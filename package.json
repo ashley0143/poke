@@ -1,0 +1,28 @@
+{
+  "name": "poketale",
+  "version": "0.0.1",
+  "description": "Youtube video player that does not track your info",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.17.1",
+    "youtube-search": "^1.1.6",
+    "ejs": "^3.1.6",
+    "path": "^0.12.7",
+    "node-fetch": "^2.6.1"
+  },
+  "engines": {
+    "node": "12.x"
+  },
+  "repository": {
+    "url": "https://github.com/ashpotter/poketube"
+  },
+  "license": "MIT",
+  "keywords": [
+    "poketube",
+    "privite",
+    "ytdl"
+  ]
+}

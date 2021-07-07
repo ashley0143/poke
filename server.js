@@ -49,7 +49,7 @@ app.get("/api/search", function(req, res) {
   var search = require("youtube-search");
 
   if (!req.query.query) {
-    return res.redirect(`/youtube`);
+    return res.redirect(`/`);
   }
 
   var opts = {

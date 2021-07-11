@@ -1,7 +1,5 @@
 const path = require("path");
-
 const templateDir = path.resolve(`${process.cwd()}${path.sep}html`);
-
 var express = require("express");
 var app = express();
 app.engine("html", require("ejs").renderFile);
@@ -16,7 +14,7 @@ const renderTemplate = async (res, req, template, data = {}) => {
 
 app.get("/watch", function(req, res) {
   var url = req.query.v;
-  var jth = `https://www.youtube.com/watch?v=${url}`;
+  var uu = `https://www.youtube.com/watch?v=${url}`;
   var search = require("youtube-search");
 
   var opts = {
@@ -25,7 +23,7 @@ app.get("/watch", function(req, res) {
   };
 
   const fetch = require("node-fetch");
-  search(jth, opts, function(err, results) {
+  search(uu, opts, function(err, results) {
     var i = results[0].id;
     fetch(`https://poketalebot.com/api/ytdl/dowlands/fromurl/get/json?url=${i}`)
       .then(res => res.json())

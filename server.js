@@ -11,6 +11,9 @@ const renderTemplate = async (res, req, template, data = {}) => {
     Object.assign(data)
   );
 };
+ 
+const ytSearch = require('youtube-search');
+const fetch = require('node-fetch');
 
 app.get("/watch", function(req, res) {
   var url = req.query.v;
@@ -25,25 +28,43 @@ app.get("/watch", function(req, res) {
   const fetch = require("node-fetch");
   search(uu, opts, function(err, results) {
     var i = results[0].id;
-    fetch(`https://poketalebot.com/api/ytdl/dowlands/fromurl/get/json?url=${i}`)
+    fetch(`https://yt-proxy-api.herokuapp.com/get_player_info?v=${i}`)
       .then(res => res.json())
       .then(json => {
         var video = results[0];
         if (!video) return;
         if (err) console.log(err);
-
-        var h = json.url;
-        renderTemplate(res, req, "youtube.ejs", { url: h, title: video });
+        const tarih = json.upload_date
+        var h = json.formats[1].url;
+        renderTemplate(res, req, "youtube.ejs", { url: h, title: video,video:json,date:tarih });
       });
   });
 });
+  app.get("/", function(req, res) {
+        var url = req.query.url;
+    var search = require("youtube-search");
 
-app.get("/", function(req, res) {
-  renderTemplate(res, req, "ytmain.ejs");
-});
+ if(url){
+    var opts = {
+      maxResults: 1,
+      key: process.env.yt
+    };
 
-app.get("/api/search", function(req, res) {
-  var url = req.query.query;
+    search(url, opts, function(err, results) {
+      var h = results[0].id;
+     var lmao = results[0];
+if(err) return
+      res.redirect(`/watch?v=${h}&title=${lmao.title}&channel=${lmao.channelTitle}&searchquery=${url}&data=${mythe2}${mythe}${mythe3}`);
+    });
+ }
+    if(!url){
+     renderTemplate(res, req, "ytmain.ejs")
+    }
+ });
+  
+ 
+app.get('/youtube/ara', async (req, res) => {
+    var url = req.query.query;
   var search = require("youtube-search");
 
   if (!req.query.query) {

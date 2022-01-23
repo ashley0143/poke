@@ -54,7 +54,7 @@ app.get("/watch", function(req, res) {
       var h = results[0].id;
      var lmao = results[0];
 if(err) return
-      res.redirect(`/watch?v=${h}&title=${lmao.title}&channel=${lmao.channelTitle}&searchquery=${url}&data=${mythe2}${mythe}${mythe3}`);
+      res.redirect(`/watch?v=${h}&title=${lmao.title}&channel=${lmao.channelTitle}&searchquery=${url}`);
     });
  }
     if(!url){

@@ -15,10 +15,7 @@
 <meta content=720 name=twitter:player:height>
 <div class=watch-main-col id=watch7-content itemid="" itemscope itemtype=http://schema.org/VideoObject>
     <link href="https://poketalebot.com/youtube/watch?v=<%=title.id%>" itemprop=url>
-    <meta content='"<%=title.title%>' itemprop=name>
-    <meta content=False itemprop=paid>
-    <meta content="<%=title.channelId%>" itemprop=channelId>
-    <meta content="<%=title.id%>" itemprop=videoId><span itemprop=author itemscope itemtype=http://schema.org/Person><link href="http://www.youtube.com/channel/<%=title.channelId%>"itemprop=url><link itemprop=name content=" <%=title.channelTitle%> "><link href=https://cdn.poketalebot.com/404/v2.css rel=stylesheet></span>
+ <link href="http://www.youtube.com/channel/<%=title.channelId%>"itemprop=url><link itemprop=name content=" <%=title.channelTitle%> "><link href=https://cdn.poketalebot.com/404/v2.css rel=stylesheet></span>
     <center>
         <form action=/youtube/ara><input id=fname name=query> <input type=submit value=Search></form>
         <hr>
@@ -41,7 +38,7 @@
                 <%=title.title%>
                 </b>
             </h1>   
-            <a style="color:#fff" href="https://youtube.com<%=video.channel.url%>">
+            <a style="color:#fff" href="https://youtube.com/channel/<%=title.channelId%>">
                 <%=title.channelTitle%>
                 </a><hr>
                 <p><i class="fas fa-calendar-alt"></i>    <%=date%>|<i class="fas fa-chart-bar"></i>  <%=video.engagement.views.toLocaleString()%> Views| <i class="fas fa-thumbs-up"></i>                     <%=video.engagement.likes.toLocaleString()%>    <i class="fas fa-thumbs-down"></i>                     <%=video.engagement.dislikes.toLocaleString()%><br></p>

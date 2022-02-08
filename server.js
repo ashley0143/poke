@@ -12,20 +12,18 @@ const renderTemplate = async (res, req, template, data = {}) => {
   );
 };
  
-const ytSearch = require('youtube-search');
+const search = require('youtube-search');
 const fetch = require('node-fetch');
 
 app.get("/watch", function(req, res) {
   var url = req.query.v;
   var uu = `https://www.youtube.com/watch?v=${url}`;
-  var search = require("youtube-search");
 
   var opts = {
     maxResults: 1,
     key: process.env.yt
   };
-
-  const fetch = require("node-fetch");
+  
   search(uu, opts, function(err, results) {
     var i = results[0].id;
     fetch(`https://yt-proxy-api.herokuapp.com/get_player_info?v=${i}`)
@@ -64,8 +62,7 @@ if(err) return
   
  
 app.get('/youtube/ara', async (req, res) => {
-    var url = req.query.query;
-  var search = require("youtube-search");
+   var url = req.query.query;
 
   if (!req.query.query) {
     return res.redirect(`/`);

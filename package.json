@@ -1,5 +1,5 @@
 {
-  "name": "poketale",
+  "name": "poketube",
   "version": "0.0.1",
   "description": "Youtube video player that does not track your info",
   "main": "server.js",
@@ -19,7 +19,7 @@
   "repository": {
     "url": "https://github.com/ashpotter/poketube"
   },
-  "license": "MIT",
+  "license": "GPL-3.0",
   "keywords": [
     "poketube",
     "privite",

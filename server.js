@@ -9,80 +9,53 @@ const lyricsFinder = require("lyrics-finder");
   res.render(path.resolve(`${templateDir}${path.sep}${template}`), Object.assign(data)
 );
 };
-const ytSearch = require('youtube-search');
 const fetch = require('node-fetch');
-const search = require("youtube-search");
 
-app.get("/watch", function(req, res) {
+app.get("/watch", async function(req, res) {
   var url = req.query.v;
   var uu = `https://www.youtube.com/watch?v=${url}`;
-  var search = require("youtube-search");
 
   var opts = {
     maxResults: 1,
     key: process.env.yt
   };
 
-   search(uu, opts, async (err, results) => {
-  if (err != undefined)
-    return console.error(err);
-  if (results.length === 0) return;
-
-  const video = results[0];
-
-  const json = await fetch(`https://yt-proxy-api.herokuapp.com/get_player_info?v=${video.id}`)
+  const json = await fetch(`https://yt-proxy-api.herokuapp.com/get_player_info?v=${url}`)
     .then((res) => res.json());
 
-  const lyrics = await lyricsFinder(video.title);
+  const lyrics = await lyricsFinder(json.title);
  
   if (lyrics == undefined) lyrics = "Lyrics not found";
    renderTemplate(res, req, 'youtube.ejs', {
     url: json.formats[1].url,
-    title: video,
+    title: json,
     video: json,
     date: json.upload_date,
     lyrics:lyrics.replace(/\n/g, ' <br> ')
-  });
+   
 });
 });
   app.get("/", function(req, res) {
-        var url = req.query.url;
-
- if(url){
-    var opts = {
-      maxResults: 1,
-      key: process.env.yt
-    };
-
-    search(url, opts, function(err, results) {
-      var h = results[0].id;
-     var lmao = results[0];
-if(err) return
-      res.redirect(`/watch?v=${h}&title=${lmao.title}&channel=${lmao.channelTitle}&searchquery=${url}`);
-    });
- }
-    if(!url){
      renderTemplate(res, req, "ytmain.ejs")
-    }
  });
   
  
-app.get('/youtube/ara', async (req, res) => {
-    var url = req.query.query;
- 
-  if (!req.query.query) {
-    return res.redirect(`/`);
+
+
+app.get("/youtube/ara", async (req, res) => {
+  const query = req.query.query
+
+  if (!query) {
+    return res.redirect("/")
   }
 
-  var opts = {
-    maxResults: 1,
-    key: process.env.yt
-  };
-
-  search(req.query.query, opts, function(err, results) {
-    var h = results[0].id;
-    res.redirect(`/watch?v=${h}`);
-  });
-});
+  const result = await fetch(`https://yt-proxy-api.herokuapp.com/search?q=${query}`).then(res => res.json())
+  for (item of result.results) {
+    if (item.type == "video") {
+      const id = item.item.id
+      return res.redirect(`/watch?v=${id}`)
+    }
+  }
+})
 
 const listener = app.listen(3000);

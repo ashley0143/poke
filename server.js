@@ -4,43 +4,49 @@ var express = require("express");
 var app = express();
 app.engine("html", require("ejs").renderFile);
 app.set("view engine", "html");
-
-const renderTemplate = async (res, req, template, data = {}) => {
-  res.render(
-    path.resolve(`${templateDir}${path.sep}${template}`),
-    Object.assign(data)
-  );
+const lyricsFinder = require("lyrics-finder");
+ const renderTemplate = async (res, req, template, data = {}) => {
+  res.render(path.resolve(`${templateDir}${path.sep}${template}`), Object.assign(data)
+);
 };
- 
-const search = require('youtube-search');
+const ytSearch = require('youtube-search');
 const fetch = require('node-fetch');
+const search = require("youtube-search");
 
 app.get("/watch", function(req, res) {
   var url = req.query.v;
   var uu = `https://www.youtube.com/watch?v=${url}`;
+  var search = require("youtube-search");
 
   var opts = {
     maxResults: 1,
     key: process.env.yt
   };
-  
-  search(uu, opts, function(err, results) {
-    var i = results[0].id;
-    fetch(`https://yt-proxy-api.herokuapp.com/get_player_info?v=${i}`)
-      .then(res => res.json())
-      .then(json => {
-        var video = results[0];
-        if (!video) return;
-        if (err) console.log(err);
-        const tarih = json.upload_date
-        var h = json.formats[1].url;
-        renderTemplate(res, req, "youtube.ejs", { url: h, title: video,video:json,date:tarih });
-      });
+
+   search(uu, opts, async (err, results) => {
+  if (err != undefined)
+    return console.error(err);
+  if (results.length === 0) return;
+
+  const video = results[0];
+
+  const json = await fetch(`https://yt-proxy-api.herokuapp.com/get_player_info?v=${video.id}`)
+    .then((res) => res.json());
+
+  const lyrics = await lyricsFinder(video.title);
+ 
+  if (lyrics == undefined) lyrics = "Lyrics not found";
+   renderTemplate(res, req, 'youtube.ejs', {
+    url: json.formats[1].url,
+    title: video,
+    video: json,
+    date: json.upload_date,
+    lyrics:lyrics.replace(/\n/g, ' <br> ')
   });
+});
 });
   app.get("/", function(req, res) {
         var url = req.query.url;
-    var search = require("youtube-search");
 
  if(url){
     var opts = {
@@ -62,8 +68,8 @@ if(err) return
   
  
 app.get('/youtube/ara', async (req, res) => {
-   var url = req.query.query;
-
+    var url = req.query.query;
+ 
   if (!req.query.query) {
     return res.redirect(`/`);
   }

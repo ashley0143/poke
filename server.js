@@ -15,11 +15,6 @@ app.get("/watch", async function(req, res) {
   var url = req.query.v;
   var uu = `https://www.youtube.com/watch?v=${url}`;
 
-  var opts = {
-    maxResults: 1,
-    key: process.env.yt
-  };
-
   const json = await fetch(`https://yt-proxy-api.herokuapp.com/get_player_info?v=${url}`)
     .then((res) => res.json());
 
@@ -38,10 +33,6 @@ app.get("/watch", async function(req, res) {
   app.get("/", function(req, res) {
      renderTemplate(res, req, "ytmain.ejs")
  });
-  
- 
-
-
 app.get("/youtube/ara", async (req, res) => {
   const query = req.query.query
 

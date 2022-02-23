@@ -5,48 +5,87 @@ var app = express();
 app.engine("html", require("ejs").renderFile);
 app.set("view engine", "html");
 const lyricsFinder = require("lyrics-finder");
- const renderTemplate = async (res, req, template, data = {}) => {
-  res.render(path.resolve(`${templateDir}${path.sep}${template}`), Object.assign(data)
-);
+const renderTemplate = async (res, req, template, data = {}) => {
+  res.render(
+    path.resolve(`${templateDir}${path.sep}${template}`),
+    Object.assign(data)
+  );
 };
-const fetch = require('node-fetch');
-
-app.get("/watch", async function(req, res) {
+const fetch = require("node-fetch");
+app.get("/watchnew", async function (req, res) {
   var url = req.query.v;
   var uu = `https://www.youtube.com/watch?v=${url}`;
 
-  const json = await fetch(`https://yt-proxy-api.herokuapp.com/get_player_info?v=${url}`)
-    .then((res) => res.json());
+  var opts = {
+    maxResults: 1,
+    key: process.env.yt,
+  };
+
+  const json = await fetch(
+    `https://yt-proxy-api.herokuapp.com/get_player_info?v=${url}`
+  ).then((res) => res.json());
 
   const lyrics = await lyricsFinder(json.title);
- 
   if (lyrics == undefined) lyrics = "Lyrics not found";
-   renderTemplate(res, req, 'youtube.ejs', {
+  renderTemplate(res, req, "youtubenew.ejs", {
     url: json.formats[1].url,
     title: json,
     video: json,
     date: json.upload_date,
-    lyrics:lyrics.replace(/\n/g, ' <br> ')
-   
+    lyrics: lyrics.replace(/\n/g, " <br> "),
+  });
 });
+app.get("/watch", async function (req, res) {
+  var url = req.query.v;
+  var uu = `https://www.youtube.com/watch?v=${url}`;
+
+  var opts = {
+    maxResults: 1,
+    key: process.env.yt,
+  };
+
+  const json = await fetch(
+    `https://yt-proxy-api.herokuapp.com/get_player_info?v=${url}`
+  ).then((res) => res.json());
+    const newapi = await fetch(
+    `https://yt-proxy-api.herokuapp.com/video?v=${url}`
+  ).then((res) => res.json());
+  console.log(newapi)
+  const lyrics = await lyricsFinder(json.title);
+  if (lyrics == undefined) lyrics = "Lyrics not found";
+  renderTemplate(res, req, "youtubenew.ejs", {
+    url: json.formats[1].url,
+    title: json,
+    a:newapi,
+    video: json,
+    date: json.upload_date,
+    lyrics: lyrics.replace(/\n/g, " <br> "),
+  });
 });
-  app.get("/", function(req, res) {
-     renderTemplate(res, req, "ytmain.ejs")
- });
+app.get("/", function (req, res) {
+  renderTemplate(res, req, "ytmain.ejs");
+});
+
 app.get("/youtube/ara", async (req, res) => {
-  const query = req.query.query
+  const query = req.query.query;
 
   if (!query) {
-    return res.redirect("/")
+    return res.redirect("/");
   }
 
-  const result = await fetch(`https://yt-proxy-api.herokuapp.com/search?q=${query}`).then(res => res.json())
+  const result = await fetch(
+    `https://yt-proxy-api.herokuapp.com/search?q=${query}`
+  ).then((res) => res.json());
   for (item of result.results) {
     if (item.type == "video") {
-      const id = item.item.id
-      return res.redirect(`/watch?v=${id}`)
+      const videoid = item.item.id;
+      return res.redirect(`/watch?v=${videoid}`);
     }
   }
-})
+});
+
+app.get("/css/:id", (req, res) => {
+  res.sendFile(__dirname + `/css/${req.params.id}`);
+});
 
 const listener = app.listen(3000);

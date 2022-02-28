@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2021-2022 POKETUBE & LIGTHTUBE CONTRUBUTORS (https://gitlab.com/kuylar/lighttube,https://github.com/iamashley0/poketube.)
+    Copyright (C) 2021-2022 POKETUBE & LIGHTTUBE CONTRUBUTORS (https://gitlab.com/kuylar/lighttube,https://github.com/iamashley0/poketube.)
     
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by

@@ -1,22 +1,38 @@
-<html>
+<!DOCTYPE html><html>
 
 <head>
-    <title>Poketube - Main</title>
+    <title>Poketube - Main Menu</title>
     <link rel="icon" href="https://poketalebot.com/youtube/icons/dark.svg">
     <link rel="preconnect" href="https://fonts.gstatic.com">
-    <link href="https://fonts.googleapis.com/css2?family=Sigmar+One&amp;display=swap" rel="stylesheet"> </head>
-
+    <link href="https://fonts.googleapis.com/css2?family=Sigmar+One&amp;display=swap" rel="stylesheet"> 
+    <meta content=website property=og:type>
+    <meta content="Poketube" property=og:title>
+    <meta content="Poketube is a open source youtube player. watch youtube videos privately!" property=twitter:description>
+    <meta content="https://cdn.glitch.com/ef5d02b7-c958-475a-b82d-d263d37e7ec7/d49811d3-f7ea-4cce-a4ac-1b4e84dceae7.image.png" property=og:image>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@500&display=swap" rel="stylesheet">
+    <meta content=summary_large_image name=twitter:card>
+    <meta content=@PoketaleBot name=twitter:site>
+    <meta content=@PoketaleBot name=twitter:creator>
+ </head>
 <body>
+  <script>
+        function AddSearch () {
+            if (window.sidebar) {     
+                window.sidebar.addSearchEngine ('http://watch.poketalebot.com/search/default.src', 'https://poketalebot.com/youtube/icons/dark.svg', 'Poketube Quick search', null);
+            }
+        }
+ </script>
     <style>
         body{background-color:#23272A} h1{color:#fff} h2{color:#fff} h3{color:#fff} h4{color:#fff}  p{color:#fff}ohyeah{color:#fff}.jumbotron{background-color:#1f1c1c;margin:50px;padding:15px;margin-bottom:20px}
     </style>
+            <center>
     <div class="jumbotron" style="justify-content: center;">
-        <center>
             <h1 style="font-family:Sigmar One;font-weight: bold;font-size:100px;"> POKETUBE</h1>
-            <p> Youtube video player that does not track your info </p> <a href="https://github.com/ashpotter/poketube/" style="color:#fff">We are now open source in github!</a><br>
-            <form action="/youtube/ara" data-dashlane-rid="0437266a52d688e8" data-form-type=""> <input type="text" id="fname" name="query" value="" data-dashlane-rid="b1ddcc51a01a9fea" data-form-type=""> <input type="submit" value="search" data-dashlane-rid="b32ae802b921b67e" data-form-type=""></form>
-        </center>
+            <p  style="color:#fff;font-family: 'Roboto', sans-serif;"> Youtube video player that does not track your info </p> 
+            <form action="/youtube/ara" data-dashlane-rid="0437266a52d688e8" data-form-type=""> <input type="text" id="fname" name="query" value="" data-dashlane-rid="b1ddcc51a01a9fea" data-form-type=""> <input type="submit" value="search" data-dashlane-rid="b32ae802b921b67e" data-form-type=""></form><a href="https://github.com/ashpotter/poketube/" style="color:#fff;font-family: 'Roboto', sans-serif;">Source code</a> 
+         </center>
     </div>
 </body>
-
+ 
 </html>
+   

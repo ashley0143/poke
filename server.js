@@ -144,11 +144,6 @@ const options = {
   request(options).pipe(res);
  });
 
- app.get("/video/upload", (req, res) => {
-           res.redirect("https://youtube.com/upload?from=poketube_utc");
-
- });
-
  app.get("/fetch", async function (req, res) {
   var url = req.query.v;
   const js = await fetch(
@@ -159,4 +154,8 @@ const options = {
   res.json(lastItem.url)
  });
  */
+ app.get("/video/upload", (req, res) => {
+           res.redirect("https://youtube.com/upload?from=poketube_utc");
+
+ });
 const listener = app.listen(3000);

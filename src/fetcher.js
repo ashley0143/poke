@@ -1,5 +1,5 @@
 /*
-    WARNING:THIS FILE IS STILL ON WIP
+  
     Copyright (C) 2021-2022 POKETUBE CONTRUBUTORS (https://github.com/iamashley0/poketube)
     
     This program is free software: you can redistribute it and/or modify
@@ -15,20 +15,23 @@
     You should have received a copy of the GNU General Public License
     along with this program. If not, see https://www.gnu.org/licenses/.
   */
- 
 const fetch = require("node-fetch"); //2.5.x
+const superfetch = require("../src/modules/node-superfetch.js")
 const lyricsFinder = require("lyrics-finder");
 var youtube_url = `https://www.youtube.com/watch?v=`;
 var dislike_api = `https://returnyoutubedislikeapi.com/votes?videoId=`
 var proxy = `https://yt-proxy-api.herokuapp.com/get_player_info?v=`
 
 module.exports = async function(video_id){
-  
+ 
   const pro = await fetch(`${proxy}${video_id}`).then((res) => res.json());
   const dislike = await fetch(`${dislike_api}${video_id}`).then((res) => res.json());
   const dislikes = dislike.dislikes
-  
-   
+ 
+  /*
+       This is a if else statment to check the lastest
+       format from the fetched url and return it lmao 
+  */
   if(pro.formats[1].url){
     var url = pro.formats[1].url
    } else if(!pro.formats[1].url){
@@ -36,9 +39,10 @@ module.exports = async function(video_id){
     const lastItem = s[s.length - 1];
     var url = lastItem.url
    }
+ 
   
   /*
-  * Returner
+  * Returner object
   */
   const returner = {
     video:pro,

@@ -1,6 +1,8 @@
 <!DOCTYPE html>
-<title>
-    <%=video.title%> - PokeTube</title>
+  <% if (e === false) { %>
+    
+ <% } %>
+  <% if (!e) { %>
 <meta content="<%=video.title%>" name=title>
 <link href=https://poketalebot.com/youtube/icons/dark.svg rel=icon>
 <meta content=player name=twitter:card>
@@ -15,29 +17,29 @@
 <meta content=720 name=twitter:player:height>
 <link href="https://poketalebot.com/youtube/watch?v=<%=title.id%>" itemprop=url>
 <link href="http://www.youtube.com/channel/<%=title.channelId%>" itemprop=url>
-<link itemprop=name content=" <%=title.channelTitle%> ">
+    <link itemprop=name content=" <%=title.channelTitle%> "> <% } %>
+
+    <title> <%=video.title%> - PokeTube</title>
 <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@500&display=swap" rel=stylesheet>
 <link href=https://cdn.poketalebot.com/404/v2.css rel=stylesheet>
 <link href=/css/app.main.css rel=stylesheet>
-<center>
+
+  
+  <body>
+     <center>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@900&family=Sigmar+One&display=swap" rel=stylesheet>
     <link href=https://pro.fontawesome.com/releases/v5.15.3/css/all.css rel=stylesheet>
     <center>
         <nav>
-            <div class=left><a href=#><i class="fas fa-bars"></i></a> <a href=# style=font-family:Inter,sans-serif><span><i class="fa-youtube fab"style=color:#fff></i></span>PokeTube</a></div>
+            <div class=left><a style=font-family:Inter,sans-serif;color:#fff><span><i class="fa-youtube fab"style=color:#fff></i></span>PokeTube</a></div>
             <div class=middle>
                 <form action=/youtube/ara><input class=search-bar id=fname name=query style=color:#fff;font-family:Roboto,sans-serif> <button class="btn btn-success" type=submit><i class="fas fa-search"></i></button></form>
             </div>
-            <div class=right><a href=#><i class="fas fa-video"></i></a> <a href=#><i class="fas fa-th"></i></a> <a href=#><i class="fas fa-comment"></i></a> <a href=#><i class="fas fa-bell"></i></a></div>
+            <div class=right><a href="/video/upload?from="><i class="fas fa-video"></i></a> <a href="https://git.poketalebot.org"><i class="fab fa-git-alt"></i></a> <a href="https://github.com/iamashley0/poketube/issues"><i class="fas fa-bug"></i></a> <a href="https://github.com/iamashley0/poketube/pulls"><i class="fal fa-code-merge"></i></a></div>
         </nav>
         <section class=youtube-video>
             <div class=screen>
                 <div class=videoOuterContainer-3x2_n9>
-                    <style>
-                        .video {
-                        text-align:center
-                        }
-                    </style>
                      <div class=videoMiddleContainer-2yUOUz>
                         <div class=videoInnerContainer-2IHZcN>
                         <video autoplay class=video-3DYbjh controls name=media>
@@ -46,7 +48,7 @@
                         <br></center>
 <center>
     <h1 style=font-family:Inter,sans-serif;font-weight:700;white-space:yes;font-size:45><b> <%=video.title%> </b></h1>
-    <a href="https://youtube.com/channel/<%=title.channel.id%>" style=color:#fff>
+    <a href="<%=title.channel.id%>" style=color:#fff>
         <%=title.channel.name%>
     </a>
 </center>
@@ -59,7 +61,7 @@
                     <%=date%>|<i class="fas fa-chart-bar"></i>
                         <%=a.engagement.views.toLocaleString()%> Views| <i class="fas fa-thumbs-up"></i>
                             <%=a.engagement.likes.toLocaleString()%> <i class="fas fa-thumbs-down"></i>
-                                <%=a.engagement.dislikes.toLocaleString()%><br>
+                                <%=dislikes.toLocaleString()%><br>
                                     <p><i class="fas fa-shield-alt"></i> Youtube wont know you are whatching this video (also your fbi guy wont know too)</p><noscript><p><i class="fas fa-code"></i> Hey,you are on no script mode rn. Yes,Poketube does not require billion lame scripts to run :P</p></noscript>
                                     <hr>
                                     <h3 style=color:#fff;font-family:Inter,sans-serif;font-weight:700;white-space:yes>Description</h3>
@@ -68,20 +70,20 @@
                                             <%-title.description.replace(/\n/g, " <br> ")%></center>
                                     <% if (lyrics) { %>
                                         <hr><br>
-                                            
-                    <details>
-                        <summary><h1 style="font-family: 'Inter', sans-serif;font-weight: bold;white-space:yes;font-size:45;"> Lyrics
-                        </h1><p style="color: blue;">See Lyrics by clicking here</p></summary>
+                                <h1 style="font-family: 'Inter', sans-serif;font-weight: bold;white-space:yes;font-size:45;"> Lyrics
+                        </h1>            
+                    <details style="color=#fff">
+                        <summary style="color=#fff"></summary>
                         <p style="color: white;">
                                         <p style=color:#fff>
                                             <%-lyrics%>
                                         </p>                    </details>
                                         <% } %>
-                                           <script>
-                        var VideoTitle = "<%=title.title%>"
-                         var ChannelTitle = "<%=title.channel.name%> "
-                         document.title = "<%=video.title%> - PokeTube"
+                                                                     </center></center></center></center></center>             
+  </body>
+  <script>
+                      var VideoTitle = "<%=title.title%>"
+                      var ChannelTitle = "<%=title.channel.name%> "
+                      document.title = "<%=video.title%> - PokeTube"
                     </script>
-            </center>
-        </center>
-
+         

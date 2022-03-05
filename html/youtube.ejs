@@ -1,10 +1,28 @@
+<!--
+    This Source Code Form is subject to the terms of the GNU General Public License:
+
+    Copyright (C) 2021-2022 POKETUBE CONTRUBUTORS (https://github.com/iamashley0/poketube)
+    
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program. If not, see https://www.gnu.org/licenses/.
+-->
 <!DOCTYPE html>
   <% if (e === false) { %>
     
  <% } %>
   <% if (!e) { %>
 <meta content="<%=video.title%>" name=title>
-<link href=https://poketalebot.com/youtube/icons/dark.svg rel=icon>
+<link href=https://watch.poketalebot.com/css/yt-ukraine.svg rel=icon>
 <meta content=player name=twitter:card>
 <meta content="<%=title.channelTitle%>" name=twitter:description>
 <meta content=@youtube name=twitter:site>
@@ -18,20 +36,23 @@
 <link href="https://poketalebot.com/youtube/watch?v=<%=title.id%>" itemprop=url>
 <link href="http://www.youtube.com/channel/<%=title.channelId%>" itemprop=url>
     <link itemprop=name content=" <%=title.channelTitle%> "> <% } %>
-
     <title> <%=video.title%> - PokeTube</title>
 <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@500&display=swap" rel=stylesheet>
 <link href=https://cdn.poketalebot.com/404/v2.css rel=stylesheet>
 <link href=/css/app.main.css rel=stylesheet>
-
-  
+<style>
+   a.class:hover {
+    text-decoration:underline;
+    font-weight:bold
+}
+</style>
   <body>
      <center>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@900&family=Sigmar+One&display=swap" rel=stylesheet>
     <link href=https://pro.fontawesome.com/releases/v5.15.3/css/all.css rel=stylesheet>
     <center>
         <nav>
-            <div class=left><a style=font-family:Inter,sans-serif;color:#fff><span><i class="fa-youtube fab"style=color:#fff></i></span>PokeTube</a></div>
+            <div class=left><a class="class" href="https://stopwarukraine.com/" style=font-family:Inter,sans-serif;color:#fff><span><i class="fa-youtube fab" style=color:#fff></i></span><span style="text-decoration:inherit;background:linear-gradient(to right, rgba(255,215,0,1) 50%, rgba(0,87,184,1) 50%);-webkit-text-fill-color:transparent;-webkit-background-clip:text;">PokeTube</span> 🇺🇦 </a></div>
             <div class=middle>
                 <form action=/youtube/ara><input class=search-bar id=fname name=query style=color:#fff;font-family:Roboto,sans-serif> <button class="btn btn-success" type=submit><i class="fas fa-search"></i></button></form>
             </div>
@@ -47,7 +68,7 @@
                         </video>
                         <br></center>
 <center>
-    <h1 style=font-family:Inter,sans-serif;font-weight:700;white-space:yes;font-size:45><b> <%=video.title%> </b></h1>
+    <h1 style="text-decoration:inherit;background:linear-gradient(to right, rgba(255,215,0,1) 50%, rgba(0,87,184,1) 50%);-webkit-text-fill-color:transparent;-webkit-background-clip:text;font-family:Inter,sans-serif;font-weight:700;white-space:yes;font-size:45"><b> <%=video.title%> </b></h1>
     <a href="<%=title.channel.id%>" style=color:#fff>
         <%=title.channel.name%>
     </a>
@@ -64,7 +85,7 @@
                                 <%=dislikes.toLocaleString()%><br>
                                     <p><i class="fas fa-shield-alt"></i> Youtube wont know you are whatching this video (also your fbi guy wont know too)</p><noscript><p><i class="fas fa-code"></i> Hey,you are on no script mode rn. Yes,Poketube does not require billion lame scripts to run :P</p></noscript>
                                     <hr>
-                                    <h3 style=color:#fff;font-family:Inter,sans-serif;font-weight:700;white-space:yes>Description</h3>
+                                    <h3 style="font-family:Inter,sans-serif;font-weight:700;white-space:yestext-decoration:inherit;background:linear-gradient(to right, rgba(255,215,0,1) 50%, rgba(0,87,184,1) 50%);-webkit-text-fill-color:transparent;-webkit-background-clip:text;">Description</h3>
                                     <center>
                                         <p>
                                             <%-title.description.replace(/\n/g, " <br> ")%></center>
@@ -86,4 +107,4 @@
                       var ChannelTitle = "<%=title.channel.name%> "
                       document.title = "<%=video.title%> - PokeTube"
                     </script>
-         
+      

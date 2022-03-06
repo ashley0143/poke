@@ -15,6 +15,7 @@
     along with this program. If not, see https://www.gnu.org/licenses/.
   */
 const path = require("path");
+const moment = require("moment");
 const templateDir = path.resolve(`${process.cwd()}${path.sep}html`);
 var express = require("express");
 var app = express();
@@ -83,7 +84,7 @@ app.get("/watch", async function (req, res) {
     title: json,
     a:json,
     video: json,
-    date: json.uploadDate,
+    date: moment(json.uploadDate).format("LL"),
     e:e,
     lyrics: lyrics.replace(/\n/g, " <br> "),
   });
@@ -92,7 +93,7 @@ app.get("/", function (req, res) {
   renderTemplate(res, req, "ytmain.ejs");
 });
 
-app.get("/youtube/ara", async (req, res) => {
+app.get("/api/search", async (req, res) => {
   const query = req.query.query;
 
   if (!query) {

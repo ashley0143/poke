@@ -1,6 +1,6 @@
 {
   "name": "poketube",
-  "version": "0.0.1",
+  "version": "2.0.1",
   "description": "Youtube video player that does not track your info",
   "main": "server.js",
   "scripts": {
@@ -17,6 +17,7 @@
     "request": "^2.88.2",
     "xml2json": "^0.12.0",
     "fast-xml-parser": "^4.0.5"
+    "moment": "^2.29.1"
   },
   "engines": {
     "node": "16.x"

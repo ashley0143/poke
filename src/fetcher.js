@@ -16,41 +16,48 @@
     along with this program. If not, see https://www.gnu.org/licenses/.
   */
 const fetch = require("node-fetch"); //2.5.x
-const superfetch = require("../src/modules/node-superfetch.js")
+const xmltojson = require("xml2json")
 const lyricsFinder = require("lyrics-finder");
 var youtube_url = `https://www.youtube.com/watch?v=`;
 var dislike_api = `https://returnyoutubedislikeapi.com/votes?videoId=`
-var proxy = `https://yt-proxy-api.herokuapp.com/get_player_info?v=`
+var new_api_url = `https://lighttube.herokuapp.com/api/player`
 
 module.exports = async function(video_id){
- 
-  const pro = await fetch(`${proxy}${video_id}`).then((res) => res.json());
-  const dislike = await fetch(`${dislike_api}${video_id}`).then((res) => res.json());
+const dislike = await fetch(`${dislike_api}${video_id}`).then((res) => res.json());
   const dislikes = dislike.dislikes
- 
-  /*
-       This is a if else statment to check the lastest
-       format from the fetched url and return it lmao 
-  */
-  if(pro.formats[1].url){
-    var url = pro.formats[1].url
-   } else if(!pro.formats[1].url){
-    var s = pro.formats
-    const lastItem = s[s.length - 1];
-    var url = lastItem.url
-   }
- 
-  
+ /*
+  functions to fetch xml
+*/
+   async function fetchxml(id){
+  const player = await fetch(`https://lighttube.herokuapp.com/api/player?v=${id}`)
+  return player.text()
+  } 
+    
+ async function parsexml(id){
+  var h = await fetchxml(id) 
+  var j = xmltojson.toJson(h);
+  return JSON.parse(j);
+  }
+
+
   /*
   * Returner object
   */
   const returner = {
-    video:pro,
-    dislikes:dislikes,
-    likes:dislike.likes,
-    video_downloaded_url:url,
-    video_url_youtube:`${youtube_url}${video_id}`,
+    video:await parsexml(video_id),
+    engagement:dislike,
+    video_url_youtube:`${youtube_url}${video_id}`
    }
-  
-  return returner
-}
+   return returner
+ }
+
+module.exports.searcher = async function searcher(query,res){
+   const search = await fetch(`https://lighttube.herokuapp.com/api/search?query=${query}`)
+    const text =  await search.text()
+   const j = JSON.parse(xmltojson.toJson(text));
+     for (item of j.Search.Results.Video)  {
+       const videoid = item.id;
+      return res.redirect(`/watch?v=${videoid}`);
+    }
+  }
+ 

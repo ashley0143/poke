@@ -17,7 +17,7 @@
   */
 const fetch = require("node-fetch"); //2.5.x
 const xmltojson = require("xml2json")
-const lyricsFinder = require("lyrics-finder");
+const lyricsFinder = require("../src/lyrics.js");
 var youtube_url = `https://www.youtube.com/watch?v=`;
 var dislike_api = `https://returnyoutubedislikeapi.com/votes?videoId=`
 var new_api_url = `https://lighttube.herokuapp.com/api/player`

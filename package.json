@@ -7,12 +7,12 @@
     "start": "node server.js"
   },
   "dependencies": {
-   "express": "^4.17.1",
-    "youtube-search": "^1.1.6",
+    "express": "^4.17.1",
     "ejs": "^3.1.6",
     "path": "^0.12.7",
+    "html-to-text": "^5.1.1",
+    "encoding": "^0.1.13",
     "node-fetch": "^2.6.1",
-    "lyrics-finder": "^21.7.0",
     "xml-js": "^1.6.11",
     "request": "^2.88.2",
     "xml2json": "^0.12.0",

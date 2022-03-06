@@ -21,13 +21,13 @@
     
  <% } %>
   <% if (!e) { %>
-<meta content="<%=video.title%>" name=title>
+<meta content="<%=video.Title%>" name=title>
 <link href=https://watch.poketalebot.com/css/yt-ukraine.svg rel=icon>
 <meta content=player name=twitter:card>
 <meta content="<%=title.channelTitle%>" name=twitter:description>
 <meta content=@youtube name=twitter:site>
 <meta content="https://poketalebot.com/youtube/watch?v=<%=title.id%>" name=twitter:url>
-<meta content="<%=video.title%>" name=twitter:title>
+<meta content="<%=video.Title%>" name=twitter:title>
 <meta content="https://i.ytimg.com/vi/<%=title.id%>/maxresdefault.jpg" name=twitter:image>
 <meta content="https://www.youtube.com/embed/<%=title.id%>" name=twitter:player>
 <meta content=1280 name=twitter:player:width>
@@ -35,8 +35,8 @@
 <meta content=720 name=twitter:player:height>
 <link href="https://poketalebot.com/youtube/watch?v=<%=title.id%>" itemprop=url>
 <link href="http://www.youtube.com/channel/<%=title.channelId%>" itemprop=url>
-    <link itemprop=name content=" <%=title.channelTitle%> "> <% } %>
-    <title> <%=video.title%> - PokeTube</title>
+  <% } %>
+    <title> <%=video.Title%> - PokeTube</title>
 <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@500&display=swap" rel=stylesheet>
 <link href=https://cdn.poketalebot.com/404/v2.css rel=stylesheet>
 <link href=/css/app.main.css rel=stylesheet>
@@ -68,9 +68,9 @@
                         </video>
                         <br></center>
 <center>
-    <h1 style="text-decoration:inherit;background:linear-gradient(to right, rgba(255,215,0,1) 50%, rgba(0,87,184,1) 50%);-webkit-text-fill-color:transparent;-webkit-background-clip:text;font-family:Inter,sans-serif;font-weight:700;white-space:yes;font-size:45"><b> <%=video.title%> </b></h1>
-    <a href="<%=title.channel.id%>" style=color:#fff>
-        <%=title.channel.name%>
+    <h1 style="text-decoration:inherit;background:linear-gradient(to right, rgba(255,215,0,1) 50%, rgba(0,87,184,1) 50%);-webkit-text-fill-color:transparent;-webkit-background-clip:text;font-family:Inter,sans-serif;font-weight:700;white-space:yes;font-size:45"><b> <%=video.Title%> </b></h1>
+    <a href="<%=title.Channel.id%>" style=color:#fff>
+        <%=title.Channel.Name%>
     </a>
 </center>
 <hr>
@@ -80,15 +80,15 @@
             <center>
                 <p><i class="fas fa-calendar-alt"></i>
                     <%=date%>|<i class="fas fa-chart-bar"></i>
-                        <%=a.engagement.views.toLocaleString()%> Views| <i class="fas fa-thumbs-up"></i>
-                            <%=a.engagement.likes.toLocaleString()%> <i class="fas fa-thumbs-down"></i>
-                                <%=dislikes.toLocaleString()%><br>
+                        <%=engagement.viewCount.toLocaleString()%> Views| <i class="fas fa-thumbs-up"></i>
+                            <%=engagement.likes.toLocaleString()%> <i class="fas fa-thumbs-down"></i>
+                                <%=engagement.dislikes.toLocaleString()%><br>
                                     <p><i class="fas fa-shield-alt"></i> Youtube wont know you are whatching this video (also your fbi guy wont know too)</p><noscript><p><i class="fas fa-code"></i> Hey,you are on no script mode rn. Yes,Poketube does not require billion lame scripts to run :P</p></noscript>
                                     <hr>
                                     <h3 style="font-family:Inter,sans-serif;font-weight:700;white-space:yestext-decoration:inherit;background:linear-gradient(to right, rgba(255,215,0,1) 50%, rgba(0,87,184,1) 50%);-webkit-text-fill-color:transparent;-webkit-background-clip:text;">Description</h3>
                                     <center>
                                         <p>
-                                            <%-title.description.replace(/\n/g, " <br> ")%></center>
+                                            <%-title.Description.replace(/\n/g, " <br> ")%></center>
                                     <% if (lyrics) { %>
                                         <hr><br>
                                 <h1 style="font-family: 'Inter', sans-serif;font-weight: bold;white-space:yes;font-size:45;"> Lyrics
@@ -102,9 +102,4 @@
                                         <% } %>
                                                                      </center></center></center></center></center>             
   </body>
-  <script>
-                      var VideoTitle = "<%=title.title%>"
-                      var ChannelTitle = "<%=title.channel.name%> "
-                      document.title = "<%=video.title%> - PokeTube"
-                    </script>
-      
+ 

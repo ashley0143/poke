@@ -1,10 +1,20 @@
  <div align="center">
 <a href="https://www.bigbuckbunny.org">
- <img src="https://user-images.githubusercontent.com/65588168/156022510-07fec331-9651-4bb5-8649-2c20b0ce8853.png">
+ <img src="https://user-images.githubusercontent.com/65588168/156941082-2fe10d35-bc1d-4928-9c5d-32d91cdea3d8.png">
  </a>
  <h1> POKETUBE </h1>
- youtube player that does not track your info nor sell them
- <br><br><br>
+ youtube player that loves privacy
+ <br>
+</div>
+ 
+## Features
+
+- Works on Older browsers!
+- Javascript-free on frontend
+- No advetisment
+- See Dislike counts from [Return YouTube Dislike Api](https://www.returnyoutubedislike.com/) (see:[Line 22 of fetcher.js](https://github.com/iamashley0/poketube/blob/main/src/fetcher.js#L22))
+- Uses LightTube api 
+ 
  tbanks to <a href="https://gitlab.com/kuylar/lighttube">LIGHTTUBE</a>
 
  

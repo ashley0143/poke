@@ -21,7 +21,7 @@ var app = express();
 app.engine("html", require("ejs").renderFile);
 var dislike_api = `https://returnyoutubedislikeapi.com/votes?videoId=`
 app.set("view engine", "html");
-const lyricsFinder = require("lyrics-finder");
+const lyricsFinder = require("./src/lyrics.js");
 const renderTemplate = async (res, req, template, data = {}) => {
   res.render(
     path.resolve(`${templateDir}${path.sep}${template}`),

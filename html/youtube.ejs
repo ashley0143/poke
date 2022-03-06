@@ -35,7 +35,7 @@
 <meta content=720 name=twitter:player:height>
 <link href="https://poketalebot.com/youtube/watch?v=<%=title.id%>" itemprop=url>
 <link href="http://www.youtube.com/channel/<%=title.channelId%>" itemprop=url>
-  <% } %>
+    <% } %>
     <title> <%=video.Title%> - PokeTube</title>
 <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@500&display=swap" rel=stylesheet>
 <link href=https://cdn.poketalebot.com/404/v2.css rel=stylesheet>
@@ -54,7 +54,7 @@
         <nav>
             <div class=left><a class="class" href="https://stopwarukraine.com/" style=font-family:Inter,sans-serif;color:#fff><span><i class="fa-youtube fab" style=color:#fff></i></span><span style="text-decoration:inherit;background:linear-gradient(to right, rgba(255,215,0,1) 50%, rgba(0,87,184,1) 50%);-webkit-text-fill-color:transparent;-webkit-background-clip:text;">PokeTube</span> 🇺🇦 </a></div>
             <div class=middle>
-                <form action=/youtube/ara><input class=search-bar id=fname name=query style=color:#fff;font-family:Roboto,sans-serif> <button class="btn btn-success" type=submit><i class="fas fa-search"></i></button></form>
+                <form action=/api/search><input class=search-bar id=fname name=query style=color:#fff;font-family:Roboto,sans-serif> <button class="btn btn-success" type=submit><i class="fas fa-search"></i></button></form>
             </div>
             <div class=right><a href="/video/upload?from="><i class="fas fa-video"></i></a> <a href="https://git.poketalebot.org"><i class="fab fa-git-alt"></i></a> <a href="https://github.com/iamashley0/poketube/issues"><i class="fas fa-bug"></i></a> <a href="https://github.com/iamashley0/poketube/pulls"><i class="fal fa-code-merge"></i></a></div>
         </nav>
@@ -68,7 +68,7 @@
                         </video>
                         <br></center>
 <center>
-    <h1 style="text-decoration:inherit;background:linear-gradient(to right, rgba(255,215,0,1) 50%, rgba(0,87,184,1) 50%);-webkit-text-fill-color:transparent;-webkit-background-clip:text;font-family:Inter,sans-serif;font-weight:700;white-space:yes;font-size:45"><b> <%=video.Title%> </b></h1>
+    <h1 style="font-family:Inter,sans-serif;font-weight:700;white-space:yes;font-size:45"><b> <%=video.Title%> </b></h1>
     <a href="<%=title.Channel.id%>" style=color:#fff>
         <%=title.Channel.Name%>
     </a>
@@ -85,7 +85,7 @@
                                 <%=engagement.dislikes.toLocaleString()%><br>
                                     <p><i class="fas fa-shield-alt"></i> Youtube wont know you are whatching this video (also your fbi guy wont know too)</p><noscript><p><i class="fas fa-code"></i> Hey,you are on no script mode rn. Yes,Poketube does not require billion lame scripts to run :P</p></noscript>
                                     <hr>
-                                    <h3 style="font-family:Inter,sans-serif;font-weight:700;white-space:yestext-decoration:inherit;background:linear-gradient(to right, rgba(255,215,0,1) 50%, rgba(0,87,184,1) 50%);-webkit-text-fill-color:transparent;-webkit-background-clip:text;">Description</h3>
+                                    <h3 style="color:#fff;font-family:Inter,sans-serif;font-weight:700;white-space:yes;">Description</h3>
                                     <center>
                                         <p>
                                             <%-title.Description.replace(/\n/g, " <br> ")%></center>

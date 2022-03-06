@@ -30,8 +30,7 @@ const renderTemplate = async (res, req, template, data = {}) => {
 };
 const fetch = require("node-fetch");
 const fetcher = require("./src/fetcher.js");
-
-app.get("/watchnew", async function (req, res) {
+ app.get("/watchnew", async function (req, res) {
   var url = req.query.v;
   var uu = `https://www.youtube.com/watch?v=${url}`;
 
@@ -59,29 +58,32 @@ app.get("/watch", async function (req, res) {
     maxResults: 1,
     key: process.env.yt,
   };
-
-  const json = await fetch(
-    `https://yt-proxy-api.herokuapp.com/get_player_info?v=${url}`
-  ).then((res) => res.json());
-    const newapi = await fetch(
-    `https://yt-proxy-api.herokuapp.com/video?v=${url}`
-  ).then((res) => res.json());
+   var fetching = await fetcher(url)
+  
    const dislike = await fetch(`${dislike_api}${url}`).then((res) => res.json());
   const dislikes = dislike.dislikes
   
+  const j = fetching.video.Player.Formats.Format
+   
+    if(j[1].URL){
+    var url = j[1].URL
+   } else if(j[1].URL){
+    var s = j.formats
+    const lastItem = s[s.length - 1];
+    var url = lastItem.URL
+   }
  
-  var s = json.formats
-  const lastItem = s[s.length - 1];
-  
-  const lyrics = await lyricsFinder(json.title);
+  const json = fetching.video.Player
+   const engagement = fetching.engagement
+   const lyrics = await lyricsFinder(json.Title);
   if (lyrics == undefined) lyrics = "Lyrics not found";
   renderTemplate(res, req, "youtubenew.ejs", {
-    url: lastItem.url,
-    dislikes:dislikes,
+    url: url,
+    engagement:engagement,
     title: json,
-    a:newapi,
+    a:json,
     video: json,
-    date: json.upload_date,
+    date: json.uploadDate,
     e:e,
     lyrics: lyrics.replace(/\n/g, " <br> "),
   });
@@ -96,65 +98,12 @@ app.get("/youtube/ara", async (req, res) => {
   if (!query) {
     return res.redirect("/");
   }
-
-  const result = await fetch(
-    `https://yt-proxy-api.herokuapp.com/search?q=${query}`
-  ).then((res) => res.json());
-  for (item of result.results) {
-    if (item.type == "video") {
-      const videoid = item.item.id;
-      return res.redirect(`/watch?v=${videoid}`);
-    }
-  }
+  fetcher.searcher(query,res)
 });
-
-app.get("/js/:id", (req, res) => {
-  var id = req.params.id;
-  if (id === "vendor.chunk.js") {
-    res.redirect(
-      "https://global-assets.iamashley.xyz/assets/vendor.004560fb.js"
-    );
-  }
-  res.sendFile(__dirname + `/js/${id}`);
-});
-
 app.get("/css/:id", (req, res) => {
   res.sendFile(__dirname + `/css/${req.params.id}`);
 });
-app.get("/search/:id", (req, res) => {
-  res.sendFile(__dirname + `/search/${req.params.id}`);
-});
-/* WIP 
-app.get("/proxy", async function (req, res){
-  var url = req.query.v;
- 
-const options = {
-  url: `https://watch.poketalebot.com/fetch?v=${url}`,
-  headers: {
-    'User-Agent': 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:96.0) Gecko/20100101 Firefox/96.0'
-  }
-};
-  const json = await fetch(
-    `https://yt-proxy-api.herokuapp.com/get_player_info?v=${url}`
-  ).then((res) => res.json());
-   var s = json.formats
-  const lastItem = s[s.length - 1];
- var request = require('request');
-  var newurl = `https://watch.poketalebot.com/fetch?v=${url}`;
-  request(options).pipe(res);
- });
-
- app.get("/fetch", async function (req, res) {
-  var url = req.query.v;
-  const js = await fetch(
-    `https://yt-proxy-api.herokuapp.com/get_player_info?v=${url}`
-  ).then((res) => res.json());
-  var s = js.formats
-  const lastItem = s[s.length - 1];
-  res.json(lastItem.url)
- });
- */
- app.get("/video/upload", (req, res) => {
+app.get("/video/upload", (req, res) => {
            res.redirect("https://youtube.com/upload?from=poketube_utc");
 
  });

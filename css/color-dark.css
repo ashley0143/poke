@@ -1,0 +1,21 @@
+:root {
+    --text-primary: #fff;
+    --text-secondary: #808080;
+
+    --app-background: #181818;
+    --context-menu-background: #333;
+    --border-color: #444;
+    --item-hover-background: #373737;
+    --item-active-background: #383838;
+
+    --engagement-bar-background: #CCCCCC;
+    --engagement-bar-foreground: #909090;
+
+    --top-bar-background: #202020;
+    --guide-background: #212121;
+
+    --thumbnail-background: #252525;
+
+    --channel-info-background: #181818;
+    --channel-contents-background: #0f0f0f;
+}

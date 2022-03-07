@@ -31,7 +31,24 @@ const renderTemplate = async (res, req, template, data = {}) => {
 };
 const fetch = require("node-fetch");
 const fetcher = require("./src/fetcher.js");
+ app.get("/watchnew", async function (req, res) {
+  var url = req.query.v;
+  var uu = `https://www.youtube.com/watch?v=${url}`;
 
+  const json = await fetch(
+    `https://yt-proxy-api.herokuapp.com/get_player_info?v=${url}`
+  ).then((res) => res.json());
+
+  const lyrics = await lyricsFinder(json.title);
+  if (lyrics == undefined) lyrics = "Lyrics not found";
+  renderTemplate(res, req, "youtubenew.ejs", {
+    url: json.formats[1].url,
+    title: json,
+    video: json,
+    date: json.upload_date,
+    lyrics: lyrics.replace(/\n/g, " <br> "),
+  });
+});
 app.get("/watch", async function (req, res) {
   var url = req.query.v;
   var e = req.query.e;
@@ -75,7 +92,12 @@ app.get("/watch", async function (req, res) {
 app.get("/", function (req, res) {
   renderTemplate(res, req, "ytmain.ejs");
 });
-
+app.get("/channel", function (req, res) {
+  renderTemplate(res, req, "channel.ejs");
+});
+app.get("/domains", function (req, res) {
+  renderTemplate(res, req, "domains.ejs");
+});
 app.get("/api/search", async (req, res) => {
   const query = req.query.query;
 
@@ -91,4 +113,7 @@ app.get("/video/upload", (req, res) => {
            res.redirect("https://youtube.com/upload?from=poketube_utc");
 
  });
+app.get("*", function (req, res) {
+        renderTemplate(res, req, "404.ejs");
+});
 const listener = app.listen(3000);

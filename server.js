@@ -78,7 +78,7 @@ app.get("/watch", async function (req, res) {
    const engagement = fetching.engagement
    const lyrics = await lyricsFinder(json.Title);
   if (lyrics == undefined) lyrics = "Lyrics not found";
-  renderTemplate(res, req, "youtubenew.ejs", {
+  renderTemplate(res, req, "youtube.ejs", {
     url: url,
     engagement:engagement,
     title: json,

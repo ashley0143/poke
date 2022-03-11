@@ -88,8 +88,11 @@
                                     <hr>
                                     <h3 style="color:#fff;font-family:Inter,sans-serif;font-weight:700;white-space:yes;">Video Description</h3>
                                     <center>
+                                                                        <% if (title.Description) { %>
                                         <p>
                                             <%-title.Description.replace(/\n/g, " <br> ")%></center>
+                                                                                    <% } %>
+
                                     <% if (lyrics) { %>
                                         <hr><br>
                                 <h1 style="font-family: 'Inter', sans-serif;font-weight: bold;white-space:yes;font-size:45;"> Music Lyrics 

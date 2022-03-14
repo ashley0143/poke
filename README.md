@@ -14,7 +14,9 @@
 - No advetisment
 - See Dislike counts from [Return YouTube Dislike Api](https://www.returnyoutubedislike.com/) (see:[Line 22 of fetcher.js](https://github.com/iamashley0/poketube/blob/main/src/fetcher.js#L22))
 - Uses LightTube api 
- 
+
+[![SWUbanner](https://raw.githubusercontent.com/vshymanskyy/StandWithUkraine/main/banner2-direct.svg)](https://vshymanskyy.github.io/StandWithUkraine/)
+
  tbanks to <a href="https://gitlab.com/kuylar/lighttube">LIGHTTUBE</a>
 
  

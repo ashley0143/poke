@@ -90,7 +90,7 @@
                                     <center>
                                                                         <% if (title.Description) { %>
                                         <p>
-                                            <%-title.Description.replace(/\n/g, " <br> ")%></center>
+                                            <%-title.Description.toString().replace(/\n/g, " <br> ")%></center>
                                                                                     <% } %>
 
                                     <% if (lyrics) { %>

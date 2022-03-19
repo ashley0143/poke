@@ -111,6 +111,9 @@ app.get("/channel", function (req, res) {
 app.get("/domains", function (req, res) {
   renderTemplate(res, req, "domains.ejs");
 });
+app.get("/privacy", function (req, res) {
+  renderTemplate(res, req, "priv.ejs");
+});
 app.get("/api/search", async (req, res) => {
   const query = req.query.query;
 

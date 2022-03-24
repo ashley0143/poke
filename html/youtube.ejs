@@ -24,6 +24,7 @@
 <meta content="<%=video.Title%>" name=title>
 <link href=https://poketube.fun/css/yt-ukraine.svg rel=icon>
 <meta content=player name=twitter:card>
+<link href="//vjs.zencdn.net/7.10.2/video-js.min.css" rel="stylesheet">
 <meta content="<%=title.channelTitle%>" name=twitter:description>
 <meta content=@youtube name=twitter:site>
 <meta content="https://poketalebot.com/youtube/watch?v=<%=title.id%>" name=twitter:url>
@@ -47,6 +48,10 @@
 }
 </style>
   <body>
+    
+    <!-- IF SCRIPT IS ENABLED -->
+   <script src="/js/video.js"></script>
+    
      <center>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@900&family=Sigmar+One&display=swap" rel=stylesheet>
     <link href=https://pro.fontawesome.com/releases/v5.15.3/css/all.css rel=stylesheet>
@@ -55,7 +60,7 @@
             <div class=left><a class="class" href="https://stopwarukraine.com/" style=font-family:Inter,sans-serif;color:#fff><span><i class="fa-youtube fab" style=color:#fff></i></span><span style="text-decoration:inherit;background:linear-gradient(to right, rgba(255,215,0,1) 50%, rgba(0,87,184,1) 50%);-webkit-text-fill-color:transparent;-webkit-background-clip:text;">PokeTube</span> 🇺🇦 </a> <a style="color:red;" href="/domains">Domains!</a></div>               
 
             <div class=middle>
-                <form action=/api/search><input class=search-bar id=fname name=query style=color:#fff;font-family:Roboto,sans-serif> <button class="btn btn-success" type=submit><i class="fas fa-search"></i></button></form>
+                <form action=/api/search><input class=search-bar autocomplete="off" id=fname name=query style="color:#fff;font-family:Inter,sans-serif;font-weight:bolder"> <button class="btn btn-success" type=submit><i class="fas fa-search"></i></button></form>
             </div>
             <div class=right><a href="/video/upload?from="><i class="fas fa-video"></i></a> <a href="https://git.poketalebot.org"><i class="fab fa-git-alt"></i></a> <a href="https://github.com/iamashley0/poketube/issues"><i class="fas fa-bug"></i></a> <a href="https://github.com/iamashley0/poketube/pulls"><i class="fal fa-code-merge"></i></a></div>
         </nav>
@@ -64,8 +69,8 @@
                 <div class=videoOuterContainer-3x2_n9>
                      <div class=videoMiddleContainer-2yUOUz>
                         <div class=videoInnerContainer-2IHZcN>
-                        <video autoplay class=video-3DYbjh controls name=media>
-                        <source src="<%=url%>" type=video/mp4>
+                          <video class="video-3DYbjh" autoplay controls>
+                         <source src="<%=url%>" type="video/mp4">
                         </video>
                         <br></center>
 <center>
@@ -106,4 +111,3 @@
                                         <% } %>
                                                                      </center></center></center></center></center>             
   </body>
- 

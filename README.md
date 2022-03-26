@@ -18,6 +18,21 @@
 - Uses LightTube api 
 - <a href="https://github.com/iamashley0/poketube/tree/main/sdk">Custom sdk!</a> 
 
- tbanks to <a href="https://gitlab.com/kuylar/lighttube">LIGHTTUBE</a>
+## How to self host or add a new public instance?
+good question lol
 
+- first,you have to install nodejs if you dont have it (prob you do tho)
+- then clone this url:https://github.com/iamashley0/poketube.git
+- open a terminal in the folder you cloned poketube,and type npm install
+- and then open a port in your local host via express 
+- then,setup your domain
+- lastly,make a pr about adding your domain into <a href="https://github.com/iamashley0/poketube/blob/main/html/domains.ejs">domains.ejs</a>
+
+## Privacy Policy:
+ We do not sell your data.<br>
+ We do not use third party trackers/cookies for the use of this site. <br>
+ We do not track you lol<br>
+ 
+ see <a href="https://poketube.fun/privacy">Privacy policy</a> for more info
+ 
  

@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2021-2022 POKETUBE & LIGHTTUBE CONTRUBUTORS (https://gitlab.com/kuylar/lighttube,https://github.com/iamashley0/poketube.)
+    Copyright (C) 2021-2022 POKETUBE CONTRUBUTORS (https://github.com/iamashley0/poketube)
     
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -99,7 +99,9 @@ app.get("/css/:id", (req, res) => {
 });
 app.get("/video/upload", (req, res) => {
            res.redirect("https://youtube.com/upload?from=poketube_utc");
-
+ });
+app.get("/api/video/download", async function (req, res) {
+  var v = req.query.v;var fetching = await fetcher(v);const url = fetching.video.Player.Formats.Format[1].URL;res.redirect(url)
  });
 app.get("*", function (req, res) {
 const things = random_words[Math.floor((Math.random()*random_words.length))];

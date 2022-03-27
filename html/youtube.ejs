@@ -22,10 +22,10 @@
  <% } %>
   <% if (!e) { %>
 <meta content="<%=video.Title%>" name=title>
-<link href=https://poketube.fun/css/yt-ukraine.svg rel=icon>
+<link href=/css/yt-ukraine.svg rel=icon>
 <meta content=player name=twitter:card>
 <link href="//vjs.zencdn.net/7.10.2/video-js.min.css" rel="stylesheet">
-<meta content="<%=title.channelTitle%>" name=twitter:description>
+<meta content="<%=title.Channel.Name%>" name=twitter:description>
 <meta content=@youtube name=twitter:site>
 <meta content="https://poketalebot.com/youtube/watch?v=<%=title.id%>" name=twitter:url>
 <meta content="<%=video.Title%>" name=twitter:title>
@@ -35,11 +35,11 @@
 <meta content="Poketube is a private youtube player thats focusted on privacy. No javascript needed!" property=twitter:description>
 <meta content=720 name=twitter:player:height>
 <link href="https://poketalebot.com/youtube/watch?v=<%=title.id%>" itemprop=url>
-<link href="http://www.youtube.com/channel/<%=title.channelId%>" itemprop=url>
-    <% } %>
-    <title> <%=video.Title%> - PokeTube</title>
+<link href="http://www.youtube.com/channel/<%=title.Channel.id%>" itemprop=url>
+<% } %> <!-- close the } -->
+<title> <%=video.Title%> - PokeTube</title>
 <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@500&display=swap" rel=stylesheet>
-<link href=https://cdn.poketalebot.com/404/v2.css rel=stylesheet>
+<link href=/css/app-cdn.min.css rel=stylesheet>
 <link href=/css/app.main.css rel=stylesheet>
 <style>
    a.class:hover {
@@ -48,9 +48,6 @@
 }
 </style>
   <body>
-    
-    <!-- IF SCRIPT IS ENABLED -->
-   <script src="/js/video.js"></script>
     
      <center>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@900&family=Sigmar+One&display=swap" rel=stylesheet>
@@ -74,7 +71,7 @@
                         </video>
                         <br></center><hr>
 <center>
-    <h1 style="font-family:Inter,sans-serif;font-weight:700;white-space:yes;font-size:45"><b> <%=video.Title%> </b></h1>
+    <h1 style="font-family:Inter,sans-serif;font-weight:900;white-space:yes;font-size:45"><b> <%=video.Title%> </b></h1>
     <a href="/channel?id=<%=title.Channel.id%>" style=color:#fff>
         <%=title.Channel.Name%>
     </a>
@@ -89,7 +86,7 @@
                         <%=engagement.viewCount.toLocaleString()%> Views| <i class="fas fa-thumbs-up"></i>
                             <%=engagement.likes.toLocaleString()%> <i class="fas fa-thumbs-down"></i>
                                 <%=engagement.dislikes.toLocaleString()%><br>
-                                    <p><i class="fas fa-shield-alt"></i> Youtube wont know you are whatching this video (also your fbi guy wont know too)</p><noscript><p><i class="fas fa-code"></i> Hey,you are on no script mode rn. Yes,Poketube does not require billion lame scripts to run :P</p></noscript>
+                                    <p><i class="fas fa-shield-alt"></i> Youtube wont know you are whatching this video (also your fbi guy wont know too)</p><a href="/api/video/download?v=<%=video.id%>">Downlad this video!</a><noscript><p><i class="fas fa-code"></i> Hey,you are on no script mode rn. Yes,Poketube does not require billion lame scripts to run :P</p></noscript>
                                     <hr>
                                     <h3 style="color:#fff;font-family:Inter,sans-serif;font-weight:700;white-space:yes;">Video Description</h3>
                                     <center>

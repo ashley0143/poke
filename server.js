@@ -46,6 +46,8 @@ app.get("/watch", async function (req, res) {
   var v = req.query.v;
   var e = req.query.e;
    var fetching = await fetcher(v)
+    const url = fetching.video.Player.Formats.Format[1].URL
+    /*
 const j = fetching.video.Player.Formats.Format,
   j_ = typeof j === 'object' && j !== null
     ? j
@@ -54,7 +56,7 @@ let url;
 
 if (j_.URL != undefined)
   url = j_.URL;
-  
+  */
   const json = fetching.video.Player
    const engagement = fetching.engagement
    const lyrics = await lyricsFinder(json.Title);

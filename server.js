@@ -42,49 +42,19 @@ const random_words = [
 ]
 const fetch = require("node-fetch");
 const fetcher = require("./src/fetcher.js");
- app.get("/watchnew", async function (req, res) {
-  var url = req.query.v;
-  var uu = `https://www.youtube.com/watch?v=${url}`;
-
-  const json = await fetch(
-    `https://yt-proxy-api.herokuapp.com/get_player_info?v=${url}`
-  ).then((res) => res.json());
-
-  const lyrics = await lyricsFinder(json.title);
-  if (lyrics == undefined) lyrics = "Lyrics not found";
-  renderTemplate(res, req, "youtubenew.ejs", {
-    url: json.formats[1].url,
-    title: json,
-    video: json,
-    date: json.upload_date,
-    lyrics: lyrics.replace(/\n/g, " <br> "),
-  });
-});
 app.get("/watch", async function (req, res) {
-  var url = req.query.v;
+  var v = req.query.v;
   var e = req.query.e;
+   var fetching = await fetcher(v)
+const j = fetching.video.Player.Formats.Format,
+  j_ = typeof j === 'object' && j !== null
+    ? j
+    : j[j.length - 1];
+let url;
 
-  var uu = `https://www.youtube.com/watch?v=${url}`;
-
-  var opts = {
-    maxResults: 1,
-    key: process.env.yt,
-  };
-   var fetching = await fetcher(url)
+if (j_.URL != undefined)
+  url = j_.URL;
   
-   const dislike = await fetch(`${dislike_api}${url}`).then((res) => res.json());
-  const dislikes = dislike.dislikes
-  
-  const j = fetching.video.Player.Formats.Format
-   
-    if(j[1].URL){
-    var url = j[1].URL
-   } else if(j[1].URL){
-    var s = j.formats
-    const lastItem = s[s.length - 1];
-    var url = lastItem.URL
-   }
- 
   const json = fetching.video.Player
    const engagement = fetching.engagement
    const lyrics = await lyricsFinder(json.Title);

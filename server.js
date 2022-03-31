@@ -45,18 +45,15 @@ const fetcher = require("./src/fetcher.js");
 app.get("/watch", async function (req, res) {
   var v = req.query.v;
   var e = req.query.e;
-   var fetching = await fetcher(v)
-    const url = fetching.video.Player.Formats.Format[1].URL
-    /*
+  if(!v) res.redirect("/")
+  var fetching = await fetcher(v)
 const j = fetching.video.Player.Formats.Format,
-  j_ = typeof j === 'object' && j !== null
-    ? j
-    : j[j.length - 1];
+  j_ = Array.isArray(j)
+    ? j[j.length - 1]
+    : j;
 let url;
-
 if (j_.URL != undefined)
   url = j_.URL;
-  */
   const json = fetching.video.Player
    const engagement = fetching.engagement
    const lyrics = await lyricsFinder(json.Title);

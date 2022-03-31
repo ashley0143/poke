@@ -24,14 +24,13 @@ class videoFetchManager{
     var json = xmltojson.toJson(text);
     let parser = JSON.parse(json);
     const fetching = parser
-    var j = fetching.Player.Formats.Format
-     if(j[1].URL){
-    var url = j[1].URL
-   } else if(j[1].URL){
-    var s = j.formats
-    const lastItem = s[s.length - 1];
-    var url = lastItem.URL
-   }
+ const j = fetching.Player.Formats.Format,
+  j_ = Array.isArray(j)
+    ? j[j.length - 1]
+    : j;
+let url;
+if (j_.URL != undefined)
+  url = j_.URL;
     return url
   }
 }

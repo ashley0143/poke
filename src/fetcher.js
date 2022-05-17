@@ -1,6 +1,6 @@
 /*
   
-    Copyright (C) 2021-2022 POKETUBE CONTRUBUTORS (https://github.com/iamashley0/poketube)
+    Copyright (C) 2021-2022 POKETUBE (https://github.com/iamashley0/poketube)
     
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -16,30 +16,25 @@
     along with this program. If not, see https://www.gnu.org/licenses/.
   */
 const fetch = require("node-fetch"); //2.5.x
-const xmltojson = require("xml2json")
-const lyricsFinder = require("../src/lyrics.js");
+const { toJson } = require("xml2json")
+
 var youtube_url = `https://www.youtube.com/watch?v=`;
 var dislike_api = `https://returnyoutubedislikeapi.com/votes?videoId=`
 var new_api_url = `https://lighttube.herokuapp.com/api/player`
 
 module.exports = async function(video_id){
 const dislike = await fetch(`${dislike_api}${video_id}`).then((res) => res.json());
-  const dislikes = dislike.dislikes
- /*
-  functions to fetch xml
-*/
-   async function fetchxml(id){
-  const player = await fetch(`https://lighttube.herokuapp.com/api/player?v=${id}`)
-  return player.text()
-  } 
-    
- async function parsexml(id){
-  var h = await fetchxml(id) 
-  var j = xmltojson.toJson(h);
+const dislikes = dislike.dislikes || "none"
+
+  /*
+   * Parses and fetches an xml
+  */
+  async function parsexml(id){
+  const player = await fetch(`${new_api_url}?v=${id}`)
+  var h = await player.text()
+  var j = toJson(h);
   return JSON.parse(j);
   }
-
-
   /*
   * Returner object
   */
@@ -54,10 +49,15 @@ const dislike = await fetch(`${dislike_api}${video_id}`).then((res) => res.json(
 module.exports.searcher = async function searcher(query,res){
    const search = await fetch(`https://lighttube.herokuapp.com/api/search?query=${query}`)
     const text =  await search.text()
-   const j = JSON.parse(xmltojson.toJson(text));
+   const j = JSON.parse(toJson(text));
+  if(query.length > 2) {
      for (item of j.Search.Results.Video)  {
        const videoid = item.id;
       return res.redirect(`/watch?v=${videoid}`);
     }
+    if(query.length < 2){
+      res.redirect("/")
+    }
+  }
   }
  

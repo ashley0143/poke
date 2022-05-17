@@ -1,7 +1,7 @@
  <!--
     This Source Code Form is subject to the terms of the GNU General Public License:
 
-    Copyright (C) 2021-2022 POKETUBE CONTRUBUTORS (https://github.com/iamashley0/poketube)
+    Copyright (C) 2021-2022 POKETUBE (https://github.com/iamashley0/poketube)
     
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -17,14 +17,12 @@
     along with this program. If not, see https://www.gnu.org/licenses/.
 -->
 <!DOCTYPE html>
-  <% if (e === false) { %>
+  <% if (e === false) { %> <!-- if ?e=false,dont show up the meta tags  -->
     
  <% } %>
   <% if (!e) { %>
 <meta content="<%=video.Title%>" name=title>
-<link href=/css/yt-ukraine.svg rel=icon>
 <meta content=player name=twitter:card>
-<link href="//vjs.zencdn.net/7.10.2/video-js.min.css" rel="stylesheet">
 <meta content="<%=title.Channel.Name%>" name=twitter:description>
 <meta content=@youtube name=twitter:site>
 <meta content="https://poketalebot.com/youtube/watch?v=<%=title.id%>" name=twitter:url>
@@ -37,6 +35,8 @@
 <link href="https://poketalebot.com/youtube/watch?v=<%=title.id%>" itemprop=url>
 <link href="http://www.youtube.com/channel/<%=title.Channel.id%>" itemprop=url>
 <% } %> <!-- close the } -->
+<link href="//vjs.zencdn.net/7.10.2/video-js.min.css" rel="stylesheet">
+<link href=/css/yt-ukraine.svg rel=icon>
 <title> <%=video.Title%> - PokeTube</title>
 <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@500&display=swap" rel=stylesheet>
 <link href=/css/app-cdn.min.css rel=stylesheet>
@@ -47,6 +47,63 @@
     font-weight:bold
 }
 </style>
+  <!-- WIGGLE WIGGLE WIGGLE -->
+  <style>
+    body{
+        overflow-x: hidden; /* Hide horizontal scrollbar */
+    }
+    
+   .animated {
+            -webkit-animation-duration: 10s; 
+            animation-duration: 10s; 
+            -webkit-animation-fill-mode: both;
+            animation-fill-mode: both; 
+            animation-iteration-count: infinite;
+            -moz-animation-iteration-count: infinite;
+            -webkit-animation-iteration-count: infinite;
+            -o-animation-iteration-count: infinite;
+         }
+         
+         @-webkit-keyframes wiggle { 
+            0% { -webkit-transform: skewX(9deg); }
+            10% { -webkit-transform: skewX(-8deg); }
+            20% { -webkit-transform: skewX(7deg); }
+            30% { -webkit-transform: skewX(-6deg); }
+            40% { -webkit-transform: skewX(5deg); } 
+            50% { -webkit-transform: skewX(-4deg); } 
+            60% { -webkit-transform: skewX(3deg); }
+            70% { -webkit-transform: skewX(-2deg); } 
+            80% { -webkit-transform: skewX(1deg); } 
+            90% { -webkit-transform: skewX(0deg); }
+            100% { -webkit-transform: skewX(0deg); } 
+         }
+         
+         @keyframes wiggle { 
+            0% { transform: skewX(9deg); } 
+            10% { transform: skewX(-8deg); } 
+            20% { transform: skewX(7deg); } 
+            30% { transform: skewX(-6deg); } 
+            40% { transform: skewX(5deg); } 
+            50% { transform: skewX(-4deg); } 
+            60% { transform: skewX(3deg); } 
+            70% { transform: skewX(-2deg); } 
+            80% { transform: skewX(1deg); } 
+            90% { transform: skewX(0deg); } 
+            100% { transform: skewX(0deg); } 
+         }
+         
+         .wiggle { 
+            -webkit-animation-name: wiggle;
+            animation-name: wiggle; 
+            -webkit-animation-timing-function: ease-in;
+            animation-timing-function: ease-in; 
+         }
+         
+         .animated.wiggle { 
+            -webkit-animation-duration: 0.75s; 
+            animation-duration: 0.75s;
+         }
+  </style>
   <body>
     
      <center>
@@ -54,24 +111,23 @@
     <link href=https://pro.fontawesome.com/releases/v5.15.3/css/all.css rel=stylesheet>
     <center>
         <nav>
-            <div class=left><a class="class" href="https://stopwarukraine.com/" style=font-family:Inter,sans-serif;color:#fff><span><i class="fa-youtube fab" style=color:#fff></i></span><span style="text-decoration:inherit;background:linear-gradient(to right, rgba(255,215,0,1) 50%, rgba(0,87,184,1) 50%);-webkit-text-fill-color:transparent;-webkit-background-clip:text;">PokeTube</span> 🇺🇦 </a> <a style="color:red;" href="/domains">Domains!</a></div>               
+            <div class=left><a class="class" href="https://stopwarukraine.com/" style=font-family:Inter,sans-serif;color:#fff><span><i class="fa-youtube fab" style=color:#fff></i></span><span style="text-decoration:inherit;background:linear-gradient(to right, rgba(255,215,0,1) 50%, rgba(0,87,184,1) 50%);-webkit-text-fill-color:transparent;-webkit-background-clip:text;">PokeTube</span> 🇺🇦 </a> <a style="color:red;" href="/domains">Domains!</a></a></div>               
 
             <div class=middle>
-                <form action=/api/search><input class=search-bar autocomplete="off" id=fname name=query style="color:#fff;font-family:Inter,sans-serif;font-weight:bolder"> <button class="btn btn-success" type=submit><i class="fas fa-search"></i></button></form>
+                <form action=/api/search><input class=search-bar autocomplete="on" id=fname name=query style="color:#fff;font-family:Inter,sans-serif;font-weight:bolder"> <button class="btn btn-success" type=submit><i class="fas fa-search"></i></button></form>
             </div>
-            <div class=right><a href="/video/upload?from="><i class="fas fa-video"></i></a> <a href="https://git.poketalebot.org"><i class="fab fa-git-alt"></i></a> <a href="https://github.com/iamashley0/poketube/issues"><i class="fas fa-bug"></i></a> <a href="https://github.com/iamashley0/poketube/pulls"><i class="fal fa-code-merge"></i></a></div>
+            <div class=right><a href="/privacy"><i class="fas fa-shield"></i></a><a href="/video/upload?from="><i class="fas fa-video"></i></a> <a href="github.com/iamashley0/poketube/"><i class="fab fa-git-alt"></i></a><a href="https://github.com/iamashley0/poketube/issues"><i class="fas fa-bug"></i></a></a></div>
         </nav>
         <section class=youtube-video>
-            <div class=screen>     
-                <div class=videoOuterContainer-3x2_n9>
+            <div class=screen>     <br>
+                 <div class=videoOuterContainer-3x2_n9>
                      <div class=videoMiddleContainer-2yUOUz>
                         <div class=videoInnerContainer-2IHZcN>
-                          <video class="video-3DYbjh" autoplay controls>
-                         <source src="<%=url%>" type="video/mp4">
-                        </video>
-                        <br></center><hr>
+                          	<video id="player" class="video-3DYbjh" src="<%=url%>" poster="https://i.ytimg.com/vi/<%=video.id%>/maxresdefault.jpg" autoplay controls>
+					</video>
+                         <br></center><hr>
 <center>
-    <h1 style="font-family:Inter,sans-serif;font-weight:900;white-space:yes;font-size:45"><b> <%=video.Title%> </b></h1>
+     <h1  style="font-family:Inter,sans-serif;font-weight:900;white-space:yes;font-size:65"><b> <%=video.Title%> </b></h1> 
     <a href="/channel?id=<%=title.Channel.id%>" style=color:#fff>
         <%=title.Channel.Name%>
     </a>
@@ -85,26 +141,39 @@
                     <%=date%>|<i class="fas fa-chart-bar"></i>
                         <%=engagement.viewCount.toLocaleString()%> Views| <i class="fas fa-thumbs-up"></i>
                             <%=engagement.likes.toLocaleString()%> <i class="fas fa-thumbs-down"></i>
-                                <%=engagement.dislikes.toLocaleString()%><br>
-                                    <p><i class="fas fa-shield-alt"></i> Youtube wont know you are whatching this video (also your fbi guy wont know too)</p><a href="/api/video/download?v=<%=video.id%>">Download this video!</a><noscript><p><i class="fas fa-code"></i> Hey,you are on no script mode rn. Yes,Poketube does not require billion lame scripts to run :P</p></noscript>
+                                <%=engagement.dislikes.toLocaleString()%> 
+<br>
+                                    <p><i class="fas fa-shield-alt"></i> Youtube And Poketube wont know you are whatching this video (also your fbi guy wont know too)</p>
+                               <p>   <span style="color:green;">Protip:</span>if a music video doesnt play,search up a lyrics video instead!</p>
+                         <p>  <a href="/api/video/download?v=<%=video.id%>">Download</a>|<a href="https://youtube.com/watch?v=<%=video.id%>">Open on YouTube</a>|<a href="/privacy">Privacy</a>
+                                  </p><noscript><p><i class="fas fa-code"></i> Hey,you are on no script mode rn. Yes,Poketube does not require billion lame scripts to run :P</p></noscript>
                                     <hr>
-                                    <h3 style="color:#fff;font-family:Inter,sans-serif;font-weight:700;white-space:yes;">Video Description</h3>
+                                    <h1 style="color:#fff;font-family:Inter,sans-serif;font-weight:700;white-space:yes;"> Description</h1>
                                     <center>
                                                                         <% if (title.Description) { %>
-                                        <p>
-                                            <%-title.Description.toString().replace(/\n/g, " <br> ")%></center>
-                                                                                    <% } %>
+                                                                
+                                        <p style=color:#fff>
+                                            <%-String(title.Description).replace(/\n/g, " <br> ")%></center>
+                                        </p>                    </details>
+                                                                                     <% } %>
 
                                     <% if (lyrics) { %>
-                                        <hr><br>
-                                <h1 style="font-family: 'Inter', sans-serif;font-weight: bold;white-space:yes;font-size:45;"> Music Lyrics 
+                                        <hr>
+                                <h1 style="font-family: 'Inter', sans-serif;font-weight: bold;white-space:yes;font-size:45;">   Lyrics 
                         </h1>            
+                                                                        <p>Click the arrow to expand!</p> <p>
+                                      see how our lyrics search works <a href="https://github.com/iamashley0/poketube/blob/main/src/lyrics.js"> here </a>
+                                      </p>
+
                     <details style="color=#fff">
                         <summary style="color=#fff"></summary>
                         <p style="color: white;">
                                         <p style=color:#fff>
                                             <%-lyrics%>
                                         </p>                    </details>
-                                        <% } %>
+                                        <% } %><hr>
+                                              <p><i class="fas fa-cookie-bite"></i> This website does not track you. No cookies. No data collection. No statistics. 100% handcrafted without JavaScript. <a href="https://poketube.fun/github.com/iamashley0/poketube/">Source code</a><br></p>
                                                                      </center></center></center></center></center>             
   </body>
+                              
+ 

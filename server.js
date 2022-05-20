@@ -15,15 +15,15 @@
     along with this program. If not, see https://www.gnu.org/licenses/.
   */
 const path = require("path");
+const htmlParser = require("node-html-parser");
+
 const moment = require("moment");
 const templateDir = path.resolve(`${process.cwd()}${path.sep}html`);
-
 var express = require("express");
 var app = express();
 app.engine("html", require("ejs").renderFile);
 app.use(express.urlencoded({ extended: true })) // for parsing application/x-www-form-urlencoded
 var dislike_api = `https://returnyoutubedislikeapi.com/votes?videoId=`
-
 app.set("view engine", "html");
 const lyricsFinder = require("./src/lyrics.js");
 const renderTemplate = async (res, req, template, data = {}) => {
@@ -32,7 +32,6 @@ const renderTemplate = async (res, req, template, data = {}) => {
     Object.assign(data)
   );
 };
-
 const random_words = [
   "banana pie",
   "how to buy an atom bomb",
@@ -46,10 +45,12 @@ const random_words = [
 ]
 const fetch = require("node-fetch");
 const fetcher = require("./src/fetcher.js");
- 
+
 app.get("/watch", async function (req, res) {
+  
   var v = req.query.v;
-  var e = req.query.e;
+  const getColors = require('get-image-colors')
+   var e = req.query.e;
   if(!v) res.redirect("/")
   var fetching = await fetcher(v)
 const j = fetching.video.Player.Formats.Format,
@@ -63,8 +64,10 @@ if (j_.URL != undefined)
    const engagement = fetching.engagement
    const lyrics = await lyricsFinder(json.Title);
   if (lyrics == undefined) lyrics = "Lyrics not found";
+   
   renderTemplate(res, req, "youtube.ejs", {
     url: url,
+    color: await getColors(`https://i.ytimg.com/vi/${v}/maxresdefault.jpg`).then((colors) => colors[0].hex()),
     engagement:engagement,
     title: json,
     a:json,

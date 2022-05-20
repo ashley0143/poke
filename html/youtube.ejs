@@ -1,4 +1,4 @@
-<!-- 
+ <!--
     This Source Code Form is subject to the terms of the GNU General Public License:
 
     Copyright (C) 2021-2022 POKETUBE (https://github.com/iamashley0/poketube)
@@ -22,6 +22,7 @@
  <% } %>
   <% if (!e) { %>
 <meta content="<%=video.Title%>" name=title>
+<meta content="<%=color%>" name="theme-color">
 <meta content=player name=twitter:card>
 <meta content="<%=title.Channel.Name%>" name=twitter:description>
 <meta content=@youtube name=twitter:site>
@@ -149,10 +150,11 @@ summary:hover{
                             <%=engagement.likes.toLocaleString()%> <i class="fas fa-thumbs-down"></i>
                                 <%=engagement.dislikes.toLocaleString()%> 
 <br>
+                                    <noscript><p><i class="fas fa-code"></i> Hey,you are on no script mode rn. Yes,Poketube does not require billion lame scripts to run :P</p></noscript>
                                     <p><i class="fas fa-shield-alt"></i> Youtube And Poketube wont know you are whatching this video (also your fbi guy wont know too)</p>
                                <p>   <span style="color:green;">Protip:</span>if a music video doesnt play,search up a lyrics video instead!</p>
                          <p>  <a href="/api/video/download?v=<%=video.id%>">Download</a>|<a href="https://youtube.com/watch?v=<%=video.id%>">Open on YouTube</a>|<a href="/privacy">Privacy</a>
-                                  </p><noscript><p><i class="fas fa-code"></i> Hey,you are on no script mode rn. Yes,Poketube does not require billion lame scripts to run :P</p></noscript>
+                                  </p>
                                     <hr>
                                     <h1 style="color:#fff;font-family:Inter,sans-serif;font-weight:700;white-space:yes;"> Description</h1>
                                     <center>
@@ -179,6 +181,7 @@ summary:hover{
                                         </p>                    </details>
                                         <% } %><hr>
                                               <p>This website does not track you. No cookies. No data collection. No statistics. 100% handcrafted without JavaScript. <a href="https://github.com/iamashley0/poketube/">Source code</a><br></p>
+                                        
                                                                      </center></center></center></center></center>             
   </body>
                               

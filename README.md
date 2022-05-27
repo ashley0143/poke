@@ -13,7 +13,7 @@
  
 ## Why Poketube?
 - Works on Older browsers!
-- No like bloat css (unlike,LightTube)
+- No like bloat css (unlike,LightTube) /s
 - Lyrics for songs!
 - No cookies,no data collection,no statistics
 - Javascript-free on frontend

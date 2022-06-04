@@ -1,4 +1,4 @@
-/*
+ /*
     Copyright (C) 2021-2022 POKETUBE (https://github.com/iamashley0/poketube)
     
     This program is free software: you can redistribute it and/or modify
@@ -16,7 +16,6 @@
   */
 const path = require("path");
 const htmlParser = require("node-html-parser");
-
 const moment = require("moment");
 const templateDir = path.resolve(`${process.cwd()}${path.sep}html`);
 var express = require("express");
@@ -64,24 +63,19 @@ if (j_.URL != undefined)
    const engagement = fetching.engagement
    const lyrics = await lyricsFinder(json.Title);
   if (lyrics == undefined) lyrics = "Lyrics not found";
-   
-  renderTemplate(res, req, "youtube.ejs", {
+  renderTemplate(res, req, "poketube.ejs", {
     url: url,
     color: await getColors(`https://i.ytimg.com/vi/${v}/maxresdefault.jpg`).then((colors) => colors[0].hex()),
     engagement:engagement,
-    title: json,
-    a:json,
     video: json,
     date: moment(json.uploadDate).format("LL"),
     e:e,
     lyrics: lyrics.replace(/\n/g, " <br> "),
   });
 });
- 
- 
 app.get("/", function (req, res) {
   const things = random_words[Math.floor((Math.random()*random_words.length))];
-  renderTemplate(res, req, "ytmain.ejs", {
+  renderTemplate(res, req, "main.ejs", {
   random:things,
 });});
 app.get("/channel", function (req, res) {
@@ -91,6 +85,9 @@ app.get("/channel", function (req, res) {
 });});
 app.get("/privacy", function (req, res) {
   renderTemplate(res, req, "priv.ejs");
+});
+app.get("/143", function (req, res) {
+  renderTemplate(res, req, "143.ejs");
 });
 app.get("/domains", function (req, res) {
   renderTemplate(res, req, "domains.ejs");
@@ -118,15 +115,10 @@ app.get("/api/video/download", async function (req, res) {
 app.get("/api/video/downloadjson", async function (req, res) {
   var v = req.query.v;var fetching = await fetcher(v);const url = fetching.video.Player.Formats.Format[1].URL;res.json(url)
  });
-
- 
  app.get("*", function (req, res) {
 const things = random_words[Math.floor((Math.random()*random_words.length))];
   renderTemplate(res, req, "404.ejs", {
   random:things,
 });});
- 
-
-
 app.listen("3000", () => {
 })

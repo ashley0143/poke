@@ -1,18 +1,19 @@
 <head>
-    <title>Poketube - Wip</title>
-   <link href=/css/yt-ukraine.svg rel=icon>
+    <title><%=j.Channel.Metadata.Name%> - PokeTube</title>
+   <link href=https://watch.poketalebot.com/css/yt-ukraine.svg rel=icon>
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Sigmar+One&amp;display=swap" rel="stylesheet"> 
     <meta content=website property=og:type>
-    <meta content="Poketube" property=og:title>
-    <meta content="Poketube is a open source youtube player. watch youtube videos privately!" property=twitter:description>
-    <meta content="https://cdn.glitch.com/ef5d02b7-c958-475a-b82d-d263d37e7ec7/d49811d3-f7ea-4cce-a4ac-1b4e84dceae7.image.png" property=og:image>
+    <meta content="<%=j.Channel.Metadata.Name%> - PokeTube" property=og:title>
+    <meta content="<%-about.Description.replace(/\n/g, "")%>" property=twitter:description>
+    <meta content="<%=j.Channel.Metadata.Banners.Thumbnail[2].$t%>" property=og:image>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@500&display=swap" rel="stylesheet">
     <meta content=summary_large_image name=twitter:card>
     <meta content=@PoketaleBot name=twitter:site>
     <meta content=@PoketaleBot name=twitter:creator>
   <link href=https://cdn.poketalebot.com/404/v2.css rel=stylesheet>
-    <link href=/css/app.main.css rel=stylesheet>
+    <link href=/css/app.main.css rel=stylesheet><link href=/css/search.main.css rel=stylesheet>
+
  </head>
 <body>
      <center> 
@@ -27,17 +28,35 @@
  
         </nav>
         <section class=youtube-video>
-            <div class=screen><br>
-              <h1 style="color:#fff">WORK IN PROGRESS! (will be added in 22.10)</h1><br>
- <a href="https://youtube.com/channel/<%=ID%>">view the channel on youtube</a>
+     <div class="app">
+<div class="channel-page">
+	<div class="channel-info-container">
+          <img src="<%=j.Channel.Metadata.Banners.Thumbnail[2].$t%>">
+		<div class="channel-info" >
+			<a href="/channel/UCmxfZa-sV27MUDqy-iJIsfA" class="avatar">
+				<img src="<%=j.Channel.Metadata.Avatars.Thumbnail.$t%>" alt="Channel Avatar">
+			</a>
+			<div class="name">
+				<p style="color:#fff"><%=j.Channel.Metadata.Name%></p>
+ 			</div>
+			<button class="subscribe-button">
+    
+        <%=subs%>
+          </button>
+		</div>
+	</div><hr>
+	<h3 style="color:#fff">About this channel</h3>
+	<p style="color:#fff"><%-about.Description.replace(/\n/g, " <br> ")%></p>
+	<br><br>
+	
+	
+
+	
+</div>
+
+</div>
               </body>
  
-  <script type="text/javascript">
-        function AddSearch () {
-            if (window.sidebar) {     
-                window.sidebar.addSearchEngine ('http://watch.poketalebot.com/search/default.src', 'https://poketalebot.com/youtube/icons/dark.svg', 'Poketube Quick search', null);
-            }
-        }
- </script>
+   
  
 </html>

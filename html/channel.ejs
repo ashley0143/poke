@@ -5,15 +5,15 @@
     <link href="https://fonts.googleapis.com/css2?family=Sigmar+One&amp;display=swap" rel="stylesheet"> 
     <meta content=website property=og:type>
     <meta content="<%=j.Channel.Metadata.Name%> - PokeTube" property=og:title>
-    <meta content="<%-about.Description.replace(/\n/g, "")%>" property=twitter:description>
+    <meta content="<%-desc%>" property=twitter:description>
     <meta content="<%=j.Channel.Metadata.Banners.Thumbnail[2].$t%>" property=og:image>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@500&display=swap" rel="stylesheet">
     <meta content=summary_large_image name=twitter:card>
     <meta content=@PoketaleBot name=twitter:site>
     <meta content=@PoketaleBot name=twitter:creator>
   <link href=https://cdn.poketalebot.com/404/v2.css rel=stylesheet>
-    <link href=/css/app.main.css rel=stylesheet><link href=/css/search.main.css rel=stylesheet>
-
+    <link href=/css/app.main.css rel=stylesheet>
+      <link href=/css/search.main.css rel=stylesheet>
  </head>
 <body>
      <center> 
@@ -33,25 +33,20 @@
 	<div class="channel-info-container">
           <img src="<%=j.Channel.Metadata.Banners.Thumbnail[2].$t%>">
 		<div class="channel-info" >
-			<a href="/channel/UCmxfZa-sV27MUDqy-iJIsfA" class="avatar">
+			<a href="/channel?id=<%=ID%>" class="avatar">
 				<img src="<%=j.Channel.Metadata.Avatars.Thumbnail.$t%>" alt="Channel Avatar">
 			</a>
 			<div class="name">
 				<p style="color:#fff"><%=j.Channel.Metadata.Name%></p>
  			</div>
-			<button class="subscribe-button">
-    
-        <%=subs%>
+			<button class="subscribe-button"><%=subs%>
           </button>
 		</div>
 	</div><hr>
 	<h3 style="color:#fff">About this channel</h3>
-	<p style="color:#fff"><%-about.Description.replace(/\n/g, " <br> ")%></p>
-	<br><br>
-	
-	
-
-	
+	<p style="color:#fff"><%-desc.replace(/\n/g, " <br> ")%></p>
+	<br><hr>
+	  <a href="https://youtube.com/channel/<%=ID%>">view the channel on youtube</a>
 </div>
 
 </div>

@@ -99,7 +99,6 @@ app.get("/api/search", async (req, res) => {
     return res.redirect("/");
   }
       return res.redirect(`/search?query=${query}`);
-
  });
 app.get("/search", async (req, res) => {
   const { toJson } = require("xml2json");
@@ -114,6 +113,7 @@ app.get("/search", async (req, res) => {
   }
   renderTemplate(res, req, "search.ejs", {
     j: j,
+    q:query
   });
  });
 app.get("/css/:id", (req, res) => {

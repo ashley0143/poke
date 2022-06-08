@@ -48,16 +48,11 @@
     font-weight:bold
 }
   summary{
-    color:blue;
+    color:gray;
 }
 summary:hover{
-    color:red;
+    color:white;
 }
-  h1{
-  background-image: linear-gradient(to left, violet, blue, orange, red);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  }
 </style>
   <!-- WIGGLE WIGGLE WIGGLE -->
   <style>
@@ -117,28 +112,27 @@ summary:hover{
          }
   </style>
   <body>
-    
      <center>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@900&family=Sigmar+One&display=swap" rel=stylesheet>
     <link href=https://pro.fontawesome.com/releases/v5.15.3/css/all.css rel=stylesheet>
     <center>
         <nav>
-            <div class=left><a class="class" href="/143" style=font-family:Inter,sans-serif;color:#fff><span><i class="fa-youtube fab" style="text-decoration:inherit;background:linear-gradient(to right,blue,pink);-webkit-text-fill-color:transparent;-webkit-background-clip:text;"></i></span><span style="background-image: linear-gradient(to left,purple,#000080);-webkit-background-clip: text;-webkit-text-fill-color: transparent;">PokeTube</span> 🇺🇦 </a> <a href="/domains"><i class="fas fa-server"></i><a href="https://search.poketalebot.com"><i class="fas fa-search"></i> </a></div>               
+            <div class=left><a class="class" href="/143" style=font-family:Inter,sans-serif;color:#fff><span><i class="fa-youtube fab" style="text-decoration:inherit;background:linear-gradient(to right,blue,pink);-webkit-text-fill-color:transparent;-webkit-background-clip:text;"></i></span><span style="background-image: linear-gradient(to left,pink,#000080);-webkit-background-clip: text;-webkit-text-fill-color: transparent;">PokeTube</span> 🇺🇦 </a> <a href="/domains"><i class="fas fa-server"></i><a href="https://search.poketalebot.com"><i class="fas fa-search"></i> </a></div>               
             <div class=middle>
-                <form action=/api/search><input class=search-bar autocomplete="on" id=fname name=query style="color:#fff;font-family:Inter,sans-serif;"> <button class="btn btn-success" type=submit><i class="fas fa-search"></i></button></form>
+                <form action=/search><input class=search-bar autocomplete="on" id=fname name=query style="color:#fff;font-family:Inter,sans-serif;"> <button class="btn btn-success" type=submit><i class="fas fa-search"></i></button></form>
             </div>
             <div class=right><a href="/privacy"><i class="fas fa-shield"></i></a><a href="/video/upload?from="><i class="fas fa-video"></i></a> <a href="https://github.com/iamashley0/poketube/"><i class="fab fa-git-alt"></i></a><a href="https://github.com/iamashley0/poketube/issues"><i class="fas fa-bug"></i></a></a></div>
         </nav>
         <section class=youtube-video>
-            <div class=screen>     <br>
+            <div class=screen>     
                  <div class=videoOuterContainer-3x2_n9>
                      <div class=videoMiddleContainer-2yUOUz>
                         <div class=videoInnerContainer-2IHZcN>
                           	<video id="player" class="video-3DYbjh" src="<%=url%>" poster="https://i.ytimg.com/vi/<%=video.id%>/maxresdefault.jpg" autoplay controls>
-					</video>
-                         <br></center><hr>
+					</video><br><br>
+                        <br><br></center><hr>
 <center>
-     <h1  style="font-family:Inter,sans-serif;font-weight:900;white-space:yes;font-size:65"><b> <%=video.Title%> </b></h1> 
+     <h1 style="font-family:Inter,sans-serif;font-weight:900;white-space:yes;font-size:65"><b> <%=video.Title%> </b></h1> 
     <a href="/channel?id=<%=video.Channel.id%>" style=color:#fff>
         <%=video.Channel.Name%>
     </a>
@@ -156,34 +150,42 @@ summary:hover{
 <br>
                                     <noscript><p><i class="fas fa-code"></i> Hey,you are on no script mode rn. Yes,Poketube does not require billion lame scripts to run :P</p></noscript>
                                     <p><i class="fas fa-shield-alt"></i> Youtube And Poketube wont know you are whatching this video (also your fbi guy wont know too)</p>
-                               <p>   <span style="color:green;">Protip:</span>if a music video doesnt play,search up a lyrics video instead!</p>
-                         <p>  <a href="/api/video/download?v=<%=video.id%>">Download</a>|<a href="https://youtube.com/watch?v=<%=video.id%>">Open on YouTube</a>|<a href="/privacy">Privacy</a>
+                         <p>  <a href="/api/video/download?v=<%=video.id%>">Download</a>|<a href="https://youtube.com/watch?v=<%=video.id%>">Open on YouTube (Not recommended)</a>|<a href="/privacy">Privacy</a>
                                   </p>
                                     <hr>
-                                    <h1 style="color:#fff;font-family:Inter,sans-serif;font-weight:700;white-space:yes;"> Description</h1>
+  <h1 style="color:#fff;font-family:Inter,sans-serif;font-weight:700;white-space:yes;">M O A R
+                                  </h1>             
+                                  <p>
+                                    see description and the lyrics of the video!
+                                  </p>
+                                  <p>
+                                    (click the arrow to expand)
+                                  </p>
+                                  <details style="color=#fff">
+                        <summary style="color=#fff"></summary>
+                        <p style="color: white;">
+                                    <h1 style="color:#fff;font-family:Inter,sans-serif;font-weight:700;white-space:yes;"> Description</h1><hr>
                                     <center>
                                                                         <% if (video.Description) { %>
                                                                 
                                         <p style=color:#fff>
                                             <%-String(video.Description).replace(/\n/g, " <br> ")%></center>
-                                        </p>                    </details>
+                                        </p>                 
                                                                                      <% } %>
 
                                     <% if (lyrics) { %>
-                                        <hr>
-                                <h1 style="font-family: 'Inter', sans-serif;font-weight: bold;white-space:yes;font-size:45;">   Lyrics 
-                        </h1>            
-                                                                        <p>Click the arrow to expand!</p> <p>
-                                      see how our lyrics search works <a href="https://github.com/iamashley0/poketube/blob/main/src/lyrics.js"> here </a>
-                                      </p>
+                                        
+                                <h1 style="color:#fff;font-family: 'Inter', sans-serif;font-weight: bold;white-space:yes;font-size:45;">   Lyrics 
+                        </h1> <hr>           
 
-                    <details style="color=#fff">
-                        <summary style="color=#fff"></summary>
+  
                         <p style="color: white;">
                                         <p style=color:#fff>
                                             <%-lyrics%>
-                                        </p>                    </details>
-                                        <% } %><hr>
+                                        </p> 
+
+                                        <% } %>                                      </details>
+<hr>
                                               <p>This website does not track you. No cookies. No data collection. No statistics. 100% handcrafted without JavaScript. <a href="https://github.com/iamashley0/poketube/">Source code</a><br></p>
                                         
                                                                      </center></center></center></center></center>             

@@ -1,0 +1,87 @@
+ <!--
+    This Source Code Form is subject to the terms of the GNU General Public License:
+
+    Copyright (C) 2021-2022 POKETUBE (https://github.com/iamashley0/poketube)
+    
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program. If not, see https://www.gnu.org/licenses/.
+-->
+<!DOCTYPE html>
+<head>
+<title>Search</title>
+<link href="//vjs.zencdn.net/7.10.2/video-js.min.css" rel="stylesheet">
+<link href=/css/yt-ukraine.svg rel=icon>
+ <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@500&display=swap" rel=stylesheet>
+<link href=/css/app-cdn.min.css rel=stylesheet>
+<link href=/css/app.main.css rel=stylesheet>
+<link href=/css/search.main.css rel=stylesheet>
+<style>
+   a.class:hover {
+    text-decoration:underline;
+    font-weight:bold
+}
+  summary{
+    color:blue;
+}
+summary:hover{
+    color:red;
+}
+  h1{
+  background-image: linear-gradient(to left, violet, blue, orange, red);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  }
+</style>
+</head>
+  <body>
+     <center>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@900&family=Sigmar+One&display=swap" rel=stylesheet>
+    <link href=https://pro.fontawesome.com/releases/v5.15.3/css/all.css rel=stylesheet>
+    <center>
+        <nav>
+            <div class=left><a class="class" href="/143" style=font-family:Inter,sans-serif;color:#fff><span><i class="fa-youtube fab" style="text-decoration:inherit;background:linear-gradient(to right,blue,pink);-webkit-text-fill-color:transparent;-webkit-background-clip:text;"></i></span><span style="background-image: linear-gradient(to left,pink,#000080);-webkit-background-clip: text;-webkit-text-fill-color: transparent;">PokeTube</span> 🇺🇦 </a> <a href="/domains"><i class="fas fa-server"></i><a href="https://search.poketalebot.com"><i class="fas fa-search"></i> </a></div>               
+            <div class=middle>
+                <form action=/api/search><input class=search-bar autocomplete="on" id=fname name=query style="color:#fff;font-family:Inter,sans-serif;"> <button class="btn btn-success" type=submit><i class="fas fa-search"></i></button></form>
+            </div>
+            <div class=right><a href="/privacy"><i class="fas fa-shield"></i></a><a href="/video/upload?from="><i class="fas fa-video"></i></a> <a href="https://github.com/iamashley0/poketube/"><i class="fab fa-git-alt"></i></a><a href="https://github.com/iamashley0/poketube/issues"><i class="fas fa-bug"></i></a></a></div>
+        </nav>
+            </center>
+<p>
+  hey,this is still wip!
+  
+       </p>
+      <hr>
+          <div class="app">
+       <% j.Search.Results.Video.forEach(x => { %>
+         <div class="video-list">
+    <div class="video">
+      <a
+        href="/watch?v=<%= x.id %>"
+        class="thumbnail"
+        style="background-image: url('https://i.ytimg.com/vi/<%= x.id %>/hq720.jpg?sqp=-oaymwEXCNAFEJQDSFryq4qpAwkIARUAAIhCGAE=&amp;rs=AOn4CLBmAOZV7CM3NdDKlEFxGX7PpI5UWQ')"
+         ><span class="video-length"><%=x.duration %></span></a>
+      <div class="info" style="color:#fff;text-align: left;"">
+        <a style="color:#fff" href="/watch?v=<%= x.id %>" class="title max-lines-2"
+          ><%= x.Title %></a>
+        <div style="display: flex; flex-direction: column; row-gap: 8px">
+          <a href="/watch?v=<%= x.id %>"><%=x.Channel.Name %></a>
+        </div>
+      </div>
+    </div>
+    </div>
+  </div>
+               <% }) %>   </div>
+
+   </body>
+                              
+ 

@@ -81,7 +81,6 @@ app.get("/", function (req, res) {
 app.get("/channel", async (req, res) => {
     const ID = req.query.id;
     const { toJson } = require("xml2json");
-   
     const bout = await fetch(
     `https://lighttube.herokuapp.com/api/channel?id=${ID}&tab=about`
   );
@@ -92,7 +91,8 @@ app.get("/channel", async (req, res) => {
   ID:ID,
   j:k,
   about:k.Channel.Contents.ItemSection.About,
-  subs:typeof subscribers === 'string' ? subscribers.replace('subscribers', '') : 'Private'
+  subs:typeof subscribers === 'string' ? subscribers.replace('subscribers', '') : 'Private',
+  desc:k.Channel.Contents.ItemSection.About.Description
 });});
 app.get("/privacy", function (req, res) {
   renderTemplate(res, req, "priv.ejs");
@@ -117,7 +117,6 @@ app.get("/search", async (req, res) => {
   const search = await fetch(
     `https://lighttube.herokuapp.com/api/search?query=${query}`
   );
-  
   const text = await search.text();
   const j = JSON.parse(toJson(text));
   if (!query) {

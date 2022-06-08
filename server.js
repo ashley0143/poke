@@ -98,8 +98,24 @@ app.get("/api/search", async (req, res) => {
   if (!query) {
     return res.redirect("/");
   }
-  fetcher.searcher(query,res)
-});
+      return res.redirect(`/search?query=${query}`);
+
+ });
+app.get("/search", async (req, res) => {
+  const { toJson } = require("xml2json");
+  const query = req.query.query;
+  const search = await fetch(
+    `https://lighttube.herokuapp.com/api/search?query=${query}`
+  );
+  const text = await search.text();
+  const j = JSON.parse(toJson(text));
+  if (!query) {
+    return res.redirect("/");
+  }
+  renderTemplate(res, req, "search.ejs", {
+    j: j,
+  });
+ });
 app.get("/css/:id", (req, res) => {
   res.sendFile(__dirname + `/css/${req.params.id}`);
 });

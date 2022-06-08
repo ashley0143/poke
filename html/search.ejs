@@ -18,13 +18,14 @@
 -->
 <!DOCTYPE html>
 <head>
-<title>Search</title>
+<title>Searching <%=q%> - PokeTube</title>
 <link href="//vjs.zencdn.net/7.10.2/video-js.min.css" rel="stylesheet">
 <link href=/css/yt-ukraine.svg rel=icon>
  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@500&display=swap" rel=stylesheet>
 <link href=/css/app-cdn.min.css rel=stylesheet>
 <link href=/css/app.main.css rel=stylesheet>
 <link href=/css/search.main.css rel=stylesheet>
+
 <style>
    a.class:hover {
     text-decoration:underline;
@@ -42,7 +43,8 @@ summary:hover{
   -webkit-text-fill-color: transparent;
   }
 </style>
-</head>
+ </head>
+
   <body>
      <center>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@900&family=Sigmar+One&display=swap" rel=stylesheet>
@@ -51,17 +53,12 @@ summary:hover{
         <nav>
             <div class=left><a class="class" href="/143" style=font-family:Inter,sans-serif;color:#fff><span><i class="fa-youtube fab" style="text-decoration:inherit;background:linear-gradient(to right,blue,pink);-webkit-text-fill-color:transparent;-webkit-background-clip:text;"></i></span><span style="background-image: linear-gradient(to left,pink,#000080);-webkit-background-clip: text;-webkit-text-fill-color: transparent;">PokeTube</span> 🇺🇦 </a> <a href="/domains"><i class="fas fa-server"></i><a href="https://search.poketalebot.com"><i class="fas fa-search"></i> </a></div>               
             <div class=middle>
-                <form action=/api/search><input class=search-bar autocomplete="on" id=fname name=query style="color:#fff;font-family:Inter,sans-serif;"> <button class="btn btn-success" type=submit><i class="fas fa-search"></i></button></form>
+                <form action=/api/search><input value="<%=q%>" class=search-bar autocomplete="on" id=fname name=query style="color:#fff;font-family:Inter,sans-serif;"> <button class="btn btn-success" type=submit><i class="fas fa-search"></i></button></form>
             </div>
             <div class=right><a href="/privacy"><i class="fas fa-shield"></i></a><a href="/video/upload?from="><i class="fas fa-video"></i></a> <a href="https://github.com/iamashley0/poketube/"><i class="fab fa-git-alt"></i></a><a href="https://github.com/iamashley0/poketube/issues"><i class="fas fa-bug"></i></a></a></div>
         </nav>
             </center>
-<p>
-  hey,this is still wip!
-  
-       </p>
-      <hr>
-          <div class="app">
+           <div class="app">
        <% j.Search.Results.Video.forEach(x => { %>
          <div class="video-list">
     <div class="video">
@@ -70,17 +67,22 @@ summary:hover{
         class="thumbnail"
         style="background-image: url('https://i.ytimg.com/vi/<%= x.id %>/hq720.jpg?sqp=-oaymwEXCNAFEJQDSFryq4qpAwkIARUAAIhCGAE=&amp;rs=AOn4CLBmAOZV7CM3NdDKlEFxGX7PpI5UWQ')"
          ><span class="video-length"><%=x.duration %></span></a>
-      <div class="info" style="color:#fff;text-align: left;"">
+      <div class="info" style="color:#fff;text-align: left;">
         <a style="color:#fff" href="/watch?v=<%= x.id %>" class="title max-lines-2"
           ><%= x.Title %></a>
         <div style="display: flex; flex-direction: column; row-gap: 8px">
-          <a href="/watch?v=<%= x.id %>"><%=x.Channel.Name %></a>
+          <a href="/watch?v=IRSWmkSJJEs"><span><%= x.views %> views</span> <span>•</span> <span><%= x.uploadedAt %></span></a>
+          <a href="/channel?id=<%= x.Channel.id %>">By <%=x.Channel.Name %></a>
         </div>
       </div>
     </div>
     </div>
   </div>
-               <% }) %>   </div>
+               <% }) %>   
+                 </div>
+         <p>
+          and thats the end of the internet... wooo
+        </p>
 
    </body>
                               

@@ -16,48 +16,34 @@
     along with this program. If not, see https://www.gnu.org/licenses/.
   */
 const fetch = require("node-fetch"); //2.5.x
-const { toJson } = require("xml2json")
+const { toJson } = require("xml2json");
 
 var youtube_url = `https://www.youtube.com/watch?v=`;
-var dislike_api = `https://returnyoutubedislikeapi.com/votes?videoId=`
-var new_api_url = `https://lighttube.herokuapp.com/api/player`
+var dislike_api = `https://returnyoutubedislikeapi.com/votes?videoId=`;
+var new_api_url = `https://tube.kuylar.dev/api/player`;
 
-module.exports = async function(video_id){
-const dislike = await fetch(`${dislike_api}${video_id}`).then((res) => res.json());
-const dislikes = dislike.dislikes || "none"
+module.exports = async function (video_id) {
+  const dislike = await fetch(`${dislike_api}${video_id}`).then((res) =>
+    res.json()
+  );
+  const dislikes = dislike.dislikes || "none";
 
   /*
    * Parses and fetches an xml
-  */
-  async function parsexml(id){
-  const player = await fetch(`${new_api_url}?v=${id}`)
-  var h = await player.text()
-  var j = toJson(h);
-  return JSON.parse(j);
+   */
+  async function parsexml(id) {
+    const player = await fetch(`${new_api_url}?v=${id}`);
+    var h = await player.text();
+    var j = toJson(h);
+    return JSON.parse(j);
   }
   /*
-  * Returner object
-  */
+   * Returner object
+   */
   const returner = {
-    video:await parsexml(video_id),
-    engagement:dislike,
-    video_url_youtube:`${youtube_url}${video_id}`
-   }
-   return returner
- }
-
-module.exports.searcher = async function searcher(query,res){
-   const search = await fetch(`https://lighttube.herokuapp.com/api/search?query=${query}`)
-    const text =  await search.text()
-   const j = JSON.parse(toJson(text));
-  if(query.length > 2) {
-     for (item of j.Search.Results.Video)  {
-       const videoid = item.id;
-      return res.redirect(`/watch?v=${videoid}`);
-    }
-    if(query.length < 2){
-      res.redirect("/")
-    }
-  }
-  }
- 
+    video: await parsexml(video_id),
+    engagement: dislike,
+    video_url_youtube: `${youtube_url}${video_id}`,
+  };
+  return returner;
+};

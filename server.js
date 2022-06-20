@@ -77,7 +77,8 @@ app.get("/", function (req, res) {
   const things = random_words[Math.floor((Math.random()*random_words.length))];
   renderTemplate(res, req, "main.ejs", {
   random:things,
-});});
+});
+});
 app.get("/channel", async (req, res) => {
     const ID = req.query.id;
     const { toJson } = require("xml2json");
@@ -115,7 +116,7 @@ app.get("/search", async (req, res) => {
   const { toJson } = require("xml2json");
   const query = req.query.query;
   const search = await fetch(
-    `https://lighttube.herokuapp.com/api/search?query=${query}`
+    `https://tube.kuylar.dev/api/search?query=${query}`
   );
   const text = await search.text();
   const j = JSON.parse(toJson(text));

@@ -46,13 +46,12 @@ const fetch = require("node-fetch");
 const fetcher = require("./src/fetcher.js");
 
 app.get("/watch", async function (req, res) {
-  
   var v = req.query.v;
   const getColors = require('get-image-colors')
    var e = req.query.e;
   if(!v) res.redirect("/")
   var fetching = await fetcher(v)
-const j = fetching.video.Player.Formats.Format,
+    const j = fetching.video.Player.Formats.Format,
   j_ = Array.isArray(j)
     ? j[j.length - 1]
     : j;
@@ -73,6 +72,34 @@ if (j_.URL != undefined)
     lyrics: lyrics.replace(/\n/g, " <br> "),
   });
 });
+
+app.get("/old/watch", async function (req, res) {
+  var v = req.query.v;
+  const getColors = require('get-image-colors')
+   var e = req.query.e;
+  if(!v) res.redirect("/")
+  var fetching = await fetcher(v)
+    const j = fetching.video.Player.Formats.Format,
+  j_ = Array.isArray(j)
+    ? j[j.length - 1]
+    : j;
+let url;
+if (j_.URL != undefined)
+  url = j_.URL;
+  const json = fetching.video.Player
+   const engagement = fetching.engagement
+   const lyrics = await lyricsFinder(json.Title);
+  if (lyrics == undefined) lyrics = "Lyrics not found";
+  renderTemplate(res, req, "poketube-old.ejs", {
+    url: url,
+    color: await getColors(`https://i.ytimg.com/vi/${v}/maxresdefault.jpg`).then((colors) => colors[0].hex()),
+    engagement:engagement,
+    video: json,
+    date: moment(json.uploadDate).format("LL"),
+    e:e,
+    lyrics: lyrics.replace(/\n/g, " <br> "),
+  });
+});
 app.get("/", function (req, res) {
   const things = random_words[Math.floor((Math.random()*random_words.length))];
   renderTemplate(res, req, "main.ejs", {
@@ -80,11 +107,9 @@ app.get("/", function (req, res) {
 });
 });
 app.get("/channel", async (req, res) => {
-    const ID = req.query.id;
-    const { toJson } = require("xml2json");
-    const bout = await fetch(
-    `https://lighttube.herokuapp.com/api/channel?id=${ID}&tab=about`
-  );
+  const ID = req.query.id;
+  const { toJson } = require("xml2json");
+  const bout = await fetch( `https://tube.kuylar.dev/api/channel?id=${ID}&tab=about`);
   const h = await bout.text();
   const k = JSON.parse(toJson(h));
   const { Subscribers: subscribers } = k.Channel.Metadata;
@@ -115,9 +140,7 @@ app.get("/api/search", async (req, res) => {
 app.get("/search", async (req, res) => {
   const { toJson } = require("xml2json");
   const query = req.query.query;
-  const search = await fetch(
-    `https://tube.kuylar.dev/api/search?query=${query}`
-  );
+  const search = await fetch(`https://tube.kuylar.dev/api/search?query=${query}`);
   const text = await search.text();
   const j = JSON.parse(toJson(text));
   if (!query) {
@@ -143,6 +166,8 @@ app.get("/api/video/download", async function (req, res) {
 app.get("/api/video/downloadjson", async function (req, res) {
   var v = req.query.v;var fetching = await fetcher(v);const url = fetching.video.Player.Formats.Format[1].URL;res.json(url)
  });
+
+
  app.get("*", function (req, res) {
 const things = random_words[Math.floor((Math.random()*random_words.length))];
   renderTemplate(res, req, "404.ejs", {

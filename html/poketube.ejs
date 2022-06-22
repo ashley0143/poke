@@ -234,18 +234,37 @@ summary:hover{
 	</div>
 
 		<div class="recommended-list" style="backgorund-color:#181818">
-            	           <% if (!lyrics) { %>
+            	           <% if (lyrics && !r) { %>
+                  Ayo u are lucy! this music video has lyrics! wanna see em? <a href="/watch?v=<%=video.id%>&r=f">Click this!</a>
+                           <% } %>   
+                              <% if (!r) { %> 
+                               <p style="font-family:Inter,sans-serif;font-weight:900;white-space:yes;">
+you migth also watch these... (ig?)
+                               </p>
+          <% k.Video.Recommendations.Video.forEach(x => { %>
+						<div class="video">
+      <a  href="/watch?v=<%= x.id %>" class="thumbnail" style="background-image: url('https://i.ytimg.com/vi/<%= x.id %>/hqdefault.jpg?sqp=-oaymwEXCNAFEJQDSFryq4qpAwkIARUAAIhCGAE=&amp;rs=AOn4CLBmAOZV7CM3NdDKlEFxGX7PpI5UWQ')"  >								<span class="video-length"><%=x.duration %></span>
+							</a>
+							<div class="info">
+								<a href="/watch?v=<%= x.id %>" class="title max-lines-2"><%= x.Title %></a>
+								<div>
+               <a href="/channel?id=<%= x.Channel.id %>">By <%=x.Channel.Name %></a>
+									<div>
+										          <a href="/watch?v=<%= x.id %>"><span><%= x.views %> views</span> <span>•</span> <span><%= x.uploadedAt %></span></a>
+
+									</div>
+								</div>
+							</div>
+						</div>
+       <% }) %>   
+                            <% } %>
+
  
-         <div align="center">
-                                <h1 style="color:#fff;font-family: 'Inter', sans-serif;font-weight: bold;white-space:yes;font-size:45;">   Lyrics 
-                        </h1>  
-                        <p style="color: white;">
-                                        <p style=color:#fff>
- We didint found any Lyrics lol (this migth not be a music video or something idk)
-           </p> 
-                                                                   <% } %>
 
       	           <% if (lyrics) { %>
+                                                  <% if (r === "f") { %> 
+
+            <a href="/watch?v=<%=video.id%>">See the Recommended videos instead</a>
 
          <div align="center">
                                 <h1 style="color:#fff;font-family: 'Inter', sans-serif;font-weight: bold;white-space:yes;font-size:45;">   Lyrics 
@@ -257,12 +276,14 @@ summary:hover{
                                         <p style=color:#fff>
                                             <%-lyrics%>
                                         </p> 
+                                                                      <% } %>
 
-		</div>
+                                        <% } %>                                      </details>
+
+                     </div>
 	</div>
 </div>
-                                        <% } %>
-		 
+ 		 
 </body>
 </html>
 

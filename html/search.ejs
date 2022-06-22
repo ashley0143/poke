@@ -65,13 +65,13 @@ summary:hover{
       <a
         href="/watch?v=<%= x.id %>"
         class="thumbnail"
-        style="background-image: url('https://i.ytimg.com/vi/<%= x.id %>/hq720.jpg?sqp=-oaymwEXCNAFEJQDSFryq4qpAwkIARUAAIhCGAE=&amp;rs=AOn4CLBmAOZV7CM3NdDKlEFxGX7PpI5UWQ')"
+        style="background-image: url('https://i.ytimg.com/vi/<%= x.id %>/hqdefault.jpg?sqp=-oaymwEXCNAFEJQDSFryq4qpAwkIARUAAIhCGAE=&amp;rs=AOn4CLBmAOZV7CM3NdDKlEFxGX7PpI5UWQ')"
          ><span class="video-length"><%=x.duration %></span></a>
       <div class="info" style="color:#fff;text-align: left;">
         <a style="color:#fff" href="/watch?v=<%= x.id %>" class="title max-lines-2"
           ><%= x.Title %></a>
         <div style="display: flex; flex-direction: column; row-gap: 8px">
-          <a href="/watch?v=IRSWmkSJJEs"><span><%= x.views %> views</span> <span>•</span> <span><%= x.uploadedAt %></span></a>
+          <a href="/watch?v=<%= x.id %>"><span><%= x.views %> views</span> <span>•</span> <span><%= x.uploadedAt %></span></a>
           <a href="/channel?id=<%= x.Channel.id %>">By <%=x.Channel.Name %></a>
         </div>
       </div>

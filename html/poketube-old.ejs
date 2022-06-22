@@ -1,0 +1,195 @@
+ <!--
+    This Source Code Form is subject to the terms of the GNU General Public License:
+
+    Copyright (C) 2021-2022 POKETUBE (https://github.com/iamashley0/poketube)
+    
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program. If not, see https://www.gnu.org/licenses/.
+-->
+<!DOCTYPE html>
+  <% if (e === false) { %> <!-- if ?e=false,dont show up the meta tags  -->
+    
+ <% } %>
+  <% if (!e) { %>
+<meta content="<%=video.Title%>" name=title>
+<meta content="<%=color%>" name="theme-color">
+<meta content=player name=twitter:card>
+<meta content="<%=video.Channel.Name%>" name=twitter:description>
+<meta content=@youtube name=twitter:site>
+<meta content="https://poketube.fun/watch?v=<%=video.id%>" name=twitter:url>
+<meta content="<%=video.Title%>" name=twitter:title>
+<meta content="https://i.ytimg.com/vi/<%=video.id%>/maxresdefault.jpg" name=twitter:image>
+<meta content="https://www.youtube.com/embed/<%=video.id%>" name=twitter:player>
+<meta content=1280 name=twitter:player:width>
+<meta content="Poketube is a private youtube player thats focusted on privacy. No javascript needed!" property=twitter:description>
+<meta content=720 name=twitter:player:height>
+<link href="https://poketube.fun/watch?v=<%=video.id%>" itemprop=url>
+<link href="http://www.youtube.com/channel/<%=video.Channel.id%>" itemprop=url>
+<% } %> <!-- close the } -->
+<link href="//vjs.zencdn.net/7.10.2/video-js.min.css" rel="stylesheet">
+<link href=/css/yt-ukraine.svg rel=icon>
+<title> <%=video.Title%> - PokeTube</title>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@500&display=swap" rel=stylesheet>
+<link href=/css/app-cdn.min.css rel=stylesheet>
+<link href=/css/app.main.css rel=stylesheet>
+<style>
+   a.class:hover {
+    text-decoration:underline;
+    font-weight:bold
+}
+  summary{
+    color:gray;
+}
+summary:hover{
+    color:white;
+}
+</style>
+  <!-- WIGGLE WIGGLE WIGGLE -->
+  <style>
+    body{
+        overflow-x: hidden; /* Hide horizontal scrollbar */
+        color:#000
+    }
+    
+   .animated {
+            -webkit-animation-duration: 10s; 
+            animation-duration: 10s; 
+            -webkit-animation-fill-mode: both;
+            animation-fill-mode: both; 
+            animation-iteration-count: infinite;
+            -moz-animation-iteration-count: infinite;
+            -webkit-animation-iteration-count: infinite;
+            -o-animation-iteration-count: infinite;
+         }
+         
+         @-webkit-keyframes wiggle { 
+            0% { -webkit-transform: skewX(9deg); }
+            10% { -webkit-transform: skewX(-8deg); }
+            20% { -webkit-transform: skewX(7deg); }
+            30% { -webkit-transform: skewX(-6deg); }
+            40% { -webkit-transform: skewX(5deg); } 
+            50% { -webkit-transform: skewX(-4deg); } 
+            60% { -webkit-transform: skewX(3deg); }
+            70% { -webkit-transform: skewX(-2deg); } 
+            80% { -webkit-transform: skewX(1deg); } 
+            90% { -webkit-transform: skewX(0deg); }
+            100% { -webkit-transform: skewX(0deg); } 
+         }
+         
+         @keyframes wiggle { 
+            0% { transform: skewX(9deg); } 
+            10% { transform: skewX(-8deg); } 
+            20% { transform: skewX(7deg); } 
+            30% { transform: skewX(-6deg); } 
+            40% { transform: skewX(5deg); } 
+            50% { transform: skewX(-4deg); } 
+            60% { transform: skewX(3deg); } 
+            70% { transform: skewX(-2deg); } 
+            80% { transform: skewX(1deg); } 
+            90% { transform: skewX(0deg); } 
+            100% { transform: skewX(0deg); } 
+         }
+         
+         .wiggle { 
+            -webkit-animation-name: wiggle;
+            animation-name: wiggle; 
+            -webkit-animation-timing-function: ease-in;
+            animation-timing-function: ease-in; 
+         }
+         
+         .animated.wiggle { 
+            -webkit-animation-duration: 0.75s; 
+            animation-duration: 0.75s;
+         }
+  </style>
+  <body>
+     <center>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@900&family=Sigmar+One&display=swap" rel=stylesheet>
+    <link href=https://pro.fontawesome.com/releases/v5.15.3/css/all.css rel=stylesheet>
+    <center>
+        <nav>
+            <div class=left><a class="class" href="/143" style=font-family:Inter,sans-serif;color:#fff><span><i class="fa-youtube fab" style="text-decoration:inherit;background:linear-gradient(to right,blue,pink);-webkit-text-fill-color:transparent;-webkit-background-clip:text;"></i></span><span style="background-image: linear-gradient(to left,pink,#000080);-webkit-background-clip: text;-webkit-text-fill-color: transparent;">PokeTube</span> 🇺🇦 </a> <a href="/domains"><i class="fas fa-server"></i><a href="https://search.poketalebot.com"><i class="fas fa-search"></i> </a></div>               
+            <div class=middle>
+                <form action=/search><input class=search-bar autocomplete="on" id=fname name=query style="color:#fff;font-family:Inter,sans-serif;"> <button class="btn btn-success" type=submit><i class="fas fa-search"></i></button></form>
+            </div>
+            <div class=right><a href="/privacy"><i class="fas fa-shield"></i></a><a href="/video/upload?from="><i class="fas fa-video"></i></a> <a href="https://github.com/iamashley0/poketube/"><i class="fab fa-git-alt"></i></a><a href="https://github.com/iamashley0/poketube/issues"><i class="fas fa-bug"></i></a></a></div>
+        </nav>
+        <section class=youtube-video>
+            <div class=screen>     
+                 <div class=videoOuterContainer-3x2_n9>
+                     <div class=videoMiddleContainer-2yUOUz>
+                        <div class=videoInnerContainer-2IHZcN>
+                          	<video id="player" class="video-3DYbjh" src="<%=url%>" poster="https://i.ytimg.com/vi/<%=video.id%>/maxresdefault.jpg" autoplay controls>
+ 					</video><br><br>
+                        <br><br></center><hr>
+<center>
+     <h1 style="font-family:Inter,sans-serif;font-weight:900;white-space:yes;font-size:65"><b> <%=video.Title%> </b></h1> 
+    <a href="/channel?id=<%=video.Channel.id%>" style=color:#fff>
+        <%=video.Channel.Name%>
+    </a>
+</center>
+<hr>
+<center>
+    <center>
+        <center>
+            <center>
+                <p><i class="fas fa-calendar-alt"></i>
+                    <%=date%>|<i class="fas fa-chart-bar"></i>
+                        <%=engagement.viewCount.toLocaleString()%> Views| <i class="fas fa-thumbs-up"></i>
+                            <%=engagement.likes.toLocaleString()%> <i class="fas fa-thumbs-down"></i>
+                                <%=engagement.dislikes.toLocaleString()%> 
+<br>
+                                    <noscript><p><i class="fas fa-code"></i> Hey,you are on no script mode rn. Yes,Poketube does not require billion lame scripts to run :P</p></noscript>
+                                    <p><i class="fas fa-shield-alt"></i> Youtube And Poketube wont know you are whatching this video (also your fbi guy wont know too)</p>
+                         <p>  <a href="/api/video/download?v=<%=video.id%>">Download</a>|<a href="https://youtube.com/watch?v=<%=video.id%>">Open on YouTube (Not recommended)</a>|<a href="/privacy">Privacy</a>
+                                  </p>
+                                    <hr>
+  <h1 style="color:#fff;font-family:Inter,sans-serif;font-weight:700;white-space:yes;">M O A R
+                                  </h1>             
+                                  <p>
+                                    see description and the lyrics of the video!
+                                  </p>
+                                  <p>
+                                    (click the arrow to expand)
+                                  </p>
+                                  <details style="color=#fff">
+                        <summary style="color=#fff"></summary>
+                        <p style="color: white;">
+                                    <h1 style="color:#fff;font-family:Inter,sans-serif;font-weight:700;white-space:yes;"> Description</h1><hr>
+                                    <center>
+                                                                        <% if (video.Description) { %>
+                                                                
+                                        <p style=color:#fff>
+                                            <%-String(video.Description).replace(/\n/g, " <br> ")%></center>
+                                        </p>                 
+                                                                                     <% } %>
+
+                                    <% if (lyrics) { %>
+                                        
+                                <h1 style="color:#fff;font-family: 'Inter', sans-serif;font-weight: bold;white-space:yes;font-size:45;">   Lyrics 
+                        </h1> <hr>           
+
+  
+                        <p style="color: white;">
+                                        <p style=color:#fff>
+                                            <%-lyrics%>
+                                        </p> 
+
+                                        <% } %>                                      </details>
+<hr>
+                                              <p>This website does not track you. No cookies. No data collection. No statistics. 100% handcrafted without JavaScript. <a href="https://github.com/iamashley0/poketube/">Source code</a><br></p>
+                                        
+                                                                     </center></center></center></center></center>             
+  </body>
+                              
+ 

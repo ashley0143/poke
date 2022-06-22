@@ -119,10 +119,14 @@ app.get("/channel", async (req, res) => {
   const bout = await fetch( `https://tube.kuylar.dev/api/channel?id=${ID}&tab=about`);
   const h = await bout.text();
   const k = JSON.parse(toJson(h));
+  const channel = await fetch( `https://tube.kuylar.dev/api/channel?id=${ID}&tab=videos`);
+  const c = await channel.text();
+  const tj = JSON.parse(toJson(c));
   const { Subscribers: subscribers } = k.Channel.Metadata;
   renderTemplate(res, req, "channel.ejs", {
   ID:ID,
   j:k,
+  tj:tj,
   about:k.Channel.Contents.ItemSection.About,
   subs:typeof subscribers === 'string' ? subscribers.replace('subscribers', '') : 'Private',
   desc:k.Channel.Contents.ItemSection.About.Description

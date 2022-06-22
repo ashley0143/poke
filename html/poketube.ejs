@@ -42,6 +42,9 @@
 <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@500&display=swap" rel=stylesheet>
 <link href=/css/app-cdn.min.css rel=stylesheet>
 <link href=/css/app.main.css rel=stylesheet>
+<link href="/css/watch.main.css" rel=stylesheet>
+      <link href="https://fonts.googleapis.com/css2?family=Inter:wght@900&family=Sigmar+One&display=swap" rel=stylesheet>
+    <link href=https://pro.fontawesome.com/releases/v5.15.3/css/all.css rel=stylesheet>
 <style>
    a.class:hover {
     text-decoration:underline;
@@ -58,6 +61,7 @@ summary:hover{
   <style>
     body{
         overflow-x: hidden; /* Hide horizontal scrollbar */
+        color:#000
     }
     
    .animated {
@@ -110,85 +114,156 @@ summary:hover{
             -webkit-animation-duration: 0.75s; 
             animation-duration: 0.75s;
          }
+    
+    :root {
+    --text-primary: #fff;
+    --text-secondary: #fff;
+    --text-link: #3ea6ff;
+
+    --app-background: #000;
+    --context-menu-background: #333;
+    --border-color: #444;
+    --item-hover-background: #373737;
+    --item-active-background: #383838;
+
+    --top-bar-background: #202020;
+    --guide-background: #212121;
+
+    --thumbnail-background: #252525;
+
+    --channel-info-background: #181818;
+    --channel-contents-background: #0f0f0f;
+}
+.alert {
+  padding: 20px;
+  background-color: #f44336;
+  color: white;
+  opacity: 1;
+  transition: opacity 0.6s;
+  margin-bottom: 15px;
+}
+
+.alert.success {background-color: #04AA6D;}
+.alert.info {background-color: #2196F3;}
+.alert.warning {background-color: #ff9800;}
+
+.closebtn {
+  margin-left: 15px;
+  color: white;
+  font-weight: bold;
+  float: right;
+  font-size: 22px;
+  line-height: 20px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.closebtn:hover {
+  color: black;
+}
   </style>
   <body>
-     <center>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@900&family=Sigmar+One&display=swap" rel=stylesheet>
-    <link href=https://pro.fontawesome.com/releases/v5.15.3/css/all.css rel=stylesheet>
-    <center>
-        <nav>
+ 
+<div class="app">
+   <nav>
             <div class=left><a class="class" href="/143" style=font-family:Inter,sans-serif;color:#fff><span><i class="fa-youtube fab" style="text-decoration:inherit;background:linear-gradient(to right,blue,pink);-webkit-text-fill-color:transparent;-webkit-background-clip:text;"></i></span><span style="background-image: linear-gradient(to left,pink,#000080);-webkit-background-clip: text;-webkit-text-fill-color: transparent;">PokeTube</span> 🇺🇦 </a> <a href="/domains"><i class="fas fa-server"></i><a href="https://search.poketalebot.com"><i class="fas fa-search"></i> </a></div>               
             <div class=middle>
                 <form action=/search><input class=search-bar autocomplete="on" id=fname name=query style="color:#fff;font-family:Inter,sans-serif;"> <button class="btn btn-success" type=submit><i class="fas fa-search"></i></button></form>
             </div>
             <div class=right><a href="/privacy"><i class="fas fa-shield"></i></a><a href="/video/upload?from="><i class="fas fa-video"></i></a> <a href="https://github.com/iamashley0/poketube/"><i class="fab fa-git-alt"></i></a><a href="https://github.com/iamashley0/poketube/issues"><i class="fas fa-bug"></i></a></a></div>
+     
         </nav>
-        <section class=youtube-video>
-            <div class=screen>     
-                 <div class=videoOuterContainer-3x2_n9>
-                     <div class=videoMiddleContainer-2yUOUz>
-                        <div class=videoInnerContainer-2IHZcN>
-                          	<video id="player" class="video-3DYbjh" src="<%=url%>" poster="https://i.ytimg.com/vi/<%=video.id%>/maxresdefault.jpg" autoplay controls>
-					</video><br><br>
-                        <br><br></center><hr>
-<center>
-     <h1 style="font-family:Inter,sans-serif;font-weight:900;white-space:yes;font-size:65"><b> <%=video.Title%> </b></h1> 
-    <a href="/channel?id=<%=video.Channel.id%>" style=color:#fff>
-        <%=video.Channel.Name%>
-    </a>
-</center>
-<hr>
-<center>
-    <center>
-        <center>
-            <center>
-                <p><i class="fas fa-calendar-alt"></i>
-                    <%=date%>|<i class="fas fa-chart-bar"></i>
-                        <%=engagement.viewCount.toLocaleString()%> Views| <i class="fas fa-thumbs-up"></i>
-                            <%=engagement.likes.toLocaleString()%> <i class="fas fa-thumbs-down"></i>
-                                <%=engagement.dislikes.toLocaleString()%> 
-<br>
-                                    <noscript><p><i class="fas fa-code"></i> Hey,you are on no script mode rn. Yes,Poketube does not require billion lame scripts to run :P</p></noscript>
-                                    <p><i class="fas fa-shield-alt"></i> Youtube And Poketube wont know you are whatching this video (also your fbi guy wont know too)</p>
-                         <p>  <a href="/api/video/download?v=<%=video.id%>">Download</a>|<a href="https://youtube.com/watch?v=<%=video.id%>">Open on YouTube (Not recommended)</a>|<a href="/privacy">Privacy</a>
-                                  </p>
-                                    <hr>
-  <h1 style="color:#fff;font-family:Inter,sans-serif;font-weight:700;white-space:yes;">M O A R
-                                  </h1>             
-                                  <p>
-                                    see description and the lyrics of the video!
-                                  </p>
-                                  <p>
-                                    (click the arrow to expand)
-                                  </p>
-                                  <details style="color=#fff">
-                        <summary style="color=#fff"></summary>
-                        <p style="color: white;">
-                                    <h1 style="color:#fff;font-family:Inter,sans-serif;font-weight:700;white-space:yes;"> Description</h1><hr>
-                                    <center>
-                                                                        <% if (video.Description) { %>
-                                                                
-                                        <p style=color:#fff>
-                                            <%-String(video.Description).replace(/\n/g, " <br> ")%></center>
-                                        </p>                 
-                                                                                     <% } %>
-
-                                    <% if (lyrics) { %>
-                                        
-                                <h1 style="color:#fff;font-family: 'Inter', sans-serif;font-weight: bold;white-space:yes;font-size:45;">   Lyrics 
-                        </h1> <hr>           
-
+	  
   
+ 
+ <div class="watch-page">
+
+
+	<div class="primary">
+       
+		<div class="video-player-container">
+					<video class="player" autoplay controls src="<%=url%>" poster="https://i.ytimg.com/vi/<%=video.id%>/sddefault.jpg?v=607ddcd4">
+					</video>
+		</div>
+    <hr>
+			<div class="video-info">
+				<div class="video-title" style="font-family:Inter,sans-serif;font-weight:900;white-space:yes;"><%=video.Title%></div>
+				<p class="video-sub-info description">
+					<span><%=engagement.viewCount.toLocaleString()%> views - Uploaded by  <a href="/channel?id=<%=video.Channel.id%>" style=color:#fff>
+        <%=video.Channel.Name%>
+    </a></span> <br><br> <%-String(video.Description).replace(/\n/g, " <br> ")%></center>
+				</p>
+				<div class="video-info-buttons">
+					<div>
+  <i class="fas fa-thumbs-up"></i>
+     <%=engagement.likes.toLocaleString()%>
+          </div>
+					<div>
+<i class="fas fa-thumbs-down"></i>						    <%=engagement.dislikes.toLocaleString()%>
+					</div>
+          					<div>
+
+					<a style="color:#fff" href="/api/video/download?v=<%=video.id%>">
+            <i class="fas fa-download"></i>
+            Download
+					</a>
+                      
+					<a style="color:#fff" href="/old/watch?v=<%=video.id%>">
+          <i class="fas fa-history"></i>
+            Watch in old UI
+					</a>
+                  					</div>
+    
+ 
+				</div>
+			</div>
+          
+          <!-- IGNORE THIS DIV PLEASE -->
+          
+			<div class="channel-info__bordered" style="display:none;">
+				<a href="/" class="avatar">
+					<img src="">
+				</a>
+				<div class="name">
+					<a href=""></a>
+				</div>
+				<div class="subscriber-count">
+ 				</div>
+				<button class="subscribe-button" >Subscribe</button>
+			</div>
+	</div>
+
+		<div class="recommended-list" style="backgorund-color:#181818">
+            	           <% if (!lyrics) { %>
+ 
+         <div align="center">
+                                <h1 style="color:#fff;font-family: 'Inter', sans-serif;font-weight: bold;white-space:yes;font-size:45;">   Lyrics 
+                        </h1>  
+                        <p style="color: white;">
+                                        <p style=color:#fff>
+ We didint found any Lyrics lol (this migth not be a music video or something idk)
+           </p> 
+                                                                   <% } %>
+
+      	           <% if (lyrics) { %>
+
+         <div align="center">
+                                <h1 style="color:#fff;font-family: 'Inter', sans-serif;font-weight: bold;white-space:yes;font-size:45;">   Lyrics 
+                        </h1>  
+           <p>
+ See how our lyrics search works:<a href="https://github.com/iamashley0/poketube/blob/main/src/lyrics.js">Here</a>
+           </p>
                         <p style="color: white;">
                                         <p style=color:#fff>
                                             <%-lyrics%>
                                         </p> 
 
-                                        <% } %>                                      </details>
-<hr>
-                                              <p>This website does not track you. No cookies. No data collection. No statistics. 100% handcrafted without JavaScript. <a href="https://github.com/iamashley0/poketube/">Source code</a><br></p>
-                                        
-                                                                     </center></center></center></center></center>             
+		</div>
+	</div>
+</div>
+                                        <% } %>
+		 
+</body>
+</html>
+
   </body>
-                              
- 

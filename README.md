@@ -13,7 +13,6 @@
  
 ## Why Poketube?
 - Works on Older browsers!
-- No like bloat css (unlike,LightTube) /s
 - Lyrics for songs!
 - No cookies,no data collection,no statistics
 - Javascript-free on frontend
@@ -22,8 +21,7 @@
 - Uses LightTube api*
 - <a href="https://github.com/iamashley0/poketube/tree/main/sdk">Custom sdk!</a> 
 
-*:we are planing to ditch LightTube api in the future
-
+ 
 
 ## How to self host or add a new public instance?
 good question lol

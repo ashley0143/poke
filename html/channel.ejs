@@ -5,15 +5,34 @@
     <link href="https://fonts.googleapis.com/css2?family=Sigmar+One&amp;display=swap" rel="stylesheet"> 
     <meta content=website property=og:type>
     <meta content="<%=j.Channel.Metadata.Name%> - PokeTube" property=og:title>
-    <meta content="<%-desc%>" property=twitter:description>
+    <meta content="<%-desc.replace(/\n/g, " ")%>" property=twitter:description>
     <meta content="<%=j.Channel.Metadata.Banners.Thumbnail[2].$t%>" property=og:image>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@500&display=swap" rel="stylesheet">
     <meta content=summary_large_image name=twitter:card>
     <meta content=@PoketaleBot name=twitter:site>
     <meta content=@PoketaleBot name=twitter:creator>
-  <link href=https://cdn.poketalebot.com/404/v2.css rel=stylesheet>
+     <link href=https://cdn.poketalebot.com/404/v2.css rel=stylesheet>
     <link href=/css/app.main.css rel=stylesheet>
-      <link href=/css/search.main.css rel=stylesheet>
+      <link href=/css/search.main.css?v=6 rel=stylesheet>
+      <style>  :root {
+    --text-primary: #fff;
+    --text-secondary: #fff;
+    --text-link: #3ea6ff;
+
+    --app-background: #000;
+    --context-menu-background: #000;
+    --border-color: #444;
+    --item-hover-background: #000;
+    --item-active-background: #000;
+
+    --top-bar-background: #000;
+    --guide-background: #000;
+
+    --thumbnail-background: #000;
+
+    --channel-info-background: #000;
+    --channel-contents-background: #000;
+}</style>
  </head>
 <body>
      <center> 
@@ -26,11 +45,14 @@
                 <form action=/api/search><input class=search-bar id=fname name=query style=color:#fff;font-family:Roboto,sans-serif> <button class="btn btn-success" type=submit><i class="fas fa-search"></i></button></form>
             </div>
  
-        </nav>
+        </nav> 
+       
         <section class=youtube-video>
      <div class="app">
 <div class="channel-page">
-	<div class="channel-info-container">
+ 
+<div class="channel-page">
+ <div class="channel-info-container">
           <img src="<%=j.Channel.Metadata.Banners.Thumbnail[2].$t%>">
 		<div class="channel-info" >
 			<a href="/channel?id=<%=ID%>" class="avatar">
@@ -43,13 +65,32 @@
           </button>
 		</div>
 	</div><hr>
-	<h3 style="color:#fff">About this channel</h3>
+   
+<h3 style="color:#fff">About this channel</h3>
+  <br><br> <hr>
 	<p style="color:#fff"><%-desc.replace(/\n/g, " <br> ")%></p>
-	<br><hr>
-	  <a href="https://youtube.com/channel/<%=ID%>">view the channel on youtube</a>
-</div>
+	<br><br>
+	<h3  style="color:#fff">Uploads</h3>
+            <div align="center">
 
-</div>
+   	<div class="video-grid">
+   <% tj.Channel.Contents.ItemSection.ItemSection.Video.forEach(x =>  { %>
+			<a href="/watch?v=<%- x.id %>" class="video">
+				<div class="thumbnail" style="background-image: url('https://i.ytimg.com/vi/<%- x.id %>/hqdefault.jpg?sqp=-oaymwEjCNACELwBSFryq4qpAxUIARUAAAAAGAElAADIQj0AgKJDeAE=&amp;rs=AOn4CLAWzSgJiToCNsG9Rwj3y-p3XN9AxQ')"><span class="video-length"><%- x.duration %></span></div>
+				<div class="info">
+					<span class="title max-lines-2"><%- x.Title %></span>
+					<div>
+						<div>
+							<span><%- x.views %> views</span>
+							<span><%- x.uploadedAt %></span>
+						</div>
+					</div>
+            </div>
+ 			</a>	
+ 		 	               <% }) %>   
+                       </div>
+
+	</div>
               </body>
  
    

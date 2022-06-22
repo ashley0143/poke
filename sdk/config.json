@@ -1,4 +1,4 @@
 {
 "dislike_api":"https://returnyoutubedislikeapi.com/votes?videoId=",
-"poketube_api":"https://lighttube.herokuapp.com/api"
+"poketube_api":"https://tube.kuylar.dev/api"
 }

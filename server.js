@@ -48,7 +48,12 @@ const fetcher = require("./src/fetcher.js");
 app.get("/watch", async function (req, res) {
   var v = req.query.v;
   const getColors = require('get-image-colors')
-   var e = req.query.e;
+  var e = req.query.e;
+  var r = req.query.r;
+  const { toJson } = require("xml2json");
+  const video = await fetch( `https://tube.kuylar.dev/api/video?v=${v}`);
+  const h = await video.text();
+  const k = JSON.parse(toJson(h));
   if(!v) res.redirect("/")
   var fetching = await fetcher(v)
     const j = fetching.video.Player.Formats.Format,
@@ -69,6 +74,8 @@ if (j_.URL != undefined)
     video: json,
     date: moment(json.uploadDate).format("LL"),
     e:e,
+    k:k,
+    r:r,
     lyrics: lyrics.replace(/\n/g, " <br> "),
   });
 });

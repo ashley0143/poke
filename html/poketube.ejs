@@ -18,7 +18,7 @@
 -->
 <!DOCTYPE html>
   <% if (e === false) { %> <!-- if ?e=false,dont show up the meta tags  -->
-      
+    
  <% } %>
   <% if (!e) { %>
 <meta content="<%=video.Title%>" name=title>
@@ -38,6 +38,9 @@
 <% } %> <!-- close the } -->
 <link href="//vjs.zencdn.net/7.10.2/video-js.min.css" rel="stylesheet">
 <link href=/css/yt-ukraine.svg rel=icon>
+<META HTTP-EQUIV="CACHE-CONTROL" CONTENT="NO-CACHE">
+<META HTTP-EQUIV="PRAGMA" CONTENT="NO-CACHE">
+<META HTTP-EQUIV="EXPIRES" CONTENT="Mon, 22 Jun 2002 11:12:01 GMT">
 <title> <%=video.Title%> - PokeTube</title>
 <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@500&display=swap" rel=stylesheet>
 <link href=/css/app-cdn.min.css rel=stylesheet>
@@ -265,7 +268,7 @@ you migth also watch these... (ig?)
                                                   <% if (r === "f") { %> 
 
             <a href="/watch?v=<%=video.id%>">See the Recommended videos instead</a>
-
+         <a href="https://github.com/iamashley0/poketube/issues">Report wrong lyrics!</a>
          <div align="center">
                                 <h1 style="color:#fff;font-family: 'Inter', sans-serif;font-weight: bold;white-space:yes;font-size:45;">   Lyrics 
                         </h1>  

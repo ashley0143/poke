@@ -33,12 +33,13 @@
   <link href=https://cdn.poketalebot.com/404/v2.css rel=stylesheet>
     <link href=/css/app.main.css rel=stylesheet>
  </head>
-  <style>  h1{
-  background-image: linear-gradient(to left, violet, blue, orange, red);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  }</style>
- <body style="background: #000;">
+  <style> 
+   
+    
+  </style>        <style nonce="IJD3y0awTwA2dd0pWOP+ZQ">
+                #yt-masthead{margin:15px auto;width:440px;margin-top:25px}#logo-container{margin-right:5px;float:left;cursor:pointer;text-decoration:none}.logo{background:no-repeat url("//www.gstatic.com/youtube/img/branding/youtubelogo/1x/youtubelogo_30.png");width:125px;height:30px;cursor:pointer;display:inline-block}#masthead-search{display:flex;margin-top:3px;max-width:650px;overflow:hidden;padding:0;position:relative}.search-button{border-left:0;-moz-border-radius-topleft:0;border-top-left-radius:0;-moz-border-radius-bottomleft:0;border-bottom-left-radius:0;float:right;height:29px;padding:0;border:solid 1px transparent;border-color:#ffff;background:#999;;color:#333;cursor:pointer}.search-button:hover{border-color:#c6c6c6;background:#f0f0f0;box-shadow:0 1px 0 rgba(0,0,0,0.0)}.search-button-content{border:none;display:block;opacity:.6;padding:0;text-indent:-10000px;background:no-repeat url(//www.gstatic.com/youtube/src/web/htdocs/img/search.png);background-size:auto;width:15px;height:15px;box-shadow:none;margin:0 25px}#masthead-search-terms-border{flex:1 1 auto;border:1px solid #ccc;box-shadow:inset 0 1px 2px #eee;background-color:#fff;font-size:14px;height:29px;line-height:30px;margin:0 0 2px;overflow:hidden;position:relative;-moz-box-sizing:border-box;box-sizing:border-box;-webkit-transition:border-color .2s ease;transition:border-color .2s ease}#masthead-search-terms{background:#2c2f33;border:0;font-size:16px;height:100%;left:0;margin:0;outline:none;padding:2px 6px;position:absolute;width:100%;-moz-box-sizing:border-box;box-sizing:border-box}
+            </style>
+ <body style="background-image: url('<%-url%>');background-repeat: no-repeat;   background-size: cover;" >
      <center> 
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@900&family=Sigmar+One&display=swap" rel=stylesheet>
     <link href=https://pro.fontawesome.com/releases/v5.15.3/css/all.css rel=stylesheet>
@@ -46,14 +47,21 @@
         <nav>
             <div class=left><a class="class" href="https://stopwarukraine.com/" style=font-family:Inter,sans-serif;color:#fff><span><i class="fa-youtube fab" style="text-decoration:inherit;background:linear-gradient(to right,blue,pink);-webkit-text-fill-color:transparent;-webkit-background-clip:text;"></i></span><span style="background-image: linear-gradient(to left,purple,#000080);-webkit-background-clip: text;-webkit-text-fill-color: transparent;">PokeTube</span> 🇺🇦 </a></div></div>
             <div class=middle>
-                <form action=/api/search><input class=search-bar id=fname name=query style=color:#fff;font-family:Roboto,sans-serif> <button class="btn btn-success" type=submit><i class="fas fa-search"></i></button></form>
+               
             </div>
         </nav>
         <section class=youtube-video>
-            <div class=screen style="background: #000;"><br>
+            <div class=screen><br>
               <b>
                 <h1 style="color:#fff">Welcome to <span style="color:#c9e26;font-family:Inter,sans-serif;">PokeTube~!</span></h1><br> 
-<h1 style="color:#fff">U can search something from da search bar to get started <br> (start by typing "<%-random%>")</h1><br> 
+                <h1 style="color:#fff"> (start by typing "<%-random%>")</h1><br> 
+ <p style="color:#fff;">
+   Splash images from <a href="https://unsplash.com">Unsplash.com</a>
+                  </p>
+                       <div id="yt-masthead"> 
+                <form id="masthead-search" class="search-form" action="/api/search" onsubmit="if (document.getElementById('masthead-search-terms').value == '') return false;">
+                    <div id="masthead-search-terms-border" dir="ltr"><input id="masthead-search-terms" style=color:#fff;font-family:Roboto,sans-serif autocomplete="off" onkeydown="if (!this.value &amp;&amp; (event.keyCode == 40 || event.keyCode == 32 || event.keyCode == 34)) {this.onkeydown = null; this.blur();}" name="query" value="" type="text" placeholder="Search Videos" title="Search" aria-label="Search"></div><button class="search-button" type="submit" onclick="if (document.getElementById('masthead-search-terms').value == '') return false; document.getElementById('masthead-search').submit(); return false;" dir="ltr"><span class="search-button-content">Search</span></button></form>
+            </div>
    <img src="https://raw.githubusercontent.com/vshymanskyy/StandWithUkraine/main/badges/StandWithUkraine.svg"><br>
             <hr>
            <p style="color:#fff">
@@ -61,13 +69,13 @@
   </p>
 
     <p style="color:#fff">
-                  PokeTube 22.06 - <a href="https://github.com/iamashley0/poketube" style="color:#fff">Source Code</a> - <a style="color:#fff;" href="/privacy">Privacy policy (boring)</a> - 
+                  PokeTube 22.06.23 - <a href="https://github.com/iamashley0/poketube" style="color:#fff">Source Code</a> - <a style="color:#fff;" href="/privacy">Privacy policy (boring)</a> - 
                 <a style="color:#fff;" href="/domains">Public Instances</a>
 
                </p>
 
   </b>
+               
     </body>
-              
 </html>
    

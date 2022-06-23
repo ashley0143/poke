@@ -36,11 +36,11 @@
 <link href="https://poketube.fun/watch?v=<%=video.id%>" itemprop=url>
 <link href="http://www.youtube.com/channel/<%=video.Channel.id%>" itemprop=url>
 <% } %> <!-- close the } -->
-<link href="//vjs.zencdn.net/7.10.2/video-js.min.css" rel="stylesheet">
-<link href=/css/yt-ukraine.svg rel=icon>
 <META HTTP-EQUIV="CACHE-CONTROL" CONTENT="NO-CACHE">
 <META HTTP-EQUIV="PRAGMA" CONTENT="NO-CACHE">
 <META HTTP-EQUIV="EXPIRES" CONTENT="Mon, 22 Jun 2002 11:12:01 GMT">
+<link href="//vjs.zencdn.net/7.10.2/video-js.min.css" rel="stylesheet">
+<link href=/css/yt-ukraine.svg rel=icon>
 <title> <%=video.Title%> - PokeTube</title>
 <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@500&display=swap" rel=stylesheet>
 <link href=/css/app-cdn.min.css rel=stylesheet>
@@ -192,9 +192,9 @@ summary:hover{
 			<div class="video-info">
 				<div class="video-title" style="font-family:Inter,sans-serif;font-weight:900;white-space:yes;"><%=video.Title%></div>
 				<p class="video-sub-info description">
-					<span><%=engagement.viewCount.toLocaleString()%> views - Uploaded by  <a href="/channel?id=<%=video.Channel.id%>" style=color:#fff>
-        <%=video.Channel.Name%>
-    </a></span> <br><br> <%-String(video.Description).replace(/\n/g, " <br> ")%></center>
+					<span><%=engagement.viewCount.toLocaleString()%> views - Uploaded on <%=date%> - Uploaded by  <a href="/channel?id=<%=video.Channel.id%>" style=color:#fff> 
+        <%=video.Channel.Name%>    </a> 
+</span> <br><br> <%-String(video.Description).replace(/\n/g, " <br> ")%></center>
 				</p>
 				<div class="video-info-buttons">
 					<div>
@@ -220,23 +220,26 @@ summary:hover{
  
 				</div>
 			</div>
-          
-          <!-- IGNORE THIS DIV PLEASE -->
-          
-			<div class="channel-info__bordered" style="display:none;">
-				<a href="/" class="avatar">
-					<img src="">
+          		<div class="channel-info__bordered">
+				<a href="/channel?id=<%=video.Channel.id%>" class="avatar">
+					<img src=" <%= k.Video.Channel.Avatar[1].$t %>">
 				</a>
 				<div class="name">
-					<a href=""></a>
+					<a  href="/channel?id=<%=video.Channel.id%>" >  <%=video.Channel.Name%></a>
 				</div>
 				<div class="subscriber-count">
+          <%= k.Video.Channel.subscriberCount %>
  				</div>
-				<button class="subscribe-button" >Subscribe</button>
+				<button class="subscribe-button" ><a style="color:#fff" href="https://www.youtube.com/channel/<%=video.Channel.id%>?view_as=subscriber?sub_confirmation=1">Subscribe</a></button>
 			</div>
 	</div>
+           
+	
 
 		<div class="recommended-list" style="backgorund-color:#181818">
+      <div  style="font-family:Inter,sans-serif;font-weight:900;white-space:yes;">
+      <a href="https://youtube.com/watch?v=<%=video.id%>">Open On YouTube</a> • <a href="/privacy">Privacy</a> • <a href="https://github.com/iamashley0/poketube/">Git</a>
+      </div> 
             	           <% if (lyrics && !r) { %>
                   Ayo u are lucy! this music video has lyrics! wanna see em? <a href="/watch?v=<%=video.id%>&r=f">Click this!</a>
                            <% } %>   
@@ -244,7 +247,7 @@ summary:hover{
                                <p style="font-family:Inter,sans-serif;font-weight:900;white-space:yes;">
 you migth also watch these... (ig?)
                                </p>
-          <% k.Video.Recommendations.Video.forEach(x => { %>
+     <% k.Video.Recommendations.Video.forEach(x => { %>
 						<div class="video">
       <a  href="/watch?v=<%= x.id %>" class="thumbnail" style="background-image: url('https://i.ytimg.com/vi/<%= x.id %>/hqdefault.jpg?sqp=-oaymwEXCNAFEJQDSFryq4qpAwkIARUAAIhCGAE=&amp;rs=AOn4CLBmAOZV7CM3NdDKlEFxGX7PpI5UWQ')"  >								<span class="video-length"><%=x.duration %></span>
 							</a>
@@ -254,7 +257,6 @@ you migth also watch these... (ig?)
                <a href="/channel?id=<%= x.Channel.id %>">By <%=x.Channel.Name %></a>
 									<div>
 										          <a href="/watch?v=<%= x.id %>"><span><%= x.views %> views</span> <span>•</span> <span><%= x.uploadedAt %></span></a>
-
 									</div>
 								</div>
 							</div>

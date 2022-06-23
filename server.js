@@ -1,4 +1,4 @@
- /*
+/*
     Copyright (C) 2021-2022 POKETUBE (https://github.com/iamashley0/poketube)
     
     This program is free software: you can redistribute it and/or modify
@@ -42,6 +42,15 @@ const random_words = [
   "is a panda a panda if pandas???",
   "Minecraft moive trailer"
 ]
+const image_urls = [
+ "https://cdn.glitch.com/4095e32f-375a-40f2-841e-961cee4c2a95/sheng-l-q2dUSl9S4Xg-unsplash.jpg?v=1655990895950",
+  "https://cdn.glitch.com/4095e32f-375a-40f2-841e-961cee4c2a95/willian-justen-de-vasconcellos-T_Qe4QlMIvQ-unsplash(1).jpg?v=1655991004992",
+  "https://cdn.glitch.global/4095e32f-375a-40f2-841e-961cee4c2a95/s-b-vonlanthen-A8iLzX6OddM-unsplash.jpg?v=1655991148325",
+  "https://cdn.glitch.global/4095e32f-375a-40f2-841e-961cee4c2a95/pawel-czerwinski-8uZPynIu-rQ-unsplash.jpg?v=1655991178735",
+  "https://cdn.glitch.global/4095e32f-375a-40f2-841e-961cee4c2a95/richard-horvath-_nWaeTF6qo0-unsplash.jpg?v=1655991315976",
+  "https://cdn.glitch.global/4095e32f-375a-40f2-841e-961cee4c2a95/john-fowler-aaIN3y2zcMQ-unsplash.jpg?v=1655991319840",
+  "https://cdn.glitch.global/4095e32f-375a-40f2-841e-961cee4c2a95/kristopher-roller-zepnJQycr4U-unsplash.jpg?v=1655991322758"
+]
 const fetch = require("node-fetch");
 const fetcher = require("./src/fetcher.js");
 
@@ -56,7 +65,7 @@ app.get("/watch", async function (req, res) {
   const k = JSON.parse(toJson(h));
   if(!v) res.redirect("/")
   var fetching = await fetcher(v)
-    const j = fetching.video.Player.Formats.Format,
+     const j = fetching.video.Player.Formats.Format,
   j_ = Array.isArray(j)
     ? j[j.length - 1]
     : j;
@@ -72,7 +81,7 @@ if (j_.URL != undefined)
     color: await getColors(`https://i.ytimg.com/vi/${v}/maxresdefault.jpg`).then((colors) => colors[0].hex()),
     engagement:engagement,
     video: json,
-    date: moment(json.uploadDate).format("LL"),
+    date: moment(k.Video.uploadDate).format("LL"),
     e:e,
     k:k,
     r:r,
@@ -109,8 +118,11 @@ if (j_.URL != undefined)
 });
 app.get("/", function (req, res) {
   const things = random_words[Math.floor((Math.random()*random_words.length))];
+    const ur = image_urls[Math.floor((Math.random()*image_urls.length))];
+
   renderTemplate(res, req, "main.ejs", {
   random:things,
+  url:ur
 });
 });
 app.get("/channel", async (req, res) => {

@@ -24,14 +24,13 @@
 <meta content="<%=video.Title%>" name=title>
 <meta content="<%=color%>" name="theme-color">
 <meta content=player name=twitter:card>
-<meta content="<%=video.Channel.Name%>" name=twitter:description>
+<meta content="<%=video.Channel.Name%>" name=twitter:author>
 <meta content=@youtube name=twitter:site>
 <meta content="https://poketube.fun/watch?v=<%=video.id%>" name=twitter:url>
 <meta content="<%=video.Title%>" name=twitter:title>
 <meta content="https://i.ytimg.com/vi/<%=video.id%>/maxresdefault.jpg" name=twitter:image>
 <meta content="https://www.youtube.com/embed/<%=video.id%>" name=twitter:player>
 <meta content=1280 name=twitter:player:width>
-<meta content="Poketube is a private youtube player thats focusted on privacy. No javascript needed!" property=twitter:description>
 <meta content=720 name=twitter:player:height>
 <link href="https://poketube.fun/watch?v=<%=video.id%>" itemprop=url>
 <link href="http://www.youtube.com/channel/<%=video.Channel.id%>" itemprop=url>
@@ -64,7 +63,7 @@ summary:hover{
   <style>
     body{
         overflow-x: hidden; /* Hide horizontal scrollbar */
-        color:#000
+        color:#111111
     }
     
    .animated {
@@ -123,7 +122,7 @@ summary:hover{
     --text-secondary: #fff;
     --text-link: #3ea6ff;
 
-    --app-background: #000;
+    --app-background: #111111;
     --context-menu-background: #333;
     --border-color: #444;
     --item-hover-background: #373737;
@@ -185,7 +184,7 @@ summary:hover{
 	<div class="primary">
        
 		<div class="video-player-container">
-					<video class="player" autoplay controls src="<%=url%>" poster="https://i.ytimg.com/vi/<%=video.id%>/sddefault.jpg?v=607ddcd4">
+					<video class="player" style="border-radius: 24px;" autoplay controls src="<%=url%>" poster="https://i.ytimg.com/vi/<%=video.id%>/sddefault.jpg?v=607ddcd4">
 					</video>
 		</div>
     <hr>
@@ -249,7 +248,7 @@ you migth also watch these... (ig?)
                                </p>
      <% k.Video.Recommendations.Video.forEach(x => { %>
 						<div class="video">
-      <a  href="/watch?v=<%= x.id %>" class="thumbnail" style="background-image: url('https://i.ytimg.com/vi/<%= x.id %>/hqdefault.jpg?sqp=-oaymwEXCNAFEJQDSFryq4qpAwkIARUAAIhCGAE=&amp;rs=AOn4CLBmAOZV7CM3NdDKlEFxGX7PpI5UWQ')"  >								<span class="video-length"><%=x.duration %></span>
+      <a  href="/watch?v=<%= x.id %>" class="thumbnail" style="background-image: url('https://i.ytimg.com/vi/<%= x.id %>/hqdefault.jpg?sqp=-oaymwEXCNAFEJQDSFryq4qpAwkIARUAAIhCGAE=&amp;rs=AOn4CLBmAOZV7CM3NdDKlEFxGX7PpI5UWQ');border-radius: 10px;"  >								<span class="video-length"><%=x.duration %></span>
 							</a>
 							<div class="info">
 								<a href="/watch?v=<%= x.id %>" class="title max-lines-2"><%= x.Title %></a>

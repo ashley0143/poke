@@ -286,7 +286,7 @@ a.icon-button > img {
 .video-player-container {
   max-width: 100%;
   margin: auto;
-  max-height: 75vh;
+  max-height: 78.5vh;
   aspect-ratio: 16 / 9;
 }
 .player {
@@ -372,6 +372,7 @@ a.icon-button > img {
   grid-auto-flow: row;
   grid-template-areas: "avatar name . subscribe-button" "avatar subs . subscribe-button";
   padding: 8px;
+  border-radius: 35px;
 }
 .avatar {
   grid-area: avatar;
@@ -404,6 +405,7 @@ a.icon-button > img {
   border: none;
   margin: auto;
   height: 37px;
+  border-radius: 34px;
 }
 .subscribe-button.subscribed {
   background-color: #ececec;

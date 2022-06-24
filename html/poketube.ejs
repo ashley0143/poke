@@ -35,16 +35,13 @@
 <link href="https://poketube.fun/watch?v=<%=video.id%>" itemprop=url>
 <link href="http://www.youtube.com/channel/<%=video.Channel.id%>" itemprop=url>
 <% } %> <!-- close the } -->
-<META HTTP-EQUIV="CACHE-CONTROL" CONTENT="NO-CACHE">
-<META HTTP-EQUIV="PRAGMA" CONTENT="NO-CACHE">
-<META HTTP-EQUIV="EXPIRES" CONTENT="Mon, 22 Jun 2002 11:12:01 GMT">
 <link href="//vjs.zencdn.net/7.10.2/video-js.min.css" rel="stylesheet">
 <link href=/css/yt-ukraine.svg rel=icon>
 <title> <%=video.Title%> - PokeTube</title>
 <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@500&display=swap" rel=stylesheet>
 <link href=/css/app-cdn.min.css rel=stylesheet>
 <link href=/css/app.main.css rel=stylesheet>
-<link href="/css/watch.main.css" rel=stylesheet>
+<link href="/css/watch.main.css?v=56" rel=stylesheet>
       <link href="https://fonts.googleapis.com/css2?family=Inter:wght@900&family=Sigmar+One&display=swap" rel=stylesheet>
     <link href=https://pro.fontawesome.com/releases/v5.15.3/css/all.css rel=stylesheet>
 <style>
@@ -184,10 +181,9 @@ summary:hover{
 	<div class="primary">
        
 		<div class="video-player-container">
-					<video class="player" style="border-radius: 24px;" autoplay controls src="<%=url%>" poster="https://i.ytimg.com/vi/<%=video.id%>/sddefault.jpg?v=607ddcd4">
+					<video class="player" style="border-radius: 10px;" autoplay controls src="<%=url%>" poster="https://i.ytimg.com/vi/<%=video.id%>/sddefault.jpg?v=607ddcd4">
 					</video>
-		</div>
-    <hr>
+		</div><br>
 			<div class="video-info">
 				<div class="video-title" style="font-family:Inter,sans-serif;font-weight:900;white-space:yes;"><%=video.Title%></div>
 				<p class="video-sub-info description">
@@ -235,10 +231,13 @@ summary:hover{
            
 	
 
-		<div class="recommended-list" style="backgorund-color:#181818">
-      <div  style="font-family:Inter,sans-serif;font-weight:900;white-space:yes;">
-      <a href="https://youtube.com/watch?v=<%=video.id%>">Open On YouTube</a> • <a href="/privacy">Privacy</a> • <a href="https://github.com/iamashley0/poketube/">Git</a>
+	<div class="recommended-list" style="background-color:#1c1c1c;border-radius: 54px;">
+      <div style="font-family:Inter,sans-serif;font-weight:900;white-space:yes;" align="center">
+      <a href="https://youtube.com/watch?v=fhLHFiRWlmA">Open On YouTube</a> • <a href="/privacy">Privacy</a> • <a href="https://github.com/iamashley0/poketube/">Git</a>
       </div> 
+              
+
+ 
             	           <% if (lyrics && !r) { %>
                   Ayo u are lucy! this music video has lyrics! wanna see em? <a href="/watch?v=<%=video.id%>&r=f">Click this!</a>
                            <% } %>   

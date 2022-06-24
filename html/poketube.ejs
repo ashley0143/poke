@@ -1,4 +1,4 @@
- <!--
+  <!--
     This Source Code Form is subject to the terms of the GNU General Public License:
 
     Copyright (C) 2021-2022 POKETUBE (https://github.com/iamashley0/poketube)
@@ -187,8 +187,7 @@ summary:hover{
 			<div class="video-info">
 				<div class="video-title" style="font-family:Inter,sans-serif;font-weight:900;white-space:yes;"><%=video.Title%></div>
 				<p class="video-sub-info description">
-					<span><%=engagement.viewCount.toLocaleString()%> views - Uploaded on <%=date%> - Uploaded by  <a href="/channel?id=<%=video.Channel.id%>" style=color:#fff> 
-        <%=video.Channel.Name%>    </a> 
+					<span><%=engagement.viewCount.toLocaleString()%> views - Uploaded on <%=date%> ^^
 </span> <br><br> <%-String(video.Description).replace(/\n/g, " <br> ")%></center>
 				</p>
 				<div class="video-info-buttons">
@@ -215,7 +214,7 @@ summary:hover{
  
 				</div>
 			</div>
-          		<div class="channel-info__bordered">
+          		<div class="channel-info__bordered" name="chnl">
 				<a href="/channel?id=<%=video.Channel.id%>" class="avatar">
 					<img src=" <%= k.Video.Channel.Avatar[1].$t %>">
 				</a>
@@ -225,7 +224,7 @@ summary:hover{
 				<div class="subscriber-count">
           <%= k.Video.Channel.subscriberCount %>
  				</div>
-				<button class="subscribe-button" ><a style="color:#fff" href="https://www.youtube.com/channel/<%=video.Channel.id%>?view_as=subscriber?sub_confirmation=1">Subscribe</a></button>
+				<button class="subscribe-button" ><a style="color:#fff" href="https://www.youtube.com/channel/<%=video.Channel.id%>?view_as=subscriber?sub_confirmation=1">Suscribe</a></button>
 			</div>
 	</div>
            
@@ -242,7 +241,7 @@ summary:hover{
                   Ayo u are lucy! this music video has lyrics! wanna see em? <a href="/watch?v=<%=video.id%>&r=f">Click this!</a>
                            <% } %>   
                               <% if (!r) { %> 
-                               <p style="font-family:Inter,sans-serif;font-weight:900;white-space:yes;">
+                               <p style="font-family:Inter,sans-serif;font-weight:900;white-space:yes;" align="center">
 you migth also watch these... (ig?)
                                </p>
      <% k.Video.Recommendations.Video.forEach(x => { %>
@@ -252,10 +251,9 @@ you migth also watch these... (ig?)
 							<div class="info">
 								<a href="/watch?v=<%= x.id %>" class="title max-lines-2"><%= x.Title %></a>
 								<div>
-               <a href="/channel?id=<%= x.Channel.id %>">By <%=x.Channel.Name %></a>
+               <a href="/channel?id=<%= x.Channel.id %>"><%=x.Channel.Name %></a>
 									<div>
-										          <a href="/watch?v=<%= x.id %>"><span><%= x.views %> views</span> <span>•</span> <span><%= x.uploadedAt %></span></a>
-									</div>
+ <%= x.uploadedAt %>  </div>
 								</div>
 							</div>
 						</div>

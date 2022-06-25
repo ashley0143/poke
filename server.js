@@ -59,6 +59,7 @@ app.get("/watch", async function (req, res) {
   const getColors = require('get-image-colors')
   var e = req.query.e;
   var r = req.query.r;
+
   const { toJson } = require("xml2json");
   const video = await fetch( `https://tube.kuylar.dev/api/video?v=${v}`);
   const h = await video.text();

@@ -37,14 +37,13 @@
 <link href="https://poketube.fun/watch?v=<%=video.id%>" itemprop=url>
 <link href="http://www.youtube.com/channel/<%=video.Channel.id%>" itemprop=url>
 <% } %> <!-- close the } -->
-<link href="//vjs.zencdn.net/7.10.2/video-js.min.css" rel="stylesheet">
 <link href=/css/yt-ukraine.svg?v=6 rel=icon>
 <title> <%=video.Title%> - PokeTube</title>
 <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@500&display=swap" rel=stylesheet>
 <link href=/css/app-cdn.min.css rel=stylesheet>
 <link href=/css/app.main.css rel=stylesheet>
 <link href="/css/watch.main.css?v=56" rel=stylesheet>
-      <link href="https://fonts.googleapis.com/css2?family=Inter:wght@900&family=Sigmar+One&display=swap" rel=stylesheet>
+       <link href="https://fonts.googleapis.com/css2?family=Inter:wght@900&family=Sigmar+One&display=swap" rel=stylesheet>
     <link href=https://pro.fontawesome.com/releases/v5.15.3/css/all.css rel=stylesheet>
 <style>
    a.class:hover {
@@ -173,7 +172,7 @@ summary:hover{
             <div class=right><a href="/privacy"><i class="fas fa-shield"></i></a><a href="/video/upload?from="><i class="fas fa-video"></i></a> <a href="https://github.com/iamashley0/poketube/"><i class="fab fa-git-alt"></i></a><a href="https://github.com/iamashley0/poketube/issues"><i class="fas fa-bug"></i></a></a></div>
      
         </nav>
-	  
+	   
  
  
  <div class="watch-page">
@@ -232,7 +231,22 @@ summary:hover{
 	
 
 	<div class="recommended-list" style="background-color:#1c1c1c;border-radius:25px;margin: 10px;">
+    
+    <!-- this allows us to see how much poketube users watched this video,we dont collect your ip or any of your personal information while making this. we dont collect or share your personal information as we said on our privacy policy:https://poketube.fun/privacy 
+
+this process does not use cookies,and it does not collect any information whatsoever execpt how many users watched this spesific video 
+
+we use something called matomo to do this,and since ip adreses are collected by def on matomo,we closed that on our instance. no infromation is collected from you. 
+
+we dont collect or share your personal infromation,period.
+
+if you want to change the url - see config in server.js
+-->
+    
+    <img src="<%=t%>t/rep.gif?video_id=<%=video.id%>" style="width: 0;visibility: hidden;">
+
     <div style="font-family:Inter,sans-serif;font-weight:900;white-space:yes;" align="center">
+      
       <a href="https://youtube.com/watch?v=<%=video.id%>">Open On YouTube</a> • <a href="/privacy">Privacy</a> • <a href="https://github.com/iamashley0/poketube/">Git</a>
       </div> 
               

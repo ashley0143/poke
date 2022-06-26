@@ -17,6 +17,8 @@
     along with this program. If not, see https://www.gnu.org/licenses/.
 -->
 <!DOCTYPE html>
+        
+
   <% if (e === false) { %> <!-- if ?e=false,dont show up the meta tags  -->
     
  <% } %>
@@ -162,10 +164,9 @@ summary:hover{
 }
   </style>
   <body>
- 
 <div class="app">
    <nav>
-            <div class=left><a class="class" href="/143" style=font-family:Inter,sans-serif;color:#fff> <img style="width: 20vh;display: block;margin-left: auto;margin-right: auto;" src="/css/logo.svg?v=5">                                                                                                           <a href="/domains"><i  style="display: block;margin-left: auto;margin-right: auto;" class="fas fa-server"></i>  </a></div>               
+            <div class=left><a class="class" href="/143" style=font-family:Inter,sans-serif;color:#fff> <img style="width: 6em;display: block;margin-left: auto;margin-right: auto;" src="/css/logo.svg?v=5">                                                                                                           <a href="/domains"><i  style="display: block;margin-left: auto;margin-right: auto;" class="fas fa-server"></i>  </a></div>               
             <div class=middle>
                 <form action=/search><input class=search-bar autocomplete="on" id=fname name=query style="color:#fff;font-family:Inter,sans-serif;"> <button class="btn btn-success" type=submit><i class="fas fa-search"></i></button></form>
             </div>
@@ -173,7 +174,7 @@ summary:hover{
      
         </nav>
 	  
-  
+ 
  
  <div class="watch-page">
 
@@ -182,7 +183,7 @@ summary:hover{
        
 		<div class="video-player-container">
 					<video class="player" style="border-radius: 10px;" autoplay controls src="<%=url%>" poster="https://i.ytimg.com/vi/<%=video.id%>/sddefault.jpg?v=607ddcd4">
-					</video>
+ 					</video>
 		</div><br>
 			<div class="video-info">
 				<div class="video-title" style="font-family:Inter,sans-serif;font-weight:900;white-space:yes;"><%=video.Title%></div>
@@ -227,16 +228,18 @@ summary:hover{
 				<button class="subscribe-button" ><a style="color:#fff" href="https://www.youtube.com/channel/<%=video.Channel.id%>?view_as=subscriber?sub_confirmation=1">Suscribe</a></button>
 			</div>
 	</div>
-           
+ 
 	
 
 	<div class="recommended-list" style="background-color:#1c1c1c;border-radius:25px;margin: 10px;">
-      <div style="font-family:Inter,sans-serif;font-weight:900;white-space:yes;" align="center">
+    <div style="font-family:Inter,sans-serif;font-weight:900;white-space:yes;" align="center">
       <a href="https://youtube.com/watch?v=<%=video.id%>">Open On YouTube</a> • <a href="/privacy">Privacy</a> • <a href="https://github.com/iamashley0/poketube/">Git</a>
       </div> 
               
-
- 
+    
+    
+    
+    
             	           <% if (lyrics && !r) { %>
                   Ayo u are lucy! this music video has lyrics! wanna see em? <a href="/watch?v=<%=video.id%>&r=f">Click this!</a>
                            <% } %>   
@@ -244,14 +247,14 @@ summary:hover{
                                <p style="font-family:Inter,sans-serif;font-weight:900;white-space:yes;" align="center">
 you migth also watch these... (ig?)
                                </p>
-     <% k.Video.Recommendations.Video.forEach(x => { %>
-						<div class="video">
+     <% k.Video.Recommendations.Video.forEach(x => { %>       
+ 						<div class="video">
       <a  href="/watch?v=<%= x.id %>" class="thumbnail" style="background-image: url('https://i.ytimg.com/vi/<%= x.id %>/hqdefault.jpg?sqp=-oaymwEXCNAFEJQDSFryq4qpAwkIARUAAIhCGAE=&amp;rs=AOn4CLBmAOZV7CM3NdDKlEFxGX7PpI5UWQ');border-radius: 10px;"  >								<span class="video-length"><%=x.duration %></span>
 							</a>
 							<div class="info">
 								<a href="/watch?v=<%= x.id %>" class="title max-lines-2"><%= x.Title %></a>
 								<div>
-               <a href="/channel?id=<%= x.Channel.id %>"><%=x.Channel.Name %></a>
+               <a class="max-lines-2" href="/channel?id=<%= x.Channel.id %>"><%=x.Channel.Name %></a>
 									<div>
  <%= x.uploadedAt %>  </div>
 								</div>
@@ -282,10 +285,11 @@ you migth also watch these... (ig?)
                                         <% } %>                                      </details>
 
                      </div>
-	</div>
+ 
+	</div>  
+
 </div>
- 		 
+ 
 </body>
 </html>
-
   </body>

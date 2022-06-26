@@ -1,4 +1,4 @@
-/*
+ /*
     Copyright (C) 2021-2022 POKETUBE (https://github.com/iamashley0/poketube)
     
     This program is free software: you can redistribute it and/or modify
@@ -22,7 +22,7 @@ var express = require("express");
 var app = express();
 app.engine("html", require("ejs").renderFile);
 app.use(express.urlencoded({ extended: true })) // for parsing application/x-www-form-urlencoded
-var dislike_api = `https://returnyoutubedislikeapi.com/votes?videoId=`
+
 app.set("view engine", "html");
 const lyricsFinder = require("./src/lyrics.js");
 const renderTemplate = async (res, req, template, data = {}) => {
@@ -54,6 +54,19 @@ const image_urls = [
 const fetch = require("node-fetch");
 const fetcher = require("./src/fetcher.js");
 
+
+
+/*
+this is our config file,you can change stuff here
+*/
+
+const config = {
+  tubeApi:"https://tube.kuylar.dev/api/",
+  dislikes:"https://returnyoutubedislikeapi.com/votes?videoId=",
+  "t_url":"https://t.poketube.fun/" //  def matomo url 
+}
+
+
 app.get("/watch", async function (req, res) {
   var v = req.query.v;
   const getColors = require('get-image-colors')
@@ -61,7 +74,7 @@ app.get("/watch", async function (req, res) {
   var r = req.query.r;
 
   const { toJson } = require("xml2json");
-  const video = await fetch( `https://tube.kuylar.dev/api/video?v=${v}`);
+  const video = await fetch( config.tubeApi + `video?v=${v}`);
   const h = await video.text();
   const k = JSON.parse(toJson(h));
   if(!v) res.redirect("/")
@@ -86,6 +99,7 @@ if (j_.URL != undefined)
     e:e,
     k:k,
     r:r,
+    t:config.t_url,
     lyrics: lyrics.replace(/\n/g, " <br> "),
   });
 });
@@ -129,10 +143,10 @@ app.get("/", function (req, res) {
 app.get("/channel", async (req, res) => {
   const ID = req.query.id;
   const { toJson } = require("xml2json");
-  const bout = await fetch( `https://tube.kuylar.dev/api/channel?id=${ID}&tab=about`);
+  const bout = await fetch( config.tubeApi + `channel?id=${ID}&tab=about`);
   const h = await bout.text();
   const k = JSON.parse(toJson(h));
-  const channel = await fetch( `https://tube.kuylar.dev/api/channel?id=${ID}&tab=videos`);
+  const channel = await fetch( config.tubeApi + `channel?id=${ID}&tab=videos`);
   const c = await channel.text();
   const tj = JSON.parse(toJson(c));
   const { Subscribers: subscribers } = k.Channel.Metadata;

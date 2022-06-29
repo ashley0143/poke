@@ -1,4 +1,4 @@
- /*
+/*
     Copyright (C) 2021-2022 POKETUBE (https://github.com/iamashley0/poketube)
     
     This program is free software: you can redistribute it and/or modify
@@ -21,7 +21,7 @@ const templateDir = path.resolve(`${process.cwd()}${path.sep}html`);
 var express = require("express");
 var app = express();
 app.engine("html", require("ejs").renderFile);
-app.use(express.urlencoded({ extended: true })) // for parsing application/x-www-form-urlencoded
+app.use(express.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
 
 app.set("view engine", "html");
 const lyricsFinder = require("./src/lyrics.js");
@@ -40,124 +40,125 @@ const random_words = [
   "can you go to space?",
   "how to become a god?",
   "is a panda a panda if pandas???",
-  "Minecraft moive trailer"
-]
+  "Minecraft movie trailer",
+];
 const image_urls = [
- "https://cdn.glitch.com/4095e32f-375a-40f2-841e-961cee4c2a95/sheng-l-q2dUSl9S4Xg-unsplash.jpg?v=1655990895950",
+  "https://cdn.glitch.com/4095e32f-375a-40f2-841e-961cee4c2a95/sheng-l-q2dUSl9S4Xg-unsplash.jpg?v=1655990895950",
   "https://cdn.glitch.com/4095e32f-375a-40f2-841e-961cee4c2a95/willian-justen-de-vasconcellos-T_Qe4QlMIvQ-unsplash(1).jpg?v=1655991004992",
   "https://cdn.glitch.global/4095e32f-375a-40f2-841e-961cee4c2a95/s-b-vonlanthen-A8iLzX6OddM-unsplash.jpg?v=1655991148325",
   "https://cdn.glitch.global/4095e32f-375a-40f2-841e-961cee4c2a95/pawel-czerwinski-8uZPynIu-rQ-unsplash.jpg?v=1655991178735",
   "https://cdn.glitch.global/4095e32f-375a-40f2-841e-961cee4c2a95/richard-horvath-_nWaeTF6qo0-unsplash.jpg?v=1655991315976",
   "https://cdn.glitch.global/4095e32f-375a-40f2-841e-961cee4c2a95/john-fowler-aaIN3y2zcMQ-unsplash.jpg?v=1655991319840",
-  "https://cdn.glitch.global/4095e32f-375a-40f2-841e-961cee4c2a95/kristopher-roller-zepnJQycr4U-unsplash.jpg?v=1655991322758"
-]
+  "https://cdn.glitch.global/4095e32f-375a-40f2-841e-961cee4c2a95/kristopher-roller-zepnJQycr4U-unsplash.jpg?v=1655991322758",
+];
 const fetch = require("node-fetch");
 const fetcher = require("./src/fetcher.js");
-
-
 
 /*
 this is our config file,you can change stuff here
 */
 
 const config = {
-  tubeApi:"https://tube.kuylar.dev/api/",
-  dislikes:"https://returnyoutubedislikeapi.com/votes?videoId=",
-  "t_url":"https://t.poketube.fun/" //  def matomo url 
-}
-
+  tubeApi: "https://tube.kuylar.dev/api/",
+  dislikes: "https://returnyoutubedislikeapi.com/votes?videoId=",
+  t_url: "https://t.poketube.fun/", //  def matomo url
+};
 
 app.get("/watch", async function (req, res) {
   var v = req.query.v;
-  const getColors = require('get-image-colors')
+  const getColors = require("get-image-colors");
   var e = req.query.e;
   var r = req.query.r;
+  var t = req.query.t;
 
   const { toJson } = require("xml2json");
-  const video = await fetch( config.tubeApi + `video?v=${v}`);
+  const video = await fetch(config.tubeApi + `video?v=${v}`);
   const h = await video.text();
   const k = JSON.parse(toJson(h));
-  if(!v) res.redirect("/")
-  var fetching = await fetcher(v)
-     const j = fetching.video.Player.Formats.Format,
-  j_ = Array.isArray(j)
-    ? j[j.length - 1]
-    : j;
-let url;
-if (j_.URL != undefined)
-  url = j_.URL;
-  const json = fetching.video.Player
-   const engagement = fetching.engagement
-   const lyrics = await lyricsFinder(json.Title);
+  if (!v) res.redirect("/");
+  var fetching = await fetcher(v);
+  const j = fetching.video.Player.Formats.Format,
+    j_ = Array.isArray(j) ? j[j.length - 1] : j;
+  let url;
+  if (j_.URL != undefined) url = j_.URL;
+  const json = fetching.video.Player;
+  const engagement = fetching.engagement;
+  const lyrics = await lyricsFinder(json.Title);
   if (lyrics == undefined) lyrics = "Lyrics not found";
   renderTemplate(res, req, "poketube.ejs", {
     url: url,
-    color: await getColors(`https://i.ytimg.com/vi/${v}/maxresdefault.jpg`).then((colors) => colors[0].hex()),
-    engagement:engagement,
+    color: await getColors(
+      `https://i.ytimg.com/vi/${v}/maxresdefault.jpg`
+    ).then((colors) => colors[0].hex()),
+    engagement: engagement,
     video: json,
     date: moment(k.Video.uploadDate).format("LL"),
-    e:e,
-    k:k,
-    r:r,
-    t:config.t_url,
+    e: e,
+    k: k,
+    r: r,
+    t: config.t_url,
+    optout: t,
     lyrics: lyrics.replace(/\n/g, " <br> "),
   });
 });
 
 app.get("/old/watch", async function (req, res) {
   var v = req.query.v;
-  const getColors = require('get-image-colors')
-   var e = req.query.e;
-  if(!v) res.redirect("/")
-  var fetching = await fetcher(v)
-    const j = fetching.video.Player.Formats.Format,
-  j_ = Array.isArray(j)
-    ? j[j.length - 1]
-    : j;
-let url;
-if (j_.URL != undefined)
-  url = j_.URL;
-  const json = fetching.video.Player
-   const engagement = fetching.engagement
-   const lyrics = await lyricsFinder(json.Title);
+  const getColors = require("get-image-colors");
+  var e = req.query.e;
+  if (!v) res.redirect("/");
+  var fetching = await fetcher(v);
+  const j = fetching.video.Player.Formats.Format,
+    j_ = Array.isArray(j) ? j[j.length - 1] : j;
+  let url;
+  if (j_.URL != undefined) url = j_.URL;
+  const json = fetching.video.Player;
+  const engagement = fetching.engagement;
+  const lyrics = await lyricsFinder(json.Title);
   if (lyrics == undefined) lyrics = "Lyrics not found";
   renderTemplate(res, req, "poketube-old.ejs", {
     url: url,
-    color: await getColors(`https://i.ytimg.com/vi/${v}/maxresdefault.jpg`).then((colors) => colors[0].hex()),
-    engagement:engagement,
+    color: await getColors(
+      `https://i.ytimg.com/vi/${v}/maxresdefault.jpg`
+    ).then((colors) => colors[0].hex()),
+    engagement: engagement,
     video: json,
     date: moment(json.uploadDate).format("LL"),
-    e:e,
+    e: e,
     lyrics: lyrics.replace(/\n/g, " <br> "),
   });
 });
 app.get("/", function (req, res) {
-  const things = random_words[Math.floor((Math.random()*random_words.length))];
-    const ur = image_urls[Math.floor((Math.random()*image_urls.length))];
+  const things = random_words[Math.floor(Math.random() * random_words.length)];
+  const ur = image_urls[Math.floor(Math.random() * image_urls.length)];
 
   renderTemplate(res, req, "main.ejs", {
-  random:things,
-  url:ur
-});
+    random: things,
+    url: ur,
+  });
 });
 app.get("/channel", async (req, res) => {
   const ID = req.query.id;
   const { toJson } = require("xml2json");
-  const bout = await fetch( config.tubeApi + `channel?id=${ID}&tab=about`);
+  const bout = await fetch(config.tubeApi + `channel?id=${ID}&tab=about`);
   const h = await bout.text();
   const k = JSON.parse(toJson(h));
-  const channel = await fetch( config.tubeApi + `channel?id=${ID}&tab=videos`);
+  const channel = await fetch(config.tubeApi + `channel?id=${ID}&tab=videos`);
   const c = await channel.text();
   const tj = JSON.parse(toJson(c));
   const { Subscribers: subscribers } = k.Channel.Metadata;
   renderTemplate(res, req, "channel.ejs", {
-  ID:ID,
-  j:k,
-  tj:tj,
-  about:k.Channel.Contents.ItemSection.About,
-  subs:typeof subscribers === 'string' ? subscribers.replace('subscribers', '') : 'Private',
-  desc:k.Channel.Contents.ItemSection.About.Description
-});});
+    ID: ID,
+    j: k,
+    tj: tj,
+    about: k.Channel.Contents.ItemSection.About,
+    subs:
+      typeof subscribers === "string"
+        ? subscribers.replace("subscribers", "")
+        : "Private",
+    desc: k.Channel.Contents.ItemSection.About.Description,
+  });
+});
 app.get("/privacy", function (req, res) {
   renderTemplate(res, req, "priv.ejs");
 });
@@ -173,12 +174,14 @@ app.get("/api/search", async (req, res) => {
   if (!query) {
     return res.redirect("/");
   }
-      return res.redirect(`/search?query=${query}`);
- });
+  return res.redirect(`/search?query=${query}`);
+});
 app.get("/search", async (req, res) => {
   const { toJson } = require("xml2json");
   const query = req.query.query;
-  const search = await fetch(`https://tube.kuylar.dev/api/search?query=${query}`);
+  const search = await fetch(
+    `https://tube.kuylar.dev/api/search?query=${query}`
+  );
   const text = await search.text();
   const j = JSON.parse(toJson(text));
   if (!query) {
@@ -186,9 +189,9 @@ app.get("/search", async (req, res) => {
   }
   renderTemplate(res, req, "search.ejs", {
     j: j,
-    q:query
+    q: query,
   });
- });
+});
 app.get("/css/:id", (req, res) => {
   res.sendFile(__dirname + `/css/${req.params.id}`);
 });
@@ -196,20 +199,25 @@ app.get("/js/:id", (req, res) => {
   res.sendFile(__dirname + `/js/${req.params.id}`);
 });
 app.get("/video/upload", (req, res) => {
-           res.redirect("https://youtube.com/upload?from=poketube_utc");
- });
+  res.redirect("https://youtube.com/upload?from=poketube_utc");
+});
 app.get("/api/video/download", async function (req, res) {
-  var v = req.query.v;var fetching = await fetcher(v);const url = fetching.video.Player.Formats.Format[1].URL;res.redirect(url)
- });
+  var v = req.query.v;
+  var fetching = await fetcher(v);
+  const url = fetching.video.Player.Formats.Format[1].URL;
+  res.redirect(url);
+});
 app.get("/api/video/downloadjson", async function (req, res) {
-  var v = req.query.v;var fetching = await fetcher(v);const url = fetching.video.Player.Formats.Format[1].URL;res.json(url)
- });
+  var v = req.query.v;
+  var fetching = await fetcher(v);
+  const url = fetching.video.Player.Formats.Format[1].URL;
+  res.json(url);
+});
 
-
- app.get("*", function (req, res) {
-const things = random_words[Math.floor((Math.random()*random_words.length))];
+app.get("*", function (req, res) {
+  const things = random_words[Math.floor(Math.random() * random_words.length)];
   renderTemplate(res, req, "404.ejs", {
-  random:things,
-});});
-app.listen("3000", () => {
-})
+    random: things,
+  });
+});
+app.listen("3000", () => {});

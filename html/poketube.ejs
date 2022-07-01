@@ -44,7 +44,7 @@
 <link href=/css/app.main.css rel=stylesheet>
 <link href="/css/watch.main.css?v=56" rel=stylesheet>
        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@900&family=Sigmar+One&display=swap" rel=stylesheet>
-    <link href=https://pro.fontawesome.com/releases/v5.15.3/css/all.css rel=stylesheet>
+    <link href=https://site-assets.fontawesome.com/releases/v6.1.1/css/all.css rel=stylesheet>
 <style>
    a.class:hover {
     text-decoration:underline;
@@ -228,7 +228,6 @@ summary:hover{
 				<button class="subscribe-button" ><a style="color:#fff" href="https://www.youtube.com/channel/<%=video.Channel.id%>?view_as=subscriber?sub_confirmation=1">Suscribe</a></button>
 			</div>
 	</div>
- 
 	
 
 	<div class="recommended-list" style="background-color:#1c1c1c;border-radius:25px;margin: 10px;">
@@ -264,7 +263,7 @@ if you want to change the url - see config in server.js
                   <div style="font-family:Inter,sans-serif;font-weight:900;white-space:yes;" align="center">
 
 <a href="/watch?v=<%=video.id%>&t=f"> 
- Opt out of stats  </a> ( more info:<a href="/privacy">P.p</a>)
+ Opt out of stats  </a> (<a href="/privacy" style="color:#fff">More info</a>)
                
    </div>
      <% } %>
@@ -299,13 +298,11 @@ you migth also watch these... (ig?)
 							<div class="info">
                 
       <% if (!optout) { %> 
-        
 								<a href="/watch?v=<%= x.id %>" class="title max-lines-2"><%= x.Title %></a>
                    <% } %>
    <% if (optout) { %> 
 								<a href="/watch?v=<%= x.id %>&t=f" class="title max-lines-2"><%= x.Title %></a>
                    <% } %>
-
 								<div>
                <a class="max-lines-2" href="/channel?id=<%= x.Channel.id %>"><%=x.Channel.Name %></a>
 									<div>

@@ -18,8 +18,12 @@
     <meta content=@PoketaleBot name=twitter:creator>
      <link href=https://cdn.poketalebot.com/404/v2.css rel=stylesheet>
     <link href=/css/app.main.css rel=stylesheet>
-      <link href=/css/search.main.css?v=536 rel=stylesheet>
-      <style>  :root {
+      <link href=/css/search.main.css?v=5736 rel=stylesheet>
+      <style> 
+        .channel-info-container > img {
+  width: 100%;
+}
+        :root {
     --text-primary: #fff;
     --text-secondary: #fff;
     --text-link: #3ea6ff;
@@ -64,22 +68,22 @@
 				<img src="<%=j.Channel.Metadata.Avatars.Thumbnail.$t%>" alt="Channel Avatar">
 			</a>
 			<div class="name">
-				<p style="color:#fff"><%=j.Channel.Metadata.Name%></p>
+				<p style="font-family:Inter,sans-serif;font-weight:900;white-space:yes;"><%=j.Channel.Metadata.Name%></p>
  			</div>
-			<button class="subscribe-button"><%=subs%>
-          </button>
+			<button class="subscribe-button"><%=subs%></button>
 		</div>
 	</div><hr>
         <% if (ID === "UCFAiFyGs6oDiF1Nf-rRJpZA") { %> 
+                        <a href="https://www.curesarcoma.org/donate/">Donate to curesarcoma.org</a><br>
 <p>
-Technoblade never dies! <a href="https://technoblade.com/">More info</a>
+Technoblade never dies!  <a href="https://technoblade.com/">More info</a>
           </p><hr>
        <% } %>
-<h3 style="color:#fff">About this channel</h3>
+<h3 style="color:#fff;text-transform: uppercase;font-family:Inter,sans-serif;font-weight:900;white-space:yes;">About this channel</h3>
   <br><br> <hr>
 	<p style="color:#fff"><%-desc.replace(/\n/g, " <br> ")%></p>
 	<br><br>
-	<h3  style="color:#fff">Uploads</h3>
+	<h3 style="color:#fff;text-transform: uppercase;font-family:Inter,sans-serif;font-weight:900;white-space:yes;">Uploads</h3>
             <div align="center">
 
    	<div class="video-grid">

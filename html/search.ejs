@@ -25,7 +25,7 @@
 <link href=/css/app-cdn.min.css rel=stylesheet>
 <link href=/css/app.main.css rel=stylesheet>
 <link href=/css/search.main.css rel=stylesheet>
-
+ 
 <style>
    a.class:hover {
     text-decoration:underline;
@@ -37,11 +37,12 @@
 summary:hover{
     color:red;
 }
-  h1{
-  background-image: linear-gradient(to left, violet, blue, orange, red);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  }
+            @font-face {
+        font-family: 'Ginto Nord';
+        font-weight: 800;
+        src:url('https://cdn.statically.io/gh/brecert/discord-quote-generator/main/Ginto-Nord-800.woff') format("woff");
+      }
+ 
 </style>
  </head>
 
@@ -68,9 +69,9 @@ summary:hover{
         style="background-image: url('https://i.ytimg.com/vi/<%= x.id %>/hqdefault.jpg?sqp=-oaymwEXCNAFEJQDSFryq4qpAwkIARUAAIhCGAE=&amp;rs=AOn4CLBmAOZV7CM3NdDKlEFxGX7PpI5UWQ');border-radius: 20px;"
          ><span class="video-length"><%=x.duration %></span></a>
       <div class="info" style="color:#fff;text-align: left;">
-        <a style="color:#fff" href="/watch?v=<%= x.id %>" class="title max-lines-2"
+        <a style="color:#fff;font-family: 'Ginto Nord'" href="/watch?v=<%= x.id %>" class="title max-lines-2"
           ><%= x.Title %></a>
-        <div style="display: flex; flex-direction: column; row-gap: 8px">
+        <div style="display: flex; flex-direction: column; row-gap: 8px;font-family: 'Inter'">
           <a href="/watch?v=<%= x.id %>"><span><%= x.views %> views</span> <span>•</span> <span><%= x.uploadedAt %></span></a>
           <a href="/channel?id=<%= x.Channel.id %>">By <%=x.Channel.Name %></a>
         </div>
@@ -79,11 +80,14 @@ summary:hover{
     </div>
   </div>
                <% }) %>   
-                 </div>
+                 </div> 
          <p>
           and thats the end of the internet... wooo
         </p>
 
    </body>
+                              
+ 
+
                               
  

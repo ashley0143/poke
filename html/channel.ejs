@@ -48,7 +48,7 @@
   
    .video-grid > .video {
    background-color: #181818;
-border-radius: 4px;
+border-radius: 8px;
    }
       </style>
  </head>
@@ -89,12 +89,12 @@ border-radius: 4px;
 Technoblade never dies!  <a href="https://technoblade.com/">More info</a>
           </p><hr>
        <% } %>
-<h3 style="color:#fff;text-transform: uppercase;font-family:Ginto Nord,sans-serif;font-weight:900;white-space:yes;">About this channel</h3>
+<h3 style="color:#fff;text-transform: uppercase;font-family:Ginto Nord,sans-serif;font-weight:900;white-space:yes;font-style: italic;">About this channel</h3>
   <br><br>   <hr style="clear: both;display: block;border: none;border-bottom: 0.5px solid #2f2f2f;margin: 0 0;/*! width: 4.5em; */height: 0;">
 
 	<p style="color:#fff"><%-desc.replace(/\n/g, " <br> ")%></p>
 	<br><br>
-	<h3 style="color:#fff;text-transform: uppercase;font-family:Ginto Nord,sans-serif;font-weight:900;white-space:yes;">Uploads</h3>
+	<h3 style="color:#fff;text-transform: uppercase;font-family:Ginto Nord,sans-serif;font-weight:900;white-space:yes;  font-style: italic;">Uploads</h3>
          <p style="color:#fff;font-family:Ginto Nord,sans-serif;font-weight:900;white-space:yes;">
            the last few uploads of the <%=j.Channel.Metadata.Name%> channel !
          </p>                                <hr style="clear: both;display: block;border: none;border-bottom: 0.5px solid #2f2f2f;margin: 0 0;/*! width: 4.5em; */height: 0;">
@@ -104,7 +104,7 @@ Technoblade never dies!  <a href="https://technoblade.com/">More info</a>
    	<div class="video-grid">
    <% tj.Channel.Contents.ItemSection.ItemSection.Video.forEach(x =>  { %>
 			<a href="/watch?v=<%- x.id %>" class="video">
-				<div class="thumbnail" style="background-image: url('https://i.ytimg.com/vi/<%- x.id %>/hqdefault.jpg?sqp=-oaymwEjCNACELwBSFryq4qpAxUIARUAAAAAGAElAADIQj0AgKJDeAE=&amp;rs=AOn4CLAWzSgJiToCNsG9Rwj3y-p3XN9AxQ');border-radius: 4px;"><span class="video-length"><%- x.duration %></span></div>
+				<div class="thumbnail" style="background-image: url('https://i.ytimg.com/vi/<%= x.id %>/hqdefault.jpg?sqp=-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLBy_x4UUHLNDZtJtH0PXeQGoRFTgw');border-radius: 4px;"><span class="video-length"><%- x.duration %></span></div>
 				<div class="info">
 					<span class="title max-lines-2" style="font-family:Ginto Nord,sans-serif;"><%- x.Title %></span>
 			 
@@ -119,4 +119,3 @@ Technoblade never dies!  <a href="https://technoblade.com/">More info</a>
    
  
 </html>
-

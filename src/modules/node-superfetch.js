@@ -1,6 +1,5 @@
 /*
 Internet Systems Consortium license
-===================================
 
 Copyright (c) 2017-2018, dragonfire535
 

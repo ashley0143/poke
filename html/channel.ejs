@@ -20,6 +20,12 @@
     <link href=/css/app.main.css rel=stylesheet>
       <link href=/css/search.main.css?v=5736 rel=stylesheet>
       <style> 
+              @font-face {
+        font-family: 'Ginto Nord';
+        font-weight: 800;
+        src:url('https://cdn.statically.io/gh/brecert/discord-quote-generator/main/Ginto-Nord-800.woff') format("woff");
+      }
+        
         .channel-info-container > img {
   width: 100%;
 }
@@ -68,7 +74,7 @@
 				<img src="<%=j.Channel.Metadata.Avatars.Thumbnail.$t%>" alt="Channel Avatar">
 			</a>
 			<div class="name">
-				<p style="font-family:Inter,sans-serif;font-weight:900;white-space:yes;"><%=j.Channel.Metadata.Name%></p>
+				<p style="font-family:Ginto Nord,sans-serif;font-weight:900;white-space:yes;"><%=j.Channel.Metadata.Name%></p>
  			</div>
 			<button class="subscribe-button"><%=subs%></button>
 		</div>

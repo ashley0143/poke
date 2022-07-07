@@ -134,6 +134,12 @@ summary:hover{
     --channel-info-background: #181818;
     --channel-contents-background: #0f0f0f;
 }
+          @font-face {
+        font-family: 'Ginto Nord';
+        font-weight: 800;
+        src:url('https://cdn.statically.io/gh/brecert/discord-quote-generator/main/Ginto-Nord-800.woff') format("woff");
+      }
+
 .alert {
   padding: 20px;
   background-color: #f44336;
@@ -185,7 +191,7 @@ summary:hover{
  					</video>
 		</div><br>
 			<div class="video-info">
-				<div class="video-title" style="font-family:Inter,sans-serif;font-weight:900;white-space:yes;"><%=video.Title%></div>
+				<div class="video-title" style="font-family:'Ginto Nord';font-weight:900;white-space:yes;"><%=video.Title%></div>
 				<p class="video-sub-info description">
 					<span><%=engagement.viewCount.toLocaleString()%> views - Uploaded on <%=date%> ^^
 </span> <br><br> <%-String(video.Description).replace(/\n/g, " <br> ")%></center>
@@ -219,7 +225,7 @@ summary:hover{
 				<a href="/channel?id=<%=video.Channel.id%>" class="avatar">
 					<img src=" <%= k.Video.Channel.Avatar[1].$t %>">
 				</a>
-				<div class="name">
+				<div class="name" style="font-family:'Ginto Nord'">
 					<a  href="/channel?id=<%=video.Channel.id%>" >  <%=video.Channel.Name%></a>
 				</div>
 				<div class="subscriber-count">
@@ -281,9 +287,11 @@ if you want to change the url - see config in server.js
                   
                            <% } %>   
                               <% if (!r) { %> 
-                               <p style="font-family:Inter,sans-serif;font-weight:900;white-space:yes;" align="center">
-you migth also watch these... (ig?)
-                               </p>
+                                <hr style="clear: both;display: block;border: none;border-bottom: 0.5px solid #2f2f2f;margin: 0 0;/*! width: 4.5em; */height: 0;">
+                               <p style="font-family:'Ginto Nord',sans-serif;font-weight:900;white-space:yes;" align="center">
+  OTHER VIDEOS FOR YOU <3
+                                </p>
+                            
      <% k.Video.Recommendations.Video.forEach(x => { %>       
  						<div class="video">
                     <% if (!optout) { %> 
@@ -317,11 +325,14 @@ you migth also watch these... (ig?)
 
       	           <% if (lyrics) { %>
                                                   <% if (r === "f") { %> 
+                                <hr style="clear: both;display: block;border: none;border-bottom: 0.5px solid #2f2f2f;margin: 0 0;/*! width: 4.5em; */height: 0;">
 
             <a href="/watch?v=<%=video.id%>">See the Recommended videos instead</a>
          <a href="https://github.com/iamashley0/poketube/issues">Report wrong lyrics!</a>
-         <div align="center">
-                                <h1 style="color:#fff;font-family: 'Inter', sans-serif;font-weight: bold;white-space:yes;font-size:45;">   Lyrics 
+         <div align="center">                                <hr style="clear: both;display: block;border: none;border-bottom: 0.5px solid #2f2f2f;margin: 0 0;/*! width: 4.5em; */height: 0;">
+
+                                                             <h1 style="font-family:'Ginto Nord',sans-serif;font-weight:900;white-space:yes;" align="center">
+ Lyrics 
                         </h1>  
            <p>
  See how our lyrics search works:<a href="https://github.com/iamashley0/poketube/blob/main/src/lyrics.js">Here</a>

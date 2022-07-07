@@ -1,7 +1,7 @@
 <head>
   
     <% if (ID === "UCFAiFyGs6oDiF1Nf-rRJpZA") { %> 
-    <title>Technoblade Never Dies!</title>
+    <title>Technoblade Never Dies! - PokeTube</title>
  <% } %>
     <title><%=j.Channel.Metadata.Name%> - PokeTube</title>
    <link href=https://watch.poketalebot.com/css/yt-ukraine.svg rel=icon>
@@ -19,7 +19,7 @@
      <link href=https://cdn.poketalebot.com/404/v2.css rel=stylesheet>
     <link href=/css/app.main.css rel=stylesheet>
       <link href=/css/search.main.css?v=5736 rel=stylesheet>
-      <style> 
+ <style> 
               @font-face {
         font-family: 'Ginto Nord';
         font-weight: 800;
@@ -33,21 +33,24 @@
     --text-primary: #fff;
     --text-secondary: #fff;
     --text-link: #3ea6ff;
-
+          
     --app-background: #000;
     --context-menu-background: #000;
     --border-color: #444;
     --item-hover-background: #000;
     --item-active-background: #000;
-
     --top-bar-background: #000;
     --guide-background: #000;
-
     --thumbnail-background: #000;
-
     --channel-info-background: #000;
     --channel-contents-background: #000;
-}</style>
+}
+  
+   .video-grid > .video {
+   background-color: #181818;
+border-radius: 4px;
+   }
+      </style>
  </head>
 <body>
      <center> 
@@ -78,32 +81,33 @@
  			</div>
 			<button class="subscribe-button"><%=subs%></button>
 		</div>
-	</div><hr>
+	</div>  <hr style="clear: both;display: block;border: none;border-bottom: 0.5px solid #2f2f2f;margin: 0 0;/*! width: 4.5em; */height: 0;">
+
         <% if (ID === "UCFAiFyGs6oDiF1Nf-rRJpZA") { %> 
                         <a href="https://www.curesarcoma.org/donate/">Donate to curesarcoma.org</a><br>
 <p>
 Technoblade never dies!  <a href="https://technoblade.com/">More info</a>
           </p><hr>
        <% } %>
-<h3 style="color:#fff;text-transform: uppercase;font-family:Inter,sans-serif;font-weight:900;white-space:yes;">About this channel</h3>
-  <br><br> <hr>
+<h3 style="color:#fff;text-transform: uppercase;font-family:Ginto Nord,sans-serif;font-weight:900;white-space:yes;">About this channel</h3>
+  <br><br>   <hr style="clear: both;display: block;border: none;border-bottom: 0.5px solid #2f2f2f;margin: 0 0;/*! width: 4.5em; */height: 0;">
+
 	<p style="color:#fff"><%-desc.replace(/\n/g, " <br> ")%></p>
 	<br><br>
-	<h3 style="color:#fff;text-transform: uppercase;font-family:Inter,sans-serif;font-weight:900;white-space:yes;">Uploads</h3>
+	<h3 style="color:#fff;text-transform: uppercase;font-family:Ginto Nord,sans-serif;font-weight:900;white-space:yes;">Uploads</h3>
+         <p style="color:#fff;font-family:Ginto Nord,sans-serif;font-weight:900;white-space:yes;">
+           the last few uploads of the <%=j.Channel.Metadata.Name%> channel !
+         </p>                                <hr style="clear: both;display: block;border: none;border-bottom: 0.5px solid #2f2f2f;margin: 0 0;/*! width: 4.5em; */height: 0;">
+
             <div align="center">
 
    	<div class="video-grid">
    <% tj.Channel.Contents.ItemSection.ItemSection.Video.forEach(x =>  { %>
 			<a href="/watch?v=<%- x.id %>" class="video">
-				<div class="thumbnail" style="background-image: url('https://i.ytimg.com/vi/<%- x.id %>/hqdefault.jpg?sqp=-oaymwEjCNACELwBSFryq4qpAxUIARUAAAAAGAElAADIQj0AgKJDeAE=&amp;rs=AOn4CLAWzSgJiToCNsG9Rwj3y-p3XN9AxQ');border-radius: 26.5px;"><span class="video-length"><%- x.duration %></span></div>
+				<div class="thumbnail" style="background-image: url('https://i.ytimg.com/vi/<%- x.id %>/hqdefault.jpg?sqp=-oaymwEjCNACELwBSFryq4qpAxUIARUAAAAAGAElAADIQj0AgKJDeAE=&amp;rs=AOn4CLAWzSgJiToCNsG9Rwj3y-p3XN9AxQ');border-radius: 4px;"><span class="video-length"><%- x.duration %></span></div>
 				<div class="info">
-					<span class="title max-lines-2"><%- x.Title %></span>
-					<div>
-						<div>
-							<span><%- x.views %> views</span>
-							<span><%- x.uploadedAt %></span>
-						</div>
-					</div>
+					<span class="title max-lines-2" style="font-family:Ginto Nord,sans-serif;"><%- x.Title %></span>
+			 
             </div>
  			</a>	
  		 	               <% }) %>   
@@ -115,3 +119,4 @@ Technoblade never dies!  <a href="https://technoblade.com/">More info</a>
    
  
 </html>
+

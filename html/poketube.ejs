@@ -36,7 +36,7 @@
 <meta content=720 name=twitter:player:height>
 <link href="https://poketube.fun/watch?v=<%=video.id%>" itemprop=url>
 <link href="http://www.youtube.com/channel/<%=video.Channel.id%>" itemprop=url>
-<% } %> <!-- close the } -->
+ <% } %> <!-- close the } -->
 <link href=/css/yt-ukraine.svg?v=6 rel=icon>
 <title> <%=video.Title%> - PokeTube</title>
 <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@500&display=swap" rel=stylesheet>
@@ -139,9 +139,7 @@ summary:hover{
         font-weight: 800;
         src:url('https://cdn.statically.io/gh/brecert/discord-quote-generator/main/Ginto-Nord-800.woff') format("woff");
       }
-
  
-
 .closebtn {
   margin-left: 15px;
   color: white;
@@ -172,8 +170,7 @@ summary:hover{
  
  <div class="watch-page">
 
-
-	<div class="primary">
+ 	<div class="primary">
        
 		<div class="video-player-container">
 					<video class="player" style="border-radius: 16px;" autoplay controls src="<%=url%>" poster="https://i.ytimg.com/vi/<%=video.id%>/hqdefault.jpg?v=607ddcd4">
@@ -228,25 +225,11 @@ summary:hover{
 	<div class="recommended-list" style="background-color:#1c1c1c;border-radius:25px;margin: 10px;">
     
  
-      <% if (optout) { %> 
-        
- <% } %>
- <% if (!optout) { %> 
-       <!-- this allows us to see how much poketube users watched this video,we dont collect your ip or any of your personal information while making this. we dont collect or share your personal information as we said on our privacy policy:https://poketube.fun/privacy 
-
-this process does not use cookies,and it does not collect any information whatsoever execpt how many users watched this spesific video 
-
-we use something called matomo to do this,and since ip adreses are collected by def on matomo,we closed that on our instance. no infromation is collected from you. 
-
-we dont collect or share your personal infromation,period.
-
-if you want to change the url - see config in server.js
--->
-        <img src="<%=t%>t/rep.gif?video_id=<%=video.id%>" style="width: 0;visibility: hidden;">
- <% } %>
     <div style="font-family:Inter,sans-serif;font-weight:900;white-space:yes;" align="center">
-      
-      <a href="https://youtube.com/watch?v=<%=video.id%>">Open On YouTube</a> • <a href="/privacy">Privacy</a> • <a href="https://github.com/iamashley0/poketube/">Git</a> 
+         SessionID:<%=btoa(Date.now())%><br>         (we dont see this ID,see <a href="/privacy">privacy</a> )
+<br><br>
+
+       <a href="https://youtube.com/watch?v=<%=video.id%>">Open On YouTube</a> • <a href="/privacy">Privacy</a> • <a href="https://github.com/iamashley0/poketube/">Git</a> 
       </div> 
                
       <% if (optout) { %> 
@@ -338,8 +321,29 @@ if you want to change the url - see config in server.js
  
 	</div>  
 
+      <% if (optout) { %> 
+        
+ <% } %>
+ <% if (!optout) { %> 
+          <!-- MORE INFO :https://poketube.fun/privacy -->
+          <!-- MORE INFO :https://poketube.fun/privacy -->
+       
+          <!-- if you want to change the url - please see config in server.js  -->
+        
+        
+        
+   
+         <!-- START <%=t%> -->  
+        <img src="<%=t%>t/rep.gif?ID=<%=btoa(Date.now())%>" style="width: 0;visibility: hidden;" id="SesionID">
+        <img src="<%=t%>t/rep.gif?video_id=<%=btoa(video.id)%>" style="width: 0;visibility: hidden;" id="videoID">
+        <img src="<%=t%>t/rep.gif?channel_ID=<%=btoa(video.Channel.id)%>" style="width: 0;visibility: hidden;" id="channel">
+        <img src="<%=t%>t/rep.gif?piwik=t" style="width: 0;visibility: hidden;" id="piwik_noip_no_personal-info_collect">
+        <!-- END <%=t%> -->  
+
+ <% } %>
 </div>
  
 </body>
 </html>
   </body>
+

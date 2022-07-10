@@ -1,6 +1,6 @@
 {
   "name": "poketube",
-  "version": "2.0.1",
+  "version": "20.22",
   "description": "Youtube video player that does not track your info",
   "main": "server.js",
   "scripts": {

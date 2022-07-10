@@ -139,7 +139,20 @@ summary:hover{
         font-weight: 800;
         src:url('https://cdn.statically.io/gh/brecert/discord-quote-generator/main/Ginto-Nord-800.woff') format("woff");
       }
- 
+
+.alert {
+  padding: 20px;
+  background-color: #f44336;
+  color: white;
+  opacity: 1;
+  transition: opacity 0.6s;
+  margin-bottom: 15px;
+}
+
+.alert.success {background-color: #04AA6D;}
+.alert.info {background-color: #2196F3;}
+.alert.warning {background-color: #ff9800;}
+
 .closebtn {
   margin-left: 15px;
   color: white;
@@ -226,9 +239,7 @@ summary:hover{
     
  
     <div style="font-family:Inter,sans-serif;font-weight:900;white-space:yes;" align="center">
-         SessionID:<%=btoa(Date.now())%><br>         (we dont see this ID,see <a href="/privacy">privacy</a> )
-<br><br>
-
+ 
        <a href="https://youtube.com/watch?v=<%=video.id%>">Open On YouTube</a> • <a href="/privacy">Privacy</a> • <a href="https://github.com/iamashley0/poketube/">Git</a> 
       </div> 
                
@@ -346,4 +357,3 @@ summary:hover{
 </body>
 </html>
   </body>
-

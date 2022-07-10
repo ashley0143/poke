@@ -7,12 +7,15 @@
  <h1> PokeTube Source Code </h1> 
   this is the source code of PokeTube! the youtube front-end that doesnt tracks you ^^ <br> <br> for matomos source code,see <a href="https://github.com/poketube-org/poketube/tree/main/t"> here. </a>
   <br> <br> 
-  see https://poketube.fun/domains for the istances of PokeTube :^
+  see https://poketube.fun/domains for the istances of PokeTube :^ <br> <br>
+
+   to self host you'll need  [Node.js](https://nodejs.org/en/download/) (which comes with [npm](http://npmjs.com)) installed on your computer. when you do,simpliy download the repo and run "node server.js" or npm start in the terminal. btw you probably need alot of ram to host this :P ( i recommend like 8 gigs free )
  <br>
 
 
 ## Why PokeTube?
 - Lyrics for songs!
+- Beautiful UI (Dont expect much tho lol)
 - No cookies,no data collection
 - Javascript-free on frontend
 - No ads & Tracking

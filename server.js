@@ -102,6 +102,46 @@ app.get("/watch", async function (req, res) {
   });
 });
 
+app.get("/music", async function (req, res) {
+  var v = req.query.v;
+  const getColors = require("get-image-colors");
+  var e = req.query.e;
+  var r = req.query.r;
+  var t = req.query.t;
+
+  const { toJson } = require("xml2json");
+  const video = await fetch(config.tubeApi + `video?v=${v}`);
+  const h = await video.text();
+  const k = JSON.parse(toJson(h));
+  if (!v) res.redirect("/");
+  var fetching = await fetcher(v);
+  const j = fetching.video.Player.Formats.Format,
+    j_ = Array.isArray(j) ? j[j.length - 1] : j;
+  let url;
+  if (j_.URL != undefined) url = j_.URL;
+  const json = fetching.video.Player;
+  const engagement = fetching.engagement;
+  const lyrics = await lyricsFinder(json.Title);
+  if (lyrics == undefined) lyrics = "Lyrics not found";
+  renderTemplate(res, req, "poketube-music.ejs", {
+    url: url,
+    color: await getColors(
+      `https://i.ytimg.com/vi/${v}/maxresdefault.jpg`
+    ).then((colors) => colors[0].hex()),
+    engagement: engagement,
+    video: json,
+    date: moment(k.Video.uploadDate).format("LL"),
+    e: e,
+    k: k,
+    r: r,
+    t: config.t_url,
+    optout: t,
+    lyrics: lyrics.replace(/\n/g, " <br> "),
+  });
+});
+
+
+
 app.get("/old/watch", async function (req, res) {
   var v = req.query.v;
   const getColors = require("get-image-colors");
@@ -213,11 +253,15 @@ app.get("/api/video/downloadjson", async function (req, res) {
   const url = fetching.video.Player.Formats.Format[1].URL;
   res.json(url);
 });
-
+ 
 app.get("*", function (req, res) {
   const things = random_words[Math.floor(Math.random() * random_words.length)];
   renderTemplate(res, req, "404.ejs", {
     random: things,
   });
 });
+
+
+// 
+
 app.listen("3000", () => {});

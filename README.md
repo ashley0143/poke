@@ -4,20 +4,22 @@
  
   <img src="https://raw.githubusercontent.com/vshymanskyy/StandWithUkraine/main/badges/StandWithUkraine.svg">
 
- <h1> PokeTube </h1> 
-  this is the source code of PokeTube! the youtube front-end that doesnt tracks you ^^
+ <h1> PokeTube Source Code </h1> 
+  this is the source code of PokeTube! the youtube front-end that doesnt tracks you ^^ <br> <br> for matomos source code,see <a href="https://github.com/poketube-org/poketube/tree/main/t"> here. </a>
+  <br> <br> 
+  see https://poketube.fun/domains for the istances of PokeTube :^
  <br>
- 
-  
+
+
 ## Why PokeTube?
 - Lyrics for songs!
-- No cookies,no data collection,no statistics
+- No cookies,no data collection
 - Javascript-free on frontend
-- No ads
-- See Dislike counts from [Return YouTube Dislike Api](https://www.returnyoutubedislike.com/) (see:[Line 22 of fetcher.js](https://github.com/iamashley0/poketube/blob/main/src/fetcher.js#L22))
+- No ads & Tracking
+- % 100 free software
+- See Dislike counts from [Return YouTube Dislike Api](https://www.returnyoutubedislike.com/)!
 - Uses LightTube api
 - <a href="https://github.com/iamashley0/poketube/tree/main/sdk">Custom sdk!</a> 
 
 ## Legal
-
-see:https://poketube.fun/privacy
+Privacy Policy: https://poketube.fun/privacy (TL;DR:we dont collect or share your personal info lol)

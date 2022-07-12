@@ -22,6 +22,7 @@ var express = require("express");
 var app = express();
 app.engine("html", require("ejs").renderFile);
 app.use(express.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
+const getColors = require("get-image-colors");
 
 app.set("view engine", "html");
 const lyricsFinder = require("./src/lyrics.js");
@@ -51,7 +52,9 @@ const image_urls = [
   "https://cdn.glitch.global/4095e32f-375a-40f2-841e-961cee4c2a95/john-fowler-aaIN3y2zcMQ-unsplash.jpg?v=1655991319840",
   "https://cdn.glitch.global/4095e32f-375a-40f2-841e-961cee4c2a95/kristopher-roller-zepnJQycr4U-unsplash.jpg?v=1655991322758",
 ];
+
 const fetch = require("node-fetch");
+const { toJson } = require("xml2json");
 const fetcher = require("./src/fetcher.js");
 
 /*
@@ -66,12 +69,9 @@ const config = {
 
 app.get("/watch", async function (req, res) {
   var v = req.query.v;
-  const getColors = require("get-image-colors");
   var e = req.query.e;
   var r = req.query.r;
   var t = req.query.t;
-
-  const { toJson } = require("xml2json");
   const video = await fetch(config.tubeApi + `video?v=${v}`);
   const h = await video.text();
   const k = JSON.parse(toJson(h));
@@ -102,14 +102,36 @@ app.get("/watch", async function (req, res) {
   });
 });
 
+
+app.get("/download", async function (req, res) {
+  var v = req.query.v;
+
+  const video = await fetch(config.tubeApi + `video?v=${v}`);
+  const h = await video.text();
+  const k = JSON.parse(toJson(h));
+  if (!v) res.redirect("/");
+  var fetching = await fetcher(v);
+  const j = fetching.video.Player.Formats.Format,
+    j_ = Array.isArray(j) ? j[j.length - 1] : j;
+  let url;
+  if (j_.URL != undefined) url = j_.URL;
+  const json = fetching.video.Player;
+  const engagement = fetching.engagement;
+  
+  renderTemplate(res, req, "download.ejs", {
+    url: url,
+    engagement: engagement,
+    k: k,
+    video: json,
+    date: moment(k.Video.uploadDate).format("LL")
+  });
+});
+
 app.get("/music", async function (req, res) {
   var v = req.query.v;
-  const getColors = require("get-image-colors");
   var e = req.query.e;
   var r = req.query.r;
   var t = req.query.t;
-
-  const { toJson } = require("xml2json");
   const video = await fetch(config.tubeApi + `video?v=${v}`);
   const h = await video.text();
   const k = JSON.parse(toJson(h));
@@ -144,7 +166,6 @@ app.get("/music", async function (req, res) {
 
 app.get("/old/watch", async function (req, res) {
   var v = req.query.v;
-  const getColors = require("get-image-colors");
   var e = req.query.e;
   if (!v) res.redirect("/");
   var fetching = await fetcher(v);

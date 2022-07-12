@@ -1,0 +1,224 @@
+ <!--
+    This Source Code Form is subject to the terms of the GNU General Public License:
+
+    Copyright (C) 2021-2022 POKETUBE (https://github.com/iamashley0/poketube)
+    
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program. If not, see https://www.gnu.org/licenses/.
+--><!DOCTYPE html><html>
+<head>
+    <title>PokeTube - Download Video</title>
+    <link href=/css/yt-ukraine.svg?v=6 rel=icon>
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Sigmar+One&amp;display=swap" rel="stylesheet"> 
+    <meta content=website property=og:type>
+    <meta content="Poketube" property=og:title>
+    <meta content="Download a video on PokeTube" property=twitter:description>
+    <meta content="https://cdn.glitch.com/ef5d02b7-c958-475a-b82d-d263d37e7ec7/poketubemain.png" property=og:image>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@500&display=swap" rel="stylesheet">
+    <meta content=summary_large_image name=twitter:card>
+    <meta content=@PoketaleBot name=twitter:site>
+    <meta content=@PoketaleBot name=twitter:creator>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@500&display=swap" rel=stylesheet>
+<link href=/css/app-cdn.min.css rel=stylesheet>
+<link href=/css/app.main.css rel=stylesheet>
+<link href="/css/watch.main.css?v=56" rel=stylesheet>
+       <link href="https://fonts.googleapis.com/css2?family=Inter:wght@900&family=Sigmar+One&display=swap" rel=stylesheet>
+    <link href=https://site-assets.fontawesome.com/releases/v6.1.1/css/all.css rel=stylesheet>
+<style>
+   a.class:hover {
+    text-decoration:underline;
+    font-weight:bold
+}
+  summary{
+    color:gray;
+}
+summary:hover{
+    color:white;
+}
+</style>
+  <!-- WIGGLE WIGGLE WIGGLE -->
+  <style>
+    body{
+        overflow-x: hidden; /* Hide horizontal scrollbar */
+        color:#111111
+    }
+    
+   .animated {
+            -webkit-animation-duration: 10s; 
+            animation-duration: 10s; 
+            -webkit-animation-fill-mode: both;
+            animation-fill-mode: both; 
+            animation-iteration-count: infinite;
+            -moz-animation-iteration-count: infinite;
+            -webkit-animation-iteration-count: infinite;
+            -o-animation-iteration-count: infinite;
+         }
+         
+         @-webkit-keyframes wiggle { 
+            0% { -webkit-transform: skewX(9deg); }
+            10% { -webkit-transform: skewX(-8deg); }
+            20% { -webkit-transform: skewX(7deg); }
+            30% { -webkit-transform: skewX(-6deg); }
+            40% { -webkit-transform: skewX(5deg); } 
+            50% { -webkit-transform: skewX(-4deg); } 
+            60% { -webkit-transform: skewX(3deg); }
+            70% { -webkit-transform: skewX(-2deg); } 
+            80% { -webkit-transform: skewX(1deg); } 
+            90% { -webkit-transform: skewX(0deg); }
+            100% { -webkit-transform: skewX(0deg); } 
+         }
+         
+         @keyframes wiggle { 
+            0% { transform: skewX(9deg); } 
+            10% { transform: skewX(-8deg); } 
+            20% { transform: skewX(7deg); } 
+            30% { transform: skewX(-6deg); } 
+            40% { transform: skewX(5deg); } 
+            50% { transform: skewX(-4deg); } 
+            60% { transform: skewX(3deg); } 
+            70% { transform: skewX(-2deg); } 
+            80% { transform: skewX(1deg); } 
+            90% { transform: skewX(0deg); } 
+            100% { transform: skewX(0deg); } 
+         }
+         
+         .wiggle { 
+            -webkit-animation-name: wiggle;
+            animation-name: wiggle; 
+            -webkit-animation-timing-function: ease-in;
+            animation-timing-function: ease-in; 
+         }
+         
+         .animated.wiggle { 
+            -webkit-animation-duration: 0.75s; 
+            animation-duration: 0.75s;
+         }
+    
+    :root {
+    --text-primary: #fff;
+    --text-secondary: #fff;
+    --text-link: #3ea6ff;
+
+    --app-background: #111111;
+    --context-menu-background: #333;
+    --border-color: #444;
+    --item-hover-background: #373737;
+    --item-active-background: #383838;
+
+    --top-bar-background: #202020;
+    --guide-background: #212121;
+
+    --thumbnail-background: #252525;
+
+    --channel-info-background: #181818;
+    --channel-contents-background: #0f0f0f;
+}
+          @font-face {
+        font-family: 'Ginto Nord';
+        font-weight: 800;
+        src:url('https://cdn.statically.io/gh/brecert/discord-quote-generator/main/Ginto-Nord-800.woff') format("woff");
+      }
+
+.alert {
+  padding: 20px;
+  background-color: #f44336;
+  color: white;
+  opacity: 1;
+  transition: opacity 0.6s;
+  margin-bottom: 15px;
+}
+
+.alert.success {background-color: #04AA6D;}
+.alert.info {background-color: #2196F3;}
+.alert.warning {background-color: #ff9800;}
+
+.closebtn {
+  margin-left: 15px;
+  color: white;
+  font-weight: bold;
+  float: right;
+  font-size: 22px;
+  line-height: 20px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.closebtn:hover {
+  color: black;
+}
+  </style>
+ </head>
+ 
+<body>
+ 
+<div class="app">
+	   <nav>
+            <div class=left><a class="class" href="/143" style=font-family:Inter,sans-serif;color:#fff> <img style="width: 6em;display: block;margin-left: auto;margin-right: auto;" src="/css/logo.svg?v=5">                                                                                                           <a href="/domains"><i  style="display: block;margin-left: auto;margin-right: auto;" class="fas fa-server"></i>  </a></div>               
+            <div class=middle>
+                <form action=/search><input class=search-bar autocomplete="on" id=fname name=query style="color:#fff;font-family:Inter,sans-serif;"> <button class="btn btn-success" type=submit><i class="fas fa-search"></i></button></form>
+            </div>
+            <div class=right><a href="/privacy"><i class="fas fa-shield"></i></a><a href="/video/upload?from="><i class="fas fa-video"></i></a> <a href="https://github.com/iamashley0/poketube/"><i class="fab fa-git-alt"></i></a><a href="https://github.com/iamashley0/poketube/issues"><i class="fas fa-bug"></i></a></a></div>
+        </nav>
+	   
+
+<div class="playlist-page">
+	<div class="playlist-info" style="border-radius:12px;">
+		<div class="thumbnail" style="background-image: url('https://i.ytimg.com/vi/<%=video.id%>/hqdefault.jpg');border-radius: 5px;">
+			<a href="/watch?v=<%=video.id%>">Watch It!</a>
+		</div>
+ 		<p class="title"><%=video.Title%></p>
+		<span class="info"><%=engagement.viewCount.toLocaleString()%> Views • Uploaded <%=date%></span>
+		<div class="channel-info">
+		<a href="/channel?id=<%=video.Channel.id%>" class="avatar">
+					<img src=" <%= k.Video.Channel.Avatar[1].$t %>">
+				</a>
+			</a>
+			<div class="name">
+				<a class="name" href="/channel?id=<%=video.Channel.id%>"><%=video.Channel.Name%></a>
+			</div>
+		</div>
+	</div>
+	<div class="video-list download-list playlist-video-list">
+		<div class="format-list">
+			<h1 style="font-family:'Ginto Nord';font-weight:900;white-space:yes;">DOWNLOAD THE VIDEO</h1>
+			<p>You can download the video by clicking on the "download" button bellow.</p>
+				<div class="download-format">
+				 
+		 
+				</div>
+				 
+				<div class="download-format">
+					<div>
+          HIGHEST QUALITY - MP4 FORMAT
+          </div>
+					<a style="color:#fff" href="/api/video/download?v=<%=video.id%>">
+            <i class="fas fa-download"></i>
+						Download 
+					</a>
+					 <p>
+             we dont see the videos that you are downloading. <br><br><a href="/privacy">Legal stuff</a>
+          </p>
+				</div>
+		</div>
+	 
+	</div>
+</div>
+ 
+<img src="https://t.poketube.fun/t/rep.gif?download_video=<%=btoa(video.id)%>" style="width: 0;visibility: hidden;" id="download_page">
+
+</div>
+ 
+ 
+</body>
+</html>

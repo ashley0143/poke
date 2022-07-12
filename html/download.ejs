@@ -173,11 +173,11 @@ summary:hover{
 	   
 
 <div class="playlist-page">
-	<div class="playlist-info" style="border-radius:12px;">
+	<div class="playlist-info" style="border-radius:12px;font-family:'Inter';">
 		<div class="thumbnail" style="background-image: url('https://i.ytimg.com/vi/<%=video.id%>/hqdefault.jpg');border-radius: 5px;">
 			<a href="/watch?v=<%=video.id%>">Watch It!</a>
 		</div>
- 		<p class="title"><%=video.Title%></p>
+ 		<p class="title"> <%=video.Title%></p>
 		<span class="info"><%=engagement.viewCount.toLocaleString()%> Views • Uploaded <%=date%></span>
 		<div class="channel-info">
 		<a href="/channel?id=<%=video.Channel.id%>" class="avatar">
@@ -192,7 +192,7 @@ summary:hover{
 	<div class="video-list download-list playlist-video-list">
 		<div class="format-list">
 			<h1 style="font-family:'Ginto Nord';font-weight:900;white-space:yes;">DOWNLOAD THE VIDEO</h1>
-			<p>You can download the video by clicking on the "download" button bellow.</p>
+			<p>You can download the video by clicking on the "download" button bellow!</p>
 				<div class="download-format">
 				 
 		 
@@ -207,7 +207,7 @@ summary:hover{
 						Download 
 					</a>
 					 <p>
-             we dont see the videos that you are downloading. <br><br><a href="/privacy">Legal stuff</a>
+             we dont see the videos that you are downloading :P <br><br><a href="/privacy">Legal stuff</a>
           </p>
 				</div>
 		</div>

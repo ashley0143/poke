@@ -1,81 +1,187 @@
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html>
   <head>
     <meta charset="utf-8" />
-    <title>PokeTube - Stats</title>
+    <title>PokeTube - Metrics</title>
     <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@900&family=Sigmar+One&display=swap"
-      rel="stylesheet"
-    />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Roboto:wght@500&display=swap"
-      rel="stylesheet"
-    />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@900&family=Sigmar+One&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@500&display=swap"  rel="stylesheet" />
     <link href="/stuff/tube.svg" rel="icon" />
-     <style>
+    <link rel="stylesheet" href="https://poketube.fun/css/pv.css?v=5444" type="text/css" />
+    <link rel="stylesheet" href="stuff/style.css?v=5444" type="text/css" />
+    <style>
+      .site {
+        font-family: "", -apple-system, BlinkMacSystemFont,
+          avenir next, avenir, helvetica neue, helvetica, ubuntu, roboto, noto,
+          segoe ui, arial, sans-serif;
+      }
 
-            @import("https://poketube.fun/css/app.main.css");
-            body{
-              background-color:#181818
-            }
-            h1,h2,h3,h4,h5{
-              font-family:Inter,sans-serif;
-            }
-            a,div,p{
-              font-family:Roboto,sans-serif;
-              text-decoration: none;
-            }
-            div{
-          background: #fff;
-          border-radius: 26px;
-          padding: 6px;
-          margin: auto;
-          position: absolute;
-          left: 50%;
-          top: 50%;
-          transform: translate(-50%, -50%);
-      } 
-             :visited { color: #1F00FF }
+      .bg-pt-blue {
+        background: #5da4dc;
+      }
+
+      .bg-pt-gray {
+        background: #ededed;
+      }
+
+      .bg-pt-dark {
+        background: #333;
+      }
+
+      .bg-pt-footer {
+        background: #434a50;
+      }
+
+      .pt-title-blue {
+        color: #dee2e5;
+      }
+
+      .pt-blue {
+        color: #5da4dc;
+      }
+
+      .footer-item {
+        font-size: 0.85rem;
+      }
+
+      .footer-item a {
+        color: #c5cacd;
+        text-decoration: none;
+      }
+
+      .footer-item-color {
+        color: #c5cacd;
+      }
+
+      .pt-gray {
+        color: #999;
+      }
+
+      .pt-gray-2 {
+        color: #888;
+      }
+
+      .pt-black {
+        color: #333;
+      }
+
+      .pt-black-2 {
+        color: #666;
+      }
+
+      .pt-black-3 {
+        color: #464646;
+      }
+
+      /* Some measurement and spacing tweaks */
+
+      .max-width {
+        max-width: 1008px;
+      }
+
+      .lh-copy {
+        line-height: 1.5;
+      }
+
+      .number {
+        position: relative;
+        top: 3px;
+        padding-right: 0.3rem;
+      }
+
+      .numbered-list > li {
+        padding-bottom: 0.3rem;
+      }
+
+      .button--view-positions {
+        padding-top: 0.75em;
+        padding-bottom: 0.75em;
+      }
+
+      .logo {
+        padding-bottom: 2rem;
+        padding-top: 2rem;
+      }
+
+      .logo > img {
+        width: 80px;
+        height: 80px;
+        padding-bottom: 5px;
+      }
+
+      .measure--wrap-title {
+        max-width: 25rem;
+      }
+
+      @media screen and (max-width: 30em) {
+        .f3 {
+          font-size: 26px;
+        }
+      }
+
+      /* Medium-sized screen */
+      @media screen and (min-width: 30em) and (max-width: 60em) {
+        .community {
+          margin-left: 25%;
+        }
+      }
+
+      /* Not small screen */
+      @media screen and (min-width: 30em) {
+        .logo {
+          padding-bottom: 6em;
+          padding-top: 6em;
+        }
+
+        .logo > img {
+          width: 120px;
+          height: 120px;
+          padding-bottom: 10px;
+        }
+      }
+
+      h1,
+      h2,
+      h3,
+      h4,
+      h5 {
+        font-family: Inter, sans-serif;
+      }
+      a,
+      div,
+      p {
+        font-family: Roboto, sans-serif;
+      }
+
+      :visited {
+        color: #1f00ff;
+      }
     </style>
   </head>
-  <body>
-        <img src="/t/rep.gif" style="width: 0;visibility: hidden;"> 
-    <center>
-      <div>
-        <h1>Hi Nerd!</h1>
-        <p>
-          At Poketube,we simply dont collect or share your personal information.
-          You might see the requests to this website being made while watching a
-          video,tho.
-        </p>
-        <p>
-          The request beign made to this website is to,ya know see how much
-          poketube users have watched a spesific video. 
-        </p>
-        <p>
-          This process does not collect any of your personal information. We
-          promise.
-        </p>
-        <p>
-          For the source code of this "stats" thingy, its based on matomo (its just a self-hosted matomo istance really ) but w/ config options changed to;<br>
-          - Dont collect personal info<br>
-          - Dont collect ip<br><br>
-          
-          for more info,please look at <a href="//piwik.org">Matomo's</a> Website.
-        </p>
-        
-        <h1>
-          Why?
-        </h1>
-        <p>
-          <i>why use stuff to collect basic things like how much users have watched any video?</i>
-        </p>
-        <a href="https://poketube.fun/privacy"
-          >See our privacy policy for more info</a
-        >
-      </div>
-    </center>
+  <body class="site">
+    <section class="logo bg-pt-dark center tc pv5 pv6-ns ph1">
+      <img src="stuff/tube.svg" />
+      <h2 class="f3 f2-ns white ma0">PokeTube - Metrics</h2>
+      <h3 class="f5 f4-ns ma0 white-50 fw4">Private by Design</h3>
+    </section>
+    <section class="tc pv3 pv5-ns pt-dark-2 ph4">
+      <p class="measure-wide center lh-copy pt-black-3">
+        At <a href="https://poketube.fun">PokeTube</a> we do not collect or
+        share any personal information. That's our
+        <a href="https://poketube.fun/privacy">privacy policy</a> in TL;DR. To
+        improve our products we had to create a completely anonymous way to
+        figure out how PokeTube is being used.
+      </p>
+
+      <p class="measure-wide center lh-copy pt-black-3">
+        We use a tool called Piwik (A free software Web analytics system,see
+        piwik.org) to collect information. By information we mean, aggregated
+        data about things such as the number of visits daily/weekly/monthly to
+        PokeTube. Learn more on our
+        <a href="https://poketube.fun/privacy">privacy policy</a>.
+      </p>
+    </section>
   </body>
 </html>
+
 

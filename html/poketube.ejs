@@ -1,4 +1,4 @@
- <!--
+  <!--
     This Source Code Form is subject to the terms of the GNU General Public License:
 
     Copyright (C) 2021-2022 POKETUBE (https://github.com/iamashley0/poketube)
@@ -25,15 +25,13 @@
   <% if (!e) { %>
 <meta content="<%=video.Title%>" name=title>
 <meta content="<%=color%>" name="theme-color">
-<meta content=player name=twitter:card>
 <meta content="<%=video.Channel.Name%>" name=twitter:author>
 <meta content=@youtube name=twitter:site>
 <meta content="https://poketube.fun/watch?v=<%=video.id%>" name=twitter:url>
-<meta content="<%=video.Title%>" name=twitter:title>
-<meta content="https://i.ytimg.com/vi/<%=video.id%>/maxresdefault.jpg" name=twitter:image>
-<meta content="https://www.youtube.com/embed/<%=video.id%>" name=twitter:player>
-<meta content=1280 name=twitter:player:width>
-<meta content=720 name=twitter:player:height>
+<meta content="<%=video.Title%> - PokeTube" name=twitter:title>
+<meta content="Watch this video by <%=video.Channel.Name%> On PokeTube. The YouTube front-end that doesnt track you!" property=twitter:description>
+<meta content="https://i.ytimg.com/vi/<%=video.id%>/maxresdefault.jpg" property=og:image>
+<meta content=summary_large_image name=twitter:card>
 <link href="https://poketube.fun/watch?v=<%=video.id%>" itemprop=url>
 <link href="http://www.youtube.com/channel/<%=video.Channel.id%>" itemprop=url>
  <% } %> <!-- close the } -->

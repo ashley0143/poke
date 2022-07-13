@@ -123,7 +123,10 @@ app.get("/download", async function (req, res) {
     engagement: engagement,
     k: k,
     video: json,
-    date: moment(k.Video.uploadDate).format("LL")
+    date: moment(k.Video.uploadDate).format("LL"),
+    color: await getColors(
+      `https://i.ytimg.com/vi/${v}/maxresdefault.jpg`
+    ).then((colors) => colors[0].hex()),
   });
 });
 

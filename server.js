@@ -32,6 +32,7 @@ const renderTemplate = async (res, req, template, data = {}) => {
     Object.assign(data)
   );
 };
+
 const random_words = [
   "banana pie",
   "how to buy an atom bomb",
@@ -43,6 +44,7 @@ const random_words = [
   "is a panda a panda if pandas???",
   "Minecraft movie trailer",
 ];
+
 const image_urls = [
   "https://cdn.glitch.com/4095e32f-375a-40f2-841e-961cee4c2a95/sheng-l-q2dUSl9S4Xg-unsplash.jpg?v=1655990895950",
   "https://cdn.glitch.com/4095e32f-375a-40f2-841e-961cee4c2a95/willian-justen-de-vasconcellos-T_Qe4QlMIvQ-unsplash(1).jpg?v=1655991004992",
@@ -71,6 +73,7 @@ app.get("/watch", async function (req, res) {
   var v = req.query.v;
   var e = req.query.e;
   var r = req.query.r;
+  var f = req.query.f;
   var t = req.query.t;
   const video = await fetch(config.tubeApi + `video?v=${v}`);
   const h = await video.text();
@@ -83,6 +86,11 @@ app.get("/watch", async function (req, res) {
   if (j_.URL != undefined) url = j_.URL;
   const json = fetching.video.Player;
   const engagement = fetching.engagement;
+  const channel = await fetch(
+    config.tubeApi + `channel?id=${json.Channel.id}&tab=videos`
+  );
+  const c = await channel.text();
+  const tj = JSON.parse(toJson(c));
   const lyrics = await lyricsFinder(json.Title);
   if (lyrics == undefined) lyrics = "Lyrics not found";
   renderTemplate(res, req, "poketube.ejs", {
@@ -95,13 +103,14 @@ app.get("/watch", async function (req, res) {
     date: moment(k.Video.uploadDate).format("LL"),
     e: e,
     k: k,
+    tj: tj,
     r: r,
+    f: f,
     t: config.t_url,
     optout: t,
     lyrics: lyrics.replace(/\n/g, " <br> "),
   });
 });
-
 
 app.get("/download", async function (req, res) {
   var v = req.query.v;
@@ -117,7 +126,7 @@ app.get("/download", async function (req, res) {
   if (j_.URL != undefined) url = j_.URL;
   const json = fetching.video.Player;
   const engagement = fetching.engagement;
-  
+
   renderTemplate(res, req, "download.ejs", {
     url: url,
     engagement: engagement,
@@ -164,8 +173,6 @@ app.get("/music", async function (req, res) {
     lyrics: lyrics.replace(/\n/g, " <br> "),
   });
 });
-
-
 
 app.get("/old/watch", async function (req, res) {
   var v = req.query.v;
@@ -277,7 +284,7 @@ app.get("/api/video/downloadjson", async function (req, res) {
   const url = fetching.video.Player.Formats.Format[1].URL;
   res.json(url);
 });
- 
+
 app.get("*", function (req, res) {
   const things = random_words[Math.floor(Math.random() * random_words.length)];
   renderTemplate(res, req, "404.ejs", {
@@ -285,7 +292,6 @@ app.get("*", function (req, res) {
   });
 });
 
-
-// 
+//
 
 app.listen("3000", () => {});

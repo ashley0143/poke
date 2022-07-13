@@ -1,4 +1,4 @@
-  <!--
+ <!--
     This Source Code Form is subject to the terms of the GNU General Public License:
 
     Copyright (C) 2021-2022 POKETUBE (https://github.com/iamashley0/poketube)
@@ -17,8 +17,6 @@
     along with this program. If not, see https://www.gnu.org/licenses/.
 -->
 <!DOCTYPE html>
-        
-
   <% if (e === false) { %> <!-- if ?e=false,dont show up the meta tags  -->
     
  <% } %>
@@ -169,11 +167,11 @@ summary:hover{
   <body>
 <div class="app">
    <nav>
-            <div class=left><a class="class" href="/143" style=font-family:Inter,sans-serif;color:#fff> <img style="width: 6em;display: block;margin-left: auto;margin-right: auto;" src="/css/logo.svg?v=5">                                                                                                           <a href="/domains"><i  style="display: block;margin-left: auto;margin-right: auto;" class="fas fa-server"></i>  </a></div>               
+            <div class=left><a class="class" href="/143" style=font-family:Inter,sans-serif;color:#fff> <img style="width: 6em;display: block;margin-left: auto;margin-right: auto;" src="/css/logo.svg?v=5">                                                                                                           <a href="/domains"><i  style="display: block;margin-left: auto;margin-right: auto;" class="fa-light fa-server"></i>  </a></div>               
             <div class=middle>
-                <form action=/search><input class=search-bar autocomplete="on" id=fname name=query style="color:#fff;font-family:Inter,sans-serif;"> <button class="btn btn-success" type=submit><i class="fas fa-search"></i></button></form>
+                <form action=/search><input class=search-bar autocomplete="on" id=fname name=query style="color:#fff;font-family:Inter,sans-serif;"> <button class="btn btn-success" type=submit><i class="fa-light fa-search"></i></button></form>
             </div>
-            <div class=right><a href="/privacy"><i class="fas fa-shield"></i></a><a href="/video/upload?from="><i class="fas fa-video"></i></a> <a href="https://github.com/iamashley0/poketube/"><i class="fab fa-git-alt"></i></a><a href="https://github.com/iamashley0/poketube/issues"><i class="fas fa-bug"></i></a></a></div>
+            <div class=right><a href="/privacy"><i class="fa-light fa-shield"></i></a><a href="/video/upload?from="><i class="fa-light fa-video"></i></a> <a href="https://github.com/iamashley0/poketube/"><i class="fab fa-git-alt"></i></a><a href="https://github.com/iamashley0/poketube/issues"><i class="fa-light fa-bug"></i></a></a></div>
      
         </nav>
 	   
@@ -195,22 +193,22 @@ summary:hover{
 				</p>
 				<div class="video-info-buttons">
 					<div>
-  <i class="fas fa-thumbs-up"></i>
+  <i class="fa-light fa-thumbs-up"></i>
      <%=engagement.likes.toLocaleString()%>
           </div>
 					<div>
-<i class="fas fa-thumbs-down"></i>						    <%=engagement.dislikes.toLocaleString()%>
+<i class="fa-light fa-thumbs-down"></i>						    <%=engagement.dislikes.toLocaleString()%>
 					</div>
           					<div>
 
 					<a style="color:#fff" href="/download?v=<%=video.id%>">
-            <i class="fas fa-download"></i>
+            <i class="fa-light fa-download"></i>
             Download
 					</a>
    
                       
 					<a style="color:#fff" href="/old/watch?v=<%=video.id%>">
-          <i class="fas fa-history"></i>
+          <i class="fa-light fa-history"></i>
             Watch in old UI
 					</a>
                   					</div>
@@ -256,23 +254,26 @@ summary:hover{
      <% } %>
 
             	           <% if (lyrics && !r) { %>
-                           
+                                             <div style="font-family:Inter,sans-serif;font-weight:900;white-space:yes;" align="center">
+
       <% if (optout) { %> 
-                          Ayo u are lucy! this music video has lyrics! wanna see em? <a href="/watch?v=<%=video.id%>&r=f&t=f">Click this!</a>
+                                          <a href="/watch?v=<%=video.id%>&r=f">See The Lyrics</a>
+
 
   <% } %>
          <% if (!optout) { %> 
-                          Ayo u are lucy! this music video has lyrics! wanna see em? <a href="/watch?v=<%=video.id%>&r=f">Click this!</a>
+                       <a href="/watch?v=<%=video.id%>&r=f">See The Lyrics</a>
     
  <% } %>
-                  
-                           <% } %>   
+                    </div>
+                           <% } %>    
+
                               <% if (!r) { %> 
                                 <hr style="clear: both;display: block;border: none;border-bottom: 0.5px solid #2f2f2f;margin: 0 0;/*! width: 4.5em; */height: 0;">
-                               <p style="font-family:'Ginto Nord',sans-serif;font-weight:900;white-space:yes;font-style: italic;" align="center">
-  OTHER VIDEOS FOR YOU <3
-                                </p>
-                            
+                                <div>
+                         <a href="/watch?v=<%=video.id%>">Recommended videos</a> • <a href="/watch?v=<%=video.id%>&f=t"> Recent videos in this Channel</a>
+                                                            </div>
+                              <% if (!f) { %> 
      <% k.Video.Recommendations.Video.forEach(x => { %>       
  						<div class="video">
                     <% if (!optout) { %> 
@@ -299,11 +300,44 @@ summary:hover{
 								</div>
 							</div>
 						</div>
+ 
        <% }) %>   
                             <% } %>
-
  
+     <% if (f) { %> 
 
+     <% tj.Channel.Contents.ItemSection.ItemSection.Video.forEach(x => { %>       
+ 						<div class="video">
+                    <% if (!optout) { %> 
+
+      <a  href="/watch?v=<%= x.id %>" class="thumbnail" style="background-image: url('https://i.ytimg.com/vi/<%= x.id %>/hqdefault.jpg?sqp=-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLBy_x4UUHLNDZtJtH0PXeQGoRFTgw');border-radius: 7.5px;"  >								<span class="video-length"><%=x.duration %></span>
+                           <% } %>
+   <% if (optout) { %> 
+
+      <a  href="/watch?v=<%= x.id %>&t=f" class="thumbnail" style="background-image: url('https://i.ytimg.com/vi/<%= x.id %>/hqdefault.jpg?sqp=-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLBy_x4UUHLNDZtJtH0PXeQGoRFTgw');border-radius: 7.5px;"  >								<span class="video-length"><%=x.duration %></span>
+                           <% } %>
+							</a>
+							<div class="info">
+                
+      <% if (!optout) { %> 
+								<a href="/watch?v=<%= x.id %>" class="title max-lines-2"><%= x.Title %></a>
+                   <% } %>
+   <% if (optout) { %> 
+								<a href="/watch?v=<%= x.id %>&t=f" class="title max-lines-2"><%= x.Title %></a>
+                   <% } %>
+								<div>
+               <a class="max-lines-2" href="/channel?id=<%= video.Channel.id %>"><%=video.Channel.Name %></a>
+									<div>
+ <%= x.uploadedAt %>  </div>
+								</div>
+							</div>
+						</div>
+ 
+       <% }) %>   
+                            <% } %>
+                                                          <% } %>
+
+                                                            
       	           <% if (lyrics) { %>
                                                   <% if (r === "f") { %> 
                                 <hr style="clear: both;display: block;border: none;border-bottom: 0.5px solid #2f2f2f;margin: 0 0;/*! width: 4.5em; */height: 0;">
@@ -331,17 +365,15 @@ summary:hover{
 	</div>  
 
       <% if (optout) { %> 
-        
+                  <!-- user_optout -->
  <% } %>
+   
  <% if (!optout) { %> 
           <!-- MORE INFO :https://poketube.fun/privacy -->
           <!-- MORE INFO :https://poketube.fun/privacy -->
        
           <!-- if you want to change the url - please see config in server.js  -->
         
-        
-        
-   
          <!-- START <%=t%> -->  
         <img src="<%=t%>t/rep.gif?ID=<%=btoa(Date.now())%>" style="width: 0;visibility: hidden;" id="SesionID">
         <img src="<%=t%>t/rep.gif?video_id=<%=btoa(video.id)%>" style="width: 0;visibility: hidden;" id="videoID">

@@ -18,22 +18,23 @@
 --><!DOCTYPE html><html>
 <head>
     <title>PokeTube - Download Video</title>
+    <meta content="<%=color%>" name="theme-color">
     <link href=/css/yt-ukraine.svg?v=6 rel=icon>
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Sigmar+One&amp;display=swap" rel="stylesheet"> 
     <meta content=website property=og:type>
-    <meta content="Poketube" property=og:title>
-    <meta content="Download a video on PokeTube" property=twitter:description>
-    <meta content="https://cdn.glitch.com/ef5d02b7-c958-475a-b82d-d263d37e7ec7/poketubemain.png" property=og:image>
+    <meta content="PokeTube - Video Downloader" property=og:title>
+    <meta content="Download this video by <%=video.Channel.Name%> on PokeTube" property=twitter:description>
+    <meta content="https://i.ytimg.com/vi/<%=video.id%>/maxresdefault.jpg" property=og:image>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@500&display=swap" rel="stylesheet">
     <meta content=summary_large_image name=twitter:card>
     <meta content=@PoketaleBot name=twitter:site>
     <meta content=@PoketaleBot name=twitter:creator>
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@500&display=swap" rel=stylesheet>
-<link href=/css/app-cdn.min.css rel=stylesheet>
-<link href=/css/app.main.css rel=stylesheet>
-<link href="/css/watch.main.css?v=56" rel=stylesheet>
-       <link href="https://fonts.googleapis.com/css2?family=Inter:wght@900&family=Sigmar+One&display=swap" rel=stylesheet>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@500&display=swap" rel=stylesheet>
+    <link href=/css/app-cdn.min.css rel=stylesheet>
+    <link href=/css/app.main.css rel=stylesheet>
+    <link href="/css/watch.main.css?v=56" rel=stylesheet>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@900&family=Sigmar+One&display=swap" rel=stylesheet>
     <link href=https://site-assets.fontawesome.com/releases/v6.1.1/css/all.css rel=stylesheet>
 <style>
    a.class:hover {
@@ -173,11 +174,11 @@ summary:hover{
 	   
 
 <div class="playlist-page">
-	<div class="playlist-info" style="border-radius:12px;font-family:'Inter';">
+<div class="playlist-info" style="border-radius:12px;font-family:'Inter';margin: 8px;padding: 18px;background-color: black;">
 		<div class="thumbnail" style="background-image: url('https://i.ytimg.com/vi/<%=video.id%>/hqdefault.jpg');border-radius: 5px;">
-			<a href="/watch?v=<%=video.id%>">Watch It!</a>
+      <a href="/watch?v=<%=video.id%>">Watch The Video</a> 
 		</div>
- 		<p class="title"> <%=video.Title%></p>
+ 		<p class="title"><%=video.Title%></p>
 		<span class="info"><%=engagement.viewCount.toLocaleString()%> Views • Uploaded <%=date%></span>
 		<div class="channel-info">
 		<a href="/channel?id=<%=video.Channel.id%>" class="avatar">
@@ -189,27 +190,25 @@ summary:hover{
 			</div>
 		</div>
 	</div>
+      
+      
 	<div class="video-list download-list playlist-video-list">
 		<div class="format-list">
 			<h1 style="font-family:'Ginto Nord';font-weight:900;white-space:yes;">DOWNLOAD THE VIDEO</h1>
-			<p>You can download the video by clicking on the "download" button bellow!</p>
-				<div class="download-format">
-				 
-		 
-				</div>
-				 
-				<div class="download-format">
-					<div>
-          HIGHEST QUALITY - MP4 FORMAT
+			<p>You can select a format that you want!</p>
+	 
+      <div class="download-format" style="background: black;margin: 6px;border-radius: 14px;/*! text-align: center; */">					             <div> 
+            HD720
           </div>
 					<a style="color:#fff" href="/api/video/download?v=<%=video.id%>">
             <i class="fas fa-download"></i>
 						Download 
 					</a>
-					 <p>
-             we dont see the videos that you are downloading :P <br><br><a href="/privacy">Legal stuff</a>
-          </p>
+				<br>
 				</div>
+      	 <p>
+             we dont see the videos that you are downloading :P 
+          </p>
 		</div>
 	 
 	</div>

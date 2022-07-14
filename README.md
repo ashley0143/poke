@@ -19,10 +19,10 @@
 - No cookies,no data collection
 - Javascript-free on frontend
 - No ads & Tracking
-- % 100 free software
+- 100% free software
 - See Dislike counts from [Return YouTube Dislike Api](https://www.returnyoutubedislike.com/)!
 - Uses LightTube api
 - <a href="https://github.com/iamashley0/poketube/tree/main/sdk">Custom sdk!</a> 
 
-## Legal
+## Legal Stuff
 Privacy Policy: https://poketube.fun/privacy (TL;DR:we dont collect or share your personal info lol)

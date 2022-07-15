@@ -44,16 +44,7 @@ const random_words = [
   "is a panda a panda if pandas???",
   "Minecraft movie trailer",
 ];
-
-const image_urls = [
-  "https://cdn.glitch.com/4095e32f-375a-40f2-841e-961cee4c2a95/sheng-l-q2dUSl9S4Xg-unsplash.jpg?v=1655990895950",
-  "https://cdn.glitch.com/4095e32f-375a-40f2-841e-961cee4c2a95/willian-justen-de-vasconcellos-T_Qe4QlMIvQ-unsplash(1).jpg?v=1655991004992",
-  "https://cdn.glitch.global/4095e32f-375a-40f2-841e-961cee4c2a95/s-b-vonlanthen-A8iLzX6OddM-unsplash.jpg?v=1655991148325",
-  "https://cdn.glitch.global/4095e32f-375a-40f2-841e-961cee4c2a95/pawel-czerwinski-8uZPynIu-rQ-unsplash.jpg?v=1655991178735",
-  "https://cdn.glitch.global/4095e32f-375a-40f2-841e-961cee4c2a95/richard-horvath-_nWaeTF6qo0-unsplash.jpg?v=1655991315976",
-  "https://cdn.glitch.global/4095e32f-375a-40f2-841e-961cee4c2a95/john-fowler-aaIN3y2zcMQ-unsplash.jpg?v=1655991319840",
-  "https://cdn.glitch.global/4095e32f-375a-40f2-841e-961cee4c2a95/kristopher-roller-zepnJQycr4U-unsplash.jpg?v=1655991322758",
-];
+ 
 
 const fetch = require("node-fetch");
 const { toJson } = require("xml2json");
@@ -199,14 +190,13 @@ app.get("/old/watch", async function (req, res) {
     lyrics: lyrics.replace(/\n/g, " <br> "),
   });
 });
-app.get("/", function (req, res) {
-  const things = random_words[Math.floor(Math.random() * random_words.length)];
-  const ur = image_urls[Math.floor(Math.random() * image_urls.length)];
-
-  renderTemplate(res, req, "main.ejs", {
-    random: things,
-    url: ur,
-  });
+app.get("/", async function (req, res) {
+  const trends = await fetch(config.tubeApi + `trending`);
+  const h = await trends.text();
+  const k = JSON.parse(toJson(h));
+   renderTemplate(res, req, "main.ejs", {
+     k:k,
+   });
 });
 app.get("/channel", async (req, res) => {
   const ID = req.query.id;
@@ -266,9 +256,7 @@ app.get("/search", async (req, res) => {
 app.get("/css/:id", (req, res) => {
   res.sendFile(__dirname + `/css/${req.params.id}`);
 });
-app.get("/js/:id", (req, res) => {
-  res.sendFile(__dirname + `/js/${req.params.id}`);
-});
+ 
 app.get("/video/upload", (req, res) => {
   res.redirect("https://youtube.com/upload?from=poketube_utc");
 });

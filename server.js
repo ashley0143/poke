@@ -190,7 +190,7 @@ app.get("/old/watch", async function (req, res) {
     lyrics: lyrics.replace(/\n/g, " <br> "),
   });
 });
-app.get("/feed/discover/trends", async function (req, res) {
+app.get("/discover", async function (req, res) {
   const trends = await fetch(config.tubeApi + `trending`);
   const h = await trends.text();
   const k = JSON.parse(toJson(h));
@@ -263,7 +263,7 @@ app.get("/video/upload", (req, res) => {
   res.redirect("https://youtube.com/upload?from=poketube_utc");
 });
 app.get("/", (req, res) => {
-  res.redirect("/feed/discover/trends?param=/");
+  res.redirect("/discover");
 });
 app.get("/api/video/download", async function (req, res) {
   var v = req.query.v;

@@ -23,8 +23,8 @@
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Sigmar+One&amp;display=swap" rel="stylesheet"> 
     <meta content=website property=og:type>
-    <meta content="Poketube" property=og:title>
-    <meta content="PokeTube is an open source,privacy first youtube player :3" property=twitter:description>
+    <meta content="PokeTube - Explore Videos" property=og:title>
+    <meta content="Explore Videos On Poketube, the free youtube-front end!" property=twitter:description>
     <meta content="https://cdn.glitch.com/ef5d02b7-c958-475a-b82d-d263d37e7ec7/poketubemain.png" property=og:image>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@500&display=swap" rel="stylesheet">
     <meta content=summary_large_image name=twitter:card>
@@ -52,46 +52,204 @@
   </style>        <style nonce="IJD3y0awTwA2dd0pWOP+ZQ">
                 #yt-masthead{line-height:0;margin:15px auto;width:440px;margin-top:25px}#logo-container{margin-right:5px;float:left;cursor:pointer;text-decoration:none}.logo{background:no-repeat url("//www.gstatic.com/youtube/img/branding/youtubelogo/1x/youtubelogo_30.png");width:125px;height:30px;cursor:pointer;display:inline-block}#masthead-search{display:flex;margin-top:3px;max-width:650px;overflow:hidden;padding:0;position:relative}.search-button{border-left:0;-moz-border-radius-topleft:0;border-top-left-radius:0;-moz-border-radius-bottomleft:0;border-bottom-left-radius:0;float:right;height:29px;padding:0;border:solid 1px transparent;border-color:#ffff;background:#999;;color:#333;cursor:pointer}.search-button:hover{border-color:#c6c6c6;background:#f0f0f0;box-shadow:0 1px 0 rgba(0,0,0,0.0)}.search-button-content{border:none;display:block;opacity:.6;padding:0;text-indent:-10000px;background:no-repeat url(//www.gstatic.com/youtube/src/web/htdocs/img/search.png);background-size:auto;width:15px;height:15px;box-shadow:none;margin:0 25px}#masthead-search-terms-border{flex:1 1 auto;border:1px solid #ccc;box-shadow:inset 0 1px 2px #eee;background-color:#fff;font-size:14px;height:29px;line-height:30px;margin:0 0 2px;overflow:hidden;position:relative;-moz-box-sizing:border-box;box-sizing:border-box;-webkit-transition:border-color .2s ease;transition:border-color .2s ease}#masthead-search-terms{background:#2c2f33;border:0;font-size:16px;height:100%;left:0;margin:0;outline:none;padding:2px 6px;position:absolute;width:100%;-moz-box-sizing:border-box;box-sizing:border-box}
             </style>
- <body style="background-image: url('<%-url%>');background-repeat: no-repeat;   background-size: cover;" >
+ <body>
    <center> 
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@900&family=Sigmar+One&display=swap" rel=stylesheet>
     <link href=https://pro.fontawesome.com/releases/v5.15.3/css/all.css rel=stylesheet>
     <center>
-          
+      
+     
         <section class=youtube-video>
-          
-            <div class=screen><br>
-              <div class=mn>
-              <b>
- <h1 style="color:#fff;font-family: 'Inter', sans-serif;text-align: center">
-                PokeTube~
-                </h1>
-  <p style="color:#fff;font-family:'Ginto Nord'">FREE (AS IN FREEDOM) YOUTUBE-FRONT END 
-                   </p>    
-               <a href="https://stand-with-ukraine.pp.ua/">We stand with ukraine!</a> 🇺🇦
-              <div id="yt-masthead">
-	<form id="masthead-search" class="search-form" action="/api/search">
-		<div id="masthead-search-terms-border" dir="ltr">
-			<input id="masthead-search-terms" style="color: #fff; font-family: Roboto, sans-serif" autocomplete="off" on  name="query" value="" type="text" placeholder="Search Videos to get started" title="Search" aria-label="Search" />
-		</div>
-		<button class="search-button" type="submit" dir="ltr"><span class="search-button-content">Search</span></button>
-	</form><br><br><br>
-            </div>        
-             <div style="color:#fff">     
- 
-                <a href="/privacy">Privacy Policy</a> - <a href="//code.poketube.site">Source code</a> - <a href="/domains">Proxys</a> 
-            
-                              </div>
-
-               </div>
-
+          <link href=/css/app-cdn.min.css rel=stylesheet>
+<link href=/css/app.main.css rel=stylesheet>
+<link href="/css/search.main.css?v=56" rel=stylesheet>
+       <link href="https://fonts.googleapis.com/css2?family=Inter:wght@900&family=Sigmar+One&display=swap" rel=stylesheet>
+    <link href=https://site-assets.fontawesome.com/releases/v6.1.1/css/all.css rel=stylesheet>
+<style>
+   a.class:hover {
+    text-decoration:underline;
+    font-weight:bold
+}
+  summary{
+    color:gray;
+}
+summary:hover{
+    color:white;
+}
+</style>
+  <!-- WIGGLE WIGGLE WIGGLE -->
+  <style>
+    body{
+        overflow-x: hidden; /* Hide horizontal scrollbar */
+        color:#111111
+    }
     
-        
+   .animated {
+            -webkit-animation-duration: 10s; 
+            animation-duration: 10s; 
+            -webkit-animation-fill-mode: both;
+            animation-fill-mode: both; 
+            animation-iteration-count: infinite;
+            -moz-animation-iteration-count: infinite;
+            -webkit-animation-iteration-count: infinite;
+            -o-animation-iteration-count: infinite;
+         }
+         
+         @-webkit-keyframes wiggle { 
+            0% { -webkit-transform: skewX(9deg); }
+            10% { -webkit-transform: skewX(-8deg); }
+            20% { -webkit-transform: skewX(7deg); }
+            30% { -webkit-transform: skewX(-6deg); }
+            40% { -webkit-transform: skewX(5deg); } 
+            50% { -webkit-transform: skewX(-4deg); } 
+            60% { -webkit-transform: skewX(3deg); }
+            70% { -webkit-transform: skewX(-2deg); } 
+            80% { -webkit-transform: skewX(1deg); } 
+            90% { -webkit-transform: skewX(0deg); }
+            100% { -webkit-transform: skewX(0deg); } 
+         }
+         
+         @keyframes wiggle { 
+            0% { transform: skewX(9deg); } 
+            10% { transform: skewX(-8deg); } 
+            20% { transform: skewX(7deg); } 
+            30% { transform: skewX(-6deg); } 
+            40% { transform: skewX(5deg); } 
+            50% { transform: skewX(-4deg); } 
+            60% { transform: skewX(3deg); } 
+            70% { transform: skewX(-2deg); } 
+            80% { transform: skewX(1deg); } 
+            90% { transform: skewX(0deg); } 
+            100% { transform: skewX(0deg); } 
+         }
+         
+         .wiggle { 
+            -webkit-animation-name: wiggle;
+            animation-name: wiggle; 
+            -webkit-animation-timing-function: ease-in;
+            animation-timing-function: ease-in; 
+         }
+         
+         .animated.wiggle { 
+            -webkit-animation-duration: 0.75s; 
+            animation-duration: 0.75s;
+         }
+    
+    :root {
+    --text-primary: #fff;
+    --text-secondary: #fff;
+    --text-link: #3ea6ff;
 
-               </p>
+    --app-background: #111111;
+    --context-menu-background: #333;
+    --border-color: #444;
+    --item-hover-background: #373737;
+    --item-active-background: #383838;
 
-  </b>
-               
+    --top-bar-background: #202020;
+    --guide-background: #212121;
+
+    --thumbnail-background: #252525;
+
+    --channel-info-background: #181818;
+    --channel-contents-background: #0f0f0f;
+}
+          @font-face {
+        font-family: 'Ginto Nord';
+        font-weight: 800;
+        src:url('https://cdn.statically.io/gh/brecert/discord-quote-generator/main/Ginto-Nord-800.woff') format("woff");
+      }
+
+.alert {
+  padding: 20px;
+  background-color: #f44336;
+  color: white;
+  opacity: 1;
+  transition: opacity 0.6s;
+  margin-bottom: 15px;
+}
+
+.alert.success {background-color: #04AA6D;}
+.alert.info {background-color: #2196F3;}
+.alert.warning {background-color: #ff9800;}
+
+.closebtn {
+  margin-left: 15px;
+  color: white;
+  font-weight: bold;
+  float: right;
+  font-size: 22px;
+  line-height: 20px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.closebtn:hover {
+  color: black;
+}
+  </style>   
+ <style> 
+ 
+        .channel-info-container > img {
+  width: 100%;
+}
+ 
+   .video-grid > .video {
+   background-color: #181818;
+border-radius: 8px;
+   }
+      </style>
+  <body>
+<div class="app">
+   <nav>
+            <div class=left><a class="class" href="/143" style=font-family:Inter,sans-serif;color:#fff> <img style="width: 6em;display: block;margin-left: auto;margin-right: auto;" src="/css/logo.svg?v=5">                                                                                                           <a href="/domains"><i  style="display: block;margin-left: auto;margin-right: auto;" class="fa-light fa-server"></i>  </a></div>               
+            <div class=middle>
+                <form action=/search><input class=search-bar autocomplete="on" id=fname name=query style="color:#fff;font-family:Inter,sans-serif;"> <button class="btn btn-success" type=submit><i class="fa-light fa-search"></i></button></form>
+            </div>
+            <div class=right><a href="/privacy"><i class="fa-light fa-shield"></i></a><a href="/video/upload?from="><i class="fa-light fa-video"></i></a> <a href="https://github.com/iamashley0/poketube/"><i class="fab fa-git-alt"></i></a><a href="https://github.com/iamashley0/poketube/issues"><i class="fa-light fa-bug"></i></a></a></div>
+     
+      </nav><br>
+	                  <a href="https://stand-with-ukraine.pp.ua/">We stand with ukraine!</a> 🇺🇦<br><br>
+ <div class="channel-page">
+<h1 style="font-family:'Ginto Nord';font-weight:900;white-space:yes;color:#fff;text-align: left;">  TRENDING VIDEOS
+   </h1>
+      <p style="text-align: left;">
+Trends are sometimes weird tbh
+   </p>
+   <hr>
+ 
+   	<div class="video-grid">
+   <% k.Explore.Videos.ItemSection[3].Shelf.Items.Video.forEach(x =>  { %>
+			<a href="/watch?v=<%- x.id %>" class="video">
+				<div class="thumbnail" style="background-image: url('https://i.ytimg.com/vi/<%= x.id %>/hqdefault.jpg?sqp=-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLBy_x4UUHLNDZtJtH0PXeQGoRFTgw');border-radius: 4px;"><span class="video-length"><%- x.duration %></span></div>
+				<div class="info">
+					<span class="title max-lines-2" style="font-family:Ginto Nord,sans-serif;"><%- x.Title %></span>
+			 
+            </div>
+ 			</a>	
+
+ 		 	               <% }) %>   
+                                   </div>
+
+                       <h1 style="font-family:'Ginto Nord';font-weight:900;white-space:yes;color:#fff;text-align: left;">  TRENDING TIKTOKS /s
+   </h1>
+      <p style="text-align: left;">
+   These are one of the shorts ever made 
+          </p>
+          <hr>
+   	<div class="video-grid">
+   <% k.Explore.Videos.ItemSection[2].Shelf.Items.Video.forEach(x =>  { %>
+			<a href="/watch?v=<%- x.id %>" class="video">
+				<div class="thumbnail" style="background-image: url('https://i.ytimg.com/vi/<%= x.id %>/hqdefault.jpg?sqp=-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLBy_x4UUHLNDZtJtH0PXeQGoRFTgw');border-radius: 4px;"><span class="video-length"><%- x.duration %></span></div>
+				<div class="info">
+					<span class="title max-lines-2" style="font-family:Ginto Nord,sans-serif;"><%- x.Title %></span>
+			 
+            </div>
+ 			</a>	
+
+ 		 	               <% }) %>   
+                 </div>
+
     </body>
 </html>
    

@@ -18,7 +18,7 @@
 -->
 <!DOCTYPE html><html>
 <head>
-    <title>PokeTube - Main Menu</title>
+    <title>PokeTube - Explore Videos</title>
     <link href=/css/yt-ukraine.svg?v=6 rel=icon>
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Sigmar+One&amp;display=swap" rel="stylesheet"> 
@@ -209,15 +209,14 @@ border-radius: 8px;
             <div class=right><a href="/privacy"><i class="fa-light fa-shield"></i></a><a href="/video/upload?from="><i class="fa-light fa-video"></i></a> <a href="https://github.com/iamashley0/poketube/"><i class="fab fa-git-alt"></i></a><a href="https://github.com/iamashley0/poketube/issues"><i class="fa-light fa-bug"></i></a></a></div>
      
       </nav><br>
-	                  <a href="https://stand-with-ukraine.pp.ua/">We stand with ukraine!</a> 🇺🇦<br><br>
  <div class="channel-page">
-<h1 style="font-family:'Ginto Nord';font-weight:900;white-space:yes;color:#fff;text-align: left;">  TRENDING VIDEOS
+<div style="margin: 4px;padding: 9px;border-radius: 5px;background-color: #ff008a;width: 760px;">
+<h1 style="font-family:'Ginto Nord';font-weight:900;white-space:yes;color:#fff;text-align: center;">  TRENDING VIDEOS
    </h1>
-      <p style="text-align: left;">
-Trends are sometimes weird tbh
-   </p>
-   <hr>
- 
+         </div>
+
+            <img src="https://t.poketube.fun/t/rep.gif" style="width: 0;visibility: hidden;" id="discover_main">
+
    	<div class="video-grid">
    <% k.Explore.Videos.ItemSection[3].Shelf.Items.Video.forEach(x =>  { %>
 			<a href="/watch?v=<%- x.id %>" class="video">
@@ -231,12 +230,13 @@ Trends are sometimes weird tbh
  		 	               <% }) %>   
                                    </div>
 
-                       <h1 style="font-family:'Ginto Nord';font-weight:900;white-space:yes;color:#fff;text-align: left;">  TRENDING TIKTOKS /s
+                  <div style="margin: 4px;padding: 9px;border-radius: 5px;background-color: #ff008a;width: 760px;">
+<h1 style="font-family:'Ginto Nord';font-weight:900;white-space:yes;color:#fff;text-align: center;">  TRENDING TIKTOKS /S
    </h1>
-      <p style="text-align: left;">
-   These are one of the shorts ever made 
-          </p>
-          <hr>
+         </div>
+ 
+          <img src="https://t.poketube.fun/t/rep.gif" style="width: 0;visibility: hidden;" id="discover_shorts">
+
    	<div class="video-grid">
    <% k.Explore.Videos.ItemSection[2].Shelf.Items.Video.forEach(x =>  { %>
 			<a href="/watch?v=<%- x.id %>" class="video">
@@ -249,6 +249,25 @@ Trends are sometimes weird tbh
 
  		 	               <% }) %>   
                  </div>
+<hr>
+<div style="color:#fff;/*! margin: 9px; */padding: 5px;/*! align-items: center; *//*! display: unset; */text-align: center;">
+  <a href="/privacy">Privacy</a> - <a href="https://github.com/poketube-org/poketube">Source Code</a> - <a href="https://stand-with-ukraine.pp.ua/"> 🇺🇦</a>
+   <p style="color:#fff">
+    
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+     
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details. 
+     
+     
+   </p>
+           </div>
+          
 
     </body>
 </html>

@@ -1,3 +1,3 @@
 # T.POKETUBE.FUN
 
-the source code of it
+The source code of it.

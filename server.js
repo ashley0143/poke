@@ -44,7 +44,6 @@ const random_words = [
   "is a panda a panda if pandas???",
   "Minecraft movie trailer",
 ];
- 
 
 const fetch = require("node-fetch");
 const { toJson } = require("xml2json");
@@ -194,9 +193,9 @@ app.get("/discover", async function (req, res) {
   const trends = await fetch(config.tubeApi + `trending`);
   const h = await trends.text();
   const k = JSON.parse(toJson(h));
-   renderTemplate(res, req, "main.ejs", {
-     k:k,
-   });
+  renderTemplate(res, req, "main.ejs", {
+    k: k,
+  });
 });
 app.get("/channel", async (req, res) => {
   const ID = req.query.id;
@@ -253,17 +252,26 @@ app.get("/search", async (req, res) => {
     q: query,
   });
 });
+
 app.get("/css/:id", (req, res) => {
   res.sendFile(__dirname + `/css/${req.params.id}`);
 });
+
 app.get("/js/:id", (req, res) => {
   res.sendFile(__dirname + `/js/${req.params.id}`);
 });
+
 app.get("/video/upload", (req, res) => {
   res.redirect("https://youtube.com/upload?from=poketube_utc");
 });
-app.get("/", (req, res) => {
-  res.redirect("/discover");
+
+app.get("/", async function (req, res) {
+  const trends = await fetch(config.tubeApi + `trending`);
+  const h = await trends.text();
+  const k = JSON.parse(toJson(h));
+  renderTemplate(res, req, "landing.ejs", {
+    k: k,
+  });
 });
 app.get("/api/video/download", async function (req, res) {
   var v = req.query.v;

@@ -3,15 +3,13 @@
  <img src="https://user-images.githubusercontent.com/65588168/178095991-a9c4b907-831a-456c-a648-bf3d92073104.png" > </a>
  
   <img src="https://raw.githubusercontent.com/vshymanskyy/StandWithUkraine/main/badges/StandWithUkraine.svg">
-
- <h1> PokeTube Source Code </h1> 
-  this is the source code of PokeTube! the youtube front-end that doesnt tracks you ^^ <br> <br> for matomos source code,see <a href="https://github.com/poketube-org/poketube/tree/main/t"> here. </a>
-  <br> <br> 
-  see https://poketube.fun/domains for the istances of PokeTube :^ <br> <br>
-
-   to self host you'll need  [Node.js](https://nodejs.org/en/download/) (which comes with [npm](http://npmjs.com)) installed on your computer. when you do,simpliy download the repo and run "node server.js" or npm start in the terminal. btw you probably need alot of ram to host this :P ( i recommend like 8 gigs free )
- <br>
-
+  <!-- hi -->
+ <h1> PokeTube Source Repo </h1> 
+  this is the source code of PokeTube! (whoa) the youtube front-end that doesnt tracks you ^^
+  <br> <br> for matomos source code,see <a href="https://github.com/poketube-org/poketube/tree/main/t"> here. </a><br> <br> 
+  i personally dont care about typos that much, if you see one please make pr kek <br><br>
+ to self host you'll need  [Node.js](https://nodejs.org/en/download/) (which comes with [npm](http://npmjs.com)) installed on your computer. when you do,simpliy download the repo and run "node server.js" or npm start in the terminal. btw you probably need alot of ram to host this :P ( i recommend like 8 gigs free )
+ <br> <br>
 
 ## Why PokeTube?
 - Lyrics for songs!
@@ -25,4 +23,5 @@
 - <a href="https://github.com/iamashley0/poketube/tree/main/sdk">Custom sdk!</a> 
 
 ## Legal Stuff
+
 Privacy Policy: https://poketube.fun/privacy (TL;DR:we dont collect or share your personal info lol)

@@ -4,7 +4,7 @@
  
   <img src="https://raw.githubusercontent.com/vshymanskyy/StandWithUkraine/main/badges/StandWithUkraine.svg">
   <!-- hi -->
- <h1> PokeTube Source Repo </h1> 
+ <h1> PokeTube Source Repo - GitHub </h1> 
   this is the source code of PokeTube! (whoa) the youtube front-end that doesnt tracks you ^^
   <br> <br> for matomos source code,see <a href="https://github.com/poketube-org/poketube/tree/main/t"> here. </a><br> <br> 
   i personally dont care about typos that much, if you see one please make pr kek <br><br>

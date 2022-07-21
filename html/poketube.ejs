@@ -27,7 +27,7 @@
 <meta content=@youtube name=twitter:site>
 <meta content="https://poketube.fun/watch?v=<%=video.id%>" name=twitter:url>
 <meta content="<%=video.Title%> - PokeTube" name=twitter:title>
-<meta content="Watch this video by <%=video.Channel.Name%> on PokeTube. The YouTube front-end that doesnt track you!" property=twitter:description>
+<meta content="Watch this video by <%=video.Channel.Name%> On PokeTube. The YouTube front-end that doesnt track you!" property=twitter:description>
 <meta content="https://i.ytimg.com/vi/<%=video.id%>/maxresdefault.jpg" property=og:image>
 <meta content=summary_large_image name=twitter:card>
 <link href="https://poketube.fun/watch?v=<%=video.id%>" itemprop=url>
@@ -190,7 +190,7 @@ summary:hover{
 			<div class="video-info">
 				<div class="video-title" style="font-family:'Ginto Nord';font-weight:900;white-space:yes;"><%=video.Title%></div>
 				<p class="video-sub-info description">
-					<span><%=engagement.viewCount.toLocaleString()%> views - Uploaded on <%=date%> ^^
+					<span><%=engagement.viewCount.toLocaleString()%> total views - Uploaded on <%=date%> ^^
 </span> <br><br> <%-String(video.Description).replace(/\n/g, " <br> ")%></center>
 				</p>
 				<div class="video-info-buttons">
@@ -273,18 +273,18 @@ summary:hover{
                               <% if (!r) { %> 
                                 <hr style="clear: both;display: block;border: none;border-bottom: 0.5px solid #2f2f2f;margin: 0 0;/*! width: 4.5em; */height: 0;">
                                 <div>
-                         <a href="/watch?v=<%=video.id%>">Recommended videos</a> • <a href="/watch?v=<%=video.id%>&f=t"> Recent videos in this Channel</a>
+                         <a href="/watch?v=<%=video.id%>">Recommended videos</a> •  <a href="/watch?v=<%=video.id%>&f=t"> Recent videos from this channel</a>
                                                             </div>
                               <% if (!f) { %> 
      <% k.Video.Recommendations.Video.forEach(x => { %>       
  						<div class="video">
                     <% if (!optout) { %> 
 
-      <a  href="/watch?v=<%= x.id %>" class="thumbnail" style="background-image: url('https://i.ytimg.com/vi/<%= x.id %>/hqdefault.jpg?sqp=-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLBy_x4UUHLNDZtJtH0PXeQGoRFTgw');border-radius: 7.5px;"  >								<span class="video-length"><%=x.duration %></span>
+      <a  href="/watch?v=<%= x.id %>" class="thumbnail" style="background-image: url('https://i.ytimg.com/vi/<%= x.id %>/hqdefault.jpg?sqp=-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLBy_x4UUHLNDZtJtH0PXeQGoRFTgw');border-radius: 9.5px;"  >								<span class="video-length"><%=x.duration %></span>
                            <% } %>
    <% if (optout) { %> 
 
-      <a  href="/watch?v=<%= x.id %>&t=f" class="thumbnail" style="background-image: url('https://i.ytimg.com/vi/<%= x.id %>/hqdefault.jpg?sqp=-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLBy_x4UUHLNDZtJtH0PXeQGoRFTgw');border-radius: 7.5px;"  >								<span class="video-length"><%=x.duration %></span>
+      <a  href="/watch?v=<%= x.id %>&t=f" class="thumbnail" style="background-image: url('https://i.ytimg.com/vi/<%= x.id %>/hqdefault.jpg?sqp=-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLBy_x4UUHLNDZtJtH0PXeQGoRFTgw');border-radius: 9.5px;"  >								<span class="video-length"><%=x.duration %></span>
                            <% } %>
 							</a>
 							<div class="info">
@@ -312,16 +312,15 @@ summary:hover{
  						<div class="video">
                     <% if (!optout) { %> 
 
-      <a  href="/watch?v=<%= x.id %>" class="thumbnail" style="background-image: url('https://i.ytimg.com/vi/<%= x.id %>/hqdefault.jpg?sqp=-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLBy_x4UUHLNDZtJtH0PXeQGoRFTgw');border-radius: 7.5px;"  >								<span class="video-length"><%=x.duration %></span>
+      <a  href="/watch?v=<%= x.id %>" class="thumbnail" style="background-image: url('https://i.ytimg.com/vi/<%= x.id %>/hqdefault.jpg?sqp=-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLBy_x4UUHLNDZtJtH0PXeQGoRFTgw');border-radius: 9.5px;"  >								<span class="video-length"><%=x.duration %></span>
                            <% } %>
    <% if (optout) { %> 
 
-      <a  href="/watch?v=<%= x.id %>&t=f" class="thumbnail" style="background-image: url('https://i.ytimg.com/vi/<%= x.id %>/hqdefault.jpg?sqp=-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLBy_x4UUHLNDZtJtH0PXeQGoRFTgw');border-radius: 7.5px;"  >								<span class="video-length"><%=x.duration %></span>
+      <a  href="/watch?v=<%= x.id %>&t=f" class="thumbnail" style="background-image: url('https://i.ytimg.com/vi/<%= x.id %>/hqdefault.jpg?sqp=-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLBy_x4UUHLNDZtJtH0PXeQGoRFTgw');border-radius: 9.5px;"  >								<span class="video-length"><%=x.duration %></span>
                            <% } %>
 							</a>
 							<div class="info">
-                
-      <% if (!optout) { %> 
+       <% if (!optout) { %> 
 								<a href="/watch?v=<%= x.id %>" class="title max-lines-2"><%= x.Title %></a>
                    <% } %>
    <% if (optout) { %> 
@@ -343,7 +342,7 @@ summary:hover{
       	           <% if (lyrics) { %>
                                                   <% if (r === "f") { %> 
                                 <hr style="clear: both;display: block;border: none;border-bottom: 0.5px solid #2f2f2f;margin: 0 0;/*! width: 4.5em; */height: 0;">
-
+ 
             <a href="/watch?v=<%=video.id%>">See the Recommended videos instead</a>
          <a href="https://github.com/iamashley0/poketube/issues">Report wrong lyrics!</a>
          <div align="center">                                <hr style="clear: both;display: block;border: none;border-bottom: 0.5px solid #2f2f2f;margin: 0 0;/*! width: 4.5em; */height: 0;">
@@ -367,7 +366,7 @@ summary:hover{
 	</div>  
 
       <% if (optout) { %> 
-                  <!-- user_optout -->
+                  <!-- user_optout_piwik -->
  <% } %>
    
  <% if (!optout) { %> 
@@ -377,10 +376,13 @@ summary:hover{
           <!-- if you want to change the url - please see config in server.js  -->
         
          <!-- START <%=t%> -->  
+   
         <img src="<%=t%>t/rep.gif?ID=<%=btoa(Date.now())%>" style="width: 0;visibility: hidden;" id="SesionID">
         <img src="<%=t%>t/rep.gif?video_id=<%=btoa(video.id)%>" style="width: 0;visibility: hidden;" id="videoID">
         <img src="<%=t%>t/rep.gif?channel_ID=<%=btoa(video.Channel.id)%>" style="width: 0;visibility: hidden;" id="channel">
         <img src="<%=t%>t/rep.gif?piwik=t" style="width: 0;visibility: hidden;" id="piwik_noip_no_personal-info_collect">
+   
+
         <!-- END <%=t%> -->  
 
  <% } %>

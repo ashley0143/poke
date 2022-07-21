@@ -66,6 +66,7 @@ app.get("/watch", async function (req, res) {
   var f = req.query.f;
   var t = req.query.t;
   const video = await fetch(config.tubeApi + `video?v=${v}`);
+ 
   const h = await video.text();
   const k = JSON.parse(toJson(h));
   if (!v) res.redirect("/");

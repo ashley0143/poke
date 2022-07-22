@@ -169,11 +169,11 @@ summary:hover{
     
 <div class="app" style="color:#fff">
    <nav>
-            <div class=left><a class="class" href="/143" style=font-family:Inter,sans-serif;color:#fff> <img style="width: 6em;display: block;margin-left: auto;margin-right: auto;" src="/css/logo.svg?v=5">                                                                                                           <a href="/domains"><i  style="display: block;margin-left: auto;margin-right: auto;" class="fa-light fa-server"></i>  </a></div>               
+            <div class=left><a class="class" href="/143" style=font-family:Inter,sans-serif;color:#fff> <img style="width: 6em;display: block;margin-left: auto;margin-right: auto;" src="/css/logo.svg?v=5">                                                                                                           <a href="/domains"><i  style="display: block;margin-left: auto;margin-right: auto;" class="fa-light fa-server"></i> </a></div>               
             <div class=middle>
                 <form action=/search><input class=search-bar autocomplete="on" id=fname name=query style="color:#fff;font-family:Inter,sans-serif;"> <button class="btn btn-success" type=submit><i class="fa-light fa-search"></i></button></form>
             </div>
-            <div class=right><a href="/privacy"><i class="fa-light fa-shield"></i></a><a href="/video/upload?from="><i class="fa-light fa-video"></i></a> <a href="https://github.com/iamashley0/poketube/"><i class="fab fa-git-alt"></i></a><a href="https://github.com/iamashley0/poketube/issues"><i class="fa-light fa-bug"></i></a></a></div>
+            <div class=right> <a href="/privacy"><i style="display: block;margin-left: auto;margin-right: auto;" class="fa-light fa-shield"></i></a> <a href="/video/upload?from="><i style="display: block;margin-left: auto;margin-right: auto;" class="fa-light fa-video"></i></a><a href="/download?v=<%=video.id%>"><i  style="display: block;margin-left: auto;margin-right: auto;"  class="fa-light fa-download"></i></a> </div>
      
         </nav>
 	   
@@ -190,8 +190,8 @@ summary:hover{
 			<div class="video-info">
 				<div class="video-title" style="font-family:'Ginto Nord';font-weight:900;white-space:yes;"><%=video.Title%></div>
 				<p class="video-sub-info description">
-					<span><%=engagement.viewCount.toLocaleString()%> total views - Uploaded on <%=date%> ^^
-</span> <br><br> <%-String(video.Description).replace(/\n/g, " <br> ")%></center>
+					<span><%=engagement.viewCount.toLocaleString()%> Total views - Uploaded on <%=date%> ^^
+</span>  <%-String(video.Description).replace(/\n/g, " <br> ")%></center>
 				</p>
 				<div class="video-info-buttons">
 					<div>
@@ -230,8 +230,15 @@ summary:hover{
  				</div>
 				<button class="subscribe-button" ><a style="color:#fff" href="https://www.youtube.com/channel/<%=video.Channel.id%>?view_as=subscriber?sub_confirmation=1">Suscribe</a></button>
 			</div>
+                <div>
+                  <br>
+                                <hr style="clear: both;display: block;border: none;border-bottom: 0.5px solid #2f2f2f;margin: 0 0;/*! width: 4.5em; */height: 0;">
+                  <p><i class="fas fa-shield-alt"></i> The Connection to our servers are encrypted in sha256, meaning we cant see the videos you watching. Learn more <a href="https://en.wikipedia.org/wiki/Secure_Hash_Algorithms">About hash Algorithms here.</a> </p>
+                            </div>
+
 	</div>
-	
+          
+
 
 	<div class="recommended-list" style="background-color:#1c1c1c;border-radius:25px;margin: 10px;">
     
@@ -259,13 +266,12 @@ summary:hover{
                                              <div style="font-family:Inter,sans-serif;font-weight:900;white-space:yes;" align="center">
 
       <% if (optout) { %> 
-                                          <a href="/watch?v=<%=video.id%>&r=f">See The Lyrics</a>
+     <a href="/watch?v=<%=video.id%>&r=f">See The Lyrics</a>
 
 
   <% } %>
          <% if (!optout) { %> 
                        <a href="/watch?v=<%=video.id%>&r=f">See The Lyrics</a>
-    
  <% } %>
                     </div>
                            <% } %>    
@@ -342,9 +348,7 @@ summary:hover{
       	           <% if (lyrics) { %>
                                                   <% if (r === "f") { %> 
                                 <hr style="clear: both;display: block;border: none;border-bottom: 0.5px solid #2f2f2f;margin: 0 0;/*! width: 4.5em; */height: 0;">
- 
-            <a href="/watch?v=<%=video.id%>">See the Recommended videos instead</a>
-         <a href="https://github.com/iamashley0/poketube/issues">Report wrong lyrics!</a>
+            <a href="/watch?v=<%=video.id%>">See the Recommended videos instead</a> - <a href="https://github.com/iamashley0/poketube/issues">Report wrong lyrics!</a>
          <div align="center">                                <hr style="clear: both;display: block;border: none;border-bottom: 0.5px solid #2f2f2f;margin: 0 0;/*! width: 4.5em; */height: 0;">
 
                                                              <h1 style="font-family:'Ginto Nord',sans-serif;font-weight:900;white-space:yes;" align="center">

@@ -64,6 +64,62 @@ const config = {
 
 // pages 
 
+app.get("/mobile", async function (req, res) {
+  /*
+   * QUERYS
+   * v = Video ID
+   * e = Embed
+   * r = Recommended videos
+   * f = Recent videos from channel
+   * t = Piwik OptOut
+   */
+  var v = req.query.v;
+  var e = req.query.e;
+  var r = req.query.r;
+  var f = req.query.f;
+  var t = req.query.t;
+
+  const video = await fetch(config.tubeApi + `video?v=${v}`);
+  var fetching = await fetcher(v);
+
+  const json = fetching.video.Player;
+  const h = await video.text();
+  const k = JSON.parse(toJson(h));
+  if (!v) res.redirect("/");
+
+  // video
+  const j = fetching.video.Player.Formats.Format,
+    j_ = Array.isArray(j) ? j[j.length - 1] : j;
+  let url;
+  if (j_.URL != undefined) url = j_.URL;
+
+  // channel info
+  const engagement = fetching.engagement;
+  const channel = await fetch(config.tubeApi + `channel?id=${json.Channel.id}&tab=videos`);
+  const c = await channel.text();
+  const tj = JSON.parse(toJson(c));
+
+  // lyrics
+  const lyrics = await lyricsFinder(json.Title);
+  if (lyrics == undefined) lyrics = "Lyrics not found";
+
+  renderTemplate(res, req, "poketube-mobile.ejs", {
+    url: url,
+    color: await getColors(`https://i.ytimg.com/vi/${v}/maxresdefault.jpg`).then((colors) => colors[0].hex()),
+    engagement: engagement,
+    video: json,
+    date: moment(k.Video.uploadDate).format("LL"),
+    e: e,
+    k: k,
+    tj: tj,
+    r: r,
+    f: f,
+    t: config.t_url,
+    optout: t,
+    lyrics: lyrics.replace(/\n/g, " <br> "),
+  });
+});
+
 app.get("/watch", async function (req, res) {
   /*
    * QUERYS

@@ -184,7 +184,7 @@ summary:hover{
 				</video>
 		</div>
 			<div class="video-info">
-				<div class="video-title" style="font-family:'Inter';font-weight:900;white-space:yes;"><%=video.Title%></div>
+				<div class="video-title" style="font-family:'Inter';font-weight:900;white-space:yes;"><%=video.Title%>               </div>
 				<div class="video-info-bar">
 					<%=engagement.viewCount.toLocaleString()%> Total views - Uploaded on <%=date%> ^^
 					<div class="divider"></div>
@@ -234,7 +234,13 @@ summary:hover{
 				<button class="subscribe-button" ><a style="color:#fff" href="https://www.youtube.com/channel/<%=video.Channel.id%>?view_as=subscriber?sub_confirmation=1">Suscribe</a></button>
 			</div>
                 <div>
-				<p class="description">  <%-String(video.Description).replace(/\n/g, " <br> ")%> </p>
+                  
+                          <div>
+<h3 style="color:#fff;font-family:Inter,sans-serif;font-weight:700;white-space:yes;"> Description</h3>    <details open style="color=#fff"><summary style="color=#fff"></summary>
+        				<p class="description"><%-String(video.Description).replace(/\n/g, " <br> ")%> </p>
+                            </div> 
+          </details>
+                
 			</div>
  	</div>
 	<div class="secondary">

@@ -29,9 +29,12 @@ const fetcher = require("./src/fetcher.js");
 const templateDir = path.resolve(`${process.cwd()}${path.sep}html`);
 
 var express = require("express");
+var useragent = require("express-useragent");
+
 var app = express();
 app.engine("html", require("ejs").renderFile);
 app.use(express.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
+app.use(useragent.express());
 
 app.set("view engine", "html");
 const renderTemplate = async (res, req, template, data = {}) => {
@@ -103,6 +106,12 @@ app.get("/mobile", async function (req, res) {
   const lyrics = await lyricsFinder(json.Title);
   if (lyrics == undefined) lyrics = "Lyrics not found";
 
+  // redirect to pc version
+  
+   if(!req.useragent.isMobile){
+    res.redirect(`/watch?v=${v}`);
+  }
+  
   renderTemplate(res, req, "poketube-mobile.ejs", {
     url: url,
     color: await getColors(`https://i.ytimg.com/vi/${v}/maxresdefault.jpg`).then((colors) => colors[0].hex()),
@@ -142,7 +151,7 @@ app.get("/watch", async function (req, res) {
   const h = await video.text();
   const k = JSON.parse(toJson(h));
   if (!v) res.redirect("/");
-
+  
   // video
   const j = fetching.video.Player.Formats.Format,
     j_ = Array.isArray(j) ? j[j.length - 1] : j;
@@ -159,6 +168,13 @@ app.get("/watch", async function (req, res) {
   const lyrics = await lyricsFinder(json.Title);
   if (lyrics == undefined) lyrics = "Lyrics not found";
 
+  
+  // redirect to mobile version
+  if(req.useragent.isMobile){
+    res.redirect(`/mobile?v=${v}`);
+  }
+  
+  
   renderTemplate(res, req, "poketube.ejs", {
     url: url,
     color: await getColors(`https://i.ytimg.com/vi/${v}/maxresdefault.jpg`).then((colors) => colors[0].hex()),
@@ -340,3 +356,4 @@ app.get("*", function (req, res) {
 // listen
 
 app.listen("3000", () => {});
+

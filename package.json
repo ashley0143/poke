@@ -20,7 +20,8 @@
     "moment": "^2.29.1",
     "ytdl-core": "^4.11.0",
     "node-html-parser": "^5.3.3",
-    "get-image-colors": "^4.0.1"
+    "get-image-colors": "^4.0.1",
+    "express-useragent": "^1.0.15"
   },
   "engines": {
     "node": "16.x"

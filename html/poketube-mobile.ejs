@@ -54,7 +54,11 @@ summary:hover{
 </style>
   <!-- WIGGLE WIGGLE WIGGLE -->
   <style>
+    
+    
+    
     body{
+         max-width: 100%;
         overflow-x: hidden; /* Hide horizontal scrollbar */
         color:#111111
     }
@@ -173,62 +177,39 @@ summary:hover{
     <nav>
       <div class=left><a class="class" href="/" style=font-family:Inter,sans-serif;color:#fff> <img style="width: 6em;display: block;margin-left: auto;margin-right: auto;" src="/css/logo.svg?v=5"></a>
       </div>
- 
         </nav>
 	   <div class="mobile-page">
 	<div class="primary">
 		<div class="video-player-container">
-					<video class="player"  autoplay controls src="<%=url%>" poster="https://i.ytimg.com/vi/<%=video.id%>/hqdefault.jpg?v=607ddcd4">
+					<video class="player" autoplay controls src="<%=url%>" poster="https://i.ytimg.com/vi/<%=video.id%>/hqdefault.jpg?v=607ddcd4">
  					</video>
 				</video>
 		</div>
 			<div class="video-info">
-				<div class="video-title" style="font-family:'Inter';font-weight:900;white-space:yes;"><%=video.Title%>               </div>
-				<div class="video-info-bar">
-					<%=engagement.viewCount.toLocaleString()%> Total views - Uploaded on <%=date%> ^^
+              
+ 				<div class="video-title" style="font-family:'Inter';font-weight:900;white-space:yes;"><%=video.Title%>  
+          
+ </div>
+ 				<div class="video-info-bar" style="font-family:'Inter';">
 					<div class="divider"></div>
-					<div class="video-info-buttons">
-					<div>
-  <i class="fa-light fa-thumbs-up"></i>
+         	<div class="divider"></div>
+          					<%=engagement.viewCount.toLocaleString()%> Views - Uploaded on <%=date%> :3
+					<div class="video-info-buttons" style="font-family:'Inter';font-weight:900;white-space:yes;">
+            <div>
+   <i class="fa-light fa-thumbs-up"></i>
      <%=engagement.likes.toLocaleString()%>
-          </div>
-					<div>
-<i class="fa-light fa-thumbs-down"></i>						    <%=engagement.dislikes.toLocaleString()%>
-					</div>
- 
-					<a style="color:#fff" href="/download?v=<%=video.id%>">
+       </div>
+              <a>
+ <i class="fa-light fa-thumbs-down"></i><%=engagement.dislikes.toLocaleString()%>
+                </a>
+					<a style="color:#fff" href="/api/video/download?v=<%=video.id%>&from=mobile">   
             <i class="fa-light fa-download"></i>
             Download
 					</a>
-            
-            			<a style="color:#fff" href="https://youtube.com/watch?v=<%=video.id%>">
-            <i class="fa-light fa-share"></i>
-            Open In YouTube
-					</a>
-                <% if (lyrics && !r) { %>                      
-      <% if (optout) { %> 
-     <a href="/mobile?v=<%=video.id%>&r=f" style="color:#fff">
-                   <i class="fa-light fa-music"></i>
-                              Lyrics (Wow)</a>
-
-
-  <% } %>
-         <% if (!optout) { %> 
-                       <a href="/mobile?v=<%=video.id%>&r=f" style="color:#fff">
-                                            <i class="fa-light fa-music"></i>
-
-                         Lyrics (Wow)</a>
- <% } %>
-                    </div>
-                           <% } %>    
- 
+ 	<a style="color:#fff" href="#more"> <i class="fa-thin fa-circle-plus"></i>  More.. </a>
             </div>
       
 				</div>
-    
-                  
-                  
-        
 					<div class="channel-info" name="chnl">
 				<a href="/channel?id=<%=video.Channel.id%>" class="avatar">
 					<img src=" <%= k.Video.Channel.Avatar[1].$t %>">
@@ -241,8 +222,12 @@ summary:hover{
 			</div>
                         <div>
                 <div>
-<h3 style="color:#fff;font-family:Inter,sans-serif;font-weight:700;white-space:yes;"> Description</h3>    <details open style="color=#fff"><summary style="color=#fff"></summary>
-        				<p class="description"><%-String(video.Description).replace(/\n/g, " <br> ")%> </p>
+ 
+<h3 style="color:#fff;font-family:Ginto Nord,sans-serif;font-weight:700;white-space:yes;"> Description</h3>
+                  <details open style="color=#fff"><summary style="color=#fff"></summary>
+ 
+        			<p class="description"><%-String(video.Description).replace(/\n/g, " <br> ")%> </p>
+ 
                             </div> 
           </details>
                 
@@ -252,14 +237,10 @@ summary:hover{
 	 
 		<div class="recommended-list" style="color:#fff">
                      
-            	      
                               <% if (!r) { %> 
                                 <hr style="clear: both;display: block;border: none;border-bottom: 0.5px solid #2f2f2f;margin: 0 0;/*! width: 4.5em; */height: 0;">
                                 <div>
-                                   
-
-                         <a href="/mobile?v=<%=video.id%>">Recommended videos</a> •  <a href="/mobile?v=<%=video.id%>&f=t"> Recent videos from this channel</a>
-                                                            </div>
+                         <a href="/mobile?v=<%=video.id%>">Recommended videos</a> •  <a href="/mobile?v=<%=video.id%>&f=t"> Recent videos from this channel</a>                                 </div> 
                               <% if (!f) { %> 
      <% k.Video.Recommendations.Video.forEach(x => { %>       
  						<div class="video">
@@ -280,10 +261,9 @@ summary:hover{
    <% if (optout) { %> 
 								<a href="/mobile?v=<%= x.id %>&t=f" class="title max-lines-2"><%= x.Title %></a>
                    <% } %>
-								<div>
-               <a class="max-lines-2" style="color:#fff" href="/channel?id=<%= x.Channel.id %>"><%=x.Channel.Name %></a>
-									<div>
- <%= x.uploadedAt %>  </div>
+								<div  style="color:#fff" >
+               <a class="max-lines-2" style="color:#fff" href="/channel?id=<%= x.Channel.id %>"><%=x.Channel.Name %></a> • <div>
+  <%= x.uploadedAt %>  </div>
 								</div>
 							</div>
 						</div>
@@ -321,8 +301,30 @@ summary:hover{
  
        <% }) %>   
                             <% } %>
-                                                          <% } %>
-
+                              <a name="more"></a>
+                                      <hr style="clear: both;display: block;border: none;border-bottom: 0.5px solid #2f2f2f;margin: 0 0;/*! width: 4.5em; */height: 0;">
+                               
+<h3 style="text-align:center;color:#fff;font-family:Ginto Nord,sans-serif;font-weight:700;white-space:yes;te"> More Options                </h3>
+                  <div style="font-family:Inter,sans-serif;font-weight:900;white-space:yes;" align="center">
+     <a href="https://youtube.com/watch?v=<%=video.id%>">Open On YouTube</a> •  <a href="/privacy">Privacy</a> • <a href="https://github.com/iamashley0/poketube/">Git</a> 
+                                <% if (optout) { %> 
+ <% } %>
+      <% if (!optout) { %> 
+ • <a href="/mobile?v=<%=video.id%>&t=f"> 
+ Opt out of Metrics</a> (<a href="/privacy" style="color:#fff">Wut?</a>) 
+     <% } %>
+                        <% if (lyrics && !r) { %>                      
+      <% if (optout) { %> 
+                 <br>    <br>     <a href="/mobile?v=<%=video.id%>&r=f">  Lyrics (Wow) </a> 
+  <% } %>
+         <% if (!optout) { %> 
+             <br>   <br>          <a href="/mobile?v=<%=video.id%>&r=f" >  Lyrics (Wow) </a> 
+ <% } %>
+                            <% } %> 
+            <% } %>
+              
+                                                                           </div>
+ 
                                                             
       	           <% if (lyrics) { %>
                                                   <% if (r === "f") { %> 
@@ -331,8 +333,7 @@ summary:hover{
             <a href="/mobile?v=<%=video.id%>">See the Recommended videos instead</a> - <a href="https://github.com/iamashley0/poketube/issues">Report wrong lyrics qwq</a>
                                                     </p>
          <div align="center">                                <hr style="clear: both;display: block;border: none;border-bottom: 0.5px solid #2f2f2f;margin: 0 0;/*! width: 4.5em; */height: 0;">
-
-                                                             <h1 style="font-family:'Ginto Nord',sans-serif;font-weight:900;white-space:yes;" align="center">
+                                                              <h1 style="font-family:'Ginto Nord',sans-serif;font-weight:900;white-space:yes;" align="center">
  Lyrics 
                         </h1>  
            <p>
@@ -346,8 +347,7 @@ summary:hover{
 
                                         <% } %>                                      
  		</div>
-	</div>
-</div>
+ </div>
 
 		
   
@@ -377,4 +377,3 @@ summary:hover{
 </body>
 </html>
   </body>
-

@@ -31,12 +31,10 @@
 <meta content="https://i.ytimg.com/vi/<%=video.id%>/maxresdefault.jpg" property=og:image>
 <meta content=summary_large_image name=twitter:card>
 <link href="https://poketube.fun/mobile?v=<%=video.id%>" itemprop=url>
-<link href="http://www.youtube.com/channel/<%=video.Channel.id%>" itemprop=url>
  <% } %> <!-- close the } -->
-            <meta name="viewport" content="width=device-width,initial-scale=1">
-
+<meta name="viewport" content="width=device-width,initial-scale=1">
 <link href=/css/yt-ukraine.svg?v=6 rel=icon>
-<title> <%=video.Title%> - PokeTube</title>
+<title> <%=video.Title%> - PokeTube Mobile</title>
 <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@500&display=swap" rel=stylesheet>
  <link href="https://tube.kuylar.dev/css/mobile.css" rel=stylesheet>
  <link href=/css/app.main.css rel=stylesheet>
@@ -173,8 +171,9 @@ summary:hover{
   <body>
 <div class="app" style="color:#fff;margin-top: 0;">
     <nav>
-      <div class=left><a class="class" href="/143" style=font-family:Inter,sans-serif;color:#fff> <img style="width: 6em;display: block;margin-left: auto;margin-right: auto;" src="/css/logo.svg?v=5"></a>
+      <div class=left><a class="class" href="/" style=font-family:Inter,sans-serif;color:#fff> <img style="width: 6em;display: block;margin-left: auto;margin-right: auto;" src="/css/logo.svg?v=5"></a>
       </div>
+ 
         </nav>
 	   <div class="mobile-page">
 	<div class="primary">
@@ -222,7 +221,12 @@ summary:hover{
                            <% } %>    
  
             </div>
+      
 				</div>
+    
+                  
+                  
+        
 					<div class="channel-info" name="chnl">
 				<a href="/channel?id=<%=video.Channel.id%>" class="avatar">
 					<img src=" <%= k.Video.Channel.Avatar[1].$t %>">
@@ -233,9 +237,8 @@ summary:hover{
 		 
 				<button class="subscribe-button" ><a style="color:#fff" href="https://www.youtube.com/channel/<%=video.Channel.id%>?view_as=subscriber?sub_confirmation=1">Suscribe</a></button>
 			</div>
+                        <div>
                 <div>
-                  
-                          <div>
 <h3 style="color:#fff;font-family:Inter,sans-serif;font-weight:700;white-space:yes;"> Description</h3>    <details open style="color=#fff"><summary style="color=#fff"></summary>
         				<p class="description"><%-String(video.Description).replace(/\n/g, " <br> ")%> </p>
                             </div> 
@@ -307,7 +310,7 @@ summary:hover{
 								<a href="/mobile?v=<%= x.id %>&t=f" class="title max-lines-2"><%= x.Title %></a>
                    <% } %>
 								<div>
-               <a class="max-lines-2" href="/channel?id=<%= video.Channel.id %>"><%=video.Channel.Name %></a>
+               <a class="max-lines-2" style="color:#fff"  href="/channel?id=<%= video.Channel.id %>"><%=video.Channel.Name %></a>
 									<div>
  <%= x.uploadedAt %>  </div>
 								</div>

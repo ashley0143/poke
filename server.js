@@ -1,4 +1,4 @@
-/*
+ /*
     Copyright (C) 2021-2022 POKETUBE (https://github.com/iamashley0/poketube)
     
     This program is free software: you can redistribute it and/or modify
@@ -282,15 +282,21 @@ app.get("/channel", async (req, res) => {
     desc: k.Channel.Contents.ItemSection.About.Description,
   });
 });
+
+// static pages
 app.get("/privacy", function (req, res) {
   renderTemplate(res, req, "priv.ejs");
 });
+
 app.get("/143", function (req, res) {
   renderTemplate(res, req, "143.ejs");
 });
+
 app.get("/domains", function (req, res) {
   renderTemplate(res, req, "domains.ejs");
 });
+
+// search 
 app.get("/api/search", async (req, res) => {
   const query = req.query.query;
 
@@ -299,6 +305,7 @@ app.get("/api/search", async (req, res) => {
   }
   return res.redirect(`/search?query=${query}`);
 });
+
 app.get("/search", async (req, res) => {
   const { toJson } = require("xml2json");
   const query = req.query.query;
@@ -326,7 +333,7 @@ app.get("/js/:id", (req, res) => {
 });
 
 app.get("/video/upload", (req, res) => {
-  res.redirect("https://youtube.com/upload?from=poketube_utc");
+  res.redirect("https://youtube.com/upload");
 });
 
 app.get("/", async function (req, res) {
@@ -339,6 +346,7 @@ app.get("/api/video/download", async function (req, res) {
   const url = fetching.video.Player.Formats.Format[1].URL;
   res.redirect(url);
 });
+
 app.get("/api/video/downloadjson", async function (req, res) {
   var v = req.query.v;
   var fetching = await fetcher(v);
@@ -356,4 +364,3 @@ app.get("*", function (req, res) {
 // listen
 
 app.listen("3000", () => {});
-

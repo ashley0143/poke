@@ -1,4 +1,7 @@
- /*
+/*
+
+    PokeTube is an Free/Libre youtube front-end. this is our main file.
+  
     Copyright (C) 2021-2022 POKETUBE (https://github.com/iamashley0/poketube)
     
     This program is free software: you can redistribute it and/or modify
@@ -283,7 +286,7 @@ app.get("/channel", async (req, res) => {
   });
 });
 
-// static pages
+// static 
 app.get("/privacy", function (req, res) {
   renderTemplate(res, req, "priv.ejs");
 });
@@ -296,7 +299,10 @@ app.get("/domains", function (req, res) {
   renderTemplate(res, req, "domains.ejs");
 });
 
-// search 
+app.get("/license", function (req, res) {
+  renderTemplate(res, req, "license.ejs");
+});
+
 app.get("/api/search", async (req, res) => {
   const query = req.query.query;
 
@@ -305,7 +311,6 @@ app.get("/api/search", async (req, res) => {
   }
   return res.redirect(`/search?query=${query}`);
 });
-
 app.get("/search", async (req, res) => {
   const { toJson } = require("xml2json");
   const query = req.query.query;

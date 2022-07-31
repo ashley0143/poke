@@ -1,4 +1,4 @@
-   <!--
+ <!--
     This Source Code Form is subject to the terms of the GNU General Public License:
 
     Copyright (C) 2021-2022 POKETUBE (https://github.com/iamashley0/poketube)
@@ -178,14 +178,34 @@ src:url('https://cdn.statically.io/gh/brecert/discord-quote-generator/main/Ginto
   <style>
   nav .right {
  display: flex;
-border-radius: 36px;
+border-radius: 5px;
 justify-content: normal;
 margin-left: 80px;
 padding-left: 0px;
 margin-right: 30px;
 align-items: center;
-background-color: #131313;
+background: black;
 }
+    
+    nav .left {
+    display: flex;
+justify-content: flex-start;
+align-items: center;
+border-radius: 5px;
+background: black;
+ padding-left: 0px;
+margin-right: 100px;
+    }
+    
+    nav .middle {
+      display: flex;
+justify-content: center;
+align-items: center;
+border-radius: 5px;
+background: black;
+margin-left: 100px;
+margin-right: 100px;
+    }
   </style>
   
    <!-- STYLES END -->
@@ -194,7 +214,7 @@ background-color: #131313;
     
 <div class="app" style="color:#fff">
    <nav>
-     <div class=left><a class="class" href="/143" style=font-family:Inter,sans-serif;color:#fff> <img style="width: 6em;display: block;margin-left: auto;margin-right: auto;" src="/css/logo.svg?v=5">         </a>             </div>                                                                                    
+      <div class=left><a class="class" href="/143" style=font-family:Inter,sans-serif;color:#fff> <img style="width: 6em;display: block;margin-left: auto;margin-right: auto;" src="/css/logo.svg?v=5">         </a>             </div>                                    
             <div class=middle>
                 <form action=/search><input class=search-bar autocomplete="on" id=fname name=query style="color:#fff;font-family:Inter,sans-serif;"> <button class="btn btn-success" type=submit><i class="fa-light fa-search"></i></button></form>
             </div>

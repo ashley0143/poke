@@ -212,18 +212,15 @@ border-radius: 8px;
      
       </nav><br>
  <div class="channel-page" style="background-color: var(--channel-contents-background);">
-      
-<div style="margin: 4px;padding: 9px;border-radius: 5px;background-color: #ff008a;width: 760px;">
-<h1 style="font-family:'Ginto Nord';font-weight:900;white-space:yes;color:#fff;text-align: center;">  TRENDING VIDEOS
-   </h1>
-    <p style="color: white;font-family: Inter;margin: 0;">
-       Trend videos are weird ngl 
- </p>
-         </div>
- 
-            <img src="https://t.poketube.fun/t/rep.gif" style="width: 0;visibility: hidden;" id="discover_main">
+    
+<a href="#shorts" style="border-radius: 10px;background: #222121;padding: 10px;font-family: Ginto Nord;margin: 4px;">See trending shorts owo~</a>
+   
+   
+   <img src="https://t.poketube.fun/t/rep.gif" style="width: 0;visibility: hidden;" id="discover_main">
+   
+   
     	<div class="video-grid">
-   <% k.Explore.Videos.ItemSection[2].Shelf.Items.Video.forEach(x =>  { %>
+   <% k.Explore.Videos.ItemSection[3].Shelf.Items.Video.forEach(x =>  { %>
 			<a href="/watch?v=<%- x.id %>" class="video">
 				<div class="thumbnail" style="background-image: url('https://i.ytimg.com/vi/<%= x.id %>/hqdefault.jpg?sqp=-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLBy_x4UUHLNDZtJtH0PXeQGoRFTgw');border-radius: 4px;"><span class="video-length"><%- x.duration %></span></div>
 				<div class="info">
@@ -234,19 +231,12 @@ border-radius: 8px;
 
  		 	               <% }) %>   
                                    </div>
-
-                  <div style="margin: 4px;padding: 9px;border-radius: 5px;background-color: #ff008a;width: 760px;">
-<h1 style="font-family:'Ginto Nord';font-weight:900;white-space:yes;color:#fff;text-align: center;">  TRENDING TIKTOKS /S
-   </h1>
-                    <p style="color: white;font-family: Inter;margin: 0;">
-  ah yes, def not youtube shorts
-</p>
-         </div>
  
+          <a name="shorts"></a>
           <img src="https://t.poketube.fun/t/rep.gif" style="width: 0;visibility: hidden;" id="discover_shorts">
-
+<hr>
    	<div class="video-grid">
-   <% k.Explore.Videos.ItemSection[1].Shelf.Items.Video.forEach(x =>  { %>
+   <% k.Explore.Videos.ItemSection[2].Shelf.Items.Video.forEach(x =>  { %>
 			<a href="/watch?v=<%- x.id %>" class="video">
 				<div class="thumbnail" style="background-image: url('https://i.ytimg.com/vi/<%= x.id %>/hqdefault.jpg?sqp=-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLBy_x4UUHLNDZtJtH0PXeQGoRFTgw');border-radius: 4px;"><span class="video-length"><%- x.duration %></span></div>
 				<div class="info">
@@ -257,25 +247,8 @@ border-radius: 8px;
 
  		 	               <% }) %>   
                  </div>
-<hr>
-<div style="color:#fff;/*! margin: 9px; */padding: 5px;/*! align-items: center; *//*! display: unset; */text-align: center;">
-  <a href="/privacy">Privacy</a> - <a href="https://github.com/poketube-org/poketube">Source Code</a> - <a href="https://stand-with-ukraine.pp.ua/"> 🇺🇦</a>
-   <p style="color:#fff">
-    
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
-     
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details. 
-     
-     
-   </p>
-           </div>
-          
+
+          <hr>
 
     </body>
 </html>

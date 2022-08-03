@@ -1,7 +1,7 @@
 {
   "name": "poketube",
   "version": "20.22",
-  "description": "Youtube video player that does not track your info",
+  "description": "Libre youtube front-end",
   "main": "server.js",
   "scripts": {
     "start": "node server.js"
@@ -21,7 +21,8 @@
     "ytdl-core": "^4.11.0",
     "node-html-parser": "^5.3.3",
     "get-image-colors": "^4.0.1",
-    "express-useragent": "^1.0.15"
+    "express-useragent": "^1.0.15",
+    "js-sha512":"0.8.0"
   },
   "engines": {
     "node": "16.x"

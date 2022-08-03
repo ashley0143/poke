@@ -34,7 +34,15 @@ const templateDir = path.resolve(`${process.cwd()}${path.sep}html`);
 var express = require("express");
 var useragent = require("express-useragent");
 
-var app = express();
+
+// hash
+var sha512 = require('js-sha512').sha512;
+var sha384 = require('js-sha512').sha384;
+
+var sha512_256 = require('js-sha512').sha512_256;
+var sha512_224 = require('js-sha512').sha512_224;
+
+ var app = express();
 app.engine("html", require("ejs").renderFile);
 app.use(express.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
 app.use(useragent.express());
@@ -186,6 +194,7 @@ app.get("/watch", async function (req, res) {
     date: moment(k.Video.uploadDate).format("LL"),
     e: e,
     k: k,
+    sha384:sha384,
     tj: tj,
     r: r,
     f: f,

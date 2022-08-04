@@ -285,9 +285,22 @@ margin-right: 100px;
                 <div>
                   <br>
                                 <hr style="clear: both;display: block;border: none;border-bottom: 0.5px solid #2f2f2f;margin: 0 0;/*! width: 4.5em; */height: 0;">
-                  <p><i class="fas fa-shield-alt"></i> The Connection is secured with  ECDSA with SHA-384 Signature Algorithm :3 We see the video title as: <br>
-                    <span style="font-family:'Monospace'"> <%=sha384(video.Title)%></span> <br>
+                  <p><i class="fas fa-shield-alt"></i> The Connection is secured with ECDSA with SHA-384 Signature Algorithm :3 <br> 
+                    	<div class="video-title" style="font-family:'Ginto Nord';font-weight:900;white-space:yes;">Encryption Information!</div>
+                  <div>
+                    <p style="margin:0;">
+                     Using SHA-384
                     </p>
+                    Title:  <span style="font-family:'Monospace'"> <%=sha384(video.Title)%></span><br>
+                    ID:  <span style="font-family:'Monospace'"> <%=sha384(video.id)%></span><br>
+                     Chnl: <span style="font-family:'Monospace'">    <%=sha384(video.Channel.Name)%> </span>
+                                         Date: <span style="font-family:'Monospace'">    <%=sha384(btoa(Date.now()).toString())%> </span>
+                      <br><br>
+                    </div>
+                  <a href="https://en.wikipedia.org/wiki/Encryption">What the hell is Encryption??</a>
+                     </p>
+                    
+                             <hr style="clear: both;display: block;border: none;border-bottom: 0.5px solid #2f2f2f;margin: 0 0;/*! width: 4.5em; */height: 0;">
                   </div>
 	</div>
           

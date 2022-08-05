@@ -6,9 +6,7 @@
   <h1> PokeTube Source Repo - GitHub </h1> 
   
   this is the source code of PokeTube! (whoa) the youtube front-end that doesnt tracks you ^^
-  
- this is the source code of the front-end of poketube, for backend see https://github.com/poketube-org/poketube-backend
- 
+   
  for matomos source code,see <a href="https://github.com/poketube-org/poketube/tree/main/t"> here. </a>
  
  to self host you'll need  [Node.js](https://nodejs.org/en/download/) (which comes with [npm](http://npmjs.com)) installed on your computer. when you do,simpliy download the repo and run "node server.js" or npm start in the terminal. btw you probably need alot of ram to host this :P ( i recommend like 8 gigs free )

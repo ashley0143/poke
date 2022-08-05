@@ -1,0 +1,16 @@
+https://systemuicons.com/
+=========================
+home:
+https://systemuicons.com/images/icons/home_door.svg
+browse:
+https://systemuicons.com/images/icons/compass.svg
+subscriptions:
+-
+profile:
+https://systemuicons.com/images/icons/user_male_circle.svg
+search:
+https://systemuicons.com/images/icons/search.svg
+like:
+https://systemuicons.com/images/icons/thumbs_up.svg
+dislike:
+https://systemuicons.com/images/icons/thumbs_down.svg

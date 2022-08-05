@@ -1,0 +1,146 @@
+﻿@using System.Collections.Specialized
+@using System.Web
+@using InnerTube.Models
+@model LightTube.Contexts.PlayerContext
+
+@{
+    ViewBag.Metadata = new Dictionary<string, string>();
+    ViewBag.Metadata["author"] = Model.Video.Channel.Name;
+    ViewBag.Metadata["og:title"] = Model.Player.Title;
+    ViewBag.Metadata["og:url"] = $"{Url.ActionContext.HttpContext.Request.Scheme}://{Url.ActionContext.HttpContext.Request.Host}{Url.ActionContext.HttpContext.Request.Path}{Url.ActionContext.HttpContext.Request.QueryString}";
+    ViewBag.Metadata["og:image"] = $"{Url.ActionContext.HttpContext.Request.Scheme}://{Url.ActionContext.HttpContext.Request.Host}/proxy/image?url={HttpUtility.UrlEncode(Model.Player.Thumbnails.FirstOrDefault()?.Url?.ToString())}";
+    ViewBag.Metadata["twitter:card"] = $"{Url.ActionContext.HttpContext.Request.Scheme}://{Url.ActionContext.HttpContext.Request.Host}/proxy/image?url={HttpUtility.UrlEncode(Model.Player.Thumbnails.LastOrDefault()?.Url?.ToString())}";
+    ViewBag.Metadata["og:description"] = Model.Player.Description;
+    ViewBag.Title = Model.Player.Title;
+
+    Layout = null;
+    try
+    {
+        ViewBag.Metadata["og:video"] = $"/proxy/video?url={HttpUtility.UrlEncode(Model.Player.Formats.First().Url.ToString())}";
+        Model.Resolution ??= Model.Player.Formats.First().FormatNote;
+    }
+    catch
+    {
+    }
+    bool live = Model.Player.Formats.Length == 0 && Model.Player.AdaptiveFormats.Length > 0;
+    bool canPlay = true;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta property="og:site_name" content="lighttube"/>
+    <meta property="og:type" content="website"/>
+    @if (ViewBag.Metadata is not null)
+    {
+        @foreach (KeyValuePair<string, string> metaTag in ViewBag.Metadata)
+        {
+            if (metaTag.Key.StartsWith("og:"))
+            {
+                <meta property="@metaTag.Key" content="@metaTag.Value"/>
+            }
+            else
+            {
+                <meta name="@metaTag.Key" content="@metaTag.Value"/>
+            }
+        }
+    }
+    <meta property="theme-color" content="#AA0000"/>
+    <title>@ViewData["Title"] - lighttube</title>
+    <link rel="stylesheet" href="~/css/bootstrap-icons/bootstrap-icons.css"/>
+    <link rel="stylesheet" href="~/css/desktop.css" asp-append-version="true"/>
+    <link rel="stylesheet" href="~/css/lt-video/player-desktop.css" asp-append-version="true"/>
+    <link rel="icon" href="~/favicon.ico">
+</head>
+<body>
+
+@if (live)
+{
+    <video class="player" poster="@Model.Player.Thumbnails.LastOrDefault()?.Url">
+    </video>
+} 
+else if (Model.Player.Formats.Length > 0)
+{
+    <video class="player" controls src="/proxy/media/@Model.Player.Id/@HttpUtility.UrlEncode(Model.Player.Formats.First(x => x.FormatNote == Model.Resolution && x.FormatId != "17").FormatId)" poster="@Model.Player.Thumbnails.LastOrDefault()?.Url">
+        @foreach (Subtitle subtitle in Model.Player.Subtitles ?? Array.Empty<Subtitle>())
+        {
+            @:<track src="/proxy/caption/@Model.Player.Id/@HttpUtility.UrlEncode(subtitle.Language).Replace("+", "%20")" label="@subtitle.Language" kind="subtitles">
+        }
+    </video>
+}
+else
+{
+    canPlay = false;
+    <div id="player" class="player error" style="background-image: url('@Model.Player.Thumbnails.LastOrDefault()?.Url')">
+        @if (string.IsNullOrWhiteSpace(Model.Player.ErrorMessage))
+        {
+            <span>
+                No playable streams returned from the API (@Model.Player.Formats.Length/@Model.Player.AdaptiveFormats.Length)
+            </span>
+        }
+        else
+        {
+            <span>
+                @Model.Player.ErrorMessage
+            </span>
+        }
+    </div>
+}
+
+@if (canPlay)
+{
+    <script src="/js/lt-video/player-desktop.js"></script>
+    @if (!Model.CompatibilityMode && !live)
+    {
+    <script src="/js/shaka-player/shaka-player.compiled.min.js"></script>
+    <script>
+        let player = undefined;
+        loadPlayerWithShaka("video", {
+            "id": "@Model.Video.Id",
+            "title": "@Html.Raw(Model.Video.Title.Replace("\"", "\\\""))",
+            "embed": true,
+            "live": false,
+            "storyboard": "/proxy/image?url=@HttpUtility.UrlEncode(Model.Player.Storyboards.FirstOrDefault())"
+        }, [
+            @foreach(Format f in Model.Player.Formats.Reverse())
+            {
+                @:{"height": @f.Resolution.Split("x")[1],"label":"@f.FormatName","src": "/proxy/video?url=@HttpUtility.UrlEncode(f.Url)"},
+            }
+        ], "https://@(Context.Request.Host)/manifest/@(Model.Video.Id).mpd").then(x => player = x).catch(alert);;
+    </script>
+    }
+    else if (live)
+    {
+    <script src="/js/hls.js/hls.min.js"></script>
+    <script>
+        let player = undefined;
+        loadPlayerWithHls("video", {
+            "id": "@(Model.Video.Id)",
+            "title": "@Html.Raw(Model.Video.Title.Replace("\"", "\\\""))",
+            "embed": true,
+            "live": true
+        }, "https://@(Context.Request.Host)/manifest/@(Model.Video.Id).m3u8").then(x => player = x).catch(alert);
+    </script>
+    }
+    else
+    {
+    <script>
+        const player = new Player("video", {
+            "id": "@Model.Video.Id",
+            "title": "@Html.Raw(Model.Video.Title.Replace("\"", "\\\""))",
+            "embed": true,
+            "live": false,
+            "storyboard": "/proxy/image?url=@HttpUtility.UrlEncode(Model.Player.Storyboards.FirstOrDefault())"
+        }, [
+            @foreach(Format f in Model.Player.Formats.Reverse())
+            {
+                @:{"height": @f.Resolution.Split("x")[1],"label":"@f.FormatName","src": "/proxy/video?url=@HttpUtility.UrlEncode(f.Url)"},
+            }
+        ]);
+    </script>
+    }
+}
+</body>
+</html>

@@ -1,0 +1,63 @@
+﻿@model LightTube.Contexts.SettingsContext
+
+@{
+	ViewBag.Title = "Settings";
+	Layout = "_Layout";
+}
+
+
+<form method="post">
+<div class="settings-content">
+<h1 style="text-align:center">Settings</h1>
+<div>
+	<label for="settings-theme">Theme</label>
+	<select id="settings-theme" name="theme">
+		@Html.Raw($"<option value='light' {(Model.Theme == "light" ? "selected" : "")}>Light</option>")
+		@Html.Raw($"<option value='dark' {(Model.Theme == "dark" ? "selected" : "")}>Dark</option>")
+	</select>
+	<p>This is the visual theme the website will use.</p>
+</div>
+<div>
+	<label for="settings-yhl">Content Language</label>
+	<select id="settings-yhl" name="hl">
+		@foreach (KeyValuePair<string, string> o in Model.Languages)
+		{
+			@Html.Raw($"<option value='{o.Key}' {(o.Key == Model.CurrentLanguage ? "selected" : "")}>{o.Value}</option>")
+		}
+	</select>
+	<p>The language YouTube will deliver the content in. This will not affect LightTube's UI language.</p>
+</div>
+<div>
+	<label for="settings-ygl">Content Region</label>
+	<select id="settings-ygl" name="gl">
+		@foreach (KeyValuePair<string, string> o in Model.Regions)
+		{
+			@Html.Raw($"<option value='{o.Key}' {(o.Key == Model.CurrentRegion ? "selected" : "")}>{o.Value}</option>")
+		}
+	</select>
+	<p>The language YouTube will deliver the content for. It is used for the explore page and the recommendations.</p>
+</div>
+<div>
+	<label for="settings-player">Player</label>
+	<select id="settings-player" name="compatibility">
+		@Html.Raw($"<option value=\"false\" {(Model.CompatibilityMode ? "" : "selected")}>DASH playback with muxed fallback (recommended)</option>")
+		@Html.Raw($"<option value=\"true\" {(Model.CompatibilityMode ? "selected" : "")}>Muxed formats only (only supports 360p & 720p)</option>")
+	</select>
+	<p>Player behaviour. DASH playback allows for resolutions over 720p, but it is not compatible in all browsers. (e.g: Firefox Mobile)</p>
+</div>
+<div>
+	<label for="settings-api">API Access</label>
+	<select id="settings-api" name="api-access">
+		@Html.Raw($"<option value=\"true\" {(Model.ApiAccess ? "selected" : "")}>Enabled</option>")
+		@Html.Raw($"<option value=\"false\" {(Model.ApiAccess ? "" : "selected")}>Disabled</option>")
+	</select>
+	<p>This will allow apps to log in using your username and password</p>
+</div>
+<div style="display:flex;flex-direction:row">
+	<a href="/Account/Logins" class="login-button">Active Logins</a>
+	<a href="/Account/Delete" class="login-button" style="color:red">Delete Account</a>
+</div>
+</div>
+<br>
+<input type="submit" class="login-button" value="Save"/>
+</form>

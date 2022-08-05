@@ -1,0 +1,29 @@
+@model LightTube.Contexts.MessageContext
+@{
+	ViewData["Title"] = "Login";
+	Layout = "_Layout";
+}
+
+@if (!string.IsNullOrWhiteSpace(Model.Message))
+{
+	<div class="login-message">
+		@Model.Message
+	</div>
+}
+
+<div class="login-container">
+	<div>
+		<div>
+			<form asp-action="Login" method="POST" class="login-form">
+				<h1>Log in</h1>
+				<input name="userid" type="text" placeholder="UserID">
+				<input name="password" type="password" placeholder="Password">
+				<input type="submit" value="Login">
+			</form>
+		</div>
+	</div>
+	<div>
+		<h2>Don't have an account?</h2>
+		<a href="/Account/Register" class="login-button">Create an account</a>
+	</div>
+</div>

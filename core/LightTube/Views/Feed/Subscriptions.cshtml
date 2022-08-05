@@ -1,0 +1,55 @@
+﻿@using Humanizer
+@using LightTube.Database
+@using System.Web
+@model LightTube.Contexts.FeedContext
+@{
+	ViewData["Title"] = "Subscriptions";
+	ViewData["SelectedGuideItem"] = "subs";
+	
+	bool minMode = false;
+	if (Context.Request.Cookies.TryGetValue("minMode", out string minModeString))
+		bool.TryParse(minModeString, out minMode);
+}
+
+<div class="horizontal-channel-list" style="max-width: @(!Model.MobileLayout ? $"calc(100vw - {(minMode ? 80 : 312)}px);" : "")">
+	<a href="/feed/channels" class="channel">
+		<i class="bi bi-gear"></i>
+		<div class="name max-lines-2">Manage Channels</div>
+	</a>
+	<a href="/rss?token=@HttpUtility.UrlEncode(Model.RssToken)" class="channel">
+		<i class="bi bi-rss"></i>
+		<div class="name max-lines-2">RSS Feed</div>
+	</a>
+	@foreach (LTChannel channel in Model.Channels)
+	{
+		<a href="/channel/@channel.ChannelId" class="channel">
+			<img src="@channel.IconUrl" loading="lazy">
+			<div class="name max-lines-2">@channel.Name</div>
+		</a>
+	}
+</div>
+
+<div class="rich-video-grid">
+	@foreach (FeedVideo video in Model.Videos)
+	{
+		<div class="video">
+			<a href="/watch?v=@video.Id" class="thumbnail img-thumbnail">
+				<img src="@video.Thumbnail" loading="lazy">
+			</a>
+			<a href="/channel/@video.ChannelId" class="avatar">
+				<img src="@Model.Channels.First(x => x.ChannelId == video.ChannelId).IconUrl">
+			</a>
+			<div class="info">
+				<a href="/watch?v=@video.Id" class="title max-lines-2">@video.Title</a>
+				<div>
+					<a href="/channel/@video.ChannelId">@video.ChannelName</a>
+					<div>
+						<span>@video.ViewCount views</span>
+						<span>•</span>
+						<span>@video.PublishedDate.Humanize(DateTimeOffset.Now)</span>
+					</div>
+				</div>
+			</div>
+		</div>
+	}
+</div>

@@ -1,0 +1,139 @@
+﻿@using System.Web
+@using LightTube.Contexts
+@model LightTube.Contexts.BaseContext
+@{
+	bool compatibility = false;
+	if (Context.Request.Cookies.TryGetValue("compatibility", out string compatibilityString))
+		bool.TryParse(compatibilityString, out compatibility);
+	
+	bool minMode = false;
+	if (Context.Request.Cookies.TryGetValue("minMode", out string minModeString))
+		bool.TryParse(minModeString, out minMode);
+}
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8"/>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+	<meta property="og:site_name" content="lighttube" />
+	<meta property="og:type" content="website" />
+	@if (ViewBag.Metadata is not null)
+	{
+		@foreach (KeyValuePair<string, string> metaTag in ViewBag.Metadata)
+		{
+			if (metaTag.Key.StartsWith("og:"))
+			{
+				<meta property="@metaTag.Key" content="@metaTag.Value"/>
+			}
+			else
+			{
+				<meta name="@metaTag.Key" content="@metaTag.Value"/>
+			}
+		}
+	}
+	<meta property="theme-color" content="#AA0000" />
+	<title>@ViewData["Title"] - lighttube</title>
+	@if ((ViewData["HideGuide"] ?? false).Equals(true))
+	{
+		<style> .guide { display: none !important; } </style>
+	}
+	@{
+		Context.Request.Cookies.TryGetValue("theme", out string theme);
+		if (!new[] { "light", "dark" }.Contains(theme)) theme = "light";
+	}
+	<link rel="stylesheet" href="@($"~/css/colors-{theme}.css")" asp-append-version="true"/>
+	@if (Model.MobileLayout)
+	{
+		<link rel="stylesheet" href="~/css/mobile.css" asp-append-version="true"/>
+		<link rel="stylesheet" href="~/css/lt-video/player-mobile.css" asp-append-version="true"/>
+	}
+	else
+	{
+		<link rel="stylesheet" href="~/css/desktop.css" asp-append-version="true"/>
+		<link rel="stylesheet" href="~/css/lt-video/player-desktop.css" asp-append-version="true"/>
+	}
+	<link rel="stylesheet" href="~/css/bootstrap-icons/bootstrap-icons.css" asp-append-version="true"/>
+	<link rel="icon" href="~/favicon.ico">
+</head>
+<body>
+
+<div class="top-bar @(ViewData["UseFullSizeSearchBar"]?.Equals(true) ?? false ? "full-size-search" : "")">
+	<a class="logo" href="/">light<b>tube</b></a>
+	<div class="divider"></div>
+	<form action="/results">
+		<input type="text" placeholder="Search" name="search_query" value="@(Model is SearchContext ctx ? ctx.Query : Context.Request.Cookies.TryGetValue("search_query", out string s) ? s : "")">
+		<input type="submit" value="Search">
+	</form>
+	<div class="divider"></div>
+	<div class="search-button">
+		<a class="icon-link" href="/results">
+			<i class="bi bi-search"></i>
+		</a>
+	</div>
+	<div class="account" tabindex="-1">
+		<a class="icon-link" href="/Account">
+			<i class="bi bi-person-circle"></i>
+		</a>
+		<div class="account-menu">
+			@Html.Partial("_LoginLogoutPartial")
+			<div class="guide-item"><a href="/toggles/theme?redirectUrl=@(HttpUtility.UrlEncode($"{Context.Request.Path}{Context.Request.QueryString}"))">Toggle Theme</a></div>
+		</div>
+	</div>
+</div>
+
+<div class="guide @(minMode ? "minmode" : "")">
+	<div class="guide-item @(ViewData["SelectedGuideItem"] as string == "home" ? "active" : "")">
+		<a href="/">
+			<i class="icon bi bi-house-door"></i>
+			Home
+		</a>
+	</div>
+	<div class="guide-item @(ViewData["SelectedGuideItem"] as string == "explore" ? "active" : "")">
+		<a href="/feed/explore">
+			<i class="icon bi bi-compass"></i>
+			Explore
+		</a>
+	</div>
+	<div class="guide-item @(ViewData["SelectedGuideItem"] as string == "subs" ? "active" : "")">
+		<a href="/feed/subscriptions">
+			<i class="icon bi bi-inboxes"></i>
+			Subscriptions
+		</a>
+	</div>
+	<div class="guide-item @(ViewData["SelectedGuideItem"] as string == "library" ? "active" : "")">
+		<a href="/feed/library">
+			<i class="icon bi bi-list-ul"></i>
+			Library
+		</a>
+	</div>
+	<div class="hide-on-minmode guide-item">
+		<a href="/toggles/collapse_guide?redirectUrl=@(HttpUtility.UrlEncode($"{Context.Request.Path}{Context.Request.QueryString}"))">
+			<i class="icon"><i class="bi bi-arrow-left-square"></i></i>
+			Collapse Guide
+		</a>
+	</div>
+	<div class="show-on-minmode guide-item">
+		<a href="/toggles/collapse_guide?redirectUrl=@(HttpUtility.UrlEncode($"{Context.Request.Path}{Context.Request.QueryString}"))">
+			<i class="icon"><i class="bi bi-arrow-right-square"></i></i>
+			Expand
+		</a>
+	</div>
+	<hr class="hide-on-minmode">
+	<p class="hide-on-minmode">
+		<a href="https://gitlab.com/kuylar/lighttube/-/blob/master/README.md">About</a><br>
+		<a href="https://gitlab.com/kuylar/lighttube/-/blob/master/OTHERLIBS.md">How LightTube works</a><br>
+		<a href="https://gitlab.com/kuylar/lighttube">Source code</a>
+		<a href="https://gitlab.com/kuylar/lighttube/-/wikis/XML-API">API</a>
+		<a href="https://gitlab.com/kuylar/lighttube/-/blob/master/LICENSE">License</a><br>
+		<span style="font-weight: normal">Running on LightTube v@(Utils.GetVersion())</span>
+	</p>
+</div>
+
+<div class="app">
+	@RenderBody()
+</div>
+
+<script src="~/js/site.js" asp-append-version="true"></script>
+@await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

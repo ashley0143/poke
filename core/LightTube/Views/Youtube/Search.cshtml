@@ -1,0 +1,28 @@
+@using InnerTube.Models
+@model LightTube.Contexts.SearchContext
+
+@{
+	ViewBag.Title = Model.Query;
+	Layout = "_Layout";
+	ViewData["UseFullSizeSearchBar"] = Model.MobileLayout;
+}
+
+<div class="video-list">
+	@foreach (DynamicItem preview in Model.Results.Results)
+	{
+		@preview.GetHtml()
+	}
+</div>
+<div class="pagination-buttons">
+	@if (!string.IsNullOrWhiteSpace(Model.ContinuationKey))
+	{
+		<a href="/results?search_query=@Model.Query">First Page</a>
+	}
+	<div class="divider"></div>
+	<span>•</span>
+	<div class="divider"></div>
+	@if (!string.IsNullOrWhiteSpace(Model.Results.ContinuationKey))
+	{
+		<a href="/results?search_query=@Model.Query&continuation=@Model.Results.ContinuationKey">Next Page</a>
+	}
+</div>

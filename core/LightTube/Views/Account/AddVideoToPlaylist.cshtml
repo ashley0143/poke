@@ -1,0 +1,52 @@
+﻿@using System.Web
+@using LightTube.Database
+@model LightTube.Contexts.AddToPlaylistContext
+
+@{
+	ViewBag.Metadata = new Dictionary<string, string>();
+	ViewBag.Metadata["author"] = Model.Video.Channel.Name;
+	ViewBag.Metadata["og:title"] = Model.Video.Title;
+	ViewBag.Metadata["og:url"] = $"{Url.ActionContext.HttpContext.Request.Scheme}://{Url.ActionContext.HttpContext.Request.Host}{Url.ActionContext.HttpContext.Request.Path}{Url.ActionContext.HttpContext.Request.QueryString}";
+	ViewBag.Metadata["og:image"] = $"{Url.ActionContext.HttpContext.Request.Scheme}://{Url.ActionContext.HttpContext.Request.Host}/proxy/image?url={HttpUtility.UrlEncode(Model.Thumbnail)}";
+	ViewBag.Metadata["twitter:card"] = $"{Url.ActionContext.HttpContext.Request.Scheme}://{Url.ActionContext.HttpContext.Request.Host}/proxy/image?url={HttpUtility.UrlEncode(Model.Thumbnail)}";
+	ViewBag.Title = Model.Video.Title;
+	Layout = "_Layout";
+}
+
+<div class="playlist-page">
+	<div class="playlist-info">
+		<div class="thumbnail" style="background-image: url('@Model.Thumbnail')">
+			<a href="/watch?v=@Model.Video.Id">Watch</a>
+		</div>
+		<p class="title">@Model.Video.Title</p>
+		<span class="info">@Model.Video.Views • @Model.Video.UploadDate</span>
+		<div class="channel-info">
+			<a href="/channel/@Model.Video.Channel.Id" class="avatar">
+				<img src="@Model.Video.Channel.Avatars.LastOrDefault()?.Url">
+			</a>
+			<div class="name">
+				<a class="name" href="/channel/@Model.Video.Channel.Id">@Model.Video.Channel.Name</a>
+			</div>
+		</div>
+	</div>
+	<div class="video-list playlist-list playlist-video-list">
+		<h3>Add to one of these playlists:</h3>
+		<a class="login-button" href="/Account/CreatePlaylist" style="margin:unset;">Create playlist</a>
+		@foreach (LTPlaylist playlist in Model.Playlists)
+		{
+			<div class="playlist-video">
+				<a href="/playlist?list=@playlist.Id&add=@Model.Id" class="thumbnail"
+				   style="background-image: url('https://i.ytimg.com/vi_webp/@playlist.VideoIds.FirstOrDefault()/maxresdefault.webp')">
+				</a>
+				<div class="info">
+					<a href="/playlist?list=@playlist.Id&add=@Model.Id" class="title max-lines-2">
+						@playlist.Name
+					</a>
+					<div>
+						<span>@playlist.VideoIds.Count videos</span>
+					</div>
+				</div>
+			</div>
+		}
+	</div>
+</div>

@@ -1,0 +1,35 @@
+﻿@using LightTube.Database
+@model LightTube.Contexts.PlaylistsContext
+
+@{
+	ViewData["Title"] = "Playlists";
+	ViewData["SelectedGuideItem"] = "library";
+	Layout = "_Layout";
+}
+
+<div class="video-list">
+	<h2>Playlists</h2>
+	@foreach (LTPlaylist playlist in Model.Playlists)
+	{
+		<div class="playlist">
+			<a href="/watch?v=@playlist.VideoIds.FirstOrDefault()&list=@playlist.Id" class="thumbnail" style="background-image: url('https://i.ytimg.com/vi_webp/@playlist.VideoIds.FirstOrDefault()/maxresdefault.webp')">
+				<div>
+					<span>@playlist.VideoIds.Count</span><span>VIDEOS</span>
+				</div>
+			</a>
+			<div class="info">
+				<a href="/watch?v=@playlist.VideoIds.FirstOrDefault()&list=@playlist.Id" class="title max-lines-2">@playlist.Name</a>
+				<div>
+					<a href="/channel/@PlaylistManager.GenerateAuthorId(playlist.Author)">@playlist.Author</a>
+					<ul>
+						<li>
+							<a href="/playlist?list=@playlist.Id">
+								<b>View Full Playlist</b>
+							</a>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+	}
+</div>

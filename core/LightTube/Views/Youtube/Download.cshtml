@@ -1,0 +1,95 @@
+﻿@using System.Web
+@using InnerTube
+@using InnerTube.Models
+@model LightTube.Contexts.PlayerContext
+
+@{
+	ViewBag.Metadata = new Dictionary<string, string>();
+	ViewBag.Metadata["author"] = Model.Video.Channel.Name;
+	ViewBag.Metadata["og:title"] = Model.Player.Title;
+	ViewBag.Metadata["og:url"] = $"{Url.ActionContext.HttpContext.Request.Scheme}://{Url.ActionContext.HttpContext.Request.Host}{Url.ActionContext.HttpContext.Request.Path}{Url.ActionContext.HttpContext.Request.QueryString}";
+	ViewBag.Metadata["og:image"] = $"{Url.ActionContext.HttpContext.Request.Scheme}://{Url.ActionContext.HttpContext.Request.Host}/proxy/image?url={HttpUtility.UrlEncode(Model.Player.Thumbnails.FirstOrDefault()?.Url?.ToString())}";
+	ViewBag.Metadata["twitter:card"] = $"{Url.ActionContext.HttpContext.Request.Scheme}://{Url.ActionContext.HttpContext.Request.Host}/proxy/image?url={HttpUtility.UrlEncode(Model.Player.Thumbnails.LastOrDefault()?.Url?.ToString())}";
+	ViewBag.Title = Model.Player.Title;
+	Layout = "_Layout";	
+}
+
+<div class="playlist-page">
+	<div class="playlist-info">
+		<div class="thumbnail" style="background-image: url('@Model.Player.Thumbnails.Last().Url')">
+			<a href="/watch?v=@Model.Player.Id">Watch</a>
+		</div>
+		<p class="title">@Model.Player.Title</p>
+		<span class="info">@Model.Video.Views • @Model.Video.UploadDate</span>
+		<div class="channel-info">
+			<a href="/channel/@Model.Player.Channel.Id" class="avatar">
+				<img src="@Model.Player.Channel.Avatars.LastOrDefault()?.Url">
+			</a>
+			<div class="name">
+				<a class="name" href="/channel/@Model.Player.Channel.Id">@Model.Player.Channel.Name</a>
+			</div>
+		</div>
+	</div>
+	<div class="video-list download-list playlist-video-list">
+		<div class="format-list">
+			<h2>Muxed formats</h2>
+			<p>These downloads have both video and audio in them</p>
+			@foreach (Format format in Model.Player.Formats)
+			{
+				<div class="download-format">
+					<div>
+						@format.FormatNote
+					</div>
+					<a href="/proxy/download/@Model.Video.Id/@format.FormatId/@(HttpUtility.UrlEncode(Model.Video.Title)).@format.GetExtension()">
+						<i class="bi bi-download"></i>
+						Download through LightTube
+					</a>
+					<a href="@format.Url">
+						<i class="bi bi-cloud-download"></i>
+						Download through YouTube
+					</a>
+				</div>
+			}
+		</div>
+		<div class="format-list">
+			<h2>Audio only formats</h2>
+			<p>These downloads have only have audio in them</p>
+			@foreach (Format format in Model.Player.AdaptiveFormats.Where(x => x.VideoCodec == "none"))
+			{
+				<div class="download-format">
+					<div>
+						@format.FormatNote (Codec: @format.AudioCodec, Sample Rate: @format.AudioSampleRate)
+					</div>
+					<a href="/proxy/download/@Model.Video.Id/@format.FormatId/@(HttpUtility.UrlEncode(Model.Video.Title)).@format.GetExtension()">
+						<i class="bi bi-download"></i>
+						Download through LightTube
+					</a>
+					<a href="@format.Url">
+						<i class="bi bi-cloud-download"></i>
+						Download through YouTube
+					</a>
+				</div>
+			}
+		</div>
+		<div class="format-list">
+			<h2>Video only formats</h2>
+			<p>These downloads have only have video in them</p>
+			@foreach (Format format in Model.Player.AdaptiveFormats.Where(x => x.AudioCodec == "none"))
+			{
+				<div class="download-format">
+					<div>
+						@format.FormatNote (Codec: @format.VideoCodec)
+					</div>
+					<a href="/proxy/download/@Model.Video.Id/@format.FormatId/@(HttpUtility.UrlEncode(Model.Video.Title)).@format.GetExtension()">
+						<i class="bi bi-download"></i>
+						Download through LightTube
+					</a>
+					<a href="@format.Url">
+						<i class="bi bi-cloud-download"></i>
+						Download through YouTube
+					</a>
+				</div>
+			}
+		</div>
+	</div>
+</div>

@@ -1,0 +1,42 @@
+@model LightTube.Contexts.MessageContext
+@{
+	ViewData["Title"] = "Register";
+	Layout = "_Layout";
+}
+
+@if (!string.IsNullOrWhiteSpace(Model.Message))
+{
+	<div class="login-message">
+		@Model.Message
+	</div>
+}
+
+<div class="login-container">
+	<div>
+		<div>
+			<form asp-action="Register" method="POST" class="login-form">
+            	<h1>Register</h1>
+            	<input name="userid" type="text" placeholder="UserID">
+            	<input name="password" type="password" placeholder="Password">
+            	<input type="submit" value="Register">
+            </form>
+		</div>
+	</div>
+	<div>
+		<div>
+			<h1>...or register with a local account</h1>
+			<h2>What is the difference?</h2>
+			<ul>
+				<li>Remote account data is saved in this lighttube instance, while local account data is stored in
+					your browser's cookies
+					<ul>
+						<li>This means that the author of this lighttube instance cannot see your account data</li>
+						<li>It also means that, if you clear your cookies a lot, your account data will also get
+							lost with the cookies</li>
+					</ul>
+				</li>
+			</ul>
+			<a href="/Account/RegisterLocal" class="login-button">Create local account</a>
+		</div>
+	</div>
+</div>

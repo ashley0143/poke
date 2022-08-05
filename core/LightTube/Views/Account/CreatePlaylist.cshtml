@@ -1,0 +1,25 @@
+﻿@model LightTube.Contexts.BaseContext
+
+@{
+	ViewBag.Title = "Create Playlist";
+	Layout = "_Layout";
+}
+
+<div class="login-container">
+	<div>
+		<div>
+			<form asp-action="CreatePlaylist" method="POST" class="playlist-form">
+				<h1>Create Playlist</h1>
+				<input name="name" type="text" placeholder="Playlist Name">
+				<input name="description" type="text" placeholder="Description">
+				<select name="visibility">
+					<option value="UNLISTED">Anyone with the link can view</option>
+					<option value="PRIVATE">Only you can view</option>
+				</select>
+				<input type="submit" value="Create">
+			</form>
+		</div>
+	</div>
+	<div>
+	</div>
+</div>

@@ -1,0 +1,46 @@
+@using LightTube.Database
+@model LightTube.Contexts.MessageContext
+@{
+	ViewData["Title"] = "Delete Account";
+	Layout = "_Layout";
+}
+
+@if (!string.IsNullOrWhiteSpace(Model.Message))
+{
+	<div class="login-message">
+		@Model.Message
+	</div>
+}
+
+<div class="login-container">
+	<div>
+		<div>
+			@if (Context.Request.Cookies.TryGetValue("account_data", out string _))
+			{
+				Context.TryGetUser(out LTUser user, "web");
+				<form asp-action="Delete" method="POST" class="login-form">
+					<h1>Delete Account</h1>
+					<p>Deleting a local account</p>
+					<input name="email" type="hidden" value="@user.UserID">
+					<input name="password" type="hidden" value="@user.PasswordHash">
+					<input type="submit" value="Delete Account" class="login-button danger">
+				</form>
+			}
+			else
+			{
+				<form asp-action="Delete" method="POST" class="login-form">
+					<h1>Delete Account</h1>
+					<input name="userid" type="text" placeholder="UserID">
+					<input name="password" type="password" placeholder="Password">
+					<input type="submit" value="Delete Account" class="login-button danger">
+				</form>
+			}
+		</div>
+	</div>
+	<div>
+		<div>
+			<h1>Warning!</h1>
+			<p>You cannot undo this operation! After you enter your username and password, your account will get deleted forever.</p>
+		</div>
+	</div>
+</div>

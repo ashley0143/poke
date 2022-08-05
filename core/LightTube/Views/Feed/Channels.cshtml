@@ -1,0 +1,26 @@
+@using LightTube.Database
+@model LightTube.Contexts.FeedContext
+
+@{
+	ViewBag.Title = "Channel list";
+}
+
+<div class="video-list">
+	@foreach (LTChannel channel in Model.Channels)
+	{
+		<div class="channel">
+			<a href="/channel/@channel.ChannelId" class="avatar">
+				<img src="@channel.IconUrl" alt="Channel Avatar">
+			</a>
+			<a href="/channel/@channel.ChannelId" class="info">
+				<span class="name max-lines-2">@channel.Name</span>
+				<div>
+					<div>
+						<span>@channel.Subscribers</span>
+					</div>
+				</div>
+			</a>
+			<button class="subscribe-button" data-cid="@channel.ChannelId">Subscribe</button>
+		</div>
+	}
+</div>

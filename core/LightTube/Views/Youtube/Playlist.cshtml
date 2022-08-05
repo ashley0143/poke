@@ -1,0 +1,85 @@
+@using InnerTube.Models
+@using System.Web
+@model LightTube.Contexts.PlaylistContext
+
+@{
+	ViewBag.Title = Model.Playlist.Title;
+	ViewBag.Metadata = new Dictionary<string, string>();
+	ViewBag.Metadata["og:title"] = Model.Playlist.Title;
+	ViewBag.Metadata["og:url"] = $"{Url.ActionContext.HttpContext.Request.Scheme}://{Url.ActionContext.HttpContext.Request.Host}{Url.ActionContext.HttpContext.Request.Path}{Url.ActionContext.HttpContext.Request.QueryString}";
+	ViewBag.Metadata["og:image"] = $"{Url.ActionContext.HttpContext.Request.Scheme}://{Url.ActionContext.HttpContext.Request.Host}/proxy/image?url={HttpUtility.UrlEncode(Model.Playlist.Thumbnail.FirstOrDefault()?.Url?.ToString())}";
+	ViewBag.Metadata["twitter:card"] = $"{Url.ActionContext.HttpContext.Request.Scheme}://{Url.ActionContext.HttpContext.Request.Host}/proxy/image?url={HttpUtility.UrlEncode(Model.Playlist.Thumbnail.LastOrDefault()?.Url?.ToString())}";
+	ViewBag.Metadata["og:description"] = Model.Playlist.Description;
+	Layout = "_Layout";
+}
+
+@if (!string.IsNullOrWhiteSpace(Model.Message))
+{
+	<div class="playlist-message" style="padding: 16px;background-color: var(--border-color); color: var(--text-primary);">
+		@Model.Message
+	</div>
+}
+<div class="playlist-page">
+	<div class="playlist-info">
+		<div class="thumbnail" style="background-image: url('@Model.Playlist.Thumbnail.LastOrDefault()?.Url')">
+			<a href="/watch?v=@Model.Playlist.Videos.FirstOrDefault()?.Id&list=@Model.Id">Play all</a>
+		</div>
+		<p class="title">@Model.Playlist.Title</p>
+		<span class="info">@Model.Playlist.VideoCount videos • @Model.Playlist.ViewCount views • @Model.Playlist.LastUpdated</span>
+		<span class="description">@Html.Raw(Model.Playlist.GetHtmlDescription())</span>
+		<a href="/playlist?list=@Model.Id&remove=true" class="login-button" style="margin:unset;">
+			<i class="bi bi-trash"></i>
+			Delete playlist
+		</a>
+		<div class="channel-info">
+			<a href="/channel/@Model.Playlist.Channel.Id" class="avatar">
+				<img src="@Model.Playlist.Channel.Avatars.LastOrDefault()?.Url">
+			</a>
+			<div class="name">
+				<a class="name" href="/channel/@Model.Playlist.Channel.Id">@Model.Playlist.Channel.Name</a>
+			</div>
+			<button class="subscribe-button" data-cid="@Model.Playlist.Channel.Id">Subscribe</button>
+		</div>
+	</div>
+	<div class="video-list playlist-video-list">
+		@foreach (PlaylistVideoItem video in Model.Playlist.Videos.Cast<PlaylistVideoItem>())
+		{
+			<div class="playlist-video">
+				<a href="/watch?v=@video.Id&list=@Model.Id" class="index">
+					@video.Index
+				</a>
+				<a href="/watch?v=@video.Id&list=@Model.Id" class="thumbnail"
+				   style="background-image: url('@video.Thumbnails.LastOrDefault()?.Url')">
+					<span class="video-length">@video.Duration</span>
+				</a>
+				<div class="info">
+					<a href="/watch?v=@video.Id&list=@Model.Id" class="title max-lines-2">
+						@video.Title
+					</a>
+					<div>
+						<a href="/channel/@video.Channel.Name">@video.Channel.Name</a>
+					</div>
+				</div>
+				@if (Model.Editable)
+				{
+					<a href="/playlist?list=@Model.Id&delete=@(video.Index - 1)" class="edit">
+						<i class="bi bi-trash"></i>
+	                </a>
+				}
+			</div>
+		}
+	</div>
+</div>
+<div class="pagination-buttons">
+	@if (!string.IsNullOrWhiteSpace(Model.ContinuationToken))
+	{
+		<a href="/playlist?list=@Model.Id">First Page</a>
+	}
+	<div class="divider"></div>
+	<span>•</span>
+	<div class="divider"></div>
+	@if (!string.IsNullOrWhiteSpace(Model.Playlist.ContinuationKey))
+	{
+		<a href="/playlist?list=@Model.Id&continuation=@Model.Playlist.ContinuationKey">Next Page</a>
+	}
+</div>

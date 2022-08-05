@@ -1,0 +1,17 @@
+@model LightTube.Contexts.ErrorContext
+@{
+	ViewData["Title"] = "Error";
+}
+
+<h1 class="text-danger">Error.</h1>
+<h2 class="text-danger">An error occurred while processing your request.</h2>
+<p>
+	You can try other alternatives to access this resource such as: 
+	<b>
+		<a href="https://invidio.us@($"{Model.Path}{Context.Request.QueryString}")">Invidious</a>
+	</b> 
+	or
+	<b>
+		<a href="https://youtube.com@($"{Model.Path}{Context.Request.QueryString}")">YouTube</a>
+	</b>
+</p>

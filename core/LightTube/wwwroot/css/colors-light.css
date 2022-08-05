@@ -1,0 +1,19 @@
+:root {
+    --text-primary: #000;
+    --text-secondary: #606060;
+    --text-link: #3ea6ff;
+
+    --app-background: #f9f9f9;
+    --context-menu-background: #f2f2f2;
+    --border-color: #c5c5c5;
+    --item-hover-background: #f2f2f2;
+    --item-active-background: #E5E5E5;;
+
+    --top-bar-background: #FFF;
+    --guide-background: #FFF;
+
+    --thumbnail-background: #CCC;
+
+    --channel-info-background: #fff;
+    --channel-contents-background: #f9f9f9;
+}

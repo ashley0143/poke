@@ -1,0 +1,18 @@
+@using LightTube.Database
+@model LightTube.Contexts.LoginsContext
+@{
+	ViewData["Title"] = "Active Logins";
+	Layout = "_Layout";
+}
+
+<h1 style="text-align:center;">Active Logins</h1>
+<div class="logins-container">
+	@foreach (LTLogin login in Model.Logins)
+	{
+		<div class="login">
+			<h2 class="max-lines-1">@(login.Identifier == Model.CurrentLogin ? "(This window) " : "")@login.GetTitle()</h2>
+			<p>@Html.Raw(login.GetDescription().Replace("\n", "<br>"))</p>
+			<a href="/Account/DisableLogin?id=@login.Identifier" class="login-button" style="color:red;">Disable</a>
+		</div>
+	}
+</div>

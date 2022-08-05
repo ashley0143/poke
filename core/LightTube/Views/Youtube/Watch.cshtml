@@ -1,0 +1,325 @@
+@using System.Text.RegularExpressions
+@using System.Web
+@using InnerTube.Models
+@model LightTube.Contexts.PlayerContext
+
+@{
+	bool compatibility = false;
+	if (Context.Request.Cookies.TryGetValue("compatibility", out string compatibilityString))
+		bool.TryParse(compatibilityString, out compatibility);
+
+	ViewBag.Metadata = new Dictionary<string, string>();
+	ViewBag.Metadata["author"] = Model.Video.Channel.Name;
+	ViewBag.Metadata["og:title"] = Model.Player.Title;
+	ViewBag.Metadata["og:url"] = $"{Url.ActionContext.HttpContext.Request.Scheme}://{Url.ActionContext.HttpContext.Request.Host}{Url.ActionContext.HttpContext.Request.Path}{Url.ActionContext.HttpContext.Request.QueryString}";
+	ViewBag.Metadata["og:image"] = $"{Url.ActionContext.HttpContext.Request.Scheme}://{Url.ActionContext.HttpContext.Request.Host}/proxy/image?url={HttpUtility.UrlEncode(Model.Player.Thumbnails.FirstOrDefault()?.Url?.ToString())}";
+	ViewBag.Metadata["twitter:card"] = $"{Url.ActionContext.HttpContext.Request.Scheme}://{Url.ActionContext.HttpContext.Request.Host}/proxy/image?url={HttpUtility.UrlEncode(Model.Player.Thumbnails.LastOrDefault()?.Url?.ToString())}";
+	ViewBag.Metadata["og:description"] = Model.Player.Description;
+	ViewBag.Title = Model.Player.Title;
+
+	Layout = "_Layout";
+	try
+	{
+		ViewBag.Metadata["og:video"] = $"/proxy/video?url={HttpUtility.UrlEncode(Model.Player.Formats.First().Url.ToString())}";
+		Model.Resolution ??= Model.Player.Formats.First().FormatNote;
+	}
+	catch
+	{
+	}
+	ViewData["HideGuide"] = true;
+
+	bool live = Model.Player.Formats.Length == 0 && Model.Player.AdaptiveFormats.Length > 0;
+	string description = Model.Video.GetHtmlDescription();
+	const string youtubePattern = @"[w.]*youtube[-nockie]*\.com";
+
+	// turn URLs into hyperlinks
+	Regex urlRegex = new(youtubePattern, RegexOptions.IgnoreCase);
+	Match m;
+	for (m = urlRegex.Match(description); m.Success; m = m.NextMatch())
+		description = description.Replace(m.Groups[0].ToString(),
+			$"{Url.ActionContext.HttpContext.Request.Host}");
+	
+	bool canPlay = true;
+}
+
+<!-- TODO: chapters -->
+<div class="watch-page">
+	<div class="primary">
+		<div class="video-player-container">
+			
+			@if (live)
+			{
+				<video class="player" poster="@Model.Player.Thumbnails.LastOrDefault()?.Url">
+				</video>
+			} 
+			else if (Model.Player.Formats.Length > 0)
+			{
+				<video class="player" controls src="/proxy/media/@Model.Player.Id/@HttpUtility.UrlEncode(Model.Player.Formats.First(x => x.FormatNote == Model.Resolution && x.FormatId != "17").FormatId)" poster="@Model.Player.Thumbnails.LastOrDefault()?.Url">
+					@foreach (Subtitle subtitle in Model.Player.Subtitles ?? Array.Empty<Subtitle>())
+					{
+						@:<track src="/proxy/caption/@Model.Player.Id/@HttpUtility.UrlEncode(subtitle.Language).Replace("+", "%20")" label="@subtitle.Language" kind="subtitles">
+					}
+				</video>
+			}
+			else
+			{
+				canPlay = false;
+				<div id="player" class="player error" style="background-image: url('@Model.Player.Thumbnails.LastOrDefault()?.Url')">
+					@if (string.IsNullOrWhiteSpace(Model.Player.ErrorMessage))
+					{
+						<span>
+							No playable streams returned from the API (@Model.Player.Formats.Length/@Model.Player.AdaptiveFormats.Length)
+						</span>
+					}
+					else
+					{
+						<span>
+							@Model.Player.ErrorMessage
+						</span>
+					}
+				</div>
+			}
+		</div>
+		@if (Model.MobileLayout)
+		{
+			<div class="video-info">
+				<div class="video-title">@Model.Video.Title</div>
+				<div class="video-info-bar">
+					<span>@Model.Video.Views</span>
+					<span>Published @Model.Video.UploadDate</span>
+					<div class="divider"></div>
+					<div class="video-info-buttons">
+						<div>
+							<i class="bi bi-hand-thumbs-up"></i><span>@Model.Engagement.Likes</span>
+						</div>
+		                <div>
+                			<i class="bi bi-hand-thumbs-down"></i><span>@Model.Engagement.Dislikes</span>
+		                </div>
+		                <a href="/download?v=@Model.Video.Id">
+                			<i class="bi bi-download"></i>
+                			Download
+		                </a>
+		                <a href="/Account/AddVideoToPlaylist?v=@Model.Video.Id">
+                			<i class="bi bi-folder-plus"></i>
+                			Save
+		                </a>
+		                <a href="https://www.youtube.com/watch?v=@Model.Video.Id">
+                			<i class="bi bi-share"></i>
+                			YouTube link
+		                </a>
+		            </div>
+				</div>
+				<div class="channel-info">
+					<a href="/channel/@Model.Video.Channel.Id" class="avatar">
+						<img src="@Model.Video.Channel.Avatars.LastOrDefault()?.Url">
+					</a>
+					<div class="name">
+						<a href="/channel/@Model.Video.Channel.Id">@Model.Video.Channel.Name</a>
+					</div>
+					<button class="subscribe-button" data-cid="@Model.Video.Channel.Id">Subscribe</button>
+				</div>
+				<p class="description">@Html.Raw(description)</p>
+			</div>
+			<hr>
+		}
+		else
+		{
+			<div class="video-info">
+				<div class="video-title">@Model.Video.Title</div>
+				<p class="video-sub-info description">
+					<span>@Model.Video.Views&nbsp; @Model.Video.UploadDate</span>&nbsp; @Html.Raw(description)
+				</p>
+				<div class="video-info-buttons">
+					<div>
+						<i class="bi bi-hand-thumbs-up"></i>
+						@Model.Engagement.Likes
+					</div>
+					<div>
+						<i class="bi bi-hand-thumbs-down"></i>
+						@Model.Engagement.Dislikes
+					</div>
+					<a href="/download?v=@Model.Player.Id">
+						<i class="bi bi-download"></i>
+						Download
+					</a>
+					<a href="/Account/AddVideoToPlaylist?v=@Model.Video.Id">
+						<i class="bi bi-folder-plus"></i>
+						Save
+					</a>
+					<a href="https://www.youtube.com/watch?v=@Model.Video.Id">
+						<i class="bi bi-share"></i>
+						YouTube link
+					</a>
+				</div>
+			</div>
+			<div class="channel-info__bordered">
+				<a href="/channel/@Model.Video.Channel.Id" class="avatar">
+					<img src="@Model.Video.Channel.Avatars.FirstOrDefault()?.Url">
+				</a>
+				<div class="name">
+					<a href="/channel/@Model.Video.Channel.Id">@Model.Video.Channel.Name</a>
+				</div>
+				<div class="subscriber-count">
+					@Model.Video.Channel.SubscriberCount
+				</div>
+				<button class="subscribe-button" data-cid="@Model.Video.Channel.Id">Subscribe</button>
+			</div>
+		}
+	</div>
+	<div class="secondary">
+		<noscript>
+			<div class="resolutions-list">
+				<h3>Change Resolution</h3>
+				<div>
+					@foreach (Format format in Model.Player.Formats.Where(x => x.FormatId != "17"))
+					{
+						@if (format.FormatNote == Model.Resolution)
+						{
+							<b>@format.FormatNote (current)</b>
+						}
+						else
+						{
+							<a href="/watch?v=@Model.Player.Id&quality=@format.FormatNote">@format.FormatNote</a>
+						}
+					}
+				</div>
+			</div>
+		</noscript>
+		<div class="recommended-list">
+
+			@if (Model.Video.Recommended.Length == 0)
+			{
+				<p style="text-align: center">None :(<br>This is most likely an age-restricted video</p>
+			}
+			@foreach (DynamicItem recommendation in Model.Video.Recommended)
+			{
+				switch (recommendation)
+				{
+					case VideoItem video:
+						<div class="video">
+							<a href="/watch?v=@video.Id" class="thumbnail" style="background-image: url('@video.Thumbnails.LastOrDefault()?.Url')">
+								<span class="video-length">@video.Duration</span>
+							</a>
+							<div class="info">
+								<a href="/watch?v=@video.Id" class="title max-lines-2">@video.Title</a>
+								<div>
+									<a href="/channel/@video.Channel.Id" class="max-lines-1">@video.Channel.Name</a>
+									<div>
+										<span>@video.Views views</span>
+										<span>•</span>
+										<span>@video.UploadedAt</span>
+									</div>
+								</div>
+							</div>
+						</div>
+						break;
+					case PlaylistItem playlist:
+						<div class="playlist">
+							<a href="/watch?v=@playlist.FirstVideoId&list=@playlist.Id" class="thumbnail" style="background-image: url('@playlist.Thumbnails.LastOrDefault()?.Url')">
+								<div>
+									<span>@playlist.VideoCount</span>
+									<span>VIDEOS</span>
+								</div>
+							</a>
+							<div class="info">
+								<a href="/watch?v=@playlist.FirstVideoId&list=@playlist.Id" class="title max-lines-2">@playlist.Title</a>
+								<div>
+									<a href="/channel/@playlist.Channel.Id">@playlist.Channel.Name</a>
+								</div>
+							</div>
+						</div>
+						break;
+					case RadioItem radio:
+						<div class="playlist">
+							<a href="/watch?v=@radio.FirstVideoId&list=@radio.Id" class="thumbnail" style="background-image: url('@radio.Thumbnails.LastOrDefault()?.Url')">
+								<div>
+									<span>MIX</span>
+								</div>
+							</a>
+							<div class="info">
+								<a href="/watch?v=@radio.FirstVideoId&list=@radio.Id" class="title max-lines-2">@radio.Title</a>
+								<div>
+									<span>@radio.Channel.Name</span>
+								</div>
+							</div>
+						</div>
+						break;
+					case ContinuationItem continuationItem:
+						break;
+					default:
+						<div class="video">
+							<div class="thumbnail" style="background-image: url('@recommendation.Thumbnails?.LastOrDefault()?.Url')"></div>
+							<div class="info">
+								<span class="title max-lines-2">@recommendation.GetType().Name</span>
+								<div>
+									<b>WARNING:</b> Unknown recommendation type: @recommendation.Id
+								</div>
+							</div>
+						</div>
+						break;
+				}
+			}
+		</div>
+	</div>
+</div>
+
+@if (canPlay)
+{
+	@if (Model.MobileLayout)
+	{
+		<script src="/js/lt-video/player-mobile.js"></script>
+	}
+	else
+	{
+		<script src="/js/lt-video/player-desktop.js"></script>
+	}
+	@if (!Model.CompatibilityMode && !live)
+	{
+		<script src="/js/shaka-player/shaka-player.compiled.min.js"></script>
+		<script>
+    let player = undefined;
+    loadPlayerWithShaka("video", {
+        "id": "@Model.Video.Id",
+        "title": "@Html.Raw(Model.Video.Title.Replace("\"", "\\\""))",
+        "embed": false,
+        "live": false,
+        "storyboard": "/proxy/image?url=@HttpUtility.UrlEncode(Model.Player.Storyboards.FirstOrDefault())"
+    }, [
+        @foreach (Format f in Model.Player.Formats.Reverse())
+        {
+            @:{"height": @f.Resolution.Split("x")[1],"label":"@f.FormatName","src": "/proxy/video?url=@HttpUtility.UrlEncode(f.Url)"},
+        }
+    ], "https://@(Context.Request.Host)/manifest/@(Model.Video.Id).mpd").then(x => player = x).catch(alert);
+</script>
+	}
+	else if (live)
+	{
+		<script src="/js/hls.js/hls.min.js"></script>
+		<script>
+    let player = undefined;
+    loadPlayerWithHls("video", {
+        "id": "@(Model.Video.Id)",
+        "title": "@Html.Raw(Model.Video.Title.Replace("\"", "\\\""))",
+        "embed": false,
+        "live": true
+    }, "https://@(Context.Request.Host)/manifest/@(Model.Video.Id).m3u8").then(x => player = x).catch(alert);
+</script>
+	}
+	else
+	{
+		<script>
+    const player = new Player("video", {
+        "id": "@Model.Video.Id",
+        "title": "@Html.Raw(Model.Video.Title.Replace("\"", "\\\""))",
+        "embed": false,
+        "live": false,
+        "storyboard": "/proxy/image?url=@HttpUtility.UrlEncode(Model.Player.Storyboards.FirstOrDefault())"
+    }, [
+        @foreach (Format f in Model.Player.Formats.Reverse())
+        {
+            @:{"height": @f.Resolution.Split("x")[1],"label":"@f.FormatName","src": "/proxy/media/@(Model.Player.Id)/@(f.FormatId)"},
+        }
+    ]);
+</script>
+	}
+}

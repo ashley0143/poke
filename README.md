@@ -16,12 +16,13 @@
 ## About 
 - This is the source code of PokeTube! (whoa) the youtube front-end that doesnt tracks you 
   - For matomos source code,see [here](https://github.com/poketube-org/poketube/tree/main/t)
+  - Distrotube review [here](https://poketube.fun/watch?v=dQw4w9WgXcQ) :)
  
 
 ## Usage 
 - To self host you'll need  [Node.js](https://nodejs.org/en/download/) 
   - which comes with [npm](http://npmjs.com) installed on your computer 
-  - for Arch Linux [AUR package](https://aur.archlinux.org/packages/nodejs-git)
+  - for Arch nyArch Linuwu [AUR package](https://aur.archlinux.org/packages/nodejs-git)
 - First clone poketube
 ```
 git clone https://github.com/poketube-org/poketube

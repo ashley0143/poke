@@ -1,4 +1,4 @@
- <!--
+  <!--
     This Source Code Form is subject to the terms of the GNU General Public License:
 
     Copyright (C) 2021-2022 POKETUBE (https://github.com/iamashley0/poketube)
@@ -189,7 +189,6 @@ margin-left: 80px;
 padding-left: 0px;
 margin-right: 30px;
 align-items: center;
-background: black;
 }
     
     nav .left {
@@ -197,17 +196,16 @@ background: black;
 justify-content: flex-start;
 align-items: center;
 border-radius: 5px;
-background: black;
  padding-left: 0px;
 margin-right: 100px;
     }
     
     nav .middle {
       display: flex;
+      background: black;
 justify-content: center;
 align-items: center;
 border-radius: 5px;
-background: black;
 margin-left: 100px;
 margin-right: 100px;
     }
@@ -243,9 +241,12 @@ margin-right: 100px;
 			<div class="video-info">
 				<div class="video-title" style="font-family:'Ginto Nord';font-weight:900;white-space:yes;"><%=video.Title%></div>
 				<p class="video-sub-info description">
-					<span><%=engagement.viewCount.toLocaleString()%> Total views - Uploaded on <%=date%> ^^</span> <%-String(video.Description).replace(/\n/g, " <br> ")%></center>
+					<span><%=engagement.viewCount.toLocaleString()%> Total views - Uploaded on <%=date%> ^^</span>
+            <br>                      <br>          
+
+            <%-String(video.Description).replace(/\n/g, " <br> ")%></center>
 				</p>
-				<div class="video-info-buttons">
+      <div class="video-info-buttons" style="border-radius: 15px;background: #333;padding: 3px;border-style: none;min-height: 34px;height: min-content;">
 					<div>
   <i class="fa-light fa-thumbs-up"></i>
      <%=engagement.likes.toLocaleString()%>

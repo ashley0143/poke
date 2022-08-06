@@ -30,7 +30,7 @@ git clone https://github.com/poketube-org/poketube
 ```
 - Run the following command inside poketube/
 ```
-npm install server 
+npm install 
 ```
 - Now run 
 ```

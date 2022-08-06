@@ -3,17 +3,40 @@
  <img src="https://user-images.githubusercontent.com/65588168/178095991-a9c4b907-831a-456c-a648-bf3d92073104.png" > </a>
  
   <img src="https://raw.githubusercontent.com/vshymanskyy/StandWithUkraine/main/badges/StandWithUkraine.svg">
-  <h1> PokeTube Source Repo - GitHub </h1> 
+
+# PokeTube Source Repo - GitHub 
   
-  this is the source code of PokeTube! (whoa) the youtube front-end that doesnt tracks you ^^
-   
- for matomos source code,see <a href="https://github.com/poketube-org/poketube/tree/main/t"> here. </a>
- 
- to self host you'll need  [Node.js](https://nodejs.org/en/download/) (which comes with [npm](http://npmjs.com)) installed on your computer. when you do,simpliy download the repo and run "node server.js" or npm start in the terminal. btw you probably need alot of ram to host this :P ( i recommend like 8 gigs free )
- 
+## Table of contents 
+- [About](#about)
+- [Usage](#usage)
+- [Why Poketube](#why-poketube)
+- [Legal](#legal)
+
+
+## About 
+- This is the source code of PokeTube! (whoa) the youtube front-end that doesnt tracks you 
+  - For matomos source code,see [here](https://github.com/poketube-org/poketube/tree/main/t)
+  - Distrotube review [here](https://poketube.fun/watch?v=dQw4w9WgXcQ) :)
  
 
-## Why PokeTube?
+## Usage 
+- To self host you'll need  [Node.js](https://nodejs.org/en/download/) 
+  - which comes with [npm](http://npmjs.com) installed on your computer 
+  - for Arch nyArch Linuwu [AUR package](https://aur.archlinux.org/packages/nodejs-git)
+- First clone poketube
+```
+git clone https://github.com/poketube-org/poketube
+```
+- Run the following command inside poketube/
+```
+npm install server 
+```
+- Now run 
+```
+node server.js
+```
+- Poketube is running on `localhost:3000` 
+## Why PokeTube
 - Lyrics for songs!
 - Beautiful UI (Dont expect much tho lol)
 - No cookies,no data collection
@@ -24,6 +47,7 @@
 - Uses LightTube api
 - <a href="https://github.com/iamashley0/poketube/tree/main/sdk">Custom sdk!</a> 
 
-## Legal Stuff
+## Legal 
 
-Privacy Policy: https://poketube.fun/privacy (TL;DR:we dont collect or share your personal info lol)
+[Privacy Policy](https://poketube.fun/privacy) 
+ - TL;DR:we dont collect or share your personal info lol

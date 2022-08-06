@@ -1,4 +1,6 @@
-  <!--
+  
+ <% if (!isMobile) { %> 
+<!--
     This Source Code Form is subject to the terms of the GNU General Public License:
 
     Copyright (C) 2021-2022 POKETUBE (https://github.com/iamashley0/poketube)
@@ -16,7 +18,6 @@
     You should have received a copy of the GNU General Public License
     along with this program. If not, see https://www.gnu.org/licenses/.
 -->
-
 <!DOCTYPE html>
 <html class="poketube_desktop">
 <head>
@@ -433,12 +434,7 @@ margin-right: 100px;
                      </div>
  
 	</div>  
-
-      <% if (optout) { %> 
-                  <!-- user_optout_piwik -->
-        
-          
- <% } %>
+ 
    
  <% if (!optout) { %> 
           <!-- MORE INFO :https://poketube.fun/privacy -->
@@ -465,4 +461,384 @@ margin-right: 100px;
 </body>
 </html>
 
-        
+  <% } %>
+
+     <% if (isMobile) { %> 
+
+     <!--
+    This Source Code Form is subject to the terms of the GNU General Public License:
+
+    Copyright (C) 2021-2022 POKETUBE (https://github.com/iamashley0/poketube)
+    
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program. If not, see https://www.gnu.org/licenses/.
+-->
+<!DOCTYPE html>
+  <% if (e === false) { %> <!-- if ?e=false,dont show up the meta tags  -->
+    
+ <% } %>
+  <% if (!e) { %>
+<meta content="<%=video.Title%>" name=title>
+<meta content="<%=color%>" name="theme-color">
+<meta content="<%=video.Channel.Name%>" name=twitter:author>
+<meta content=@youtube name=twitter:site>
+<meta content="https://poketube.fun/mobile?v=<%=video.id%>" name=twitter:url>
+<meta content="<%=video.Title%> - PokeTube" name=twitter:title>
+<meta content="mobile this video by <%=video.Channel.Name%> On PokeTube. The YouTube front-end that doesnt track you!" property=twitter:description>
+<meta content="https://i.ytimg.com/vi/<%=video.id%>/maxresdefault.jpg" property=og:image>
+<meta content=summary_large_image name=twitter:card>
+<link href="https://poketube.fun/mobile?v=<%=video.id%>" itemprop=url>
+ <% } %> <!-- close the } -->
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<link href=/css/yt-ukraine.svg?v=6 rel=icon>
+<title> <%=video.Title%> - PokeTube Mobile</title>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@500&display=swap" rel=stylesheet>
+ <link href="https://tube.kuylar.dev/css/mobile.css" rel=stylesheet>
+ <link href=/css/app.main.css rel=stylesheet>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@900&family=Sigmar+One&display=swap" rel=stylesheet>
+    <link href=https://site-assets.fontawesome.com/releases/v6.1.1/css/all.css rel=stylesheet>
+<style>
+   a.class:hover {
+    text-decoration:underline;
+    font-weight:bold
+}
+  summary{
+    color:gray;
+}
+summary:hover{
+    color:white;
+}
+</style>
+  <!-- WIGGLE WIGGLE WIGGLE -->
+  <style>
+    
+    
+    
+    body{
+         max-width: 100%;
+        overflow-x: hidden; /* Hide horizontal scrollbar */
+        color:#111111
+    }
+    
+   .animated {
+            -webkit-animation-duration: 10s; 
+            animation-duration: 10s; 
+            -webkit-animation-fill-mode: both;
+            animation-fill-mode: both; 
+            animation-iteration-count: infinite;
+            -moz-animation-iteration-count: infinite;
+            -webkit-animation-iteration-count: infinite;
+            -o-animation-iteration-count: infinite;
+         }
+         
+         @-webkit-keyframes wiggle { 
+            0% { -webkit-transform: skewX(9deg); }
+            10% { -webkit-transform: skewX(-8deg); }
+            20% { -webkit-transform: skewX(7deg); }
+            30% { -webkit-transform: skewX(-6deg); }
+            40% { -webkit-transform: skewX(5deg); } 
+            50% { -webkit-transform: skewX(-4deg); } 
+            60% { -webkit-transform: skewX(3deg); }
+            70% { -webkit-transform: skewX(-2deg); } 
+            80% { -webkit-transform: skewX(1deg); } 
+            90% { -webkit-transform: skewX(0deg); }
+            100% { -webkit-transform: skewX(0deg); } 
+         }
+         
+         @keyframes wiggle { 
+            0% { transform: skewX(9deg); } 
+            10% { transform: skewX(-8deg); } 
+            20% { transform: skewX(7deg); } 
+            30% { transform: skewX(-6deg); } 
+            40% { transform: skewX(5deg); } 
+            50% { transform: skewX(-4deg); } 
+            60% { transform: skewX(3deg); } 
+            70% { transform: skewX(-2deg); } 
+            80% { transform: skewX(1deg); } 
+            90% { transform: skewX(0deg); } 
+            100% { transform: skewX(0deg); } 
+         }
+         
+         .wiggle { 
+            -webkit-animation-name: wiggle;
+            animation-name: wiggle; 
+            -webkit-animation-timing-function: ease-in;
+            animation-timing-function: ease-in; 
+         }
+         
+         .animated.wiggle { 
+            -webkit-animation-duration: 0.75s; 
+            animation-duration: 0.75s;
+         }
+    
+    :root {
+    --text-primary: #fff;
+    --text-secondary: #fff;
+    --text-link: #3ea6ff;
+
+    --app-background: #111111;
+    --context-menu-background: #333;
+    --border-color: #444;
+    --item-hover-background: #373737;
+    --item-active-background: #383838;
+
+    --top-bar-background: #202020;
+    --guide-background: #212121;
+
+    --thumbnail-background: #252525;
+
+    --channel-info-background: #181818;
+    --channel-contents-background: #0f0f0f;
+}
+          @font-face {
+        font-family: 'Ginto Nord';
+        font-weight: 800;
+        src:url('https://cdn.statically.io/gh/brecert/discord-quote-generator/main/Ginto-Nord-800.woff') format("woff");
+      }
+
+.alert {
+  padding: 20px;
+  background-color: #f44336;
+  color: white;
+  opacity: 1;
+  transition: opacity 0.6s;
+  margin-bottom: 15px;
+}
+
+.alert.success {background-color: #04AA6D;}
+.alert.info {background-color: #2196F3;}
+.alert.warning {background-color: #ff9800;}
+
+.closebtn {
+  margin-left: 15px;
+  color: white;
+  font-weight: bold;
+  float: right;
+  font-size: 22px;
+  line-height: 20px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.closebtn:hover {
+  color: black;
+}
+    
+     
+  </style>
+  <style>body, html { margin: 0; padding: 0; } * { font-family: sans-serif; } .player { background-color: #000 !important; display: grid; grid-template-columns: 1fr min-content; grid-template-rows: max-content 1fr max-content max-content max-content; gap: 0 0; width: 100%; /* height: 100%; */ aspect-ratio: 16 / 9; } .player * { color: #fff; } .player.embed, video.embed { position: fixed; top: 0; bottom: 0; left: 0; right: 0; } .player * { -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none; } .player > video { position: relative; width: 100%; height: 100%; z-index: 0; grid-area: 1 / 1 / 6 / 3; } .player.hide-controls > .player-title, .player.hide-controls > .player-controls, .player.hide-controls > .player-playback-bar-container, .player.hide-controls > .player-menu { display: none !important; } .player-controls { background-color: #0007; display: flex; justify-content: center; align-items: center; z-index: 1; grid-area: 1 / 1 / 6 / 3; } .player-button { width: 96px; height: 96px; font-size: 90px; text-align: center; line-height: 48px; } .player-tiny-button { width: 40px; font-size: 20px; text-align: center; } .player-tiny-button > i { color: #ddd; } .player-button, .player-button * { color: #dddddd !important; text-decoration: none; } .player-button > i { min-width: 48px; } .player-button:hover, .player-button:hover * { color: #fff !important; } .player-playback-bar { transition: width linear 100ms; } .player-playback-bar-container { grid-area: 4 / 1 / 5 / 3; display: flex; column-gap: 8px; justify-content: center; align-items: center; height: 8px; transition: height linear 100ms; width: 100%; z-index: 2; margin-bottom: 10px; } .player-playback-bar-bg { background-color: #fff3 !important; width: 100%; height: 100%; z-index: 2; display: grid; grid-template-columns: 1fr; grid-template-rows: 1fr; } .player-playback-bar-bg > * { grid-area: 1 / 1 / 2 / 2; } .player-playback-bar-buffer { background-color: #fffa !important; height: 100%; width: 0; z-index: 3; } .player-playback-bar-fg { background-color: #f00 !important; height: 100%; width: 0; z-index: 4; } .player-buffering { grid-area: 1 / 1 / 6 / 3; z-index: 1; display: flex; justify-content: center; align-items: center; } .player-buffering-spinner { width: 80px; height: 80px; }></style>
+  <body>
+<div class="app" style="color:#fff;margin-top: 0;">
+    <nav>
+      <div class=left><a class="class" href="/" style=font-family:Inter,sans-serif;color:#fff> <img style="width: 6em;display: block;margin-left: auto;margin-right: auto;" src="/css/logo.svg?v=5"></a>
+      </div>
+        </nav>
+	   <div class="mobile-page">
+	<div class="primary">
+		<div class="video-player-container">
+					<video class="player" autoplay controls src="<%=url%>" poster="https://i.ytimg.com/vi/<%=video.id%>/hqdefault.jpg?v=607ddcd4">
+ 					</video>
+				</video>
+		</div>
+			<div class="video-info">
+              
+ 				<div class="video-title" style="font-family:'Inter';font-weight:900;white-space:yes;"><%=video.Title%>  
+          
+ </div>
+ 				<div class="video-info-bar" style="font-family:'Inter';">
+					<div class="divider"></div>
+         	<div class="divider"></div>
+          					<%=engagement.viewCount.toLocaleString()%> Views - Uploaded on <%=date%> :3
+					<div class="video-info-buttons" style="font-family:'Inter';font-weight:900;white-space:yes;">
+            <div>
+   <i class="fa-light fa-thumbs-up"  style="font-size:x-large" ></i>
+     <%=engagement.likes.toLocaleString()%>
+       </div>
+              <a>
+ <i class="fa-light fa-thumbs-down"  style="font-size:x-large" ></i><%=engagement.dislikes.toLocaleString()%>
+                </a>
+					<a style="color:#fff" href="/api/video/download?v=<%=video.id%>&from=mobile">   
+            <i style="font-size:x-large" class="fa-light fa-download"></i>
+            Download
+					</a>
+ 	<a style="color:#fff" href="#more"> <i style="font-size:x-large"  class="fa-thin fa-circle-plus"></i>More.. </a>
+            </div>
+				</div>
+					<div class="channel-info" name="chnl">
+				<a href="/channel?id=<%=video.Channel.id%>" class="avatar">
+					<img src=" <%= k.Video.Channel.Avatar[1].$t %>">
+				</a>
+				<div class="name" style="font-family:'Ginto Nord'">
+					<a  href="/channel?id=<%=video.Channel.id%>" >  <%=video.Channel.Name%></a>
+				</div>
+		 
+				<button class="subscribe-button" ><a style="color:#fff" href="https://www.youtube.com/channel/<%=video.Channel.id%>?view_as=subscriber?sub_confirmation=1">Suscribe</a></button>
+			</div>
+                        <div>
+                <div>
+ 
+<h3 style="color:#fff;font-family:Ginto Nord,sans-serif;font-weight:700;white-space:yes;"> Description</h3>
+                  <details open style="color=#fff"><summary style="color=#fff"></summary>
+ 
+        			<p class="description"><%-String(video.Description).replace(/\n/g, " <br> ")%> </p>
+ 
+                            </div> 
+                  
+          </details>
+ 			</div>
+ 	</div>
+	<div class="secondary">
+	 
+		<div class="recommended-list" style="color:#fff">
+                     
+                              <% if (!r) { %> 
+                                <hr style="clear: both;display: block;border: none;border-bottom: 0.5px solid #2f2f2f;margin: 0 0;/*! width: 4.5em; */height: 0;">
+                                <div>
+                         <a href="/mobile?v=<%=video.id%>">Recommended videos</a> •  <a href="/mobile?v=<%=video.id%>&f=t"> Recent videos from this channel</a>                                 </div> 
+                              <% if (!f) { %> 
+     <% k.Video.Recommendations.Video.forEach(x => { %>       
+ 						<div class="video">
+                    <% if (!optout) { %> 
+
+      <a  href="/mobile?v=<%= x.id %>" class="thumbnail" style="background-image: url('https://i.ytimg.com/vi/<%= x.id %>/hqdefault.jpg?sqp=-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLBy_x4UUHLNDZtJtH0PXeQGoRFTgw');border-radius: 9.5px;"  >								<span class="video-length"><%=x.duration %></span>
+                           <% } %>
+   <% if (optout) { %> 
+
+      <a  href="/mobile?v=<%= x.id %>&t=f" class="thumbnail" style="background-image: url('https://i.ytimg.com/vi/<%= x.id %>/hqdefault.jpg?sqp=-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLBy_x4UUHLNDZtJtH0PXeQGoRFTgw');border-radius: 9.5px;"  >								<span class="video-length"><%=x.duration %></span>
+                           <% } %>
+							</a>
+							<div class="info">
+                
+      <% if (!optout) { %> 
+								<a href="/mobile?v=<%= x.id %>" class="title max-lines-2"><%= x.Title %></a>
+                   <% } %>
+   <% if (optout) { %> 
+								<a href="/mobile?v=<%= x.id %>&t=f" class="title max-lines-2"><%= x.Title %></a>
+                   <% } %>
+								<div  style="color:#fff" >
+               <a class="max-lines-2" style="color:#fff" href="/channel?id=<%= x.Channel.id %>"><%=x.Channel.Name %></a> • <div>
+  <%= x.uploadedAt %>  </div>
+								</div>
+							</div>
+						</div>
+ 
+       <% }) %>   
+                            <% } %>
+ 
+     <% if (f) { %> 
+
+     <% tj.Channel.Contents.ItemSection.ItemSection.Video.forEach(x => { %>       
+ 						<div class="video">
+                    <% if (!optout) { %> 
+
+      <a  href="/mobile?v=<%= x.id %>" class="thumbnail" style="background-image: url('https://i.ytimg.com/vi/<%= x.id %>/hqdefault.jpg?sqp=-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLBy_x4UUHLNDZtJtH0PXeQGoRFTgw');border-radius: 9.5px;"  >								<span class="video-length"><%=x.duration %></span>
+                           <% } %>
+   <% if (optout) { %> 
+
+      <a  href="/mobile?v=<%= x.id %>&t=f" class="thumbnail" style="background-image: url('https://i.ytimg.com/vi/<%= x.id %>/hqdefault.jpg?sqp=-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLBy_x4UUHLNDZtJtH0PXeQGoRFTgw');border-radius: 9.5px;"  >								<span class="video-length"><%=x.duration %></span>
+                           <% } %>
+							</a>
+							<div class="info">
+       <% if (!optout) { %> 
+								<a href="/mobile?v=<%= x.id %>" class="title max-lines-2"><%= x.Title %></a>
+                   <% } %>
+   <% if (optout) { %> 
+								<a href="/mobile?v=<%= x.id %>&t=f" class="title max-lines-2"><%= x.Title %></a>
+                   <% } %>
+								<div>
+               <a class="max-lines-2" style="color:#fff"  href="/channel?id=<%= video.Channel.id %>"><%=video.Channel.Name %></a>
+									<div>
+ <%= x.uploadedAt %>  </div>
+								</div>
+							</div>
+						</div>
+ 
+       <% }) %>   
+                            <% } %>
+                              <a name="more"></a>
+                                      <hr style="clear: both;display: block;border: none;border-bottom: 0.5px solid #2f2f2f;margin: 0 0;/*! width: 4.5em; */height: 0;">
+                               
+<h3 style="text-align:center;color:#fff;font-family:Ginto Nord,sans-serif;font-weight:700;white-space:yes;te"> MOAR                </h3>
+                              <p style="text-align:center;color:#fff; font-weight:700;white-space:yes;margin:0">More Epic options owo~</p>
+                  <div style="font-family:Inter,sans-serif;font-weight:900;white-space:yes;" align="center">
+     <a href="https://youtube.com/watch?v=<%=video.id%>">Open On YouTube</a> •  <a href="/privacy">Privacy</a> • <a href="https://github.com/iamashley0/poketube/">Git</a> 
+                                <% if (optout) { %> 
+ <% } %>
+      <% if (!optout) { %> 
+ • <a href="/mobile?v=<%=video.id%>&t=f"> 
+ Opt out of Metrics</a> (<a href="/privacy" style="color:#fff">Wut?</a>) 
+     <% } %>
+                        <% if (lyrics && !r) { %>                      
+      <% if (optout) { %> 
+                 <br>    <br>     <a href="/mobile?v=<%=video.id%>&r=f">  Lyrics (Wow) </a> 
+  <% } %>
+         <% if (!optout) { %> 
+             <br>   <br>          <a href="/mobile?v=<%=video.id%>&r=f" >  Lyrics (Wow) </a> 
+ <% } %>
+                            <% } %> 
+                          
+            <% } %>                                     
+                    <p><i class="fa-light fa-shield"></i>The Connection is secured with ECDSA with SHA-384 Signature Algorithm :3 </p>
+                               </div>
+ 
+                                                            
+      	           <% if (lyrics) { %>
+                                                  <% if (r === "f") { %> 
+                                <hr style="clear: both;display: block;border: none;border-bottom: 0.5px solid #2f2f2f;margin: 0 0;/*! width: 4.5em; */height: 0;">
+                                                    <p>
+            <a href="/mobile?v=<%=video.id%>">See the Recommended videos instead</a> - <a href="https://github.com/iamashley0/poketube/issues">Report wrong lyrics qwq</a>
+                                                    </p>
+         <div align="center">                                <hr style="clear: both;display: block;border: none;border-bottom: 0.5px solid #2f2f2f;margin: 0 0;/*! width: 4.5em; */height: 0;">
+                                                              <h1 style="font-family:'Ginto Nord',sans-serif;font-weight:900;white-space:yes;" align="center">
+ Lyrics 
+                        </h1>  
+           <p>
+ See how our lyrics search works:<a href="https://github.com/iamashley0/poketube/blob/main/src/lyrics.js">Here</a>
+           </p>
+                        <p style="color: white;">
+                                        <p style=color:#fff>
+                                            <%-lyrics%>
+                                        </p> 
+                           
+                                          <% } %>
+ 
+                                        <% } %>         
+                                  
+ 		</div>
+ </div>
+
+ 
+ <% if (!optout) { %> 
+          <!-- MORE INFO :https://poketube.fun/privacy -->
+          <!-- MORE INFO :https://poketube.fun/privacy -->
+   
+          <!-- if you  want to change the url - please see config in server.js  -->
+   
+         <!-- START <%=t%> -->  
+  <!-- mobile only -->
+   <!-- dont use matomo.php, as its being blocked by ublock origin. -->
+        <img src="<%=t%>t/index.php?idsite=5&amp;rec=1" style="width: 0;visibility: hidden;border:0;"  alt="" >
+  <!--- mobile only -->
+   
+        <img src="<%=t%>t/rep.gif?ID=<%=btoa(Date.now())%>" style="width: 0;visibility: hidden;" id="SesionID">
+        <img src="<%=t%>t/rep.gif?video_id=<%=btoa(video.id)%>" style="width: 0;visibility: hidden;" id="videoID">
+        <img src="<%=t%>t/rep.gif?channel_ID=<%=btoa(video.Channel.id)%>" style="width: 0;visibility: hidden;" id="channel">
+        <img src="<%=t%>t/rep.gif?piwik=t" style="width: 0;visibility: hidden;" id="piwik_noip_no_personal-info_collect">
+        <!-- END <%=t%> -->  
+ <% } %>
+</div>
+ 
+</body>
+</html>
+  </body>
+  <% } %>

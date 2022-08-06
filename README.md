@@ -7,10 +7,10 @@
 # PokeTube Source Repo - GitHub 
   
 ## Table of contents 
-[About](#about)
-[Usage](#usage)
-[Why Poketube](#why-poketube)
-[Legal](#legal)
+- [About](#about)
+- [Usage](#usage)
+- [Why Poketube](#why-poketube)
+- [Legal](#legal)
 
 
 ## About 

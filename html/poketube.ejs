@@ -1,4 +1,3 @@
-
  <% if (!isMobile) { %> 
 <!--
     This Source Code Form is subject to the terms of the GNU General Public License:
@@ -515,7 +514,7 @@ margin-right: 100px;
 <link href=/css/yt-ukraine.svg?v=6 rel=icon>
 <title> <%=video.Title%> - PokeTube Mobile</title>
 <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@500&display=swap" rel=stylesheet>
- <link href="https://tube.kuylar.dev/css/watch.css" rel=stylesheet>
+ <link href="https://tube.kuylar.dev/css/mobile.css" rel=stylesheet>
  <link href=/css/app.main.css rel=stylesheet>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@900&family=Sigmar+One&display=swap" rel=stylesheet>
     <link href=https://site-assets.fontawesome.com/releases/v6.1.1/css/all.css rel=stylesheet>
@@ -655,18 +654,15 @@ summary:hover{
       <div class=left><a class="class" href="/" style=font-family:Inter,sans-serif;color:#fff> <img style="width: 6em;display: block;margin-left: auto;margin-right: auto;" src="/css/logo.svg?v=5"></a>
       </div>
         </nav>
+  
 	   <div class="mobile-page">
 	<div class="primary">
 		<div class="video-player-container">
 					<video class="player" autoplay controls src="<%=url%>" poster="https://i.ytimg.com/vi/<%=video.id%>/hqdefault.jpg?v=607ddcd4">
  					</video>
-				</video>
-		</div>
+ 		</div>
 			<div class="video-info">
-              
- 				<div class="video-title" style="font-family:'Inter';font-weight:900;white-space:yes;"><%=video.Title%>  
-          
- </div>
+        <div class="video-title" style="font-family:'Inter';font-weight:900;white-space:yes;"><%=video.Title%> </div>
  				<div class="video-info-bar" style="font-family:'Inter';">
 					<div class="divider"></div>
          	<div class="divider"></div>

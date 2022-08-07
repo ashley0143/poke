@@ -1,4 +1,4 @@
-  <!--
+ <!--
     This Source Code Form is subject to the terms of the GNU General Public License:
 
     Copyright (C) 2021-2022 POKETUBE (https://github.com/iamashley0/poketube)
@@ -154,7 +154,9 @@ summary:hover{
   cursor: pointer;
   transition: 0.3s;
 }
-
+    a{
+      border-radius:13px
+    }
 .closebtn:hover {
   color: black;
 }
@@ -197,10 +199,31 @@ summary:hover{
 			<h1 style="font-family:'Ginto Nord';font-weight:900;white-space:yes;">DOWNLOAD THE VIDEO</h1>
 			<p>You can select a format that you want!</p>
 	 
-      <div class="download-format" style="background: black;margin: 6px;border-radius: 14px;/*! text-align: center; */">					             <div> 
-            HD720
+      	 
+      <div class="download-format" style="background: black;margin: 6px;border-radius: 14px;/*! text-align: center; */">  <div style="font-family:'Ginto Nord'"> 
+            3GPP 
           </div>
-					<a style="color:#fff" href="/api/video/download?v=<%=video.id%>">
+					<a style="color:#fff;font-family:Inter" href="/api/video/download?v=<%=video.id%>&q=17">
+            <i class="fas fa-download"></i>
+						Download 
+					</a>
+				<br>
+				</div>
+      
+           <div class="download-format" style="background: black;margin: 6px;border-radius: 14px;/*! text-align: center; */">  <div style="font-family:'Ginto Nord'"> 
+            MP4 (480p)
+          </div>
+					<a style="color:#fff;font-family:Inter" href="/api/video/download?v=<%=video.id%>&q=18">
+            <i class="fas fa-download"></i>
+						Download 
+					</a>
+				<br>
+				</div>
+      
+      <div class="download-format" style="background: black;margin: 6px;border-radius: 14px;/*! text-align: center; */">					             <div style="font-family:'Ginto Nord'"> 
+            MP4 (HD720)
+          </div>
+					<a style="color:#fff;font-family:Inter" href="/api/video/download?v=<%=video.id%>">
             <i class="fas fa-download"></i>
 						Download 
 					</a>

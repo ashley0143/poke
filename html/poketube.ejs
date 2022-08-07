@@ -1,4 +1,4 @@
- 
+
  <% if (!isMobile) { %> 
 <!--
     This Source Code Form is subject to the terms of the GNU General Public License:
@@ -505,18 +505,18 @@ margin-right: 100px;
 <meta content="<%=color%>" name="theme-color">
 <meta content="<%=video.Channel.Name%>" name=twitter:author>
 <meta content=@youtube name=twitter:site>
-<meta content="https://poketube.fun/mobile?v=<%=video.id%>" name=twitter:url>
+<meta content="https://poketube.fun/watch?v=<%=video.id%>" name=twitter:url>
 <meta content="<%=video.Title%> - PokeTube" name=twitter:title>
 <meta content="mobile this video by <%=video.Channel.Name%> On PokeTube. The YouTube front-end that doesnt track you!" property=twitter:description>
 <meta content="https://i.ytimg.com/vi/<%=video.id%>/maxresdefault.jpg" property=og:image>
 <meta content=summary_large_image name=twitter:card>
-<link href="https://poketube.fun/mobile?v=<%=video.id%>" itemprop=url>
+<link href="https://poketube.fun/watch?v=<%=video.id%>" itemprop=url>
  <% } %> <!-- close the } -->
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <link href=/css/yt-ukraine.svg?v=6 rel=icon>
 <title> <%=video.Title%> - PokeTube Mobile</title>
 <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@500&display=swap" rel=stylesheet>
- <link href="https://tube.kuylar.dev/css/mobile.css" rel=stylesheet>
+ <link href="https://tube.kuylar.dev/css/watch.css" rel=stylesheet>
  <link href=/css/app.main.css rel=stylesheet>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@900&family=Sigmar+One&display=swap" rel=stylesheet>
     <link href=https://site-assets.fontawesome.com/releases/v6.1.1/css/all.css rel=stylesheet>
@@ -717,26 +717,26 @@ summary:hover{
                               <% if (!r) { %> 
                                 <hr style="clear: both;display: block;border: none;border-bottom: 0.5px solid #2f2f2f;margin: 0 0;/*! width: 4.5em; */height: 0;">
                                 <div>
-                         <a href="/mobile?v=<%=video.id%>">Recommended videos</a> •  <a href="/mobile?v=<%=video.id%>&f=t"> Recent videos from this channel</a>                                 </div> 
+                         <a href="/watch?v=<%=video.id%>">Recommended videos</a> •  <a href="/watch?v=<%=video.id%>&f=t"> Recent videos from this channel</a>                                 </div> 
                               <% if (!f) { %> 
      <% k.Video.Recommendations.Video.forEach(x => { %>       
  						<div class="video">
                     <% if (!optout) { %> 
 
-      <a  href="/mobile?v=<%= x.id %>" class="thumbnail" style="background-image: url('https://i.ytimg.com/vi/<%= x.id %>/hqdefault.jpg?sqp=-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLBy_x4UUHLNDZtJtH0PXeQGoRFTgw');border-radius: 9.5px;"  >								<span class="video-length"><%=x.duration %></span>
+      <a  href="/watch?v=<%= x.id %>" class="thumbnail" style="background-image: url('https://i.ytimg.com/vi/<%= x.id %>/hqdefault.jpg?sqp=-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLBy_x4UUHLNDZtJtH0PXeQGoRFTgw');border-radius: 9.5px;"  >								<span class="video-length"><%=x.duration %></span>
                            <% } %>
    <% if (optout) { %> 
 
-      <a  href="/mobile?v=<%= x.id %>&t=f" class="thumbnail" style="background-image: url('https://i.ytimg.com/vi/<%= x.id %>/hqdefault.jpg?sqp=-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLBy_x4UUHLNDZtJtH0PXeQGoRFTgw');border-radius: 9.5px;"  >								<span class="video-length"><%=x.duration %></span>
+      <a  href="/watch?v=<%= x.id %>&t=f" class="thumbnail" style="background-image: url('https://i.ytimg.com/vi/<%= x.id %>/hqdefault.jpg?sqp=-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLBy_x4UUHLNDZtJtH0PXeQGoRFTgw');border-radius: 9.5px;"  >								<span class="video-length"><%=x.duration %></span>
                            <% } %>
 							</a>
 							<div class="info">
                 
       <% if (!optout) { %> 
-								<a href="/mobile?v=<%= x.id %>" class="title max-lines-2"><%= x.Title %></a>
+								<a href="/watch?v=<%= x.id %>" class="title max-lines-2"><%= x.Title %></a>
                    <% } %>
    <% if (optout) { %> 
-								<a href="/mobile?v=<%= x.id %>&t=f" class="title max-lines-2"><%= x.Title %></a>
+								<a href="/watch?v=<%= x.id %>&t=f" class="title max-lines-2"><%= x.Title %></a>
                    <% } %>
 								<div  style="color:#fff" >
                <a class="max-lines-2" style="color:#fff" href="/channel?id=<%= x.Channel.id %>"><%=x.Channel.Name %></a> • <div>
@@ -754,19 +754,19 @@ summary:hover{
  						<div class="video">
                     <% if (!optout) { %> 
 
-      <a  href="/mobile?v=<%= x.id %>" class="thumbnail" style="background-image: url('https://i.ytimg.com/vi/<%= x.id %>/hqdefault.jpg?sqp=-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLBy_x4UUHLNDZtJtH0PXeQGoRFTgw');border-radius: 9.5px;"  >								<span class="video-length"><%=x.duration %></span>
+      <a  href="/watch?v=<%= x.id %>" class="thumbnail" style="background-image: url('https://i.ytimg.com/vi/<%= x.id %>/hqdefault.jpg?sqp=-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLBy_x4UUHLNDZtJtH0PXeQGoRFTgw');border-radius: 9.5px;"  >								<span class="video-length"><%=x.duration %></span>
                            <% } %>
    <% if (optout) { %> 
 
-      <a  href="/mobile?v=<%= x.id %>&t=f" class="thumbnail" style="background-image: url('https://i.ytimg.com/vi/<%= x.id %>/hqdefault.jpg?sqp=-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLBy_x4UUHLNDZtJtH0PXeQGoRFTgw');border-radius: 9.5px;"  >								<span class="video-length"><%=x.duration %></span>
+      <a  href="/watch?v=<%= x.id %>&t=f" class="thumbnail" style="background-image: url('https://i.ytimg.com/vi/<%= x.id %>/hqdefault.jpg?sqp=-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLBy_x4UUHLNDZtJtH0PXeQGoRFTgw');border-radius: 9.5px;"  >								<span class="video-length"><%=x.duration %></span>
                            <% } %>
 							</a>
 							<div class="info">
        <% if (!optout) { %> 
-								<a href="/mobile?v=<%= x.id %>" class="title max-lines-2"><%= x.Title %></a>
+								<a href="/watch?v=<%= x.id %>" class="title max-lines-2"><%= x.Title %></a>
                    <% } %>
    <% if (optout) { %> 
-								<a href="/mobile?v=<%= x.id %>&t=f" class="title max-lines-2"><%= x.Title %></a>
+								<a href="/watch?v=<%= x.id %>&t=f" class="title max-lines-2"><%= x.Title %></a>
                    <% } %>
 								<div>
                <a class="max-lines-2" style="color:#fff"  href="/channel?id=<%= video.Channel.id %>"><%=video.Channel.Name %></a>
@@ -788,15 +788,15 @@ summary:hover{
                                 <% if (optout) { %> 
  <% } %>
       <% if (!optout) { %> 
- • <a href="/mobile?v=<%=video.id%>&t=f"> 
+ • <a href="/watch?v=<%=video.id%>&t=f"> 
  Opt out of Metrics</a> (<a href="/privacy" style="color:#fff">Wut?</a>) 
      <% } %>
                         <% if (lyrics && !r) { %>                      
       <% if (optout) { %> 
-                 <br>    <br>     <a href="/mobile?v=<%=video.id%>&r=f">  Lyrics (Wow) </a> 
+                 <br>    <br>     <a href="/watch?v=<%=video.id%>&r=f">  Lyrics (Wow) </a> 
   <% } %>
          <% if (!optout) { %> 
-             <br>   <br>          <a href="/mobile?v=<%=video.id%>&r=f" >  Lyrics (Wow) </a> 
+             <br>   <br>          <a href="/watch?v=<%=video.id%>&r=f" >  Lyrics (Wow) </a> 
  <% } %>
                             <% } %> 
                           
@@ -809,7 +809,7 @@ summary:hover{
                                                   <% if (r === "f") { %> 
                                 <hr style="clear: both;display: block;border: none;border-bottom: 0.5px solid #2f2f2f;margin: 0 0;/*! width: 4.5em; */height: 0;">
                                                     <p>
-            <a href="/mobile?v=<%=video.id%>">See the Recommended videos instead</a> - <a href="https://github.com/iamashley0/poketube/issues">Report wrong lyrics qwq</a>
+            <a href="/watch?v=<%=video.id%>">See the Recommended videos instead</a> - <a href="https://github.com/iamashley0/poketube/issues">Report wrong lyrics qwq</a>
                                                     </p>
          <div align="center">                                <hr style="clear: both;display: block;border: none;border-bottom: 0.5px solid #2f2f2f;margin: 0 0;/*! width: 4.5em; */height: 0;">
                                                               <h1 style="font-family:'Ginto Nord',sans-serif;font-weight:900;white-space:yes;" align="center">

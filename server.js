@@ -330,8 +330,12 @@ app.get("/", async function (req, res) {
 app.get("/api/video/download", async function (req, res) {
   var v = req.query.v;
   var fetching = await fetcher(v);
-  const url = fetching.video.Player.Formats.Format[1].URL;
-  res.redirect(url);
+ 
+  const json = fetching.video.Player;
+
+  const url = `https://tube.kuylar.dev/proxy/download/${v}/22/${json.title}.mp4`
+  
+  res.redirect(url)
 });
 
 app.get("/api/video/downloadjson", async function (req, res) {

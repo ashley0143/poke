@@ -236,9 +236,8 @@ margin-right: 100px;
  	<div class="primary">
        
 		<div class="video-player-container">
-  <video class="player" id="<%=sha384(video.id)%>" style="border-radius: 16px;" autoplay controls src="https://tube.kuylar.dev/proxy/media/<%=video.id%>/18?e=<%=sha384(video.id)%><%=sha384(video.Title)%><%=sha384(video.Description)%><%=sha384(video.id)%><%=sha384(video.Title)%><%=sha384(video.Description)%><%=sha384(video.id)%><%=sha384(video.Title)%><%=sha384(video.Description)%><%=sha384(video.id)%><%=sha384(video.Title)%><%=sha384(video.Description)%><%=sha384(video.id)%><%=sha384(video.Title)%><%=sha384(video.Description)%><%=sha384(video.id)%><%=sha384(video.Title)%><%=sha384(video.Description)%><%=sha384(video.id)%><%=sha384(video.Title)%><%=sha384(video.Description)%><%=sha384(video.id)%><%=sha384(video.Title)%><%=sha384(video.Description)%><%=sha384(video.id)%><%=sha384(video.Title)%><%=sha384(video.Description)%><%=sha384(video.id)%><%=sha384(video.Title)%><%=sha384(video.Description)%>" poster="https://i.ytimg.com/vi/<%=video.id%>/hqdefault.jpg?v=607ddcd4">
- 					</video>
- 
+  <video class="player" id="<%=sha384(video.id)%>" style="border-radius: 16px;" autoplay controls src="<%=url%>" poster="https://i.ytimg.com/vi/<%=video.id%>/hqdefault.jpg?v=607ddcd4">
+ 					</video><img src="https://t.poketube.fun/t/rep.gif?video=<%=btoa(video.id)%>" style="border:0;width: 0;visibility: hidden;" id="video">
 		</div><br>
 			<div class="video-info">
 				<div class="video-title" style="font-family:'Ginto Nord';font-weight:900;white-space:yes;"><%=video.Title%></div>
@@ -659,7 +658,7 @@ summary:hover{
 	   <div class="mobile-page">
 	<div class="primary">
 		<div class="video-player-container">
-					<video class="player" autoplay controls src="https://tube.kuylar.dev/proxy/media/<%=video.id%>/18?e=<%=sha384(video.id)%><%=sha384(video.Title)%><%=sha384(video.Description)%><%=sha384(video.id)%><%=sha384(video.Title)%><%=sha384(video.Description)%><%=sha384(video.id)%><%=sha384(video.Title)%><%=sha384(video.Description)%><%=sha384(video.id)%><%=sha384(video.Title)%><%=sha384(video.Description)%><%=sha384(video.id)%><%=sha384(video.Title)%><%=sha384(video.Description)%><%=sha384(video.id)%><%=sha384(video.Title)%><%=sha384(video.Description)%><%=sha384(video.id)%><%=sha384(video.Title)%><%=sha384(video.Description)%><%=sha384(video.id)%><%=sha384(video.Title)%><%=sha384(video.Description)%><%=sha384(video.id)%><%=sha384(video.Title)%><%=sha384(video.Description)%><%=sha384(video.id)%><%=sha384(video.Title)%><%=sha384(video.Description)%>" poster="https://i.ytimg.com/vi/<%=video.id%>/hqdefault.jpg?v=607ddcd4">
+					<video class="player" autoplay controls src="<%=url%>" poster="https://i.ytimg.com/vi/<%=video.id%>/hqdefault.jpg?v=607ddcd4">
  					</video>
 				</video>
 		</div>

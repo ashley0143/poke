@@ -141,11 +141,12 @@ app.get("/watch", async function (req, res) {
   if (!v) res.redirect("/");
   
   // video
-  const j = fetching.video.Player.Formats.Format,
-    j_ = Array.isArray(j) ? j[j.length - 1] : j;
-  let url;
-  if (j_.URL != undefined) url = j_.URL;
+  const url = `https://tube.kuylar.dev/proxy/media/${v}/18`
+  
+  // encryption
 
+  const url_e = url + "?e="+ sha384(json.id) +  sha384(json.Title) 
+  
   // channel info
   const engagement = fetching.engagement;
   const channel = await fetch(config.tubeApi + `channel?id=${json.Channel.id}&tab=videos`);
@@ -159,7 +160,7 @@ app.get("/watch", async function (req, res) {
   
   
   renderTemplate(res, req, "poketube.ejs", {
-    url: url,
+    url: url_e,
     color: await getColors(`https://i.ytimg.com/vi/${v}/maxresdefault.jpg`).then((colors) => colors[0].hex()),
     engagement: engagement,
     video: json,

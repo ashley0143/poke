@@ -195,11 +195,11 @@ summary:hover{
       
       
 	<div class="video-list download-list playlist-video-list">
-		<div class="format-list">
-			<h1 style="font-family:'Ginto Nord';font-weight:900;white-space:yes;">DOWNLOAD THE VIDEO</h1>
-			<p>You can select a format that you want!</p>
-	 
-      	 
+    			<h1 style="font-family:'Ginto Nord';font-weight:900;white-space:yes;">DOWNLOAD THE VIDEO</h1>
+ 		<div class="format-list">
+ 
+      	 <h2>Muxed formats</h2>
+       
       <div class="download-format" style="background: black;margin: 6px;border-radius: 14px;/*! text-align: center; */">  <div style="font-family:'Ginto Nord'"> 
             3GPP 
           </div>
@@ -220,20 +220,45 @@ summary:hover{
 				<br>
 				</div>
       
-      <div class="download-format" style="background: black;margin: 6px;border-radius: 14px;/*! text-align: center; */">					             <div style="font-family:'Ginto Nord'"> 
-            MP4 (HD720)
-          </div>
+      <div class="download-format" style="background: black;margin: 6px;border-radius: 14px;/*! text-align: center; */">					             <div style="font-family:'Ginto Nord'"> MP4 (720p)
+           </div>
 					<a style="color:#fff;font-family:Inter" href="/api/video/download?v=<%=video.id%>">
             <i class="fas fa-download"></i>
 						Download 
 					</a>
 				<br>
 				</div>
-      	 <p>
+        <p style="visibility: hidden;">
              we dont see the videos that you are downloading :P 
           </p>
 		</div>
 	 
+    <div class="format-list">
+      
+			<h2>Audio only formats</h2>
+     
+        <div class="download-format" style="background: black;margin: 6px;border-radius: 14px;/*! text-align: center; */">					             <div style="font-family:'Ginto Nord'"> webm (50k) 
+           </div>
+			  	<a style="color:#fff;font-family:Inter" href="/api/video/download?v=<%=video.id%>&q=249&f=webm">
+            <i class="fas fa-download"></i>
+						Download 
+					</a>
+				<br>
+				</div>
+      
+        <div class="download-format" style="background: black;margin: 6px;border-radius: 14px;/*! text-align: center; */">					             <div style="font-family:'Ginto Nord'"> webm (160k) 
+           </div>
+			  	<a style="color:#fff;font-family:Inter" href="/api/video/download?v=<%=video.id%>&q=251&f=webm">
+            <i class="fas fa-download"></i>
+						Download 
+					</a>
+				<br>
+				</div>
+        <p style="visibility: hidden;">
+ gfhefdhgrdfhdfshfgddfsfdgdfsds gfhefdhgrdfhdfshfgddfsfdgdfsds
+
+      </p>
+ 
 	</div>
 </div>
  

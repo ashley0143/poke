@@ -314,15 +314,14 @@ margin-right: 100px;
             <p>Change the resolution of the video :3</p>
  				<div>
                <% if (!qua) { %> 
-      			<a href="/watch?v=<%=video.id%>&quality=medium">medium</a>
+       			<a href="/watch?v=<%=video.id%>&quality=medium">medium</a>
         						<b>hd720 (current)</b>
  <% } %>               
-   <% if (qua) { %> 
-
-							<b>medium (current)</b>
-							<a href="/watch?v=<%=video.id%>">hd720</a>
+   <% if (qua === "medium") { %> 
+ 							<b>medium (current)</b>
+ 							<a href="/watch?v=<%=video.id%>">hd720</a>
       <% } %>               
-
+ 
 				</div>
                 </div>
                                              <hr style="clear: both;display: block;border: none;border-bottom: 0.5px solid #2f2f2f;margin: 0 0;/*! width: 4.5em; */height: 0;">

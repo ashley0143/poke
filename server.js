@@ -148,7 +148,7 @@ app.get("/watch", async function (req, res) {
   if(q === "medium") {
       var url = `https://tube.kuylar.dev/proxy/media/${v}/18`
   }
-
+ 
   // encryption
 
   const url_e = url + "?e="+ sha384(json.id) +  sha384(json.Title) + sha384(json.Channel.id)  + sha384(json.Channel.id) + "Piwik" + sha384(config.t_url)
@@ -338,14 +338,18 @@ app.get("/", async function (req, res) {
 app.get("/api/video/download", async function (req, res) {
   var v = req.query.v;
 
+  var format = "mp4"
   var q = "22";
   if (req.query.q) q = req.query.q;
-
+  if( req.query.f) {
+    var format = "mp3"
+  }
   var fetching = await fetcher(v);
 
   const json = fetching.video.Player;
-
-  const url = `https://tube.kuylar.dev/proxy/download/${v}/${q}/${json.Title}.mp4`;
+ 
+  
+  const url = `https://tube.kuylar.dev/proxy/download/${v}/${q}/${json.Title}.${format}`;
 
   res.redirect(url)
 });

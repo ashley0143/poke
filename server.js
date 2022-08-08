@@ -125,12 +125,15 @@ app.get("/watch", async function (req, res) {
    * r = Recommended videos
    * f = Recent videos from channel
    * t = Piwik OptOut
+   * q = quality obv
    */
   var v = req.query.v;
   var e = req.query.e;
   var r = req.query.r;
   var f = req.query.f;
   var t = req.query.t;
+  var q = req.query.quality;
+
 
   const video = await fetch(config.tubeApi + `video?v=${v}`);
   var fetching = await fetcher(v);
@@ -140,9 +143,12 @@ app.get("/watch", async function (req, res) {
   const k = JSON.parse(toJson(h));
   if (!v) res.redirect("/");
   
-  // video
-  const url = `https://tube.kuylar.dev/proxy/media/${v}/22`
-  
+  //video 
+  if(!q) url = `https://tube.kuylar.dev/proxy/media/${v}/22`
+  if(q === "medium") {
+      var url = `https://tube.kuylar.dev/proxy/media/${v}/18`
+  }
+
   // encryption
 
   const url_e = url + "?e="+ sha384(json.id) +  sha384(json.Title) + sha384(json.Channel.id)  + sha384(json.Channel.id) + "Piwik" + sha384(config.t_url)
@@ -171,6 +177,7 @@ app.get("/watch", async function (req, res) {
     isMobile:req.useragent.isMobile,
     tj: tj,
     r: r,
+    qua:q,
     f: f,
     t: config.t_url,
     optout: t,

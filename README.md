@@ -1,7 +1,7 @@
  
   
   <a href="https://poketube.fun/watch?v=dQw4w9WgXcQ">
- <img src="https://user-images.githubusercontent.com/65588168/178095991-a9c4b907-831a-456c-a648-bf3d92073104.png" > </a>
+ <img src="https://poketube.fun/css/logo.svg" > </a>
  
   <img src="https://raw.githubusercontent.com/vshymanskyy/StandWithUkraine/main/badges/StandWithUkraine.svg">
 

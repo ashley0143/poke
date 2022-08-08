@@ -652,10 +652,9 @@ summary:hover{
   <body>
 <div class="app" style="color:#fff;margin-top: 0;">
     <nav>
-      <div class=left><a class="class" href="/" style=font-family:Inter,sans-serif;color:#fff> <img style="width: 8.5em;display: block;margin-left: auto;margin-right: auto;" src="/css/logo.svg?v=5">      </a>
+      <div class=left><a class="class" href="/" style=font-family:Inter,sans-serif;color:#fff> <img style="width: 8.5em;display: block;margin-left: auto;margin-right: auto;" src="/css/logo-mobile.svg">      </a>
       </div>
         </nav>
-  
 	   <div class="mobile-page">
 	<div class="primary">
 		<div class="video-player-container">
@@ -676,7 +675,7 @@ summary:hover{
               <a>
  <i class="fa-light fa-thumbs-down"  style="font-size:x-large" ></i><%=engagement.dislikes.toLocaleString()%>
                 </a>
-					<a style="color:#fff" href="/api/video/download?v=<%=video.id%>&from=mobile">   
+					<a style="color:#fff" href="/download?v=<%=video.id%>&from=mobile">   
             <i style="font-size:x-large" class="fa-light fa-download"></i>
             Download
 					</a>

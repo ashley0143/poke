@@ -224,15 +224,8 @@ margin-right: 100px;
             </div>
             <div class=right >
                                  <a href="/privacy"><i style="display: block;margin-left: auto;margin-right: auto;" class="fa-light fa-shield"></i></a> <a href="/video/upload?from="><i style="display: block;margin-left: auto;margin-right: auto;" class="fa-light fa-video"></i></a>
-                             <% if (!qua) { %> 
-
-              <a href="#resolution"><i style="display: block;margin-left: auto;margin-right: auto;" class="fa-light fa-high-definition"></i></a>
-                                     <% } %>               
-          <% if (qua) { %> 
-
-              <a href="#resolution"><i style="display: block;margin-left: auto;margin-right: auto;" class="fa-light fa-standard-definition"></i></a>
-                                     <% } %>               
-     </div>
+                            
+      </div>
      
         </nav>
 	   
@@ -245,6 +238,17 @@ margin-right: 100px;
 		<div class="video-player-container">
   <video class="player" id="<%=sha384(video.id)%>" style="border-radius: 16px;" autoplay controls src="<%=url%>" poster="https://i.ytimg.com/vi/<%=video.id%>/hqdefault.jpg?v=607ddcd4">
  					</video><img src="https://t.poketube.fun/t/rep.gif?video=<%=btoa(video.id)%>" style="border:0;width: 0;visibility: hidden;" id="video">
+<div style="  display: block ruby;column-gap: 0;" align="center">
+                               <% if (!qua) { %> 
+
+                                 <i style="display: block;margin-left: auto;margin-right: auto;" class="fa-solid fa-high-definition"></i> <a href="/watch?v=<%=video.id%>&quality=medium"><i style="display: block;margin-left: auto;margin-right: auto;" class="fa-light fa-standard-definition"></i></a>
+                                                                      <% } %>               
+                               <% if (qua) { %> 
+                                 <a href="/watch?v=<%=video.id%>">  <i style="display: block;margin-left: auto;margin-right: auto;" class="fa-light fa-high-definition"></i> </a>  <i style="display: block;margin-left: auto;margin-right: auto;" class="fa-solid fa-standard-definition"></i>
+
+                                                                      <% } %>               
+
+       </div>
 		</div><br>
 			<div class="video-info">
 				<div class="video-title" style="font-family:'Ginto Nord';font-weight:900;white-space:yes;"><%=video.Title%></div>
@@ -299,6 +303,7 @@ margin-right: 100px;
                     	<div class="video-title" style="font-family:'Ginto Nord';font-weight:900;white-space:yes;">Encryption Information!</div><br> 
  <i class="fas fa-shield-alt"></i> The Connection is secured with ECDSA with SHA-384 Signature Algorithm :3 (  <a href="https://en.wikipedia.org/wiki/Encryption">WHAT THE HELL IS ENCRYPTION ?! (ME DUM)</a> ) <br><br> 
 
+                
                   <div>
                      <a href="/encryption?v=<%=video.id%>">Click here for encryption info</a><br> 
                                              
@@ -307,29 +312,10 @@ margin-right: 100px;
                      </p>
                     
                              <hr style="clear: both;display: block;border: none;border-bottom: 0.5px solid #2f2f2f;margin: 0 0;/*! width: 4.5em; */height: 0;">
-                    
-         	<div class="resolutions-list" style="margin: 0;border: none;">
-            <a name="resolution"></a>
-                                  	<div class="video-title" style="font-family:'Ginto Nord';font-weight:900;white-space:yes;">Resolution</div>
-            <p>Change the resolution of the video :3</p>
- 				<div>
-               <% if (!qua) { %> 
-       			<a href="/watch?v=<%=video.id%>&quality=medium">medium</a>
-        						<b>hd720 (current)</b>
- <% } %>               
-   <% if (qua === "medium") { %> 
- 							<b>medium (current)</b>
- 							<a href="/watch?v=<%=video.id%>">hd720</a>
-      <% } %>               
- 
-				</div>
-                </div>
+       
                                              <hr style="clear: both;display: block;border: none;border-bottom: 0.5px solid #2f2f2f;margin: 0 0;/*! width: 4.5em; */height: 0;">
-
                   </div>
            
-
-
 	<div class="recommended-list" style="background-color:#1c1c1c;border-radius:25px;margin: 10px;">
     
      <div style="font-family:Inter,sans-serif;font-weight:900;white-space:yes;" align="center">

@@ -26,6 +26,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Sigmar+One&amp;display=swap" rel="stylesheet"> 
     <meta content=website property=og:type>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
  
     <meta content="PokeTube - Explore Videos" property=og:title>
     <meta content="Explore Videos On Poketube, the free youtube-front end!" property=twitter:description>
@@ -204,21 +205,26 @@ border-radius: 8px;
   <body>
 <div class="app" style="background-color: var(--channel-contents-background);">
    <nav>
-            <div class=left><a class="class" href="/143" style=font-family:Inter,sans-serif;color:#fff>  <img style="width: 8.5em;display: block;margin-left: auto;margin-right: auto;" src="/css/logo.svg?v=5">                                                                                                           <a href="/domains"><i  style="display: block;margin-left: auto;margin-right: auto;" class="fa-light fa-server"></i>  </a></div>               
-            <div class=middle>
-                <form action=/search><input class=search-bar autocomplete="on" id=fname name=query style="color:#fff;font-family:Inter,sans-serif;"> <button class="btn btn-success" type=submit><i class="fa-light fa-search"></i></button></form>
+            <div class=left>
+              <a class="class" href="/143" style=font-family:Inter,sans-serif;color:#fff>  <img style="transform: scale(1.3);width:8.5em;display: block;margin-left: auto;margin-right: auto;" src="/css/logo.svg?v=5"></a>
+            </div>               
+            <div class=right>
+              <a href="/domains"><i  style="display: block;margin-left: auto;margin-right: auto;" class="fa-light fa-server"></i>  </a>
+              <a href="/privacy"><i class="fa-light fa-shield"></i></a>
+              <a href="/video/upload?from="><i class="fa-light fa-video"></i></a> 
+              <a href="https://github.com/iamashley0/poketube/"><i class="fab fa-git-alt"></i></a>
+              <a href="https://github.com/iamashley0/poketube/issues"><i class="fa-light fa-bug"></i></a>
             </div>
-            <div class=right><a href="/privacy"><i class="fa-light fa-shield"></i></a><a href="/video/upload?from="><i class="fa-light fa-video"></i></a> <a href="https://github.com/iamashley0/poketube/"><i class="fab fa-git-alt"></i></a><a href="https://github.com/iamashley0/poketube/issues"><i class="fa-light fa-bug"></i></a></a></div>
      
       </nav><br>
- <div class="channel-page" style="background-color: var(--channel-contents-background);">
-    
-<a href="#shorts" style="border-radius: 10px;background: #222121;padding: 10px;font-family: Ginto Nord;margin: 4px;">See trending shorts owo~</a>
-   
-   
+      <div class=search>
+        <form action=/search><input class=search-bar autocomplete="on" id=fname name=query style="color:#fff;font-family:Inter,sans-serif;"> <button class="btn btn-success" type=submit><i class="fa-light fa-search"></i></button></form>
+      </div>
+      <div style="padding-top: 1em;">
+        <a href="#shorts" style="border-radius: 10px;background: #222121;padding: 10px;font-family: Ginto Nord;margin: 4px;">See trending shorts owo~</a>
+      </div>
+ <div class="channel-page" style="background-color: var(--channel-contents-background);">   
    <img src="https://t.poketube.fun/t/rep.gif" style="width: 0;visibility: hidden;" id="discover_main">
-   
-   
     	<div class="video-grid">
    <% k.Explore.Videos.ItemSection[3].Shelf.Items.Video.forEach(x =>  { %>
 			<a href="/watch?v=<%- x.id %>" class="video">

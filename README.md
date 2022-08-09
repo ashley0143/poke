@@ -9,6 +9,7 @@
   
 ## Table of contents 
 - [About](#about)
+- [Coding Standards](#coding-standards)
 - [Usage](#usage)
 - [Why Poketube](#why-poketube)
 - [Legal Stuff](#legal-stuff)
@@ -18,7 +19,9 @@
 - This is the source code of PokeTube! (whoa) the youtube front-end that doesnt tracks you 
   - For matomos source code,see [here](https://github.com/poketube-org/poketube/tree/main/t)
   - Distrotube review [here](https://poketube.fun/watch?v=dQw4w9WgXcQ) 
- 
+
+# Coding Standards
+we use the GNU Coding Standard, see https://www.gnu.org/prep/standards
 
 ## Usage 
 - To self host you'll need  [Node.js](https://nodejs.org/en/download/) 

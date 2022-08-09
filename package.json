@@ -24,9 +24,6 @@
     "express-useragent": "^1.0.15",
     "js-sha512":"0.8.0"
   },
-  "engines": {
-    "node": "16.x"
-  },
   "repository": {
     "url": "https://github.com/ashpotter/poketube"
   },

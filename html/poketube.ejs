@@ -240,13 +240,13 @@ border-radius: 5px;
 		<div class="video-player-container">
   <video class="player" id="<%=sha384(video.id)%>" style="border-radius: 16px;" autoplay controls src="<%=url%>" poster="https://i.ytimg.com/vi/<%=video.id%>/hqdefault.jpg?v=607ddcd4">
  					</video><img src="https://t.poketube.fun/t/rep.gif?video=<%=btoa(video.id)%>" style="border:0;width: 0;visibility: hidden;" id="video">
-<div style="  display: block ruby;column-gap: 0;" align="center">
+<div style="display: flex;justify-content: center;align-items: center;flex-direction: row; column-gap: 0;" align="center">
                                <% if (!qua) { %> 
 
-                                 <i style="display: block;margin-left: auto;margin-right: auto;" class="fa-solid fa-high-definition"></i> <a href="/watch?v=<%=video.id%>&quality=medium"><i style="display: block;margin-left: auto;margin-right: auto;" class="fa-light fa-standard-definition"></i></a>
+                                 <i style="display: block;" class="fa-solid fa-high-definition"></i> <a href="/watch?v=<%=video.id%>&quality=medium"><i style="display: block;" class="fa-light fa-standard-definition"></i></a>
                                                                       <% } %>               
                                <% if (qua) { %> 
-                                 <a href="/watch?v=<%=video.id%>">  <i style="display: block;margin-left: auto;margin-right: auto;" class="fa-light fa-high-definition"></i> </a>  <i style="display: block;margin-left: auto;margin-right: auto;" class="fa-solid fa-standard-definition"></i>
+                                 <a href="/watch?v=<%=video.id%>">  <i style="display: block;" class="fa-light fa-high-definition"></i> </a>  <i style="display: block;" class="fa-solid fa-standard-definition"></i>
 
                                                                       <% } %>               
 

@@ -278,7 +278,6 @@ nav {
     display: flex;
     justify-content: space-between;
     height: 4em;
-    grid-template-columns: 20% 60% 20%
 }
 
 nav a {
@@ -307,22 +306,28 @@ nav .left a i {
 }
 
 nav .middle {
-    display:flex;
-    justify-content:center;
-    align-items:center
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 nav .middle .search-bar {
-    background:#222;
-    border:1px solid #444;
-    width:420px;
-    height:30px
+    display: flex;
+    transform: translateY(1em);
+    background: #222;
+    border: 1px solid #444;
+    width: 320px;
+    height: 30px
 }
 
 nav .middle button {
-    background:#454545;
-    color:#999;
-    padding:7px 25px
+    display: flex;
+    transform: translate(22em, -1.25em);
+    background: #454545;
+    color: #999;
+    padding: 10px 10px;
+    border: 1px;
+    border-radius: 50%;
 }
 
 nav .middle input {

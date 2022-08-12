@@ -246,6 +246,8 @@ app.get("/discover", async function (req, res) {
   const k = JSON.parse(toJson(h));
   renderTemplate(res, req, "main.ejs", {
     k: k,
+   isMobile:req.useragent.isMobile
+
   });
 });
 

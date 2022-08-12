@@ -52,6 +52,8 @@ summary:hover{
   <style>
     body{
         overflow-x: hidden; /* Hide horizontal scrollbar */
+              overflow-y: hidden; /* Hide scrollbar */
+
         color:#111111
     }
     
@@ -195,9 +197,11 @@ summary:hover{
       
       
 	<div class="video-list download-list playlist-video-list">
-    			<h1 style="font-family:'Ginto Nord';font-weight:900;white-space:yes;">DOWNLOAD THE VIDEO</h1>
- 		<div class="format-list">
- 
+    <div>
+    			<h1 style="font-family:'Ginto Nord';font-weight:900;white-space:yes;">DOWNLOAD VIDEO</h1>
+          <p>Select an pog format qwq</p>
+    </div>
+  		<div class="format-list">
       	 <h2>Muxed formats</h2>
        
       <div class="download-format" style="background: black;margin: 6px;border-radius: 14px;/*! text-align: center; */">  <div style="font-family:'Ginto Nord'"> 
@@ -235,7 +239,7 @@ summary:hover{
 	 
     <div class="format-list">
       
-			<h2>Audio only formats</h2>
+			<h2>Audio formats</h2>
      
         <div class="download-format" style="background: black;margin: 6px;border-radius: 14px;/*! text-align: center; */">					             <div style="font-family:'Ginto Nord'"> webm (50k) 
            </div>
@@ -262,7 +266,7 @@ summary:hover{
 	</div>
 </div>
  
-<img src="https://t.poketube.fun/t/rep.gif?download_video=<%=btoa(video.id)%>" style="width: 0;visibility: hidden;" id="download_page">
+ <img src="https://t.poketube.fun/t/rep.gif?download_video=<%=btoa(video.id)%>" style="width: 0;visibility: hidden;" id="download_page">
 
 </div>
  

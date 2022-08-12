@@ -25,7 +25,7 @@
 <link href=/css/app-cdn.min.css rel=stylesheet>
 <link href=/css/app.main.css rel=stylesheet>
 <link href=/css/search.main.css rel=stylesheet>
- 
+ <link href=/css/watch.main.css rel=stylesheet>
 <style>
    a.class:hover {
     text-decoration:underline;
@@ -44,22 +44,51 @@ summary:hover{
       }
  
 </style>
+  <style>
+    
+    nav {
+      background:#0f0b0b
+    }
+    
+  nav .right {
+ display: flex;
+border-radius: 5px;
+justify-content: normal;
+padding-left: 0px;
+align-items: center;
+margin-left: 10px;
+}
+    
+    nav .left {
+    display: flex;
+justify-content: flex-start;
+align-items: center;
+border-radius: 5px;
+ padding-left: 0px;
+margin-right: 40px;
+    }
+    
+    nav .middle {
+      display: flex;
+ justify-content: center;
+align-items: center;
+border-radius: 5px;
+    }
+  </style>
  </head>
 
   <body>
      <center>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@900&family=Sigmar+One&display=swap" rel=stylesheet>
     <link href=https://pro.fontawesome.com/releases/v5.15.3/css/all.css rel=stylesheet>
-    <center>
-        <nav>
+         <nav>
             <div class=left><a class="class" href="/143" style=font-family:Inter,sans-serif;color:#fff> <img style="width: 8.5em;display: block;margin-left: auto;margin-right: auto;" src="/css/logo.svg?v=5">                                                                                                                <a href="/domains"><i  style="display: block;margin-left: auto;margin-right: auto;" class="fas fa-server"></i>  </a></div>               
-            <div class=middle>
-                <form action=/api/search><input value="<%=q%>" class=search-bar autocomplete="on" id=fname name=query style="color:#fff;font-family:Inter,sans-serif;"> <button class="btn btn-success" type=submit><i class="fas fa-search"></i></button></form>
+        <div class=middle>
+                <form action=/search><input class=search-bar autocomplete="on" id=fname name=query style="color:#fff;font-family:Inter,sans-serif;"> <button class="btn btn-success" type=submit><i class="fas fa-search"></i></button></form>
             </div>
             <div class=right><a href="/privacy"><i class="fas fa-shield"></i></a><a href="/video/upload?from="><i class="fas fa-video"></i></a> <a href="https://github.com/iamashley0/poketube/"><i class="fab fa-git-alt"></i></a><a href="https://github.com/iamashley0/poketube/issues"><i class="fas fa-bug"></i></a></a></div>
         </nav>
-            </center>
-           <div class="app">
+            <div class="app">
        <% j.Search.Results.Video.forEach(x => { %>
          <div class="video-list">
     <div class="video">

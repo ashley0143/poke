@@ -1,4 +1,4 @@
-  <!--
+ <!--
     This Source Code Form is subject to the terms of the GNU General Public License:
 
     Copyright (C) 2021-2022 POKETUBE (https://github.com/iamashley0/poketube)
@@ -96,8 +96,8 @@ border-radius: 5px;
      <center>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@900&family=Sigmar+One&display=swap" rel=stylesheet>
     <link href=https://pro.fontawesome.com/releases/v5.15.3/css/all.css rel=stylesheet>
-   
- <div class="app" >
+ 
+        <div class="app" >
    
     <nav>
             <div class=left>
@@ -113,28 +113,30 @@ border-radius: 5px;
       </nav><br>
   
  
+  
   <div class="discover-some-bitches">
              <div class="video-title" style="font-family:'Ginto nord';font-weight:900;white-space:yes;font-size: xxx-large;">SEARCHING VIDEOS ON POKETUBE</div>
  				<div class="video-info-bar" style="font-family:'Ginto nord';border-bottom:none;padding:0;font-size: small;">
           Wow ur searching videos?? how
    </div>
    </div>
-       
+      
         <div class=search>
-        
+
         <form action=/search>
    <input class="search-bar" autocomplete="on" id="fname" name="query" value=" <%=q%>" placeholder="search some videos lol "style="color:#fff;font-family:Inter,sans-serif;border-radius: 8px;">
-          
-        
+
+
           <button class="btn btn-success" type=submit><i class="fa-light fa-search"></i></button></form>
       </div>
-  <br>  <br>
-  <br>
-  <br>
-
-    
-    
+                       <br>             <br>
+             <br>             <br>
+             <br>            <br style="display: none;">          
+           
        </div>
+  <div class="channel-page" style="background-color: var(--channel-contents-background);">   
+
+       
        <% j.Search.Results.Video.forEach(x => { %>
          <div class="video-list">
     <div class="video">
@@ -152,7 +154,8 @@ border-radius: 5px;
         </div>
       </div>
     </div>
-    </div>
+          
+          </div>      
                 <% }) %>   
           <p>
  Congratulations, you've reached the end of the internet kekw 

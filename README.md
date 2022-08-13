@@ -29,7 +29,7 @@ we use the GNU Coding Standard, see https://www.gnu.org/prep/standards
   - for nyArch Linuwu [AUR package](https://aur.archlinux.org/packages/nodejs-git)
 - First clone poketube
 ```
-git clone https://github.com/poketube-org/poketube
+git clone https://codeberg.org/ashley/poketube.git
 ```
 - Run the following command inside poketube/
 ```

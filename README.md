@@ -5,7 +5,7 @@
  
   <img src="https://raw.githubusercontent.com/vshymanskyy/StandWithUkraine/main/badges/StandWithUkraine.svg">
 
-# PokeTube Source Repo - GitHub 
+# PokeTube Source Repo 
   
 ## Table of contents 
 - [About](#about)

@@ -17,8 +17,9 @@
 
 ## About 
 - This is the source code of PokeTube! (whoa) the youtube front-end that doesnt tracks you 
-  - For matomos source code,see [here](https://github.com/poketube-org/poketube/tree/main/t)
+  - For matomos source code,see [here](https://codeberg.org/ashley/poketube/src/branch/main/t)
   - Distrotube review [here](https://poketube.fun/watch?v=dQw4w9WgXcQ) 
+  - issues: https://codeberg.org/Ashley/poketube/issues
 
 # Coding Standards
 we use the GNU Coding Standard, see https://www.gnu.org/prep/standards

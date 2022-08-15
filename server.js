@@ -161,8 +161,7 @@ app.get("/watch", async function (req, res) {
 
   // lyrics
   const lyrics = await lyricsFinder(json.Title);
-  if (lyrics == undefined) lyrics = "Lyrics not found";
-
+ 
   
   
   renderTemplate(res, req, "poketube.ejs", {

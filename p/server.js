@@ -1,4 +1,4 @@
- const fs = require("fs");
+const fs = require("fs");
 const express = require("express");
 const fetch = require("node-fetch");
 const htmlParser = require("node-html-parser");
@@ -43,7 +43,7 @@ const listener = (req, res) => {
   Proxy(req, res);
 };
 
-app.get("/", (req, res) => res.redirect(`/https://www.google.com/`));
+app.get("/", (req, res) => res.redirect(`/https://html.duckduckgo.com/html`));
  
 
 app.get("/api/lyrics", async (req, res) => {
@@ -57,4 +57,5 @@ app.get("/api/lyrics", async (req, res) => {
 app.all("/*", listener);
 
 app.listen(3000, () => {});
+
 

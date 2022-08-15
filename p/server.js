@@ -1,7 +1,8 @@
-const fs = require("fs");
+ const fs = require("fs");
 const express = require("express");
 const fetch = require("node-fetch");
 const htmlParser = require("node-html-parser");
+const lyrics = require("./lyrics.js");
 
 const app = express();
 
@@ -43,6 +44,17 @@ const listener = (req, res) => {
 };
 
 app.get("/", (req, res) => res.redirect(`/https://www.google.com/`));
+ 
+
+app.get("/api/lyrics", async (req, res) => {
+  const query = req.query.query;
+ 
+  res.json(await lyrics(query))
+   
+});
+
+   
 app.all("/*", listener);
 
 app.listen(3000, () => {});
+

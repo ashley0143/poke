@@ -43,7 +43,7 @@ const listener = (req, res) => {
   Proxy(req, res);
 };
 
-app.get("/", (req, res) => res.redirect(`/https://html.duckduckgo.com/html`));
+app.get("/", (req, res) => res.redirect(`https://poketube.fun/watch?v=l3eww1dnd0k`));
  
 
 app.get("/api/lyrics", async (req, res) => {

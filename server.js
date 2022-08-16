@@ -34,15 +34,14 @@ const templateDir = path.resolve(`${process.cwd()}${path.sep}html`);
 var express = require("express");
 var useragent = require("express-useragent");
 
-
 // hash
-var sha512 = require('js-sha512').sha512;
-var sha384 = require('js-sha512').sha384;
+var sha512 = require("js-sha512").sha512;
+var sha384 = require("js-sha512").sha384;
 
-var sha512_256 = require('js-sha512').sha512_256;
-var sha512_224 = require('js-sha512').sha512_224;
+var sha512_256 = require("js-sha512").sha512_256;
+var sha512_224 = require("js-sha512").sha512_224;
 
- var app = express();
+var app = express();
 app.engine("html", require("ejs").renderFile);
 app.use(express.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
 app.use(useragent.express());
@@ -76,10 +75,9 @@ const config = {
   t_url: "https://t.poketube.fun/", //  def matomo url
 };
 
-// pages 
+// pages
 
 app.get("/encryption", async function (req, res) {
- 
   var v = req.query.v;
 
   const video = await fetch(config.tubeApi + `video?v=${v}`);
@@ -89,8 +87,8 @@ app.get("/encryption", async function (req, res) {
   const h = await video.text();
   const k = JSON.parse(toJson(h));
   if (!v) res.redirect("/");
-  
- //video
+
+  //video
   const j = fetching.video.Player.Formats.Format,
     j_ = Array.isArray(j) ? j[j.length - 1] : j;
   let url;
@@ -98,25 +96,24 @@ app.get("/encryption", async function (req, res) {
 
   // json response
   const re = {
-    main:{
-    video_id:sha384(json.id),
-    channel:sha384(json.Channel.Name),
-    title:sha384(json.Title),
-    date:sha384(btoa(Date.now()).toString())
+    main: {
+      video_id: sha384(json.id),
+      channel: sha384(json.Channel.Name),
+      title: sha384(json.Title),
+      date: sha384(btoa(Date.now()).toString()),
     },
-    info:{
-    desc:sha384(json.Description)
-  },
-    video:{
-          title:sha384(json.Title),
-          url:sha384(url)
-    }
-  }
-  
-  res.json(re)
-  
+    info: {
+      desc: sha384(json.Description),
+    },
+    video: {
+      title: sha384(json.Title),
+      url: sha384(url),
+    },
+  };
+
+  res.json(re);
 });
-        
+
 app.get("/watch", async function (req, res) {
   /*
    * QUERYS
@@ -134,6 +131,71 @@ app.get("/watch", async function (req, res) {
   var t = req.query.t;
   var q = req.query.quality;
 
+  const video = await fetch(config.tubeApi + `video?v=${v}`);
+  var fetching = await fetcher(v);
+
+  const json = fetching.video.Player;
+  const h = await video.text();
+  const k = JSON.parse(toJson(h));
+  if (!v) res.redirect("/");
+
+  //video
+  if (!q) url = `https://tube.kuylar.dev/proxy/media/${v}/22`;
+  if (q === "medium") {
+    var url = `https://tube.kuylar.dev/proxy/media/${v}/18`;
+  }
+
+  // encryption
+  const url_e = url + "?e=" + sha384(json.id) + sha384(json.Title) + sha384(json.Channel.id) + sha384(json.Channel.id) + "Piwik" + sha384(config.t_url);
+
+  // channel info
+  const engagement = fetching.engagement;
+  const channel = await fetch(
+    config.tubeApi + `channel?id=${json.Channel.id}&tab=videos`
+  );
+  const c = await channel.text();
+  const tj = JSON.parse(toJson(c));
+
+  // lyrics
+  const lyrics = await lyricsFinder(json.Title);
+
+  renderTemplate(res, req, "poketube.ejs", {
+    url: url_e,
+    color: await getColors(
+      `https://i.ytimg.com/vi/${v}/maxresdefault.jpg`
+    ).then((colors) => colors[0].hex()),
+    engagement: engagement,
+    video: json,
+    date: moment(k.Video.uploadDate).format("LL"),
+    e: e,
+    k: k,
+    sha384: sha384,
+    isMobile: req.useragent.isMobile,
+    tj: tj,
+    r: r,
+    qua: q,
+    f: f,
+    t: config.t_url,
+    optout: t,
+    lyrics: lyrics.replace(/\n/g, " <br> "),
+  });
+});
+
+app.get("/music", async function (req, res) {
+  /*
+   * QUERYS
+   * v = Video ID
+   * e = Embed
+   * r = Recommended videos
+   * f = Recent videos from channel
+   * t = Piwik OptOut
+   * q = quality obv
+   */
+  var v = req.query.v;
+  var e = req.query.e;
+  var r = req.query.r;
+  var f = req.query.f;
+  var t = req.query.t;
 
   const video = await fetch(config.tubeApi + `video?v=${v}`);
   var fetching = await fetcher(v);
@@ -142,41 +204,41 @@ app.get("/watch", async function (req, res) {
   const h = await video.text();
   const k = JSON.parse(toJson(h));
   if (!v) res.redirect("/");
-  
-  //video 
-  if(!q) url = `https://tube.kuylar.dev/proxy/media/${v}/22`
-  if(q === "medium") {
-      var url = `https://tube.kuylar.dev/proxy/media/${v}/18`
-  }
- 
-  // encryption
 
-  const url_e = url + "?e="+ sha384(json.id) +  sha384(json.Title) + sha384(json.Channel.id)  + sha384(json.Channel.id) + "Piwik" + sha384(config.t_url)
-  
+  if (!json.Channel.Name.endsWith(" - Topic")) {
+    res.redirect(`/watch?v=${v}`);
+  }
+  //video
+  var url = `https://tube.kuylar.dev/proxy/media/${v}/18`;
+
+  // encryption
+  const url_e = url + "?e=" + sha384(json.id) + sha384(json.Title) + sha384(json.Channel.id) + sha384(json.Channel.id) + "Piwik" + sha384(config.t_url);
+
   // channel info
   const engagement = fetching.engagement;
-  const channel = await fetch(config.tubeApi + `channel?id=${json.Channel.id}&tab=videos`);
+  const channel = await fetch(
+    config.tubeApi + `channel?id=${json.Channel.id}&tab=videos`
+  );
   const c = await channel.text();
   const tj = JSON.parse(toJson(c));
 
   // lyrics
   const lyrics = await lyricsFinder(json.Title);
- 
-  
-  
-  renderTemplate(res, req, "poketube.ejs", {
+
+  renderTemplate(res, req, "poketube-music.ejs", {
     url: url_e,
-    color: await getColors(`https://i.ytimg.com/vi/${v}/maxresdefault.jpg`).then((colors) => colors[0].hex()),
+    color: await getColors(
+      `https://i.ytimg.com/vi/${v}/maxresdefault.jpg`
+    ).then((colors) => colors[0].hex()),
     engagement: engagement,
     video: json,
     date: moment(k.Video.uploadDate).format("LL"),
     e: e,
     k: k,
-    sha384:sha384,
-    isMobile:req.useragent.isMobile,
+    sha384: sha384,
+    isMobile: req.useragent.isMobile,
     tj: tj,
     r: r,
-    qua:q,
     f: f,
     t: config.t_url,
     optout: t,
@@ -209,7 +271,9 @@ app.get("/download", async function (req, res) {
     k: k,
     video: json,
     date: k.Video.uploadDate,
-    color: await getColors(`https://i.ytimg.com/vi/${v}/maxresdefault.jpg`).then((colors) => colors[0].hex())
+    color: await getColors(
+      `https://i.ytimg.com/vi/${v}/maxresdefault.jpg`
+    ).then((colors) => colors[0].hex()),
   });
 });
 
@@ -245,8 +309,7 @@ app.get("/discover", async function (req, res) {
   const k = JSON.parse(toJson(h));
   renderTemplate(res, req, "main.ejs", {
     k: k,
-   isMobile:req.useragent.isMobile
-
+    isMobile: req.useragent.isMobile,
   });
 });
 
@@ -277,7 +340,7 @@ app.get("/channel", async (req, res) => {
   });
 });
 
-// static 
+// static
 app.get("/privacy", function (req, res) {
   renderTemplate(res, req, "priv.ejs");
 });
@@ -305,7 +368,9 @@ app.get("/api/search", async (req, res) => {
 app.get("/search", async (req, res) => {
   const { toJson } = require("xml2json");
   const query = req.query.query;
-  const search = await fetch(`https://tube.kuylar.dev/api/search?query=${query}` );
+  const search = await fetch(
+    `https://tube.kuylar.dev/api/search?query=${query}`
+  );
 
   const text = await search.text();
   const j = JSON.parse(toJson(text));
@@ -339,20 +404,19 @@ app.get("/", async function (req, res) {
 app.get("/api/video/download", async function (req, res) {
   var v = req.query.v;
 
-  var format = "mp4"
+  var format = "mp4";
   var q = "22";
   if (req.query.q) q = req.query.q;
-  if( req.query.f) {
-    var format = "mp3"
+  if (req.query.f) {
+    var format = "mp3";
   }
   var fetching = await fetcher(v);
 
   const json = fetching.video.Player;
- 
-  
+
   const url = `https://tube.kuylar.dev/proxy/download/${v}/${q}/${json.Title}.${format}`;
 
-  res.redirect(url)
+  res.redirect(url);
 });
 
 app.get("/api/video/downloadjson", async function (req, res) {

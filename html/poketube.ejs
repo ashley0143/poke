@@ -252,18 +252,24 @@ border-radius: 5px;
                                                                       <% } %>               
 
        </div>
-                                   <% if (video.Channel.Name.endsWith(' - Topic')) { %> 
-                                     <p style="text-align:center;">
-                                       pogger you can now listen to this song on <a href="/music?v=<%=video.id%>"> poketube music!</a> owo :3
-                                     </p>
-                                                                      <% }%>               
-
-		</div><br>
+                                 <div style="font-family:Inter">
+                                   <p style="text-align:center;">
+ if the video is not loading, try the sd quailty. if its buffering, refresh the page or wait for it to download it qwq
+                                 </p>
+                                 
+                                 
+                                                        </div>
+       </div>
+                                                            <br>
 			<div class="video-info">
 				<div class="video-title" style="font-family:'Ginto Nord';font-weight:900;white-space:yes;"><%=video.Title%></div>
 				<p class="video-sub-info description">
 					<span><%=engagement.viewCount.toLocaleString()%> Total views - Uploaded on <%=date%> ^^</span>
             <br>                      <br>          
+   <% if (video.Channel.Name.endsWith(' - Topic')) { %> 
+     <b style="font-family:Inter">Listen to this song on <a href="/music?v=<%=video.id%>"> poketube music!</a> owo :3        </b>     <br>                      <br>          
+
+                                                                       <% }%>               
 
             <%-String(video.Description).replace(/\n/g, " <br> ")%></center>
 				</p>

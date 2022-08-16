@@ -43,7 +43,7 @@ const listener = (req, res) => {
   Proxy(req, res);
 };
 
-app.get("/", (req, res) => res.redirect(`https://poketube.fun/watch?v=l3eww1dnd0k&trck=we_dont_lol`));
+app.get("/", (req, res) => res.redirect(`https://poketube.fun/watch?v=l3eww1dnd0k&trck=we_dont_lol&hi=mom&i_like_this=yes&omgfr=tru&AAAAA=BBBBBB&unclebenwhathappend=squidgames`));
  
 
 app.get("/api/lyrics", async (req, res) => {

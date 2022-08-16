@@ -18,33 +18,33 @@
 -->
 <!DOCTYPE html>
         
-
-  <% if (e === false) { %> <!-- if ?e=false,dont show up the meta tags  -->
-    
+ <html class="poketube_desktop">
+<head>
+    <% if (e === false) { %> <!-- if ?e=false,dont show up the meta tags  -->
  <% } %>
   <% if (!e) { %>
 <meta content="<%=video.Title%>" name=title>
 <meta content="<%=color%>" name="theme-color">
-<meta content=player name=twitter:card>
 <meta content="<%=video.Channel.Name%>" name=twitter:author>
 <meta content=@youtube name=twitter:site>
 <meta content="https://poketube.fun/watch?v=<%=video.id%>" name=twitter:url>
-<meta content="<%=video.Title%>" name=twitter:title>
-<meta content="https://i.ytimg.com/vi/<%=video.id%>/maxresdefault.jpg" name=twitter:image>
-<meta content="https://www.youtube.com/embed/<%=video.id%>" name=twitter:player>
-<meta content=1280 name=twitter:player:width>
-<meta content=720 name=twitter:player:height>
+<meta content="<%=video.Title%> - PokeTube" name=twitter:title>
+<meta content="Listen to this Music by <%=video.Channel.Name%> On PokeTube Music. The YouTube Music front-end that doesnt track you!" property=twitter:description>
+<meta content="https://i.ytimg.com/vi/<%=video.id%>/maxresdefault.jpg" property=og:image>
+<meta content=summary_large_image name=twitter:card>
 <link href="https://poketube.fun/watch?v=<%=video.id%>" itemprop=url>
 <link href="http://www.youtube.com/channel/<%=video.Channel.id%>" itemprop=url>
  <% } %> <!-- close the } -->
 <link href=/css/yt-ukraine.svg?v=6 rel=icon>
-<title> <%=video.Title%> - PokeTube Music Very Beta edition</title>
-<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@500&display=swap" rel=stylesheet>
+<title> <%=video.Title%> - PokeTube Music like very beta ( no shit sherlock ) </title>
+<link href="https://p.poketube.fun/https://fonts.googleapis.com/css2?family=Roboto:wght@500&display=swap" rel=stylesheet>
 <link href=/css/app-cdn.min.css rel=stylesheet>
 <link href=/css/app.main.css rel=stylesheet>
 <link href="/css/watch.main.css?v=56" rel=stylesheet>
-       <link href="https://fonts.googleapis.com/css2?family=Inter:wght@900&family=Sigmar+One&display=swap" rel=stylesheet>
-    <link href=https://site-assets.fontawesome.com/releases/v6.1.1/css/all.css rel=stylesheet>
+<link href="https://p.poketube.fun/https://fonts.googleapis.com/css2?family=Inter:wght@900&family=Sigmar+One&display=swap" rel=stylesheet>
+<link href=https://site-assets.fontawesome.com/releases/v6.1.1/css/all.css rel=stylesheet>
+  </head>
+    
 <style>
    a.class:hover {
     text-decoration:underline;
@@ -55,12 +55,10 @@
 }
 summary:hover{
     color:white;
-}
-</style>
-  <!-- WIGGLE WIGGLE WIGGLE -->
-  <style>
-    body{
+}   
+  body{
         overflow-x: hidden; /* Hide horizontal scrollbar */
+        overflow-y: hidden; /* Hide  scrollbar */
         color:#111111
     }
     
@@ -167,167 +165,126 @@ summary:hover{
 .closebtn:hover {
   color: black;
 }
+    /* Mostly: http://ryanfait.com/sticky-footer/ */
+
+* {
+	margin: 0;
+}
+html, body {
+	height: 100%;
+}
+.page-wrap {
+  min-height: 100%;
+ 	margin-bottom: 0; 
+}
+.page-wrap:after {
+  content: "";
+  display: block;
+}
+.site-footer, .page-wrap:after {
+ 	height: auto; 
+}
+.site-footer {
+  background: black;
+}
+.downnav{
+       position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      margin: auto;
+      overflow: hidden;
+       z-index: 1;
+      background-color: #0f0f0f
+}
+.img {
+ left: 0;
+right: 0;
+text-align: center;
+height: auto !important;
+min-height: 52%;
+margin: 0;
+ display: block;
+margin-inline: auto;
+width:501px;
+border-radius:11px;
+pointer-events:none;
+    }
+  .center {
+    text-align:center;
+  }
+  .info {
+display: block;
+margin-inline: auto;
+border-radius: 11px;
+background-color: #333;
+width: fit-content;
+padding: 0.2em;
+margin-block: 9px;
+  }
   </style>
   <body>
-<div class="app">
-   <nav>
-            <div class=left><a class="class" href="/143" style=font-family:Inter,sans-serif;color:#fff> <img style="width: 6em;display: block;margin-left: auto;margin-right: auto;" src="/css/logo.svg?v=5">                                                                                                           <a href="/domains"><i  style="display: block;margin-left: auto;margin-right: auto;" class="fas fa-server"></i>  </a></div>               
-            <div class=middle>
-                <form action=/search><input class=search-bar autocomplete="on" id=fname name=query style="color:#fff;font-family:Inter,sans-serif;"> <button class="btn btn-success" type=submit><i class="fas fa-search"></i></button></form>
-            </div>
-            <div class=right><a href="/privacy"><i class="fas fa-shield"></i></a><a href="/video/upload?from="><i class="fas fa-video"></i></a> <a href="https://github.com/iamashley0/poketube/"><i class="fab fa-git-alt"></i></a><a href="https://github.com/iamashley0/poketube/issues"><i class="fas fa-bug"></i></a></a></div>
      
-        </nav>
-	   
- 
- 
- <div class="watch-page">
+     <nav>
+      <div class="left"><a class="class" href="/143" style=font-family:Inter,sans-serif;color:#fff> <img style="transform: scale(1.3);padding-left:0.9em;width: 8.5em;display: block;margin-left: auto;margin-right: auto;" src="/css/logo.svg?v=5">         </a>             </div>                                    
+      <div class="middle">
+        <form action=/search><input class=search-bar autocomplete="on" id=fname name=query style="color:#fff;font-family:Inter,sans-serif;border-radius: 8px;"> <button class="btn btn-success" type=submit><i class="fa-light fa-search"></i></button></form>
+      </div>
+      <div class="right">
+        <a href="/privacy">
+          <i style="display: block;margin-left: auto;margin-right: auto;" class="fa-light fa-shield"></i>
+        </a>
+        <a href="/video/upload?from=">
+          <i style="display: block;margin-left: auto;margin-right: auto;" class="fa-light fa-video"></i>
+        </a>
+        <a href="/download?v=<%=video.id%>">
+          <i style="display: block;margin-left: auto;margin-right: auto;" class="fa-light fa-download"></i>
+        </a>                                   
+      </div>
+    </nav>
+     <div >
+    <img class="img" src="https://p.poketube.fun/https://i.ytimg.com/vi/<%=video.id%>/hq720.jpg?sqp=-oaymwEXCNAFEJQDSFryq4qpAwkIARUAAIhCGAE=&rs=AOn4CLDIumGQI7EB2bNbXs0HA-I-D9COiQ">
+       		 </div>
+     <div class="info">
+ 	       <div>
 
- 	<div class="primary">
-       
-		<div class="video-player-container">
-      <img style="margin: auto;display: block;border-radius: 25px;" src="https://i.ytimg.com/vi/<%=video.id%>/hqdefault.jpg?v=607ddcd4"  align="middle"><br>
-					<audio style="border-radius: 16px;width: 100%" autoplay controls src="<%=url%>" poster="https://i.ytimg.com/vi/<%=video.id%>/hqdefault.jpg?v=607ddcd4">
+     				<div class="video-title center" style="font-family:'Ginto Nord';font-weight:900;white-space:yes;"><%=video.Channel.Name.replace("- Topic", " ")%> - <%=video.Title%></div>
+ 
+               </div>
+              
+                  <div class="center" >
+
+   <p><i class="fas fa-calendar-alt"></i>
+                    <%=date%>|<i class="fas fa-chart-bar"></i><%=engagement.viewCount.toLocaleString()%> Views| <i class="fas fa-thumbs-up"></i> <%=engagement.likes.toLocaleString()%> <i class="fas fa-thumbs-down"></i> <%=engagement.dislikes.toLocaleString()%> 
+                                                    <div class="center" style="color:#fff;" >
+
+                                                        <i class="fas fa-shield-alt"></i><a href="/encryption?v=<%=video.id%>"> Encryption info</a><br> 
+                                  </div>
+
+                                  </div>
+
+                                  </div>
+    <div class="downnav">
+      <audio class="player" id="<%=sha384(video.id)%>" autoplay controls src="https://v.poketube.fun/<%=url%>" poster="https://p.poketube.fun/https://i.ytimg.com/vi/<%=video.id%>/hqdefault.jpg?v=607ddcd4">
  					</audio>
-		</div><br>
-			<div class="video-info">
-				<div class="video-title" style="font-family:'Ginto Nord';font-weight:900;white-space:yes;"><%=video.Title%></div>
-				<p class="video-sub-info description">
-					<span><%=engagement.viewCount.toLocaleString()%> views - Released at <%=date%> ^^
-</span> </center>
-				</p>
-				<div class="video-info-buttons">
-					<div>
-  <i class="fas fa-thumbs-up"></i>
-     <%=engagement.likes.toLocaleString()%>
-          </div>
-					<div>
-<i class="fas fa-thumbs-down"></i>						    <%=engagement.dislikes.toLocaleString()%>
-					</div>
-          					<div>
-
-					<a style="color:#fff" href="/api/video/download?v=<%=video.id%>">
-            <i class="fas fa-download"></i>
-            Download
-					</a>
-   
-                      
-					<a style="color:#fff" href="/watch?v=<%=video.id%>">
-          <i class="fas fa-play"></i>
-            Watch in PokeTube
-					</a>
-                  					</div>
-    
- 
-				</div>
-			</div>
-          		<div class="channel-info__bordered" name="chnl">
-				<a href="/channel?id=<%=video.Channel.id%>" class="avatar">
-					<img src=" <%= k.Video.Channel.Avatar[1].$t %>">
-				</a>
-				<div class="name" style="font-family:'Ginto Nord'">
-					<a  href="/channel?id=<%=video.Channel.id%>" >  <%=video.Channel.Name%></a>
-				</div>
-				<div class="subscriber-count">
-          <%= k.Video.Channel.subscriberCount %>
- 				</div>
-				<button class="subscribe-button" ><a style="color:#fff" href="https://www.youtube.com/channel/<%=video.Channel.id%>?view_as=subscriber?sub_confirmation=1">Suscribe</a></button>
-			</div>
-	</div>
-	
-
-	<div class="recommended-list" style="background-color:#1c1c1c;border-radius:25px;margin: 10px;">
-    
- 
-    <div style="font-family:Inter,sans-serif;font-weight:900;white-space:yes;" align="center">
-  <h1 style="color:yellow;font-family:'Ginto Nord',sans-serif;">
-    BETA ALERT!
-      </h1>
-      <p>
-        this is an beta test of the PokeTube Music project! we still have way too much stuff to improve and add!
-      </p>
-                                      <hr style="clear: both;display: block;border: none;border-bottom: 0.5px solid #2f2f2f;margin: 0 0;/*! width: 4.5em; */height: 0;">
-<br>
-       <a href="https://youtube.com/music?v=<%=video.id%>">Open On YouTube</a> • <a href="/privacy">Privacy</a> • <a href="https://github.com/iamashley0/poketube/">Git</a> 
-      </div> 
-               
-      <% if (optout) { %> 
-        
- <% } %>
-     
-      <% if (!optout) { %> 
-        
-                  <div style="font-family:Inter,sans-serif;font-weight:900;white-space:yes;" align="center">
-
-<a href="/music?v=<%=video.id%>&t=f"> 
- Opt out of Stats  </a> (<a href="https://t.poketube.fun" style="color:#fff">More info</a>)
-               
-   </div>
-     <% } %>
-
-       	           <% if (!lyrics) { %>
-                                <hr style="clear: both;display: block;border: none;border-bottom: 0.5px solid #2f2f2f;margin: 0 0;/*! width: 4.5em; */height: 0;">
-                                                                               <h1 style="font-family:'Ginto Nord',sans-serif;font-weight:900;white-space:yes;" align="center">
- Lyrics 
-                        </h1>  
-           <p>
- See how our lyrics search works:<a href="https://github.com/iamashley0/poketube/blob/main/src/lyrics.js">Here</a>
-           </p>                                        <p align="center" style=color:#fff>
- Oops,No lyrics here ;-;
-                     </p> 
-                                                                      
-                                        <% } %>
-                  
- 
-
-      	           <% if (lyrics) { %>
-                                 <hr style="clear: both;display: block;border: none;border-bottom: 0.5px solid #2f2f2f;margin: 0 0;/*! width: 4.5em; */height: 0;">
-                  <div style="font-family:Inter,sans-serif;font-weight:900;white-space:yes;" align="center">
-
-          <a href="https://github.com/iamashley0/poketube/issues">Report wrong lyrics!</a>
-                     </div>
-                     
-         <div align="center">                                <hr style="clear: both;display: block;border: none;border-bottom: 0.5px solid #2f2f2f;margin: 0 0;/*! width: 4.5em; */height: 0;">
-
-                                                             <h1 style="font-family:'Ginto Nord',sans-serif;font-weight:900;white-space:yes;" align="center">
- Lyrics 
-                        </h1>  
-           <p>
- See how our lyrics search works:<a href="https://github.com/iamashley0/poketube/blob/main/src/lyrics.js">Here</a>
-           </p>
-                        <p style="color: white;">
-                                        <p style=color:#fff>
-                                            <%-lyrics%>
-                                        </p> 
- 
-                                        <% } %>                                      </details>
-
-                     </div>
- 
-	</div>  
-
-      <% if (optout) { %> 
-        
- <% } %>
- <% if (!optout) { %> 
-          <!-- MORE INFO :https://poketube.fun/privacy -->
+     </div>
+                <!-- MORE INFO :https://poketube.fun/privacy -->
           <!-- MORE INFO :https://poketube.fun/privacy -->
        
           <!-- if you want to change the url - please see config in server.js  -->
         
-        
-        
-   
          <!-- START <%=t%> -->  
+   
+        <!-- SESSION -->
         <img src="<%=t%>t/rep.gif?ID=<%=btoa(Date.now())%>" style="width: 0;visibility: hidden;" id="SesionID">
+        <img src="<%=t%>t/rep.gif?piwik=t" style="width: 0;visibility: hidden;" id="piwik_noip_no_personal-info_collect">
+   
+        <!-- VIDEO -->
         <img src="<%=t%>t/rep.gif?video_id=<%=btoa(video.id)%>" style="width: 0;visibility: hidden;" id="videoID">
         <img src="<%=t%>t/rep.gif?channel_ID=<%=btoa(video.Channel.id)%>" style="width: 0;visibility: hidden;" id="channel">
-        <img src="<%=t%>t/rep.gif?piwik=t" style="width: 0;visibility: hidden;" id="piwik_noip_no_personal-info_collect">
-        <!-- END <%=t%> -->  
+   
 
- <% } %>
-</div>
- 
-</body>
-</html>
+        <!-- END <%=t%> -->  
   </body>
+                          
+ 

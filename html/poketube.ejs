@@ -252,6 +252,12 @@ border-radius: 5px;
                                                                       <% } %>               
 
        </div>
+                                   <% if (video.Channel.Name.endsWith(' - Topic')) { %> 
+                                     <p style="text-align:center;">
+                                       pogger you can now listen to this song on <a href="/music?v=<%=video.id%>"> poketube music!</a> owo :3
+                                     </p>
+                                                                      <% }%>               
+
 		</div><br>
 			<div class="video-info">
 				<div class="video-title" style="font-family:'Ginto Nord';font-weight:900;white-space:yes;"><%=video.Title%></div>

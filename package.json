@@ -22,7 +22,8 @@
     "node-html-parser": "^5.3.3",
     "get-image-colors": "^4.0.1",
     "express-useragent": "^1.0.15",
-    "js-sha512":"0.8.0"
+    "js-sha512":"0.8.0",
+     "music-info": "^1.2.1"
   },
   "engines": {
     "node": "16.x"

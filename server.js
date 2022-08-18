@@ -180,7 +180,7 @@ app.get("/watch", async function (req, res) {
     f: f,
     t: config.t_url,
     optout: t,
-    lyrics: lyrics.replace(/\n/g, " <br> "),
+    lyrics: ""
   });
 });
 
@@ -251,7 +251,7 @@ app.get("/music", async function (req, res) {
     f: f,
     t: config.t_url,
     optout: t,
-    lyrics: lyrics.replace(/\n/g, " <br> "),
+    lyrics: ""
   });
 });
 

@@ -29,7 +29,7 @@
 <meta content=@youtube name=twitter:site>
 <meta content="https://poketube.fun/watch?v=<%=video.id%>" name=twitter:url>
 <meta content="<%=video.Title%> - PokeTube" name=twitter:title>
-<meta content="Listen to this Music by <%=video.Channel.Name%> On PokeTube Music. The YouTube Music front-end that doesnt track you!" property=twitter:description>
+<meta content="Listen to this Song by <%=info.artist%> On PokeTube Music. The YouTube Music front-end that doesnt track you!" property=twitter:description>
 <meta content="https://i.ytimg.com/vi/<%=video.id%>/maxresdefault.jpg" property=og:image>
 <meta content=summary_large_image name=twitter:card>
 <link href="https://poketube.fun/watch?v=<%=video.id%>" itemprop=url>
@@ -187,6 +187,17 @@ html, body {
 .site-footer {
   background: black;
 }
+.align {
+  position: absolute;
+  bottom: 0px;
+  left: 0px;
+  padding: 3em;
+  display: flex;
+  flex-direction: row;
+  gap: 1em;
+  margin:24px;
+  margin-left:auto;
+}
 .downnav{
        position: fixed;
       bottom: 0;
@@ -206,22 +217,21 @@ min-height: 52%;
 margin: 0;
  display: block;
 margin-inline: auto;
-width:200px;
-border-radius:11px;
+width: 10em;
+border-radius: 11px;
 pointer-events:none;
     }
   .center {
     text-align:center;
   }
-  .info {
-display: block;
-margin-inline: auto;
-border-radius: 11px;
-background-color: #333;
-width: fit-content;
-padding: 0.2em;
-margin-block: 9px;
-  }
+.info {
+    display: block;
+    margin-inline: auto;
+     height: 2.5em;
+    width: fit-content;
+    padding: 0em 1em;
+    margin-block: 9px;
+}
   </style>
   <body>
      
@@ -242,18 +252,18 @@ margin-block: 9px;
         </a>                                   
       </div>
     </nav>
-     <div>
-    <img class="img" src="<%=info.artwork%>">
-       		 </div>
-     <div class="info">
- 	       <div>
-      				<div class="video-title center" style="font-family:'Ginto Nord';font-weight:900;white-space:yes;"><%=info.artist%> - <%=info.title%></div>
-                 </div>
-           </div>
-    <div class="downnav">
-      <audio class="player" id="<%=sha384(video.id)%>" autoplay controls src="https://p.poketube.fun/<%=url%>" poster="https://p.poketube.fun/https://i.ytimg.com/vi/<%=video.id%>/hqdefault.jpg?v=607ddcd4">
- 					</audio>
-     </div>
+    <div class="align">
+      <img class="img" src="<%=info.artwork%>"/>
+        <div class="info">
+          <div class="video-title center" style="font-family:'Ginto Nord';font-weight:900;white-space:yes;"> <%=info.title%></div>
+              <div class="video-title center" style="font-family:Inter;font-weight:900;white-space:yes;text-align: left;">             <%=info.artist%>
+</div>
+         </div>
+      <div class="downnav">
+        <audio class="player" id="<%=sha384(video.id)%>" autoplay controls src="https://p.poketube.fun/<%=url%>" poster="https://p.poketube.fun/https://i.ytimg.com/vi/<%=video.id%>/hqdefault.jpg?v=607ddcd4">
+            </audio>
+      </div>
+    </div>
                 <!-- MORE INFO :https://poketube.fun/privacy -->
           <!-- MORE INFO :https://poketube.fun/privacy -->
        

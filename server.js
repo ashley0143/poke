@@ -41,6 +41,8 @@ var sha384 = require("js-sha512").sha384;
 var sha512_256 = require("js-sha512").sha512_256;
 var sha512_224 = require("js-sha512").sha512_224;
 
+const musicInfo = require("music-info");
+
 var app = express();
 app.engine("html", require("ejs").renderFile);
 app.use(express.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
@@ -132,6 +134,7 @@ app.get("/watch", async function (req, res) {
   var q = req.query.quality;
 
   const video = await fetch(config.tubeApi + `video?v=${v}`);
+  
   var fetching = await fetcher(v);
 
   const json = fetching.video.Player;
@@ -147,7 +150,7 @@ app.get("/watch", async function (req, res) {
 
   // encryption
   const url_e = url + "?e=" + sha384(json.id) + sha384(json.Title) + sha384(json.Channel.id) + sha384(json.Channel.id) + "Piwik" + sha384(config.t_url);
-
+  
   // channel info
   const engagement = fetching.engagement;
   const channel = await fetch(
@@ -196,6 +199,8 @@ app.get("/music", async function (req, res) {
   var r = req.query.r;
   var f = req.query.f;
   var t = req.query.t;
+  
+  if (!v) res.redirect("/");
 
   const video = await fetch(config.tubeApi + `video?v=${v}`);
   var fetching = await fetcher(v);
@@ -203,11 +208,11 @@ app.get("/music", async function (req, res) {
   const json = fetching.video.Player;
   const h = await video.text();
   const k = JSON.parse(toJson(h));
-  if (!v) res.redirect("/");
-
+ 
   if (!json.Channel.Name.endsWith(" - Topic")) {
     res.redirect(`/watch?v=${v}`);
   }
+  
   //video
   var url = `https://tube.kuylar.dev/proxy/media/${v}/18`;
 
@@ -223,10 +228,14 @@ app.get("/music", async function (req, res) {
   const tj = JSON.parse(toJson(c));
 
   // lyrics
-  const lyrics = await lyricsFinder(json.Title);
-
+  const lyrics = await lyricsFinder(json.Title); 
+  
+  // info
+ const info = await musicInfo.searchSong({ title: json.Title, artist:json.Channel.Name.replace("- Topic", "")}, 1000)
+  
   renderTemplate(res, req, "poketube-music.ejs", {
     url: url_e,
+    info: info,
     color: await getColors(
       `https://i.ytimg.com/vi/${v}/maxresdefault.jpg`
     ).then((colors) => colors[0].hex()),

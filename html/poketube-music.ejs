@@ -20,8 +20,8 @@
         
  <html class="poketube_desktop">
 <head>
-    <% if (e === false) { %> <!-- if ?e=false,dont show up the meta tags  -->
- <% } %>
+  <% if (e === false) { %> <!-- if ?e=false,dont show up the meta tags  -->
+ <% } %>    
   <% if (!e) { %>
 <meta content="<%=video.Title%>" name=title>
 <meta content="<%=color%>" name="theme-color">
@@ -206,7 +206,7 @@ min-height: 52%;
 margin: 0;
  display: block;
 margin-inline: auto;
-width:501px;
+width:200px;
 border-radius:11px;
 pointer-events:none;
     }
@@ -242,28 +242,14 @@ margin-block: 9px;
         </a>                                   
       </div>
     </nav>
-     <div >
-    <img class="img" src="https://p.poketube.fun/https://i.ytimg.com/vi/<%=video.id%>/hq720.jpg?sqp=-oaymwEXCNAFEJQDSFryq4qpAwkIARUAAIhCGAE=&rs=AOn4CLDIumGQI7EB2bNbXs0HA-I-D9COiQ">
+     <div>
+    <img class="img" src="<%=info.artwork%>">
        		 </div>
      <div class="info">
  	       <div>
-
-     				<div class="video-title center" style="font-family:'Ginto Nord';font-weight:900;white-space:yes;"><%=video.Channel.Name.replace("- Topic", " ")%> - <%=video.Title%></div>
- 
-               </div>
-              
-                  <div class="center" >
-
-   <p><i class="fas fa-calendar-alt"></i>
-                    <%=date%>|<i class="fas fa-chart-bar"></i><%=engagement.viewCount.toLocaleString()%> Views| <i class="fas fa-thumbs-up"></i> <%=engagement.likes.toLocaleString()%> <i class="fas fa-thumbs-down"></i> <%=engagement.dislikes.toLocaleString()%> 
-                                                    <div class="center" style="color:#fff;" >
-
-                                                        <i class="fas fa-shield-alt"></i><a href="/encryption?v=<%=video.id%>"> Encryption info</a><br> 
-                                  </div>
-
-                                  </div>
-
-                                  </div>
+      				<div class="video-title center" style="font-family:'Ginto Nord';font-weight:900;white-space:yes;"><%=info.artist%> - <%=info.title%></div>
+                 </div>
+           </div>
     <div class="downnav">
       <audio class="player" id="<%=sha384(video.id)%>" autoplay controls src="https://p.poketube.fun/<%=url%>" poster="https://p.poketube.fun/https://i.ytimg.com/vi/<%=video.id%>/hqdefault.jpg?v=607ddcd4">
  					</audio>

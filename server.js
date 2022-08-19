@@ -134,7 +134,7 @@ app.get("/watch", async function (req, res) {
   var q = req.query.quality;
 
   const video = await fetch(config.tubeApi + `video?v=${v}`);
-  
+
   var fetching = await fetcher(v);
 
   const json = fetching.video.Player;
@@ -149,8 +149,15 @@ app.get("/watch", async function (req, res) {
   }
 
   // encryption
-  const url_e = url + "?e=" + sha384(json.id) + sha384(json.Title) + sha384(json.Channel.id) + sha384(json.Channel.id) + "Piwik" + sha384(config.t_url);
-  
+  const url_e =
+    url +
+    "?e=" +
+    sha384(json.Title) +
+    sha384(json.Channel.id) +
+    sha384(json.Channel.id) +
+    "Piwik" +
+    sha384(config.t_url);
+
   // channel info
   const engagement = fetching.engagement;
   const channel = await fetch(
@@ -180,7 +187,7 @@ app.get("/watch", async function (req, res) {
     f: f,
     t: config.t_url,
     optout: t,
-    lyrics: ""
+    lyrics: "",
   });
 });
 
@@ -199,7 +206,7 @@ app.get("/music", async function (req, res) {
   var r = req.query.r;
   var f = req.query.f;
   var t = req.query.t;
-  
+
   if (!v) res.redirect("/");
 
   const video = await fetch(config.tubeApi + `video?v=${v}`);
@@ -208,16 +215,24 @@ app.get("/music", async function (req, res) {
   const json = fetching.video.Player;
   const h = await video.text();
   const k = JSON.parse(toJson(h));
- 
+
   if (!json.Channel.Name.endsWith(" - Topic")) {
     res.redirect(`/watch?v=${v}`);
   }
-  
+
   //video
   var url = `https://tube.kuylar.dev/proxy/media/${v}/18`;
 
   // encryption
-  const url_e = url + "?e=" + sha384(json.id) + sha384(json.Title) + sha384(json.Channel.id) + sha384(json.Channel.id) + "Piwik" + sha384(config.t_url);
+  const url_e =
+    url +
+    "?e=" +
+    sha384(json.id) +
+    sha384(json.Title) +
+    sha384(json.Channel.id) +
+    sha384(json.Channel.id) +
+    "Piwik" +
+    sha384(config.t_url);
 
   // channel info
   const engagement = fetching.engagement;
@@ -227,13 +242,26 @@ app.get("/music", async function (req, res) {
   const c = await channel.text();
   const tj = JSON.parse(toJson(c));
 
-  // lyrics
-  const lyrics = await lyricsFinder(json.Title); 
-  
   // info
- const info = await musicInfo.searchSong({ title: json.Title, artist:json.Channel.Name.replace("- Topic", "")}, 1000)
+  const info = await musicInfo.searchSong(
+    { title: json.Title, artist: json.Channel.Name.replace("- Topic", "") },
+    1000
+  );
   
-    
+  var lyrics = await musicInfo
+    .searchLyrics({ title: info.title, artist: info.artist })
+    .catch(() => null);
+  
+  var ly = "";
+  
+  if (lyrics === null) {
+    ly = "This Is Where I'd Put The songs lyrics. IF IT HAD ONE ";
+  }
+
+  if (lyrics) {
+    ly = lyrics.lyrics.replace(/\n/g, " <br> ");
+  }
+
   renderTemplate(res, req, "poketube-music.ejs", {
     url: url_e,
     info: info,
@@ -252,7 +280,7 @@ app.get("/music", async function (req, res) {
     f: f,
     t: config.t_url,
     optout: t,
-    lyrics: ""
+    lyrics: ly,
   });
 });
 

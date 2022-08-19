@@ -255,10 +255,16 @@ pointer-events:none;
     <div class="align">
       <img class="img" src="<%=info.artwork%>"/>
         <div class="info">
-          <div class="video-title center" style="font-family:'Ginto Nord';font-weight:900;white-space:yes;"> <%=info.title%></div>
+     <div class="video-title center" style="font-family:Ginto Nord;font-weight:900;white-space:yes;text-align: left;">            
+            <%=info.title%></div>
               <div class="video-title center" style="font-family:Inter;font-weight:900;white-space:yes;text-align: left;">             <%=info.artist%>
 </div>
+<div style="margin-top: 7px;">
+<i class="fa-solid fa-heart"></i> <%=engagement.likes.toLocaleString()%> 
+
+                </div>
          </div>
+       
       <div class="downnav">
         <audio class="player" id="<%=sha384(video.id)%>" autoplay controls src="https://p.poketube.fun/<%=url%>" poster="https://p.poketube.fun/https://i.ytimg.com/vi/<%=video.id%>/hqdefault.jpg?v=607ddcd4">
             </audio>

@@ -1,4 +1,4 @@
- <!--
+  <!--
     This Source Code Form is subject to the terms of the GNU General Public License:
 
     Copyright (C) 2021-2022 POKETUBE (https://github.com/iamashley0/poketube)
@@ -43,7 +43,7 @@
 <link href="/css/watch.main.css?v=56" rel=stylesheet>
 <link href="https://p.poketube.fun/https://fonts.googleapis.com/css2?family=Inter:wght@900&family=Sigmar+One&display=swap" rel=stylesheet>
 <link href=https://site-assets.fontawesome.com/releases/v6.1.1/css/all.css rel=stylesheet>
-  </head>
+   </head>
     
 <style>
    a.class:hover {
@@ -256,7 +256,7 @@ pointer-events:none;
       </div>
     </nav>
     <div class="align">
-      <img class="img" src="<%=info.artwork%>"/>
+      <img class="img" src="https://p.poketube.fun/<%=info.artwork%>"/>
         <div class="info">
      <div class="video-title center" style="font-family:Ginto Nord;font-weight:900;white-space:yes;text-align: left;">
             <%=info.title%></div>
@@ -267,6 +267,7 @@ pointer-events:none;
   </div>
                 <div>
                      <i class="fas fa-shield-alt"></i><a style="color:#fff" href="/encryption?v=<%=video.id%>"> Encryption </a>
+ 
   </div>	 
    <div>
      		<a style="color:#fff" href="/download?v=<%=video.id%>">
@@ -275,15 +276,16 @@ pointer-events:none;
 					</a>
    
   </div>
-         </div>
+ 
                 
-<div style="position: fixed;bottom: 0;right: 0;margin: 67px;">
-       <p style="margin:0;">
+<div style="position: fixed;bottom: 0;right: 0;margin: 67px;text-decoration: none;">
+        <p style="margin:0;">
          Powered By
-  </p>  <img src="/css/apple.svg"> 
-                  </div>
+  </p>  
+  <img src="/css/apple.svg?v=5"> 
+                    </div>
       <div class="downnav">
-        <audio class="player" id="<%=sha384(video.id)%>" autoplay controls src="https://p.poketube.fun/<%=url%>" poster="https://p.poketube.fun/https://i.ytimg.com/vi/<%=video.id%>/hqdefault.jpg?v=607ddcd4">
+        <audio class="player" id="<%=sha384(video.id)%>" autoplay controls src="https://p.poketube.fun/<%=url%>" poster="https://p.poketube.fun/https://i.ytimg.com/vi/<%=video.id%>/hqdefault.jpg?v=607ddcd4"><img src="https://t.poketube.fun/t/rep.gif?music=<%=btoa(video.id)%>" style="border:0;width: 0;visibility: hidden;" id="music-track">
             </audio>
       </div>
     </div>

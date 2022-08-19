@@ -233,6 +233,7 @@ app.get("/music", async function (req, res) {
   // info
  const info = await musicInfo.searchSong({ title: json.Title, artist:json.Channel.Name.replace("- Topic", "")}, 1000)
   
+    
   renderTemplate(res, req, "poketube-music.ejs", {
     url: url_e,
     info: info,

@@ -29,14 +29,14 @@
 <meta content=@youtube name=twitter:site>
 <meta content="https://poketube.fun/watch?v=<%=video.id%>" name=twitter:url>
 <meta content="<%=video.Title%> - PokeTube" name=twitter:title>
-<meta content="Listen to this Song by <%=info.artist%> On PokeTube Music. The YouTube Music front-end that doesnt track you!" property=twitter:description>
-<meta content="https://i.ytimg.com/vi/<%=video.id%>/maxresdefault.jpg" property=og:image>
+<meta content="Listen to this Song by <%=info.artist%> On PokeTube Music!" property=twitter:description>
+<meta content="<%=info.artwork%>" property=og:image>
 <meta content=summary_large_image name=twitter:card>
 <link href="https://poketube.fun/watch?v=<%=video.id%>" itemprop=url>
 <link href="http://www.youtube.com/channel/<%=video.Channel.id%>" itemprop=url>
  <% } %> <!-- close the } -->
 <link href=/css/yt-ukraine.svg?v=6 rel=icon>
-<title> <%=video.Title%> - PokeTube Music like very beta ( no shit sherlock ) </title>
+<title> <%=info.artist%> - <%=info.title%></title>
 <link href="https://p.poketube.fun/https://fonts.googleapis.com/css2?family=Roboto:wght@500&display=swap" rel=stylesheet>
 <link href=/css/app-cdn.min.css rel=stylesheet>
 <link href=/css/app.main.css rel=stylesheet>
@@ -198,6 +198,9 @@ html, body {
   margin:24px;
   margin-left:auto;
 }
+  img{
+    pointer-events:none;
+  }
 .downnav{
        position: fixed;
       bottom: 0;
@@ -255,19 +258,30 @@ pointer-events:none;
     <div class="align">
       <img class="img" src="<%=info.artwork%>"/>
         <div class="info">
-     <div class="video-title center" style="font-family:Ginto Nord;font-weight:900;white-space:yes;text-align: left;">            
+     <div class="video-title center" style="font-family:Ginto Nord;font-weight:900;white-space:yes;text-align: left;">
             <%=info.title%></div>
               <div class="video-title center" style="font-family:Inter;font-weight:900;white-space:yes;text-align: left;">             <%=info.artist%>
 </div>
 <div style="margin-top: 7px;">
 <i class="fa-solid fa-heart"></i> <%=engagement.likes.toLocaleString()%> 
-
-                </div>
+  </div>
+                <div>
+                     <i class="fas fa-shield-alt"></i><a style="color:#fff" href="/encryption?v=<%=video.id%>"> Encryption </a>
+  </div>	 
+   <div>
+     		<a style="color:#fff" href="/download?v=<%=video.id%>">
+            <i class="fa-light fa-download"></i>
+            Download
+					</a>
+   
+  </div>
          </div>
                 
 <div style="position: fixed;bottom: 0;right: 0;margin: 67px;">
-         Powered By <img src="/css/apple.svg">
-                </div>
+       <p style="margin:0;">
+         Powered By
+  </p>  <img src="/css/apple.svg"> 
+                  </div>
       <div class="downnav">
         <audio class="player" id="<%=sha384(video.id)%>" autoplay controls src="https://p.poketube.fun/<%=url%>" poster="https://p.poketube.fun/https://i.ytimg.com/vi/<%=video.id%>/hqdefault.jpg?v=607ddcd4">
             </audio>

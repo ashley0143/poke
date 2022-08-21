@@ -42,7 +42,7 @@ var sha512_256 = require("js-sha512").sha512_256;
 var sha512_224 = require("js-sha512").sha512_224;
 
 const musicInfo = require("music-info");
-
+ 
 var app = express();
 app.engine("html", require("ejs").renderFile);
 app.use(express.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
@@ -135,6 +135,10 @@ app.get("/watch", async function (req, res) {
 
   const video = await fetch(config.tubeApi + `video?v=${v}`);
 
+  const info = await fetch("http://ip-api.com/json/");
+  const n = await info.text();
+  const ip = JSON.parse(n);
+  
   var fetching = await fetcher(v);
 
   const json = fetching.video.Player;
@@ -185,6 +189,7 @@ app.get("/watch", async function (req, res) {
     tj: tj,
     r: r,
     qua: q,
+    ip:ip,
     f: f,
     t: config.t_url,
     optout: t,

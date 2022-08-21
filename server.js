@@ -179,6 +179,7 @@ app.get("/watch", async function (req, res) {
     date: moment(k.Video.uploadDate).format("LL"),
     e: e,
     k: k,
+    process:process,
     sha384: sha384,
     isMobile: req.useragent.isMobile,
     tj: tj,
@@ -190,6 +191,8 @@ app.get("/watch", async function (req, res) {
     lyrics: "",
   });
 });
+
+ 
 
 app.get("/music", async function (req, res) {
   /*

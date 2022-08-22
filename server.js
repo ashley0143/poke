@@ -66,6 +66,7 @@ const random_words = [
   "how to become a god?",
   "is a panda a panda if pandas???",
   "Minecraft movie trailer",
+  "monke"
 ];
 
 /*
@@ -215,6 +216,10 @@ app.get("/music", async function (req, res) {
   var f = req.query.f;
   var t = req.query.t;
 
+  const info = await fetch("http://ip-api.com/json/");
+  const n = await info.text();
+  const ip = JSON.parse(n);
+  
   if (!v) res.redirect("/");
 
   const video = await fetch(config.tubeApi + `video?v=${v}`);
@@ -251,13 +256,13 @@ app.get("/music", async function (req, res) {
   const tj = JSON.parse(toJson(c));
 
   // info
-  const info = await musicInfo.searchSong(
+  const song = await musicInfo.searchSong(
     { title: json.Title, artist: json.Channel.Name.replace("- Topic", "") },
     1000
   );
   
   var lyrics = await musicInfo
-    .searchLyrics({ title: info.title, artist: info.artist })
+    .searchLyrics({ title: song.title, artist: song.artist })
     .catch(() => null);
   
   var ly = "";
@@ -272,11 +277,13 @@ app.get("/music", async function (req, res) {
 
   renderTemplate(res, req, "poketube-music.ejs", {
     url: url_e,
-    info: info,
+    info: song,
     color: await getColors(
       `https://i.ytimg.com/vi/${v}/maxresdefault.jpg`
     ).then((colors) => colors[0].hex()),
     engagement: engagement,
+        process:process, 
+    ip:ip,
     video: json,
     date: moment(k.Video.uploadDate).format("LL"),
     e: e,

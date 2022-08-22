@@ -1,4 +1,4 @@
- :root {
+:root {
   --max-content-width: 590px;
   --default-border-radius: 4px;
 }
@@ -22537,4 +22537,3 @@ a.tw-card__link:visited {
 .most-visited__site-link--highlight .most-visited__site-link-delete {
   opacity: 1;
 }
-

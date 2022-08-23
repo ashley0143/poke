@@ -1,4 +1,4 @@
-/*
+ /*
 
     PokeTube is an Free/Libre youtube front-end. this is our main file.
   
@@ -33,7 +33,7 @@ const templateDir = path.resolve(`${process.cwd()}${path.sep}html`);
 
 var express = require("express");
 var useragent = require("express-useragent");
-
+ 
 // hash
 var sha512 = require("js-sha512").sha512;
 var sha384 = require("js-sha512").sha384;
@@ -43,6 +43,12 @@ var sha512_224 = require("js-sha512").sha512_224;
 
 const musicInfo = require("music-info");
  
+ var http = require('http');
+var https = require('https');
+
+http.globalAgent.maxSockets = Infinity;
+https.globalAgent.maxSockets = Infinity;
+
 var app = express();
 app.engine("html", require("ejs").renderFile);
 app.use(express.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
@@ -79,6 +85,25 @@ const config = {
 };
 
 // pages
+
+ 
+app.use(function(req, res, next) {
+   res.header("Access-Control-Allow-Origin", "*");
+ 
+   next();
+});
+     app.get("/api/subtitles", async (req, res) => {
+  const id = req.query.v;
+   const l = req.query.h;
+ 
+  const url = `https://tube.kuylar.dev/proxy/caption/${id}/${l}/`
+
+  let f = await fetch(url);
+   const body = await f.text();
+
+     
+      res.send(body)
+    });
 
 app.get("/encryption", async function (req, res) {
   var v = req.query.v;
@@ -152,7 +177,6 @@ app.get("/watch", async function (req, res) {
   if (q === "medium") {
     var url = `https://tube.kuylar.dev/proxy/media/${v}/18`;
   }
-
   // encryption
   const url_e =
     url +
@@ -405,7 +429,7 @@ app.get("/143", function (req, res) {
 app.get("/domains", function (req, res) {
   renderTemplate(res, req, "domains.ejs");
 });
-
+ 
 app.get("/license", function (req, res) {
   renderTemplate(res, req, "license.ejs");
 });
@@ -489,3 +513,4 @@ app.get("*", function (req, res) {
 // listen
 
 app.listen("3000", () => {});
+

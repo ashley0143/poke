@@ -365,18 +365,18 @@ app.get("/old/watch", async function (req, res) {
   if (j_.URL != undefined) url = j_.URL;
   const json = fetching.video.Player;
   const engagement = fetching.engagement;
-  const lyrics = await lyricsFinder(json.Title);
-  if (lyrics == undefined) lyrics = "Lyrics not found";
-  renderTemplate(res, req, "poketube-old.ejs", {
+    const lyrics = ""
+  
+   renderTemplate(res, req, "poketube-old.ejs", {
     url: url,
     color: await getColors(
       `https://i.ytimg.com/vi/${v}/maxresdefault.jpg`
     ).then((colors) => colors[0].hex()),
     engagement: engagement,
     video: json,
-    date: "", //return ""
+    date: "see the new ui", //return ""
     e: e,
-    lyrics: lyrics.replace(/\n/g, " <br> "),
+      lyrics: "none, see the new ui",
   });
 });
 

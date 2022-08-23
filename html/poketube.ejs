@@ -243,6 +243,12 @@ border-radius: 5px;
        
 		<div class="video-player-container">
 <video class="player" id="<%=sha384(video.id)%>" style="border-radius: 16px;" autoplay controls src="<%=url%>" poster="https://p.poketube.fun/https://i.ytimg.com/vi/<%=video.id%>/maxresdefault.jpg?v=607ddcd4">
+   <% if (  video.Subtitles.Subtitle) { %> 
+
+   <% video.Subtitles.Subtitle.forEach(x => { %><track src="/api/subtitles?v=<%=video.id%>&h=<%= x.language %>" label="<%= x.language %>" kind="subtitles">                                                             
+         <% }) %>   
+                                                                                 <% } %>               
+
  					</video><img src="https://t.poketube.fun/t/rep.gif?video=<%=btoa(video.id)%>" style="border:0;width: 0;visibility: hidden;" id="video">
 <div style="display: flex;justify-content: center;align-items: center;flex-direction: row; column-gap: 3px;" align="center">
                                 
@@ -873,3 +879,4 @@ summary:hover{
 </html>
   </body>
   <% } %>
+

@@ -135,7 +135,8 @@ border-radius: 5px;
        </div>
   <div class="channel-page" style="background-color: var(--channel-contents-background);">   
 
-       
+            <%  if (Array.isArray( j.Search.Results.Video)) { %> 
+
        <% j.Search.Results.Video.forEach(x => { %>
          <div class="video-list">
     <div class="video">
@@ -155,13 +156,32 @@ border-radius: 5px;
     </div>
           
           </div>      
-                <% }) %>   
-       <p style="background-color: #353030;width: fit-content;border-radius: 3px;padding: 4px;">
+                 <p style="background-color: #353030;width: fit-content;border-radius: 3px;padding: 4px;">
  Congratulations, you've reached the end of the internet kekw 
         <div></div></p> 
+                <% }) %>   
+                                  <% } %>   
+            <%  if (!Array.isArray( j.Search.Results.Video)) { %>
+              <br>
+             <h1 style="font-family:'Ginto nord';font-weight:900;white-space:yes;">
+               <img src="https://p.poketube.fun/https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse2.explicit.bing.net%2Fth%3Fid%3DOIP.GUMY7MavfJyrfhjKbPKB9wHaDt%26pid%3DApi&f=1">
+              </h1>
+              <p>A error occured while searching. perhaps try refresing the page lol</p>
+              <p>
+	You can try other alternatives to access this resource such as: 
+	<b>
+		<a href="https://invidio.us/results?q=<%=q%>">Invidious</a>
+	</b> 
+	or
+	<b>
+		<a href="https://tube.kuylar.dev/results?search_query=<%=q%>">lighttube</a>
+	</b>
+</p>
+                                  <% } %>   
+
+ 
         </a>
         </div>
    </body>
                               
  
-

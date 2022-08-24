@@ -1,4 +1,4 @@
-  <% if (!isMobile) { %> 
+   <% if (!isMobile) { %> 
 <!--
     This Source Code Form is subject to the terms of the GNU General Public License:
 
@@ -256,10 +256,10 @@ border-radius: 5px;
                                 
   <% if (!qua) { %> 
 
-                                 <i style="display: block;" class="fa-solid fa-high-definition"></i> <a href="/watch?v=<%=video.id%>&quality=medium"><i style="display: block;" class="fa-light fa-standard-definition"></i></a>
+                                 <i style="display: block;" title="High Definition [Current]" class="fa-solid fa-high-definition"></i> <a href="/watch?v=<%=video.id%>&quality=medium"><i style="display: block;" title="Standard Definition" class="fa-light fa-standard-definition"></i></a>
                                                                       <% } %>               
                                <% if (qua) { %> 
-                                 <a href="/watch?v=<%=video.id%>">  <i style="display: block;" class="fa-light fa-high-definition"></i> </a>  <i style="display: block;" class="fa-solid fa-standard-definition"></i>
+                                 <a href="/watch?v=<%=video.id%>">  <i style="display: block;"  title="High Definition" class="fa-light fa-high-definition"></i> </a>  <i style="display: block;" title="Standard Definition [Current]"  class="fa-solid fa-standard-definition"></i>
 
                                                                       <% } %>               
 
@@ -339,15 +339,17 @@ border-radius: 5px;
                      </p>
                     
                              <hr style="clear: both;display: block;border: none;border-bottom: 0.5px solid #2f2f2f;margin: 0 0;/*! width: 4.5em; */height: 0;">
-       <p>
-PokeTube Player v08.21.22 - Node.js <%=process.version%> - V8 v<%=process.versions.v8%> -  <%=process.platform.replace("linux", "GNU/Linux")%> <%=process.arch%> Server ( <%=ip.org%> )
-                </p>
-        <p>
-          This website does not track you. <a href="/privacy">Privacy Policy</a>
-         </p>
+ 
+                     
+       <p style="font-family:MonoSpace">
+         <b>
+PokeTube Player v08.23.22 - Node.js <%=process.version%> - V8 v<%=process.versions.v8%> -  <%=process.platform.replace("linux", "GNU/Linux")%> <%=process.arch%> Server ( <%=ip.org%> )
+           </b>
+                </p>                        
+ 
          </div>
-           
-	<div class="recommended-list" style="background-color:#1c1c1c;border-radius:25px;margin: 10px;">
+                 
+	<div class="recommended-list" style="background-color:#1c1c1c;border-radius:25px;margin: 5px;">
     
      <div style="font-family:Inter,sans-serif;font-weight:900;white-space:yes;" align="center">
  
@@ -406,10 +408,10 @@ PokeTube Player v08.21.22 - Node.js <%=process.version%> - V8 v<%=process.versio
 							<div class="info">
                 
       <% if (!optout) { %> 
-								<a href="/watch?v=<%= x.id %>" class="title max-lines-2"><%= x.Title %></a>
+								<a href="/watch?v=<%= x.id %>" class="title max-lines-2" title="<%= x.Title %>"><%= x.Title %></a>
                    <% } %>
    <% if (optout) { %> 
-								<a href="/watch?v=<%= x.id %>&t=f" class="title max-lines-2"><%= x.Title %></a>
+								<a href="/watch?v=<%= x.id %>&t=f" class="title max-lines-2" title="<%= x.Title %>"><%= x.Title %></a>
                    <% } %>
 								<div>
                <a class="max-lines-2" href="/channel?id=<%= x.Channel.id %>"><%=x.Channel.Name %></a>
@@ -437,10 +439,10 @@ PokeTube Player v08.21.22 - Node.js <%=process.version%> - V8 v<%=process.versio
 							</a>
 							<div class="info">
        <% if (!optout) { %> 
-								<a href="/watch?v=<%= x.id %>" class="title max-lines-2"><%= x.Title %></a>
+								<a href="/watch?v=<%= x.id %>" class="title max-lines-2" title="<%= x.Title %>"><%= x.Title %></a>
                    <% } %>
    <% if (optout) { %> 
-								<a href="/watch?v=<%= x.id %>&t=f" class="title max-lines-2"><%= x.Title %></a>
+								<a href="/watch?v=<%= x.id %>&t=f" class="title max-lines-2" title="<%= x.Title %>"><%= x.Title %></a>
                    <% } %>
 								<div>
                <a class="max-lines-2" href="/channel?id=<%= video.Channel.id %>"><%=video.Channel.Name %></a>

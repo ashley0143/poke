@@ -1,12 +1,15 @@
- 
-  
-  <a href="https://poketube.fun/watch?v=dQw4w9WgXcQ">
- <img src="https://poketube.fun/css/logo.svg" width="600"> </a>
- 
-  <img src="https://raw.githubusercontent.com/vshymanskyy/StandWithUkraine/main/badges/StandWithUkraine.svg">
+   
+  <div align="center">
+  <a href="https://poketube.fun/watch?v=9sJUDx7iEJw&quality=medium">
+   <img src="https://cdn.glitch.global/5d35aeaf-2df2-4f2f-a4b7-b486694c329b/e31b71e6-7781-4d07-aec2-9e1e8e7d6c6e.image.png?v=1661427092214">
+ <img src="https://poketube.fun/css/logo.svg" width="500"> </a><br>
+   <img src="https://raw.githubusercontent.com/vshymanskyy/StandWithUkraine/main/badges/StandWithUkraine.svg">
+
+</div>
+
 
 # PokeTube Source Repo 
-  
+ 
 ## Table of contents 
 - [About](#about)
 - [Coding Standards](#coding-standards)

@@ -3,8 +3,7 @@
   <a href="https://poketube.fun/watch?v=9sJUDx7iEJw&quality=medium">
    <img src="https://cdn.glitch.global/5d35aeaf-2df2-4f2f-a4b7-b486694c329b/e31b71e6-7781-4d07-aec2-9e1e8e7d6c6e.image.png?v=1661427092214">
  <img src="https://poketube.fun/css/logo.svg" width="500"> </a><br>
-   <img src="https://raw.githubusercontent.com/vshymanskyy/StandWithUkraine/main/badges/StandWithUkraine.svg">
-
+   <img src="https://raw.githubusercontent.com/vshymanskyy/StandWithUkraine/main/badges/StandWithUkraine.svg"> 
 </div>
 
 
@@ -59,3 +58,5 @@ node server.js
 
 [Privacy Policy](https://poketube.fun/privacy) <br>
 TL;DR:we dont collect or share your personal info lol
+
+<a href="https://codeberg.org/Ashley/poketube/src/branch/main/LICENSE"> <img src="https://www.gnu.org/graphics/gplv3-88x31.png"> </a>

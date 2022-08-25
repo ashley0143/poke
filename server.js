@@ -284,7 +284,10 @@ app.get("/music", async function (req, res) {
     { title: json.Title, artist: json.Channel.Name.replace("- Topic", "") },
     1000
   );
-  
+
+    if (!song) {
+    res.redirect(`/watch?v=${v}`);
+  }
   var lyrics = await musicInfo
     .searchLyrics({ title: song.title, artist: song.artist })
     .catch(() => null);

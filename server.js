@@ -361,26 +361,8 @@ app.get("/old/watch", async function (req, res) {
   var v = req.query.v;
   var e = req.query.e;
   if (!v) res.redirect("/");
-  var fetching = await fetcher(v);
-  const j = fetching.video.Player.Formats.Format,
-    j_ = Array.isArray(j) ? j[j.length - 1] : j;
-  let url;
-  if (j_.URL != undefined) url = j_.URL;
-  const json = fetching.video.Player;
-  const engagement = fetching.engagement;
-    const lyrics = ""
   
-   renderTemplate(res, req, "poketube-old.ejs", {
-    url: url,
-    color: await getColors(
-      `https://i.ytimg.com/vi/${v}/maxresdefault.jpg`
-    ).then((colors) => colors[0].hex()),
-    engagement: engagement,
-    video: json,
-    date: "see the new ui", //return ""
-    e: e,
-      lyrics: "none, see the new ui",
-  });
+   res.redirect(`/watch?v=${v}`);
 });
 
 app.get("/discover", async function (req, res) {

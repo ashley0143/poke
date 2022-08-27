@@ -268,20 +268,18 @@ border-radius: 5px;
                                    <p style="text-align:center;">
  Not loading? <s>skill issue</s> try the sd quailty :3
                                    </p>
+
                                  
                                  
                                                         </div>
        </div>
                                                             <br>
-			<div class="video-info">
+			<div class="video-info">           
 				<div class="video-title" style="font-family:'Ginto Nord';font-weight:900;white-space:yes;"><%=video.Title%></div>
 				<p class="video-sub-info description">
 					<span><%=engagement.viewCount.toLocaleString()%> Total views - Uploaded on <%=date%> ^^</span>
             <br>                      <br>          
-   <% if (video.Channel.Name.endsWith(' - Topic')) { %> 
-     <b style="font-family:Inter">Listen to this song on <a href="/music?v=<%=video.id%>"> poketube music!</a> owo :3        </b>     <br>                      <br>          
-
-                                                                       <% }%>               
+ 
 
             <%-String(video.Description).replace(/\n/g, " <br> ")%></center>
 				</p>
@@ -295,18 +293,27 @@ border-radius: 5px;
 					</div>
           					<div>
 
-					<a style="color:#fff" href="/download?v=<%=video.id%>">
+					<a style="color:#fff;text-decoration: none; " href="/download?v=<%=video.id%>">
             <i class="fa-light fa-download"></i>
-            Download!
+            Download
 					</a>
    
-                      
-					<a style="color:#fff" href="/old/watch?v=<%=video.id%>">
-          <i class="fa-light fa-history"></i>
-            Watch in old UI
-					</a>
+ <% if (!video.Channel.Name.endsWith(' - Topic')) { %> 
+					<a style="color:#fff;text-decoration: none;" href="/encryption?v=<%=video.id%>">
+               <i class="fa-light fa-shield"></i>
+                Encryption
+   </a>
+                                                                          <% }%>       
+                            <% if (video.Channel.Name.endsWith(' - Topic')) { %> 
+                                                 					<a style="color:#fff;text-decoration: none;" href="/music?v=<%=video.id%>">
+          <i class="fa-light fa-music"></i>
+                  Open In Music
+                                                 </a>
+
+                                                                       <% }%>       
                   					</div>
     
+                    
  
 				</div>
 			</div>
@@ -343,13 +350,14 @@ border-radius: 5px;
                      
        <p style="font-family:MonoSpace">
          <b>
-PokeTube Player v08.26.22 - Node <%=process.version%> - V8 engine v<%=process.versions.v8%> -  <%=process.platform.replace("linux", "GNU/Linux")%> <%=process.arch%> Server ( <%=ip.org%> )
+PokeTube Player v08.27.22 - Node <%=process.version%> - V8 engine v<%=process.versions.v8%> -  <%=process.platform.replace("linux", "GNU/Linux")%> <%=process.arch%> Server ( <%=ip.org%> )
            </b>
+         
                 </p>                        
  
          </div>
                  
-	<div class="recommended-list" style="background-color:#1c1c1c;border-radius:25px;margin: 5px;">
+	<div class="recommended-list" style="background-color:#1c1c1c;border-radius:25px;margin: 10px;">
     
      <div style="font-family:Inter,sans-serif;font-weight:900;white-space:yes;" align="center">
  

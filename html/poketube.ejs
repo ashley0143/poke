@@ -299,18 +299,25 @@ border-radius: 5px;
 					</a>
    
  <% if (!video.Channel.Name.endsWith(' - Topic')) { %> 
+    <% if (!video.Title.endsWith('Audio)')) { %> 
+
 					<a style="color:#fff;text-decoration: none;" href="/encryption?v=<%=video.id%>">
                <i class="fa-light fa-shield"></i>
                 Encryption
    </a>
-                                                                          <% }%>       
-                            <% if (video.Channel.Name.endsWith(' - Topic')) { %> 
+                                                                          <% }%>                                                                              <% }%>      
+  
+                                                                             <% if (video.Channel.Name.endsWith(' - Topic') || video.Title.endsWith('Audio)')) { %> 
+                                                            
+                            <% if (video.Channel.Name.endsWith(' - Topic') || video.Title.endsWith('Audio)'))  { %> 
                                                  					<a style="color:#fff;text-decoration: none;" href="/music?v=<%=video.id%>">
           <i class="fa-light fa-music"></i>
                   Open In Music
                                                  </a>
 
-                                                                       <% }%>       
+                                                                       <% }%>                     
+                                                                          <% }%>      
+    
                   					</div>
     
                     

@@ -34,6 +34,7 @@
     <meta content=@PoketaleBot name=twitter:site>
     <meta content=@PoketaleBot name=twitter:creator>
     <link href=/css/app-cdn.min.css rel=stylesheet>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 <link href=/css/app.main.css rel=stylesheet>
 <link href="/css/search.main.css?v=56" rel=stylesheet>
  <style> 
@@ -67,11 +68,157 @@
    background-color: #181818;
 border-radius: 8px;
    }
-      </style>
+      </style>  <!-- STYLES START -->
+  
+<style>
+   a.class:hover {
+    text-decoration:underline;
+    font-weight:bold
+}
+  summary{
+    color:gray;
+}
+summary:hover{
+    color:white;
+}
+</style>
+   
+   <style>
+    body{
+        overflow-x: hidden; /* Hide horizontal scrollbar */
+        color:#111111
+    }
+          :visited { color: #00c0ff }
+     
+a{
+  color:#0ab7f0;
+}
+   .animated {
+            -webkit-animation-duration: 10s; 
+            animation-duration: 10s; 
+            -webkit-animation-fill-mode: both;
+            animation-fill-mode: both; 
+            animation-iteration-count: infinite;
+            -moz-animation-iteration-count: infinite;
+            -webkit-animation-iteration-count: infinite;
+            -o-animation-iteration-count: infinite;
+         }
+         
+         @-webkit-keyframes wiggle { 
+            0% { -webkit-transform: skewX(9deg); }
+            10% { -webkit-transform: skewX(-8deg); }
+            20% { -webkit-transform: skewX(7deg); }
+            30% { -webkit-transform: skewX(-6deg); }
+            40% { -webkit-transform: skewX(5deg); } 
+            50% { -webkit-transform: skewX(-4deg); } 
+            60% { -webkit-transform: skewX(3deg); }
+            70% { -webkit-transform: skewX(-2deg); } 
+            80% { -webkit-transform: skewX(1deg); } 
+            90% { -webkit-transform: skewX(0deg); }
+            100% { -webkit-transform: skewX(0deg); } 
+         }
+         
+         @keyframes wiggle { 
+            0% { transform: skewX(9deg); } 
+            10% { transform: skewX(-8deg); } 
+            20% { transform: skewX(7deg); } 
+            30% { transform: skewX(-6deg); } 
+            40% { transform: skewX(5deg); } 
+            50% { transform: skewX(-4deg); } 
+            60% { transform: skewX(3deg); } 
+            70% { transform: skewX(-2deg); } 
+            80% { transform: skewX(1deg); } 
+            90% { transform: skewX(0deg); } 
+            100% { transform: skewX(0deg); } 
+         }
+         
+         .wiggle { 
+            -webkit-animation-name: wiggle;
+            animation-name: wiggle; 
+            -webkit-animation-timing-function: ease-in;
+            animation-timing-function: ease-in; 
+         }
+         
+         .animated.wiggle { 
+            -webkit-animation-duration: 0.75s; 
+            animation-duration: 0.75s;
+         }
+    
+  @font-face {
+font-family: 'Ginto Nord';
+font-weight: 800;
+src:url('https://cdn.statically.io/gh/brecert/discord-quote-generator/main/Ginto-Nord-800.woff') format("woff");
+      }
+
+.alert {
+  padding: 20px;
+  background-color: #f44336;
+  color: white;
+  opacity: 1;
+  transition: opacity 0.6s;
+  margin-bottom: 15px;
+}
+
+.alert.success {background-color: #04AA6D;}
+.alert.info {background-color: #2196F3;}
+.alert.warning {background-color: #ff9800;}
+
+.closebtn {
+  margin-left: 15px;
+  color: white;
+  font-weight: bold;
+  float: right;
+  font-size: 22px;
+  line-height: 20px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.closebtn:hover {
+  color: black;
+}
+    
+  </style>
+  
+  <!-- NEW NAVBAR -->
+  
+  <style>
+    
+    nav {
+      background:#0f0b0b
+    }
+    
+  nav .right {
+ display: flex;
+border-radius: 5px;
+justify-content: normal;
+padding-left: 0px;
+align-items: center;
+margin-left: 10px;
+}
+    
+    nav .left {
+    display: flex;
+justify-content: flex-start;
+align-items: center;
+border-radius: 5px;
+ padding-left: 0px;
+margin-right: 40px;
+    }
+    
+    nav .middle {
+      display: flex;
+ justify-content: center;
+align-items: center;
+border-radius: 5px;
+    }
+  </style>
+  
+   <!-- STYLES END -->
  </head>
 <body>
      <center> 
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@900&family=Sigmar+One&display=swap" rel=stylesheet>
+    <link href="https://p.poketube.fun/https://fonts.googleapis.com/css2?family=Inter:wght@900&family=Sigmar+One&display=swap" rel=stylesheet>
     <link href=https://site-assets.fontawesome.com/releases/v6.1.1/css/all.css rel=stylesheet>
     <center>
     <nav>
@@ -103,6 +250,7 @@ border-radius: 8px;
 	</div>  <hr style="clear: both;display: block;border: none;border-bottom: 0.5px solid #2f2f2f;margin: 0 0;/*! width: 4.5em; */height: 0;">
 
         <% if (ID === "UCFAiFyGs6oDiF1Nf-rRJpZA") { %> 
+          <hr>
                         <a href="https://www.curesarcoma.org/donate/">Donate to curesarcoma.org</a><br>
 <p>
 Technoblade never dies!  <a href="https://technoblade.com/">More info</a>

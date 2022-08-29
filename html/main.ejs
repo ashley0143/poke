@@ -196,7 +196,7 @@ summary:hover{
  
    .video-grid > .video {
    background-color: #181818;
-border-radius: 8px;
+border-radius: 16px;
    }    
    
    .app{
@@ -232,7 +232,7 @@ border-radius: 8px;
   <div class="discover-some-bitches">
                <div class="video-title" style="font-family:'Ginto nord';font-weight:900;white-space:nowrap;font-size: xxx-large;">Privacy Is Your Rigth</div>
  				<div class="video-info-bar" style="font-family:'Inter';border-bottom:none;padding:0;">
-       PokeTube is a libre youtube-front end that respects your privacy!
+       PokeTube is a libre youtube-front end that respects your privacy and your freedom!
   </div>
    </div>
         <div class=search>
@@ -266,7 +266,7 @@ border-radius: 8px;
   <div class="discover-some-bitches" style="width:auto;">
              <div class="video-title" style="font-family:'Ginto nord';font-weight:900;white-space:yes;font-size: xxx-large;"> Privacy Is Your Rigth</div>
  				<div class="video-info-bar" style="font-family:'Ginto nord';border-bottom:none;padding:0;font-size: small;">
- PokeTube is a libre youtube-front end that respects your privacy!   </div>
+ PokeTube is a libre youtube-front end that respects your privacy! </div>
    </div>
                <div class=search>
         
@@ -283,11 +283,11 @@ border-radius: 8px;
   
     <img src="https://t.poketube.fun/t/rep.gif" style="width: 0;visibility: hidden;" id="discover_main">
    
-               <div class="video-title" style="font-family:'Ginto nord';font-weight:900;white-space:nowrap;font-size: xxx-large;">Discover Videos</div>
+               <div class="video-title" style="font-family:'Ginto nord';font-weight:900;white-space:nowrap;font-size: xxx-large;">Discover Trend Videos</div>
     	<div class="video-grid">
    <% k.Explore.Videos.ItemSection[3].Shelf.Items.Video.forEach(x =>  { %>
 			<a href="/watch?v=<%- x.id %>" class="video">
-				<div class="thumbnail" style="background-image: url('https://p.poketube.fun/https://i.ytimg.com/vi/<%= x.id %>/hqdefault.jpg?sqp=-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLBy_x4UUHLNDZtJtH0PXeQGoRFTgw');border-radius: 4px;"><span class="video-length"><%- x.duration %></span></div>
+				<div class="thumbnail" style="background-image: url('https://p.poketube.fun/https://i.ytimg.com/vi/<%= x.id %>/hqdefault.jpg?sqp=-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLBy_x4UUHLNDZtJtH0PXeQGoRFTgw');border-top-left-radius: 16px;border-top-right-radius: 16px;"><span class="video-length"><%- x.duration %></span></div>
 				<div class="info">
 					<span class="title max-lines-2" style="font-family:Ginto Nord,sans-serif;"><%- x.Title %></span>
              </div>

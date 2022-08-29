@@ -365,7 +365,7 @@ app.get("/old/watch", async function (req, res) {
    res.redirect(`/watch?v=${v}`);
 });
 
-app.get("/discover", async function (req, res) {
+app.get("/", async function (req, res) {
   const trends = await fetch(config.tubeApi + `trending`);
   const h = await trends.text();
   const k = JSON.parse(toJson(h));
@@ -459,8 +459,8 @@ app.get("/video/upload", (req, res) => {
   res.redirect("https://youtube.com/upload");
 });
 
-app.get("/", async function (req, res) {
-  res.redirect("/discover");
+app.get("/discover", async function (req, res) {
+  res.redirect("/");
 });
 
 app.get("/api/video/download", async function (req, res) {

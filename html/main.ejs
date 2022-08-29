@@ -16,17 +16,16 @@
     You should have received a copy of the GNU General Public License
     along with this program. If not, see https://www.gnu.org/licenses/.
 -->
-
-<!-- THIS IS NOT THE LANDING PAGE, SEE LANDING.EJS FOR THE LADNDING PAGE. -->
+ 
   
 <!DOCTYPE html><html>
 <head>
-    <title>PokeTube - Explore Videos</title>
+    <title>PokeTube - Privacy Is Your Rigth</title>
     <link href=/css/yt-ukraine.svg?v=6 rel=icon>
     <link href="https://p.poketube.fun/https://fonts.googleapis.com/css2?family=Sigmar+One&amp;display=swap" rel="stylesheet"> 
     <meta content=website property=og:type>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta content="PokeTube - Explore Videos" property=og:title>
+    <meta content="PokeTube - Privacy Is Your Rigth" property=og:title>
     <meta content="PokeTube Is free software and it gives you freedom! " property=twitter:description>
     <meta content="https://cdn.glitch.com/ef5d02b7-c958-475a-b82d-d263d37e7ec7/poketubemain.png" property=og:image>
     <link href="https://p.poketube.fun/https://fonts.googleapis.com/css2?family=Roboto:wght@500&display=swap" rel="stylesheet">
@@ -231,9 +230,9 @@ border-radius: 8px;
   
  
   <div class="discover-some-bitches">
-             <div class="video-title" style="font-family:'Ginto nord';font-weight:900;white-space:yes;font-size: xxx-large;">DISCOVER VIDEOS ON POKETUBE</div>
- 				<div class="video-info-bar" style="font-family:'Ginto nord';border-bottom:none;padding:0;font-size: small;">
-          Discover trend videos, <s>tiktoks</s> shorts & music videos on poketube, the libre youtube front-end!
+               <div class="video-title" style="font-family:'Ginto nord';font-weight:900;white-space:nowrap;font-size: xxx-large;">Privacy Is Your Rigth</div>
+ 				<div class="video-info-bar" style="font-family:'Inter';border-bottom:none;padding:0;">
+       PokeTube is a libre youtube-front end that respects your privacy!
   </div>
    </div>
         <div class=search>
@@ -265,10 +264,9 @@ border-radius: 8px;
   
  
   <div class="discover-some-bitches" style="width:auto;">
-             <div class="video-title" style="font-family:'Ginto nord';font-weight:900;white-space:yes;font-size: xxx-large;">DISCOVER VIDEOS ON POKETUBE</div>
+             <div class="video-title" style="font-family:'Ginto nord';font-weight:900;white-space:yes;font-size: xxx-large;"> Privacy Is Your Rigth</div>
  				<div class="video-info-bar" style="font-family:'Ginto nord';border-bottom:none;padding:0;font-size: small;">
-          Discover trend videos, shorts & music videos on poketube, the libre youtube front-end!
-  </div>
+ PokeTube is a libre youtube-front end that respects your privacy!   </div>
    </div>
                <div class=search>
         
@@ -283,7 +281,10 @@ border-radius: 8px;
 
    
  <div class="channel-page" style="background-color: var(--channel-contents-background);">   
-   <img src="https://t.poketube.fun/t/rep.gif" style="width: 0;visibility: hidden;" id="discover_main">
+  
+    <img src="https://t.poketube.fun/t/rep.gif" style="width: 0;visibility: hidden;" id="discover_main">
+   
+               <div class="video-title" style="font-family:'Ginto nord';font-weight:900;white-space:nowrap;font-size: xxx-large;">Discover Videos</div>
     	<div class="video-grid">
    <% k.Explore.Videos.ItemSection[3].Shelf.Items.Video.forEach(x =>  { %>
 			<a href="/watch?v=<%- x.id %>" class="video">
@@ -296,25 +297,9 @@ border-radius: 8px;
 
  		 	               <% }) %>   
                                    </div>
-                    <hr>
-
-          <a name="shorts"></a>
-          <img src="https://t.poketube.fun/t/rep.gif" style="width: 0;visibility: hidden;" id="discover_shorts">
-   	<div class="video-grid">
-   <% k.Explore.Videos.ItemSection[2].Shelf.Items.Video.forEach(x =>  { %>
-			<a href="/watch?v=<%- x.id %>" class="video">
-				<div class="thumbnail" style="background-image: url('https://p.poketube.fun/https://i.ytimg.com/vi/<%= x.id %>/hqdefault.jpg?sqp=-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLBy_x4UUHLNDZtJtH0PXeQGoRFTgw');border-radius: 4px;"><span class="video-length"><%- x.duration %></span></div>
-				<div class="info">
-					<span class="title max-lines-2" style="font-family:Ginto Nord,sans-serif;"><%- x.Title %></span>
-			 
-            </div>
- 			</a>	
-
- 		 	               <% }) %>   
-                 </div>
-
-          <hr>
-
+                
+ 
+ 
     </body >
 
 </html>

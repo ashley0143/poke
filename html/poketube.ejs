@@ -553,7 +553,20 @@ border-radius: 5px;
 					<img src="https://p.poketube.fun/<%= k.Video.Channel.Avatar[1].$t %>">
 				</a>
 				<div class="name" style="font-family:'Ginto Nord'">
-					<a  href="/channel?id=<%=video.Channel.id%>" >  <%=video.Channel.Name%></a>
+ 
+          
+         <div>
+					<a style="color:#fff" href="/channel?id=<%=video.Channel.id%>" >  <%=video.Channel.Name%></a> 
+            
+            <!--
+            <% if (nigth.channel.badges[0].tooltip === "Verified") { %> 
+<i class="fa-solid fa-badge-check" title="<%=nigth.channel.badges[0].tooltip%>"></i>
+            <% } %>  <% if (nigth.channel.badges[0].tooltip === "Official Artist Channel") { %> 
+<i class="fa-solid fa-music-note" title="<%=nigth.channel.badges[0].tooltip%>"></i>
+             <% } %>
+-->
+              </div>
+
 				</div>
 				<div class="subscriber-count">
           <%= k.Video.Channel.subscriberCount %>

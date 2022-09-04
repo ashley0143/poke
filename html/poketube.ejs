@@ -560,13 +560,13 @@ border-radius: 5px;
             
               <% if (!video.Channel.Name.endsWith(' - Topic')) { %>  
             
-              <% if (nigth.channel.badges[0].tooltip  !== null) { %>  
+               <% if (badges) { %> 
 
-              <% if (nigth.channel.badges[0].tooltip === "Verified") { %> 
-<i class="fa-solid fa-badge-check" title="<%=nigth.channel.badges[0].tooltip%>"></i>
-            <% } %>  <% if (nigth.channel.badges[0].tooltip === "Official Artist Channel") { %> 
-<i class="fa-solid fa-music-note" title="<%=nigth.channel.badges[0].tooltip%>"></i>
-             <% } %>             <% } %><% } %>
+              <% if (badges.tooltip === "Verified") { %> 
+<i class="fa-solid fa-badge-check" title="<%=badges.tooltip%>"></i>
+            <% } %>  <% if (badges.tooltip === "Official Artist Channel") { %> 
+<i class="fa-solid fa-music-note" title="<%=badges.tooltip%>"></i>
+             <% } %>             <% } %>  <% } %> 
 
               </div>
 
@@ -593,7 +593,9 @@ border-radius: 5px;
                      </p>
                     
                              <hr style="clear: both;display: block;border: none;border-bottom: 0.5px solid #2f2f2f;margin: 0 0;/*! width: 4.5em; */height: 0;">
- 
+                 	<div class="video-title" style="font-family:'Ginto Nord';font-weight:900;white-space:yes;">Comments - <%=comments%> </div> 
+                    <p>comments are in development! you can view them in	<a href="https://invidio.us/watch?v=<%=video.id%>">invidious</a> for now </p>
+   <hr style="clear: both;display: block;border: none;border-bottom: 0.5px solid #2f2f2f;margin: 0 0;/*! width: 4.5em; */height: 0;">
                      
        <p style="font-family:MonoSpace">
          <b>

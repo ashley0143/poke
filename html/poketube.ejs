@@ -853,7 +853,12 @@ summary:hover{
         overflow-x: hidden; /* Hide horizontal scrollbar */
         color:#111111
     }
-    
+    html, body {
+  overflow-x: hidden;
+}
+body {
+  position: relative
+}
    .animated {
             -webkit-animation-duration: 10s; 
             animation-duration: 10s; 
@@ -1278,24 +1283,27 @@ a{
                 <div>
  
 <h3 style="color:#fff;font-family:Ginto Nord,sans-serif;font-weight:700;white-space:yes;"> Description</h3>
-                  <details open style="color:#fff"><summary style="color:#fff"></summary>
- 
+  
         			<p class="description"><%-String(video.Description).replace(/\n/g, " <br> ")%> </p>
  
                             </div> 
                   
-          </details>
-                          
+                           
  			</div>    <hr style="clear: both;display: block;border: none;border-bottom: 0.5px solid #2f2f2f;margin: 0 0;/*! width: 4.5em; */height: 0;">
                            <div>
                    	<div class="video-title" style="font-family:'Ginto Nord';font-weight:900;white-space:yes;">Comments    </div> 
                                                         <div style="padding:0">
+              <% if (!video.Channel.Name.endsWith(' - Topic')) { %>  
 
                                           <p>
                                            theres <%=comments%> total comments rigth now on this video. view em on <a href="https://invidio.us/watch?v=<%=video.id%>">invidious</a>
                              </p>
-                                            
+                                                                       <% } %>
+              <% if (video.Channel.Name.endsWith(' - Topic')) { %>  
+                                 disabled for topic channels                                      <% } %>
+
                </div>
+ 
                                  <hr style="clear: both;display: block;border: none;border-bottom: 0.5px solid #2f2f2f;margin: 0 0;/*! width: 4.5em; */height: 0;">
                </div>
                  

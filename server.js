@@ -169,7 +169,16 @@ app.get("/watch", async function (req, res) {
   var n = await nightly.text().catch(() => null);
 
   
+  
+  var nn = "";
 
+  if (n === null) {
+    nn = "";
+  }
+
+  if (n) {
+    nn = JSON.parse(n);
+  }
   
   var fetching = await fetcher(v);
 
@@ -225,7 +234,7 @@ app.get("/watch", async function (req, res) {
     f: f,
     t: config.t_url,
     optout: t,
-    nigth:JSON.parse(n),
+    nigth:nn,
     lyrics: "",
   });
 });

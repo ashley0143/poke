@@ -1028,7 +1028,20 @@ a{
 					<img src=" <%= k.Video.Channel.Avatar[1].$t %>">
 				</a>
 				<div class="name" style="font-family:'Ginto Nord'">
-					<a  href="/channel?id=<%=video.Channel.id%>" >  <%=video.Channel.Name%></a>
+		  <div>
+						<a style="color:#fff" href="/channel?id=<%=video.Channel.id%>" >  <%=video.Channel.Name%></a>   
+            
+              <% if (!video.Channel.Name.endsWith(' - Topic')) { %>  
+            
+               <% if (badges) { %> 
+
+              <% if (badges.tooltip === "Verified") { %> 
+<i class="fa-solid fa-badge-check" title="<%=badges.tooltip%>"></i>
+            <% } %>  <% if (badges.tooltip === "Official Artist Channel") { %> 
+<i class="fa-solid fa-music-note" title="<%=badges.tooltip%>"></i>
+             <% } %>             <% } %>  <% } %> 
+
+              </div>
 				</div>
 		 
 				<button class="subscribe-button" ><a style="color:#fff" href="https://www.youtube.com/channel/<%=video.Channel.id%>?view_as=subscriber?sub_confirmation=1">Suscribe</a></button>

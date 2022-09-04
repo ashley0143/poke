@@ -35,11 +35,7 @@ var express = require("express");
 var useragent = require("express-useragent");
  
 // hash
-var sha512 = require("js-sha512").sha512;
-var sha384 = require("js-sha512").sha384;
-
-var sha512_256 = require("js-sha512").sha512_256;
-var sha512_224 = require("js-sha512").sha512_224;
+const sha384 = require("js-sha512").sha384;
 
 const musicInfo = require("music-info");
  
@@ -172,13 +168,13 @@ app.get("/watch", async function (req, res) {
   
   var nn = "";
 
-  if (n === null) {
-    nn = "";
-  }
-
-  if (n) {
-    nn = JSON.parse(n);
-  }
+  var badges = ""
+  if (n === undefined) {badges = "";} 
+  if (n !== undefined) {badges = JSON.parse(n).channel.badges[0]}
+  
+  var comments = ""
+  if (n === undefined) { comments = ""; }
+  if (n !== undefined) { comments = JSON.parse(n).commentCount }
   
   var fetching = await fetcher(v);
 
@@ -234,7 +230,8 @@ app.get("/watch", async function (req, res) {
     f: f,
     t: config.t_url,
     optout: t,
-    nigth:nn,
+    badges:badges,
+    comments:comments,
     lyrics: "",
   });
 });

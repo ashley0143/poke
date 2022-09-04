@@ -232,9 +232,10 @@ background-size: cover;
  
   <div class="discover-some-bitches">
                <div class="video-title" style="font-family:'Ginto nord';font-weight:900;white-space:nowrap;font-size: xxx-large;">Privacy Is Your Right</div>
- 				<div class="video-info-bar" style="font-family:'Inter';border-bottom:none;padding:0;">
-       PokeTube is a libre youtube-front end that respects your privacy and your freedom!
-  </div>
+ 			<div class="video-info-bar" style="font-family:'Inter';border-bottom:none;padding:0;">Poketube is an a libre front end 
+  for youtube &amp; yt music! your personal data is nobody's business while using poketube. 
+  <a href="/privacy">(not our business too!)</a>
+ </div>
    </div>
      
         <div class=search>
@@ -289,6 +290,12 @@ background-size: cover;
     <img src="https://t.poketube.fun/t/rep.gif" style="width: 0;visibility: hidden;" id="discover_main">
    
                <div class="video-title" style="font-family:'Ginto nord';font-weight:900;white-space:nowrap;font-size: xxx-large;">Discover</div>
+        <% if (!isMobile) { %> 
+          <p style="margin:0;">
+            Discover videos that are trending and popular rigth now!
+          </p>
+ 		 	               <% } %>   
+
     	<div class="video-grid">
    <% k.Explore.Videos.ItemSection[3].Shelf.Items.Video.forEach(x =>  { %>
 			<a href="/watch?v=<%- x.id %>" class="video">

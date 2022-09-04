@@ -560,7 +560,7 @@ border-radius: 5px;
             
               <% if (!video.Channel.Name.endsWith(' - Topic')) { %>  
             
-              <% if (!nigth.channel.badges[0].tooltip  === null) { %>  
+              <% if (nigth.channel.badges[0].tooltip  !== null) { %>  
 
               <% if (nigth.channel.badges[0].tooltip === "Verified") { %> 
 <i class="fa-solid fa-badge-check" title="<%=nigth.channel.badges[0].tooltip%>"></i>

@@ -162,8 +162,14 @@ app.get("/watch", async function (req, res) {
   const video = await fetch(config.tubeApi + `video?v=${v}`);
 
   const info = await fetch("http://ip-api.com/json/");
-  const n = await info.text();
-  const ip = JSON.parse(n);
+  const jj = await info.text();
+  const ip = JSON.parse(jj);
+   
+   const nightly = await fetch(`https://lighttube-nightly.kuylar.dev/api/video?v=${v}`);
+  var n = await nightly.text().catch(() => null);
+
+  
+
   
   var fetching = await fetcher(v);
 
@@ -198,6 +204,7 @@ app.get("/watch", async function (req, res) {
   // lyrics
   const lyrics = await lyricsFinder(json.Title);
 
+ 
   renderTemplate(res, req, "poketube.ejs", {
     url: url_e,
     color: await getColors(
@@ -218,6 +225,7 @@ app.get("/watch", async function (req, res) {
     f: f,
     t: config.t_url,
     optout: t,
+    nigth:JSON.parse(n),
     lyrics: "",
   });
 });

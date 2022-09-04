@@ -556,8 +556,18 @@ border-radius: 5px;
  
           
          <div>
-					<a style="color:#fff" href="/channel?id=<%=video.Channel.id%>" >  <%=video.Channel.Name%></a> 
-           
+						<a style="color:#fff" href="/channel?id=<%=video.Channel.id%>" >  <%=video.Channel.Name%></a>   
+            
+              <% if (!video.Channel.Name.endsWith(' - Topic')) { %>  
+            
+              <% if (!nigth.channel.badges[0].tooltip  === null) { %>  
+
+              <% if (nigth.channel.badges[0].tooltip === "Verified") { %> 
+<i class="fa-solid fa-badge-check" title="<%=nigth.channel.badges[0].tooltip%>"></i>
+            <% } %>  <% if (nigth.channel.badges[0].tooltip === "Official Artist Channel") { %> 
+<i class="fa-solid fa-music-note" title="<%=nigth.channel.badges[0].tooltip%>"></i>
+             <% } %>             <% } %><% } %>
+
               </div>
 
 				</div>
@@ -587,7 +597,7 @@ border-radius: 5px;
                      
        <p style="font-family:MonoSpace">
          <b>
-PokeTube Player v08.31.22 - Node <%=process.version%> - V8 engine v<%=process.versions.v8%> -  <%=process.platform.replace("linux", "GNU/Linux")%> <%=process.arch%> Server ( <%=ip.org%> )
+PokeTube Player v09.04.22 - Node <%=process.version%> - V8 engine v<%=process.versions.v8%> -  <%=process.platform.replace("linux", "GNU/Linux")%> <%=process.arch%> Server ( <%=ip.org%> )
            </b>
          
                 </p>                        

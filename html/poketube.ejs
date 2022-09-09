@@ -38,411 +38,42 @@
  <% } %> <!-- close the } -->
 <link href=/css/yt-ukraine.svg?v=6 rel=icon>
 <title> <%=video.Title%> - PokeTube</title>
-<link href=/css/app-cdn.min.css rel=stylesheet>
-<link href=/css/app.main.css rel=stylesheet>
-<link href="/css/watch.main.css?v=56" rel=stylesheet>
-<link href="https://fonts.poketube.fun/css/fonts.css" rel=stylesheet>
-<link href=https://site-assets.fontawesome.com/releases/v6.1.1/css/all.css rel=stylesheet>
-  </head>
-   
+
   <!-- STYLES START -->
   
 <style>
    a.class:hover {
     text-decoration:underline;
     font-weight:bold
-}
-  summary{
-    color:gray;
-}
-summary:hover{
+   }
+   summary{
+     color:gray;
+   }
+   summary:hover{
     color:white;
-}
-</style>
-   
-   <style>
-    body{
-        overflow-x: hidden; /* Hide horizontal scrollbar */
-        color:#111111
     }
-          :visited { color: #00c0ff }
+  
+  :visited { color: #00c0ff }
      
-a{
+  a{
   color:#0ab7f0;
-}
-   .animated {
-            -webkit-animation-duration: 10s; 
-            animation-duration: 10s; 
-            -webkit-animation-fill-mode: both;
-            animation-fill-mode: both; 
-            animation-iteration-count: infinite;
-            -moz-animation-iteration-count: infinite;
-            -webkit-animation-iteration-count: infinite;
-            -o-animation-iteration-count: infinite;
-         }
-         
-         @-webkit-keyframes wiggle { 
-            0% { -webkit-transform: skewX(9deg); }
-            10% { -webkit-transform: skewX(-8deg); }
-            20% { -webkit-transform: skewX(7deg); }
-            30% { -webkit-transform: skewX(-6deg); }
-            40% { -webkit-transform: skewX(5deg); } 
-            50% { -webkit-transform: skewX(-4deg); } 
-            60% { -webkit-transform: skewX(3deg); }
-            70% { -webkit-transform: skewX(-2deg); } 
-            80% { -webkit-transform: skewX(1deg); } 
-            90% { -webkit-transform: skewX(0deg); }
-            100% { -webkit-transform: skewX(0deg); } 
-         }
-         
-         @keyframes wiggle { 
-            0% { transform: skewX(9deg); } 
-            10% { transform: skewX(-8deg); } 
-            20% { transform: skewX(7deg); } 
-            30% { transform: skewX(-6deg); } 
-            40% { transform: skewX(5deg); } 
-            50% { transform: skewX(-4deg); } 
-            60% { transform: skewX(3deg); } 
-            70% { transform: skewX(-2deg); } 
-            80% { transform: skewX(1deg); } 
-            90% { transform: skewX(0deg); } 
-            100% { transform: skewX(0deg); } 
-         }
-         
-         .wiggle { 
-            -webkit-animation-name: wiggle;
-            animation-name: wiggle; 
-            -webkit-animation-timing-function: ease-in;
-            animation-timing-function: ease-in; 
-         }
-         
-         .animated.wiggle { 
-            -webkit-animation-duration: 0.75s; 
-            animation-duration: 0.75s;
-         }
-    .v-chip:not(.v-chip--outlined).accent,
-.v-chip:not(.v-chip--outlined).error,
-.v-chip:not(.v-chip--outlined).info,
-.v-chip:not(.v-chip--outlined).primary,
-.v-chip:not(.v-chip--outlined).secondary,
-.v-chip:not(.v-chip--outlined).success,
-.v-chip:not(.v-chip--outlined).warning {
- color:#fff
-}
-.theme--light.v-chip {
- border-color:rgba(0,0,0,.12);
- color:rgba(0,0,0,.87)
-}
-.theme--light.v-chip:not(.v-chip--active) {
- background:#e0e0e0
-}
-.theme--light.v-chip:hover:before {
- opacity:.04
-}
-.theme--light.v-chip--active:before,
-.theme--light.v-chip--active:hover:before,
-.theme--light.v-chip:focus:before {
- opacity:.12
-}
-.theme--light.v-chip--active:focus:before {
- opacity:.16
-}
-.theme--dark.v-chip {
- border-color:hsla(0,0%,100%,.12);
- color:#fff
-}
-.theme--dark.v-chip:not(.v-chip--active) {
- background:#555
-}
-.theme--dark.v-chip:hover:before {
- opacity:.08
-}
-.theme--dark.v-chip--active:before,
-.theme--dark.v-chip--active:hover:before,
-.theme--dark.v-chip:focus:before {
- opacity:.24
-}
-.theme--dark.v-chip--active:focus:before {
- opacity:.32
-}
-.v-chip {
- align-items:center;
- cursor:default;
- display:inline-flex;
- line-height:20px;
- max-width:100%;
- outline:none;
- overflow:hidden;
- padding:0 12px;
- position:relative;
- text-decoration:none;
- transition-duration:.28s;
- transition-property:box-shadow,opacity;
- transition-timing-function:cubic-bezier(.4,0,.2,1);
- vertical-align:middle;
- white-space:nowrap
-}
-.v-chip:before {
- background-color:currentColor;
- bottom:0;
- border-radius:inherit;
- content:"";
- left:0;
- opacity:0;
- position:absolute;
- pointer-events:none;
- right:0;
- top:0
-}
-.v-chip .v-avatar {
- height:24px!important;
- min-width:24px!important;
- width:24px!important
-}
-.v-chip .v-icon {
- font-size:24px
-}
-.v-application--is-ltr .v-chip .v-avatar--left,
-.v-application--is-ltr .v-chip .v-icon--left {
- margin-left:-6px;
- margin-right:6px
-}
-.v-application--is-ltr .v-chip .v-avatar--right,
-.v-application--is-ltr .v-chip .v-icon--right,
-.v-application--is-rtl .v-chip .v-avatar--left,
-.v-application--is-rtl .v-chip .v-icon--left {
- margin-left:6px;
- margin-right:-6px
-}
-.v-application--is-rtl .v-chip .v-avatar--right,
-.v-application--is-rtl .v-chip .v-icon--right {
- margin-left:-6px;
- margin-right:6px
-}
-.v-chip:not(.v-chip--no-color) .v-icon {
- color:inherit
-}
-.v-chip .v-chip__close.v-icon {
- font-size:18px;
- max-height:18px;
- max-width:18px;
- -webkit-user-select:none;
- -moz-user-select:none;
- -ms-user-select:none;
- user-select:none
-}
-.v-application--is-ltr .v-chip .v-chip__close.v-icon.v-icon--right {
- margin-right:-4px
-}
-.v-application--is-rtl .v-chip .v-chip__close.v-icon.v-icon--right {
- margin-left:-4px
-}
-.v-chip .v-chip__close.v-icon:active,
-.v-chip .v-chip__close.v-icon:focus,
-.v-chip .v-chip__close.v-icon:hover {
- opacity:.72
-}
-.v-chip .v-chip__content {
- align-items:center;
- display:inline-flex;
- height:100%;
- max-width:100%
-}
-.v-chip--active .v-icon {
- color:inherit
-}
-.v-chip--link:before {
- transition:opacity .3s cubic-bezier(.25,.8,.5,1)
-}
-.v-chip--link:focus:before {
- opacity:.32
-}
-.v-chip--clickable {
- cursor:pointer;
- -webkit-user-select:none;
- -moz-user-select:none;
- -ms-user-select:none;
- user-select:none
-}
-.v-chip--clickable:active {
- box-shadow:0 3px 1px -2px rgba(0,0,0,.2),0 2px 2px 0 rgba(0,0,0,.14),0 1px 5px 0 rgba(0,0,0,.12)
-}
-.v-chip--disabled {
- opacity:.4;
- pointer-events:none;
- -webkit-user-select:none;
- -moz-user-select:none;
- -ms-user-select:none;
- user-select:none
-}
-.v-chip__filter {
- max-width:24px
-}
-.v-chip__filter.v-icon {
- color:inherit
-}
-.v-chip__filter.expand-x-transition-enter,
-.v-chip__filter.expand-x-transition-leave-active {
- margin:0
-}
-.v-chip--pill .v-chip__filter {
- margin-right:0 16px 0 0
-}
-.v-chip--pill .v-avatar {
- height:32px!important;
- width:32px!important
-}
-.v-application--is-ltr .v-chip--pill .v-avatar--left {
- margin-left:-12px
-}
-.v-application--is-ltr .v-chip--pill .v-avatar--right,
-.v-application--is-rtl .v-chip--pill .v-avatar--left {
- margin-right:-12px
-}
-.v-application--is-rtl .v-chip--pill .v-avatar--right {
- margin-left:-12px
-}
-.v-chip--label {
- border-radius:4px!important
-}
-.v-chip.v-chip--outlined {
- border-width:thin;
- border-style:solid
-}
-.v-chip.v-chip--outlined.v-chip--active:before {
- opacity:.08
-}
-.v-chip.v-chip--outlined .v-icon {
- color:inherit
-}
-.v-chip.v-chip--outlined.v-chip.v-chip {
- background-color:transparent!important
-}
-.v-chip.v-chip--selected {
- background:transparent
-}
-.v-chip.v-chip--selected:after {
- opacity:.28
-}
-.v-chip.v-size--x-small {
- border-radius:8px;
- font-size:10px;
- height:16px
-}
-.v-chip.v-size--small {
- border-radius:12px;
- font-size:12px;
- height:24px
-}
-.v-chip.v-size--default {
- border-radius:16px;
- font-size:14px;
- height:32px
-}
-.v-chip.v-size--large {
- border-radius:27px;
- font-size:16px;
- height:54px
-}
-.v-chip.v-size--x-large {
- border-radius:33px;
- font-size:18px;
- height:66px
-}
-    :root {
-    --text-primary: #fff;
-    --text-secondary: #fff;
-    --text-link: #3ea6ff;
-
-    --app-background: #111111;
-    --context-menu-background: #333;
-    --border-color: #444;
-    --item-hover-background: #373737;
-    --item-active-background: #383838;
-
-    --top-bar-background: #202020;
-    --guide-background: #212121;
-
-    --thumbnail-background: #252525;
-
-    --channel-info-background: #181818;
-    --channel-contents-background: #0f0f0f;
-}
-  @font-face {
-font-family: 'Ginto Nord';
-font-weight: 800;
-src:url('https://cdn.statically.io/gh/brecert/discord-quote-generator/main/Ginto-Nord-800.woff') format("woff");
-      }
-
-.alert {
-  padding: 20px;
-  background-color: #f44336;
-  color: white;
-  opacity: 1;
-  transition: opacity 0.6s;
-  margin-bottom: 15px;
-}
-
-.alert.success {background-color: #04AA6D;}
-.alert.info {background-color: #2196F3;}
-.alert.warning {background-color: #ff9800;}
-
-.closebtn {
-  margin-left: 15px;
-  color: white;
-  font-weight: bold;
-  float: right;
-  font-size: 22px;
-  line-height: 20px;
-  cursor: pointer;
-  transition: 0.3s;
-}
-
-.closebtn:hover {
-  color: black;
-}
-    
-  </style>
+   }
+   </style>
+  
+  <link href=/css/app-cdn.min.css rel=stylesheet>
+  <link href=/css/app.main.css rel=stylesheet>
+  <link href="/css/watch.main.css?v=56" rel=stylesheet>
+   <link href="/css/watch-util.css" rel=stylesheet>
+  <link href="https://fonts.poketube.fun/css/fonts.css" rel=stylesheet>
   
   <!-- NEW NAVBAR -->
-  
-  <style>
-    
-    nav {
-      background:#0f0b0b
-    }
-    
-  nav .right {
- display: flex;
-border-radius: 5px;
-justify-content: normal;
-padding-left: 0px;
-align-items: center;
-margin-left: 10px;
-}
-    
-    nav .left {
-    display: flex;
-justify-content: flex-start;
-align-items: center;
-border-radius: 5px;
- padding-left: 0px;
-margin-right: 40px;
-    }
-    
-    nav .middle {
-      display: flex;
- justify-content: center;
-align-items: center;
-border-radius: 5px;
-    }
-    
-    .video {
-      text-align:left;
-    }
-  </style>
+    <link href="/css/watch-navbar.css?v=56" rel=stylesheet>
+
   
    <!-- STYLES END -->
+<link href=https://site-assets.fontawesome.com/releases/v6.1.1/css/all.css rel=stylesheet>
+  </head>
+   
    
   <body>
     
@@ -593,63 +224,43 @@ border-radius: 5px;
                      </p>
                     
                              <hr style="clear: both;display: block;border: none;border-bottom: 0.5px solid #2f2f2f;margin: 0 0;/*! width: 4.5em; */height: 0;">
-                 	<div class="video-title" style="font-family:'Ginto Nord';font-weight:900;white-space:yes;">Comments - <%=comments%> </div> 
-                    <p>comments are in development! you can view them in	<a href="https://invidio.us/watch?v=<%=video.id%>">invidious</a> for now </p>
-   <hr style="clear: both;display: block;border: none;border-bottom: 0.5px solid #2f2f2f;margin: 0 0;/*! width: 4.5em; */height: 0;">
+                    
+                    <div class="video-title" style="font-family:'Ginto Nord';font-weight:900;white-space:yes;margin-bottom:10px;display: flex;column-gap: 3px;">COMMENTS | <div style="font-family: inter;"> <%=comments || "Probably disabled" %> •  <a href="https://invidio.us/watch?v=<%=video.id%>">View Comments</a> </div>
+ </div>
+    <hr style="clear: both;display: block;border: none;border-bottom: 0.5px solid #2f2f2f;margin: 0 0;/*! width: 4.5em; */height: 0;">
                      
        <p style="font-family:MonoSpace">
          <b>
-PokeTube Player v09.04.22 - Node <%=process.version%> - V8 engine v<%=process.versions.v8%> -  <%=process.platform.replace("linux", "GNU/Linux")%> <%=process.arch%> Server ( <%=ip.org%> )
+PokeTube Player v09.09.22a - Node <%=process.version%> - V8 engine v<%=process.versions.v8%> -  <%=process.platform.replace("linux", "GNU/Linux")%> <%=process.arch%> Server ( <%=ip.org%> )
            </b>
          
                 </p>                        
  
          </div>
                  
-	<div class="recommended-list" style="background-color:#1c1c1c;border-radius:25px;margin: 10px;" align="center"  >
+<div class="recommended-list" style="background-color:#1c1c1c;border-radius:25px;margin: 10px;height: fit-content;" align="center">
     
-     <div style="font-family:Inter,sans-serif;font-weight:900;white-space:yes;" align="center">
- 
-       <a href="https://youtube.com/watch?v=<%=video.id%>">Open On YouTube</a> • <a href="/privacy">Privacy</a> • <a href="https://github.com/iamashley0/poketube/">Git</a> 
-       </div> 
-               
-      <% if (optout) { %> 
-        
- <% } %>
+         
      
-      <% if (!optout) { %> 
-        
-                  <div style="font-family:Inter,sans-serif;font-weight:900;white-space:yes;" align="center">
-
-<a href="/watch?v=<%=video.id%>&t=f"> 
- Opt out of Metrics</a> (<a href="/privacy" style="color:#fff">Wut?</a>)
-               
-   </div>
-     <% } %>
-
-            	           <% if (lyrics && !r) { %>
-                                             <div style="font-family:Inter,sans-serif;font-weight:900;white-space:yes;" align="center">
-
-      <% if (optout) { %> 
-     <a href="/watch?v=<%=video.id%>&r=f">Lyrics (Wow)</a>
-
-
-  <% } %>
-         <% if (!optout) { %> 
-                       <a href="/watch?v=<%=video.id%>&r=f">Lyrics (Wow)</a>
- <% } %>
-                    </div>
-                           <% } %>    
 
                               <% if (!r) { %> 
+ 
+ <div class="video-title" style="text-align:left;font-family:'Ginto Nord';font-weight:900;white-space:yes;">                                  Recommendations
+                                </div>   
+                                 <p style="text-align:left;margin:0">
+                                 Videos that you might like
+                                </p>
                                 <hr style="clear: both;display: block;border: none;border-bottom: 0.5px solid #2f2f2f;margin: 0 0;/*! width: 4.5em; */height: 0;">
+                                                <% if (!video.Channel.Name.endsWith(' - Topic')) { %>  
+
                               <% if (!f) { %> 
 <div style="display: flex;column-gap: 2.5px;align-self: center;" align="center"> 
   <span tabindex="0" draggable="false" style="font-weight: bold;"  class="v-chip  v-chip--clickable v-chip--active v-chip--no-color theme--dark v-size--default"><a class="v-chip__content">
           Recommendations
         </span></a>
+
                                             <span tabindex="0" draggable="false" class="v-chip v-chip--clickable v-chip--no-color theme--dark v-size--default"> <a style="color:#fff;text-decoration: none;" href="/watch?v=<%=video.id%>&f=t" class="v-chip__content">
-From <%=video.Channel.Name%> </span></a>
+From <%=video.Channel.Name%> </span></a><% } %>
                                 </a>
                         
  
@@ -754,7 +365,44 @@ From  <%=video.Channel.Name%> </span></a>
                                                                       <% } %>
 
                                         <% } %>                                      </details>
+    <div style="font-family:Inter,sans-serif;font-weight:900;white-space:yes;" align="center">
+                                 <hr style="clear: both;display: block;border: none;border-bottom: 0.5px solid #2f2f2f;margin: 0 0;/*! width: 4.5em; */height: 0;">
+<br>
+       <a href="https://youtube.com/watch?v=<%=video.id%>">Open On YouTube</a> • <a href="/privacy">Privacy</a> • <a href="https://github.com/iamashley0/poketube/">Git</a> 
+       </div> 
+                                                                        
+               
+      <% if (optout) { %> 
+        
+ <% } %>
+     
+      <% if (!optout) { %> 
+        
+                  <div style="font-family:Inter,sans-serif;font-weight:900;white-space:yes;" align="center">
 
+<a href="/watch?v=<%=video.id%>&t=f"> 
+ Opt out of Metrics</a> (<a href="/privacy" style="color:#fff">Wut?</a>)
+               
+   </div>
+     <% } %>
+              <p style="font-family:Inter;margin:0;">
+                 PokeTube is Free sw: <a href="/license">Licenses</a> 
+                </p>                        
+ 
+
+            	           <% if (lyrics && !r) { %>
+                                             <div style="font-family:Inter,sans-serif;font-weight:900;white-space:yes;" align="center">
+
+      <% if (optout) { %> 
+     <a href="/watch?v=<%=video.id%>&r=f">Lyrics (Wow)</a>
+
+
+  <% } %>
+         <% if (!optout) { %> 
+                       <a href="/watch?v=<%=video.id%>&r=f">Lyrics (Wow)</a>
+ <% } %>
+                    </div>
+                           <% } %> 
                      </div>
  
 	</div>  

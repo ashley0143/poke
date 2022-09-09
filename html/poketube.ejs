@@ -37,8 +37,7 @@
 <link href="http://www.youtube.com/channel/<%=video.Channel.id%>" itemprop=url>
  <% } %> <!-- close the } -->
 <link href=/css/yt-ukraine.svg?v=6 rel=icon>
-<title> <%=video.Title%> - PokeTube</title>
-
+<title> <%=video.Title%> - PokeTube </title>
   <!-- STYLES START -->
   
 <style>
@@ -104,15 +103,15 @@
        
 		<div class="video-player-container">
 <video class="player" id="<%=sha384(video.id)%>" style="border-radius: 16px;" autoplay controls src="<%=url%>" poster="https://p.poketube.fun/https://i.ytimg.com/vi/<%=video.id%>/maxresdefault.jpg?v=607ddcd4">
-     <%  if (Array.isArray( video.Subtitles.Subtitle)) { %> 
-
+ 
     <% if (  video.Subtitles.Subtitle) { %>  
-
-   <% video.Subtitles.Subtitle.forEach(x => { %><track src="/api/subtitles?v=<%=video.id%>&h=<%= x.language %>" label="<%= x.language %>" kind="subtitles">                                                             
+     <%  if (Array.isArray( video.Subtitles.Subtitle)) { %> 
+   <% video.Subtitles.Subtitle.forEach(x => { %>
+     <track src="/api/subtitles?v=<%=video.id%>&h=<%= x.language %>" label="<%= x.language %>" kind="subtitles">         
+     
          <% }) %>   
                                                                                                        <% } %>               
                                                            <% } %>                
-
  					</video><img src="https://t.poketube.fun/t/rep.gif?video=<%=btoa(video.id)%>" style="border:0;width: 0;visibility: hidden;" id="video">
 <div style="display: flex;justify-content: center;align-items: center;flex-direction: row; column-gap: 3px;" align="center">
                                 
@@ -132,11 +131,10 @@
 			<div class="video-info">           
 				<div class="video-title" style="font-family:'Ginto Nord';font-weight:900;white-space:yes;"><%=video.Title%></div>
 				<p class="video-sub-info description">
-					<span><%=engagement.viewCount.toLocaleString()%> Total views - Uploaded on <%=date%> ^^</span>
+					<span><%=engagement.viewCount.toLocaleString()%> Total Views - Uploaded at <%=date%> ^^</span>
             <br>                      <br>          
- 
-
-            <%-String(video.Description).replace(/\n/g, " <br> ")%></center>
+            <%-String(video.Description).replace(/\n/g, " <br> ")%>
+            </center>
 				</p>
       <div class="video-info-buttons" style="border-radius: 15px;background: #333;padding: 3px;border-style: none;min-height: 34px;height: min-content;">
 					<div title="Likes">
@@ -144,7 +142,7 @@
      <%=engagement.likes.toLocaleString()%>
           </div>
 					<div title="Dislikes">
-<i class="fa-light fa-thumbs-down"></i>						    <%=engagement.dislikes.toLocaleString()%>
+<i class="fa-light fa-thumbs-down"></i> <%=engagement.dislikes.toLocaleString()%>
 					</div>
           					<div>
 
@@ -190,9 +188,7 @@
 						<a style="color:#fff" href="/channel?id=<%=video.Channel.id%>" >  <%=video.Channel.Name%></a>   
             
               <% if (!video.Channel.Name.endsWith(' - Topic')) { %>  
-            
                <% if (badges) { %> 
-
               <% if (badges.tooltip === "Verified") { %> 
 <i class="fa-solid fa-badge-check" title="<%=badges.tooltip%>"></i>
             <% } %>  <% if (badges.tooltip === "Official Artist Channel") { %> 
@@ -231,7 +227,7 @@
                      
        <p style="font-family:MonoSpace">
          <b>
-PokeTube Player v09.09.22b - Node <%=process.version%> - V8 engine v<%=process.versions.v8%> -  <%=process.platform.replace("linux", "GNU/Linux")%> <%=process.arch%> Server ( <%=ip.org%> )
+PokeTube Player v09.09.22c - Node <%=process.version%> - V8 v<%=process.versions.v8%> -  <%=process.platform.replace("linux", "GNU/Linux")%> <%=process.arch%> Server ( <%=ip.org%> )
            </b>
          
                 </p>                        
@@ -394,7 +390,7 @@ From  <%=video.Channel.Name%> </span></a>
      <a href="/watch?v=<%=video.id%>&r=f">Lyrics (Wow)</a>
 
 
-  <% } %>
+  <% } %> 
          <% if (!optout) { %> 
                        <a href="/watch?v=<%=video.id%>&r=f">Lyrics (Wow)</a>
  <% } %>
@@ -881,7 +877,7 @@ a{
  				<div class="video-info-bar" style="font-family:'Inter';">
 					<div class="divider"></div>
          	<div class="divider"></div>
-          					<%=engagement.viewCount.toLocaleString()%> Views - Uploaded on <%=date%> :3
+          					<%=engagement.viewCount.toLocaleString()%> Views - Uploaded at <%=date%> :3
 <div class="video-info-buttons" style="font-family:'Inter';font-weight:900;white-space:yes;background-color: #333;border-radius: 15px;margin: 6px;align-self: center;align-items: center;">
   <div>
    <i class="fa-light fa-thumbs-up"  style="font-size:x-large" ></i>
@@ -1146,7 +1142,7 @@ From <%=video.Channel.Name%> </span></a>
   navigator.share({
     title: document.title,
     text: "",
-    url: window.location.href + "?pk=m"
+    url: window.location.href + "&pk=m"
   })
   .then(() => console.log('Successful share'))
   .catch(error => console.log('Error sharing:', error));

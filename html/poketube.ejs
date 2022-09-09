@@ -231,7 +231,7 @@
                      
        <p style="font-family:MonoSpace">
          <b>
-PokeTube Player v09.09.22a - Node <%=process.version%> - V8 engine v<%=process.versions.v8%> -  <%=process.platform.replace("linux", "GNU/Linux")%> <%=process.arch%> Server ( <%=ip.org%> )
+PokeTube Player v09.09.22b - Node <%=process.version%> - V8 engine v<%=process.versions.v8%> -  <%=process.platform.replace("linux", "GNU/Linux")%> <%=process.arch%> Server ( <%=ip.org%> )
            </b>
          
                 </p>                        
@@ -385,10 +385,7 @@ From  <%=video.Channel.Name%> </span></a>
                
    </div>
      <% } %>
-              <p style="font-family:Inter;margin:0;">
-                 PokeTube is Free sw: <a href="/license">Licenses</a> 
-                </p>                        
- 
+            
 
             	           <% if (lyrics && !r) { %>
                                              <div style="font-family:Inter,sans-serif;font-weight:900;white-space:yes;" align="center">
@@ -885,8 +882,8 @@ a{
 					<div class="divider"></div>
          	<div class="divider"></div>
           					<%=engagement.viewCount.toLocaleString()%> Views - Uploaded on <%=date%> :3
-					<div class="video-info-buttons" style="font-family:'Inter';font-weight:900;white-space:yes;">
-            <div>
+<div class="video-info-buttons" style="font-family:'Inter';font-weight:900;white-space:yes;background-color: #333;border-radius: 15px;margin: 6px;align-self: center;align-items: center;">
+  <div>
    <i class="fa-light fa-thumbs-up"  style="font-size:x-large" ></i>
      <%=engagement.likes.toLocaleString()%>
        </div>
@@ -921,7 +918,10 @@ a{
             <% } %>  <% if (badges.tooltip === "Official Artist Channel") { %> 
 <i class="fa-solid fa-music-note" title="<%=badges.tooltip%>"></i>
              <% } %>             <% } %>  <% } %> 
-
+               
+		<div class="subscriber-count">
+          <%= k.Video.Channel.subscriberCount %>
+ 				</div>
               </div>
 				</div>
 		 
@@ -966,6 +966,8 @@ a{
                               
                                 
                               <% if (!f) { %> 
+                                              <% if (!video.Channel.Name.endsWith(' - Topic')) { %>  
+
 <div style="display: flex;column-gap: 2.5px;align-self: center;" align="center"> 
   <span tabindex="0" draggable="false" style="font-weight: bold;"  class="v-chip  v-chip--clickable v-chip--active v-chip--no-color theme--dark v-size--default"><a class="v-chip__content">
           Recommendations
@@ -976,8 +978,10 @@ From  <%=video.Channel.Name%> </span></a>
                         
  
                                                             </div>                                 
-                           <% } %>
+                           <% } %>                           <% } %>
+
                                <% if (f) { %> 
+              <% if (!video.Channel.Name.endsWith(' - Topic')) { %>  
 
 <div style="display: flex;column-gap: 2.5px;align-self: center;" align="center"> 
                                   <span tabindex="0" draggable="false" class="v-chip  v-chip--clickable v-chip--active v-chip--no-color theme--dark v-size--default"><a href="/watch?v=<%=video.id%>" style="color:#fff;text-decoration:none;" class="v-chip__content">
@@ -989,7 +993,8 @@ From <%=video.Channel.Name%> </span></a>
                         
  
                                                             </div>                                 
-                           <% } %>
+                           <% } %>                           <% } %>
+
                              
                               <% if (!f) { %> 
      <% k.Video.Recommendations.Video.forEach(x => { %>       
@@ -1141,7 +1146,7 @@ From <%=video.Channel.Name%> </span></a>
   navigator.share({
     title: document.title,
     text: "",
-    url: window.location.href
+    url: window.location.href + "?pk=m"
   })
   .then(() => console.log('Successful share'))
   .catch(error => console.log('Error sharing:', error));

@@ -25,7 +25,7 @@
      <meta content=website property=og:type>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta content="PokeTube - Privacy Is Your Right" property=og:title>
-    <meta content="PokeTube Is free software and it gives you freedom! " property=twitter:description>
+    <meta content="Privacy Is Your Right - Poketube is an a libre front end for YouTube" property=twitter:description>
     <meta content="https://cdn.glitch.com/ef5d02b7-c958-475a-b82d-d263d37e7ec7/poketubemain.png" property=og:image>
      <meta content=summary_large_image name=twitter:card>
     <meta content=@PoketaleBot name=twitter:site>
@@ -292,16 +292,16 @@ background-size: cover;
                <div class="video-title" style="font-family:'Ginto nord';font-weight:900;white-space:nowrap;font-size: xxx-large;">Discover</div>
         <% if (!isMobile) { %> 
           <p style="margin:0;">
-            Discover videos that are trending and popular rigth now!
+            Discover popular and trending content on poketube! (<s>or dont</s>)
           </p>
  		 	               <% } %>   
 
     	<div class="video-grid">
-   <% k.Explore.Videos.ItemSection[3].Shelf.Items.Video.forEach(x =>  { %>
-			<a href="/watch?v=<%- x.id %>" class="video">
+   <% k.Explore.Videos.ItemSection[2].Shelf.Items.Video.forEach(x =>  { %>
+			<a href="/watch?v=<%- x.id %>"  class="video">
 				<div class="thumbnail" style="background-image: url('https://p.poketube.fun/https://i.ytimg.com/vi/<%= x.id %>/hqdefault.jpg?sqp=-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLBy_x4UUHLNDZtJtH0PXeQGoRFTgw');border-top-left-radius: 16px;border-top-right-radius: 16px;"><span class="video-length"><%- x.duration %></span></div>
 				<div class="info">
-					<span class="title max-lines-2" style="font-family:Ginto Nord,sans-serif;"><%- x.Title %></span>
+					<span class="title max-lines-2" title="<%- x.Title %>" style="font-family:Ginto Nord,sans-serif;"><%- x.Title %></span>
              </div>
  			</a>	
           

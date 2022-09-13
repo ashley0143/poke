@@ -255,7 +255,8 @@ PokeTube Player v09.09.22c - Node <%=process.version%> - V8 v<%=process.versions
                                                 <% if (!video.Channel.Name.endsWith(' - Topic')) { %>  
 
                               <% if (!f) { %> 
-<div style="display: flex;column-gap: 2.5px;align-self: center;" align="center"> 
+                                <div style="display: flex;column-gap: 2.5px;align-self: center;" align="center"> 
+
   <span tabindex="0" draggable="false" style="font-weight: bold;"  class="v-chip  v-chip--clickable v-chip--active v-chip--no-color theme--dark v-size--default"><a class="v-chip__content">
           Recommendations
         </span></a>
@@ -263,8 +264,12 @@ PokeTube Player v09.09.22c - Node <%=process.version%> - V8 v<%=process.versions
                                             <span tabindex="0" draggable="false" class="v-chip v-chip--clickable v-chip--no-color theme--dark v-size--default"> <a style="color:#fff;text-decoration: none;" href="/watch?v=<%=video.id%>&f=t" class="v-chip__content">
 From <%=video.Channel.Name%> </span></a><% } %>
                                 </a>
- 
- 
+                                              
+                                                                          <% if (!f) { %> 
+  
+                                  </div>
+                            <% } %>
+
                            <% } %>
                                <% if (f) { %> 
 

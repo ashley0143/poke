@@ -24,7 +24,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Sigmar+One&amp;display=swap" rel="stylesheet"> 
     <meta content=website property=og:type>
     <meta content="PokeTube - Video Downloader" property=og:title>
-    <meta content="Download this video by <%=video.Channel.Name%> on PokeTube" property=twitter:description>
+    <meta content="You wouldn't download a car... Right? - Download this video by <%=video.Channel.Name%> on PokeTube " property=twitter:description>
     <meta content="https://i.ytimg.com/vi/<%=video.id%>/maxresdefault.jpg" property=og:image>
      <meta content=summary_large_image name=twitter:card>
     <meta content=@PoketaleBot name=twitter:site>
@@ -176,8 +176,8 @@ summary:hover{
 	   
 
 <div class="playlist-page">
-<div class="playlist-info" style="border-radius:12px;font-family:'Inter';margin: 8px;padding: 18px;background-color: black;">
-		<div class="thumbnail" style="background-image: url('https://i.ytimg.com/vi/<%=video.id%>/hqdefault.jpg');border-radius: 5px;">
+<div class="playlist-info" style="border-radius:12px;font-family:'Inter';margin: 8px;padding: 18px;background-color: black;width: fit-content;height: fit-content;">
+  <div class="thumbnail" style="background-image: url('https://i.ytimg.com/vi/<%=video.id%>/hqdefault.jpg');border-radius: 5px;">
       <a href="/watch?v=<%=video.id%>">Watch The Video</a> 
 		</div>
  		<p class="title"><%=video.Title%></p>
@@ -238,7 +238,7 @@ summary:hover{
     <div class="format-list">
       
 			<h2>Audio formats</h2>
-     
+      
         <div class="download-format" style="background: black;margin: 6px;border-radius: 14px;/*! text-align: center; */">					             <div style="font-family:'Ginto Nord'"> webm (50k) 
            </div>
 			  	<a style="color:#fff;font-family:Inter" href="/api/video/download?v=<%=video.id%>&q=249&f=webm">

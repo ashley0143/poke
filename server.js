@@ -38,7 +38,9 @@ var useragent = require("express-useragent");
 const sha384 = require("js-sha512").sha384;
 
 const musicInfo = require("music-info");
- 
+const wiki = require('wikipedia');
+
+
  var http = require('http');
 var https = require('https');
 
@@ -97,9 +99,12 @@ app.use(function(req, res, next) {
   let f = await fetch(url);
    const body = await f.text();
 
+       
      
       res.send(body)
     });
+
+ 
 
 app.get("/encryption", async function (req, res) {
   var v = req.query.v;
@@ -176,6 +181,7 @@ app.get("/watch", async function (req, res) {
   if (n === undefined) { comments = ""; }
   if (n !== undefined) { comments = JSON.parse(n).commentCount }
   
+   
   var fetching = await fetcher(v);
 
   const json = fetching.video.Player;
@@ -209,8 +215,13 @@ app.get("/watch", async function (req, res) {
   // lyrics
   const lyrics = await lyricsFinder(json.Title);
 
- 
-  renderTemplate(res, req, "poketube.ejs", {
+  const summary = await wiki.summary(json.Channel.Name);
+
+  var w = ""
+  if(summary.title === "Not found.") {   w = "none" } 
+  if(summary.title !== "Not found.") {w = summary}
+  
+   renderTemplate(res, req, "poketube.ejs", {
     url: url_e,
     color: await getColors(
       `https://i.ytimg.com/vi/${v}/maxresdefault.jpg`
@@ -227,6 +238,7 @@ app.get("/watch", async function (req, res) {
     r: r,
     qua: q,
     ip:ip,
+    wiki:w,
     f: f,
     t: config.t_url,
     optout: t,

@@ -1,4 +1,4 @@
- /*
+  /*
 
     PokeTube is an Free/Libre youtube front-end. this is our main file.
   
@@ -104,7 +104,10 @@ app.use(function(req, res, next) {
       res.send(body)
     });
 
- 
+  app.get("/api/opensearch", async (req, res) => {
+        res.sendFile(__dirname + `/opensearch.xml`);
+
+    });
 
 app.get("/encryption", async function (req, res) {
   var v = req.query.v;

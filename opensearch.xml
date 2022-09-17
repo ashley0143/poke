@@ -4,5 +4,5 @@
   <ShortName>PokeTube</ShortName>
   <Description>Search videos on poketube!</Description>
   <InputEncoding>UTF-8</InputEncoding>
-  <Url type="text/html" template="https://poketube.fun/search?q={searchTerms}" />
+  <Url type="text/html" template="https://poketube.fun/search?q={searchTerms}&from=osbar" />
 </OpenSearchDescription>

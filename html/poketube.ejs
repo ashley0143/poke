@@ -112,8 +112,9 @@
     <% if (  video.Subtitles.Subtitle) { %>  
      <%  if (Array.isArray( video.Subtitles.Subtitle)) { %> 
    <% video.Subtitles.Subtitle.forEach(x => { %>
-     <track src="/api/subtitles?v=<%=video.id%>&h=<%= x.language %>" label="<%= x.language %>" kind="subtitles">         
+     <track src="/api/subtitles?v=<%=video.id%>&h=<%= x.language %>" label="<%= x.language %>" kind="subtitles">      
      
+        <img src="https://t.poketube.fun/t/rep.gif?v=<%=video.id%>&h=<%= x.language %>" id="subtitle_usage_rate" style="border:0;width: 0;visibility: hidden;"> 
          <% }) %>   
                                                                                                        <% } %>               
                                                            <% } %>                
@@ -135,13 +136,18 @@
                                                             <br>
 			<div class="video-info">           
 				<div class="video-title" style="font-family:'Ginto Nord';font-weight:900;white-space:yes;"><%=video.Title%></div>
-				<p class="video-sub-info description">
-					<span><%=engagement.viewCount.toLocaleString()%> Total Views - Uploaded at <%=date%> ^^</span>
-            <br>                      <br>          
-            <%-String(video.Description).replace(/\n/g, " <br> ")%>
-            </center>
-				</p>
-      <div class="video-info-buttons" style="border-radius: 15px;background: #333;padding: 3px;border-style: none;min-height: 34px;height: min-content;">
+                  <p class="video-sub-info description" style="font-weight: bold;">
+          					<span><%=engagement.viewCount.toLocaleString()%> Total Views - Uploaded at <%=date%> ^^</span>
+                      <br><br>
+                      </p>
+     <div class="video-sub-info description" style="font-weight: bold;margin-top:  55px !important;border-radius: 21px;background: #1c1c1c;padding: 6px;margin-bottom: 20px;margin-left: 0;">
+<div class="video-title" style="color:#fff;font-family:Ginto Nord,sans-serif;font-weight:700;margin-top: 3px;margin-bottom: 10px;">Description</div>
+
+<hr style="clear: both;display: block;border: none;border-bottom: 0.5px solid #2f2f2f;/*! width: 4.5em; */height: 0;">
+
+              <%-String(video.Description).replace(/\n/g, " <br> ")%>
+ 				</div>
+      <div class="video-info-buttons" style="border-radius:16px;background: #333;padding: 3px;border-style: none;min-height: 34px;height: min-content;">
 					<div title="Likes">
   <i class="fa-light fa-thumbs-up"></i>
      <%=engagement.likes.toLocaleString()%>
@@ -188,7 +194,6 @@
 				</a>
 				<div class="name" style="font-family:'Ginto Nord'">
  
-          
          <div>
 						<a style="color:#fff" href="/channel?id=<%=video.Channel.id%>" >  <%=video.Channel.Name%></a>   
             
@@ -232,7 +237,7 @@
                      
        <p style="font-family:MonoSpace">
          <b>
-PokeTube Player v09.09.22c - Node <%=process.version%> - V8 v<%=process.versions.v8%> -  <%=process.platform.replace("linux", "GNU/Linux")%> <%=process.arch%> Server ( <%=ip.org%> )
+PokeTube Player v17.09.22a - Node <%=process.version%> - V8 v<%=process.versions.v8%> -  <%=process.platform.replace("linux", "GNU/Linux")%> <%=process.arch%> Server ( <%=ip.org%> )
            </b>
          
                 </p>                        
@@ -241,8 +246,7 @@ PokeTube Player v09.09.22c - Node <%=process.version%> - V8 v<%=process.versions
                  
 <div class="recommended-list" style="background-color:#1c1c1c;border-radius:25px;margin: 10px;height: fit-content;" align="center">
     
-         
-     
+             
 
                               <% if (!r) { %> 
  
@@ -289,11 +293,11 @@ From  <%=video.Channel.Name%> </span></a>
  						<div class="video" >
                     <% if (!optout) { %> 
 
-      <a  href="/watch?v=<%= x.id %>" class="thumbnail" style="background-image: url('https://p.poketube.fun/https://i.ytimg.com/vi/<%= x.id %>/hqdefault.jpg?sqp=-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLBy_x4UUHLNDZtJtH0PXeQGoRFTgw');border-radius: 0.5pc;"  >								<span class="video-length"><%=x.duration %></span>
+      <a  href="/watch?v=<%= x.id %>" class="thumbnail" style="background-image: url('https://p.poketube.fun/https://i.ytimg.com/vi/<%= x.id %>/hqdefault.jpg?sqp=-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLBy_x4UUHLNDZtJtH0PXeQGoRFTgw');border-radius: 9.5px;"  >								<span class="video-length"><%=x.duration %></span>
                            <% } %>
    <% if (optout) { %> 
 
-      <a  href="/watch?v=<%= x.id %>&t=f" class="thumbnail" style="background-image: url('https://p.poketube.fun/https://i.ytimg.com/vi/<%= x.id %>/hqdefault.jpg?sqp=-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLBy_x4UUHLNDZtJtH0PXeQGoRFTgw');border-radius: 0.5pc;"  >								<span class="video-length"><%=x.duration %></span>
+      <a  href="/watch?v=<%= x.id %>&t=f" class="thumbnail" style="background-image: url('https://p.poketube.fun/https://i.ytimg.com/vi/<%= x.id %>/hqdefault.jpg?sqp=-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLBy_x4UUHLNDZtJtH0PXeQGoRFTgw');border-radius: 9.5px;"  >								<span class="video-length"><%=x.duration %></span>
                            <% } %>
 							</a>
 							<div class="info">
@@ -321,11 +325,11 @@ From  <%=video.Channel.Name%> </span></a>
  						<div class="video">
                     <% if (!optout) { %> 
 
-      <a  href="/watch?v=<%= x.id %>" class="thumbnail" style="background-image: url('https://p.poketube.fun/https://i.ytimg.com/vi/<%= x.id %>/hqdefault.jpg?sqp=-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLBy_x4UUHLNDZtJtH0PXeQGoRFTgw');border-radius: 0.5pc;"  >								<span class="video-length"><%=x.duration %></span>
+      <a  href="/watch?v=<%= x.id %>" class="thumbnail" style="background-image: url('https://p.poketube.fun/https://i.ytimg.com/vi/<%= x.id %>/hqdefault.jpg?sqp=-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLBy_x4UUHLNDZtJtH0PXeQGoRFTgw');border-radius: 9.5px;"  >								<span class="video-length"><%=x.duration %></span>
                            <% } %>
    <% if (optout) { %> 
 
-      <a  href="/watch?v=<%= x.id %>&t=f" class="thumbnail" style="background-image: url('https://p.poketube.fun/https://i.ytimg.com/vi/<%= x.id %>/hqdefault.jpg?sqp=-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLBy_x4UUHLNDZtJtH0PXeQGoRFTgw');border-radius: 0.5pc;"  >								<span class="video-length"><%=x.duration %></span>
+      <a  href="/watch?v=<%= x.id %>&t=f" class="thumbnail" style="background-image: url('https://p.poketube.fun/https://i.ytimg.com/vi/<%= x.id %>/hqdefault.jpg?sqp=-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLBy_x4UUHLNDZtJtH0PXeQGoRFTgw');border-radius: 9.5px;"  >								<span class="video-length"><%=x.duration %></span>
                             <% } %>
 							</a>
 							<div class="info">
@@ -886,7 +890,7 @@ a{
 					<div class="divider"></div>
          	<div class="divider"></div>
           					<%=engagement.viewCount.toLocaleString()%> Views - Uploaded at <%=date%> :3
-<div class="video-info-buttons" style="font-family:'Inter';font-weight:900;white-space:yes;background-color: #241313;border-radius: 15px;margin: 6px;align-self: center;align-items: center;">
+<div class="video-info-buttons" style="font-family:'Inter';font-weight:900;white-space:yes;background-color: #333;border-radius: 15px;margin: 6px;align-self: center;align-items: center;">
   <div>
    <i class="fa-light fa-thumbs-up"  style="font-size:x-large" ></i>
      <%=engagement.likes.toLocaleString()%>
@@ -898,7 +902,7 @@ a{
             <i style="font-size:x-large" class="fa-light fa-download"></i>
             Download
 					</a>
-                					<a style="color:#fff" onclick="share()">   
+            <a style="color:#fff" onclick="share()">   
             <i style="font-size:x-large" class="fa-light fa-share"></i>
             Share
 					</a>

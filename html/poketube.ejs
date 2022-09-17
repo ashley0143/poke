@@ -146,6 +146,23 @@
 <hr style="clear: both;display: block;border: none;border-bottom: 0.5px solid #2f2f2f;/*! width: 4.5em; */height: 0;">
 
               <%-String(video.Description).replace(/\n/g, " <br> ")%>
+     
+                   <% if (wiki.extract_html) { %> 
+<div class="video-title" style="color:#fff;font-family:Ginto Nord,sans-serif;font-weight:700;margin-top: 10px;margin-bottom: 10px;">From The web</div>
+                     
+<hr style="clear: both;display: block;border: none;border-bottom: 0.5px solid #2f2f2f;/*! width: 4.5em; */height: 0;">
+
+<p>
+ <%-wiki.extract_html%>
+                     </p>
+  
+<p style="margin-bottom: 10px;">
+
+  <a href=" <%-wiki.content_urls.desktop.page%>
+ ">From wikipedia </a> under CC-BY-SA 3.0
+                     </p>
+                     <% } %>               
+
  				</div>
       <div class="video-info-buttons" style="border-radius:16px;background: #333;padding: 3px;border-style: none;min-height: 34px;height: min-content;">
 					<div title="Likes">

@@ -1,4 +1,4 @@
-  /*
+ /*
 
     PokeTube is an Free/Libre youtube front-end. this is our main file.
   
@@ -85,6 +85,15 @@ const config = {
 // pages
 
  
+function IsJsonString(str) {
+    try {
+        JSON.parse(str);
+    } catch (e) {
+        return false;
+    }
+    return true;
+}
+
 app.use(function(req, res, next) {
    res.header("Access-Control-Allow-Origin", "*");
  
@@ -168,22 +177,41 @@ app.get("/watch", async function (req, res) {
   const info = await fetch("http://ip-api.com/json/");
   const jj = await info.text();
   const ip = JSON.parse(jj);
-   
-   const nightly = await fetch(`https://lighttube-nightly.kuylar.dev/api/video?v=${v}`);
-  var n = await nightly.text().catch(() => null);
+     var badges = ""
+
+      for (let i = 0; i < 3; i++) {
+        try {
+          const nightly = await fetch(
+            `https://lighttube-nightly.kuylar.dev/api/video?v=${v}`
+          );
+          var n = await nightly.text();
+        } catch (err) {
+          if (err.status === 503) {
+            // retry after a bit
+            await new Promise((resolve) => setTimeout(resolve, 1000));
+          } else {
+            return (n = "none");
+          }
+        }
+      }
 
   
   
+  
+ 
   var nn = "";
 
-  var badges = ""
-  if (n === undefined) {badges = "";} 
-  if (n !== undefined) {badges = JSON.parse(n).channel.badges[0]}
+   if (n === "none") {badges = "";} 
+    if(IsJsonString(n)){
+
+  if (n !== "none") {badges = JSON.parse(n).channel.badges[0]}
+    }
   
   var comments = ""
-  if (n === undefined) { comments = ""; }
-  if (n !== undefined) { comments = JSON.parse(n).commentCount }
-  
+  if (n === "none") { comments = ""; }
+  if(IsJsonString(n)){
+  if (n !== "none") { comments = JSON.parse(n).commentCount }
+  }
    
   var fetching = await fetcher(v);
 
@@ -197,20 +225,20 @@ app.get("/watch", async function (req, res) {
   if (q === "medium") {
     var url = `https://tube.kuylar.dev/proxy/media/${v}/18`;
   }
+  
   // encryption
   const url_e =
     url +
     "?e=" +
-    sha384(json.Title) +
-    sha384(json.Channel.id) +
-    sha384(json.Channel.id) +
+    sha384(k.Video.Channel.id) +
+    sha384(k.Video.Channel.id) +
     "Piwik" +
     sha384(config.t_url);
 
   // channel info
   const engagement = fetching.engagement;
   const channel = await fetch(
-    config.tubeApi + `channel?id=${json.Channel.id}&tab=videos`
+    config.tubeApi + `channel?id=${k.Video.Channel.id}&tab=videos`
   );
   const c = await channel.text();
   const tj = JSON.parse(toJson(c));
@@ -218,7 +246,7 @@ app.get("/watch", async function (req, res) {
   // lyrics
   const lyrics = await lyricsFinder(json.Title);
 
-  const summary = await wiki.summary(json.Channel.Name);
+  const summary = await wiki.summary(k.Video.Channel.Name);
 
   var w = ""
   if(summary.title === "Not found.") {   w = "none" } 

@@ -244,7 +244,7 @@ app.get("/watch", async function (req, res) {
   const tj = JSON.parse(toJson(c));
 
   // lyrics
-  const lyrics = await lyricsFinder(json.Title);
+//  const lyrics = await lyricsFinder(json.Title);
 
   const summary = await wiki.summary(k.Video.Channel.Name);
 

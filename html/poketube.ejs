@@ -143,29 +143,30 @@
                       </p>
      <div class="video-sub-info description" style="font-weight: bold;margin-top:  55px !important;border-radius: 21px;background: #1c1c1c;padding: 10px;margin-bottom: 20px;margin-left: 0;">
 <div class="video-title" style="color:#fff;font-family:Ginto Nord,sans-serif;font-weight:700;margin-top: 3px;margin-bottom: 10px;">Description</div>
-
-<hr style="clear: both;display: block;border: none;border-bottom: 0.5px solid #2f2f2f;/*! width: 4.5em; */height: 0;">
+ <hr style="clear: both;display: block;border: none;border-bottom: 0.5px solid #2f2f2f;/*! width: 4.5em; */height: 0;">
 
               <%-String(video.Description).replace(/\n/g, " <br> ")%>
      
                    <% if (wiki.extract_html) { %> 
-<div class="video-title" style="color:#fff;font-family:Ginto Nord,sans-serif;font-weight:700;margin-top: 10px;margin-bottom: 10px;">From The web</div>
+<div class="video-title" style="color:#fff;font-family:Ginto Nord,sans-serif;font-weight:700;margin-top: 10px;margin-bottom: 10px;">From da web</div>
                      
 <hr style="clear: both;display: block;border: none;border-bottom: 0.5px solid #2f2f2f;/*! width: 4.5em; */height: 0;">
 
-<p>
- <%-wiki.extract_html%>
-                     </p>
-  
+  <%-wiki.extract_html%>
+   
 <p style="margin-bottom: 10px;">
 
   <a href=" <%-wiki.content_urls.desktop.page%>
  ">From wikipedia </a> under CC-BY-SA 3.0
                      </p>
+                     
+  
+                 
+                     </p>
                      <% } %>               
 
  				</div>
-      <div class="video-info-buttons" style="border-radius:16px;background: #333;padding: 3px;border-style: none;min-height: 34px;height: min-content;">
+      <div class="video-info-buttons" style="border-radius:16px;background: #1c1c1c;padding: 3px;border-style: none;min-height: 34px;height: min-content;">
 					<div title="Likes">
   <i class="fa-light fa-thumbs-up"></i>
      <%=engagement.likes.toLocaleString()%>
@@ -249,13 +250,13 @@
                     
                              <hr style="clear: both;display: block;border: none;border-bottom: 0.5px solid #2f2f2f;margin: 0 0;/*! width: 4.5em; */height: 0;">
                     
-                    <div class="video-title" style="font-family:'Ginto Nord';font-weight:900;white-space:yes;margin-bottom:10px;display: flex;column-gap: 3px;">COMMENTS | <div style="font-family: inter;"> <%=comments || "Probably disabled" %> •  <a href="https://invidio.us/watch?v=<%=video.id%>">View Comments</a> </div>
+                    <div class="video-title" style="font-family:'Ginto Nord';font-weight:900;white-space:yes;margin-bottom:10px;display: flex;column-gap: 3px;">COMMENTS | <div style="font-family: inter;"> <%=comments || "Probably disabled or theres no comments" %> •  <a href="https://invidio.us/watch?v=<%=video.id%>">View Comments</a> </div>
  </div>
     <hr style="clear: both;display: block;border: none;border-bottom: 0.5px solid #2f2f2f;margin: 0 0;/*! width: 4.5em; */height: 0;">
                      
        <p style="font-family:MonoSpace">
          <b>
-PokeTube Player v17.09.22a - Node <%=process.version%> - V8 v<%=process.versions.v8%> -  <%=process.platform.replace("linux", "GNU/Linux")%> <%=process.arch%> Server ( <%=ip.org%> )
+PokeTube Player v20.09.22a - Node <%=process.version%> - V8 v<%=process.versions.v8%> -  <%=process.platform.replace("linux", "GNU/Linux")%> <%=process.arch%> Server ( <%=ip.org%> )
            </b>
          
                 </p>                        
@@ -284,7 +285,10 @@ PokeTube Player v17.09.22a - Node <%=process.version%> - V8 v<%=process.versions
         </span></a>
 
                                             <span tabindex="0" draggable="false" class="v-chip v-chip--clickable v-chip--no-color theme--dark v-size--default"> <a style="color:#fff;text-decoration: none;" href="/watch?v=<%=video.id%>&f=t" class="v-chip__content">
-From <%=video.Channel.Name%> </span></a><% } %>
+From <%=video.Channel.Name%> </span></a>
+                                              
+                                    >
+                                              <% } %>
                                 </a>
                                               
                                                                           <% if (!f) { %> 
@@ -957,11 +961,28 @@ a{
                 <div>
  
 <h3 style="color:#fff;font-family:Ginto Nord,sans-serif;font-weight:700;white-space:yes;"> Description</h3>
-  
+                               <hr style="clear: both;display: block;border: none;border-bottom: 0.5px solid #2f2f2f;margin: 0 0;/*! width: 4.5em; */height: 0;">
+
         			<p class="description"><%-String(video.Description).replace(/\n/g, " <br> ")%> </p>
  
                             </div> 
-                  
+                          <% if (wiki.extract_html) { %> 
+<div class="video-title" style="color:#fff;font-family:Ginto Nord,sans-serif;font-weight:700;margin-top: 10px;margin-bottom: 10px;">From da web</div>
+                                                         <hr style="clear: both;display: block;border: none;border-bottom: 0.5px solid #2f2f2f;margin: 0 0;/*! width: 4.5em; */height: 0;">
+
+                     
+  <%-wiki.extract_html%>
+   
+<p style="margin-bottom: 10px;">
+
+  <a href=" <%-wiki.content_urls.desktop.page%>
+ ">From wikipedia </a> under CC-BY-SA 3.0
+                     </p>
+                     
+  
+                 
+                     </p>
+                     <% } %>  
                            
  			</div>    <hr style="clear: both;display: block;border: none;border-bottom: 0.5px solid #2f2f2f;margin: 0 0;/*! width: 4.5em; */height: 0;">
                            <div>

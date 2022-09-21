@@ -123,10 +123,10 @@
 
 <div class="channel-page">
  <div class="channel-info-container">
-          <img src="<%=j.Channel.Metadata.Banners.Thumbnail[2].$t%>">
+          <img src="https://p.poketube.fun/<%=j.Channel.Metadata.Banners.Thumbnail[2].$t%>">
 		<div class="channel-info" >
 			<a href="/channel?id=<%=ID%>" class="avatar">
-				<img src="<%=j.Channel.Metadata.Avatars.Thumbnail.$t%>" alt="Channel Avatar">
+				<img src="https://p.poketube.fun/<%=j.Channel.Metadata.Avatars.Thumbnail.$t%>" alt="Channel Avatar">
 			</a>
 			<div class="name">
 				<p style="font-family:Ginto Nord,sans-serif;font-weight:900;white-space:yes;"><%=j.Channel.Metadata.Name%></p>
@@ -160,7 +160,7 @@
    	<div class="video-grid" >
    <% tj.Channel.Contents.ItemSection.ItemSection.Video.forEach(x =>  { %>
 			<a href="/watch?v=<%- x.id %>" class="video">
-				<div class="thumbnail" style="background-image: url('https://i.ytimg.com/vi/<%= x.id %>/hqdefault.jpg?sqp=-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLBy_x4UUHLNDZtJtH0PXeQGoRFTgw');border-radius: 10px;"><span class="video-length"><%- x.duration %></span></div>
+				<div class="thumbnail" style="background-image: url('https://p.poketube.fun/https://i.ytimg.com/vi/<%= x.id %>/hqdefault.jpg?sqp=-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLBy_x4UUHLNDZtJtH0PXeQGoRFTgw');border-radius: 10px;"><span class="video-length"><%- x.duration %></span></div>
 				<div class="info">
 					<span class="title max-lines-2" style="font-family:Ginto Nord,sans-serif;"><%- x.Title %></span>
 			 

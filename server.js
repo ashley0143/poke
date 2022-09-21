@@ -1,4 +1,4 @@
- /*
+/*
 
     PokeTube is an Free/Libre youtube front-end. this is our main file.
   
@@ -18,7 +18,7 @@
     along with this program. If not, see https://www.gnu.org/licenses/.
   */
 
-///////// definitions /////////////////
+///////////// DEFINITONS /////////////
 const path = require("path");
 const htmlParser = require("node-html-parser");
 const getColors = require("get-image-colors");
@@ -33,16 +33,15 @@ const templateDir = path.resolve(`${process.cwd()}${path.sep}html`);
 
 var express = require("express");
 var useragent = require("express-useragent");
- 
+
 // hash
 const sha384 = require("js-sha512").sha384;
 
 const musicInfo = require("music-info");
-const wiki = require('wikipedia');
+const wiki = require("wikipedia");
 
-
- var http = require('http');
-var https = require('https');
+var http = require("http");
+var https = require("https");
 
 http.globalAgent.maxSockets = Infinity;
 https.globalAgent.maxSockets = Infinity;
@@ -70,7 +69,7 @@ const random_words = [
   "how to become a god?",
   "is a panda a panda if pandas???",
   "Minecraft movie trailer",
-  "monke"
+  "monke",
 ];
 
 /*
@@ -82,41 +81,22 @@ const config = {
   t_url: "https://t.poketube.fun/", //  def matomo url
 };
 
-// pages
+///////////// PAGES /////////////
 
- 
 function IsJsonString(str) {
-    try {
-        JSON.parse(str);
-    } catch (e) {
-        return false;
-    }
-    return true;
+  try {
+    JSON.parse(str);
+  } catch (e) {
+    return false;
+  }
+  return true;
 }
 
-app.use(function(req, res, next) {
-   res.header("Access-Control-Allow-Origin", "*");
- 
-   next();
+app.use(function (req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+
+  next();
 });
-     app.get("/api/subtitles", async (req, res) => {
-  const id = req.query.v;
-   const l = req.query.h;
- 
-  const url = `https://tube.kuylar.dev/proxy/caption/${id}/${l}/`
-
-  let f = await fetch(url);
-   const body = await f.text();
-
-       
-     
-      res.send(body)
-    });
-
-  app.get("/api/opensearch", async (req, res) => {
-        res.sendFile(__dirname + `/opensearch.xml`);
-
-    });
 
 app.get("/encryption", async function (req, res) {
   var v = req.query.v;
@@ -155,6 +135,7 @@ app.get("/encryption", async function (req, res) {
   res.json(re);
 });
 
+///////////// VIDEO PAGES ETC. /////////////
 app.get("/watch", async function (req, res) {
   /*
    * QUERYS
@@ -177,42 +158,45 @@ app.get("/watch", async function (req, res) {
   const info = await fetch("http://ip-api.com/json/");
   const jj = await info.text();
   const ip = JSON.parse(jj);
-     var badges = ""
+  var badges = "";
 
-      for (let i = 0; i < 3; i++) {
-        try {
-          const nightly = await fetch(
-            `https://lighttube-nightly.kuylar.dev/api/video?v=${v}`
-          );
-          var n = await nightly.text();
-        } catch (err) {
-          if (err.status === 503) {
-            // retry after a bit
-            await new Promise((resolve) => setTimeout(resolve, 1000));
-          } else {
-            return (n = "none");
-          }
-        }
+  for (let i = 0; i < 3; i++) {
+    try {
+      const nightly = await fetch(
+        `https://lighttube-nightly.kuylar.dev/api/video?v=${v}`
+      );
+      var n = await nightly.text();
+    } catch (err) {
+      if (err.status === 503) {
+        // retry after a bit
+        await new Promise((resolve) => setTimeout(resolve, 1000));
+      } else {
+        return (n = "none");
       }
+    }
+  }
 
-  
-  
-  
- 
   var nn = "";
 
-   if (n === "none") {badges = "";} 
-    if(IsJsonString(n)){
-
-  if (n !== "none") {badges = JSON.parse(n).channel.badges[0]}
-    }
-  
-  var comments = ""
-  if (n === "none") { comments = ""; }
-  if(IsJsonString(n)){
-  if (n !== "none") { comments = JSON.parse(n).commentCount }
+  if (n === "none") {
+    badges = "";
   }
-   
+  if (IsJsonString(n)) {
+    if (n !== "none") {
+      badges = JSON.parse(n).channel.badges[0];
+    }
+  }
+
+  var comments = "";
+  if (n === "none") {
+    comments = "";
+  }
+  if (IsJsonString(n)) {
+    if (n !== "none") {
+      comments = JSON.parse(n).commentCount;
+    }
+  }
+
   var fetching = await fetcher(v);
 
   const json = fetching.video.Player;
@@ -225,7 +209,7 @@ app.get("/watch", async function (req, res) {
   if (q === "medium") {
     var url = `https://tube.kuylar.dev/proxy/media/${v}/18`;
   }
-  
+
   // encryption
   const url_e =
     url +
@@ -244,15 +228,19 @@ app.get("/watch", async function (req, res) {
   const tj = JSON.parse(toJson(c));
 
   // lyrics
-//  const lyrics = await lyricsFinder(json.Title);
+  //  const lyrics = await lyricsFinder(json.Title);
 
   const summary = await wiki.summary(k.Video.Channel.Name);
 
-  var w = ""
-  if(summary.title === "Not found.") {   w = "none" } 
-  if(summary.title !== "Not found.") {w = summary}
-  
-   renderTemplate(res, req, "poketube.ejs", {
+  var w = "";
+  if (summary.title === "Not found.") {
+    w = "none";
+  }
+  if (summary.title !== "Not found.") {
+    w = summary;
+  }
+
+  renderTemplate(res, req, "poketube.ejs", {
     url: url_e,
     color: await getColors(
       `https://i.ytimg.com/vi/${v}/maxresdefault.jpg`
@@ -262,24 +250,22 @@ app.get("/watch", async function (req, res) {
     date: moment(k.Video.uploadDate).format("LL"),
     e: e,
     k: k,
-    process:process,
+    process: process,
     sha384: sha384,
     isMobile: req.useragent.isMobile,
     tj: tj,
     r: r,
     qua: q,
-    ip:ip,
-    wiki:w,
+    ip: ip,
+    wiki: w,
     f: f,
     t: config.t_url,
     optout: t,
-    badges:badges,
-    comments:comments,
+    badges: badges,
+    comments: comments,
     lyrics: "",
   });
 });
-
- 
 
 app.get("/music", async function (req, res) {
   /*
@@ -300,7 +286,7 @@ app.get("/music", async function (req, res) {
   const info = await fetch("http://ip-api.com/json/");
   const n = await info.text();
   const ip = JSON.parse(n);
-  
+
   if (!v) res.redirect("/");
 
   const video = await fetch(config.tubeApi + `video?v=${v}`);
@@ -342,15 +328,15 @@ app.get("/music", async function (req, res) {
     1000
   );
 
-    if (!song) {
+  if (!song) {
     res.redirect(`/watch?v=${v}`);
   }
   var lyrics = await musicInfo
     .searchLyrics({ title: song.title, artist: song.artist })
     .catch(() => null);
-  
+
   var ly = "";
-  
+
   if (lyrics === null) {
     ly = "This Is Where I'd Put The songs lyrics. IF IT HAD ONE ";
   }
@@ -366,8 +352,8 @@ app.get("/music", async function (req, res) {
       `https://i.ytimg.com/vi/${v}/maxresdefault.jpg`
     ).then((colors) => colors[0].hex()),
     engagement: engagement,
-        process:process, 
-    ip:ip,
+    process: process,
+    ip: ip,
     video: json,
     date: moment(k.Video.uploadDate).format("LL"),
     e: e,
@@ -418,23 +404,34 @@ app.get("/old/watch", async function (req, res) {
   var v = req.query.v;
   var e = req.query.e;
   if (!v) res.redirect("/");
-  
-   res.redirect(`/watch?v=${v}`);
+
+  res.redirect(`/watch?v=${v}`);
 });
 
-app.get("/", async function (req, res) {
-  const trends = await fetch(config.tubeApi + `trending`);
-  const h = await trends.text();
-  const k = JSON.parse(toJson(h));
-  renderTemplate(res, req, "main.ejs", {
-    k: k,
-    isMobile: req.useragent.isMobile,
+app.get("/search", async (req, res) => {
+  const { toJson } = require("xml2json");
+  const query = req.query.query;
+  const search = await fetch(
+    `https://tube.kuylar.dev/api/search?query=${query}`
+  );
+
+  const text = await search.text();
+  const j = JSON.parse(toJson(text));
+
+  if (!query) {
+    return res.redirect("/");
+  }
+
+  renderTemplate(res, req, "search.ejs", {
+    j: j,
+    q: query,
   });
 });
 
-app.get("/channel", async (req, res) => {
+app.get("/channel/", async (req, res) => {
   const ID = req.query.id;
-
+ 
+  
   // about
   const bout = await fetch(config.tubeApi + `channel?id=${ID}&tab=about`);
   const h = await bout.text();
@@ -459,7 +456,7 @@ app.get("/channel", async (req, res) => {
   });
 });
 
-// static
+/////////////  STATIC /////////////
 app.get("/privacy", function (req, res) {
   renderTemplate(res, req, "priv.ejs");
 });
@@ -471,37 +468,9 @@ app.get("/143", function (req, res) {
 app.get("/domains", function (req, res) {
   renderTemplate(res, req, "domains.ejs");
 });
- 
+
 app.get("/license", function (req, res) {
   renderTemplate(res, req, "license.ejs");
-});
-
-app.get("/api/search", async (req, res) => {
-  const query = req.query.query;
-
-  if (!query) {
-    return res.redirect("/");
-  }
-  return res.redirect(`/search?query=${query}`);
-});
-app.get("/search", async (req, res) => {
-  const { toJson } = require("xml2json");
-  const query = req.query.query;
-  const search = await fetch(
-    `https://tube.kuylar.dev/api/search?query=${query}`
-  );
-
-  const text = await search.text();
-  const j = JSON.parse(toJson(text));
-
-  if (!query) {
-    return res.redirect("/");
-  }
-
-  renderTemplate(res, req, "search.ejs", {
-    j: j,
-    q: query,
-  });
 });
 
 app.get("/css/:id", (req, res) => {
@@ -516,8 +485,21 @@ app.get("/video/upload", (req, res) => {
   res.redirect("https://youtube.com/upload");
 });
 
-app.get("/discover", async function (req, res) {
-  res.redirect("/");
+///////////// API /////////////
+
+app.get("/embed/:v", async function (req, res) {
+  var v = req.params.v;
+
+  res.redirect(`https://tube.kuylar.dev/proxy/media/${v}/18`);
+});
+
+app.get("/api/search", async (req, res) => {
+  const query = req.query.query;
+
+  if (!query) {
+    return res.redirect("/");
+  }
+  return res.redirect(`/search?query=${query}`);
 });
 
 app.get("/api/video/download", async function (req, res) {
@@ -545,6 +527,45 @@ app.get("/api/video/downloadjson", async function (req, res) {
   res.json(url);
 });
 
+app.get("/api/subtitles", async (req, res) => {
+  const id = req.query.v;
+  const l = req.query.h;
+
+  const url = `https://tube.kuylar.dev/proxy/caption/${id}/${l}/`;
+
+  let f = await fetch(url);
+  const body = await f.text();
+
+  res.send(body);
+});
+
+app.get("/api/opensearch", async (req, res) => {
+  res.sendFile(__dirname + `/opensearch.xml`);
+});
+///////////// REDIRECTS / DEPRACATED  /////////////
+
+app.get("/discover", async function (req, res) {
+  res.redirect("/");
+});
+
+app.get("/video/upload", (req, res) => {
+  res.redirect("https://youtube.com/upload");
+});
+
+
+
+///////////// 404 AND MAIN PAGES ETC /////////////
+app.get("/", async function (req, res) {
+  const trends = await fetch(config.tubeApi + `trending`);
+  const h = await trends.text();
+  const k = JSON.parse(toJson(h));
+  renderTemplate(res, req, "main.ejs", {
+    k: k,
+    isMobile: req.useragent.isMobile,
+  });
+});
+ 
+
 app.get("*", function (req, res) {
   const things = random_words[Math.floor(Math.random() * random_words.length)];
   renderTemplate(res, req, "404.ejs", {
@@ -552,7 +573,8 @@ app.get("*", function (req, res) {
   });
 });
 
+ ////////////////////////////////////////////////////
+
 // listen
 
 app.listen("3000", () => {});
-

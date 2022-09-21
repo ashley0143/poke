@@ -31,7 +31,7 @@
 <meta content="https://poketube.fun/watch?v=<%=video.id%>" name=twitter:url>
 <meta content="<%=video.Title%> - PokeTube" name=twitter:title>
 <meta content="Watch this video by <%=video.Channel.Name%> On PokeTube. The YouTube front-end that doesnt track you!" property=twitter:description>
-<meta content="https://i.ytimg.com/vi/<%=video.id%>/maxresdefault.jpg" property=og:image>
+<meta content="https://i.ytimg.com/vi/<%=video.id%>/hqdefault.jpg" property=og:image>
 <meta content=summary_large_image name=twitter:card>
 <link href="https://poketube.fun/watch?v=<%=video.id%>" itemprop=url>
 <link href="http://www.youtube.com/channel/<%=video.Channel.id%>" itemprop=url>
@@ -144,9 +144,15 @@
      <div class="video-sub-info description" style="font-weight: bold;margin-top:  55px !important;border-radius: 21px;background: #1c1c1c;padding: 10px;margin-bottom: 20px;margin-left: 0;">
 <div class="video-title" style="color:#fff;font-family:Ginto Nord,sans-serif;font-weight:700;margin-top: 3px;margin-bottom: 10px;">Description</div>
  <hr style="clear: both;display: block;border: none;border-bottom: 0.5px solid #2f2f2f;/*! width: 4.5em; */height: 0;">
+     <% if (String(video.Description) != "[object Object]")  { %>
 
               <%-String(video.Description).replace(/\n/g, " <br> ")%>
-     
+                          <% } %>          
+                            
+    <% if (String(video.Description) == "[object Object]")  { %>
+      <p>No Description On this Video </p>
+                          <% } %>               
+
                    <% if (wiki.extract_html) { %> 
 <div class="video-title" style="color:#fff;font-family:Ginto Nord,sans-serif;font-weight:700;margin-top: 10px;margin-bottom: 10px;">From da web</div>
                      

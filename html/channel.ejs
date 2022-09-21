@@ -32,6 +32,9 @@
      <meta name="viewport" content="width=device-width, initial-scale=1">
  
   <style> 
+    * {
+      color:#fff
+    }
               @font-face {
         font-family: 'Ginto Nord';
         font-weight: 800;
@@ -79,6 +82,8 @@
   a{
   color:#0ab7f0;
    }
+  
+ 
    </style>
   
   <link href=/css/app-cdn.min.css rel=stylesheet>
@@ -90,6 +95,14 @@
   <!-- NEW NAVBAR -->
     <link href="/css/watch-navbar.css?v=56" rel=stylesheet>
 
+      <style>section p {
+ font-family:Whitney, Helvetica Neue, Helvetica, Arial, sans-serif;
+ font-weight:400;
+ color:#fff;
+ font-size:16px;
+ line-height:24px;
+ margin-top:12px
+}</style>
   
    <!-- STYLES END -->
 <link href=https://site-assets.fontawesome.com/releases/v6.1.1/css/all.css rel=stylesheet>
@@ -174,8 +187,39 @@
    <div style="text-align: left;">
 <h3 style="color:#fff;font-family:Ginto Nord,sans-serif;font-weight:900;padding: 0px;margin: 0;margin-top: 7px;margin-left: 10px;">About</h3>
  
-<p style="color:#fff;margin-left: 10px;"><%-desc.replace(/\n/g, " <br> ")%></p>
-	</div> <% } %>
+<p style="color:#fff;margin-left: 10px;font-weight: bold;"><%-desc.replace(/\n/g, " <br> ")%></p>
+  
+          <% if (wiki.extract_html) { %> 
+                     <h3 style="color:#fff;font-family:Ginto Nord,sans-serif;font-weight:900;padding: 0px;margin: 0;margin-top: 7px;margin-left: 10px;">From the web</h3>
+
+            <div style="color:#fff;margin-left: 10px;">
+            <p style="color:#fff:font-weight: bold;"> 
+              
+ <%-wiki.extract_html%>              </p>  
+ 
+                           </div>
+
+               <div style="color:#fff;margin-left: 10px;">
+
+<p style="margin-bottom: 10px;">
+
+  <a href=" <%-wiki.content_urls.desktop.page%>
+ ">From wikipedia </a> under CC-BY-SA 3.0
+                     </p>
+            </div>
+  
+                 
+                     </p>
+                     <% } %>   
+                       <div style="font-weight: bold;color:#fff;margin-left: 10px;">
+
+<p style="margin: 0px;margin-top: 2.5px;font-weight: bold;"><i class="fa-light fa-earth-americas"></i> <%- about.Location%>   </p>
+<p style="margin: 0px;margin-top: 2.5px;font-weight: bold;"><i class="fa-light fa-circle-info"></i>  <%- about.Joined%> </p>
+<p style="margin: 0px;margin-top: 2.5px;font-weight: bold;">   <i class="fa-light fa-arrow-trend-up"></i> <%- about.ViewCount%>   </p>
+
+  </div>
+                       </div>
+   <% } %>
                </body>
  
    

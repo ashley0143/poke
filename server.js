@@ -431,8 +431,6 @@ app.get("/search", async (req, res) => {
 app.get("/channel/", async (req, res) => {
   const ID = req.query.id;
   const tab = req.query.tab;
-
-
   
   // about
   const bout = await fetch(config.tubeApi + `channel?id=${ID}&tab=about`);
@@ -455,18 +453,26 @@ app.get("/channel/", async (req, res) => {
   }
   
   const { Subscribers: subscribers } = k.Channel.Metadata;
+  const description =  k.Channel.Contents.ItemSection.About.Description
+  
+    var d = description.toString().replace(/\n/g, " <br> ")
+    if(d === "[object Object]"){
+      var d = ""
+    }
+   
   renderTemplate(res, req, "channel.ejs", {
     ID: ID,
     tab: tab,
     j: k,
     tj: tj,
     wiki: w,
+    isMobile: req.useragent.isMobile,
     about: k.Channel.Contents.ItemSection.About,
     subs:
       typeof subscribers === "string"
         ? subscribers.replace("subscribers", "")
         : "Private",
-    desc: k.Channel.Contents.ItemSection.About.Description.replace(/\n/g, " <br> "),
+    desc: d
   });
 });
 

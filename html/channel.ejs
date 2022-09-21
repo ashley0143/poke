@@ -29,8 +29,11 @@
 
     <meta content="<%-desc%>" property=twitter:description>
           <% } %>
+       <% if (j.Channel.Metadata.Banners.Thumbnail) { %>
 
     <meta content="<%=j.Channel.Metadata.Banners.Thumbnail[2].$t%>" property=og:image>
+                   <% } %>
+
     <meta content=summary_large_image name=twitter:card>
      <meta name="viewport" content="width=device-width, initial-scale=1">
  
@@ -115,9 +118,12 @@
       <nav>
       <div class="left"><a class="class" href="/143" style=font-family:Inter,sans-serif;color:#fff> <img style="transform: scale(1.3);padding-left:0.9em;width: 8.5em;display: block;margin-left: auto;margin-right: auto;" src="/css/logo.svg?v=5">         </a>             </div>                                    
       <div class="middle">
+          <% if (!isMobile) { %>  
         <form action=/search><input class=search-bar autocomplete="on" id=fname name=query style="color:#fff;font-family:Inter,sans-serif;border-radius: 8px;transform:none;">
-              
+                 <% } %>
+          
          </form>
+            
           <img src="https://search-metrics.poketube.fun/t/rep.gif"  style="border:0;width: 0;visibility: hidden;"> 
 
       </div>
@@ -140,7 +146,12 @@
 
 <div class="channel-page">
  <div class="channel-info-container">
+   
+          <% if (j.Channel.Metadata.Banners.Thumbnail) { %>
+
           <img src="https://p.poketube.fun/<%=j.Channel.Metadata.Banners.Thumbnail[2].$t%>">
+                               <% } %>
+
 		<div class="channel-info" >
 			<a href="/channel?id=<%=ID%>" class="avatar">
 				<img src="https://p.poketube.fun/<%=j.Channel.Metadata.Avatars.Thumbnail.$t%>" alt="Channel Avatar">
@@ -187,11 +198,13 @@
                        </div> <% } %>
 
  <% if (tab === "about") { %>
-   <div style="text-align: left;">        <% if (desc) { %>
+   <div style="text-align: left;">   
+     <h3 style="color:#fff;font-family:Ginto Nord,sans-serif;font-weight:900;padding: 0px;margin: 0;margin-top: 7px;margin-left: 10px;">About</h3>
 
-<h3 style="color:#fff;font-family:Ginto Nord,sans-serif;font-weight:900;padding: 0px;margin: 0;margin-top: 7px;margin-left: 10px;">About</h3>
 
-<p style="color:#fff;margin-left: 10px;font-weight: bold;"><%-desc.replace(/\n/g, " <br> ")%></p>
+     <% if (desc) { %>
+
+ <p style="color:#fff;margin-left: 10px;font-weight: bold;"><%-desc.replace(/\n/g, " <br> ")%></p>
   <% } %>
           <% if (wiki.extract_html) { %> 
                      <h3 style="color:#fff;font-family:Ginto Nord,sans-serif;font-weight:900;padding: 0px;margin: 0;margin-top: 7px;margin-left: 10px;">From the web</h3>
@@ -216,8 +229,10 @@
                      </p>
                      <% } %>   
                        <div style="font-weight: bold;color:#fff;margin-left: 10px;">
-
+     <% if (about.Location != "[object Object]")  { %>
 <p style="margin: 0px;margin-top: 2.5px;font-weight: bold;"><i class="fa-light fa-earth-americas"></i> <%- about.Location%>   </p>
+                       <% } %>   
+
 <p style="margin: 0px;margin-top: 2.5px;font-weight: bold;"><i class="fa-light fa-circle-info"></i>  <%- about.Joined%> </p>
 <p style="margin: 0px;margin-top: 2.5px;font-weight: bold;">   <i class="fa-light fa-arrow-trend-up"></i> <%- about.ViewCount%>   </p>
 

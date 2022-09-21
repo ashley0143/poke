@@ -25,10 +25,13 @@
     <meta content=website property=og:type>
     <meta content="<%=j.Channel.Metadata.Name%> - PokeTube" property=og:title>
        <link href=/css/yt-ukraine.svg?v=6 rel=icon>
-    <meta content="<%-desc.replace(/\n/g, " ")%>" property=twitter:description>
+       <% if (desc) { %>
+
+    <meta content="<%-desc%>" property=twitter:description>
+          <% } %>
+
     <meta content="<%=j.Channel.Metadata.Banners.Thumbnail[2].$t%>" property=og:image>
     <meta content=summary_large_image name=twitter:card>
-
      <meta name="viewport" content="width=device-width, initial-scale=1">
  
   <style> 
@@ -184,11 +187,12 @@
                        </div> <% } %>
 
  <% if (tab === "about") { %>
-   <div style="text-align: left;">
+   <div style="text-align: left;">        <% if (desc) { %>
+
 <h3 style="color:#fff;font-family:Ginto Nord,sans-serif;font-weight:900;padding: 0px;margin: 0;margin-top: 7px;margin-left: 10px;">About</h3>
- 
+
 <p style="color:#fff;margin-left: 10px;font-weight: bold;"><%-desc.replace(/\n/g, " <br> ")%></p>
-  
+  <% } %>
           <% if (wiki.extract_html) { %> 
                      <h3 style="color:#fff;font-family:Ginto Nord,sans-serif;font-weight:900;padding: 0px;margin: 0;margin-top: 7px;margin-left: 10px;">From the web</h3>
 

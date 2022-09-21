@@ -430,7 +430,9 @@ app.get("/search", async (req, res) => {
 
 app.get("/channel/", async (req, res) => {
   const ID = req.query.id;
- 
+  const tab = req.query.tab;
+
+
   
   // about
   const bout = await fetch(config.tubeApi + `channel?id=${ID}&tab=about`);
@@ -441,12 +443,24 @@ app.get("/channel/", async (req, res) => {
   const channel = await fetch(config.tubeApi + `channel?id=${ID}&tab=videos`);
   const c = await channel.text();
   const tj = JSON.parse(toJson(c));
+  
+  const summary = await wiki.summary(k.Channel.Metadata.Name);
 
+  var w = "";
+  if (summary.title === "Not found.") {
+    w = "none";
+  }
+  if (summary.title !== "Not found.") {
+    w = summary;
+  }
+  
   const { Subscribers: subscribers } = k.Channel.Metadata;
   renderTemplate(res, req, "channel.ejs", {
     ID: ID,
+    tab: tab,
     j: k,
     tj: tj,
+    wiki: w,
     about: k.Channel.Contents.ItemSection.About,
     subs:
       typeof subscribers === "string"

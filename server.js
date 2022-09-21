@@ -466,7 +466,7 @@ app.get("/channel/", async (req, res) => {
       typeof subscribers === "string"
         ? subscribers.replace("subscribers", "")
         : "Private",
-    desc: k.Channel.Contents.ItemSection.About.Description.replace(/\n/g, " "),
+    desc: k.Channel.Contents.ItemSection.About.Description.replace(/\n/g, " <br> "),
   });
 });
 

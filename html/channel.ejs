@@ -22,22 +22,15 @@
  <% } %>
     <title><%=j.Channel.Metadata.Name%> - PokeTube</title>
    <link href=css/yt-ukraine.svg rel=icon>
-    <link rel="preconnect" href="https://fonts.gstatic.com">
-    <link href="https://fonts.googleapis.com/css2?family=Sigmar+One&amp;display=swap" rel="stylesheet"> 
     <meta content=website property=og:type>
     <meta content="<%=j.Channel.Metadata.Name%> - PokeTube" property=og:title>
        <link href=/css/yt-ukraine.svg?v=6 rel=icon>
     <meta content="<%-desc.replace(/\n/g, " ")%>" property=twitter:description>
     <meta content="<%=j.Channel.Metadata.Banners.Thumbnail[2].$t%>" property=og:image>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@500&display=swap" rel="stylesheet">
-    <meta content=summary_large_image name=twitter:card>
-    <meta content=@PoketaleBot name=twitter:site>
-    <meta content=@PoketaleBot name=twitter:creator>
-    <link href=/css/app-cdn.min.css rel=stylesheet>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-<link href=/css/app.main.css rel=stylesheet>
-<link href="/css/search.main.css?v=56" rel=stylesheet>
- <style> 
+
+     <meta name="viewport" content="width=device-width, initial-scale=1">
+ 
+  <style> 
               @font-face {
         font-family: 'Ginto Nord';
         font-weight: 800;
@@ -64,170 +57,63 @@
     --channel-contents-background: #000;
 }
   
-   .video-grid > .video {
-   background-color: #181818;
-border-radius: 8px;
-   }
-      </style>  <!-- STYLES START -->
+
+      </style>  
+        <!-- STYLES START -->
   
 <style>
    a.class:hover {
     text-decoration:underline;
     font-weight:bold
-}
-  summary{
-    color:gray;
-}
-summary:hover{
+   }
+   summary{
+     color:gray;
+   }
+   summary:hover{
     color:white;
-}
-</style>
-   
-   <style>
-    body{
-        overflow-x: hidden; /* Hide horizontal scrollbar */
-        color:#111111
     }
-          :visited { color: #00c0ff }
+  
+  :visited { color: #00c0ff }
      
-a{
+  a{
   color:#0ab7f0;
-}
-   .animated {
-            -webkit-animation-duration: 10s; 
-            animation-duration: 10s; 
-            -webkit-animation-fill-mode: both;
-            animation-fill-mode: both; 
-            animation-iteration-count: infinite;
-            -moz-animation-iteration-count: infinite;
-            -webkit-animation-iteration-count: infinite;
-            -o-animation-iteration-count: infinite;
-         }
-         
-         @-webkit-keyframes wiggle { 
-            0% { -webkit-transform: skewX(9deg); }
-            10% { -webkit-transform: skewX(-8deg); }
-            20% { -webkit-transform: skewX(7deg); }
-            30% { -webkit-transform: skewX(-6deg); }
-            40% { -webkit-transform: skewX(5deg); } 
-            50% { -webkit-transform: skewX(-4deg); } 
-            60% { -webkit-transform: skewX(3deg); }
-            70% { -webkit-transform: skewX(-2deg); } 
-            80% { -webkit-transform: skewX(1deg); } 
-            90% { -webkit-transform: skewX(0deg); }
-            100% { -webkit-transform: skewX(0deg); } 
-         }
-         
-         @keyframes wiggle { 
-            0% { transform: skewX(9deg); } 
-            10% { transform: skewX(-8deg); } 
-            20% { transform: skewX(7deg); } 
-            30% { transform: skewX(-6deg); } 
-            40% { transform: skewX(5deg); } 
-            50% { transform: skewX(-4deg); } 
-            60% { transform: skewX(3deg); } 
-            70% { transform: skewX(-2deg); } 
-            80% { transform: skewX(1deg); } 
-            90% { transform: skewX(0deg); } 
-            100% { transform: skewX(0deg); } 
-         }
-         
-         .wiggle { 
-            -webkit-animation-name: wiggle;
-            animation-name: wiggle; 
-            -webkit-animation-timing-function: ease-in;
-            animation-timing-function: ease-in; 
-         }
-         
-         .animated.wiggle { 
-            -webkit-animation-duration: 0.75s; 
-            animation-duration: 0.75s;
-         }
-    
-  @font-face {
-font-family: 'Ginto Nord';
-font-weight: 800;
-src:url('https://cdn.statically.io/gh/brecert/discord-quote-generator/main/Ginto-Nord-800.woff') format("woff");
-      }
-
-.alert {
-  padding: 20px;
-  background-color: #f44336;
-  color: white;
-  opacity: 1;
-  transition: opacity 0.6s;
-  margin-bottom: 15px;
-}
-
-.alert.success {background-color: #04AA6D;}
-.alert.info {background-color: #2196F3;}
-.alert.warning {background-color: #ff9800;}
-
-.closebtn {
-  margin-left: 15px;
-  color: white;
-  font-weight: bold;
-  float: right;
-  font-size: 22px;
-  line-height: 20px;
-  cursor: pointer;
-  transition: 0.3s;
-}
-
-.closebtn:hover {
-  color: black;
-}
-    
-  </style>
+   }
+   </style>
+  
+  <link href=/css/app-cdn.min.css rel=stylesheet>
+  <link href=/css/app.main.css rel=stylesheet>
+  <link href="/css/watch.main.css?v=56" rel=stylesheet>
+   <link href="/css/watch-util.css" rel=stylesheet>
+  <link href="https://fonts.poketube.fun/css/fonts.css" rel=stylesheet>
   
   <!-- NEW NAVBAR -->
-  
-  <style>
-    
-    nav {
-      background:#0f0b0b
-    }
-    
-  nav .right {
- display: flex;
-border-radius: 5px;
-justify-content: normal;
-padding-left: 0px;
-align-items: center;
-margin-left: 10px;
-}
-    
-    nav .left {
-    display: flex;
-justify-content: flex-start;
-align-items: center;
-border-radius: 5px;
- padding-left: 0px;
-margin-right: 40px;
-    }
-    
-    nav .middle {
-      display: flex;
- justify-content: center;
-align-items: center;
-border-radius: 5px;
-    }
-  </style>
+    <link href="/css/watch-navbar.css?v=56" rel=stylesheet>
+
   
    <!-- STYLES END -->
+<link href=https://site-assets.fontawesome.com/releases/v6.1.1/css/all.css rel=stylesheet>
  </head>
 <body>
      <center> 
-    <link href="https://p.poketube.fun/https://fonts.googleapis.com/css2?family=Inter:wght@900&family=Sigmar+One&display=swap" rel=stylesheet>
-    <link href=https://site-assets.fontawesome.com/releases/v6.1.1/css/all.css rel=stylesheet>
-    <center>
-    <nav>
-            <div class=left><a class="class" href="/143" style=font-family:Inter,sans-serif;color:#fff><img style="width: 8.5em;display: block;margin-left: auto;margin-right: auto;" src="/css/logo.svg?v=5">                                                                                                     <a href="/domains"><i  style="display: block;margin-left: auto;margin-right: auto;" class="fas fa-server"></i>  </a></div>               
-            <div class=middle>
-                <form action=/search><input class=search-bar autocomplete="on" id=fname name=query style="color:#fff;font-family:Inter,sans-serif;"> <button class="btn btn-success" type=submit><i class="fas fa-search"></i></button></form>
-            </div>
-            <div class=right><a href="/privacy"><i class="fas fa-shield"></i></a><a href="/video/upload?from="><i class="fas fa-video"></i></a> <a href="https://github.com/iamashley0/poketube/"><i class="fab fa-git-alt"></i></a><a href="https://github.com/iamashley0/poketube/issues"><i class="fas fa-bug"></i></a></a></div>
-        </nav>
+      <nav>
+      <div class="left"><a class="class" href="/143" style=font-family:Inter,sans-serif;color:#fff> <img style="transform: scale(1.3);padding-left:0.9em;width: 8.5em;display: block;margin-left: auto;margin-right: auto;" src="/css/logo.svg?v=5">         </a>             </div>                                    
+      <div class="middle">
+        <form action=/search><input class=search-bar autocomplete="on" id=fname name=query style="color:#fff;font-family:Inter,sans-serif;border-radius: 8px;transform:none;">
+              
+         </form>
+          <img src="https://search-metrics.poketube.fun/t/rep.gif"  style="border:0;width: 0;visibility: hidden;"> 
+
+      </div>
+      <div class="right">
+        <a href="/privacy">
+          <i style="display: block;margin-left: auto;margin-right: auto;" class="fa-light fa-shield"></i>
+        </a>
+        <a href="/video/upload?from=">
+          <i style="display: block;margin-left: auto;margin-right: auto;" class="fa-light fa-video"></i>
+        </a>
+               
+      </div>
+    </nav>
 	   
 
        
@@ -245,43 +131,49 @@ border-radius: 5px;
 			<div class="name">
 				<p style="font-family:Ginto Nord,sans-serif;font-weight:900;white-space:yes;"><%=j.Channel.Metadata.Name%></p>
  			</div>
+ 
 			<button class="subscribe-button"><%=subs%></button>
 		</div>
-	</div>  <hr style="clear: both;display: block;border: none;border-bottom: 0.5px solid #2f2f2f;margin: 0 0;/*! width: 4.5em; */height: 0;">
+	</div> 
+ <% if (!tab) { %>
 
-        <% if (ID === "UCFAiFyGs6oDiF1Nf-rRJpZA") { %> 
-          <hr>
-                        <a href="https://www.curesarcoma.org/donate/">Donate to curesarcoma.org</a><br>
-<p>
-Technoblade never dies!  <a href="https://technoblade.com/">More info</a>
-          </p><hr>
-       <% } %>
-<h3 style="color:#fff;text-transform: uppercase;font-family:Ginto Nord,sans-serif;font-weight:900;white-space:yes;font-style: italic;">About this channel</h3>
-  <br><br>   <hr style="clear: both;display: block;border: none;border-bottom: 0.5px solid #2f2f2f;margin: 0 0;/*! width: 4.5em; */height: 0;">
+   <div style="text-align: left;padding: 3px;margin-top: 7px;">
+      
+     <a href="/channel?id=UCrrdQ0AN_NNS9h5KcTQoW0w"  style="background-color: #333;padding: 5px;border-top-left-radius: 3px;border-top-right-radius: 4px;padding-bottom: 4px;">Uploads</a> <a href="/channel?id=UCrrdQ0AN_NNS9h5KcTQoW0w&amp;tab=about">About </a>
+   
+   </div>
+   <% } %>
+     <% if (tab === "about") { %>
 
-	<p style="color:#fff"><%-desc.replace(/\n/g, " <br> ")%></p>
-	<br><br>
-	<h3 style="color:#fff;text-transform: uppercase;font-family:Ginto Nord,sans-serif;font-weight:900;white-space:yes;  font-style: italic;">Uploads</h3>
-         <p style="color:#fff;font-family:Ginto Nord,sans-serif;font-weight:900;white-space:yes;">
-           the last few uploads of the <%=j.Channel.Metadata.Name%> channel !
-         </p>                                <hr style="clear: both;display: block;border: none;border-bottom: 0.5px solid #2f2f2f;margin: 0 0;/*! width: 4.5em; */height: 0;">
+   <div style="text-align: left;padding: 3px;margin-top: 7px;">
+      
+     <a href="/channel?id=UCrrdQ0AN_NNS9h5KcTQoW0w" >Uploads</a> <a href="/channel?id=UCrrdQ0AN_NNS9h5KcTQoW0w&amp;tab=about" style="background-color: #333;padding: 5px;border-top-left-radius: 3px;border-top-right-radius: 4px;padding-bottom: 4px;">About </a>
+   
+   </div>
+   <% } %>
+     <hr style="clear: both;display: block;border: none;border-bottom: 0.5px solid #2f2f2f;margin: 0 0;/*! width: 4.5em; */height: 0;">    <% if (!tab) { %>  
+    
+             <div align="center">
 
-            <div align="center">
-
-   	<div class="video-grid">
+   	<div class="video-grid" >
    <% tj.Channel.Contents.ItemSection.ItemSection.Video.forEach(x =>  { %>
 			<a href="/watch?v=<%- x.id %>" class="video">
-				<div class="thumbnail" style="background-image: url('https://i.ytimg.com/vi/<%= x.id %>/hqdefault.jpg?sqp=-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLBy_x4UUHLNDZtJtH0PXeQGoRFTgw');border-radius: 4px;"><span class="video-length"><%- x.duration %></span></div>
+				<div class="thumbnail" style="background-image: url('https://i.ytimg.com/vi/<%= x.id %>/hqdefault.jpg?sqp=-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLBy_x4UUHLNDZtJtH0PXeQGoRFTgw');border-radius: 10px;"><span class="video-length"><%- x.duration %></span></div>
 				<div class="info">
 					<span class="title max-lines-2" style="font-family:Ginto Nord,sans-serif;"><%- x.Title %></span>
 			 
             </div>
  			</a>	
  		 	               <% }) %>   
-                       </div>
+                       </div> <% } %>
 
-	</div>
-              </body>
+ <% if (tab === "about") { %>
+   <div style="text-align: left;">
+<h3 style="color:#fff;font-family:Ginto Nord,sans-serif;font-weight:900;padding: 0px;margin: 0;margin-top: 7px;margin-left: 10px;">About</h3>
+ 
+<p style="color:#fff;margin-left: 10px;"><%-desc.replace(/\n/g, " <br> ")%></p>
+	</div> <% } %>
+               </body>
  
    
  

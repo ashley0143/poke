@@ -89,15 +89,17 @@
 
       </div>
       <div class="right">
-        <a href="/privacy">
+      <a href="/privacy" style="text-decoration: none;" title="Privacy Policy">
           <i style="display: block;margin-left: auto;margin-right: auto;" class="fa-light fa-shield"></i>
         </a>
-        <a href="/video/upload?from=">
+        <a href="/video/upload" style="text-decoration: none;" title="Upload Video">
           <i style="display: block;margin-left: auto;margin-right: auto;" class="fa-light fa-video"></i>
         </a>
-        <a href="/download?v=<%=video.id%>">
-          <i style="display: block;margin-left: auto;margin-right: auto;" class="fa-light fa-download"></i>
+    
+        <a href="/embed/<%=video.id%>" style="text-decoration: none;" title="Embed">
+          <i style="display: block;margin-left: auto;margin-right: auto;" class="fa-light fa-code"></i>
         </a>                                   
+        
       </div>
     </nav>
 	   
@@ -138,7 +140,8 @@
 			<div class="video-info">           
 				<div class="video-title" style="font-family:'Ginto Nord';font-weight:900;white-space:yes;"><%=video.Title%></div>
                   <p class="video-sub-info description" style="font-weight: bold;">
-          					<span><%=engagement.viewCount.toLocaleString()%> Total Views - Uploaded at <%=date%> ^^</span>
+                    <span><%=engagement.viewCount.toLocaleString()%> Views - Uploaded on <%=date%> - By <a href="#chnl"><%-video.Channel.Name%></a> ^^</span> 
+                      
                       <br><br>
                       </p>
      <div class="video-sub-info description" style="font-weight: bold;margin-top:  55px !important;border-radius: 21px;background: #1c1c1c;padding: 10px;margin-bottom: 20px;margin-left: 0;">
@@ -165,11 +168,12 @@
   <a href=" <%-wiki.content_urls.desktop.page%>
  ">From wikipedia </a> under CC-BY-SA 3.0
                      </p>
-                     
-  
+ 
                  
                      </p>
-                     <% } %>               
+                     <% } %>  
+                   
+ 
 
  				</div>
       <div class="video-info-buttons" style="border-radius:16px;background: #1c1c1c;padding: 3px;border-style: none;min-height: 34px;height: min-content;">
@@ -186,6 +190,7 @@
             <i class="fa-light fa-download"></i>
             Download
 					</a>
+ 
    
  <% if (!video.Channel.Name.endsWith(' - Topic')) { %> 
     <% if (!video.Title.endsWith('Audio)')) { %> 
@@ -213,7 +218,9 @@
  
 				</div>
 			</div>
-          		<div class="channel-info__bordered" style="border-radius:10px;font-family:Inter" name="chnl">
+           		<div class="channel-info__bordered" style="border-radius:10px;font-family:Inter" name="chnl">
+                            <a name="chnl"></a>
+
 				<a href="/channel?id=<%=video.Channel.id%>" class="avatar">
 					<img src="https://p.poketube.fun/<%= k.Video.Channel.Avatar[1].$t %>">
 				</a>
@@ -262,7 +269,7 @@
                      
        <p style="font-family:MonoSpace">
          <b>
-PokeTube Player v20.09.22a - Node <%=process.version%> - V8 v<%=process.versions.v8%> -  <%=process.platform.replace("linux", "GNU/Linux")%> <%=process.arch%> Server ( <%=ip.org%> )
+PokeTube Player v22.09.22a - Node <%=process.version%> - V8 v<%=process.versions.v8%> -  <%=process.platform.replace("linux", "GNU/Linux")%> <%=process.arch%> Server ( <%=ip.org%> )
            </b>
          
                 </p>                        
@@ -278,8 +285,8 @@ PokeTube Player v20.09.22a - Node <%=process.version%> - V8 v<%=process.versions
  <div class="video-title" style="text-align:left;font-family:'Ginto Nord';font-weight:900;white-space:yes;">                                  Recommendations
                                 </div>   
                                  <p style="text-align:left;margin:0">
-                                 Videos that you might like
-                                </p>
+                                 Videos that u might like
+                              </p>
                                 <hr style="clear: both;display: block;border: none;border-bottom: 0.5px solid #2f2f2f;margin: 0 0;/*! width: 4.5em; */height: 0;">
                                                 <% if (!video.Channel.Name.endsWith(' - Topic')) { %>  
 

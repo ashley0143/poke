@@ -81,7 +81,7 @@ const config = {
   t_url: "https://t.poketube.fun/", //  def matomo url
 };
 
-///////////// PAGES /////////////
+///////////// FUNCTIONS /////////////
 
 function IsJsonString(str) {
   try {
@@ -91,6 +91,17 @@ function IsJsonString(str) {
   }
   return true;
 }
+
+function convert(value) {
+  if (value >= 1000000) {
+    value = value / 1000000 + "M";
+  } else if (value >= 1000) {
+    value = value / 1000 + "K";
+  }
+  return value;
+}
+
+/////////////////////////////////
 
 app.use(function (req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
@@ -187,6 +198,17 @@ app.get("/watch", async function (req, res) {
     }
   }
 
+  var nnn = "";
+
+  if (n === "none") {
+    nnn = "";
+  }
+  if (IsJsonString(n)) {
+    if (n !== "none") {
+      nnn = JSON.parse(n);
+    }
+  }
+
   var comments = "";
   if (n === "none") {
     comments = "";
@@ -257,12 +279,14 @@ app.get("/watch", async function (req, res) {
     r: r,
     qua: q,
     ip: ip,
+    convert: convert,
     wiki: w,
     f: f,
     t: config.t_url,
     optout: t,
     badges: badges,
     comments: comments,
+    n: nnn,
     lyrics: "",
   });
 });

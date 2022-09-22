@@ -431,7 +431,7 @@ app.get("/search", async (req, res) => {
 app.get("/channel/", async (req, res) => {
   const ID = req.query.id;
   const tab = req.query.tab;
-  
+
   // about
   const bout = await fetch(config.tubeApi + `channel?id=${ID}&tab=about`);
   const h = await bout.text();
@@ -441,7 +441,7 @@ app.get("/channel/", async (req, res) => {
   const channel = await fetch(config.tubeApi + `channel?id=${ID}&tab=videos`);
   const c = await channel.text();
   const tj = JSON.parse(toJson(c));
-  
+
   const summary = await wiki.summary(k.Channel.Metadata.Name);
 
   var w = "";
@@ -451,15 +451,15 @@ app.get("/channel/", async (req, res) => {
   if (summary.title !== "Not found.") {
     w = summary;
   }
-  
+
   const { Subscribers: subscribers } = k.Channel.Metadata;
-  const description =  k.Channel.Contents.ItemSection.About.Description
-  
-    var d = description.toString().replace(/\n/g, " <br> ")
-    if(d === "[object Object]"){
-      var d = ""
-    }
-   
+  const description = k.Channel.Contents.ItemSection.About.Description;
+
+  var d = description.toString().replace(/\n/g, " <br> ");
+  if (d === "[object Object]") {
+    var d = "";
+  }
+
   renderTemplate(res, req, "channel.ejs", {
     ID: ID,
     tab: tab,
@@ -472,7 +472,7 @@ app.get("/channel/", async (req, res) => {
       typeof subscribers === "string"
         ? subscribers.replace("subscribers", "")
         : "Private",
-    desc: d
+    desc: d,
   });
 });
 
@@ -508,9 +508,37 @@ app.get("/video/upload", (req, res) => {
 ///////////// API /////////////
 
 app.get("/embed/:v", async function (req, res) {
+  var e = req.query.e;
+  var f = req.query.f;
+  var t = req.query.t;
+  var q = req.query.quality;
   var v = req.params.v;
 
-  res.redirect(`https://tube.kuylar.dev/proxy/media/${v}/18`);
+  var fetching = await fetcher(v);
+  const video = await fetch(config.tubeApi + `video?v=${v}`);
+
+  const json = fetching.video.Player;
+  const h = await video.text();
+  const k = JSON.parse(toJson(h));
+  const engagement = fetching.engagement;
+
+  if (!v) res.redirect("/");
+
+  //video
+  if (!q) url = `https://tube.kuylar.dev/proxy/media/${v}/22`;
+  if (q === "medium") {
+    var url = `https://tube.kuylar.dev/proxy/media/${v}/18`;
+  }
+
+  renderTemplate(res, req, "poketube-iframe.ejs", {
+    video: json,
+    url: url,
+    sha384: sha384,
+    qua: q,
+    engagement: engagement,
+    optout: t,
+    t: config.t_url,
+  });
 });
 
 app.get("/api/search", async (req, res) => {
@@ -572,8 +600,6 @@ app.get("/video/upload", (req, res) => {
   res.redirect("https://youtube.com/upload");
 });
 
-
-
 ///////////// 404 AND MAIN PAGES ETC /////////////
 app.get("/", async function (req, res) {
   const trends = await fetch(config.tubeApi + `trending`);
@@ -584,7 +610,6 @@ app.get("/", async function (req, res) {
     isMobile: req.useragent.isMobile,
   });
 });
- 
 
 app.get("*", function (req, res) {
   const things = random_words[Math.floor(Math.random() * random_words.length)];
@@ -593,7 +618,7 @@ app.get("*", function (req, res) {
   });
 });
 
- ////////////////////////////////////////////////////
+////////////////////////////////////////////////////
 
 // listen
 

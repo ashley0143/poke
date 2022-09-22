@@ -177,12 +177,12 @@
 
  				</div>
       <div class="video-info-buttons" style="border-radius:16px;background: #1c1c1c;padding: 3px;border-style: none;min-height: 34px;height: min-content;">
-					<div title="Likes">
+					<div title="<%=engagement.likes.toLocaleString()%> Likes">
   <i class="fa-light fa-thumbs-up"></i>
-     <%=engagement.likes.toLocaleString()%>
+     <%=convert(engagement.likes)%>
           </div>
-					<div title="Dislikes">
-<i class="fa-light fa-thumbs-down"></i> <%=engagement.dislikes.toLocaleString()%>
+					<div title="<%=engagement.dislikes.toLocaleString()%> Dislikes">
+<i class="fa-light fa-thumbs-down"></i> <%=convert(engagement.dislikes)%>
 					</div>
           					<div>
 
@@ -928,11 +928,11 @@ a{
 <div class="video-info-buttons" style="font-family:'Inter';font-weight:900;white-space:yes;background-color: #333;border-radius: 15px;margin: 6px;align-self: center;align-items: center;">
   <div>
    <i class="fa-light fa-thumbs-up"  style="font-size:x-large" ></i>
-     <%=engagement.likes.toLocaleString()%>
+     <%=convert(engagement.likes)%>
        </div>
-              <a>
- <i class="fa-light fa-thumbs-down"  style="font-size:x-large" ></i><%=engagement.dislikes.toLocaleString()%>
-                </a>
+              <div>
+ <i class="fa-light fa-thumbs-down"  style="font-size:x-large" ></i><%=convert(engagement.dislikes)%>
+                </div>
 					<a style="color:#fff" href="/download?v=<%=video.id%>&from=mobile">   
             <i style="font-size:x-large" class="fa-light fa-download"></i>
             Download

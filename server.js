@@ -98,6 +98,13 @@ return new Intl.NumberFormat('en-GB', {
 }).format(value);
 }
 
+function getFirstLine(text) {
+    var index = text.indexOf("<br> ");
+    if (index === -1) index = undefined;
+    return text.substring(0, index);
+}
+
+
 /////////////////////////////////
 
 app.use(function (req, res, next) {
@@ -317,35 +324,35 @@ app.get("/music", async function (req, res) {
   const h = await video.text();
   const k = JSON.parse(toJson(h));
 
-  if (!json.Channel.Name.endsWith(" - Topic")) {
+  if (!k.Video.Channel.Name.endsWith(" - Topic")) {
     res.redirect(`/watch?v=${v}`);
   }
 
   //video
   var url = `https://tube.kuylar.dev/proxy/media/${v}/18`;
 
+   
   // encryption
   const url_e =
     url +
     "?e=" +
-    sha384(json.id) +
-    sha384(json.Title) +
-    sha384(json.Channel.id) +
-    sha384(json.Channel.id) +
+    sha384(k.Video.Channel.id) +
+    sha384(k.Video.Channel.id) +
     "Piwik" +
     sha384(config.t_url);
+
 
   // channel info
   const engagement = fetching.engagement;
   const channel = await fetch(
-    config.tubeApi + `channel?id=${json.Channel.id}&tab=videos`
+    config.tubeApi + `channel?id=${k.Video.Channel.id}&tab=videos`
   );
   const c = await channel.text();
   const tj = JSON.parse(toJson(c));
 
   // info
   const song = await musicInfo.searchSong(
-    { title: json.Title, artist: json.Channel.Name.replace("- Topic", "") },
+    { title: k.Video.Title, artist: k.Video.Channel.Name.replace("- Topic", "") },
     1000
   );
 
@@ -487,6 +494,7 @@ app.get("/channel/", async (req, res) => {
     j: k,
     tj: tj,
     wiki: w,
+    getFirstLine:getFirstLine,
     isMobile: req.useragent.isMobile,
     about: k.Channel.Contents.ItemSection.About,
     subs:

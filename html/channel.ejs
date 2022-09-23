@@ -109,7 +109,73 @@
  line-height:24px;
  margin-top:12px
 }</style>
-  
+                                                 <% if (isMobile) { %>  
+<style>
+  .video-grid{
+    justify-content:center;
+  }       
+
+.sticky-top {
+	 position: sticky;
+	 top: 0px;
+	 z-index: 999;
+}
+ .responsive {
+	 width: 100%;
+	 overflow-x: auto;
+}
+ .tabs {
+	 display: table;
+   font-family:inter;
+	 border-collapse: separate;
+	 table-layout: auto;
+}
+ .tabs.tabs-center {
+	 margin: auto;
+}
+ .tabs.tabs-justify {
+	 width: 100%;
+	 table-layout: fixed;
+}
+ .tabs a.tab {
+	 position: relative;
+	 display: table-cell;
+	 transition: all ease 0.3s;
+	 padding: 1em 1.6em;
+	 transform: translate3d(0, 0, 0);
+	 color: #fff;
+	 white-space: nowrap;
+	 cursor: pointer;
+}
+ .tabs a.tab:hover {
+	 color: #3cb4fa;
+}
+ .tabs a.tab:after {
+	 transition: all 0.3s cubic-bezier(1, 0, 0, 1);
+	 will-change: transform, box-shadow, opacity;
+	 position: absolute;
+	 content: '';
+	 height: 3px;
+	 bottom: 0px;
+	 left: 0px;
+	 right: 0px;
+	 border-radius: 3px 3px 0px 0px;
+	 background: #9fdafd;
+	 box-shadow: 0px 4px 10px 3px rgba(60, 180, 250, .15);
+	 opacity: 0;
+	 transform: scale(0, 1);
+}
+ .tabs a.tab.active {
+	 color: #fff;
+}
+ .tabs a.tab.active:after {
+	 opacity: 1;
+	 transform: scale(1, 1);
+}
+ 
+  </style>
+                 <% } %>
+
    <!-- STYLES END -->
 <link href=https://site-assets.fontawesome.com/releases/v6.1.1/css/all.css rel=stylesheet>
  </head>
@@ -145,12 +211,46 @@
 <div class="channel-page">
 
 <div class="channel-page">
- <div class="channel-info-container">
+        <% if (isMobile) { %>  
+
+               
+ 
+   <div style="text-align: center;padding: 3px;margin-top: 0px;">
+     
+     <div class="tabs tabs-center">
+            <% if (!tab) { %>
+
+                <a href="/channel?id=<%=ID%>" class="tab active">Home</a>
+                <a  href="/channel?id=<%=ID%>&tab=about"  class="tab">About</a>
+                                                               <% } %>
+                                                                             <% if (tab) { %>
+
+                <a href="/channel?id=<%=ID%>" class="tab">Home</a>
+                <a  href="/channel?id=<%=ID%>&tab=about" class="tab active">About</a>
+                                                               <% } %>
+
+            </div>
+     
+     
+
+        </a>
+
+ </a>
+</div>
+ 
    
+   </div>
+   
+                                              <% } %>
+
+ <div class="channel-info-container">
+       
+               
           <% if (j.Channel.Metadata.Banners.Thumbnail) { %>
 
           <img src="https://p.poketube.fun/<%=j.Channel.Metadata.Banners.Thumbnail[2].$t%>">
                                <% } %>
+          <% if (!isMobile) { %>  
 
 		<div class="channel-info" >
 			<a href="/channel?id=<%=ID%>" class="avatar">
@@ -163,6 +263,30 @@
 			<button class="subscribe-button"><%=subs%></button>
 		</div>
 	</div> 
+                                           <% } %>
+                                               <% if (isMobile) { %>  
+
+<div class="channel-info" style="display: inline-block;padding-bottom:0;font-weight:bold;">
+			<a href="/channel?id=<%=ID%>" class="avatar" style="height: 100px;display: inline-block;">
+				<img src="https://p.poketube.fun/<%=j.Channel.Metadata.Avatars.Thumbnail.$t%>" alt="Channel Avatar">
+			</a>
+			<div class="name">
+				<p style="font-family:Ginto Nord,sans-serif;font-weight:900;white-space:yes;"><%=j.Channel.Metadata.Name%></p>
+ 			</div>
+ 
+			<%=subs%> Subscribers 
+         <% if (!tab) { %>
+
+      <p style="padding:0;font-weight:bold;"> 
+   <%-getFirstLine(desc)%> <a href="/channel?id=<%=ID%>&tab=about">
+<i class="fa-thin fa-angle-right"></i></a>
+        </p>
+              <% } %>
+		</div>
+	</div> 
+                                           <% } %>
+        <% if (!isMobile) { %>  
+
  <% if (!tab) { %>
 
    <div style="text-align: left;padding: 3px;margin-top: 7px;">
@@ -180,7 +304,7 @@
      <a href="/channel?id=<%=ID%>" >Uploads</a> <a href="/channel?id=<%=ID%>&tab=about" style="background-color: #333;padding: 5px;border-top-left-radius: 3px;border-top-right-radius: 4px;padding-bottom: 4px;">About </a>
    
    </div>
-   <% } %>
+   <% } %> <% } %>
      <hr style="clear: both;display: block;border: none;border-bottom: 0.5px solid #2f2f2f;margin: 0 0;/*! width: 4.5em; */height: 0;">    <% if (!tab) { %>  
     
              <div align="center">

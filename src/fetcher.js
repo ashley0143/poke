@@ -15,6 +15,7 @@
     You should have received a copy of the GNU General Public License
     along with this program. If not, see https://www.gnu.org/licenses/.
   */
+
 const fetch = require("node-fetch"); //2.5.x
 const { toJson } = require("xml2json");
 
@@ -28,14 +29,27 @@ module.exports = async function (video_id) {
   );
   const dislikes = dislike.dislikes || "none";
 
+  const headers = {};
   /*
    * Parses and fetches an xml
    */
+
   async function parsexml(id) {
-    const player = await fetch(`${new_api_url}?v=${id}`);
-    var h = await player.text();
-    var j = toJson(h);
-    return JSON.parse(j);
+    for (let i = 0; i < 3; i++) {
+      try {
+        const player = await fetch(`${new_api_url}?v=${id}`, headers);
+        var h = await player.text();
+        var j = toJson(h);
+        return JSON.parse(j);
+      } catch (err) {
+        if (err.status === 503) {
+          // retry after a bit
+          await new Promise((resolve) => setTimeout(resolve, 1000));
+        } else {
+          return "";
+        }
+      }
+    }
   }
 
   /*

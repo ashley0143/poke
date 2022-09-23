@@ -205,9 +205,19 @@ height: 100%;
 <body style="display: flex;width: 100%;height: 100%;">
 <div class="app" style="color:#fff;height: 100%;justify-content: center;display: flex;width: 100%;">
  
-     	<div class="video-player-container" style="margin: auto;width: 78%;padding: 10px;" align="center">
+     	<div class="video-player-container" style="margin: auto;padding: 10px;" align="center">
 <video class="player" id="<%=sha384(video.id)%>" autoplay controls src="<%=url%>" style="border-radius:30px" poster="https://p.poketube.fun/https://i.ytimg.com/vi/<%=video.id%>/hqdefault.jpg?v=607ddcd4">
-  
+   
+    <% if (  video.Subtitles.Subtitle) { %>  
+     <%  if (Array.isArray( video.Subtitles.Subtitle)) { %> 
+   <% video.Subtitles.Subtitle.forEach(x => { %>
+     <track src="/api/subtitles?v=<%=video.id%>&h=<%= x.language %>" label="<%= x.language %>" kind="subtitles">      
+     
+        <img src="https://t.poketube.fun/t/rep.gif?v=<%=video.id%>&h=<%= x.language %>" id="subtitle_usage_rate" style="border:0;width: 0;visibility: hidden;"> 
+         <% }) %>   
+                                                                                                       <% } %>               
+                                                           <% } %>                
+                                                             
  					</video> 
        
 <div style="display: flex;justify-content: center;align-items: center;flex-direction: row; column-gap: 3px;margin: 7;" align="center">

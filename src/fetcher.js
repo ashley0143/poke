@@ -35,7 +35,7 @@ module.exports = async function (video_id) {
    */
 
   async function parsexml(id) {
-    for (let i = 0; i < 3; i++) {
+    for (let i = 0; i < 2; i++) {
       try {
         const player = await fetch(`${new_api_url}?v=${id}`, headers);
         var h = await player.text();

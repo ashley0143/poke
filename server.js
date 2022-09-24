@@ -192,34 +192,18 @@ app.get("/watch", async function (req, res) {
   }
 
   var nn = "";
+  var nnn = "";
+  var comments = "";
 
   if (n === "none") {
-    badges = "";
+    badges, nnn, comments = "";
   }
+  
   if (IsJsonString(n)) {
     if (n !== "none") {
       badges = JSON.parse(n).channel.badges[0];
-    }
-  }
-
-  var nnn = "";
-
-  if (n === "none") {
-    nnn = "";
-  }
-  if (IsJsonString(n)) {
-    if (n !== "none") {
-      nnn = JSON.parse(n);
-    }
-  }
-
-  var comments = "";
-  if (n === "none") {
-    comments = "";
-  }
-  if (IsJsonString(n)) {
-    if (n !== "none") {
-      comments = JSON.parse(n).commentCount;
+       nnn = JSON.parse(n);
+       comments = JSON.parse(n).commentCount;
     }
   }
 
@@ -252,9 +236,21 @@ app.get("/watch", async function (req, res) {
   );
   const c = await channel.text();
   const tj = JSON.parse(toJson(c));
+  
+  // about
+  const abtchnl = await fetch(
+    config.tubeApi + `channel?id=${k.Video.Channel.id}&tab=about`
+  );
+  const ab = await abtchnl.text();
+  const a = JSON.parse(toJson(ab));
 
-  // lyrics
-  //  const lyrics = await lyricsFinder(json.Title);
+  const desc = a.Channel.Contents.ItemSection.About.Description;
+
+  var d = desc.toString().replace(/\n/g, " <br> ");
+  
+  if (d === "[object Object]") {
+    var d = false;
+  }
 
   const summary = await wiki.summary(k.Video.Channel.Name);
 
@@ -266,11 +262,35 @@ app.get("/watch", async function (req, res) {
     w = summary;
   }
 
+/***********
+ * URL = Video URl
+ * color= embed color
+ * engagement = engagement data
+ * video = video json info
+ * date = upload date
+ * e = embed
+ * k = player
+ * process = process information
+ * sha384 = encryption
+ * isMobile = to check if its mobile or not
+ * tj = channel videos page
+ * r = recommended videos
+ * qua = quality obv
+ * ip = ip info
+ *  convert = formats a number
+ * wiki = wikipedia info
+ * f = recent videos from this channel
+ * t = default piwik url
+ * optout = piwik optout
+ * badges = channel badges
+ * desc = channel description
+ * comments = comment size
+ * nnn = nigthly stuff
+ *  lyrics = depracated
+ */
   renderTemplate(res, req, "poketube.ejs", {
     url: url_e,
-    color: await getColors(
-      `https://i.ytimg.com/vi/${v}/maxresdefault.jpg`
-    ).then((colors) => colors[0].hex()),
+    color: await getColors( `https://i.ytimg.com/vi/${v}/maxresdefault.jpg` ).then((colors) => colors[0].hex()),
     engagement: engagement,
     video: json,
     date: moment(k.Video.uploadDate).format("LL"),
@@ -289,6 +309,7 @@ app.get("/watch", async function (req, res) {
     t: config.t_url,
     optout: t,
     badges: badges,
+    desc:desc,
     comments: comments,
     n: nnn,
     lyrics: "",

@@ -16,7 +16,7 @@
     You should have received a copy of the GNU General Public License
     along with this program. If not, see https://www.gnu.org/licenses/.
 -->
-<head>
+<!DOCTYPE html><html><head>
     <% if (ID === "UCFAiFyGs6oDiF1Nf-rRJpZA") { %> 
     <title>Technoblade Never Dies! - PokeTube</title>
  <% } %>
@@ -91,6 +91,27 @@
   
  
    </style>
+   
+  <!-- STYLES START -->
+  
+<style>
+   a.class:hover {
+    text-decoration:underline;
+    font-weight:bold
+   }
+   summary{
+     color:gray;
+   }
+   summary:hover{
+    color:white;
+    }
+  
+  :visited { color: #00c0ff }
+     
+  a{
+  color:#0ab7f0;
+   }
+   </style>
   
   <link href=/css/app-cdn.min.css rel=stylesheet>
   <link href=/css/app.main.css rel=stylesheet>
@@ -100,6 +121,10 @@
   
   <!-- NEW NAVBAR -->
     <link href="/css/watch-navbar.css?v=56" rel=stylesheet>
+
+  
+   <!-- STYLES END -->
+<link href=https://site-assets.fontawesome.com/releases/v6.1.1/css/all.css rel=stylesheet>
 
       <style>section p {
  font-family:Whitney, Helvetica Neue, Helvetica, Arial, sans-serif;
@@ -168,7 +193,22 @@
 	 transform: scale(1, 1);
 }                 
                      </style>
-                                                 <% if (isMobile) { %>  
+                     
+  <% if(!isMobile) { %>
+    <style>
+          .video-grid {
+  display: flex;
+  flex-wrap: wrap;
+   row-gap: 40px;
+  padding: 16px;
+  max-inline-size: 164ch;
+  justify-content: space-around;
+} 
+    </style>
+   <% } %>
+
+ 
+                       <% if (isMobile) { %>  
 <style>
   .video-grid{
     justify-content:center;
@@ -241,30 +281,42 @@
 <link href=https://site-assets.fontawesome.com/releases/v6.1.1/css/all.css rel=stylesheet>
  </head>
 <body>
-     <center> 
-                 <% if (!isMobile) { %>  
+  <div class="app">
 
-      <nav>
+                  <% if (!isMobile) { %>  
+     <nav>
       <div class="left"><a class="class" href="/143" style=font-family:Inter,sans-serif;color:#fff> <img style="transform: scale(1.3);padding-left:0.9em;width: 8.5em;display: block;margin-left: auto;margin-right: auto;" src="/css/logo.svg?v=5">         </a>             </div>                                    
       <div class="middle">
-         <form action=/search><input class=search-bar autocomplete="on" id=fname name=query style="color:#fff;font-family:Inter,sans-serif;border-radius: 8px;transform:none;">
-           
-         </form>
-            
+      <div class="search">
+        
+        <form action="/search">
+   <input class="search-bar" autocomplete="on" id="fname" name="query" placeholder="" style="color:#fff;font-family:Inter,sans-serif;border-radius: 8px;" data-ddg-inputtype="identities.firstName">
+  
+
+          <button class="btn btn-success" type="submit"><i class="fa-light fa-search"></i></button>
+        
+        </form>
+                               <img src="https://search-metrics.poketube.fun/t/rep.gif" style="border:0;width: 0;visibility: hidden;"> 
+ 
+      </div>
           <img src="https://search-metrics.poketube.fun/t/rep.gif"  style="border:0;width: 0;visibility: hidden;"> 
 
       </div>
       <div class="right">
-        <a href="/privacy">
+      <a href="/privacy" style="text-decoration: none;" title="Privacy Policy">
           <i style="display: block;margin-left: auto;margin-right: auto;" class="fa-light fa-shield"></i>
         </a>
-        <a href="/video/upload?from=">
+        <a href="/video/upload" style="text-decoration: none;" title="Upload Video">
           <i style="display: block;margin-left: auto;margin-right: auto;" class="fa-light fa-video"></i>
         </a>
-                                                                              <% } %>
-
+                         
+        
       </div>
     </nav>
+	   
+ 
+                                                                                      <% } %>
+
 	   
                          <% if (isMobile) { %>  
       <nav style="background-color:#111">
@@ -286,7 +338,6 @@
                                                                                      <% } %>
 
         <section class=youtube-video>
-     <div class="app">
 <div class="channel-page">
 
 <div class="channel-page">
@@ -378,12 +429,12 @@
      <div class="tabs tabs-center">
             <% if (!tab) { %>
 
-                <a href="/channel?id=<%=ID%>" class="tab active">Home</a>
+                <a href="/channel?id=<%=ID%>" class="tab active">Uploads</a>
                 <a  href="/channel?id=<%=ID%>&tab=about"  class="tab">About</a>
                                                                <% } %>
                                                                              <% if (tab) { %>
 
-                <a href="/channel?id=<%=ID%>" class="tab">Home</a>
+                <a href="/channel?id=<%=ID%>" class="tab">Uploads</a>
                 <a  href="/channel?id=<%=ID%>&tab=about" class="tab active">About</a>
                                                                <% } %>
 

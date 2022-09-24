@@ -346,7 +346,7 @@ From  <%=video.Channel.Name%> </span></a>
 								<div>
                <a class="max-lines-2" href="/channel?id=<%= x.Channel.id %>"><%=x.Channel.Name %></a>
 									<div>
- <%= x.uploadedAt %>  </div>
+ <%= x.uploadedAt %> • <%= convert(x.views) %> views</div>
 								</div>
 							</div>
 						</div>
@@ -377,7 +377,7 @@ From  <%=video.Channel.Name%> </span></a>
 								<div>
                <a class="max-lines-2" href="/channel?id=<%= video.Channel.id %>"><%=video.Channel.Name %></a>
 									<div>
- <%= x.uploadedAt %>  </div>
+ <%= x.uploadedAt %> • <%= convert(x.views) %> views</div>
 								</div>
 							</div>
 						</div>

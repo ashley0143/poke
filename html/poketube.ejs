@@ -884,6 +884,30 @@ body {
 a{
   color:#0ab7f0;
 }
+    .fromtheweb-outer{
+display: flex;
+flex-wrap: wrap;
+justify-content: space-between;
+-moz-box-pack: justify;
+padding: 10px;
+margin-bottom: 12px;
+border-bottom-right-radius: 10px;
+border-bottom-left-radius: 10px;
+    }
+        .fromtheweb-inner{
+    -moz-box-align: center;
+text-align:left;
+          /*
+display: flex;
+flex-direction: column;
+          */
+  
+font-size: 14px;
+-moz-box-pack: center;
+justify-content: center;
+padding: 0px 0px;
+line-height: 18px;
+     }
   </style>
   <style>body, html { margin: 0; padding: 0; } * { font-family: sans-serif; color:#fff } .player { background-color: #000 !important; display: grid; grid-template-columns: 1fr min-content; grid-template-rows: max-content 1fr max-content max-content max-content; gap: 0 0; width: 100%; /* height: 100%; */ aspect-ratio: 16 / 9; } .player * { color: #fff; } .player.embed, video.embed { position: fixed; top: 0; bottom: 0; left: 0; right: 0; } .player * { -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none; } .player > video { position: relative; width: 100%; height: 100%; z-index: 0; grid-area: 1 / 1 / 6 / 3; } .player.hide-controls > .player-title, .player.hide-controls > .player-controls, .player.hide-controls > .player-playback-bar-container, .player.hide-controls > .player-menu { display: none !important; } .player-controls { background-color: #0007; display: flex; justify-content: center; align-items: center; z-index: 1; grid-area: 1 / 1 / 6 / 3; } .player-button { width: 96px; height: 96px; font-size: 90px; text-align: center; line-height: 48px; } .player-tiny-button { width: 40px; font-size: 20px; text-align: center; } .player-tiny-button > i { color: #ddd; } .player-button, .player-button * { color: #dddddd !important; text-decoration: none; } .player-button > i { min-width: 48px; } .player-button:hover, .player-button:hover * { color: #fff !important; } .player-playback-bar { transition: width linear 100ms; } .player-playback-bar-container { grid-area: 4 / 1 / 5 / 3; display: flex; column-gap: 8px; justify-content: center; align-items: center; height: 8px; transition: height linear 100ms; width: 100%; z-index: 2; margin-bottom: 10px; } .player-playback-bar-bg { background-color: #fff3 !important; width: 100%; height: 100%; z-index: 2; display: grid; grid-template-columns: 1fr; grid-template-rows: 1fr; } .player-playback-bar-bg > * { grid-area: 1 / 1 / 2 / 2; } .player-playback-bar-buffer { background-color: #fffa !important; height: 100%; width: 0; z-index: 3; } .player-playback-bar-fg { background-color: #f00 !important; height: 100%; width: 0; z-index: 4; } .player-buffering { grid-area: 1 / 1 / 6 / 3; z-index: 1; display: flex; justify-content: center; align-items: center; } .player-buffering-spinner { width: 80px; height: 80px; }</style>
   <body>
@@ -979,11 +1003,35 @@ a{
         			<p class="description"><%-String(video.Description).replace(/\n/g, " <br> ")%> </p>
  
                             </div> 
-                          <% if (wiki.extract_html) { %> 
-<div class="video-title" style="color:#fff;font-family:Ginto Nord,sans-serif;font-weight:700;margin-top: 10px;margin-bottom: 10px;">From da web</div>
-                                                         <hr style="clear: both;display: block;border: none;border-bottom: 0.5px solid #2f2f2f;margin: 0 0;/*! width: 4.5em; */height: 0;">
+          <div>
+                    <div style="justify-content: center;display: flex;padding: 11px;font-family: Ginto nord;gap: 3px;background: #111;border-top-left-radius: 10px;border-top-right-radius: 10px;">
+More from  <%=video.Channel.Name%>
+          </div>  
+                            <div style="justify-content: center;display: flex;padding: 11px;font-family: Ginto nord;gap: 3px;background: #111;">
+                             
+<div style="border-radius: 5px;background: #333;width: fit-content;padding: 18px;">
+		<a style="color:#fff" href="/channel?id=<%=video.Channel.id%>&tab=about" > 
 
+  <i class="fa-thin fa-square-user"></i> About
+  </a>
+                       </div>                     
+
+                     <div style="border-radius: 5px;background: #333;width: fit-content;padding: 17px;">
+		<a style="color:#fff" href="/channel?id=<%=video.Channel.id%>" > 
+      <i class="fa-thin fa-play"></i> Videos </a>
+                       </div>      
+                              
+
+                              
+            </div>  
+                                                           <div style="background:#0D0D0D;" class="fromtheweb-outer">
+                          <div class="fromtheweb-inner">
+                             
+                   <% if (wiki.extract_html) { %> 
+<div class="video-title" style="color:#fff;font-family:Ginto Nord,sans-serif;font-weight:700;margin-top: 10px;margin-bottom: 10px;text-aligin:left;">From da web</div>
                      
+<hr style="clear: both;display: block;border: none;border-bottom: 0.5px solid #2f2f2f;/*! width: 4.5em; */height: 0;">
+
   <%-wiki.extract_html%>
    
 <p style="margin-bottom: 10px;">
@@ -991,12 +1039,17 @@ a{
   <a href=" <%-wiki.content_urls.desktop.page%>
  ">From wikipedia </a> under CC-BY-SA 3.0
                      </p>
-                     
-  
+ 
                  
                      </p>
                      <% } %>  
-                           
+                       
+                          </div>
+ 			</div> 
+                     
+                          </div>
+                          <hr style="clear: both;display: block;border: none;border-bottom: 0.5px solid #2f2f2f;margin: 0 0;/*! width: 4.5em; */height: 0;">
+                           <div>
  			</div>    <hr style="clear: both;display: block;border: none;border-bottom: 0.5px solid #2f2f2f;margin: 0 0;/*! width: 4.5em; */height: 0;">
                            <div>
                    <div class="video-title" style="font-family:'Ginto Nord';font-weight:900;white-space:yes;margin-top: 10px;">Comments    </div>
@@ -1012,7 +1065,7 @@ a{
 
                </div>
  
-                                 <hr style="clear: both;display: block;border: none;border-bottom: 0.5px solid #2f2f2f;margin: 0 0;/*! width: 4.5em; */height: 0;">
+                                 <hr style="clear: both;display: block;border: none;border-bottom: 0.5px solid #2f2f2f;margin: 0 0;/*! width: 4.5em; */height: 0;"> 
                </div>
                  
  	</div>
@@ -1028,7 +1081,7 @@ a{
                               <% if (!f) { %> 
                                               <% if (!video.Channel.Name.endsWith(' - Topic')) { %>  
 
-<div style="display: flex;column-gap: 2.5px;align-self: center;" align="center"> 
+<div style="display: flex;column-gap: 2.5px;align-self: center;padding-top: 5px;" align="center"> 
   <span tabindex="0" draggable="false" style="font-weight: bold;"  class="v-chip  v-chip--clickable v-chip--active v-chip--no-color theme--dark v-size--default"><a class="v-chip__content">
           Recommendations
         </span></a>
@@ -1043,7 +1096,7 @@ From  <%=video.Channel.Name%> </span></a>
                                <% if (f) { %> 
               <% if (!video.Channel.Name.endsWith(' - Topic')) { %>  
 
-<div style="display: flex;column-gap: 2.5px;align-self: center;" align="center"> 
+<div style="display: flex;column-gap: 2.5px;align-self: center;padding-top: 5px;" align="center"> 
                                   <span tabindex="0" draggable="false" class="v-chip  v-chip--clickable v-chip--active v-chip--no-color theme--dark v-size--default"><a href="/watch?v=<%=video.id%>" style="color:#fff;text-decoration:none;" class="v-chip__content">
           Recommendations
         </span></a>

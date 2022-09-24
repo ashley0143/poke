@@ -376,12 +376,13 @@
    
                                               <% } %>
 
- <div class="channel-info-container">
-       
+        
                
       
                                  
           <% if (!isMobile) { %>  
+            <div class="channel-info-container" style="text-align: center;">
+
         <% if (j.Channel.Metadata.Banners.Thumbnail) { %>
 
           <img src="https://p.poketube.fun/<%=j.Channel.Metadata.Banners.Thumbnail[2].$t%>">
@@ -399,7 +400,8 @@
 	</div> 
                                            <% } %>
                                                <% if (isMobile) { %>  
-                   
+                   <div class="channel-info-container" style="text-align: center;">
+
          <% if (!tab) { %>
                                       <% if (j.Channel.Metadata.Banners.Thumbnail) { %>
 

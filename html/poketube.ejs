@@ -251,7 +251,7 @@
                 </div>                                                 <hr style="clear: both;display: block;border: none;border-bottom: 0.5px solid #2f2f2f;margin: 0 0;/*! width: 4.5em; */height: 0;">
 
                     	<div class="video-title" style="font-family:'Ginto Nord';font-weight:900;white-space:yes;">Encryption Information!</div><br> 
- <i class="fas fa-shield-alt"></i> The Connection is secured with ECDSA with SHA-384 Signature Algorithm :3 (<a href="https://en.wikipedia.org/wiki/Encryption">WHAT THE HELL IS ENCRYPTION ?! (ME DUM)</a>) <br><br> 
+ <i class="fas fa-shield-alt"></i> The Connection is secured with ECDSA with SHA-384 Signature Algorithm :3 (<a href="https://en.wikipedia.org/wiki/Encryption">WHAT THE HELL IS ENCRYPTION ?! (ME DUM) </a>) <br><br> 
 
                 
                   <div>
@@ -269,7 +269,7 @@
                      
        <p style="font-family:MonoSpace">
          <b>
-PokeTube Player v22.09.22a - Node <%=process.version%> - V8 v<%=process.versions.v8%> -  <%=process.platform.replace("linux", "GNU/Linux")%> <%=process.arch%> Server ( <%=ip.org%> )
+PokeTube Player v24.09.22a - Node <%=process.version%> - V8 v<%=process.versions.v8%> -  <%=process.platform.replace("linux", "GNU/Linux")%> <%=process.arch%> Server ( <%=ip.org%> )
            </b>
          
                 </p>                        
@@ -910,6 +910,7 @@ line-height: 18px;
     <nav >
       <div class=left><a class="class" href="/" style=font-family:Inter,sans-serif;color:#fff> <img style="width: 8.5em;display: block;margin-left: auto;margin-right: auto;" src="/css/logo-mobile.svg">      </a>
       </div>
+              <a name="top"></a>
         </nav>
 	   <div class="mobile-page">
 	<div class="primary">
@@ -938,7 +939,6 @@ line-height: 18px;
        </div>                                                 
  		</div>
 			<div class="video-info">
-                      
         <div class="video-title" style="font-family:'Inter';font-weight:900;white-space:yes;"><%=video.Title%> </div>
  				<div class="video-info-bar" style="font-family:'Inter';">
 					<div class="divider"></div>
@@ -999,10 +999,10 @@ line-height: 18px;
  
                             </div> 
           <div>
-                    <div style="justify-content: center;display: flex;padding: 11px;font-family: Ginto nord;gap: 3px;background: #1c1c1c;border-top-left-radius: 10px;border-top-right-radius: 10px;">
+                    <div style="justify-content: center;display: flex;padding: 11px;font-family: Ginto nord;gap: 3px;background: #1f1f1f;border-top-left-radius: 10px;border-top-right-radius: 10px;">
 More from  <%=video.Channel.Name%>
           </div>  
-                            <div style="justify-content: center;display: flex;padding: 11px;font-family: Ginto nord;gap: 3px;background: #1c1c1c;">
+                            <div style="justify-content: center;display: flex;padding: 11px;font-family: Ginto nord;gap: 3px;background: #1f1f1f;">
                              
 <div style="border-radius: 5px;background: #333;width: fit-content;padding: 18px;">
 		<a style="color:#fff" href="/channel?id=<%=video.Channel.id%>&tab=about" > 
@@ -1019,7 +1019,7 @@ More from  <%=video.Channel.Name%>
 
                               
             </div>  
-                                                           <div style="background:#130f0f;" class="fromtheweb-outer">
+                                                           <div style="background:#181818;" class="fromtheweb-outer">
                           <div class="fromtheweb-inner">
                              
                    <% if (wiki.extract_html) { %> 
@@ -1027,18 +1027,29 @@ More from  <%=video.Channel.Name%>
                      
 <hr style="clear: both;display: block;border: none;border-bottom: 0.5px solid #2f2f2f;/*! width: 4.5em; */height: 0;">
 
-  <%-wiki.extract_html%>
+  <b><%-wiki.extract_html%>
    
 <p style="margin-bottom: 10px;">
 
   <a href=" <%-wiki.content_urls.desktop.page%>
  ">From wikipedia </a> under CC-BY-SA 3.0
-                     </p>
+    </p></b>
  
                  
-                     </p>
-                     <% } %>  
-                       
+                      <% } %>  
+                                 <% if (!wiki.extract_html) { %> 
+                                                                    <% if (desc) { %> 
+
+<div class="video-title" style="color:#fff;font-family:Ginto Nord,sans-serif;font-weight:700;margin-top: 10px;margin-bottom: 10px;text-aligin:left;">About This Channel</div>
+                     
+<hr style="clear: both;display: block;border: none;border-bottom: 0.5px solid #2f2f2f;/*! width: 4.5em; */height: 0;">
+
+<p><b><%-desc%></b></p>
+ 
+                 
+                      <% } %>                        <% } %>  
+
+                        
                           </div>
  			</div> 
                      
@@ -1187,13 +1198,18 @@ From <%=video.Channel.Name%> </span></a>
                             <% } %> 
                           
             <% } %>                                     
-                    <p><i class="fa-light fa-shield"></i> The Connection is secured with ECDSA with SHA-384 Signature Algorithm :3 </p>             </div>
- 
-                                    
-                  <div align="center">
+                    <p><i class="fa-light fa-shield"></i> The Connection is secured with ECDSA with SHA-384 Signature Algorithm :3 </p>          
+                 <div align="center">
                      <a href="/encryption?v=<%=video.id%>">Click here for encryption info</a><br> 
                                              
-                    </div>
+                    </div><br>
+              <a href="#top">Go To Top</a>
+              </div>
+                           
+                              
+ 
+                                    
+               
                               
       	           <% if (lyrics) { %>
                                                   <% if (r === "f") { %> 

@@ -460,17 +460,10 @@ app.get("/search", async (req, res) => {
   const { toJson } = require("xml2json");
   const query = req.query.query;
 
-  if(req.query.continuation){
-    var continuation = req.query.continuation
-  }
-  
-  if(!req.query.continuation){
-    var continuation = ""
-  }
-  
-  const search = await fetch(
-    `https://tube.kuylar.dev/api/search?query=${query}&continuation=${continuation}`
-  );
+  if(req.query.continuation){ var continuation = req.query.continuation  }
+  if(!req.query.continuation){ var continuation = "" }
+
+  const search = await fetch(`https://tube.kuylar.dev/api/search?query=${query}&continuation=${continuation}`);
 
   const text = await search.text();
   const j = JSON.parse(toJson(text));
@@ -499,6 +492,12 @@ app.get("/channel/", async (req, res) => {
   const c = await channel.text();
   const tj = JSON.parse(toJson(c));
 
+  
+  if(req.query.continuation){ var continuation = req.query.continuation  }
+  if(!req.query.continuation){ var continuation = "" }
+
+
+  
   const summary = await wiki.summary(k.Channel.Metadata.Name);
 
   var w = "";
@@ -522,6 +521,7 @@ app.get("/channel/", async (req, res) => {
     tab: tab,
     j: k,
     tj: tj,
+    continuation:continuation,
     wiki: w,
     getFirstLine:getFirstLine,
     isMobile: req.useragent.isMobile,

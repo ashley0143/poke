@@ -487,16 +487,17 @@ app.get("/channel/", async (req, res) => {
   const h = await bout.text();
   const k = JSON.parse(toJson(h));
 
-  //videos
-  const channel = await fetch(config.tubeApi + `channel?id=${ID}&tab=videos`);
-  const c = await channel.text();
-  const tj = JSON.parse(toJson(c));
-
   
   if(req.query.continuation){ var continuation = req.query.continuation  }
   if(!req.query.continuation){ var continuation = "" }
 
 
+  //videos
+  const channel = await fetch(config.tubeApi + `channel?id=${ID}&tab=videos&Continuation=${continuation}`);
+  const c = await channel.text();
+  const tj = JSON.parse(toJson(c));
+
+  
   
   const summary = await wiki.summary(k.Channel.Metadata.Name);
 

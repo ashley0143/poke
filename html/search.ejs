@@ -139,9 +139,12 @@ border-radius: 5px;
   <div class="channel-page" style="background-color: var(--channel-contents-background);">   
 
             <%  if (Array.isArray( j.Search.Results.Video)) { %> 
-
+<p style="font-family: Inter;">
+  <%=j.Search.estimatedResults.toLocaleString()%> Results
+              </p>
        <% j.Search.Results.Video.forEach(x => { %>
          <div class="video-list">
+           
     <div class="video">
       <a
         href="/watch?v=<%= x.id %>"
@@ -161,9 +164,9 @@ border-radius: 5px;
           </div>      
                   
                 <% }) %>   
-                  <p style="background-color: #353030;width: fit-content;border-radius: 3px;padding: 4px;">
- Congratulations, you've reached the end of the internet kekw 
-        <div></div></p> 
+                  
+<a style="background-color: #353030;width: fit-content;border-radius: 3px;padding: 4px;" href="/search?query=<%=q%>&continuation=<%=j.Search.continuation%>">Next Page</a>
+          
                                   <% } %>   
             <%  if (!Array.isArray( j.Search.Results.Video)) { %>
               <br>

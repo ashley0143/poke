@@ -277,7 +277,7 @@ app.get("/watch", async function (req, res) {
  * r = recommended videos
  * qua = quality obv
  * ip = ip info
- *  convert = formats a number
+ * convert = formats a number
  * wiki = wikipedia info
  * f = recent videos from this channel
  * t = default piwik url
@@ -286,7 +286,6 @@ app.get("/watch", async function (req, res) {
  * desc = channel description
  * comments = comment size
  * nnn = nigthly stuff
- *  lyrics = depracated
  */
   renderTemplate(res, req, "poketube.ejs", {
     url: url_e,

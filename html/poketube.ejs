@@ -144,7 +144,8 @@
 			<div class="video-info">           
 				<div class="video-title" style="font-family:'Ginto Nord';font-weight:900;white-space:yes;"><%=video.Title%></div>
                   <p class="video-sub-info description" style="font-weight: bold;">
-                    <span><%=engagement.viewCount.toLocaleString()%> Views - Uploaded on <%=date%> - By <a href="#chnl"><%-video.Channel.Name%></a> ^^</span> 
+ 
+                    <span><%=engagement.viewCount.toLocaleString()%> Views - Uploaded on <%=date%> - By <a href="/channel?id=<%=video.Channel.id%>"><%-video.Channel.Name%></a> ^^</span> 
                       
                       <br><br>
                       </p>
@@ -180,15 +181,21 @@
  
 
  				</div>
-      <div class="video-info-buttons" style="border-radius:16px;background: #1c1c1c;padding: 3px;border-style: none;min-height: 34px;height: min-content;">
-					<div title="<%=engagement.likes.toLocaleString()%> Likes">
+      <div class="video-info-buttons" style="border-radius:16px;padding: 3px;border-style: none;min-height: 34px;height: min-content;">
+        
+<div style="display: flex;background: #1c1c1c;border-radius: 16px;background: #1c1c1c;padding: 3px;border-style: none;min-height: 34px;height: min-content;">
+ 					<div title="<%=engagement.likes.toLocaleString()%> Likes">
   <i class="fa-light fa-thumbs-up"></i>
      <%=convert(engagement.likes)%>
           </div>
 					<div title="<%=engagement.dislikes.toLocaleString()%> Dislikes">
 <i class="fa-light fa-thumbs-down"></i> <%=convert(engagement.dislikes)%>
 					</div>
-          					<div>
+ 					</div>
+
+            <div style="border-radius: 16px;background: #1c1c1c;padding: 3px;border-style: none;min-height: 34px;height: min-content;">
+
+            <div>
 
 					<a title="Download this Video :3" style="color:#fff;text-decoration: none; " href="/download?v=<%=video.id%>">
             <i class="fa-light fa-download"></i>
@@ -218,7 +225,8 @@
     
                   					</div>
     
-                    
+                    				</div>
+
  
 				</div>
 			</div>
@@ -273,7 +281,7 @@
                      
        <p style="font-family:MonoSpace">
          <b>
-PokeTube Player v24.09.22a - Node <%=process.version%> - V8 v<%=process.versions.v8%> -  <%=process.platform.replace("linux", "GNU/Linux")%> <%=process.arch%> Server ( <%=ip.org%> )
+PokeTube Player v25.09.22a - Node <%=process.version%> - V8 v<%=process.versions.v8%> -  <%=process.platform.replace("linux", "GNU/Linux")%> <%=process.arch%> Server ( <%=ip.org%> )
            </b>
          
                 </p>                        

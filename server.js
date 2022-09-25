@@ -459,8 +459,17 @@ app.get("/old/watch", async function (req, res) {
 app.get("/search", async (req, res) => {
   const { toJson } = require("xml2json");
   const query = req.query.query;
+
+  if(req.query.continuation){
+    var continuation = req.query.continuation
+  }
+  
+  if(!req.query.continuation){
+    var continuation = ""
+  }
+  
   const search = await fetch(
-    `https://tube.kuylar.dev/api/search?query=${query}`
+    `https://tube.kuylar.dev/api/search?query=${query}&continuation=${continuation}`
   );
 
   const text = await search.text();

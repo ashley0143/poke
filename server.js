@@ -341,10 +341,13 @@ app.get("/music", async function (req, res) {
   var fetching = await fetcher(v);
 
   const json = fetching.video.Player;
+  
   const h = await video.text();
   const k = JSON.parse(toJson(h));
-
-  if (!k.Video.Channel.Name.endsWith(" - Topic")) {
+  
+   
+  
+  if (!json.Channel.Name.endsWith(" - Topic")) {
     res.redirect(`/watch?v=${v}`);
   }
 
@@ -372,7 +375,7 @@ app.get("/music", async function (req, res) {
 
   // info
   const song = await musicInfo.searchSong(
-    { title: k.Video.Title, artist: k.Video.Channel.Name.replace("- Topic", "") },
+    { title: k.Video.Title, artist: json.Channel.Name.replace("- Topic", "") },
     1000
   );
 

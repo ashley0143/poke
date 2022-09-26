@@ -138,7 +138,7 @@
 				<div class="video-title" style="font-family:'Ginto Nord';font-weight:900;white-space:yes;"><%=video.Title%></div>
                   <p class="video-sub-info description" style="font-weight: bold;">
  
-                    <span><%=engagement.viewCount.toLocaleString()%> Views - Uploaded on <%=date%> - By <a href="/channel?id=<%=video.Channel.id%>"><%-video.Channel.Name%></a> ^^</span> 
+                    <span><%=engagement.viewCount.toLocaleString()%> Views - Uploaded At <%=date%> - By <a href="/channel?id=<%=k.Video.Channel.id%>"><%-k.Video.Channel.Name%></a> ^^</span> 
                       
                       <br><br>
                       </p>
@@ -151,7 +151,7 @@
                           <% } %>          
                             
     <% if (String(video.Description) == "[object Object]")  { %>
-      <p>No Description On this Video </p>
+      <p> No Description On this Video ( sad innit :c )</p>
                           <% } %>               
 
                    <% if (wiki.extract_html) { %> 
@@ -227,14 +227,14 @@
 				<div class="name" style="font-family:'Ginto Nord'">
  
          <div>
-						<a style="color:#fff" href="/channel?id=<%=video.Channel.id%>" >  <%=video.Channel.Name%></a>   
+						<a style="color:#fff" href="/channel?id=<%=k.Video.Channel.id%>" >  <%=k.Video.Channel.Name%></a>   
             
               <% if (!video.Channel.Name.endsWith(' - Topic')) { %>  
                <% if (badges) { %> 
               <% if (badges.tooltip === "Verified") { %> 
 <i class="fa-solid fa-badge-check" title="<%=badges.tooltip%>"></i>
             <% } %>  <% if (badges.tooltip === "Official Artist Channel") { %> 
-<i class="fa-solid fa-music-note" title="<%=badges.tooltip%>"></i>
+<i class="fa-solid fa-music-note" title="<%=badges.tooltip%>"></i>  
              <% } %>             <% } %>  <% } %> 
 
               </div>
@@ -251,7 +251,8 @@
               
                  
                </div>
-  
+                <% if (!video.Channel.Name.endsWith(' - Topic')) { %>  
+
                    <div class="video-title" style="color:#fff;font-family:Ginto Nord,sans-serif;font-weight:700;margin-top: 10px;margin-bottom: 9px;">Comments - <span style="font-family: inter;"> <%=comments || "Probably disabled or theres no comments" %>  </span> </div>
                       
                              <hr style="clear: both;display: block;border: none;border-bottom: 0.5px solid #2f2f2f;margin: 0 0;/*! width: 4.5em; */height: 0;">
@@ -259,10 +260,13 @@
                        <a href="https://invidio.us/watch?v=<%=video.id%>">  Click here to View Comments</a>
                         </p>
 
+                            <% } %>
+
+
 
 <p style="font-family:MonoSpace;">
          <b>
-PokeTube Player v25.09.22b - Node <%=process.version%> - V8 v<%=process.versions.v8%> -  <%=process.platform.replace("linux", "GNU/Linux")%> <%=process.arch%> Server ( <%=ip.org%> )
+PokeTube Player v26.09.22a - Node <%=process.version%> - V8 v<%=process.versions.v8%> -  <%=process.platform.replace("linux", "GNU/Linux")%> <%=process.arch%> Server ( <%=ip.org%> )
            </b>
          
                 </p>            
@@ -962,7 +966,7 @@ line-height: 18px;
 				</a>
 				<div class="name" style="font-family:'Ginto Nord'">
 		  <div>
-						<a style="color:#fff" href="/channel?id=<%=video.Channel.id%>" >  <%=video.Channel.Name%></a>   
+						<a style="color:#fff" href="/channel?id=<%=k.Video.Channel.id%>" >  <%=k.Video.Channel.Name%></a>   
             
               <% if (!video.Channel.Name.endsWith(' - Topic')) { %>  
             
@@ -993,19 +997,19 @@ line-height: 18px;
                             </div> 
           <div>
                     <div style="justify-content: center;display: flex;padding: 11px;font-family: Ginto nord;gap: 3px;background: #1f1f1f;border-top-left-radius: 10px;border-top-right-radius: 10px;">
-More from  <%=video.Channel.Name%>
+More from  <%=k.video.Channel.Name%>
           </div>  
                             <div style="justify-content: center;display: flex;padding: 11px;font-family: Ginto nord;gap: 3px;background: #1f1f1f;">
                              
 <div style="border-radius: 5px;background: #333;width: fit-content;padding: 18px;">
-		<a style="color:#fff" href="/channel?id=<%=video.Channel.id%>&tab=about" > 
+		<a style="color:#fff" href="/channel?id=<%=k.Video.Channel.id%>&tab=about" > 
 
   <i class="fa-thin fa-square-user"></i> About
   </a>
                        </div>                     
 
                      <div style="border-radius: 5px;background: #333;width: fit-content;padding: 17px;">
-		<a style="color:#fff" href="/channel?id=<%=video.Channel.id%>" > 
+		<a style="color:#fff" href="/channel?id=<%=k.Video.Channel.id%>" > 
       <i class="fa-thin fa-play"></i> Videos </a>
                        </div>      
                               

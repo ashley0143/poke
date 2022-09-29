@@ -177,19 +177,24 @@ app.get("/watch", async function (req, res) {
   
   var badges = "";
 
-  // try 4 times, thanks kuylar
-  for (let i = 0; i < 4; i++) {
+  // try few times, thanks kuylar
+  for (let i = 0; i < 5; i++) {
     try {
       const nightly = await fetch(
         `https://lighttube-nightly.kuylar.dev/api/video?v=${v}`
       );
       var n = await nightly.text();
+      
+      if(n == undefined) { 
+        for(let i=0;i<3;i+=1){try{const nightly=await fetch(`https://lighttube-nightly.kuylar.dev/api/video?v=${ v }`);var n=await nightly.text()}catch(err){if(err.status===500){await new Promise((resolve)=>setTimeout(resolve,1000))}else{return(n="")}}} 
+    }
+    
     } catch (err) {
-      if (err.status === 503) {
+      if (err.status === 500) {
         // retry after a bit
         await new Promise((resolve) => setTimeout(resolve, 1000));
       } else {
-        return (n = "none");
+        return (n = "");
       }
     }
   }
@@ -198,15 +203,15 @@ app.get("/watch", async function (req, res) {
   var nnn = "";
   var comments = "";
 
-  if (n === "none") {
+  if (n == "") {
     badges, nnn, comments = "";
   }
   
   if (IsJsonString(n)) {
-    if (n !== "none") {
-      badges = JSON.parse(n).channel.badges[0];
+    if (n != "") {
        nnn = JSON.parse(n);
-       comments = JSON.parse(n).commentCount;
+            badges = nnn.channel.badges[0];
+       comments = nnn.commentCount;
     }
   }
 

@@ -25,9 +25,9 @@
     <meta content=website property=og:type>
     <meta content="<%=j.Channel.Metadata.Name%> - PokeTube" property=og:title>
        <link href=/css/yt-ukraine.svg?v=6 rel=icon>
-       <% if (desc) { %>
+       <% if (dnoreplace) { %>
 
-    <meta content="<%-desc%>" property=twitter:description>
+    <meta content="<%-dnoreplace%>" property=twitter:description>
           <% } %>
        <% if (j.Channel.Metadata.Banners.Thumbnail) { %>
 

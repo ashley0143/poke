@@ -151,6 +151,7 @@ app.get("/encryption", async function (req, res) {
 });
 
 ///////////// VIDEO PAGES ETC. /////////////
+
 app.get("/watch", async function (req, res) {
   /*
    * QUERYS
@@ -173,9 +174,11 @@ app.get("/watch", async function (req, res) {
   const info = await fetch("http://ip-api.com/json/");
   const jj = await info.text();
   const ip = JSON.parse(jj);
+  
   var badges = "";
 
-  for (let i = 0; i < 3; i++) {
+  // try 4 times, thanks kuylar
+  for (let i = 0; i < 4; i++) {
     try {
       const nightly = await fetch(
         `https://lighttube-nightly.kuylar.dev/api/video?v=${v}`
@@ -519,12 +522,19 @@ app.get("/channel/", async (req, res) => {
   if (d === "[object Object]") {
     var d = "";
   }
+  
+  var dnoreplace = description.toString()
+  if (dnoreplace === "[object Object]") {
+    var dnoreplace = "";
+  }
 
+  
   renderTemplate(res, req, "channel.ejs", {
     ID: ID,
     tab: tab,
     j: k,
     tj: tj,
+    dnoreplace:dnoreplace,
     continuation:continuation,
     wiki: w,
     getFirstLine:getFirstLine,
@@ -563,9 +573,6 @@ app.get("/js/:id", (req, res) => {
   res.sendFile(__dirname + `/js/${req.params.id}`);
 });
 
-app.get("/video/upload", (req, res) => {
-  res.redirect("https://youtube.com/upload");
-});
 
 ///////////// API /////////////
 

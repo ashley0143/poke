@@ -93,17 +93,16 @@ function IsJsonString(str) {
 }
 
 function convert(value) {
-return new Intl.NumberFormat('en-GB', { 
-    notation: "compact"
-}).format(value);
+  return new Intl.NumberFormat("en-GB", {
+    notation: "compact",
+  }).format(value);
 }
 
 function getFirstLine(text) {
-    var index = text.indexOf("<br> ");
-    if (index === -1) index = undefined;
-    return text.substring(0, index);
+  var index = text.indexOf("<br> ");
+  if (index === -1) index = undefined;
+  return text.substring(0, index);
 }
-
 
 /////////////////////////////////
 
@@ -174,21 +173,32 @@ app.get("/watch", async function (req, res) {
   const info = await fetch("http://ip-api.com/json/");
   const jj = await info.text();
   const ip = JSON.parse(jj);
-  
+
   var badges = "";
 
   // try few times, thanks kuylar
-  for (let i = 0; i < 5; i++) {
+  for (let i = 0; i < 3; i++) {
     try {
       const nightly = await fetch(
         `https://lighttube-nightly.kuylar.dev/api/video?v=${v}`
       );
       var n = await nightly.text();
-      
-      if(n == undefined) { 
-        for(let i=0;i<3;i+=1){try{const nightly=await fetch(`https://lighttube-nightly.kuylar.dev/api/video?v=${ v }`);var n=await nightly.text()}catch(err){if(err.status===500){await new Promise((resolve)=>setTimeout(resolve,1000))}else{return(n="")}}} 
-    }
-    
+      if (n == undefined) {
+        for (let i = 0; i < 6; i++) {
+          try {
+            const nightly = await fetch(
+              `https://lighttube-nightly.kuylar.dev/api/video?v=${v}`
+            );
+            var n = await nightly.text();
+          } catch (err) {
+            if (err.status === 500) {
+              await new Promise((resolve) => setTimeout(resolve, 1000));
+            } else {
+              return (n = "");
+            }
+          }
+        }
+      }
     } catch (err) {
       if (err.status === 500) {
         // retry after a bit
@@ -204,14 +214,14 @@ app.get("/watch", async function (req, res) {
   var comments = "";
 
   if (n == "") {
-    badges, nnn, comments = "";
+    badges, nnn, (comments = "");
   }
-  
+
   if (IsJsonString(n)) {
     if (n != "") {
-       nnn = JSON.parse(n);
-            badges = nnn.channel.badges[0];
-       comments = nnn.commentCount;
+      nnn = JSON.parse(n);
+      badges = nnn.channel.badges[0];
+      comments = nnn.commentCount;
     }
   }
 
@@ -244,7 +254,7 @@ app.get("/watch", async function (req, res) {
   );
   const c = await channel.text();
   const tj = JSON.parse(toJson(c));
-  
+
   // about
   const abtchnl = await fetch(
     config.tubeApi + `channel?id=${k.Video.Channel.id}&tab=about`
@@ -255,7 +265,7 @@ app.get("/watch", async function (req, res) {
   const desc = a.Channel.Contents.ItemSection.About.Description;
 
   var d = desc.toString().replace(/\n/g, " <br> ");
-  
+
   if (d === "[object Object]") {
     var d = false;
   }
@@ -270,34 +280,36 @@ app.get("/watch", async function (req, res) {
     w = summary;
   }
 
-/***********
- * URL = Video URl
- * color= embed color
- * engagement = engagement data
- * video = video json info
- * date = upload date
- * e = embed
- * k = player
- * process = process information
- * sha384 = encryption
- * isMobile = to check if its mobile or not
- * tj = channel videos page
- * r = recommended videos
- * qua = quality obv
- * ip = ip info
- * convert = formats a number
- * wiki = wikipedia info
- * f = recent videos from this channel
- * t = default piwik url
- * optout = piwik optout
- * badges = channel badges
- * desc = channel description
- * comments = comment size
- * nnn = nigthly stuff
- */
+  /***********
+   * URL = Video URl
+   * color= embed color
+   * engagement = engagement data
+   * video = video json info
+   * date = upload date
+   * e = embed
+   * k = player
+   * process = process information
+   * sha384 = encryption
+   * isMobile = to check if its mobile or not
+   * tj = channel videos page
+   * r = recommended videos
+   * qua = quality obv
+   * ip = ip info
+   * convert = formats a number
+   * wiki = wikipedia info
+   * f = recent videos from this channel
+   * t = default piwik url
+   * optout = piwik optout
+   * badges = channel badges
+   * desc = channel description
+   * comments = comment size
+   * nnn = nigthly stuff
+   */
   renderTemplate(res, req, "poketube.ejs", {
     url: url_e,
-    color: await getColors( `https://i.ytimg.com/vi/${v}/maxresdefault.jpg` ).then((colors) => colors[0].hex()),
+    color: await getColors(
+      `https://i.ytimg.com/vi/${v}/maxresdefault.jpg`
+    ).then((colors) => colors[0].hex()),
     engagement: engagement,
     video: json,
     date: moment(k.Video.uploadDate).format("LL"),
@@ -316,7 +328,7 @@ app.get("/watch", async function (req, res) {
     t: config.t_url,
     optout: t,
     badges: badges,
-    desc:desc,
+    desc: desc,
     comments: comments,
     n: nnn,
     lyrics: "",
@@ -349,12 +361,10 @@ app.get("/music", async function (req, res) {
   var fetching = await fetcher(v);
 
   const json = fetching.video.Player;
-  
+
   const h = await video.text();
   const k = JSON.parse(toJson(h));
-  
-   
-  
+
   if (!json.Channel.Name.endsWith(" - Topic")) {
     res.redirect(`/watch?v=${v}`);
   }
@@ -362,7 +372,6 @@ app.get("/music", async function (req, res) {
   //video
   var url = `https://tube.kuylar.dev/proxy/media/${v}/18`;
 
-   
   // encryption
   const url_e =
     url +
@@ -371,7 +380,6 @@ app.get("/music", async function (req, res) {
     sha384(k.Video.Channel.id) +
     "Piwik" +
     sha384(config.t_url);
-
 
   // channel info
   const engagement = fetching.engagement;
@@ -471,10 +479,16 @@ app.get("/search", async (req, res) => {
   const { toJson } = require("xml2json");
   const query = req.query.query;
 
-  if(req.query.continuation){ var continuation = req.query.continuation  }
-  if(!req.query.continuation){ var continuation = "" }
+  if (req.query.continuation) {
+    var continuation = req.query.continuation;
+  }
+  if (!req.query.continuation) {
+    var continuation = "";
+  }
 
-  const search = await fetch(`https://tube.kuylar.dev/api/search?query=${query}&continuation=${continuation}`);
+  const search = await fetch(
+    `https://tube.kuylar.dev/api/search?query=${query}&continuation=${continuation}`
+  );
 
   const text = await search.text();
   const j = JSON.parse(toJson(text));
@@ -498,18 +512,20 @@ app.get("/channel/", async (req, res) => {
   const h = await bout.text();
   const k = JSON.parse(toJson(h));
 
-  
-  if(req.query.continuation){ var continuation = req.query.continuation  }
-  if(!req.query.continuation){ var continuation = "" }
-
+  if (req.query.continuation) {
+    var continuation = req.query.continuation;
+  }
+  if (!req.query.continuation) {
+    var continuation = "";
+  }
 
   //videos
-  const channel = await fetch(config.tubeApi + `channel?id=${ID}&tab=videos&Continuation=${continuation}`);
+  const channel = await fetch(
+    config.tubeApi + `channel?id=${ID}&tab=videos&Continuation=${continuation}`
+  );
   const c = await channel.text();
   const tj = JSON.parse(toJson(c));
 
-  
-  
   const summary = await wiki.summary(k.Channel.Metadata.Name);
 
   var w = "";
@@ -527,22 +543,21 @@ app.get("/channel/", async (req, res) => {
   if (d === "[object Object]") {
     var d = "";
   }
-  
-  var dnoreplace = description.toString()
+
+  var dnoreplace = description.toString();
   if (dnoreplace === "[object Object]") {
     var dnoreplace = "";
   }
 
-  
   renderTemplate(res, req, "channel.ejs", {
     ID: ID,
     tab: tab,
     j: k,
     tj: tj,
-    dnoreplace:dnoreplace,
-    continuation:continuation,
+    dnoreplace: dnoreplace,
+    continuation: continuation,
     wiki: w,
-    getFirstLine:getFirstLine,
+    getFirstLine: getFirstLine,
     isMobile: req.useragent.isMobile,
     about: k.Channel.Contents.ItemSection.About,
     subs:
@@ -577,7 +592,6 @@ app.get("/css/:id", (req, res) => {
 app.get("/js/:id", (req, res) => {
   res.sendFile(__dirname + `/js/${req.params.id}`);
 });
-
 
 ///////////// API /////////////
 

@@ -23,7 +23,7 @@ body {
   overflow-x: hidden; /* Hide horizontal scrollbar */
   color: #111111;
 }
- 
+
 a {
   color: #0ab7f0;
 }
@@ -370,11 +370,20 @@ a {
   --channel-info-background: #181818;
   --channel-contents-background: #0f0f0f;
 }
+
 @font-face {
   font-family: "Ginto Nord";
   font-weight: 800;
   src: url("https://p.poketube.fun/https://cdn.statically.io/gh/brecert/discord-quote-generator/main/Ginto-Nord-800.woff")
     format("woff");
+}
+
+@font-face {
+  font-family: "PokeTube Flex";
+  src: url("https://p.poketube.fun/https://raw.githubusercontent.com/oomfiee/oomfiee.github.io/Senpai/css/robotoflex.ttf");
+  font-style: normal;
+  font-stretch: 1% 800%;
+  font-display: swap;
 }
 
 .alert {

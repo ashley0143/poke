@@ -55,9 +55,12 @@
   color:#0ab7f0;
    }
   
-  .video > .info > .title {
-  font-family: Inter;
-  }
+  
+  
+   .video > .info > .title {
+ 	font-family: "PokeTube flex";
+	font-stretch: extra-expanded;
+}
    </style>
   
   <link href=/css/app-cdn.min.css rel=stylesheet>
@@ -142,8 +145,7 @@
                       
                       <br><br>
                       </p>
-     <div class="video-sub-info description" style="font-weight: bold;margin-top:  55px !important;border-radius: 21px;background: #1c1c1c;padding: 10px;margin-bottom: 20px;margin-left: 0;">
-<div class="video-title" style="color:#fff;font-family:Ginto Nord,sans-serif;font-weight:700;margin-top: 3px;margin-bottom: 10px;">Description</div>
+<div class="video-sub-info description" style="font-weight: bold;margin-top:  55px !important;border-radius: 21px;background: #1c1c1c;padding: 10px;margin-bottom: 20px;margin-left: 0;font-family: 'Poketube flex';font-stretch: expanded;"><div class="video-title" style="color:#fff;font-family:Ginto Nord,sans-serif;font-weight:700;margin-top: 3px;margin-bottom: 10px;">Description</div>
  <hr style="clear: both;display: block;border: none;border-bottom: 0.5px solid #2f2f2f;/*! width: 4.5em; */height: 0;">
      <% if (String(video.Description) != "[object Object]")  { %>
 
@@ -251,6 +253,7 @@
               
                  
                </div>
+                               <% if (comments) { %>
                 <% if (!video.Channel.Name.endsWith(' - Topic')) { %>  
 
                    <div class="video-title" style="color:#fff;font-family:Ginto Nord,sans-serif;font-weight:700;margin-top: 10px;margin-bottom: 9px;">Comments - <span style="font-family: inter;"> <%=comments || "Probably disabled or theres no comments" %>  </span> </div>
@@ -261,12 +264,13 @@
                         </p>
 
                             <% } %>
+                            <% } %>
 
 
 
 <p style="font-family:MonoSpace;">
          <b>
-PokeTube Player v26.09.22a - Node <%=process.version%> - V8 v<%=process.versions.v8%> -  <%=process.platform.replace("linux", "GNU/Linux")%> <%=process.arch%> Server ( <%=ip.org%> )
+PokeTube Player v30.09.22a - Node <%=process.version%> - V8 v<%=process.versions.v8%> -  <%=process.platform.replace("linux", "GNU/Linux")%> <%=process.arch%> Server ( <%=ip.org%> )
            </b>
          
                 </p>            
@@ -281,7 +285,7 @@ PokeTube Player v26.09.22a - Node <%=process.version%> - V8 v<%=process.versions
  
  <div class="video-title" style="text-align:left;font-family:'Ginto Nord';font-weight:900;white-space:yes;">                                  Recommendations
                                 </div>   
-                                 <p style="text-align:left;margin:0">
+<p style="text-align:left;margin:0;font-family: &quot;PokeTube flex&quot;;font-stretch: ultra-expanded;font-weight: 500;">
                                  Videos that u might like
                               </p>
                                 <hr style="clear: both;display: block;border: none;border-bottom: 0.5px solid #2f2f2f;margin: 0 0;/*! width: 4.5em; */height: 0;">
@@ -1058,11 +1062,12 @@ More from  <%=k.Video.Channel.Name%>
                    <div class="video-title" style="font-family:'Ginto Nord';font-weight:900;white-space:yes;margin-top: 10px;">Comments    </div>
                                                         <div style="padding:0">
               <% if (!video.Channel.Name.endsWith(' - Topic')) { %>  
-
+                               <% if (comments) { %>
                                           <p>
                                            theres <%=comments%> total comments rigth now on this video. view em on <a href="https://invidio.us/watch?v=<%=video.id%>">invidious</a>
                              </p>
-                                                                       <% } %>
+                                                                       <% } %>                                                                       <% } %>
+
               <% if (video.Channel.Name.endsWith(' - Topic')) { %>  
                                  disabled for topic channels                                      <% } %>
 

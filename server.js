@@ -678,6 +678,11 @@ app.get("/api/subtitles", async (req, res) => {
 app.get("/api/opensearch", async (req, res) => {
   res.sendFile(__dirname + `/opensearch.xml`);
 });
+
+app.get("/api/instances.json", async (req, res) => {
+  res.sendFile(__dirname + `/instances.json`);
+});
+
 ///////////// REDIRECTS / DEPRACATED  /////////////
 
 app.get("/discover", async function (req, res) {
@@ -711,3 +716,4 @@ app.get("*", function (req, res) {
 // listen
 
 app.listen("3000", () => {});
+

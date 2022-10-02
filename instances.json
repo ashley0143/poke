@@ -1,0 +1,74 @@
+[
+  [
+    "watch.poketalebot.com",
+    {
+      "uri": "https://watch.poketalebot.com",
+      "CLOUDFLARE": true,
+      "piwik": true,
+      "region": "🇺🇸",
+      "software": {
+        "name": "poketube-vannilla",
+        "version": "lastest",
+        "branch": "master"
+      }
+    }
+  ],
+  [
+    "poketube.fun",
+    {
+      "uri": "https://poketube.fun",
+      "CLOUDFLARE": false,
+      "piwik": true,
+      "proxy":true,
+      "DEFAULT":true,
+      "region": "🇺🇸",
+      "software": {
+        "name": "poketube-vannilla",
+        "version": "lastest",
+        "branch": "master"
+      }
+    }
+  ],
+  [
+    "poketube.site",
+    {
+      "uri": "https://poketube.site",
+      "CLOUDFLARE": true,
+      "piwik": true,
+      "region": "🇺🇸",
+      "software": {
+        "name": "poketube-vannilla",
+        "version": "lastest",
+        "branch": "master"
+      }
+    }
+  ],
+  [
+    "poketube.online",
+    {
+      "uri": "https://poketube.online",
+      "CLOUDFLARE": true,
+      "piwik": true,
+      "region": "🇺🇸",
+      "software": {
+        "name": "poketube-vannilla",
+        "version": "lastest",
+        "branch": "master"
+      }
+    }
+  ],
+  [
+    "poketube.xyz",
+    {
+      "uri": "https://poketube.xyz",
+      "CLOUDFLARE": true,
+      "piwik": true,
+      "region": "🇺🇸",
+      "software": {
+        "name": "poketube-vannilla",
+        "version": "lastest",
+        "branch": "master"
+      }
+    }
+  ]
+]

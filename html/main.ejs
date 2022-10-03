@@ -25,7 +25,7 @@
      <meta content=website property=og:type>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta content="PokeTube - Privacy Is Your Right" property=og:title>
-    <meta content="Privacy Is Your Right - Poketube is an a libre front end for YouTube Thats focused on your privacy! your personal data should be nobody's business" property=twitter:description>
+    <meta content="Privacy Is Your Right - Poketube is a libre front end for YouTube Thats focused on your privacy! your personal data should be nobody's business" property=twitter:description>
     <meta content="https://cdn.glitch.global/5d35aeaf-2df2-4f2f-a4b7-b486694c329b/0d71ef53-9fc2-4ddd-8814-fcf00ba69155.image.png?v=1664301040809" property=og:image>
      <meta content=summary_large_image name=twitter:card>
     <meta content=@PoketaleBot name=twitter:site>
@@ -193,7 +193,77 @@ summary:hover{
 .closebtn:hover {
   color: black;
 }
+    
   </style>   
+                    <style>section p {
+ font-family:Whitney, Helvetica Neue, Helvetica, Arial, sans-serif;
+ font-weight:400;
+ color:#fff;
+ font-size:16px;
+ line-height:24px;
+ margin-top:12px
+}
+    
+.sticky-top {
+	 position: sticky;
+	 top: 0px;
+	 z-index: 999;
+}
+ .responsive {
+	 width: 100%;
+	 overflow-x: auto;
+}
+ .tabs {
+	 display: table;
+   font-family:inter;
+	 border-collapse: separate;
+	 table-layout: auto;
+}
+ .tabs.tabs-center {
+	 margin: auto;
+}
+ .tabs.tabs-justify {
+	 width: 100%;
+	 table-layout: fixed;
+}
+ .tabs a.tab {
+	 position: relative;
+	 display: table-cell;
+	 transition: all ease 0.3s;
+	 padding: 1em 1.6em;
+	 transform: translate3d(0, 0, 0);
+	 color: #fff;
+	 white-space: nowrap;
+	 cursor: pointer;
+}
+ .tabs a.tab:hover {
+	 color: #3cb4fa;
+}
+ .tabs a.tab:after {
+	 transition: all 0.3s cubic-bezier(1, 0, 0, 1);
+	 will-change: transform, box-shadow, opacity;
+	 position: absolute;
+	 content: '';
+	 height: 3px;
+	 bottom: 0px;
+	 left: 0px;
+	 right: 0px;
+	 border-radius: 3px 3px 0px 0px;
+	 background: #9fdafd;
+	 box-shadow: 0px 4px 10px 3px rgba(60, 180, 250, .15);
+	 opacity: 0;
+	 transform: scale(0, 1);
+}
+ .tabs a.tab.active {
+	 color: #fff;
+}
+ .tabs a.tab.active:after {
+	 opacity: 1;
+	 transform: scale(1, 1);
+}                 
+                     </style>
+                     
+  
  <style> 
  
         .channel-info-container > img {
@@ -239,8 +309,8 @@ background-size: cover;
  
   <div class="discover-some-bitches">
                <div class="video-title" style="font-family:'Ginto nord';font-weight:900;white-space:nowrap;font-size: xxx-large;">Privacy Is Your Right</div>
- 			<div class="video-info-bar" style="font-family:'Inter';border-bottom:none;padding:0;">Poketube is an a libre front end 
-  for youtube &amp; yt music! your personal data is nobody's business while using poketube. 
+ 			<div class="video-info-bar" style="font-family:'Inter';border-bottom:none;padding:0;">Poketube is a libre front end 
+  for youtube &amp; yt music! your personal data is nobody's business while using poketube.
   <a href="/privacy">(not our business too!)</a>
  </div>
    </div>
@@ -281,6 +351,7 @@ background-size: cover;
              <div class="video-title" style="font-family:'Ginto nord';font-weight:900;white-space:yes;font-size: xxx-large;"> Privacy Is Your Right</div>
  				<div class="video-info-bar" style="font-family:'Ginto nord';border-bottom:none;padding:0;font-size: small;">
  PokeTube is a libre youtube-front end that respects your privacy! </div>
+    
    </div>
                <div class=search>
         
@@ -289,6 +360,9 @@ background-size: cover;
           
       </form>
       </div>
+                       <br>             <br>
+             <br>             <br>
+             <br>            <br style="display: none;">      
  </div>
     		 	               <% } %>   
 
@@ -296,15 +370,45 @@ background-size: cover;
  <div class="channel-page" style="background-color: var(--channel-contents-background);">   
   
     <img src="https://t.poketube.fun/t/rep.gif" style="width: 0;visibility: hidden;" id="discover_main">
-               <div class="video-title" style="font-family:'Ginto nord';font-weight:900;white-space:nowrap;font-size: xxx-large;">Discover</div>
+               <div class="video-title" style="font-family:'Ginto nord';font-weight:900;white-space:nowrap;font-size: xxx-large;">Trending</div>
+   
         <% if (!isMobile) { %> 
           <p style="margin:0;">
-            Discover popular and trending content on poketube! (<s>or dont</s>)
+       See the trending videos shorts and music videos on poketube! (<s>or dont</s>)
           </p>
  		 	               <% } %>   
+                       
+        <% if (isMobile) { %> 
+          <p style="margin:0;">
+       See the trending videos on poketube! 
+          </p>
+ 		 	               <% } %>   
+        <% if (!tab) { %> 
+
+     <div class="tabs tabs-center">
+            
+                <a href="" class="tab active">Videos</a>
+                <a  href="?tab=shorts" class="tab">TikToks</a>
+                                                              
+
+            </div>    
+           		 	               <% } %>   
+  <% if (tab) { %> 
+
+     <div class="tabs tabs-center">
+            
+                <a href="/" class="tab ">Videos</a>
+                  <a  href="?tab=shorts"  class="tab active">TikToks</a>
+                                                              
+
+            </div>    
+           		 	               <% } %>   
+
+          <hr style="clear: both;display: block;border: none;border-bottom: 0.5px solid #2f2f2f;margin: 0 0;/*! width: 4.5em; */height: 0;">      
+                               <% if (!tab) { %> 
 
     	<div class="video-grid">
-   <% k.Explore.Videos.ItemSection[2].Shelf.Items.Video.forEach(x =>  { %>
+   <% k.Explore.Videos.ItemSection[3].Shelf.Items.Video.forEach(x =>  { %>
 			<a href="/watch?v=<%- x.id %>"  class="video">
 				<div class="thumbnail" style="background-image: url('https://p.poketube.fun/https://i.ytimg.com/vi/<%= x.id %>/hqdefault.jpg?sqp=-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLBy_x4UUHLNDZtJtH0PXeQGoRFTgw');border-top-left-radius: 16px;border-top-right-radius: 16px;"><span class="video-length"><%- x.duration %></span></div>
 				<div class="info">
@@ -315,6 +419,23 @@ background-size: cover;
 
  		 	               <% }) %>   
                                    </div>
+                     		 	               <% } %>   
+                       <% if (tab) { %> 
+
+    	<div class="video-grid">
+   <% k.Explore.Videos.ItemSection[2].Shelf.Items.Video.forEach(x =>  { %>
+			<a href="/watch?v=<%- x.id %>"  class="video">
+				<div class="thumbnail" style="background-image: url('https://p.poketube.fun/https://i.ytimg.com/vi/<%= x.id %>/hqdefault.jpg?sqp=-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLBy_x4UUHLNDZtJtH0PXeQGoRFTgw');border-top-left-radius: 16px;border-top-right-radius: 16px;"><span class="video-length">PT <%- x.duration %></span></div>
+				<div class="info">
+					<span class="title max-lines-2" title="<%- x.Title %>" style="font-family:Ginto Nord,sans-serif;"><%- x.Title %></span>
+             </div>
+ 			</a>	
+          
+
+ 		 	               <% }) %>   
+                                   </div>
+                     		 	               <% } %>   
+
                 
  
  

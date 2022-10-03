@@ -700,6 +700,7 @@ app.get("/", async function (req, res) {
   const k = JSON.parse(toJson(h));
   renderTemplate(res, req, "main.ejs", {
     k: k,
+    tab: req.query.tab,
     isMobile: req.useragent.isMobile,
   });
 });
@@ -716,4 +717,3 @@ app.get("*", function (req, res) {
 // listen
 
 app.listen("3000", () => {});
-

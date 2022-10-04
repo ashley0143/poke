@@ -84,7 +84,23 @@ border-radius: 5px;
     background-size: cover;
   background-repeat: no-repeat;
    }
-   
+      .shake  {
+  animation: linear infinite alternate;
+  animation-name: DOTHESHAKE;
+  animation-duration: 1.5s;
+}
+
+@-webkit-keyframes DOTHESHAKE {
+    0% {
+      left: 0;
+      transform: translateX(0);
+    }
+    100% {
+      left: 900%;
+      transform: translateX(-90%);
+    }
+}
+         
    /* nice classname am i rigth */
    .discover-some-bitches{
      text-align: center;
@@ -97,14 +113,35 @@ border-radius: 5px;
   <body>
      <center>
   
-    <link href=https://pro.fontawesome.com/releases/v5.15.3/css/all.css rel=stylesheet>
  
-        <div class="app" >
+        <div class="app">
    
     <nav>
 <div class="left" style="padding-left: 9px;">
+
+     <% if (q == "do the harlem shake") { %>  
+              <a class="shake" href="/143" style=font-family:Inter,sans-serif;color:#fff>  <img style="transform: scale(1.3);width:8.5em;display: block;margin-left: auto;margin-right: auto;" src="/css/logo.svg?v=5"></a>
+               <audio class="player" autoplay loop controls src="https://p.poketube.fun/https://tube.kuylar.dev/proxy/media/8vJiSSAMNWw/18?e=ca0ac04022e782540e1f2fe4d6c2994949f33184ccc07568b4b1d7c93dfebd28119cb7b9e8b5db12039ba553ed861736ca0ac04022e782540e1f2fe4d6c2994949f33184ccc07568b4b1d7c93dfebd28119cb7b9e8b5db12039ba553ed861736Piwikd74c7f459daf669799074a22bcf7d79bb66e03dbd9899a2089e0bee8ed383f0c3b928c4477a42208cbd69a77549e3451
+" style="display:none;"> 
+        <script>
+             // @license magnet:?xt=urn:btih:1f739d935676111cfff4b4693e3816e664797050&dn=gpl-3.0.txt GPL-3.0-or-later
+
+                   setTimeout(function () {
+                      const video = document.getElementsByClassName("video")
+                      for(var counter = 0; counter < video.length; counter++){
+video[counter].classList.add("shake");
+}
+                   }, 13700)
+               // @license-end
+
+                                     </script>
+            </div>             
+   <% } %> 
+
+     <% if (q != "do the harlem shake") { %>  
               <a class="class" href="/143" style=font-family:Inter,sans-serif;color:#fff>  <img style="transform: scale(1.3);width:8.5em;display: block;margin-left: auto;margin-right: auto;" src="/css/logo.svg?v=5"></a>
-            </div>               
+            </div>             
+   <% } %> 
             <div class=right>
               <a href="/domains"><i  style="display: block;margin-left: auto;margin-right: auto;" class="fa-light fa-server"></i>  </a>
               <a href="/privacy"><i class="fa-light fa-shield"></i></a>
@@ -136,14 +173,16 @@ border-radius: 5px;
              <br>            <br style="display: none;">          
            
        </div>
-  <div class="channel-page" style="background-color: var(--channel-contents-background);">   
+  <div class="channel-page"   style="background-color: var(--channel-contents-background);">   
 
             <%  if (Array.isArray( j.Search.Results.Video)) { %> 
+              
 <p style="font-family: Inter;">
   <%=j.Search.estimatedResults.toLocaleString()%> Results
               </p>
+     
        <% j.Search.Results.Video.forEach(x => { %>
-         <div class="video-list">
+         <div class="video-list" >
            
     <div class="video">
       <a
@@ -162,11 +201,13 @@ border-radius: 5px;
     </div>
           
           </div>      
-                  
+                                </div>
+
                 <% }) %>   
                   
 <a style="background-color: #353030;width: fit-content;border-radius: 3px;padding: 4px;" href="/search?query=<%=q%>&continuation=<%=j.Search.continuation%>">Next Page</a>
           
+      
                                   <% } %>   
             <%  if (!Array.isArray( j.Search.Results.Video)) { %>
               <br>
@@ -185,10 +226,13 @@ border-radius: 5px;
 	</b>
 </p>
                                   <% } %>   
+                                    
 
- 
+
         </a>
         </div>
+                                    
+                            
    </body>
                               
  

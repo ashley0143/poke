@@ -26,6 +26,19 @@
 <link href=/css/search.main.css rel=stylesheet> 
  <link href=/css/watch.main.css rel=stylesheet>
 <link rel="search" type="application/opensearchdescription+xml" title="PokeTube" href="https://poketube.fun/api/opensearch" />
+  <meta content="Searching <%=q%> - PokeTube" property=og:title>
+       <% if (q == "do the harlem shake") { %>  
+             <meta content="DO THE HARLEM SHAKE" property=twitter:description>
+
+   <% } %> 
+   <% if (q != "do the harlem shake") { %>  
+         <meta content="Ur Searching <%=q%> on PokeTube! it has total of <%=j.Search.estimatedResults.toLocaleString()%> Results holy crap thats alot" property=twitter:description>
+   <% } %> 
+
+
+    <meta content="https://cdn.glitch.global/5d35aeaf-2df2-4f2f-a4b7-b486694c329b/0d71ef53-9fc2-4ddd-8814-fcf00ba69155.image.png?v=1664301040809" property=og:image>
+ <meta content=summary_large_image name=twitter:card>
+     <meta content="#715efb" name="theme-color">
 <style>
    a.class:hover {
     text-decoration:underline;

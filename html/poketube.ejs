@@ -270,7 +270,7 @@
 
 <p style="font-family:MonoSpace;">
          <b>
-PokeTube Player v30.09.22a - Node <%=process.version%> - V8 v<%=process.versions.v8%> -  <%=process.platform.replace("linux", "GNU/Linux")%> <%=process.arch%> Server ( <%=ip.org%> )
+PokeTube Player v07.10.22a - Node <%=process.version%> - V8 v<%=process.versions.v8%> -  <%=process.platform.replace("linux", "GNU/Linux")%> <%=process.arch%> Server ( <%=ip.org%> )
            </b>
          
                 </p>            
@@ -519,7 +519,7 @@ From  <%=video.Channel.Name%> </span></a>
  <link href="https://p.poketube.fun/https://tube.kuylar.dev/css/mobile.css" rel=stylesheet>
  <link href=/css/app.main.css rel=stylesheet>
 <link href="https://p.poketube.fun/https://fonts.googleapis.com/css2?family=Inter:wght@900&family=Sigmar+One&display=swap" rel=stylesheet>
-    <link href=https://site-assets.fontawesome.com/releases/v6.1.1/css/all.css rel=stylesheet>
+    <link href=https://p.poketube.fun/https://site-assets.fontawesome.com/releases/v6.1.1/css/all.css rel=stylesheet>
 <style>
    a.class:hover {
     text-decoration:underline;
@@ -849,7 +849,7 @@ body {
           @font-face {
         font-family: 'Ginto Nord';
         font-weight: 800;
-        src:url('https://cdn.statically.io/gh/brecert/discord-quote-generator/main/Ginto-Nord-800.woff') format("woff");
+        src:url('https://p.poketube.fun/https://cdn.statically.io/gh/brecert/discord-quote-generator/main/Ginto-Nord-800.woff') format("woff");
       }
 
 .alert {
@@ -1115,13 +1115,13 @@ padding: 3px;
 		 
  			</div>
                  
-<div style="display: flex;justify-content: center;gap: 3px;">
+<div style="display: flex;justify-content: center;gap: 3em;">
     
  <div style="text-align: center;font-size: x-large;margin: 9px;">
     	<p>
         <%=convert(engagement.viewCount)%>  
       <br>
- </p><p style="font-size: 17px;">views</p>
+ </p><p style="font-size: 17px;">Views</p>
 
           </p>
   </div>
@@ -1133,11 +1133,19 @@ padding: 3px;
 
           </p>
   </div>
+             <div>
+    <div style="text-align: center;font-size: x-large;margin: 9px;">
+    	<p>
+        <%=convert(engagement.dislikes)%>  
+      <br>
+ </p><p style="font-size: 17px;">Dislikes</p>
+
+          </p>
+  </div>
+  </div>
     </div>
 
-    <div>
-    
-  </div>
+  
                                   <hr style="clear: both;display: block;border: none;border-bottom: 0.5px solid #2f2f2f;margin: 0 0;/*! width: 4.5em; */height: 0;"> 
 
             <p class="description" style="padding: 10px;"><%-String(video.Description).replace(/\n/g, " <br> ")%> </p>
@@ -1205,10 +1213,11 @@ More from  <%=k.Video.Channel.Name%>
          
                    
                            <div>
+                                                            <% if (comments) { %>
+
                    <div class="video-title" style="font-family:'Ginto Nord';font-weight:900;white-space:yes;margin-top: 10px;">Comments    </div>
                                                         <div style="padding:0">
               <% if (!video.Channel.Name.endsWith(' - Topic')) { %>  
-                               <% if (comments) { %>
                                           <p>
                                            theres <%=comments%> total comments rigth now on this video. view em on <a href="https://invidio.us/watch?v=<%=video.id%>">invidious</a>
                              </p>

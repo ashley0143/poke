@@ -16,8 +16,7 @@
     You should have received a copy of the GNU General Public License
     along with this program. If not, see https://www.gnu.org/licenses/.
 -->
- 
-  
+
 <!DOCTYPE html><html>
 <head>
     <title>PokeTube - Privacy Is Your Right</title>
@@ -94,7 +93,8 @@ summary:hover{
             -webkit-animation-iteration-count: infinite;
             -o-animation-iteration-count: infinite;
          }
-         
+    
+
          @-webkit-keyframes wiggle { 
             0% { -webkit-transform: skewX(9deg); }
             10% { -webkit-transform: skewX(-8deg); }
@@ -408,7 +408,7 @@ background-size: cover;
                                <% if (!tab) { %> 
 
     	<div class="video-grid">
-   <% k.Explore.Videos.ItemSection[3].Shelf.Items.Video.forEach(x =>  { %>
+   <% k.Explore.Videos.ItemSection[2].Shelf.Items.Video.forEach(x =>  { %>
 			<a href="/watch?v=<%- x.id %>"  class="video">
 				<div class="thumbnail" style="background-image: url('https://p.poketube.fun/https://i.ytimg.com/vi/<%= x.id %>/hqdefault.jpg?sqp=-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLBy_x4UUHLNDZtJtH0PXeQGoRFTgw');border-top-left-radius: 16px;border-top-right-radius: 16px;"><span class="video-length"><%- x.duration %></span></div>
 				<div class="info">
@@ -423,7 +423,7 @@ background-size: cover;
                        <% if (tab) { %> 
 
     	<div class="video-grid">
-   <% k.Explore.Videos.ItemSection[2].Shelf.Items.Video.forEach(x =>  { %>
+   <% k.Explore.Videos.ItemSection[1].Shelf.Items.Video.forEach(x =>  { %>
 			<a href="/watch?v=<%- x.id %>"  class="video">
 				<div class="thumbnail" style="background-image: url('https://p.poketube.fun/https://i.ytimg.com/vi/<%= x.id %>/hqdefault.jpg?sqp=-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLBy_x4UUHLNDZtJtH0PXeQGoRFTgw');border-top-left-radius: 16px;border-top-right-radius: 16px;"><span class="video-length">PT <%- x.duration %></span></div>
 				<div class="info">

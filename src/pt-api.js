@@ -1,13 +1,14 @@
 /*
 
-    PokeTube is an Free/Libre youtube front-end !
+    PokeTube is a Free/Libre youtube front-end !
     
     Copyright (C) 2021-2022 POKETUBE
  
     This file is Licensed under LGPL-3.0-or-later. Poketube itself is GPL, Only this file is LGPL.
     
     see a copy here:https://www.gnu.org/licenses/lgpl-3.0.txt
-  */ 
+  */
+
 const fetch = require("node-fetch");
 const { toJson } = require("xml2json");
 
@@ -19,7 +20,7 @@ const wiki = require("wikipedia");
 const config = {
   tubeApi: "https://tube.kuylar.dev/api/",
   dislikes: "https://returnyoutubedislikeapi.com/votes?videoId=",
-  t_url: "https://t.poketube.fun/" //  def matomo url
+  t_url: "https://t.poketube.fun/", //  def matomo url
 };
 
 // Util functions
@@ -84,7 +85,7 @@ async function video(v) {
 
   const data = await fetcher(v);
 
-  const nightlyJsonData = nightlyRes !== "" && getJson(nightlyRes);
+  const nightlyJsonData = getJson(nightlyRes);
 
   return {
     json: data.video.Player,
@@ -100,9 +101,9 @@ async function video(v) {
       ? {
           beta: nightlyJsonData,
           badges: nightlyJsonData.channel.badges[0],
-          comments: nightlyJsonData.commentCount
+          comments: nightlyJsonData.commentCount,
         }
-      : {})
+      : {}),
   };
 }
 
@@ -121,5 +122,5 @@ async function search(query, cnt) {
 module.exports = {
   search,
   video,
-  channel
+  channel,
 };

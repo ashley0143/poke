@@ -56,11 +56,22 @@
    }
   
   
-  
    .video > .info > .title {
  	font-family: "PokeTube flex";
 	font-stretch: extra-expanded;
 }
+  
+  .description{
+      white-space: -moz-pre-wrap !important;  /* Mozilla, since 1999 */
+    white-space: -pre-wrap;      /* Opera 4-6 */
+    white-space: -o-pre-wrap;    /* Opera 7 */
+    white-space: pre-wrap;       /* css-3 */
+    word-wrap: break-word;       /* Internet Explorer 5.5+ */
+    white-space: -webkit-pre-wrap; /* Newer versions of Chrome/Safari*/
+    word-break: break-all;
+    white-space: normal;
+
+  }
    </style>
   
   <link href=/css/app-cdn.min.css rel=stylesheet>
@@ -270,7 +281,7 @@
 
 <p style="font-family:MonoSpace;">
          <b>
-PokeTube Player v07.10.22a - Node <%=process.version%> - V8 v<%=process.versions.v8%> -  <%=process.platform.replace("linux", "GNU/Linux")%> <%=process.arch%> Server ( <%=ip.org%> )
+PokeTube Player v09.10.22a - Node <%=process.version%> - V8 v<%=process.versions.v8%> -  <%=process.platform.replace("linux", "GNU/Linux")%> <%=process.arch%> Server ( <%=ip.org%> )
            </b>
          
                 </p>            

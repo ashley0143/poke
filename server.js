@@ -28,7 +28,10 @@ const lyricsFinder = require("./src/lyrics.js");
 const fetch = require("node-fetch");
 
 const { toJson } = require("xml2json");
+
 const fetcher = require("./src/fetcher.js");
+const api = require("./src/pt-api.js");
+
 const templateDir = path.resolve(`${process.cwd()}${path.sep}html`);
 
 var express = require("express");
@@ -167,69 +170,37 @@ app.get("/watch", async function (req, res) {
   var f = req.query.f;
   var t = req.query.t;
   var q = req.query.quality;
-
-  const video = await fetch(config.tubeApi + `video?v=${v}`);
-
-  const info = await fetch("http://ip-api.com/json/");
+  
+  
+ const info = await fetch("http://ip-api.com/json/");
   const jj = await info.text();
   const ip = JSON.parse(jj);
 
-  var badges = "";
-
-  // try few times, thanks kuylar
-  for (let i = 0; i < 3; i++) {
-    try {
-      const nightly = await fetch(
-        `https://lighttube-nightly.kuylar.dev/api/video?v=${v}`
-      );
-      var n = await nightly.text();
-      if (n == undefined) {
-        for (let i = 0; i < 6; i++) {
-          try {
-            const nightly = await fetch(
-              `https://lighttube-nightly.kuylar.dev/api/video?v=${v}`
-            );
-            var n = await nightly.text();
-          } catch (err) {
-            if (err.status === 500) {
-              await new Promise((resolve) => setTimeout(resolve, 1000));
-            } else {
-              return (n = "");
-            }
-          }
-        }
-      }
-    } catch (err) {
-      if (err.status === 500) {
-        // retry after a bit
-        await new Promise((resolve) => setTimeout(resolve, 1000));
-      } else {
-        return (n = "");
-      }
-    }
+ api.video(v).then((data) => {
+ 
+   
+  const k = data.video
+  const json = data.json
+  const engagement =  data.engagement
+   
+  if(api.video(v).b) {
+      var nnn = data.beta
+      var badges = nnn.channel.badges[0];
+     var comments = nnn.commentCount;
   }
-
-  var nn = "";
-  var nnn = "";
-  var comments = "";
-
-  if (n == "") {
-    badges, nnn, (comments = "");
+  
+if(!api.video(v).b) {
+      var nnn = ""
+      var badges = ""
+     var comments = ""
   }
+  
+  
+  
+ 
 
-  if (IsJsonString(n)) {
-    if (n != "") {
-      nnn = JSON.parse(n);
-      badges = nnn.channel.badges[0];
-      comments = nnn.commentCount;
-    }
-  }
-
-  var fetching = await fetcher(v);
-
-  const json = fetching.video.Player;
-  const h = await video.text();
-  const k = JSON.parse(toJson(h));
+  
+    
   if (!v) res.redirect("/");
 
   //video
@@ -247,22 +218,7 @@ app.get("/watch", async function (req, res) {
     "Piwik" +
     sha384(config.t_url);
 
-  // channel info
-  const engagement = fetching.engagement;
-  const channel = await fetch(
-    config.tubeApi + `channel?id=${k.Video.Channel.id}&tab=videos`
-  );
-  const c = await channel.text();
-  const tj = JSON.parse(toJson(c));
-
-  // about
-  const abtchnl = await fetch(
-    config.tubeApi + `channel?id=${k.Video.Channel.id}&tab=about`
-  );
-  const ab = await abtchnl.text();
-  const a = JSON.parse(toJson(ab));
-
-  const desc = a.Channel.Contents.ItemSection.About.Description;
+  const desc = data.desc;
 
   var d = desc.toString().replace(/\n/g, " <br> ");
 
@@ -270,46 +226,11 @@ app.get("/watch", async function (req, res) {
     var d = false;
   }
 
-  const summary = await wiki.summary(k.Video.Channel.Name);
 
-  var w = "";
-  if (summary.title === "Not found.") {
-    w = "none";
-  }
-  if (summary.title !== "Not found.") {
-    w = summary;
-  }
-
-  /***********
-   * URL = Video URl
-   * color= embed color
-   * engagement = engagement data
-   * video = video json info
-   * date = upload date
-   * e = embed
-   * k = player
-   * process = process information
-   * sha384 = encryption
-   * isMobile = to check if its mobile or not
-   * tj = channel videos page
-   * r = recommended videos
-   * qua = quality obv
-   * ip = ip info
-   * convert = formats a number
-   * wiki = wikipedia info
-   * f = recent videos from this channel
-   * t = default piwik url
-   * optout = piwik optout
-   * badges = channel badges
-   * desc = channel description
-   * comments = comment size
-   * nnn = nigthly stuff
-   */
+  
   renderTemplate(res, req, "poketube.ejs", {
     url: url_e,
-    color: await getColors(
-      `https://i.ytimg.com/vi/${v}/maxresdefault.jpg`
-    ).then((colors) => colors[0].hex()),
+    color: data.color,
     engagement: engagement,
     video: json,
     date: moment(k.Video.uploadDate).format("LL"),
@@ -318,12 +239,12 @@ app.get("/watch", async function (req, res) {
     process: process,
     sha384: sha384,
     isMobile: req.useragent.isMobile,
-    tj: tj,
+    tj: data.channel,
     r: r,
     qua: q,
     ip: ip,
     convert: convert,
-    wiki: w,
+    wiki: data.wiki,
     f: f,
     t: config.t_url,
     optout: t,
@@ -333,6 +254,8 @@ app.get("/watch", async function (req, res) {
     n: nnn,
     lyrics: "",
   });
+    });
+
 });
 
 app.get("/music", async function (req, res) {

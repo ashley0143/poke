@@ -76,7 +76,7 @@ async function video(v) {
     .then((res) => res.text())
     .then((xml) => JSON.parse(toJson(xml)));
 
-  const channel = await channel(video.Video.Channel.id);
+  const c = await channel(video.Video.Channel.id);
 
   const summary = await wiki
     .summary(video.Video.Channel.Name)
@@ -91,7 +91,7 @@ async function video(v) {
     video,
     engagement: data.engagement,
     wiki: summary,
-    desc: channel.about.Channel.Contents.ItemSection.About.Description,
+    desc: c.about.Channel.Contents.ItemSection.About.Description,
     color: await getColors(
       `https://i.ytimg.com/vi/${v}/maxresdefault.jpg`
     ).then((colors) => colors[0].hex()),

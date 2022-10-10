@@ -1,3 +1,4 @@
+<!DOCTYPE html>
  <html>
    <head>
      <title> <%=video.Title%> - PokeTube</title>
@@ -17,151 +18,7 @@ summary:hover{
 }
 </style>
    
-   <style>
-    body{
-        overflow-x: hidden; /* Hide horizontal scrollbar */
-        color:#111111
-    }
-    
-   .animated {
-            -webkit-animation-duration: 10s; 
-            animation-duration: 10s; 
-            -webkit-animation-fill-mode: both;
-            animation-fill-mode: both; 
-            animation-iteration-count: infinite;
-            -moz-animation-iteration-count: infinite;
-            -webkit-animation-iteration-count: infinite;
-            -o-animation-iteration-count: infinite;
-         }
-         
-         @-webkit-keyframes wiggle { 
-            0% { -webkit-transform: skewX(9deg); }
-            10% { -webkit-transform: skewX(-8deg); }
-            20% { -webkit-transform: skewX(7deg); }
-            30% { -webkit-transform: skewX(-6deg); }
-            40% { -webkit-transform: skewX(5deg); } 
-            50% { -webkit-transform: skewX(-4deg); } 
-            60% { -webkit-transform: skewX(3deg); }
-            70% { -webkit-transform: skewX(-2deg); } 
-            80% { -webkit-transform: skewX(1deg); } 
-            90% { -webkit-transform: skewX(0deg); }
-            100% { -webkit-transform: skewX(0deg); } 
-         }
-         
-         @keyframes wiggle { 
-            0% { transform: skewX(9deg); } 
-            10% { transform: skewX(-8deg); } 
-            20% { transform: skewX(7deg); } 
-            30% { transform: skewX(-6deg); } 
-            40% { transform: skewX(5deg); } 
-            50% { transform: skewX(-4deg); } 
-            60% { transform: skewX(3deg); } 
-            70% { transform: skewX(-2deg); } 
-            80% { transform: skewX(1deg); } 
-            90% { transform: skewX(0deg); } 
-            100% { transform: skewX(0deg); } 
-         }
-         
-         .wiggle { 
-            -webkit-animation-name: wiggle;
-            animation-name: wiggle; 
-            -webkit-animation-timing-function: ease-in;
-            animation-timing-function: ease-in; 
-         }
-         
-         .animated.wiggle { 
-            -webkit-animation-duration: 0.75s; 
-            animation-duration: 0.75s;
-         }
-    
-    :root {
-    --text-primary: #fff;
-    --text-secondary: #fff;
-    --text-link: #3ea6ff;
-
-    --app-background: #111111;
-    --context-menu-background: #333;
-    --border-color: #444;
-    --item-hover-background: #373737;
-    --item-active-background: #383838;
-
-    --top-bar-background: #202020;
-    --guide-background: #212121;
-
-    --thumbnail-background: #252525;
-
-    --channel-info-background: #181818;
-    --channel-contents-background: #0f0f0f;
-}
-  @font-face {
-font-family: 'Ginto Nord';
-font-weight: 800;
-src:url('https://cdn.statically.io/gh/brecert/discord-quote-generator/main/Ginto-Nord-800.woff') format("woff");
-      }
-
-.alert {
-  padding: 20px;
-  background-color: #f44336;
-  color: white;
-  opacity: 1;
-  transition: opacity 0.6s;
-  margin-bottom: 15px;
-}
-
-.alert.success {background-color: #04AA6D;}
-.alert.info {background-color: #2196F3;}
-.alert.warning {background-color: #ff9800;}
-
-.closebtn {
-  margin-left: 15px;
-  color: white;
-  font-weight: bold;
-  float: right;
-  font-size: 22px;
-  line-height: 20px;
-  cursor: pointer;
-  transition: 0.3s;
-}
-
-.closebtn:hover {
-  color: black;
-}
-    
-  </style>
   
-  <!-- NEW NAVBAR -->
-  
-  <style>
-    
-    nav {
-      background:#0f0b0b
-    }
-    
-  nav .right {
- display: flex;
-border-radius: 5px;
-justify-content: normal;
-padding-left: 0px;
-align-items: center;
-margin-left: 10px;
-}
-    
-    nav .left {
-    display: flex;
-justify-content: flex-start;
-align-items: center;
-border-radius: 5px;
- padding-left: 0px;
-margin-right: 40px;
-    }
-    
-    nav .middle {
-      display: flex;
- justify-content: center;
-align-items: center;
-border-radius: 5px;
-    }
-  </style>
      <script type="text/javascript">
 <!--//--><![CDATA[//><!--
 /**
@@ -197,16 +54,52 @@ border-radius: 5px;
 height: 100%;
 
        }
-     </style><link href=/css/app-cdn.min.css rel=stylesheet>
-<link href=/css/app.main.css rel=stylesheet>
-<link href="/css/watch.main.css?v=56" rel=stylesheet><link href=https://site-assets.fontawesome.com/releases/v6.1.1/css/all.css rel=stylesheet>
-
+     </style>
+  <link href=/css/app-cdn.min.css rel=stylesheet>
+  <link href=/css/app.main.css rel=stylesheet>
+  <link href="/css/watch.main.css?v=56" rel=stylesheet>
+  <link href="/css/watch-util.css" rel=stylesheet>
+  <link href="https://fonts.poketube.fun/css/fonts.css" rel=stylesheet>
+  <link href="/css/watch-navbar.css?v=56" rel=stylesheet>
+  <link href=https://p.poketube.fun/https://site-assets.fontawesome.com/releases/v6.1.1/css/all.css rel=stylesheet>
    </head>
-<body style="display: flex;width: 100%;height: 100%;">
-<div class="app" style="color:#fff;height: 100%;justify-content: center;display: flex;width: 100%;">
+     
+     
+<body style="width: 100%;height: 100%;">
+<div class="app" style="color:#fff;height: 100%;justify-content: center;width: 100%;">
+
+<nav style="height: auto;">
+    <p style="font-family:Ginto Nord;margin-left: 10px;">
+       <%=video.Title%> 
+         <p style="display: flex;"> 
+				<a href="/channel?id=<%=video.Channel.id%>" class="avatar" style="font-size: x-small;display: flex;align-items: center;align-self: center;align-content: center;margin-left: 4px;">
+          By <%=k.Video.Channel.Name%>
+          </p>
+         </a>
+      </p>
+      <p style="margin-left:10">
+        <i class="fa-light fa-thumbs-up"></i> <%=engagement.likes.toLocaleString()%>
+        <i class="fa-light fa-thumbs-down"></i> <%=engagement.dislikes.toLocaleString()%> 
+          </p>
+
+        <div style="display: flex;justify-content: center;align-items: center;flex-direction: row; column-gap: 3px;margin: 7;margin-left: auto;margin-right: 1em;" align="center">
+
+        <% if (!qua) { %> 
+
+                                 <i style="display: block;" class="fa-solid fa-high-definition"></i> <a href="/embed/<%=video.id%>/?quality=medium">
+          <i style="display: block;" class="fa-light fa-standard-definition"></i></a>
+                                                                      <% } %>               
+                               <% if (qua) { %> 
+                                 <a href="/embed/<%=video.id%>">  <i style="display: block;" class="fa-light fa-high-definition"></i> </a>  <i style="display: block;" class="fa-solid fa-standard-definition"></i>
+
+                                                                      <% } %>             
+                                                                        </div>
+                               
+    </nav>
+	   
  
-     	<div class="video-player-container" style="margin: auto;padding: 10px;" align="center">
-<video class="player" id="<%=sha384(video.id)%>" autoplay controls src="<%=url%>" style="border-radius:30px" poster="https://p.poketube.fun/https://i.ytimg.com/vi/<%=video.id%>/hqdefault.jpg?v=607ddcd4">
+<div class="video-player-container" style="margin: auto;max-height: fit-content;overflow: hidden;" align="center">
+<video class="player" id="<%=sha384(video.id)%>" controls src="<%=url%>"  poster="https://p.poketube.fun/https://i.ytimg.com/vi/<%=video.id%>/hqdefault.jpg?v=607ddcd4">
    
     <% if (  video.Subtitles.Subtitle) { %>  
      <%  if (Array.isArray( video.Subtitles.Subtitle)) { %> 
@@ -220,20 +113,9 @@ height: 100%;
                                                              
  					</video> 
        
-<div style="display: flex;justify-content: center;align-items: center;flex-direction: row; column-gap: 3px;margin: 7;" align="center">
-
-        <% if (!qua) { %> 
-
-                                 <i style="display: block;" class="fa-solid fa-high-definition"></i> <a href="/embed/<%=video.id%>/?quality=medium">
-          <i style="display: block;" class="fa-light fa-standard-definition"></i></a>
-                                                                      <% } %>               
-                               <% if (qua) { %> 
-                                 <a href="/embed/<%=video.id%>">  <i style="display: block;" class="fa-light fa-high-definition"></i> </a>  <i style="display: block;" class="fa-solid fa-standard-definition"></i>
-
-                                                                      <% } %>               
-                                                                        <div>
-                     | <i class="fa-light fa-thumbs-up"></i> <%=engagement.likes.toLocaleString()%> <i class="fa-light fa-thumbs-down"></i> <%=engagement.dislikes.toLocaleString()%>|
-ID: <%=video.id%>                                                                  
+                                         <div>
+                     
+                         
                                                                                                           </div>
                                                                         </div>
      </div>

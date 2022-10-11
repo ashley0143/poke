@@ -27,6 +27,8 @@ module.exports = async function (video_id) {
   const dislike = await fetch(`${dislike_api}${video_id}`).then((res) =>
     res.json()
   );
+  
+  
   const dislikes = dislike.dislikes || "none";
 
   const headers = {};
@@ -41,6 +43,7 @@ module.exports = async function (video_id) {
         var h = await player.text();
         var j = toJson(h);
         return JSON.parse(j);
+        break;
       } catch (err) {
         if (err.status === 503) {
           // retry after a bit

@@ -400,6 +400,25 @@
  
 			<button class="subscribe-button"><%=subs%></button>
 		</div>
+              <% if (!isMobile) { %>  
+   
+     <div class="tabs tabs-center">
+            <% if (!tab) { %>
+
+                <a href="/channel?id=<%=ID%>" class="tab active">Uploads</a>
+                <a  href="/channel?id=<%=ID%>&tab=about"  class="tab">About</a>
+                                                               <% } %>
+                                                                             <% if (tab) { %>
+
+                <a href="/channel?id=<%=ID%>" class="tab">Uploads</a>
+                <a  href="/channel?id=<%=ID%>&tab=about" class="tab active">About</a>
+                                                               <% } %>
+
+            </div>
+     
+     
+     
+     <% } %>
 	</div> 
                                            <% } %>
                                                <% if (isMobile) { %>  
@@ -430,27 +449,11 @@
               <% } %>              <% } %>
 
 		</div>
+                
 	</div> 
+        
                                            <% } %>
-        <% if (!isMobile) { %>  
-   
-     <div class="tabs tabs-center">
-            <% if (!tab) { %>
 
-                <a href="/channel?id=<%=ID%>" class="tab active">Uploads</a>
-                <a  href="/channel?id=<%=ID%>&tab=about"  class="tab">About</a>
-                                                               <% } %>
-                                                                             <% if (tab) { %>
-
-                <a href="/channel?id=<%=ID%>" class="tab">Uploads</a>
-                <a  href="/channel?id=<%=ID%>&tab=about" class="tab active">About</a>
-                                                               <% } %>
-
-            </div>
-     
-     
-     
-     <% } %>
      
      <hr style="clear: both;display: block;border: none;border-bottom: 0.5px solid #2f2f2f;margin: 0 0;/*! width: 4.5em; */height: 0;">    <% if (!tab) { %>  
     

@@ -592,6 +592,16 @@ app.get("/api/subtitles", async (req, res) => {
   res.send(body);
 });
 
+app.get("/api/redirect", async (req, res) => {
+  const red_url = req.query.u;
+
+  if (!red_url) {
+    res.redirect("/");
+  }
+
+  res.redirect(red_url);
+});
+
 app.get("/api/opensearch", async (req, res) => {
   res.sendFile(__dirname + `/opensearch.xml`);
 });
@@ -604,6 +614,14 @@ app.get("/api/instances.json", async (req, res) => {
 
 app.get("/discover", async function (req, res) {
   res.redirect("/");
+});
+
+app.get("/hashtag/:id", (req, res) => {
+  if (!req.params.id) {
+    return res.redirect("/");
+  }
+
+  return res.redirect(`/search?query=${req.params.id}&from=hashtag`);
 });
 
 app.get("/video/upload", (req, res) => {

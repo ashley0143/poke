@@ -60,7 +60,173 @@
  	font-family: "PokeTube flex";
 	font-stretch: extra-expanded;
 }
-  
+  .comments-area {
+  background: #f1f9ff;
+  padding: 50px 30px;
+  margin-top: 50px;
+}
+
+@media (max-width: 414px) {
+  .comments-area {
+    padding: 50px 8px;
+  }
+}
+
+.comments-area h4 {
+  text-align: center;
+  margin-bottom: 50px;
+  color: #002347;
+  font-size: 18px;
+}
+
+.comments-area h5 {
+  font-size: 16px;
+  margin-bottom: 0px;
+}
+
+.comments-area a {
+  color: #002347;
+}
+
+.comments-area .comment-list {
+  padding-bottom: 30px;
+}
+
+.comments-area .comment-list:last-child {
+  padding-bottom: 0px;
+}
+
+.comments-area .comment-list.left-padding {
+  padding-left: 25px;
+}
+
+@media (max-width: 413px) {
+  .comments-area .comment-list .single-comment h5 {
+    font-size: 12px;
+  }
+  .comments-area .comment-list .single-comment .date {
+    font-size: 11px;
+  }
+  .comments-area .comment-list .single-comment .comment {
+    font-size: 10px;
+  }
+}
+
+.comments-area .thumb {
+  margin-right: 20px;
+}
+
+.comments-area .date {
+  font-size: 13px;
+  color: #777777;
+  margin-bottom: 13px;
+}
+
+.comments-area .comment {
+  color: #777777;
+  margin-bottom: 0px;
+}
+
+.comments-area .btn-reply {
+  background-color: #fff;
+  color: #002347;
+  border: 1px solid #eee;
+  padding: 2px 18px;
+  font-size: 12px;
+  display: block;
+  font-weight: 600;
+  -webkit-transition: all 0.3s ease 0s;
+  -moz-transition: all 0.3s ease 0s;
+  -o-transition: all 0.3s ease 0s;
+  transition: all 0.3s ease 0s;
+}
+
+.comments-area .btn-reply:hover {
+  background: #fdc632;
+  color: #002347;
+}
+
+.comment-form {
+  background: #f1f9ff;
+  text-align: center;
+  padding: 47px 30px 43px;
+  margin-top: 50px;
+  margin-bottom: 40px;
+}
+
+.comment-form h4 {
+  text-align: center;
+  margin-bottom: 50px;
+  font-size: 18px;
+  line-height: 22px;
+  color: #002347;
+}
+
+.comment-form .name {
+  padding-left: 0px;
+}
+
+@media (max-width: 767px) {
+  .comment-form .name {
+    padding-right: 0px;
+    margin-bottom: 1rem;
+  }
+}
+
+.comment-form .email {
+  padding-right: 0px;
+}
+
+@media (max-width: 991px) {
+  .comment-form .email {
+    padding-left: 0px;
+  }
+}
+
+.comment-form .form-control {
+  padding: 8px 20px;
+  background: #fff;
+  border: none;
+  border-radius: 0px;
+  width: 100%;
+  font-size: 14px;
+  color: #777777;
+  border: 1px solid transparent;
+}
+
+.comment-form .form-control:focus {
+  box-shadow: none;
+  border: 1px solid #eee;
+}
+
+.comment-form textarea.form-control {
+  height: 140px;
+  resize: none;
+}
+
+.comment-form ::-webkit-input-placeholder {
+  /* Chrome/Opera/Safari */
+  font-size: 15px;
+  color: #777;
+}
+
+.comment-form ::-moz-placeholder {
+  /* Firefox 19+ */
+  font-size: 15px;
+  color: #777;
+}
+
+.comment-form :-ms-input-placeholder {
+  /* IE 10+ */
+  font-size: 15px;
+  color: #777;
+}
+
+.comment-form :-moz-placeholder {
+  /* Firefox 18- */
+  font-size: 15px;
+  color: #777;
+}
   .description{
       white-space: -moz-pre-wrap !important;  /* Mozilla, since 1999 */
     white-space: -pre-wrap;      /* Opera 4-6 */
@@ -80,6 +246,7 @@
   <link href="/css/watch-util.css" rel=stylesheet>
   <link href="https://fonts.poketube.fun/css/fonts.css" rel=stylesheet>
   <link href="/css/watch-navbar.css?v=56" rel=stylesheet>
+  
   <link href=https://p.poketube.fun/https://site-assets.fontawesome.com/releases/v6.1.1/css/all.css rel=stylesheet>
    </head>
    
@@ -160,7 +327,7 @@
  <hr style="clear: both;display: block;border: none;border-bottom: 0.5px solid #2f2f2f;/*! width: 4.5em; */height: 0;">
      <% if (String(video.Description) != "[object Object]")  { %>
 
-              <%-String(video.Description).replace(/\n/g, " <br> ")%>
+              <%-String(inv_vid.descriptionHtml).replace(/\n/g, " <br> ")%>
                           <% } %>          
                             
     <% if (String(video.Description) == "[object Object]")  { %>
@@ -261,31 +428,51 @@
                                         
                <div style="display:none;">
                 
-              
-                 
-               </div>
-                               <% if (comments) { %>
-                <% if (!video.Channel.Name.endsWith(' - Topic')) { %>  
+                             </div>
+        
+                 <% if (!video.Channel.Name.endsWith(' - Topic')) { %>  
+                                                   <div>
+                                                     <h5 style="font-family:ginto nord">
+                                                       Comments
+                                                     </h5>
+                                                                                      <hr style="clear: both;display: block;border: none;border-bottom: 0.5px solid #2f2f2f;margin: 0 0;/*! width: 4.5em; */height: 0;">
 
-                   <div class="video-title" style="color:#fff;font-family:Ginto Nord,sans-serif;font-weight:700;margin-top: 10px;margin-bottom: 9px;">Comments - <span style="font-family: inter;"> <%=comments || "Probably disabled or theres no comments" %>  </span> </div>
-                      
-                             <hr style="clear: both;display: block;border: none;border-bottom: 0.5px solid #2f2f2f;margin: 0 0;/*! width: 4.5em; */height: 0;">
-                   <p>
-                       <a href="https://invidio.us/watch?v=<%=video.id%>">  Click here to View Comments</a>
-                        </p>
-
-                            <% } %>
-                            <% } %>
-
-
-
-<p style="font-family:MonoSpace;">
-         <b>
-PokeTube Player v09.10.22a - Node <%=process.version%> - V8 v<%=process.versions.v8%> -  <%=process.platform.replace("linux", "GNU/Linux")%> <%=process.arch%> Server ( <%=ip.org%> )
-           </b>
-         
-                </p>            
+                                 <% inv.comments.forEach(x =>{ %>
  
+                                   <div>
+
+       <div class="comment-list left-padding">
+        <div class="single-comment justify-content-between d-flex">
+          <div class="user justify-content-between d-flex">
+            <div class="desc">
+              <h5 style="display: flex;">             <div class="thumb">
+				<a href="/channel?id=<%- x.authorId%>" class="avatar">
+					<img src="https://p.poketube.fun/<%= x.authorThumbnails[1].url %>">
+				</a>
+            </div>
+                <p style="margin: 7px;font-family:inter">
+                <%- x.author%>  </p></h5>
+              <p class="comment">
+                <%- x.contentHtml %>
+                <br> <br>
+                  <span><%- x.publishedText %> - <%- convert(x.likeCount) %> Likes</span>
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+ 
+                                         </div>
+                                   
+
+                                   <% }) %>   
+                                                                              </div>
+
+                             <% } %>
+
+
+
+
          </div>
                  
 <div class="recommended-list" style="background-color:#1c1c1c;border-radius:25px;margin: 10px;height: fit-content;" align="center">

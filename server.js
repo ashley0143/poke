@@ -170,92 +170,84 @@ app.get("/watch", async function (req, res) {
   var f = req.query.f;
   var t = req.query.t;
   var q = req.query.quality;
-  
-  
- const info = await fetch("http://ip-api.com/json/");
+
+  const info = await fetch("http://ip-api.com/json/");
   const jj = await info.text();
   const ip = JSON.parse(jj);
 
- api.video(v).then((data) => {
- 
-   
-  const k = data.video
-  const json = data.json
-  const engagement =  data.engagement
-   
-  if(api.video(v).b) {
-      var nnn = data.beta
+  api.video(v).then((data) => {
+    const k = data.video;
+    const json = data.json;
+    const engagement = data.engagement;
+    const inv_comments = data.comments;
+    const inv_vid = data.vid;
+
+    if (api.video(v).b) {
+      var nnn = data.beta;
       var badges = nnn.channel.badges[0];
-     var comments = nnn.commentCount;
-  }
-  
-if(!api.video(v).b) {
-      var nnn = ""
-      var badges = ""
-     var comments = ""
-  }
-  
-  
-  
- 
+      var comments = nnn.commentCount;
+    }
 
-  
-    
-  if (!v) res.redirect("/");
+    if (!api.video(v).b) {
+      var nnn = "";
+      var badges = "";
+      var comments = "";
+    }
 
-  //video
-  if (!q) url = `https://tube.kuylar.dev/proxy/media/${v}/22`;
-  if (q === "medium") {
-    var url = `https://tube.kuylar.dev/proxy/media/${v}/18`;
-  }
+    if (!v) res.redirect("/");
 
-  // encryption
-  const url_e =
-    url +
-    "?e=" +
-    sha384(k.Video.Channel.id) +
-    sha384(k.Video.Channel.id) +
-    "Piwik" +
-    sha384(config.t_url);
+    //video
+    if (!q) url = `https://tube.kuylar.dev/proxy/media/${v}/22`;
+    if (q === "medium") {
+      var url = `https://tube.kuylar.dev/proxy/media/${v}/18`;
+    }
 
-  const desc = data.desc;
+    // encryption
+    const url_e =
+      url +
+      "?e=" +
+      sha384(k.Video.Channel.id) +
+      sha384(k.Video.Channel.id) +
+      "Piwik" +
+      sha384(config.t_url);
 
-  var d = desc.toString().replace(/\n/g, " <br> ");
+    const desc = data.desc;
 
-  if (d === "[object Object]") {
-    var d = false;
-  }
+    var d = desc.toString().replace(/\n/g, " <br> ");
 
+    if (d === "[object Object]") {
+      var d = false;
+    }
 
-  
-  renderTemplate(res, req, "poketube.ejs", {
-    url: url_e,
-    color: data.color,
-    engagement: engagement,
-    video: json,
-    date: moment(k.Video.uploadDate).format("LL"),
-    e: e,
-    k: k,
-    process: process,
-    sha384: sha384,
-    isMobile: req.useragent.isMobile,
-    tj: data.channel,
-    r: r,
-    qua: q,
-    ip: ip,
-    convert: convert,
-    wiki: data.wiki,
-    f: f,
-    t: config.t_url,
-    optout: t,
-    badges: badges,
-    desc: desc,
-    comments: comments,
-    n: nnn,
-    lyrics: "",
-  });
+    renderTemplate(res, req, "poketube.ejs", {
+      url: url_e,
+      color: data.color,
+      engagement: engagement,
+      video: json,
+      date: moment(k.Video.uploadDate).format("LL"),
+      e: e,
+      k: k,
+      process: process,
+      sha384: sha384,
+      isMobile: req.useragent.isMobile,
+      tj: data.channel,
+      r: r,
+      qua: q,
+      inv: inv_comments,
+      ip: ip,
+      convert: convert,
+      wiki: data.wiki,
+      f: f,
+      t: config.t_url,
+      optout: t,
+      badges: badges,
+      desc: desc,
+      comments: comments,
+      n: nnn,
+      inv_vid,
+      lyrics: "",
     });
-
+  });
 });
 
 app.get("/music", async function (req, res) {
@@ -280,10 +272,11 @@ app.get("/music", async function (req, res) {
 
   if (!v) res.redirect("/");
 
-  const video = await fetch(config.tubeApi + `video?v=${v}`);
   var fetching = await fetcher(v);
 
   const json = fetching.video.Player;
+
+  const video = await fetch(config.tubeApi + `video?v=${v}`);
 
   const h = await video.text();
   const k = JSON.parse(toJson(h));
@@ -547,6 +540,7 @@ app.get("/embed/:v", async function (req, res) {
     sha384: sha384,
     qua: q,
     engagement: engagement,
+    k: k,
     optout: t,
     t: config.t_url,
   });

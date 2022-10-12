@@ -81,11 +81,17 @@ async function video(v) {
     .then((res) => res.text())
     .then((xml) => JSON.parse(toJson(xml)));
 
-  var i = await fetch(`${config.invapi}/comments/${v}`).then((res) =>
+  var inv_comments = await fetch(`${config.invapi}/comments/${v}`).then((res) =>
     res.text()
   );
 
-  var inv = await JSON.parse(i);
+  var comments = await JSON.parse(inv_comments);
+
+  var video_new_info = await fetch(`${config.invapi}/videos/${v}`).then((res) =>
+    res.text()
+  );
+
+  var vid = await JSON.parse(video_new_info);
 
   const c = await channel(video.Video.Channel.id);
 
@@ -100,7 +106,8 @@ async function video(v) {
   return {
     json: data.video.Player,
     video,
-    inv,
+    vid,
+    comments,
     engagement: data.engagement,
     wiki: summary,
     desc: c.about.Channel.Contents.ItemSection.About.Description,

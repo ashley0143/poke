@@ -338,9 +338,11 @@
                       </p>
 <div class="video-sub-info description" style="font-weight: bold;margin-top:  55px !important;border-radius: 21px;background: #1c1c1c;padding: 10px;margin-bottom: 20px;margin-left: 0;font-family: 'Poketube flex';font-stretch: expanded;"><div class="video-title" style="color:#fff;font-family:Ginto Nord,sans-serif;font-weight:700;margin-top: 3px;margin-bottom: 10px;">Description</div>
  <hr style="clear: both;display: block;border: none;border-bottom: 0.5px solid #2f2f2f;/*! width: 4.5em; */height: 0;">
+  
      <% if (String(video.Description) != "[object Object]")  { %>
 
-              <%-String(inv_vid.descriptionHtml).replace(/\n/g, " <br> ")%>
+              <%-String(inv_vid.descriptionHtml).replace(/\n/g, " <br> ").replace(/twitter\.com/g, "nitter.net").replace(/reddit\.com/g, "teddit.net") %>
+                
                           <% } %>          
                             
     <% if (String(video.Description) == "[object Object]")  { %>

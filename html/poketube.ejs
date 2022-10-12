@@ -436,6 +436,14 @@
                                                        Comments
                                                      </h5>
                                                                                       <hr style="clear: both;display: block;border: none;border-bottom: 0.5px solid #2f2f2f;margin: 0 0;/*! width: 4.5em; */height: 0;">
+                                                                             <%  if (!Array.isArray( inv.comments)) { %> 
+                                                                               <p>
+                                                                                 Comments couldnt load ;-; (<a href="https://codeberg.org/Ashley/poketube/issues/new">Report dis issue</a>)
+                                                                               </p>
+                             <% } %>
+
+                                                                               
+                        <%  if (Array.isArray( inv.comments)) { %> 
 
                                  <% inv.comments.forEach(x =>{ %>
  
@@ -445,7 +453,7 @@
         <div class="single-comment justify-content-between d-flex">
           <div class="user justify-content-between d-flex">
             <div class="desc">
-              <h5 style="display: flex;">             <div class="thumb">
+              <h5 style="display: flex;"><div class="thumb">
 				<a href="/channel?id=<%- x.authorId%>" class="avatar">
 					<img src="https://p.poketube.fun/<%= x.authorThumbnails[1].url %>">
 				</a>
@@ -464,8 +472,11 @@
  
                                          </div>
                                    
+                                                                        <% }) %>   
 
-                                   <% }) %>   
+                                   <% } %>   
+                                     
+
                                                                               </div>
 
                              <% } %>

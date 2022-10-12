@@ -1,5 +1,6 @@
-  <% if (!isMobile) { %> 
+<% if (!isMobile) { %> 
 <!--
+
     This Source Code Form is subject to the terms of the GNU General Public License:
 
     Copyright (C) 2021-2022 POKETUBE (https://github.com/iamashley0/poketube)
@@ -16,11 +17,12 @@
 
     You should have received a copy of the GNU General Public License
     along with this program. If not, see https://www.gnu.org/licenses/.
+
 -->
 <!DOCTYPE html>
 <html class="poketube_desktop">
 <head>
-    <% if (e === false) { %> <!-- if ?e=false,dont show up the meta tags  -->
+    <% if (e === false) { %> <!-- if ?e=false, dont show up the meta tags  -->
     
  <% } %>
   <% if (!e) { %>
@@ -238,6 +240,17 @@
     white-space: normal;
 
   }
+  
+  .desc {
+       white-space: -moz-pre-wrap !important;  /* Mozilla, since 1999 */
+    white-space: -pre-wrap;      /* Opera 4-6 */
+    white-space: -o-pre-wrap;    /* Opera 7 */
+    white-space: pre-wrap;       /* css-3 */
+    word-wrap: break-word;       /* Internet Explorer 5.5+ */
+    white-space: -webkit-pre-wrap; /* Newer versions of Chrome/Safari*/
+    word-break: break-all;
+    white-space: normal;
+  }
    </style>
   
   <link href=/css/app-cdn.min.css rel=stylesheet>
@@ -433,12 +446,12 @@
                  <% if (!video.Channel.Name.endsWith(' - Topic')) { %>  
                                                    <div>
                                                      <h5 style="font-family:ginto nord">
-                                                       Comments
+                                                       Comments 
                                                      </h5>
                                                                                       <hr style="clear: both;display: block;border: none;border-bottom: 0.5px solid #2f2f2f;margin: 0 0;/*! width: 4.5em; */height: 0;">
                                                                              <%  if (!Array.isArray( inv.comments)) { %> 
                                                                                <p>
-                                                                                 Comments couldnt load ;-; (<a href="https://codeberg.org/Ashley/poketube/issues/new">Report dis issue</a>)
+                                                                                 Comments couldnt load ;-; (<a href="https://codeberg.org/Ashley/poketube/issues/new">Report dis issue</a> or refresh the god damn page lol)
                                                                                </p>
                              <% } %>
 
@@ -1411,8 +1424,15 @@ More from  <%=k.Video.Channel.Name%>
 
                         
                           </div>
+                   
  			</div> 
-                     
+                          <p style="font-family:MonoSpace;">
+         <b>
+PokeTube Mobile v12.10.22a - Node <%=process.version%> - V8 v<%=process.versions.v8%> -  <%=process.platform.replace("linux", "GNU/Linux")%> <%=process.arch%> Server ( <%=ip.org%> )
+           </b>
+         
+                </p>            
+ 
                           </div>
 </div>
  </div>

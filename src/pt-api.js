@@ -7,6 +7,9 @@
     This file is Licensed under LGPL-3.0-or-later. Poketube itself is GPL, Only this file is LGPL.
     
     see a copy here:https://www.gnu.org/licenses/lgpl-3.0.txt
+    
+    please dont remove this comment while sharing this code 
+    
   */
 
 const fetch = require("node-fetch");
@@ -19,6 +22,7 @@ const wiki = require("wikipedia");
 
 const config = {
   tubeApi: "https://tube.kuylar.dev/api/",
+  invapi: "https://inv.vern.cc/api/v1",
   dislikes: "https://returnyoutubedislikeapi.com/votes?videoId=",
   t_url: "https://t.poketube.fun/", //  def matomo url
 };
@@ -77,6 +81,12 @@ async function video(v) {
     .then((res) => res.text())
     .then((xml) => JSON.parse(toJson(xml)));
 
+  var i = await fetch(`${config.invapi}/comments/${v}`).then((res) =>
+    res.text()
+  );
+
+  var inv = await JSON.parse(i);
+
   const c = await channel(video.Video.Channel.id);
 
   const summary = await wiki
@@ -90,6 +100,7 @@ async function video(v) {
   return {
     json: data.video.Player,
     video,
+    inv,
     engagement: data.engagement,
     wiki: summary,
     desc: c.about.Channel.Contents.ItemSection.About.Description,

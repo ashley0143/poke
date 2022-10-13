@@ -93,7 +93,17 @@ async function video(v) {
 
   var vid = await JSON.parse(video_new_info);
 
-  const c = await channel(video.Video.Channel.id);
+  const c = await fetch(
+    `${config.tubeApi}channel?id=${video.Video.Channel.id}&tab=videos`
+  )
+    .then((res) => res.text())
+    .then((xml) => JSON.parse(toJson(xml)));
+
+  const a = await fetch(
+    `${config.tubeApi}channel?id=${video.Video.Channel.id}&tab=about`
+  )
+    .then((res) => res.text())
+    .then((xml) => JSON.parse(toJson(xml)));
 
   const summary = await wiki
     .summary(video.Video.Channel.Name)
@@ -107,10 +117,11 @@ async function video(v) {
     json: data.video.Player,
     video,
     vid,
+    channel: c,
     comments,
     engagement: data.engagement,
     wiki: summary,
-    desc: c.about.Channel.Contents.ItemSection.About.Description,
+    desc: a.Channel.Contents.ItemSection.About.Description,
     color: await getColors(
       `https://i.ytimg.com/vi/${v}/maxresdefault.jpg`
     ).then((colors) => colors[0].hex()),

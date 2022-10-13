@@ -201,16 +201,16 @@ app.get("/watch", async function (req, res) {
     var u = inv_vid.formatStreams;
 
     if (u.includes("url", 2)) {
-      u = inv_vid.formatStreams[2].url;
+      u = `https://inv.vern.cc/latest_version?id=${v}&itag=22&local=true`
     }
     if (!u.includes("url", 2)) {
-      u = inv_vid.formatStreams[1].url;
+      u = `https://inv.vern.cc/latest_version?id=${v}&itag=18&local=true`;
     }
 
     var url = u;
 
     if (q === "medium") {
-      var url = inv_vid.formatStreams[1].url;
+      var url = `https://tube.kuylar.dev/proxy/media/${v}/18`;
     }
 
     // encryption

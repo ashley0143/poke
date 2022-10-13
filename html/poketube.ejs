@@ -906,173 +906,6 @@ body {
  -ms-user-select:none;
  user-select:none
 }
-      .comments-area {
-  background: #f1f9ff;
-  padding: 50px 30px;
-  margin-top: 50px;
-}
-
-@media (max-width: 414px) {
-  .comments-area {
-    padding: 50px 8px;
-  }
-}
-
-.comments-area h4 {
-  text-align: center;
-  margin-bottom: 50px;
-  color: #002347;
-  font-size: 18px;
-}
-
-.comments-area h5 {
-  font-size: 16px;
-  margin-bottom: 0px;
-}
-
-.comments-area a {
-  color: #002347;
-}
-
-.comments-area .comment-list {
-  padding-bottom: 30px;
-}
-
-.comments-area .comment-list:last-child {
-  padding-bottom: 0px;
-}
-
-.comments-area .comment-list.left-padding {
-  padding-left: 25px;
-}
-
-@media (max-width: 413px) {
-  .comments-area .comment-list .single-comment h5 {
-    font-size: 12px;
-  }
-  .comments-area .comment-list .single-comment .date {
-    font-size: 11px;
-  }
-  .comments-area .comment-list .single-comment .comment {
-    font-size: 10px;
-  }
-}
-
-.comments-area .thumb {
-  margin-right: 20px;
-}
-
-.comments-area .date {
-  font-size: 13px;
-  color: #777777;
-  margin-bottom: 13px;
-}
-
-.comments-area .comment {
-  color: #777777;
-  margin-bottom: 0px;
-}
-
-.comments-area .btn-reply {
-  background-color: #fff;
-  color: #002347;
-  border: 1px solid #eee;
-  padding: 2px 18px;
-  font-size: 12px;
-  display: block;
-  font-weight: 600;
-  -webkit-transition: all 0.3s ease 0s;
-  -moz-transition: all 0.3s ease 0s;
-  -o-transition: all 0.3s ease 0s;
-  transition: all 0.3s ease 0s;
-}
-
-.comments-area .btn-reply:hover {
-  background: #fdc632;
-  color: #002347;
-}
-
-.comment-form {
-  background: #f1f9ff;
-  text-align: center;
-  padding: 47px 30px 43px;
-  margin-top: 50px;
-  margin-bottom: 40px;
-}
-
-.comment-form h4 {
-  text-align: center;
-  margin-bottom: 50px;
-  font-size: 18px;
-  line-height: 22px;
-  color: #002347;
-}
-
-.comment-form .name {
-  padding-left: 0px;
-}
-
-@media (max-width: 767px) {
-  .comment-form .name {
-    padding-right: 0px;
-    margin-bottom: 1rem;
-  }
-}
-
-.comment-form .email {
-  padding-right: 0px;
-}
-
-@media (max-width: 991px) {
-  .comment-form .email {
-    padding-left: 0px;
-  }
-}
-
-.comment-form .form-control {
-  padding: 8px 20px;
-  background: #fff;
-  border: none;
-  border-radius: 0px;
-  width: 100%;
-  font-size: 14px;
-  color: #777777;
-  border: 1px solid transparent;
-}
-
-.comment-form .form-control:focus {
-  box-shadow: none;
-  border: 1px solid #eee;
-}
-
-.comment-form textarea.form-control {
-  height: 140px;
-  resize: none;
-}
-
-.comment-form ::-webkit-input-placeholder {
-  /* Chrome/Opera/Safari */
-  font-size: 15px;
-  color: #777;
-}
-
-.comment-form ::-moz-placeholder {
-  /* Firefox 19+ */
-  font-size: 15px;
-  color: #777;
-}
-
-.comment-form :-ms-input-placeholder {
-  /* IE 10+ */
-  font-size: 15px;
-  color: #777;
-}
-
-.comment-form :-moz-placeholder {
-  /* Firefox 18- */
-  font-size: 15px;
-  color: #777;
-}
 .v-application--is-ltr .v-chip .v-chip__close.v-icon.v-icon--right {
  margin-right:-4px
 }
@@ -1395,7 +1228,7 @@ padding: 3px;
    #descs span { display: block; }
    #descs span a { display: inline-block; }
     
-#comments-container .backtotop {
+    #comments-container .backtotop {
   margin: 0%;
   display: none;
 }
@@ -1483,7 +1316,6 @@ padding: 3px;
    }
    #commentss span { display: block; }
    #commentss span a { display: inline-block; }
-
   </style>
   <style>body, html { margin: 0; padding: 0; } * { font-family: sans-serif; color:#fff } .player { background-color: #000 !important; display: grid; grid-template-columns: 1fr min-content; grid-template-rows: max-content 1fr max-content max-content max-content; gap: 0 0; width: 100%; /* height: 100%; */ aspect-ratio: 16 / 9; } .player * { color: #fff; } .player.embed, video.embed { position: fixed; top: 0; bottom: 0; left: 0; right: 0; } .player * { -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none; } .player > video { position: relative; width: 100%; height: 100%; z-index: 0; grid-area: 1 / 1 / 6 / 3; } .player.hide-controls > .player-title, .player.hide-controls > .player-controls, .player.hide-controls > .player-playback-bar-container, .player.hide-controls > .player-menu { display: none !important; } .player-controls { background-color: #0007; display: flex; justify-content: center; align-items: center; z-index: 1; grid-area: 1 / 1 / 6 / 3; } .player-button { width: 96px; height: 96px; font-size: 90px; text-align: center; line-height: 48px; } .player-tiny-button { width: 40px; font-size: 20px; text-align: center; } .player-tiny-button > i { color: #ddd; } .player-button, .player-button * { color: #dddddd !important; text-decoration: none; } .player-button > i { min-width: 48px; } .player-button:hover, .player-button:hover * { color: #fff !important; } .player-playback-bar { transition: width linear 100ms; } .player-playback-bar-container { grid-area: 4 / 1 / 5 / 3; display: flex; column-gap: 8px; justify-content: center; align-items: center; height: 8px; transition: height linear 100ms; width: 100%; z-index: 2; margin-bottom: 10px; } .player-playback-bar-bg { background-color: #fff3 !important; width: 100%; height: 100%; z-index: 2; display: grid; grid-template-columns: 1fr; grid-template-rows: 1fr; } .player-playback-bar-bg > * { grid-area: 1 / 1 / 2 / 2; } .player-playback-bar-buffer { background-color: #fffa !important; height: 100%; width: 0; z-index: 3; } .player-playback-bar-fg { background-color: #f00 !important; height: 100%; width: 0; z-index: 4; } .player-buffering { grid-area: 1 / 1 / 6 / 3; z-index: 1; display: flex; justify-content: center; align-items: center; } .player-buffering-spinner { width: 80px; height: 80px; }</style>
   <body>
@@ -1590,7 +1422,6 @@ padding: 3px;
 
    </a>
   </div>
-  
 <div id="descs" style="display: contents;">
   <h3 style="font-family:'Ginto Nord';font-weight:900;white-space:yes"> Description </h3>
 <hr style="clear: both;display: block;border: none;border-bottom: 0.5px solid #2f2f2f;/*! width: 4.5em; */height: 0;">
@@ -1639,7 +1470,6 @@ padding: 3px;
   </div>
   </div>
     </div>
-  
 
   
                                   <hr style="clear: both;display: block;border: none;border-bottom: 0.5px solid #2f2f2f;margin: 0 0;/*! width: 4.5em; */height: 0;"> 
@@ -1713,8 +1543,7 @@ PokeTube Mobile v12.10.22a - Node <%=process.version%> - V8 v<%=process.versions
 </div>
  
                             </div> 
-         
-                                   
+                                  
 <div id="comments-container">
   
  <div class="backtotop">
@@ -1784,9 +1613,8 @@ PokeTube Mobile v12.10.22a - Node <%=process.version%> - V8 v<%=process.versions
 
               </div>
 				</div>
-		 
- 			</div>
-                 
+                   
+            
                    
                            <div>
  
@@ -1803,12 +1631,12 @@ PokeTube Mobile v12.10.22a - Node <%=process.version%> - V8 v<%=process.versions
                                  <hr style="clear: both;display: block;border: none;border-bottom: 0.5px solid #2f2f2f;margin: 0 0;/*! width: 4.5em; */height: 0;"> 
                </div>
                  
- 	</div>
-                               
-                               
- 	 <div class="secondary" style="padding-top: 0;">
+ 	</div> 	</div>
 
-	<div class="recommended-list" id="rec-cont" style="color:#fff">
+                 
+  	 <div class="secondary" style="padding-top: 0;">
+
+	<div class="recommended-list" style="color:#fff">
     
                               <% if (!r) { %> 
                                  

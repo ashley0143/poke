@@ -1,4 +1,4 @@
-<!--
+ <!--
     This Source Code Form is subject to the terms of the GNU General Public License:
 
     Copyright (C) 2021-2022 POKETUBE (https://github.com/iamashley0/poketube)
@@ -408,7 +408,7 @@ background-size: cover;
                                <% if (!tab) { %> 
 
     	<div class="video-grid">
-   <% k.Explore.Videos.ItemSection[3].Shelf.Items.Video.forEach(x =>  { %>
+   <% k.Explore.Videos.ItemSection[2].Shelf.Items.Video.forEach(x =>  { %>
 			<a href="/watch?v=<%- x.id %>"  class="video">
 				<div class="thumbnail" style="background-image: url('https://p.poketube.fun/https://i.ytimg.com/vi/<%= x.id %>/hqdefault.jpg?sqp=-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLBy_x4UUHLNDZtJtH0PXeQGoRFTgw');border-top-left-radius: 16px;border-top-right-radius: 16px;"><span class="video-length"><%- x.duration %></span></div>
 				<div class="info">
@@ -423,7 +423,7 @@ background-size: cover;
                        <% if (tab) { %> 
 
     	<div class="video-grid">
-   <% k.Explore.Videos.ItemSection[2].Shelf.Items.Video.forEach(x =>  { %>
+   <% k.Explore.Videos.ItemSection[1].Shelf.Items.Video.forEach(x =>  { %>
 			<a href="/watch?v=<%- x.id %>"  class="video">
 				<div class="thumbnail" style="background-image: url('https://p.poketube.fun/https://i.ytimg.com/vi/<%= x.id %>/hqdefault.jpg?sqp=-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLBy_x4UUHLNDZtJtH0PXeQGoRFTgw');border-top-left-radius: 16px;border-top-right-radius: 16px;"><span class="video-length">PT <%- x.duration %></span></div>
 				<div class="info">

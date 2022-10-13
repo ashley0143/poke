@@ -197,9 +197,20 @@ app.get("/watch", async function (req, res) {
     if (!v) res.redirect("/");
 
     //video
-    if (!q) url = `https://tube.kuylar.dev/proxy/media/${v}/22`;
+
+    var u = inv_vid.formatStreams;
+
+    if (u.includes("url", 2)) {
+      u = inv_vid.formatStreams[2].url;
+    }
+    if (!u.includes("url", 2)) {
+      u = inv_vid.formatStreams[1].url;
+    }
+
+    var url = u;
+
     if (q === "medium") {
-      var url = `https://tube.kuylar.dev/proxy/media/${v}/18`;
+      var url = inv_vid.formatStreams[1].url;
     }
 
     // encryption

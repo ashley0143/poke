@@ -305,8 +305,27 @@
  	<div class="primary">
        
 		<div class="video-player-container">
-<video class="player" id="<%=sha384(video.id)%>" style="border-radius: 16px;" autoplay controls src="<%=url%>" poster="https://p.poketube.fun/https://i.ytimg.com/vi/<%=video.id%>/maxresdefault.jpg?v=607ddcd4">
+<video class="player" id="<%=sha384(video.id)%>" style="border-radius: 16px;" autoplay controls   
+       
+       poster="https://p.poketube.fun/https://i.ytimg.com/vi/<%=video.id%>/maxresdefault.jpg?v=607ddcd4">
  
+  
+        
+             
+                  <% if (!qua) { %>  
+
+
+                            <source src="https://inv.vern.cc/latest_version?id=<%=video.id%>&itag=22&local=true" type="video/mp4; codecs=&quot;avc1.64001F, mp4a.40.2&quot;" label="hd720" selected="false">
+                                                                             <% } %>                
+
+      <% if (qua === "medium") { %>  
+
+                <source src="https://inv.vern.cc/latest_version?id=<%=video.id%>&itag=18&local=true" type="video/mp4; codecs=&quot;avc1.42001E, mp4a.40.2&quot;" label="medium" selected="false">
+                                                                           <% } %>                
+
+            
+                
+            
     <% if (  video.Subtitles.Subtitle) { %>  
      <%  if (Array.isArray( video.Subtitles.Subtitle)) { %> 
    <% video.Subtitles.Subtitle.forEach(x => { %>
@@ -1328,7 +1347,25 @@ padding: 3px;
 	   <div class="mobile-page">
 	<div class="primary">
 		<div class="video-player-container" style="background-color:#000">
-					<video class="player" autoplay style="border-radius: 6px;" controls src="<%=url%>" poster="https://i.ytimg.com/vi/<%=video.id%>/hqdefault.jpg?v=607ddcd4">
+					<video class="player" autoplay style="border-radius: 6px;" controls  poster="https://i.ytimg.com/vi/<%=video.id%>/hqdefault.jpg?v=607ddcd4">
+ 
+  
+        
+             
+                  <% if (!qua) { %>  
+
+
+                            <source src="https://inv.vern.cc/latest_version?id=<%=video.id%>&itag=22&local=true" type="video/mp4; codecs=&quot;avc1.64001F, mp4a.40.2&quot;" label="hd720" selected="false">
+                                                                             <% } %>                
+
+      <% if (qua === "medium") { %>  
+
+                <source src="https://inv.vern.cc/latest_version?id=<%=video.id%>&itag=18&local=true" type="video/mp4; codecs=&quot;avc1.42001E, mp4a.40.2&quot;" label="medium" selected="false">
+                                                                           <% } %>                
+
+            
+                
+            
                <%  if (Array.isArray( video.Subtitles.Subtitle)) { %> 
 
     <% if (  video.Subtitles.Subtitle) { %>  

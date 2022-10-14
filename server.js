@@ -107,6 +107,24 @@ function getFirstLine(text) {
   return text.substring(0, index);
 }
 
+function capitalizeFirstLetter(string) {
+  return string.charAt(0).toUpperCase() + string.slice(1);
+}
+
+function turntomins(time) {
+  var minutes = Math.floor(time / 60);
+
+  var seconds = time - minutes * 60;
+
+  function str_pad_left(string, pad, length) {
+    return (new Array(length + 1).join(pad) + string).slice(-length);
+  }
+
+  var finalTime =
+    str_pad_left(minutes, "0", 2) + ":" + str_pad_left(seconds, "0", 2);
+
+  return finalTime;
+}
 /////////////////////////////////
 
 app.use(function (req, res, next) {
@@ -633,10 +651,24 @@ app.get("/", async function (req, res) {
   const trends = await fetch(config.tubeApi + `trending`);
   const h = await trends.text();
   const k = JSON.parse(toJson(h));
+
+  if (req.query.tab) var tab = `/?type=${capitalizeFirstLetter(req.query.tab)}`;
+
+  if (!req.query.tab) var tab = "";
+
+  const invtrend = await fetch(
+    `https://inv.vern.cc/api/v1/trending${tab}`
+  ).then((res) => res.text());
+
+  const t = JSON.parse(invtrend);
+
+  console.log(invtrend);
   renderTemplate(res, req, "main.ejs", {
     k: k,
     tab: req.query.tab,
     isMobile: req.useragent.isMobile,
+    inv: t,
+    turntomins,
   });
 });
 

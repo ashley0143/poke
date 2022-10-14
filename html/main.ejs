@@ -370,7 +370,7 @@ background-size: cover;
  <div class="channel-page" style="background-color: var(--channel-contents-background);">   
   
     <img src="https://t.poketube.fun/t/rep.gif" style="width: 0;visibility: hidden;" id="discover_main">
-               <div class="video-title" style="font-family:'Ginto nord';font-weight:900;white-space:nowrap;font-size: xxx-large;">Discover Trends</div>
+               <div class="video-title" style="font-family:'Ginto nord';font-weight:900;white-space:nowrap;font-size: xxx-large;">Discover </div>
    
         <% if (!isMobile) { %> 
           <p style="margin:0;">
@@ -390,9 +390,13 @@ background-size: cover;
                 <a href="" class="tab active">Videos</a>
                                     
                 <a href="?tab=music"class="tab">Music</a>
+
                 <a  href="?tab=gaming" class="tab">Gaming</a>
+                      <% if (!isMobile) { %> 
+
                  <a href="?tab=movies" class="tab">Movies</a>
 
+           		 	               <% } %>   
 
             </div>    
            		 	               <% } %>   
@@ -404,8 +408,13 @@ background-size: cover;
                 <a href="/" class="tab">Videos</a>
                                     
                 <a href="" class="tab active ">Music</a>
+
                 <a  href="?tab=gaming" class="tab">Gaming</a>
+                       <% if (!isMobile) { %> 
+
                  <a href="?tab=movies" class="tab">Movies</a>
+
+           		 	               <% } %> 
 
                        
 
@@ -419,8 +428,11 @@ background-size: cover;
                 <a href="/" class="tab">Videos</a>
                                     
                 <a href="?tab=music" class="tab">Music</a>
+                       <% if (!isMobile) { %> 
+
                 <a href="" class="tab active">Gaming</a>
                  <a href="?tab=movies" class="tab">Movies</a>
+           		 	               <% } %>   
 
                        
 

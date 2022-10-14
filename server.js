@@ -182,7 +182,7 @@ app.get("/watch", async function (req, res) {
     var inv_comments = data.comments;
     const inv_vid = data.vid;
 
-    if (!data.comments) inv_comments = " ";
+    if (!data.comments) inv_comments = "Disabled";
 
     if (api.video(v).b) {
       var nnn = data.beta;

@@ -179,8 +179,10 @@ app.get("/watch", async function (req, res) {
     const k = data.video;
     const json = data.json;
     const engagement = data.engagement;
-    const inv_comments = data.comments;
+    var inv_comments = data.comments;
     const inv_vid = data.vid;
+
+    if (!data.comments) inv_comments = " ";
 
     if (api.video(v).b) {
       var nnn = data.beta;
@@ -196,21 +198,8 @@ app.get("/watch", async function (req, res) {
 
     if (!v) res.redirect("/");
 
-    //video
-
-    var u = inv_vid.formatStreams;
-
-    if (u.includes("url", 2)) {
-      u = `https://inv.vern.cc/latest_version?id=${v}&itag=22&local=true`
-    }
-    if (!u.includes("url", 2)) {
-      u = `https://inv.vern.cc/latest_version?id=${v}&itag=18&local=true`;
-    }
-
-    var url = u;
-
     if (q === "medium") {
-      var url = `https://tube.kuylar.dev/proxy/media/${v}/18`;
+      var url = `https://inv.vern.cc/latest_version?id=${v}&itag=18&local=true`;
     }
 
     // encryption

@@ -370,11 +370,11 @@ background-size: cover;
  <div class="channel-page" style="background-color: var(--channel-contents-background);">   
   
     <img src="https://t.poketube.fun/t/rep.gif" style="width: 0;visibility: hidden;" id="discover_main">
-               <div class="video-title" style="font-family:'Ginto nord';font-weight:900;white-space:nowrap;font-size: xxx-large;">Trending</div>
+               <div class="video-title" style="font-family:'Ginto nord';font-weight:900;white-space:nowrap;font-size: xxx-large;">Discover Trends</div>
    
         <% if (!isMobile) { %> 
           <p style="margin:0;">
-       See the trending videos shorts and music videos on poketube! (<s>or dont</s>)
+       See the trending videos, gaming stuff and music videos on poketube! (<s>or dont</s>)
           </p>
  		 	               <% } %>   
                        
@@ -388,54 +388,77 @@ background-size: cover;
      <div class="tabs tabs-center">
             
                 <a href="" class="tab active">Videos</a>
-                <a  href="?tab=shorts" class="tab">TikToks</a>
-                                                              
+                                    
+                <a href="?tab=music"class="tab">Music</a>
+                <a  href="?tab=gaming" class="tab">Gaming</a>
+                 <a href="?tab=movies" class="tab">Movies</a>
+
 
             </div>    
            		 	               <% } %>   
-  <% if (tab) { %> 
+  <% if (tab === "music") { %> 
 
      <div class="tabs tabs-center">
             
-                <a href="/" class="tab ">Videos</a>
-                  <a  href="?tab=shorts"  class="tab active">TikToks</a>
-                                                              
+              
+                <a href="/" class="tab">Videos</a>
+                                    
+                <a href="" class="tab active ">Music</a>
+                <a  href="?tab=gaming" class="tab">Gaming</a>
+                 <a href="?tab=movies" class="tab">Movies</a>
+
+                       
+
+            </div>    
+           		 	               <% } %>   
+                                  <% if (tab === "gaming") { %> 
+
+     <div class="tabs tabs-center">
+            
+              
+                <a href="/" class="tab">Videos</a>
+                                    
+                <a href="?tab=music" class="tab">Music</a>
+                <a href="" class="tab active">Gaming</a>
+                 <a href="?tab=movies" class="tab">Movies</a>
+
+                       
+
+            </div>    
+           		 	               <% } %>   
+                                 
+                                                                   <% if (tab === "movies") { %> 
+
+     <div class="tabs tabs-center">
+            
+              
+                <a href="/" class="tab">Videos</a>
+                <a href="?tab=music" class="tab">Music</a>
+                <a href="?tab=gaming" class="tab">Gaming</a>
+                 <a href="" class="tab active">Movies</a>
+
+                       
 
             </div>    
            		 	               <% } %>   
 
           <hr style="clear: both;display: block;border: none;border-bottom: 0.5px solid #2f2f2f;margin: 0 0;/*! width: 4.5em; */height: 0;">      
-                               <% if (!tab) { %> 
-
+ 
     	<div class="video-grid">
-   <% k.Explore.Videos.ItemSection[2].Shelf.Items.Video.forEach(x =>  { %>
-			<a href="/watch?v=<%- x.id %>"  class="video">
-				<div class="thumbnail" style="background-image: url('https://p.poketube.fun/https://i.ytimg.com/vi/<%= x.id %>/hqdefault.jpg?sqp=-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLBy_x4UUHLNDZtJtH0PXeQGoRFTgw');border-top-left-radius: 16px;border-top-right-radius: 16px;"><span class="video-length"><%- x.duration %></span></div>
+   <% inv.forEach(x =>  { %>
+			<a href="/watch?v=<%- x.videoId %>"  class="video">
+				<div class="thumbnail" style="background-image: url('https://p.poketube.fun/https://i.ytimg.com/vi/<%= x.videoId %>/hqdefault.jpg?sqp=-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLBy_x4UUHLNDZtJtH0PXeQGoRFTgw');border-top-left-radius: 16px;border-top-right-radius: 16px;"><span class="video-length"><%- turntomins(x.lengthSeconds) %></span></div>
 				<div class="info">
-					<span class="title max-lines-2" title="<%- x.Title %>" style="font-family:Ginto Nord,sans-serif;"><%- x.Title %></span>
+					<span class="title max-lines-2" title="<%- x.Title %>" style="font-family:Ginto Nord,sans-serif;"><%- x.title %></span>
              </div>
  			</a>	
           
 
  		 	               <% }) %>   
                                    </div>
-                     		 	               <% } %>   
-                       <% if (tab) { %> 
-
-    	<div class="video-grid">
-   <% k.Explore.Videos.ItemSection[1].Shelf.Items.Video.forEach(x =>  { %>
-			<a href="/watch?v=<%- x.id %>"  class="video">
-				<div class="thumbnail" style="background-image: url('https://p.poketube.fun/https://i.ytimg.com/vi/<%= x.id %>/hqdefault.jpg?sqp=-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLBy_x4UUHLNDZtJtH0PXeQGoRFTgw');border-top-left-radius: 16px;border-top-right-radius: 16px;"><span class="video-length">PT <%- x.duration %></span></div>
-				<div class="info">
-					<span class="title max-lines-2" title="<%- x.Title %>" style="font-family:Ginto Nord,sans-serif;"><%- x.Title %></span>
-             </div>
- 			</a>	
-          
-
- 		 	               <% }) %>   
+                     		 	            
                                    </div>
-                     		 	               <% } %>   
-
+ 
                 
  
  

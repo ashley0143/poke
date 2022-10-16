@@ -662,7 +662,6 @@ app.get("/", async function (req, res) {
 
   const t = JSON.parse(invtrend);
 
-  console.log(invtrend);
   renderTemplate(res, req, "main.ejs", {
     k: k,
     tab: req.query.tab,

@@ -274,8 +274,18 @@
     
             
     <nav>
-      <div class="left"><a class="class" href="/143" style=font-family:Inter,sans-serif;color:#fff> <img style="transform: scale(1.3);padding-left:0.9em;width: 8.5em;display: block;margin-left: auto;margin-right: auto;" src="/css/logo.svg?v=5">         </a>             </div>                                    
-      <div class="middle">
+                  <div class=left>
+
+                  <% if (inv_vid.genre != "Music") { %> 
+
+              <a class="class" href="/143" style=font-family:Inter,sans-serif;color:#fff>  <img style="transform: scale(1.3);padding-left:0.9em;width: 8.5em;display: block;margin-left: auto;margin-right: auto;" src="/css/logo.svg?v=5"></a>
+                      		 	               <% } %>   
+     <% if (inv_vid.genre === "Music") { %> 
+
+              <a class="class" href="/143" style=font-family:Inter,sans-serif;color:#fff>  <img style="transform: scale(1.3);padding-left:0.9em;width: 7.5em;display: block;margin-left: auto;margin-right: auto;" src="/css/music.svg?v=5"></a>
+                      		 	               <% } %>   
+            </div>               
+       <div class="middle">
         <form action=/search><input class=search-bar autocomplete="on" id=fname name=query style="color:#fff;font-family:Inter,sans-serif;border-radius: 8px;">
           <button class="btn btn-success" type=submit><i class="fa-light fa-search"></i></button>
              
@@ -431,9 +441,9 @@
                                                                              <% if (video.Channel.Name.endsWith(' - Topic') || video.Title.endsWith('Audio)')) { %> 
                                                             
                             <% if (video.Channel.Name.endsWith(' - Topic') || video.Title.endsWith('Audio)'))  { %> 
-                                                 					<a title="open this song in poketube music!" style="color:#fff;text-decoration: none;" href="/music?v=<%=video.id%>">
+                                                 					<a title="open this song in poketube music player :3" style="color:#fff;text-decoration: none;" href="/music?v=<%=video.id%>">
           <i class="fa-light fa-music"></i>
-                  Open In Music
+                  Open In Music Player
                                                  </a>
 
                                                                        <% }%>                     
@@ -480,10 +490,11 @@
                  <% if (!video.Channel.Name.endsWith(' - Topic')) { %>  
                                                    <div>
                                                      <h5 style="font-family:ginto nord">
-                                                       Comments 
+                                                       Comments  
                                                      </h5>
+                                                     
                                             <p style="padding: 0;margin: 0;font-family: Inter;margin-bottom: 10px;">
-    Top Comments :3
+     Top Comments :3
   </p>              
                                                                                        <hr style="clear: both;display: block;border: none;border-bottom: 0.5px solid #2f2f2f;margin: 0 0;/*! width: 4.5em; */height: 0;">
                                                      
@@ -508,7 +519,7 @@
 
                                  <% inv.comments.forEach(x =>{ %>
  
-                                   <div>
+                                   <div class="<%- x.commentId %>">
 
        <div class="comment-list left-padding">
         <div class="single-comment justify-content-between d-flex">
@@ -519,20 +530,57 @@
 					<img src="https://p.poketube.fun/<%= x.authorThumbnails[1].url %>">
 				</a>
             </div>
+                                                          <%  if (!x.authorIsChannelOwner) { %> 
+
                 <p style="margin: 7px;font-family:inter;white-space: -moz-pre-wrap !important;white-space: -pre-wrap;white-space: -o-pre-wrap;white-space: pre-wrap;word-wrap: anywhere;white-space: -webkit-pre-wrap;word-break: break-all;white-space: normal;">
-                <%- x.author%>  </p></h5>
+                  				<a href="/channel?id=<%- x.authorId%>" style="color: #fff;text-decoration: none;" >
+
+                <%- x.author%> 
+                  </a>
+                            
+                                <%  if (x.verified) { %> 
+                                                              
+                                                                   <i class="icon ion ion-md-checkmark-circle"></i>
+                                                                                                <% } %>   
+
+                  
+                  </p>                                                                <% } %>   
+
+                                          <%  if (x.authorIsChannelOwner) { %> 
+                               <p style="margin: 5px;font-family:inter;white-space: -moz-pre-wrap !important;white-space: -pre-wrap;white-space: -o-pre-wrap;white-space: pre-wrap;word-wrap: anywhere;white-space: -webkit-pre-wrap;word-break: break-all;white-space: normal;background: #333;padding: 4px;border-radius: 6px;width: auto;height: 1.2em;justify-self: center; ">
+ 
+                  				<a href="/channel?id=<%- x.authorId%>" style="color: #fff;text-decoration: none;" >
+
+                                <%- x.author%> 
+                  </a>
+                                  
+                                                            <%  if (x.verified) { %> 
+                                                              
+                                                                   <i class="icon ion ion-md-checkmark-circle"></i>
+                                                                                                <% } %>   
+
+                  
+                  </p>
+                                                                                                <% } %>   
+
+              </h5>
               <p class="comment">
                 <%- x.contentHtml %>
                 <br> <br>
-                  <span><%- x.publishedText %> - <%- convert(x.likeCount) %> Likes</span>
+                  <span><%- x.publishedText %> - <%- convert(x.likeCount) %> Likes <%   if(x.creatorHeart) { %> 
+
+                <i class="icon ion-ios-heart creator-heart-small-container" title="<%= x.creatorHeart.creatorName%> marked it with a ❤ owo"></i>
+        </span>   
+  
+                                                                <% } %>   
               </p>
             </div>
           </div>
         </div>
       </div>
- 
-                                         </div>
-                                   
+                          
+                                               </div>
+
                                                                         <% }) %>   
 
                                    <% } %>   
@@ -789,6 +837,8 @@ From  <%=video.Channel.Name%> </span></a>
  <link href="https://p.poketube.fun/https://tube.kuylar.dev/css/mobile.css" rel=stylesheet>
  <link href=/css/app.main.css rel=stylesheet>
 <link href="https://p.poketube.fun/https://fonts.googleapis.com/css2?family=Inter:wght@900&family=Sigmar+One&display=swap" rel=stylesheet>
+    <link href=https://p.poketube.fun/https://unpkg.com/ionicons@4.5.10-0/dist/css/ionicons.css rel=stylesheet>
+
     <link href=https://p.poketube.fun/https://site-assets.fontawesome.com/releases/v6.1.1/css/all.css rel=stylesheet>
 <style>
    a.class:hover {
@@ -1636,7 +1686,7 @@ PokeTube Mobile v12.10.22a - Node <%=process.version%> - V8 v<%=process.versions
 <div id="commentss" style="display: contents;">
    <h3 style="font-family:'Ginto Nord';font-weight:900;white-space:yes"> Comments </h3>
   <p style="padding: 0;margin: 0;font-family: Inter;">
-    Top Comments
+    Top Comments :3
   </p>
 <hr style="clear: both;display: block;border: none;border-bottom: 0.5px solid #2f2f2f;/*! width: 4.5em; */height: 0;">
 
@@ -1672,13 +1722,50 @@ PokeTube Mobile v12.10.22a - Node <%=process.version%> - V8 v<%=process.versions
 					<img src="https://p.poketube.fun/<%= x.authorThumbnails[1].url %>" style="width: 45px;height: 45px;">
 				</a>
             </div>
-                <p style="margin: 7px;font-family:inter">
-                <%- x.author%>  </p></h5>
+                           <%  if (!x.authorIsChannelOwner) { %> 
+
+                <p style="margin: 7px;font-family:inter;white-space: -moz-pre-wrap !important;white-space: -pre-wrap;white-space: -o-pre-wrap;white-space: pre-wrap;word-wrap: anywhere;white-space: -webkit-pre-wrap;word-break: break-all;white-space: normal;">
+                  				<a href="/channel?id=<%- x.authorId%>" style="color: #fff;text-decoration: none;" >
+
+                <%- x.author%> 
+                  </a>
+                            
+                                <%  if (x.verified) { %> 
+                                                              
+                                                                   <i class="icon ion ion-md-checkmark-circle"></i>
+                                                                                                <% } %>   
+
+                  
+                  </p>                                                                <% } %>   
+
+                                          <%  if (x.authorIsChannelOwner) { %> 
+<p style="margin: 5px;font-family:inter;white-space: -moz-pre-wrap !important;white-space: -pre-wrap;white-space: -o-pre-wrap;white-space: pre-wrap;word-wrap: anywhere;white-space: -webkit-pre-wrap;word-break: break-all;white-space: normal;background: #333;padding: 3px;border-radius: 6px;width: auto;height: 1.4em;justify-self: center; ">
+  
+                  				<a href="/channel?id=<%- x.authorId%>" style="color: #fff;text-decoration: none;" >
+
+                                <%- x.author%> 
+                  </a>
+                                  
+                                                            <%  if (x.verified) { %> 
+                                                              
+                                                                   <i class="icon ion ion-md-checkmark-circle"></i>
+                                                                                                <% } %>   
+
+                  
+                  </p>
+                                                                                                <% } %>   
+
+              
+              </h5>
               <p class="comment">
                 <%- x.contentHtml %>
                 <br> <br>
-                  <span style="display: grid;grid-auto-columns: max-content;"><%- x.publishedText %> • <%- convert(x.likeCount) %> Likes</span>
-              </p>
+            <span style="display: grid;grid-auto-columns: max-content;"><%- x.publishedText %> - <%- convert(x.likeCount) %> Likes <%   if(x.creatorHeart) { %> 
+
+                <i class="icon ion-ios-heart creator-heart-small-container" title="<%= x.creatorHeart.creatorName%> marked it with a ❤ owo"></i>
+        </span>   
+  
+                                                                <% } %>                 </p>
             </div>
           </div>
         </div>
@@ -1884,7 +1971,7 @@ PokeTube Mobile v12.10.22a - Node <%=process.version%> - V8 v<%=process.versions
   navigator.share({
     title: document.title,
     text: "",
-    url: window.location.href + "&pk=m"
+    url: window.location.href + "&pw=m"
   })
   .then(() => console.log('Successful share'))
   .catch(error => console.log('Error sharing:', error));

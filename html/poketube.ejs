@@ -318,8 +318,6 @@
 <video class="player" id="<%=sha384(video.id)%>" style="border-radius: 16px;" autoplay controls   
        
        poster="https://p.poketube.fun/https://i.ytimg.com/vi/<%=video.id%>/maxresdefault.jpg?v=607ddcd4">
- 
-  
         
              
                   <% if (!qua) { %>  
@@ -333,9 +331,7 @@
                 <source src="https://vid.puffyan.us/latest_version?id=<%=video.id%>&itag=18&local=true" type="video/mp4; codecs=&quot;avc1.42001E, mp4a.40.2&quot;" label="medium" selected="false">
                                                                            <% } %>                
 
-            
-                
-            
+                        
     <% if (  video.Subtitles.Subtitle) { %>  
      <%  if (Array.isArray( video.Subtitles.Subtitle)) { %> 
    <% video.Subtitles.Subtitle.forEach(x => { %>
@@ -365,7 +361,7 @@
 				<div class="video-title" style="font-family:'Ginto Nord';font-weight:900;white-space:yes;"><%=video.Title%></div>
                   <p class="video-sub-info description" style="font-weight: bold;">
  
-                    <span><%=engagement.viewCount.toLocaleString()%> Views - Uploaded At <%=date%> - By <a href="/channel?id=<%=k.Video.Channel.id%>"><%-k.Video.Channel.Name%></a> ^^</span> 
+                    <span><%=engagement.viewCount.toLocaleString()%> Views - Uploaded At <%=date%> ^^</span> 
                       
                       <br><br>
                       </p>
@@ -409,9 +405,10 @@
                        </div>
  				</div>
                      
-                     
-      <div class="video-info-buttons" style="background:#1c1c1c;border-radius:16px;padding: 3px;border-style: none;min-height: 34px;height: min-content;">
-        
+                     <div>
+<div class="video-info-buttons" style="background:#1c1c1c;border-radius:16px;padding: 3px;border-style: none;min-height: 34px;height: min-content;width: fit-content;text-align: right;margin-left: auto;margin-right: -8px;justify-content: center;justify-items: center;justify-self: center;">
+  
+  
  					<div title="<%=engagement.likes.toLocaleString()%> Likes">
   <i class="fa-light fa-thumbs-up"></i>
      <%=convert(engagement.likes)%>
@@ -454,9 +451,8 @@
 
  
 				</div>
-			</div>
-           		<div class="channel-info__bordered" style="border-radius:10px;font-family:Inter" name="chnl">
-                            <a name="chnl"></a>
+<div class="channel-info__bordered" style="font-family:Inter;clear: both;margin-top: 18px;padding: 4.5px;background: #1a1a1a;margin-right: -8px;width: fit-content;height: fit-content;border-radius: 43px;font-size: 15px;margin-left: 25.5px;display: flex;" name="chnl">
+  <a name="chnl"></a>
 
 				<a href="/channel?id=<%=video.Channel.id%>" class="avatar">
 					<img src="https://p.poketube.fun/<%= k.Video.Channel.Avatar[1].$t %>">
@@ -477,19 +473,20 @@
               </div>
 
 				</div>
-				<div class="subscriber-count">
-          <%= k.Video.Channel.subscriberCount %>
- 				</div>
+	 
 				<button class="subscribe-button" ><a style="color:#fff" href="https://www.youtube.com/channel/<%=video.Channel.id%>?view_as=subscriber?sub_confirmation=1">Suscribe</a></button>
 			</div>
-                                        
+              			</div>
+                          
+			</div>
+
                <div style="display:none;">
                 
                              </div>
         
                  <% if (!video.Channel.Name.endsWith(' - Topic')) { %>  
-                                                   <div>
-                                                     <h5 style="font-family:ginto nord">
+<div style="background: #1a1a1a;border-radius: 30px;padding: 10px;padding-top: 0;margin: auto;margin-top: -20px;">
+                                                 <h5 style="font-family:ginto nord;margin-bottom: 11px;margin-top: 26px;padding-top: 10px;">
                                                        Comments  
                                                      </h5>
                                                      
@@ -514,18 +511,18 @@
                                                                                </p>
                               <% } %>
 
-                                                                                                    
+                                 <div class="comments">                                                                   
                         <%  if (Array.isArray( inv.comments)) { %> 
 
                                  <% inv.comments.forEach(x =>{ %>
  
-                                   <div class="<%- x.commentId %>">
+                                   <div class="<%- x.commentId %>" style="padding: 10px;">
 
-       <div class="comment-list left-padding">
-        <div class="single-comment justify-content-between d-flex">
+          <div class="comment-list left-padding" style="background: #333;padding-top: 1px;padding: 10px;border-radius: 30px;padding-top: 0;">
+        <div class="single-comment justify-content-between d-flex" style="padding-top: none;">
           <div class="user justify-content-between d-flex">
             <div class="desc">
-              <h5 style="display: flex;"><div class="thumb">
+                   <h5 style="display: flex;margin-top: 7px;padding-top: 10px;"><div class="thumb">
 				<a href="/channel?id=<%- x.authorId%>" class="avatar" style="width: 40px;height: 40px;">
 					<img src="https://p.poketube.fun/<%= x.authorThumbnails[1].url %>">
 				</a>
@@ -547,7 +544,7 @@
                   </p>                                                                <% } %>   
 
                                           <%  if (x.authorIsChannelOwner) { %> 
-                               <p style="margin: 5px;font-family:inter;white-space: -moz-pre-wrap !important;white-space: -pre-wrap;white-space: -o-pre-wrap;white-space: pre-wrap;word-wrap: anywhere;white-space: -webkit-pre-wrap;word-break: break-all;white-space: normal;background: #333;padding: 4px;border-radius: 6px;width: auto;height: 1.2em;justify-self: center; ">
+                               <p style="margin: 5px;font-family:inter;white-space: -moz-pre-wrap !important;white-space: -pre-wrap;white-space: -o-pre-wrap;white-space: pre-wrap;word-wrap: anywhere;white-space: -webkit-pre-wrap;word-break: break-all;white-space: normal;background: #4a4a4a;padding: 4px;border-radius: 6px;width: auto;height: 1.2em;justify-self: center; ">
  
                   				<a href="/channel?id=<%- x.authorId%>" style="color: #fff;text-decoration: none;" >
 
@@ -564,7 +561,7 @@
                                                                                                 <% } %>   
 
               </h5>
-              <p class="comment">
+              <p class="comment" style="font-weight: bold;">
                 <%- x.contentHtml %>
                 <br> <br>
                   <span><%- x.publishedText %> - <%- convert(x.likeCount) %> Likes <%   if(x.creatorHeart) { %> 
@@ -585,6 +582,7 @@
 
                                    <% } %>   
                                      
+          </div>
 
                                                                               </div>
 
@@ -1559,9 +1557,7 @@ padding: 3px;
 				<div class="name" style="font-family:'Ginto Nord'">
 		  <div>
 						<a style="color:#fff" href="/channel?id=<%=k.Video.Channel.id%>" >  <%=k.Video.Channel.Name%></a>   
-            
- 
-              </div>
+                          </div>
 				</div>
 		 
  			</div>
@@ -1584,6 +1580,7 @@ padding: 3px;
 
           </p>
   </div>
+           
              <div>
     <div style="text-align: center;font-size: x-large;margin: 9px;">
     	<p>
@@ -1598,8 +1595,18 @@ padding: 3px;
 
   
                                   <hr style="clear: both;display: block;border: none;border-bottom: 0.5px solid #2f2f2f;margin: 0 0;/*! width: 4.5em; */height: 0;"> 
+         <p class="description" style="padding: 10px;">
+     <% if (String(video.Description) != "[object Object]")  { %>
 
-            <p class="description" style="padding: 10px;"><%-String(video.Description).replace(/\n/g, " <br> ")%> </p>
+              <%-String(inv_vid.descriptionHtml).replace(/\n/g, " <br> ").replace(/twitter\.com/g, "nitter.net").replace(/reddit\.com/g, "teddit.net") %>
+                
+                          <% } %>          
+                            
+    <% if (String(video.Description) == "[object Object]")  { %>
+      <p> No Description On this Video ( sad innit :c )</p>
+                          <% } %>               
+                            
+ </p>
  <div style="margin: 10px;">
                     <div style="justify-content: center;display: flex;padding: 11px;font-family: Ginto nord;gap: 3px;background: #1f1f1f;border-top-left-radius: 10px;border-top-right-radius: 10px;">
 More from  <%=k.Video.Channel.Name%>

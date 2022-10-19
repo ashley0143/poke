@@ -451,7 +451,7 @@
 
  
 				</div>
-<div class="channel-info__bordered" style="font-family:Inter;clear: both;margin-top: 18px;padding: 4.5px;background: #1a1a1a;margin-right: -8px;width: fit-content;height: fit-content;border-radius: 43px;font-size: 15px;margin-left: 25.5px;display: flex;" name="chnl">
+<div class="channel-info__bordered" style="font-family:Inter;clear: both;margin-top: 18px;padding: 4.5px;background: #1a1a1a;margin-right: -13px;width: fit-content;height: fit-content;border-radius: 43px;font-size: 15px;margin-left: 5em;display: flex;border: none;" name="chnl">
   <a name="chnl"></a>
 
 				<a href="/channel?id=<%=video.Channel.id%>" class="avatar">
@@ -474,18 +474,19 @@
 
 				</div>
 	 
-				<button class="subscribe-button" ><a style="color:#fff" href="https://www.youtube.com/channel/<%=video.Channel.id%>?view_as=subscriber?sub_confirmation=1">Suscribe</a></button>
+				<button class="subscribe-button" style="color: red;margin: auto;background: #333;border-radius: 15px;"><a style="color:hotpink;" href="https://www.youtube.com/channel/<%=video.Channel.id%>?view_as=subscriber?sub_confirmation=1">Suscribe</a></button>
 			</div>
               			</div>
                           
 			</div>
+                                                                                               <hr style="clear: both;display: block;border: none;border-bottom: 0.5px solid #2f2f2f;margin: 0 100px;/*! width: 4.5em; */height: 0;">
 
                <div style="display:none;">
                 
                              </div>
-        
+
                  <% if (!video.Channel.Name.endsWith(' - Topic')) { %>  
-<div style="background: #1a1a1a;border-radius: 30px;padding: 10px;padding-top: 0;margin: auto;margin-top: -20px;">
+<div style="background: #1a1a1a;border-radius: 30px;padding: 10px;padding-top: 0;margin: auto">
                                                  <h5 style="font-family:ginto nord;margin-bottom: 11px;margin-top: 26px;padding-top: 10px;">
                                                        Comments  
                                                      </h5>

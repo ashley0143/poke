@@ -323,12 +323,14 @@
                   <% if (!qua) { %>  
 
 
-                            <source src="https://vid.puffyan.us/latest_version?id=<%=video.id%>&itag=22&local=true" type="video/mp4; codecs=&quot;avc1.64001F, mp4a.40.2&quot;" label="hd720" selected="false">
+                     
+                                                <source src="https://tube.kuylar.dev/proxy/media/<%=video.id%>/22" type="video/mp4; codecs=&quot;avc1.64001F, mp4a.40.2&quot;" label="hd720" selected="false">
+
                                                                              <% } %>                
 
       <% if (qua === "medium") { %>  
 
-                <source src="https://vid.puffyan.us/latest_version?id=<%=video.id%>&itag=18&local=true" type="video/mp4; codecs=&quot;avc1.42001E, mp4a.40.2&quot;" label="medium" selected="false">
+                                                <source src="https://tube.kuylar.dev/proxy/media/<%=video.id%>/18" type="video/mp4; codecs=&quot;avc1.64001F, mp4a.40.2&quot;" label="hd720" selected="false">
         
                                                                            <% } %>                
 
@@ -461,7 +463,8 @@
 				<div class="name" >
  
          <div style="font-family:'Ginto Nord'">
-						<a style="color:#fff" href="/channel?id=<%=k.Video.Channel.id%>" >  <%=k.Video.Channel.Name%></a>   
+						<a title="<%=k.Video.Channel.Name%> " style="color:#fff;word-wrap: break-word;overflow: hidden;text-overflow: ellipsis;display: -webkit-box;-webkit-line-clamp: 3;line-clamp: 3;-webkit-box-orient: vertical;display: block ruby;" href="/channel?id=<%=k.Video.Channel.id%>" >  <%=k.Video.Channel.Name%> 
+              </a>   
             
               <% if (!video.Channel.Name.endsWith(' - Topic')) { %>  
                <% if (badges) { %> 

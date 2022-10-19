@@ -329,6 +329,7 @@
       <% if (qua === "medium") { %>  
 
                 <source src="https://vid.puffyan.us/latest_version?id=<%=video.id%>&itag=18&local=true" type="video/mp4; codecs=&quot;avc1.42001E, mp4a.40.2&quot;" label="medium" selected="false">
+        
                                                                            <% } %>                
 
                         
@@ -451,15 +452,15 @@
 
  
 				</div>
-<div class="channel-info__bordered" style="font-family:Inter;clear: both;margin-top: 18px;padding: 4.5px;background: #1a1a1a;margin-right: -13px;width: fit-content;height: fit-content;border-radius: 43px;font-size: 15px;margin-left: 5em;display: flex;border: none;" name="chnl">
+<div class="channel-info__bordered" style="font-family:Inter;clear: both;margin-top: 18px;padding: 4.5px;background: #1c1c1c;margin-right: -13px;width: fit-content;height: fit-content;border-radius: 43px;font-size: 15px;margin-left: 5.5em;display: flex;border: none;" name="chnl">
   <a name="chnl"></a>
 
 				<a href="/channel?id=<%=video.Channel.id%>" class="avatar">
 					<img src="https://p.poketube.fun/<%= k.Video.Channel.Avatar[1].$t %>">
 				</a>
-				<div class="name" style="font-family:'Ginto Nord'">
+				<div class="name" >
  
-         <div>
+         <div style="font-family:'Ginto Nord'">
 						<a style="color:#fff" href="/channel?id=<%=k.Video.Channel.id%>" >  <%=k.Video.Channel.Name%></a>   
             
               <% if (!video.Channel.Name.endsWith(' - Topic')) { %>  
@@ -470,11 +471,18 @@
 <i class="fa-solid fa-music-note" title="<%=badges.tooltip%>"></i>  
              <% } %>             <% } %>  <% } %> 
 
+               
               </div>
+               
+                              
+<div class="subscriber-count" style="word-wrap: initial;word-break: break-all;display: block ruby;">
+          <%= k.Video.Channel.subscriberCount.replace("subscribers", "Subs") %>
+ 				</div>
+               
 
 				</div>
 	 
-				<button class="subscribe-button" style="color: red;margin: auto;background: #333;border-radius: 15px;"><a style="color:hotpink;" href="https://www.youtube.com/channel/<%=video.Channel.id%>?view_as=subscriber?sub_confirmation=1">Suscribe</a></button>
+				<button class="subscribe-button" style="color: red;margin: auto;background: #333;border-radius: 18px;"><a style="color:hotpink;" href="https://www.youtube.com/channel/<%=video.Channel.id%>?view_as=subscriber?sub_confirmation=1">Suscribe</a></button>
 			</div>
               			</div>
                           

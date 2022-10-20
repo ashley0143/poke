@@ -431,10 +431,15 @@ app.get("/search", async (req, res) => {
     return res.redirect("/");
   }
 
+  const summary = await wiki
+    .summary(query + "")
+    .then((summary_) => (summary_.title !== "Not found." ? summary_ : "none"));
+
   renderTemplate(res, req, "search.ejs", {
     j,
     continuation,
     q: query,
+    summary
   });
 });
 

@@ -180,6 +180,27 @@ video[counter].classList.add("shake");
                      </center>
 <hr style="clear: both;display: block;border: none;border-bottom: 0.5px solid #2f2f2f;margin: 0 16em;/*! width: 4.5em; */height: 0;">
               
+                                 <% if (summary.extract_html) { %> 
+<div style="white-space: -moz-pre-wrap !important;white-space: -pre-wrap;white-space: -o-pre-wrap;white-space: pre-wrap;word-wrap: break-word;white-space: -webkit-pre-wrap;word-break: break-all;white-space: normal;padding: ;background: #1c1c1c;padding: 10px;border-radius: 10px;margin-left: 15.6em;margin-right: 15em;margin-top: 10px;">
+                                     
+<div class="video-title" style="color:#fff;font-family:Ginto Nord,sans-serif;font-weight:700;margin-top: 10px;margin-bottom: 10px;">From da web</div>
+                     
+<hr style="clear: both;display: block;border: none;border-bottom: 0.5px solid #2f2f2f;/*! width: 4.5em; */height: 0;">
+
+  <%-summary.extract_html%>
+   
+<p style="margin-bottom: 10px;">
+
+  <a href=" <%-summary.content_urls.desktop.page%>
+ ">From wikipedia </a> under CC-BY-SA 3.0
+                     </p>
+ 
+                 
+                     </p>
+                                                                        </div>
+
+                     <% } %>  
+              
        <% j.Search.Results.Video.forEach(x => { %>
          <div class="video-list" >
            

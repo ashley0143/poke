@@ -18,6 +18,7 @@
 -->
 <!DOCTYPE html>
 <head>
+<head>
 <title>Searching <%=q%> - PokeTube</title>
   <link href=/css/yt-ukraine.svg?v=6 rel=icon>
    <link href="https://fonts.poketube.fun/css/fonts.css" rel=stylesheet>
@@ -29,7 +30,6 @@
   <meta content="Searching <%=q%> - PokeTube" property=og:title>
        <% if (q == "do the harlem shake") { %>  
              <meta content="DO THE HARLEM SHAKE" property=twitter:description>
-
    <% } %> 
    <% if (q != "do the harlem shake") { %>  
          <meta content="Ur Searching <%=q%> on PokeTube! it has total of <%=j.Search.estimatedResults.toLocaleString()%> Results holy crap thats alot" property=twitter:description>
@@ -51,49 +51,22 @@ summary:hover{
     color:red;
 }
   * {
-    color:#fff
-  }
-            @font-face {
-        font-family: 'Ginto Nord';
-        font-weight: 800;
-        src:url('https://p.poketube.fun/https://cdn.statically.io/gh/brecert/discord-quote-generator/main/Ginto-Nord-800.woff') format("woff");
-      }
+    color:#fff;
+   }
+      nav {
+        background:#111111
+    }
  
-</style>    <link href=https://p.poketube.fun/https://site-assets.fontawesome.com/releases/v6.1.1/css/all.css rel=stylesheet>
+</style>    
+
+  <link href=https://p.poketube.fun/https://site-assets.fontawesome.com/releases/v6.1.1/css/all.css rel=stylesheet>
 
   <style>
     
-    nav {
-      background:none
-    }
-    
-  nav .right {
- display: flex;
-border-radius: 5px;
-justify-content: normal;
-padding-left: 0px;
-align-items: center;
-margin-left: 10px;
-}
-    
-    nav .left {
-    display: flex;
-justify-content: flex-start;
-align-items: center;
-border-radius: 5px;
- padding-left: 0px;
-margin-right: 40px;
-    }
-    
-    nav .middle {
-      display: flex;
- justify-content: center;
-align-items: center;
-border-radius: 5px;
-    }
+ 
        
    .app{
-     background-image:url("/css/head.svg");
+    /* background-image:url("/css/head.svg"); */
     background-size: cover;
   background-repeat: no-repeat;
    }
@@ -120,25 +93,35 @@ border-radius: 5px;
      width: 673px;
      margin: auto;
    }
+    
+        @font-face {
+        font-family: 'Ginto Nord';
+        font-weight: 800;
+        src:url('https://p.poketube.fun/https://cdn.statically.io/gh/brecert/discord-quote-generator/main/Ginto-Nord-800.woff') format("woff");
+      }
+    
+    .video-list > .video {
+    background: #1c1c1c;
+padding: 10px;
+border-radius: 10px;
+    }
   </style>
  </head>
 
   <body>
-     <center>
   
  
         <div class="app">
    
     <nav>
-<div class="left" style="padding-left: 9px;">
+             <div class=left>
 
-     <% if (q == "do the harlem shake") { %>  
+  <% if (q == "do the harlem shake") { %>  
               <a class="shake" href="/143" style=font-family:Inter,sans-serif;color:#fff>  <img style="transform: scale(1.3);width:8.5em;display: block;margin-left: auto;margin-right: auto;" src="/css/logo.svg?v=5"></a>
                <audio class="player" autoplay loop controls src="https://p.poketube.fun/https://tube.kuylar.dev/proxy/media/8vJiSSAMNWw/18?e=ca0ac04022e782540e1f2fe4d6c2994949f33184ccc07568b4b1d7c93dfebd28119cb7b9e8b5db12039ba553ed861736ca0ac04022e782540e1f2fe4d6c2994949f33184ccc07568b4b1d7c93dfebd28119cb7b9e8b5db12039ba553ed861736Piwikd74c7f459daf669799074a22bcf7d79bb66e03dbd9899a2089e0bee8ed383f0c3b928c4477a42208cbd69a77549e3451
 " style="display:none;"> 
         <script>
              // @license magnet:?xt=urn:btih:1f739d935676111cfff4b4693e3816e664797050&dn=gpl-3.0.txt GPL-3.0-or-later
-
                    setTimeout(function () {
                       const video = document.getElementsByClassName("video")
                       for(var counter = 0; counter < video.length; counter++){
@@ -146,15 +129,27 @@ video[counter].classList.add("shake");
 }
                    }, 13700)
                // @license-end
-
                                      </script>
-            </div>             
    <% } %> 
 
      <% if (q != "do the harlem shake") { %>  
               <a class="class" href="/143" style=font-family:Inter,sans-serif;color:#fff>  <img style="transform: scale(1.3);width:8.5em;display: block;margin-left: auto;margin-right: auto;" src="/css/logo.svg?v=5"></a>
-            </div>             
    <% } %> 
+            </div>          
+
+  
+        <div class="middle">
+<div class="search">
+  
+        <form action=/search><input class=search-bar autocomplete="on"  value="<%=q%>" id=fname name=query style="color:#fff;font-family:Inter,sans-serif;border-radius: 8px;">
+          <button class="btn btn-success" type=submit><i class="fa-light fa-search"></i></button>
+             
+         </form>
+          <img src="https://search-metrics.poketube.fun/t/rep.gif"  style="border:0;width: 0;visibility: hidden;"> 
+
+      </div>          </div>
+
+     
             <div class=right>
               <a href="/domains"><i  style="display: block;margin-left: auto;margin-right: auto;" class="fa-light fa-server"></i>  </a>
               <a href="/privacy"><i class="fa-light fa-shield"></i></a>
@@ -162,38 +157,29 @@ video[counter].classList.add("shake");
               <a href="https://github.com/iamashley0/poketube/issues"><i class="fa-light fa-bug"></i></a>
             </div>
      
-      </nav><br>
+      </nav>
   
- 
   
-  <div class="discover-some-bitches">
-             <div class="video-title" style="font-family:'Ginto nord';font-weight:900;white-space:yes;font-size: xxx-large;">SEARCHING VIDEOS ON POKETUBE</div>
- 				<div class="video-info-bar" style="font-family:'Ginto nord';border-bottom:none;padding:0;font-size: small;">
-          Wow ur searching videos?? how
-   </div>
    </div>
       
-        <div class=search>
 
-        <form action=/search>
-   <input class="search-bar" autocomplete="on" id="fname" name="query" value="<%=q%>" placeholder="search some videos lol "style="color:#fff;font-family:Inter,sans-serif;border-radius: 8px;">
-
-
-          <button class="btn btn-success" type=submit><i class="fa-light fa-search"></i></button></form>
-      </div>
-                       <br>             <br>
-             <br>             <br>
-             <br>            <br style="display: none;">          
-           
+    
        </div>
   <div class="channel-page"   style="background-color: var(--channel-contents-background);">   
 
             <%  if (Array.isArray( j.Search.Results.Video)) { %> 
-              
-<p style="font-family: Inter;">
-  <%=j.Search.estimatedResults.toLocaleString()%> Results
+                   <center>
+
+<p style="font-family: Inter;text-align: left;margin-left: 16em;">
+  <%=j.Search.estimatedResults.toLocaleString()%> Results (estimated)
+         <p style="text-align: left;margin-left: 16em;">
+    <a  href="/search?query=<%=q%>&continuation=<%=j.Search.continuation%>">Next Page</a>              </p>
+
               </p>
-     
+  
+                     </center>
+<hr style="clear: both;display: block;border: none;border-bottom: 0.5px solid #2f2f2f;margin: 0 16em;/*! width: 4.5em; */height: 0;">
+              
        <% j.Search.Results.Video.forEach(x => { %>
          <div class="video-list" >
            
@@ -201,7 +187,7 @@ video[counter].classList.add("shake");
       <a
         href="/watch?v=<%= x.id %>"
         class="thumbnail"
-        style="background-image: url('https://p.poketube.fun/https://i.ytimg.com/vi/<%= x.id %>/hqdefault.jpg?sqp=-oaymwEXCNAFEJQDSFryq4qpAwkIARUAAIhCGAE=&amp;rs=AOn4CLBmAOZV7CM3NdDKlEFxGX7PpI5UWQ');border-radius: 20px;"
+        style="background-image: url('https://p.poketube.fun/https://i.ytimg.com/vi/<%= x.id %>/hqdefault.jpg?sqp=-oaymwEXCNAFEJQDSFryq4qpAwkIARUAAIhCGAE=&amp;rs=AOn4CLBmAOZV7CM3NdDKlEFxGX7PpI5UWQ');border-radius: 10px;"
          ><span class="video-length"><%=x.duration %></span></a>
       <div class="info" style="color:#fff;text-align: left;">
         <a style="color:#fff;font-family: 'Ginto Nord'" href="/watch?v=<%= x.id %>" class="title max-lines-2"
@@ -217,9 +203,27 @@ video[counter].classList.add("shake");
                                 </div>
 
                 <% }) %>   
-                  
-<a style="background-color: #353030;width: fit-content;border-radius: 3px;padding: 4px;" href="/search?query=<%=q%>&continuation=<%=j.Search.continuation%>">Next Page</a>
+                  <center><hr style="clear: both;display: block;border: none;border-bottom: 0.5px solid #2f2f2f;margin: 0 16em;/*! width: 4.5em; */height: 0;">
+<div style="border-top: 1px solid var(--border-color);width: 100%;display: flex;gap: 43em;padding: 0;margin: 0;">
           
+            <%  if (continuation) { %>
+              
+<p style="text-align: left;margin-left: 16em;color: var(--text-secondary);text-decoration: none;">
+    <a  href="/search?query=<%=q%>">First Page</a>              </p>
+              <p style="text-align: left;;color: var(--text-secondary);text-decoration: none;">
+    <a  href="/search?query=<%=q%>&continuation=<%=j.Search.continuation%>">Next Page</a>     
+              </p>
+                                                <% } %>  
+                            <%  if (!continuation) { %>
+               <p style="text-align: left;margin-left: 16em;;color: var(--text-secondary);text-decoration: none;">
+    <a  href="/search?query=<%=q%>&continuation=<%=j.Search.continuation%>">Next Page</a>      
+                               </p>
+
+                                                <% } %>  
+             
+                    </div>
+
+                  </center>
       
                                   <% } %>   
             <%  if (!Array.isArray( j.Search.Results.Video)) { %>

@@ -432,7 +432,8 @@ app.get("/search", async (req, res) => {
   }
 
   renderTemplate(res, req, "search.ejs", {
-    j: j,
+    j,
+    continuation,
     q: query,
   });
 });

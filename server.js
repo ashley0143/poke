@@ -202,11 +202,6 @@ app.get("/watch", async function (req, res) {
 
     if (!data.comments) inv_comments = "Disabled";
 
-    if (api.video(v).b) {
-      var nnn = data.beta;
-      var badges = nnn.channel.badges[0];
-      var comments = nnn.commentCount;
-    }
 
     if (!api.video(v).b) {
       var nnn = "";

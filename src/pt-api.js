@@ -1,4 +1,4 @@
- /*
+/*
 
     PokeTube is a Free/Libre youtube front-end !
     
@@ -86,7 +86,8 @@ async function video(v) {
   );
 
   var comments = await JSON.parse(inv_comments);
-
+  
+  
   var video_new_info = await fetch(`${config.invapi}/videos/${v}`).then((res) =>
     res.text()
   );
@@ -106,7 +107,7 @@ async function video(v) {
     .then((xml) => JSON.parse(toJson(xml)));
 
   const summary = await wiki
-    .summary(video.Video.Channel.Name)
+    .summary(video.Video.Channel.Name + " ")
     .then((summary_) => (summary_.title !== "Not found." ? summary_ : "none"));
 
   const data = await fetcher(v);
@@ -125,15 +126,7 @@ async function video(v) {
     color: await getColors(
       `https://i.ytimg.com/vi/${v}/maxresdefault.jpg`
     ).then((colors) => colors[0].hex()),
-    b: nightlyJsonData !== null,
-    ...(nightlyJsonData !== null
-      ? {
-          beta: nightlyJsonData,
-          badges: nightlyJsonData.channel.badges[0],
-          comments: nightlyJsonData.commentCount,
-        }
-      : {}),
-  };
+    };
 }
 
 async function search(query, cnt) {

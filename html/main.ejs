@@ -159,13 +159,25 @@ summary:hover{
         font-weight: 800;
         src:url('https://p.poketube.fun/https://cdn.statically.io/gh/brecert/discord-quote-generator/main/Ginto-Nord-800.woff') format("woff");
       }
+
     .video > .info {
   grid-area: info;
   font-size: small;
-  padding: 1px;
   margin-left: 2px;
+  height: auto;
+  width: fit-content;
+  text-align: left;
+  margin-top: -9px;
+  padding: 2px;
+    }
+    
+    .video > .info > .title {
+  color: var(--text-primary) !important;
+  font-weight: bold;
+  font-size: initial;
+  margin-bottom: 0px;
 }
-
+    
 .alert {
   padding: 20px;
   background-color: #f44336;
@@ -469,11 +481,16 @@ background-size: cover;
 				<div class="thumbnail" style="background-image: url('https://p.poketube.fun/https://i.ytimg.com/vi/<%= x.videoId %>/hqdefault.jpg?sqp=-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLBy_x4UUHLNDZtJtH0PXeQGoRFTgw');border-top-left-radius: 16px;border-top-right-radius: 16px;"><span class="video-length"><%- turntomins(x.lengthSeconds) %></span></div>
 				<div class="info">
 					<span class="title max-lines-2" title="<%- x.title %>" style="font-family:Ginto Nord,sans-serif;"><%- x.title %></span>
+            					<span class="title max-lines-2" title="Video By <%- x.author %>" style="margin-top:1px">By <%- x.author %></span>
+
              </div>
+
  			</a>	
           
 
  		 	               <% }) %>   
+                       
+                       
                                    </div>
                      		 	            
                                    </div>

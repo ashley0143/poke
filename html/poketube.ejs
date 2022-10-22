@@ -506,25 +506,17 @@
      Top Comments :3
   </p>              
                                                                                        <hr style="clear: both;display: block;border: none;border-bottom: 0.5px solid #2f2f2f;margin: 0 0;/*! width: 4.5em; */height: 0;">
-                                                     
-                                                                                                                                  <%  if (inv != "Disabled") { %> 
-
-                                                                             <%  if (!Array.isArray( inv.comments)) { %> 
-                                                                               <p>
-                                                                                 Comments couldnt load ;-; (<a href="https://codeberg.org/Ashley/poketube/issues/new">Report dis issue</a> or refresh the god damn page lol)
-                                                                               </p>
-                             <% } %>
-                             <% } %>
-
-                                                                                                                                          <%  if (inv == "Disabled") { %> 
+                                                      
+ 
+                                                                                                                                          <%  if (!inv.comments) { %> 
 
                                                                                 <p>
-                                                                                  Comments are disabled
+                                                                               There was a error while parsing the comments :c <a href="/watch?v=<%= video.id %>">Refresh the page</a> or report this issue at codeberg
                                                                                </p>
                               <% } %>
 
                                  <div class="comments">                                                                   
-                        <%  if (Array.isArray( inv.comments)) { %> 
+                                                                                                                                           <%  if (inv.comments) { %> 
 
                                  <% inv.comments.forEach(x =>{ %>
  
@@ -567,10 +559,10 @@
                                                               
                                                                    <i class="icon ion ion-md-checkmark-circle"></i>
                                                                                                 <% } %>   
+                                                                                                <% } %>   
 
                   
                   </p>
-                                                                                                <% } %>   
 
               </h5>
               <p class="comment" style="font-weight: bold;">
@@ -592,8 +584,8 @@
 
                                                                         <% }) %>   
 
-                                   <% } %>   
-                                     
+                                                                    <% } %>
+
           </div>
 
                                                                               </div>

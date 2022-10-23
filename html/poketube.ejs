@@ -1533,17 +1533,22 @@ padding: 3px;
  
   
         
-             
+                
                   <% if (!qua) { %>  
 
 
-                            <source src="https://vid.puffyan.us/latest_version?id=<%=video.id%>&itag=22&local=true" type="video/mp4; codecs=&quot;avc1.64001F, mp4a.40.2&quot;" label="hd720" selected="false">
+                     
+                                                <source src="https://tube.kuylar.dev/proxy/media/<%=video.id%>/22" type="video/mp4; codecs=&quot;avc1.64001F, mp4a.40.2&quot;" label="hd720" selected="false">
+
                                                                              <% } %>                
 
       <% if (qua === "medium") { %>  
 
-                <source src="https://vid.puffyan.us/latest_version?id=<%=video.id%>&itag=18&local=true" type="video/mp4; codecs=&quot;avc1.42001E, mp4a.40.2&quot;" label="medium" selected="false">
+                                                <source src="https://tube.kuylar.dev/proxy/media/<%=video.id%>/18" type="video/mp4; codecs=&quot;avc1.64001F, mp4a.40.2&quot;" label="hd720" selected="false">
+        
                                                                            <% } %>                
+
+                                      
 
             
                 
@@ -1936,7 +1941,7 @@ More Epic options owo~
               </h5>
               <p class="comment" style="font-weight: bold;">
                 <%- x.contentHtml %>
-                  <span><%- x.publishedText %> - <%- convert(x.likeCount) %> Likes <%   if(x.creatorHeart) { %> 
+                 <span style="display: block ruby;"><%- x.publishedText %> - <%- convert(x.likeCount) %> Likes <%   if(x.creatorHeart) { %> 
 
                 <i class="icon ion-ios-heart creator-heart-small-container" title="<%= x.creatorHeart.creatorName%> marked it with a ❤ owo"></i>
         </span>   
@@ -1968,18 +1973,41 @@ More Epic options owo~
                    
                            <div>
  
-                             
-                   <div class="video-title" style="font-family:'Ginto Nord';font-weight:900;white-space:yes;margin-top: 10px;">Comments    </div> 
-            <p>
-      View The comments on dis video :3
-              <a id="language-button" href="#comments-container" style="float: right;" class="switch">
-<i class="fa-thin fa-chevron-down"></i>
-</a>
-                             </p>
+                                                     <%  if (Array.isArray( inv.comments)) { %> 
 
+                   <div class="video-title" style="font-family:'Ginto Nord';font-weight:900;white-space:yes;margin-top: 10px;">Comments
+                    <a id="language-button" href="#comments-container" style="float: right;" class="switch">
+<i class="fa-thin fa-chevron-down"></i>
+</a> 
+                                                       </div> 
+           
+                             
+                                   <div class="<%- inv.comments[0].id %>" >
+
+<div class="desc" style="display: flex;font-size: small;padding: 0;margin: -8px;">
+                   <h5 style="display: flex;margin-top: 7px;padding-top: 10px;"><div class="thumb">
+				<a href="/channel?id=<%-  inv.comments[0].authorId%>" class="avatar" style="width: 40px;height: 40px;margin: 4px;">
+					<img src="https://p.poketube.fun/<%=  inv.comments[0].authorThumbnails[1].url %>" style="width: 24px;height: 24px;margin-right: inherit;"  >
+                     </a>
+            </div>
+                      
+                           
+
+              </h5>
+              <p class="comment" style="font-weight: bold;color: #fff; word-wrap: break-word; overflow: hidden; text-overflow: ellipsis; display: -webkit-box;  -webkit-line-clamp: 2; line-clamp: 2; -webkit-box-orient: vertical; text-overflow: ellipsis;  max-width: 50em;align-self:center;">
+                <%-  inv.comments[0].contentHtml %>  
+               </p>
+            </div>
+    
+      </div>
+                          
+
+ 
  
                                  <hr style="clear: both;display: block;border: none;border-bottom: 0.5px solid #2f2f2f;margin: 0 0;/*! width: 4.5em; */height: 0;"> 
                </div>
+                                                                                              <% } %>   
+       
                  
  	</div> 	</div>
 

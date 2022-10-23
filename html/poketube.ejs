@@ -1426,6 +1426,98 @@ padding: 3px;
     white-space: normal;
   }
   </style>
+  
+  <style>
+    #more-button-container .backtotop {
+  margin: 0%;
+  display: none;
+}
+#more-button-container .backtotop a {
+   margin-top: .5em;
+}
+#more-button .close { display: none; }
+#more-button {
+font-size: .94em;
+line-height: 1.2em;
+text-align: left;
+padding: .6em 3%;
+margin: 0;
+background: #000;
+border-top: none;
+border-radius: 23px;
+height: 100%;
+}
+#set-language { margin-bottom: .2em; }
+#set-language + p { 
+   display: inline-block;
+   font-size: 1em;  /* 15px */
+   margin: .45em 0 0;
+}
+
+#more-buttons { padding: .4em 0; }
+#more-buttons p {margin: 0;
+font-weight: 900;
+font-stretch: ultra-expanded;
+padding: 3px;
+    }
+#more-buttons span {
+   display: inline-block;
+   width: 10.5em;
+   line-height: 2em;
+}
+#more-buttons span a {
+   line-height: 1.9em;
+}
+#more-buttons span.original { font-weight: bold; }
+/* Display/hide language list */
+
+   #more-button-container { display: none; }
+   #more-button-container:target { display: block; }
+    
+     #rec-cont:target { display: none; }
+   #rec-cont { display: block; }
+
+   .backtotop b { display: none; }
+
+   body { position: relative; }
+   #more-button-container {
+      position: absolute;
+ margin-top: -12.4em;
+     left: 0;
+      width: 100%;
+      height: 100%;
+   }
+   #language-container .backtotop a {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background: transparent;
+      border: none;
+      margin-top: 0;
+   }
+   #more-button .close {
+      float: right;
+      display: block;
+   }
+   #more-button.close span {
+      display: none;
+   }
+   #more-button .close:after {
+      content: "\2A09";
+      float: right;
+      position: relative; bottom: .1em;
+      cursor: pointer;
+   }
+  
+   #more-buttons {
+      column-width: 10em;
+      column-count: 3;
+      column-gap: 0;
+   }
+   #more-buttons span { display: block; }
+   #more-buttons span a { display: inline-block; }
+</style>
+  
   <style>body, html { margin: 0; padding: 0; } * { font-family: sans-serif; color:#fff } .player { background-color: #000 !important; display: grid; grid-template-columns: 1fr min-content; grid-template-rows: max-content 1fr max-content max-content max-content; gap: 0 0; width: 100%; /* height: 100%; */ aspect-ratio: 16 / 9; } .player * { color: #fff; } .player.embed, video.embed { position: fixed; top: 0; bottom: 0; left: 0; right: 0; } .player * { -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none; } .player > video { position: relative; width: 100%; height: 100%; z-index: 0; grid-area: 1 / 1 / 6 / 3; } .player.hide-controls > .player-title, .player.hide-controls > .player-controls, .player.hide-controls > .player-playback-bar-container, .player.hide-controls > .player-menu { display: none !important; } .player-controls { background-color: #0007; display: flex; justify-content: center; align-items: center; z-index: 1; grid-area: 1 / 1 / 6 / 3; } .player-button { width: 96px; height: 96px; font-size: 90px; text-align: center; line-height: 48px; } .player-tiny-button { width: 40px; font-size: 20px; text-align: center; } .player-tiny-button > i { color: #ddd; } .player-button, .player-button * { color: #dddddd !important; text-decoration: none; } .player-button > i { min-width: 48px; } .player-button:hover, .player-button:hover * { color: #fff !important; } .player-playback-bar { transition: width linear 100ms; } .player-playback-bar-container { grid-area: 4 / 1 / 5 / 3; display: flex; column-gap: 8px; justify-content: center; align-items: center; height: 8px; transition: height linear 100ms; width: 100%; z-index: 2; margin-bottom: 10px; } .player-playback-bar-bg { background-color: #fff3 !important; width: 100%; height: 100%; z-index: 2; display: grid; grid-template-columns: 1fr; grid-template-rows: 1fr; } .player-playback-bar-bg > * { grid-area: 1 / 1 / 2 / 2; } .player-playback-bar-buffer { background-color: #fffa !important; height: 100%; width: 0; z-index: 3; } .player-playback-bar-fg { background-color: #f00 !important; height: 100%; width: 0; z-index: 4; } .player-buffering { grid-area: 1 / 1 / 6 / 3; z-index: 1; display: flex; justify-content: center; align-items: center; } .player-buffering-spinner { width: 80px; height: 80px; }</style>
   <body>
 <div class="app" style="color:#fff;margin-top: 0;">
@@ -1502,7 +1594,7 @@ padding: 3px;
             <i style="font-size:x-large" class="fa-light fa-share"></i>
             Share
 					</a>
- 	<a style="color:#fff" href="#more"> <i style="font-size:x-large;color:#fff" class="fa-thin fa-circle-plus"></i>More.. </a>
+ 	<a style="color:#fff" href="#more-button-container"> <i style="font-size:x-large;color:#fff" class="fa-thin fa-circle-plus"></i>More.. </a>
             </div>
 				</div>
 					<div class="channel-info" name="chnl">
@@ -1542,15 +1634,16 @@ padding: 3px;
   <a href="#top"><b>&#9650;</b></a>
  </div>
  <div id="desc" class="rounded-corners">
-  <div class="button">
-   <a href="#top" class="close"></a>
-  </div>
+<hr style="clear: both;display: block;border: none;border-bottom: 0.5px solid #2f2f2f;margin: 0 11em;/*! width: 4.5em; */height: 0;"><hr style="clear: both;display: block;border: none;border-bottom: 0.5px solid #2f2f2f;margin: 0 11em;/*! width: 4.5em; */height: 0;">
+
   <div id="set-language" class="button">
 
    </a>
   </div>
 <div id="descs" style="display: contents;">
-  <h3 style="font-family:'Ginto Nord';font-weight:900;white-space:yes"> Description </h3>
+  <h3 style="font-family:'Ginto Nord';font-weight:900;white-space:yes"> Description  
+   <a href="#top" class="close" style="color: #fff;"></a>
+  </h3>
 <hr style="clear: both;display: block;border: none;border-bottom: 0.5px solid #2f2f2f;/*! width: 4.5em; */height: 0;">
 
          <div class="video-title" style="font-family:'Inter';font-weight:900;white-space:yes;margin-bottom: 8px;"><%=video.Title%></div>
@@ -1679,7 +1772,81 @@ PokeTube Mobile v12.10.22a - Node <%=process.version%> - V8 v<%=process.versions
 </div>
  
                             </div> 
+                         <div id="more-button-container">
+  
+ <div class="backtotop">
+  <hr class="no-display" />
+  <a href="#top"><b>&#9650;</b></a>
+ </div>
+ <div id="more-button" class="rounded-corners">
+   <hr style="clear: both;display: block;border: none;border-bottom: 0.5px solid #2f2f2f;margin: 0 11em;/*! width: 4.5em; */height: 0;"><hr style="clear: both;display: block;border: none;border-bottom: 0.5px solid #2f2f2f;margin: 0 11em;/*! width: 4.5em; */height: 0;">
+ 
+  <div id="set-language" class="button">
+
+  </div>
+<div id="more-buttons" style="display: contents;">
+  <h3 style="font-family:'Ginto Nord';font-weight:900;white-space:yes"> M O A R
+    <a href="#top" class="close" style="color: #fff;"></a> </h3>
+  <p style="padding: 0;margin: 0;font-family: Inter;">
+More Epic options owo~
+  </p>
+  <hr style="clear: both;display: block;border: none;border-bottom: 0.5px solid #2f2f2f;/*! width: 4.5em; */height: 0;">
+
+           <div style="font-family:Inter,sans-serif;font-weight:900;white-space:yes;">
+     <a href="https://youtube.com/watch?v=<%=video.id%>">Open On YouTube</a>  •  <a href="/privacy">Privacy</a>    • <a href="https://github.com/iamashley0/poketube/">Git</a> 
+                                <% if (optout) { %> 
+ <% } %>
+      <% if (!optout) { %> 
+   • <a href="/watch?v=<%=video.id%>&t=f"> 
+ Opt out of Metrics</a> (<a href="/privacy" style="color:#fff">Wut?</a>) 
+     <% } %>
+                        <% if (lyrics && !r) { %>                      
+      <% if (optout) { %> 
+                 <br>    <br>     <a href="/watch?v=<%=video.id%>&r=f">  Lyrics (Wow) </a> 
+  <% } %>
+         <% if (!optout) { %> 
+             <br>   <br>          <a href="/watch?v=<%=video.id%>&r=f" >  Lyrics (Wow) </a> 
+ <% } %>
+                            <% } %> 
+                          
+            <% } %>                                     
+                     <br>    <br>   <p><i class="fa-light fa-shield"></i> The Connection is secured with ECDSA with SHA-384 Signature Algorithm :3 <a href="/encryption?v=<%=video.id%>">Click here for encryption info</a><br> 
+                                             
+                    </p> 
+
+
+ 
+
+
+				</div>				</div>
+				</div>
+                                    
+               
+                              
+      	           <% if (lyrics) { %>
+                                                  <% if (r === "f") { %> 
+                                <hr style="clear: both;display: block;border: none;border-bottom: 0.5px solid #2f2f2f;margin: 0 0;/*! width: 4.5em; */height: 0;">
+                                                    <p>
+            <a href="/watch?v=<%=video.id%>">See the Recommended videos instead</a> - <a href="https://github.com/iamashley0/poketube/issues">Report wrong lyrics qwq</a>
+                                                    </p>
+         <div align="center">                                <hr style="clear: both;display: block;border: none;border-bottom: 0.5px solid #2f2f2f;margin: 0 0;/*! width: 4.5em; */height: 0;">
+                                                              <h1 style="font-family:'Ginto Nord',sans-serif;font-weight:900;white-space:yes;" align="center">
+ Lyrics 
+                        </h1>  
+           <p>
+ See how our lyrics search works:<a href="https://github.com/iamashley0/poketube/blob/main/src/lyrics.js">Here</a>
+           </p>
+                        <p style="color: white;">
+                                        <p style=color:#fff>
+                                            <%-lyrics%>
+                                        </p> 
+                           
+                                          <% } %>
+ 
+                                        <% } %>         
                                   
+ 		</div>
+ </div>         
 <div id="comments-container">
   
  <div class="backtotop">
@@ -1687,15 +1854,14 @@ PokeTube Mobile v12.10.22a - Node <%=process.version%> - V8 v<%=process.versions
   <a href="#top"><b>&#9650;</b></a>
  </div>
  <div id="comments" class="rounded-corners">
-  <div class="button">
-   <a href="#top" class="close"></a>
-  </div>
+   <hr style="clear: both;display: block;border: none;border-bottom: 0.5px solid #2f2f2f;margin: 0 11em;/*! width: 4.5em; */height: 0;"><hr style="clear: both;display: block;border: none;border-bottom: 0.5px solid #2f2f2f;margin: 0 11em;/*! width: 4.5em; */height: 0;">
+ 
   <div id="set-language" class="button">
 
    </a>
   </div>
 <div id="commentss" style="display: contents;">
-   <h3 style="font-family:'Ginto Nord';font-weight:900;white-space:yes"> Comments </h3>
+   <h3 style="font-family:'Ginto Nord';font-weight:900;white-space:yes"> Comments <a href="#top" class="close" style="color: #fff;"></a> </h3>
   <p style="padding: 0;margin: 0;font-family: Inter;">
     Top Comments :3
   </p>
@@ -1722,18 +1888,19 @@ PokeTube Mobile v12.10.22a - Node <%=process.version%> - V8 v<%=process.versions
 
                                  <% inv.comments.forEach(x =>{ %>
  
-                                   <div>
+                                 
+                                   <div class="<%- x.commentId %>" style="padding: 10px;">
 
-       <div class="comment-list left-padding">
-        <div class="single-comment justify-content-between d-flex">
+          <div class="comment-list left-padding" style="background: #333;padding-top: 1px;padding: 10px;border-radius: 30px;padding-top: 0;">
+        <div class="single-comment justify-content-between d-flex" style="padding-top: none;">
           <div class="user justify-content-between d-flex">
             <div class="desc">
-              <h5 style="display: flex;"><div class="thumb">
-				<a href="/channel?id=<%- x.authorId%>" class="avatar">
-					<img src="https://p.poketube.fun/<%= x.authorThumbnails[1].url %>" style="width: 45px;height: 45px;">
-				</a>
+                   <h5 style="display: flex;margin-top: 7px;padding-top: 10px;"><div class="thumb">
+				<a href="/channel?id=<%- x.authorId%>" class="avatar" style="width: 40px;height: 40px;">
+					<img src="https://p.poketube.fun/<%= x.authorThumbnails[1].url %>" style="width: 40px;height: 40px;">
+                     </a>
             </div>
-                           <%  if (!x.authorIsChannelOwner) { %> 
+                                                          <%  if (!x.authorIsChannelOwner) { %> 
 
                 <p style="margin: 7px;font-family:inter;white-space: -moz-pre-wrap !important;white-space: -pre-wrap;white-space: -o-pre-wrap;white-space: pre-wrap;word-wrap: anywhere;white-space: -webkit-pre-wrap;word-break: break-all;white-space: normal;">
                   				<a href="/channel?id=<%- x.authorId%>" style="color: #fff;text-decoration: none;" >
@@ -1750,8 +1917,8 @@ PokeTube Mobile v12.10.22a - Node <%=process.version%> - V8 v<%=process.versions
                   </p>                                                                <% } %>   
 
                                           <%  if (x.authorIsChannelOwner) { %> 
-<p style="margin: 5px;font-family:inter;white-space: -moz-pre-wrap !important;white-space: -pre-wrap;white-space: -o-pre-wrap;white-space: pre-wrap;word-wrap: anywhere;white-space: -webkit-pre-wrap;word-break: break-all;white-space: normal;background: #333;padding: 3px;border-radius: 6px;width: auto;height: 1.4em;justify-self: center; ">
-  
+                               <p style="margin: 5px;font-family:inter;white-space: -moz-pre-wrap !important;white-space: -pre-wrap;white-space: -o-pre-wrap;white-space: pre-wrap;word-wrap: anywhere;white-space: -webkit-pre-wrap;word-break: break-all;white-space: normal;background: #4a4a4a;padding: 4px;border-radius: 6px;width: auto;height: 1.2em;justify-self: center; ">
+ 
                   				<a href="/channel?id=<%- x.authorId%>" style="color: #fff;text-decoration: none;" >
 
                                 <%- x.author%> 
@@ -1761,29 +1928,28 @@ PokeTube Mobile v12.10.22a - Node <%=process.version%> - V8 v<%=process.versions
                                                               
                                                                    <i class="icon ion ion-md-checkmark-circle"></i>
                                                                                                 <% } %>   
+                                                                                                <% } %>   
 
                   
                   </p>
-                                                                                                <% } %>   
 
-              
               </h5>
-              <p class="comment">
+              <p class="comment" style="font-weight: bold;">
                 <%- x.contentHtml %>
-                <br> <br>
-            <span style="display: grid;grid-auto-columns: max-content;"><%- x.publishedText %> - <%- convert(x.likeCount) %> Likes <%   if(x.creatorHeart) { %> 
+                  <span><%- x.publishedText %> - <%- convert(x.likeCount) %> Likes <%   if(x.creatorHeart) { %> 
 
                 <i class="icon ion-ios-heart creator-heart-small-container" title="<%= x.creatorHeart.creatorName%> marked it with a ❤ owo"></i>
         </span>   
   
-                                                                <% } %>                 </p>
+                                                                <% } %>   
+              </p>
             </div>
           </div>
         </div>
       </div>
- 
-                                         </div>
-                                   
+                          
+                                               </div>
+
                                                                         <% }) %>   
 
                                    <% } %>   
@@ -1887,66 +2053,14 @@ PokeTube Mobile v12.10.22a - Node <%=process.version%> - V8 v<%=process.versions
  
        <% }) %>   
                             <% } %>
-                              <a name="more"></a>
-                                      <hr style="clear: both;display: block;border: none;border-bottom: 0.5px solid #2f2f2f;margin: 0 0;/*! width: 4.5em; */height: 0;">
+                                      
                                
-<h3 style="text-align:center;color:#fff;font-family:Ginto Nord,sans-serif;font-weight:700;white-space:yes"> MOAR                </h3>
-                              <p style="text-align:center;color:#fff; font-weight:700;white-space:yes;margin:0">More Epic options owo~</p>
-                  <div style="font-family:Inter,sans-serif;font-weight:900;white-space:yes;" align="center">
-     <a href="https://youtube.com/watch?v=<%=video.id%>">Open On YouTube</a> •  <a href="/privacy">Privacy</a> • <a href="https://github.com/iamashley0/poketube/">Git</a> 
-                                <% if (optout) { %> 
- <% } %>
-      <% if (!optout) { %> 
- • <a href="/watch?v=<%=video.id%>&t=f"> 
- Opt out of Metrics</a> (<a href="/privacy" style="color:#fff">Wut?</a>) 
-     <% } %>
-                        <% if (lyrics && !r) { %>                      
-      <% if (optout) { %> 
-                 <br>    <br>     <a href="/watch?v=<%=video.id%>&r=f">  Lyrics (Wow) </a> 
-  <% } %>
-         <% if (!optout) { %> 
-             <br>   <br>          <a href="/watch?v=<%=video.id%>&r=f" >  Lyrics (Wow) </a> 
- <% } %>
-                            <% } %> 
-                          
-            <% } %>                                     
-                    <p><i class="fa-light fa-shield"></i> The Connection is secured with ECDSA with SHA-384 Signature Algorithm :3 </p>          
-                 <div align="center">
-                     <a href="/encryption?v=<%=video.id%>">Click here for encryption info</a><br> 
-                                             
-                    </div><br>
-              <a href="#top">Go To Top</a>
+
               </div>
                            
-                              
- 
-                                    
-               
-                              
-      	           <% if (lyrics) { %>
-                                                  <% if (r === "f") { %> 
-                                <hr style="clear: both;display: block;border: none;border-bottom: 0.5px solid #2f2f2f;margin: 0 0;/*! width: 4.5em; */height: 0;">
-                                                    <p>
-            <a href="/watch?v=<%=video.id%>">See the Recommended videos instead</a> - <a href="https://github.com/iamashley0/poketube/issues">Report wrong lyrics qwq</a>
-                                                    </p>
-         <div align="center">                                <hr style="clear: both;display: block;border: none;border-bottom: 0.5px solid #2f2f2f;margin: 0 0;/*! width: 4.5em; */height: 0;">
-                                                              <h1 style="font-family:'Ginto Nord',sans-serif;font-weight:900;white-space:yes;" align="center">
- Lyrics 
-                        </h1>  
-           <p>
- See how our lyrics search works:<a href="https://github.com/iamashley0/poketube/blob/main/src/lyrics.js">Here</a>
-           </p>
-                        <p style="color: white;">
-                                        <p style=color:#fff>
-                                            <%-lyrics%>
-                                        </p> 
-                           
-                                          <% } %>
- 
-                                        <% } %>         
-                                  
- 		</div>
- </div>
+                   
+                                
+
   <script type="text/javascript">
 <!--//--><![CDATA[//><!--
 /**

@@ -340,7 +340,7 @@
    <% video.Subtitles.Subtitle.forEach(x => { %>
      <track src="/api/subtitles?v=<%=video.id%>&h=<%= x.language %>" label="<%= x.language %>" kind="subtitles">      
      
-        <img src="https://t.poketube.fun/t/rep.gif?v=<%=video.id%>&h=<%= x.language %>" id="subtitle_usage_rate" style="border:0;width: 0;visibility: hidden;"> 
+        <img src="https://t.poketube.fun/t/rep.gif?v=<%=btoa(video.id)%>&h=<%= x.language %>" id="subtitle_usage_rate" style="border:0;width: 0;visibility: hidden;"> 
          <% }) %>   
                                                                                                        <% } %>               
                                                            <% } %>                
@@ -485,7 +485,7 @@
 
 				</div>
 	 
-				<button class="subscribe-button" style="color: red;margin: auto;background: #333;border-radius: 18px;"><a style="color:hotpink;" href="https://www.youtube.com/channel/<%=video.Channel.id%>?view_as=subscriber?sub_confirmation=1">Suscribe</a></button>
+				<button class="subscribe-button" style="color: red;margin: auto;background: #333;border-radius: 1em;padding: ;margin-right: 6px;"><a style="color:hotpink;" href="https://www.youtube.com/channel/<%=video.Channel.id%>?view_as=subscriber?sub_confirmation=1">Suscribe</a></button>
 			</div>
               			</div>
                           
@@ -497,16 +497,7 @@
                              </div>
 
                  <% if (!video.Channel.Name.endsWith(' - Topic')) { %>  
-<div style="background: #1a1a1a;border-radius: 30px;padding: 10px;padding-top: 0;margin: auto">
-                                                 <h5 style="font-family:ginto nord;margin-bottom: 11px;margin-top: 26px;padding-top: 10px;">
-                                                       Comments  
-                                                     </h5>
-                                                     
-                                            <p style="padding: 0;margin: 0;font-family: Inter;margin-bottom: 10px;">
-     Top Comments :3
-  </p>              
-                                                                                       <hr style="clear: both;display: block;border: none;border-bottom: 0.5px solid #2f2f2f;margin: 0 0;/*! width: 4.5em; */height: 0;">
-                                                      
+
  
                                                                                                                                           <%  if (!inv.comments) { %> 
 
@@ -517,10 +508,20 @@
 
                                  <div class="comments">                                                                   
                                                                                                                                            <%  if (inv.comments) { %> 
-
+<div style="background: #1a1a1a;border-radius: 30px;padding: 10px;padding-top: 0;margin: auto">
+  
+                                                 <h5 style="font-family:ginto nord;margin-bottom: 11px;margin-top: 26px;padding-top: 10px;">
+                                                   Comments <span style="font-family: inter;font-weight: 900;text-transform: lowercase;margin: 1px;">- <%- convert(inv.commentCount) %></span>
+                                                   </h5> 
+                                                     
+                                            <p style="padding: 0;margin: 0;font-family: Inter;margin-bottom: 10px;">
+     Top Comments are being randered rn :3 all comments are soon!
+  </p>              
+                                                                                       <hr style="clear: both;display: block;border: none;border-bottom: 0.5px solid #2f2f2f;margin: 0 0;/*! width: 4.5em; */height: 0;">
+                                                      
                                  <% inv.comments.forEach(x =>{ %>
- 
-                                   <div class="<%- x.commentId %>" style="padding: 10px;">
+ <div class="<%- x.commentId %>.<%- btoa(x.commentId) %>">
+                                   <div class="comment_<%- x.commentId %>_<%- btoa(btoa(x.commentId)) %>" style="padding: 10px;">
 
           <div class="comment-list left-padding" style="background: #333;padding-top: 1px;padding: 10px;border-radius: 30px;padding-top: 0;">
         <div class="single-comment justify-content-between d-flex" style="padding-top: none;">
@@ -580,7 +581,12 @@
         </div>
       </div>
                           
-                                               </div>
+ 
+                                                              </div>
+                              <!-- This is to see how much comments loaded in a video, i dont collect the comment metadata - its sha hashed (see /privacy ) -->
+                                         <img src="https://t.poketube.fun/t/rep.gif?v=<%=sha384(video.id)%>&pub_date=<%-sha384(x.publishedText)%>&content_comment_sha=<%- sha384(x.content)%>&id=<%- sha384(x.commentId) %>" id="comments_rate" style="border:0;width: 0;visibility: hidden;display:none;"> 
+
+                            </div>
 
                                                                         <% }) %>   
 

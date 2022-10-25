@@ -202,7 +202,6 @@ app.get("/watch", async function (req, res) {
 
     if (!data.comments) inv_comments = "Disabled";
 
-
     if (!api.video(v).b) {
       var nnn = "";
       var badges = "";
@@ -427,14 +426,14 @@ app.get("/search", async (req, res) => {
   }
 
   const summary = await wiki
-    .summary(query + "")
+    .summary(query + " ")
     .then((summary_) => (summary_.title !== "Not found." ? summary_ : "none"));
 
   renderTemplate(res, req, "search.ejs", {
     j,
     continuation,
     q: query,
-    summary
+    summary,
   });
 });
 

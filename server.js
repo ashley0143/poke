@@ -81,6 +81,7 @@ this is our config file,you can change stuff here
 */
 const config = {
   tubeApi: "https://tube.kuylar.dev/api/",
+  invapi: "https://inv.vern.cc/api/v1",
   dislikes: "https://returnyoutubedislikeapi.com/votes?videoId=",
   t_url: "https://t.poketube.fun/", //  def matomo url
 };
@@ -622,6 +623,20 @@ app.get("/api/redirect", async (req, res) => {
 
   res.redirect(red_url);
 });
+
+
+app.get("/api/v1/:endpoint/:id", async (req, res) => {
+ 
+  var inv_api_fetch = await fetch(`${config.invapi}/${req.params.endpoint}/${req.params.id}`).then((res) =>
+    res.text()
+  );
+
+  var inv_api_fetch = await JSON.parse(inv_api_fetch);
+  
+  res.send(inv_api_fetch)
+  
+});
+
 
 app.get("/api/opensearch", async (req, res) => {
   res.sendFile(__dirname + `/opensearch.xml`);

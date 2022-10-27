@@ -15,7 +15,7 @@
 const fetch = require("node-fetch");
 const { toJson } = require("xml2json");
 
-const fetcher = require("../src/fetcher.js");
+const fetcher = require("../libpoketube/libpoketube-fetcher.js");
 const getColors = require("get-image-colors");
 
 const wiki = require("wikipedia");

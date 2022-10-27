@@ -28,7 +28,6 @@ module.exports = async function (video_id) {
     res.json()
   );
   
-  
   const dislikes = dislike.dislikes || "none";
 
   const headers = {};

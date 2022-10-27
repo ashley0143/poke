@@ -29,8 +29,9 @@ const fetch = require("node-fetch");
 
 const { toJson } = require("xml2json");
 
-const fetcher = require("./src/fetcher.js");
-const api = require("./src/pt-api.js");
+// libpoketube
+const fetcher = require("./src/libpoketube/libpoketube-fetcher.js");
+const api = require("./src/libpoketube/libpoketube-core.js");
 
 const templateDir = path.resolve(`${process.cwd()}${path.sep}html`);
 
@@ -526,6 +527,8 @@ app.get("/css/:id", (req, res) => {
 app.get("/js/:id", (req, res) => {
   res.sendFile(__dirname + `/js/${req.params.id}`);
 });
+
+
 
 ///////////// API /////////////
 

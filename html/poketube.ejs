@@ -496,18 +496,13 @@
                 
                              </div>
 
-                 <% if (!video.Channel.Name.endsWith(' - Topic')) { %>  
 
  
-                                                                                                                                          <%  if (!inv.comments) { %> 
-
-                                                                                <p>
-                                                                               There was a error while parsing the comments :c <a href="/watch?v=<%= video.id %>">Refresh the page</a> or report this issue at codeberg
-                                                                               </p>
-                              <% } %>
-
-                                 <div class="comments">                                                                   
+ 
+                                                 
                                                                                                                                            <%  if (inv.comments) { %> 
+                                                                                                                                                                              <div class="comments">                                                                   
+
 <div style="background: #1a1a1a;border-radius: 30px;padding: 10px;padding-top: 0;margin: auto">
   
                                                  <h5 style="font-family:ginto nord;margin-bottom: 11px;margin-top: 26px;padding-top: 10px;">
@@ -590,19 +585,28 @@
 
                                                                         <% }) %>   
 
-                                                                    <% } %>
 
           </div>
-
-
-                             <% } %>
-
-
          </div>
 
 
-         </div>
-                 
+                                                       <% } %>
+
+                                
+                 <% if(!inv.comments) { %>  
+                   </div>                                       
+
+                                                         <% } %>
+
+
+                      <% if(inv.comments) { %>  
+                   </div>                                       
+
+                                                         <% } %>
+
+
+
+                  
 <div class="recommended-list" style="background-color:#1c1c1c;border-radius:25px;margin: 10px;height: fit-content;" align="center">
     
              

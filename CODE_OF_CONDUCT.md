@@ -67,7 +67,11 @@ All community leaders are obligated to respect the privacy and security of the
 reporter of any incident.
 
 ## Additional Terms for poketube
-You may not remove or edit this file in a fork of the poketube project. if you forked the poketube project before the commit that added this file, you may add this file if you want to.
+You may not remove or edit this file in a fork of the poketube project. if you forked the poketube project before the commit that added this file, you are required to add this file to your fork - even if its a old fork.
+
+if you dont want to add this file to your fork, please contact us.
+
+you also cant use loopholes to get pass this, just cope tbh.
 
 ## Enforcement Guidelines
 

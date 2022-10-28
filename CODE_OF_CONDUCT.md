@@ -66,6 +66,9 @@ All complaints will be reviewed and investigated promptly and fairly.
 All community leaders are obligated to respect the privacy and security of the
 reporter of any incident.
 
+## Additional Terms for poketube
+You may not remove or edit this file in a fork of the poketube project. if you forked the poketube project before the commit that added this file, you may add this file if you want to.
+
 ## Enforcement Guidelines
 
 Community leaders will follow these Community Impact Guidelines in determining
@@ -126,3 +129,4 @@ enforcement ladder](https://github.com/mozilla/diversity).
 For answers to common questions about this code of conduct, see the FAQ at
 https://www.contributor-covenant.org/faq. Translations are available at
 https://www.contributor-covenant.org/translations.
+

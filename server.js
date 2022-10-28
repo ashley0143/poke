@@ -30,8 +30,8 @@ const fetch = require("node-fetch");
 const { toJson } = require("xml2json");
 
 // libpoketube
-const fetcher = require("./src/libpoketube/libpoketube-fetcher.js");
-const api = require("./src/libpoketube/libpoketube-core.js");
+const { fetcher, core, wiki, musicInfo } = require("./src/libpoketube/loader.js")
+const { IsJsonString, convert, getFirstLine, capitalizeFirstLetter, turntomins } = require("./src/libpoketube/ptutils/libpt-coreutils.js");
 
 const templateDir = path.resolve(`${process.cwd()}${path.sep}html`);
 
@@ -40,10 +40,7 @@ var useragent = require("express-useragent");
 
 // hash
 const sha384 = require("js-sha512").sha384;
-
-const musicInfo = require("music-info");
-const wiki = require("wikipedia");
-
+ 
 var http = require("http");
 var https = require("https");
 
@@ -85,49 +82,6 @@ const config = {
   dislikes: "https://returnyoutubedislikeapi.com/votes?videoId=",
   t_url: "https://t.poketube.fun/", //  def matomo url
 };
-
-///////////// FUNCTIONS /////////////
-
-function IsJsonString(str) {
-  try {
-    JSON.parse(str);
-  } catch (e) {
-    return false;
-  }
-  return true;
-}
-
-function convert(value) {
-  return new Intl.NumberFormat("en-GB", {
-    notation: "compact",
-  }).format(value);
-}
-
-function getFirstLine(text) {
-  var index = text.indexOf("<br> ");
-  if (index === -1) index = undefined;
-  return text.substring(0, index);
-}
-
-function capitalizeFirstLetter(string) {
-  return string.charAt(0).toUpperCase() + string.slice(1);
-}
-
-function turntomins(time) {
-  var minutes = Math.floor(time / 60);
-
-  var seconds = time - minutes * 60;
-
-  function str_pad_left(string, pad, length) {
-    return (new Array(length + 1).join(pad) + string).slice(-length);
-  }
-
-  var finalTime =
-    str_pad_left(minutes, "0", 2) + ":" + str_pad_left(seconds, "0", 2);
-
-  return finalTime;
-}
-/////////////////////////////////
 
 app.use(function (req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
@@ -195,7 +149,7 @@ app.get("/watch", async function (req, res) {
   const jj = await info.text();
   const ip = JSON.parse(jj);
 
-  api.video(v).then((data) => {
+  core.video(v).then((data) => {
     const k = data.video;
     const json = data.json;
     const engagement = data.engagement;
@@ -204,7 +158,7 @@ app.get("/watch", async function (req, res) {
 
     if (!data.comments) inv_comments = "Disabled";
 
-    if (!api.video(v).b) {
+    if (!core.video(v).b) {
       var nnn = "";
       var badges = "";
       var comments = "";
@@ -529,8 +483,6 @@ app.get("/js/:id", (req, res) => {
   res.sendFile(__dirname + `/js/${req.params.id}`);
 });
 
-
-
 ///////////// API /////////////
 
 app.get("/embed/:v", async function (req, res) {
@@ -624,19 +576,15 @@ app.get("/api/redirect", async (req, res) => {
   res.redirect(red_url);
 });
 
-
 app.get("/api/v1/:endpoint/:id", async (req, res) => {
- 
-  var inv_api_fetch = await fetch(`${config.invapi}/${req.params.endpoint}/${req.params.id}`).then((res) =>
-    res.text()
-  );
+  var inv_api_fetch = await fetch(
+    `${config.invapi}/${req.params.endpoint}/${req.params.id}`
+  ).then((res) => res.text());
 
   var inv_api_fetch = await JSON.parse(inv_api_fetch);
-  
-  res.send(inv_api_fetch)
-  
-});
 
+  res.send(inv_api_fetch);
+});
 
 app.get("/api/opensearch", async (req, res) => {
   res.sendFile(__dirname + `/opensearch.xml`);

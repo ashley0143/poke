@@ -1,62 +1,62 @@
    
   <div align="center">
   <a href="https://poketube.fun/watch?v=9sJUDx7iEJw&quality=medium">
-   <img src="https://cdn.glitch.global/5d35aeaf-2df2-4f2f-a4b7-b486694c329b/e31b71e6-7781-4d07-aec2-9e1e8e7d6c6e.image.png?v=1661427092214">
- <img src="https://poketube.fun/css/logo.svg" width="500"> </a><br>
-   <img src="https://raw.githubusercontent.com/vshymanskyy/StandWithUkraine/main/badges/StandWithUkraine.svg"> 
+   <img src="https://poketube.fun/css/logo.svg" width="500"> </a><br>
+   
 </div>
 
 
-# PokeTube Source Repo 
+# 
  
-## Table of contents 
-- [About](#about)
-- [Coding Standards](#coding-standards)
-- [Usage](#usage)
-- [Why Poketube](#why-poketube)
-- [Legal Stuff](#legal-stuff)
+## Table of Contents:
+- [Welcome!](#Welcome!)
+- [Hosting Poketube~](#hosting-poketube)
+- [The Legal Stuff](#the-legal-stuff)
 
 
-## About 
-- This is the source code of PokeTube! (whoa) the youtube front-end that doesnt tracks you 
-  - For matomos source code,see [here](https://codeberg.org/ashley/poketube/src/branch/main/t)
-  - Distrotube review [here](https://poketube.fun/watch?v=dQw4w9WgXcQ) 
-  - issues: https://codeberg.org/Ashley/poketube/issues
+## Welcome! 
+This is the source code of PokeTube, the privacy-friendly youtube front-end built with the Litetube API that's packed with some pretty cool stuff including:
+- ZERO ads
+- Lyrics to songs
+- A clean and modern UI
+- A Javascript-free frontend
+- No cookies or data collection
+- And built-in dislike counts Thaks to the [Return YouTube Dislike Api](https://www.returnyoutubedislike.com/)!
+#
+## Hosting Poketube~
+- To self host your own Poketube instance, you'll need the following:
 
-# Coding Standards
-we use the GNU Coding Standard, see https://www.gnu.org/prep/standards
+  - [Node.js](https://nodejs.org/en/download/) 
+  - [npm](http://npmjs.com) (Included with Node.js)
 
-## Usage 
-- To self host you'll need  [Node.js](https://nodejs.org/en/download/) 
-  - which comes with [npm](http://npmjs.com) installed on your computer 
-  - for nyArch Linuwu [AUR package](https://aur.archlinux.org/packages/nodejs-git)
-- First clone poketube
+
+Once you have everything, clone our repo:
 ```
 git clone https://codeberg.org/ashley/poketube.git
 ```
-- Run the following command inside poketube/
+You can also clone using our Github mirror if you'd prefer:
+```
+git clone https://github.com/ashley0143/poketube.git
+```
+
+Now, install the needed dependencies within the Poketube folder:
 ```
 npm install 
 ```
-- Now run 
+Once everythings installed, start your server with the following command:
 ```
 node server.js
 ```
-- Poketube is running on `localhost:3000` 
-## Why PokeTube
-- Lyrics for songs!
-- Beautiful UI (Dont expect much tho lol)
-- No cookies,no data collection
-- Javascript-free on frontend
-- No ads & Tracking
-- 100% free software
-- See Dislike counts from [Return YouTube Dislike Api](https://www.returnyoutubedislike.com/)!
-- Uses LightTube api
-- <a href="https://github.com/iamashley0/poketube/tree/main/sdk">Custom sdk!</a> 
-
-## Legal Stuff
+Congrats, Poketube should now be running on `localhost:3000`!
+#
+## The Legal Stuff..
 
 [Privacy Policy](https://poketube.fun/privacy) <br>
-TL;DR:we dont collect or share your personal info lol
+TL;DR: we dont collect or share your personal info, that's it lol
+
+We additionally use the GNU Coding Standard, see https://www.gnu.org/prep/standards
 
 <a href="https://codeberg.org/Ashley/poketube/src/branch/main/LICENSE"> <img src="https://www.gnu.org/graphics/gplv3-88x31.png"> </a>
+#
+<div align=center><img src="https://raw.githubusercontent.com/vshymanskyy/StandWithUkraine/main/badges/StandWithUkraine.svg"></div>
+

@@ -68,10 +68,13 @@ reporter of any incident.
 
 ## Additional Terms for poketube
 1.Definitions
+
 "alternative code of conduct" is a code of conduct that is not Contributor Covenant Code of Conduct. 
+
 "free software" is defined in the GNU GPL version 3. You can see a copy on the LICENSE file.
 
 2.Terms 
+
 YOU MAY NOT EDIT, REMOVE, CHANGE THE TERMS OF THIS FILE. YOU MAY NOT 
 REMOVE THIS FILE FROM YOUR FORK OF POKETUBE in any way shape or form. Everyone is permitted to copy and distribute verbatim copies of this document, but changing it is not allowed. if you are using a older fork that doesnt have the Code of Conduct ( this FILE ) you dont have to accept this conduct. since poketube is free software, you can copy
 and share copys under GPL-3.0-OR-LATER. if you dont want this conduct on your fork of poketube, you can use alternative 

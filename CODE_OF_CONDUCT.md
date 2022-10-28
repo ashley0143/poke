@@ -67,11 +67,19 @@ All community leaders are obligated to respect the privacy and security of the
 reporter of any incident.
 
 ## Additional Terms for poketube
-You may not remove or edit this file in a fork of the poketube project. if you forked the poketube project before the commit that added this file, you are required to add this file to your fork - even if its a old fork.
+1.Definitions
+"alternative code of conduct" is a code of conduct that is not Contributor Covenant Code of Conduct. 
+"free software" is defined in the GNU GPL version 3. You can see a copy on the LICENSE file.
 
-if you dont want to add this file to your fork, please contact us.
-
-you also cant use loopholes to get pass this, just cope tbh.
+2.Terms 
+YOU MAY NOT EDIT, REMOVE, CHANGE THE TERMS OF THIS FILE. YOU MAY NOT 
+REMOVE THIS FILE FROM YOUR FORK OF POKETUBE in any way shape or form. Everyone is permitted to copy and distribute verbatim copies of this document, but changing it is not allowed. if you are using a older fork that doesnt have the Code of Conduct ( this FILE ) you dont have to accept this conduct. since poketube is free software, you can copy
+and share copys under GPL-3.0-OR-LATER. if you dont want this conduct on your fork of poketube, you can use alternative 
+conducts instead. if you dont want the alternative code of conduct, you may con
+tact us and explain why do you want to remove this file. we require this because
+of the recent polymc event. (you can search it online about this event.) we are 
+sorry if this makes us a bad software, but we just dont want troll forks of poketube
+to happen. poketube is NOT a political software, and we respect peoples opinions. 
 
 ## Enforcement Guidelines
 

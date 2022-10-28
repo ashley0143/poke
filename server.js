@@ -576,6 +576,7 @@ app.get("/api/redirect", async (req, res) => {
   res.redirect(red_url);
 });
 
+/*
 app.get("/api/v1/:endpoint/:id", async (req, res) => {
   var inv_api_fetch = await fetch(
     `${config.invapi}/${req.params.endpoint}/${req.params.id}`
@@ -585,6 +586,7 @@ app.get("/api/v1/:endpoint/:id", async (req, res) => {
 
   res.send(inv_api_fetch);
 });
+*/
 
 app.get("/api/opensearch", async (req, res) => {
   res.sendFile(__dirname + `/opensearch.xml`);
@@ -623,7 +625,7 @@ app.get("/", async function (req, res) {
   if (!req.query.tab) var tab = "";
 
   const invtrend = await fetch(
-    `https://inv.vern.cc/api/v1/trending${tab}`
+    `https://vid.puffyan.us/api/v1/trending${tab}`
   ).then((res) => res.text());
 
   const t = JSON.parse(invtrend);

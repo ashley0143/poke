@@ -18,5 +18,15 @@ module.exports =
   core:require("../libpoketube/libpoketube-core.js"),
   musicInfo:require("music-info"),
   wiki:require("wikipedia"),
-  version:"libpoketube-1.1-git"
+  version:"libpoketube-1.2-git",
+  modules:{
+    fetch:require("node-fetch"),
+    toJson:require("xml2json").toJson,
+    express:require("express"),
+    useragent:require("express-useragent"),
+    path:require("path"),
+    hash:require("js-sha512").sha384,
+    moment:require("moment"),
+    getColors:require("get-image-colors"),
+  }
 }

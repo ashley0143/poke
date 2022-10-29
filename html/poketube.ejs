@@ -361,7 +361,7 @@
        </div>
                                                             <br>
 			<div class="video-info">           
-				<div class="video-title" style="font-family:'Ginto Nord';font-weight:900;white-space:yes;"><%=video.Title%></div>
+				<div class="video-title" style="font-family:Inter;font-weight:bold;line-break: auto;max-width: max-content;margin: 0;margin-bottom: 0;padding: 0;"><%=video.Title%></div>
                   <p class="video-sub-info description" style="font-weight: bold;">
  
                     <span><%=engagement.viewCount.toLocaleString()%> Views - Uploaded At <%=date%> ^^</span> 
@@ -406,10 +406,11 @@
                            
                            
                        </div>
+
  				</div>
                      
                      <div>
-<div class="video-info-buttons" style="background:#1c1c1c;border-radius:16px;padding: 3px;border-style: none;min-height: 34px;height: min-content;width: fit-content;text-align: right;margin-left: auto;margin-right: -8px;justify-content: center;justify-items: center;justify-self: center;display: block ruby;">
+<div class="video-info-buttons" style="background:#1c1c1c;border-radius:16px;padding: 3px;border-style: none;min-height: 34px;height: min-content;width: fit-content;text-align: right;margin-left: auto;margin-right: -8px;justify-content: center;justify-items: center;justify-self: center;display: block ruby;margin-top: 0em;">
   
   
  					<div title="<%=engagement.likes.toLocaleString()%> Likes">
@@ -628,7 +629,7 @@
           Recommendations
         </span></a>
 
-                                            <span tabindex="0" draggable="false" class="v-chip v-chip--clickable v-chip--no-color theme--dark v-size--default"> <a><a style="text-decoration: none;color: #fff;word-wrap: anywhere;overflow: hidden;-webkit-box-orient: vertical;text-overflow: ellipsis;max-width: 178px;margin: auto;" href="/watch?v=<%=video.id%>&f=t" class="v-chip__content">
+                                            <span tabindex="0" draggable="false" class="v-chip v-chip--clickable v-chip--no-color theme--dark v-size--default"> <a><a style="text-decoration: none;color: #fff;word-wrap: anywhere;overflow: hidden;-webkit-box-orient: vertical;text-overflow: ellipsis;max-width: 178px;margin: auto;" href="/channel?id=<%=video.Channel.id%>" class="v-chip__content">
 From <%=video.Channel.Name%> </span></a>
                                               
                                     
@@ -687,7 +688,7 @@ From  <%=video.Channel.Name%> </span></a>
  
      <% if (f) { %> 
 
-     <% tj.Channel.Contents.ItemSection.ItemSection.Video.forEach(x => { %>       
+     <% tj.Contents.ItemSection.Video.forEach(x => { %>       
  						<div class="video">
                     <% if (!optout) { %> 
 
@@ -2083,7 +2084,7 @@ More Epic options owo~
                    <% } %>
 								<div>
                <a class="max-lines-2" style="color:#fff"  href="/channel?id=<%= video.Channel.id %>"><%=video.Channel.Name %></a>
-									<div>
+									<div>  
  <%= x.uploadedAt %>  </div>
 								</div>
 							</div>

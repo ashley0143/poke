@@ -17,45 +17,24 @@
     You should have received a copy of the GNU General Public License
     along with this program. If not, see https://www.gnu.org/licenses/.
   */
-
-///////////// DEFINITONS /////////////
-const path = require("path");
-const htmlParser = require("node-html-parser");
-const getColors = require("get-image-colors");
-
-const moment = require("moment");
-const lyricsFinder = require("./src/lyrics.js");
-const fetch = require("node-fetch");
-
-const { toJson } = require("xml2json");
-
-// libpoketube
-const { fetcher, core, wiki, musicInfo } = require("./src/libpoketube/loader.js")
+ 
+const { fetcher, core, wiki, musicInfo, modules } = require("./src/libpoketube/loader.js")
 const { IsJsonString, convert, getFirstLine, capitalizeFirstLetter, turntomins } = require("./src/libpoketube/ptutils/libpt-coreutils.js");
 
-const templateDir = path.resolve(`${process.cwd()}${path.sep}html`);
+const templateDir = modules.path.resolve(`${process.cwd()}${modules.path.sep}html`);
 
-var express = require("express");
-var useragent = require("express-useragent");
-
-// hash
-const sha384 = require("js-sha512").sha384;
+const sha384 = modules.hash
  
-var http = require("http");
-var https = require("https");
-
-http.globalAgent.maxSockets = Infinity;
-https.globalAgent.maxSockets = Infinity;
-
-var app = express();
+var app = modules.express();
 app.engine("html", require("ejs").renderFile);
-app.use(express.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
-app.use(useragent.express());
+app.use(modules.express.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
+app.use(modules.useragent.express());
 
 app.set("view engine", "html");
+
 const renderTemplate = async (res, req, template, data = {}) => {
   res.render(
-    path.resolve(`${templateDir}${path.sep}${template}`),
+    modules.path.resolve(`${templateDir}${modules.path.sep}${template}`),
     Object.assign(data)
   );
 };
@@ -92,12 +71,12 @@ app.use(function (req, res, next) {
 app.get("/encryption", async function (req, res) {
   var v = req.query.v;
 
-  const video = await fetch(config.tubeApi + `video?v=${v}`);
+  const video = await modules.fetch(config.tubeApi + `video?v=${v}`);
   var fetching = await fetcher(v);
 
   const json = fetching.video.Player;
   const h = await video.text();
-  const k = JSON.parse(toJson(h));
+  const k = JSON.parse(modules.modules.toJson(h));
   if (!v) res.redirect("/");
 
   //video
@@ -145,7 +124,7 @@ app.get("/watch", async function (req, res) {
   var t = req.query.t;
   var q = req.query.quality;
 
-  const info = await fetch("http://ip-api.com/json/");
+  const info = await modules.fetch("http://ip-api.com/json/");
   const jj = await info.text();
   const ip = JSON.parse(jj);
 
@@ -192,7 +171,7 @@ app.get("/watch", async function (req, res) {
       color: data.color,
       engagement: engagement,
       video: json,
-      date: moment(k.Video.uploadDate).format("LL"),
+      date: modules.moment(k.Video.uploadDate).format("LL"),
       e: e,
       k: k,
       process: process,
@@ -234,7 +213,7 @@ app.get("/music", async function (req, res) {
   var f = req.query.f;
   var t = req.query.t;
 
-  const info = await fetch("http://ip-api.com/json/");
+  const info = await modules.fetch("http://ip-api.com/json/");
   const n = await info.text();
   const ip = JSON.parse(n);
 
@@ -244,10 +223,10 @@ app.get("/music", async function (req, res) {
 
   const json = fetching.video.Player;
 
-  const video = await fetch(config.tubeApi + `video?v=${v}`);
+  const video = await modules.fetch(config.tubeApi + `video?v=${v}`);
 
   const h = await video.text();
-  const k = JSON.parse(toJson(h));
+  const k = JSON.parse(modules.toJson(h));
 
   if (!json.Channel.Name.endsWith(" - Topic")) {
     res.redirect(`/watch?v=${v}`);
@@ -267,11 +246,11 @@ app.get("/music", async function (req, res) {
 
   // channel info
   const engagement = fetching.engagement;
-  const channel = await fetch(
+  const channel = await modules.fetch(
     config.tubeApi + `channel?id=${k.Video.Channel.id}&tab=videos`
   );
   const c = await channel.text();
-  const tj = JSON.parse(toJson(c));
+  const tj = JSON.parse(modules.toJson(c));
 
   // info
   const song = await musicInfo.searchSong(
@@ -299,14 +278,14 @@ app.get("/music", async function (req, res) {
   renderTemplate(res, req, "poketube-music.ejs", {
     url: url_e,
     info: song,
-    color: await getColors(
+    color: await modules.getColors(
       `https://i.ytimg.com/vi/${v}/maxresdefault.jpg`
     ).then((colors) => colors[0].hex()),
     engagement: engagement,
     process: process,
     ip: ip,
     video: json,
-    date: moment(k.Video.uploadDate).format("LL"),
+    date: modules.moment(k.Video.uploadDate).format("LL"),
     e: e,
     k: k,
     sha384: sha384,
@@ -324,9 +303,9 @@ app.get("/download", async function (req, res) {
   var v = req.query.v;
 
   // video
-  const video = await fetch(config.tubeApi + `video?v=${v}`);
+  const video = await modules.fetch(config.tubeApi + `video?v=${v}`);
   const h = await video.text();
-  const k = JSON.parse(toJson(h));
+  const k = JSON.parse(modules.toJson(h));
 
   if (!v) res.redirect("/");
 
@@ -345,7 +324,7 @@ app.get("/download", async function (req, res) {
     k: k,
     video: json,
     date: k.Video.uploadDate,
-    color: await getColors(
+    color: await modules.getColors(
       `https://i.ytimg.com/vi/${v}/maxresdefault.jpg`
     ).then((colors) => colors[0].hex()),
   });
@@ -360,7 +339,6 @@ app.get("/old/watch", async function (req, res) {
 });
 
 app.get("/search", async (req, res) => {
-  const { toJson } = require("xml2json");
   const query = req.query.query;
 
   if (req.query.continuation) {
@@ -370,12 +348,12 @@ app.get("/search", async (req, res) => {
     var continuation = "";
   }
 
-  const search = await fetch(
+  const search = await modules.fetch(
     `https://tube.kuylar.dev/api/search?query=${query}&continuation=${continuation}`
   );
 
   const text = await search.text();
-  const j = JSON.parse(toJson(text));
+  const j = JSON.parse(modules.toJson(text));
 
   if (!query) {
     return res.redirect("/");
@@ -385,6 +363,7 @@ app.get("/search", async (req, res) => {
     .summary(query + " ")
     .then((summary_) => (summary_.title !== "Not found." ? summary_ : "none"));
 
+  
   renderTemplate(res, req, "search.ejs", {
     j,
     continuation,
@@ -398,9 +377,9 @@ app.get("/channel/", async (req, res) => {
   const tab = req.query.tab;
 
   // about
-  const bout = await fetch(config.tubeApi + `channel?id=${ID}&tab=about`);
+  const bout = await modules.fetch(config.tubeApi + `channel?id=${ID}&tab=about`);
   const h = await bout.text();
-  const k = JSON.parse(toJson(h));
+  const k = JSON.parse(modules.toJson(h));
 
   if (req.query.continuation) {
     var continuation = req.query.continuation;
@@ -410,11 +389,11 @@ app.get("/channel/", async (req, res) => {
   }
 
   //videos
-  const channel = await fetch(
+  const channel = await modules.fetch(
     config.tubeApi + `channel?id=${ID}&tab=videos&Continuation=${continuation}`
   );
   const c = await channel.text();
-  const tj = JSON.parse(toJson(c));
+  const tj = JSON.parse(modules.toJson(c));
 
   const summary = await wiki.summary(k.Channel.Metadata.Name);
 
@@ -493,11 +472,11 @@ app.get("/embed/:v", async function (req, res) {
   var v = req.params.v;
 
   var fetching = await fetcher(v);
-  const video = await fetch(config.tubeApi + `video?v=${v}`);
+  const video = await modules.fetch(config.tubeApi + `video?v=${v}`);
 
   const json = fetching.video.Player;
   const h = await video.text();
-  const k = JSON.parse(toJson(h));
+  const k = JSON.parse(modules.toJson(h));
   const engagement = fetching.engagement;
 
   if (!v) res.redirect("/");
@@ -560,7 +539,7 @@ app.get("/api/subtitles", async (req, res) => {
 
   const url = `https://tube.kuylar.dev/proxy/caption/${id}/${l}/`;
 
-  let f = await fetch(url);
+  let f = await modules.fetch(url);
   const body = await f.text();
 
   res.send(body);
@@ -616,15 +595,15 @@ app.get("/video/upload", (req, res) => {
 
 ///////////// 404 AND MAIN PAGES ETC /////////////
 app.get("/", async function (req, res) {
-  const trends = await fetch(config.tubeApi + `trending`);
+  const trends = await modules.fetch(config.tubeApi + `trending`);
   const h = await trends.text();
-  const k = JSON.parse(toJson(h));
+  const k = JSON.parse(modules.toJson(h));
 
   if (req.query.tab) var tab = `/?type=${capitalizeFirstLetter(req.query.tab)}`;
 
   if (!req.query.tab) var tab = "";
 
-  const invtrend = await fetch(
+  const invtrend = await modules.fetch(
     `https://vid.puffyan.us/api/v1/trending${tab}`
   ).then((res) => res.text());
 

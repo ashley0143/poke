@@ -307,8 +307,7 @@
         
       </div>
     </nav>
-	   
- 
+
  
  <div class="watch-page">
 
@@ -361,14 +360,60 @@
        </div>
                                                             <br>
 			<div class="video-info">           
+        	<div>  
 				<div class="video-title" style="font-family:Inter;font-weight:bold;line-break: auto;max-width: max-content;margin: 0;margin-bottom: 0;padding: 0;"><%=video.Title%></div>
-                  <p class="video-sub-info description" style="font-weight: bold;">
+          
+               <div class="channel-info__bordered" style="font-family:Inter;clear: both;margin-top: 18px;padding: 4.5px;background: #1c1c1c;margin-right: -13px;width: fit-content;height: fit-content;border-radius: 43px;font-size: 15px;margin-right: auto;display: flex;border: none;" name="chnl">
+  <a name="chnl"></a>
+
+				<a href="/channel?id=<%=video.Channel.id%>" class="avatar">
+					<img src="https://p.poketube.fun/<%= k.Video.Channel.Avatar[1].$t %>">
+				</a>
+				<div class="name" >
  
-                    <span><%=engagement.viewCount.toLocaleString()%> Views - Uploaded At <%=date%> ^^</span> 
+         <div style="font-family:'Ginto Nord'">
+						<a title="<%=k.Video.Channel.Name%> " style="color:#fff;word-wrap: break-word;overflow: hidden;text-overflow: ellipsis;display: -webkit-box;-webkit-line-clamp: 3;line-clamp: 3;-webkit-box-orient: vertical;display: block ruby;text-overflow: ellipsis;max-width: 7em;" href="/channel?id=<%=k.Video.Channel.id%>" >  <%=k.Video.Channel.Name%> 
+              </a>   
+            
+              <% if (!video.Channel.Name.endsWith(' - Topic')) { %>  
+               <% if (badges) { %> 
+              <% if (badges.tooltip === "Verified") { %> 
+<i class="fa-solid fa-badge-check" title="<%=badges.tooltip%>"></i>
+            <% } %>  <% if (badges.tooltip === "Official Artist Channel") { %> 
+<i class="fa-solid fa-music-note" title="<%=badges.tooltip%>"></i>  
+             <% } %>             <% } %>  <% } %> 
+
+               
+              </div>
+               
+                              
+<div class="subscriber-count" style="word-wrap: initial;word-break: break-all;display: block ruby;">
+          <%= k.Video.Channel.subscriberCount.replace("subscribers", "Subs") %>
+ 				</div>
+               
+
+				</div>
+	 
+				<button class="subscribe-button" style="color: red;margin: auto;background: #333;border-radius: 1em;padding: ;margin-right: 6px;"><a style="color:hotpink;" href="https://www.youtube.com/channel/<%=video.Channel.id%>?view_as=subscriber?sub_confirmation=1">Suscribe</a></button>
+			</div>
+               			</div>
+
+<div class="video-sub-info description" style="font-weight: bold;margin-top:  10px !important;border-radius: 21px;background: #1c1c1c;padding: 10px;margin-bottom: 20px;margin-left: 0;font-family: 'Poketube flex';font-stretch: expanded;">
+    <div class="video-title" style="color:#fff;font-family:Ginto Nord,sans-serif;font-weight:700;margin-top: 3px;margin-bottom: 10px;">Metadata</div>
+ <hr style="clear: both;display: block;border: none;border-bottom: 0.5px solid #2f2f2f;/*! width: 4.5em; */height: 0;">
+
+     <p class="video-sub-info description" style="font-weight: bold;">
+ 
+                    <span>Views : <%=engagement.viewCount.toLocaleString()%>  <br>
+                        Genre: <%-inv_vid.genre %>  <br>
+
+                      Upload date:  <%=date%> ^^
+
                       
-                      <br><br>
-                      </p>
-<div class="video-sub-info description" style="font-weight: bold;margin-top:  55px !important;border-radius: 21px;background: #1c1c1c;padding: 10px;margin-bottom: 20px;margin-left: 0;font-family: 'Poketube flex';font-stretch: expanded;"><div class="video-title" style="color:#fff;font-family:Ginto Nord,sans-serif;font-weight:700;margin-top: 3px;margin-bottom: 10px;">Description</div>
+                      </span> 
+                      
+                       </p>
+  <div class="video-title" style="color:#fff;font-family:Ginto Nord,sans-serif;font-weight:700;margin-top: 3px;margin-bottom: 10px;">Description</div>
  <hr style="clear: both;display: block;border: none;border-bottom: 0.5px solid #2f2f2f;/*! width: 4.5em; */height: 0;">
   
      <% if (String(video.Description) != "[object Object]")  { %>
@@ -402,15 +447,16 @@
                          <div>
                            <hr style="clear: both;display: block;border: none;border-bottom: 0.5px solid #2f2f2f;/*! width: 4.5em; */height: 0;">
 
-                           Genre: <%-inv_vid.genre %>
                            
                            
                        </div>
+                       
 
  				</div>
                      
+                   
                      <div>
-<div class="video-info-buttons" style="background:#1c1c1c;border-radius:16px;padding: 3px;border-style: none;min-height: 34px;height: min-content;width: fit-content;text-align: right;margin-left: auto;margin-right: -8px;justify-content: center;justify-items: center;justify-self: center;display: block ruby;margin-top: 0em;">
+<div class="video-info-buttons" style="background:#1c1c1c;border-radius:16px;padding: 4px;border-style: none;min-height: 34px;height: min-content;width: fit-content;text-align: right;margin-left: auto;margin-right: -8px;justify-content: center;justify-items: center;justify-self: center;display: block ruby;margin-top: 2.7em;">
   
   
  					<div title="<%=engagement.likes.toLocaleString()%> Likes">
@@ -455,39 +501,7 @@
 
  
 				</div>
-<div class="channel-info__bordered" style="font-family:Inter;clear: both;margin-top: 18px;padding: 4.5px;background: #1c1c1c;margin-right: -13px;width: fit-content;height: fit-content;border-radius: 43px;font-size: 15px;margin-left: auto;display: flex;border: none;" name="chnl">
-  <a name="chnl"></a>
 
-				<a href="/channel?id=<%=video.Channel.id%>" class="avatar">
-					<img src="https://p.poketube.fun/<%= k.Video.Channel.Avatar[1].$t %>">
-				</a>
-				<div class="name" >
- 
-         <div style="font-family:'Ginto Nord'">
-						<a title="<%=k.Video.Channel.Name%> " style="color:#fff;word-wrap: break-word;overflow: hidden;text-overflow: ellipsis;display: -webkit-box;-webkit-line-clamp: 3;line-clamp: 3;-webkit-box-orient: vertical;display: block ruby;text-overflow: ellipsis;max-width: 7em;" href="/channel?id=<%=k.Video.Channel.id%>" >  <%=k.Video.Channel.Name%> 
-              </a>   
-            
-              <% if (!video.Channel.Name.endsWith(' - Topic')) { %>  
-               <% if (badges) { %> 
-              <% if (badges.tooltip === "Verified") { %> 
-<i class="fa-solid fa-badge-check" title="<%=badges.tooltip%>"></i>
-            <% } %>  <% if (badges.tooltip === "Official Artist Channel") { %> 
-<i class="fa-solid fa-music-note" title="<%=badges.tooltip%>"></i>  
-             <% } %>             <% } %>  <% } %> 
-
-               
-              </div>
-               
-                              
-<div class="subscriber-count" style="word-wrap: initial;word-break: break-all;display: block ruby;">
-          <%= k.Video.Channel.subscriberCount.replace("subscribers", "Subs") %>
- 				</div>
-               
-
-				</div>
-	 
-				<button class="subscribe-button" style="color: red;margin: auto;background: #333;border-radius: 1em;padding: ;margin-right: 6px;"><a style="color:hotpink;" href="https://www.youtube.com/channel/<%=video.Channel.id%>?view_as=subscriber?sub_confirmation=1">Suscribe</a></button>
-			</div>
               			</div>
                           
 			</div>
@@ -608,7 +622,7 @@
 
 
                   
-<div class="recommended-list" style="background-color:#1c1c1c;border-radius:25px;margin: 10px;height: fit-content;" align="center">
+<div class="recommended-list" style="background-color:#1c1c1c;border-radius:25px;margin: 10px;height: fit-content;justify-self: center;margin-right: -1em;" align="center">
     
              
 
@@ -616,45 +630,8 @@
  
  <div class="video-title" style="text-align:left;font-family:'Ginto Nord';font-weight:900;white-space:yes;">                                  Recommendations
                                 </div>   
-<p style="text-align:left;margin:0;font-family: &quot;PokeTube flex&quot;;font-stretch: ultra-expanded;font-weight: 500;">
-                                 Videos that u might like
-                              </p>
                                 <hr style="clear: both;display: block;border: none;border-bottom: 0.5px solid #2f2f2f;margin: 0 0;/*! width: 4.5em; */height: 0;">
-                                                <% if (!video.Channel.Name.endsWith(' - Topic')) { %>  
-
-                              <% if (!f) { %> 
-                                <div style="display: flex;column-gap: 2.5px;align-self: center;" align="center"> 
-
-  <span tabindex="0" draggable="false" style="font-weight: bold;"  class="v-chip  v-chip--clickable v-chip--active v-chip--no-color theme--dark v-size--default"><a class="v-chip__content">
-          Recommendations
-        </span></a>
-
-                                            <span tabindex="0" draggable="false" class="v-chip v-chip--clickable v-chip--no-color theme--dark v-size--default"> <a><a style="text-decoration: none;color: #fff;word-wrap: anywhere;overflow: hidden;-webkit-box-orient: vertical;text-overflow: ellipsis;max-width: 178px;margin: auto;" href="/channel?id=<%=video.Channel.id%>" class="v-chip__content">
-From <%=video.Channel.Name%> </span></a>
-                                              
-                                    
-                                              <% } %>
-                                </a>
-                                              
-                                                                          <% if (!f) { %> 
-  
-                                  </div>
-                            <% } %>
-
-                           <% } %>
-                               <% if (f) { %> 
-
-<div style="display: flex;column-gap: 2.5px;align-self: center;" align="center"> 
-                                  <span tabindex="0" draggable="false" class="v-chip  v-chip--clickable v-chip--active v-chip--no-color theme--dark v-size--default"><a href="/watch?v=<%=video.id%>" style="color:#fff;text-decoration:none;" class="v-chip__content">
-          Recommendations
-        </span></a>
-                                            <span tabindex="0" draggable="false" class="v-chip v-chip--clickable v-chip--no-color theme--dark v-size--default" style="font-weight: bold;" ><a style="text-decoration: none;color: #fff;word-wrap: anywhere;overflow: hidden;-webkit-box-orient: vertical;text-overflow: ellipsis;max-width: 178px;margin: auto;"   class="v-chip__content">
-From  <%=video.Channel.Name%> </span></a>
-                                </a>
-                        
-                                 </div>
-                            <% } %>
-
+                                            
                               <% if (!f) { %> 
      <% k.Video.Recommendations.Video.forEach(x => { %>       
  						<div class="video" >

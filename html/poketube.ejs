@@ -361,9 +361,9 @@
        </div>
                                                             <br>
 			<div class="video-info">           
-        	<div style="padding: 10px;border-radius: 11px;background-image: linear-gradient( 135deg, #F97794 10%, #623AA2 100%, #8e6f7e 100%);display: block;width: 54em;margin: auto;margin-left: 1em;margin-right: auto;">  
-				<div class="video-title" style="font-family:Inter;font-weight:bold;line-break: auto;max-width: max-content;margin: 0;margin-bottom: 0;padding: 0;"><%=video.Title%></div>
-          
+        	<div style="padding: 10px;border-radius: 11px;background-image: linear-gradient( 135deg, #F97794 10%, #623AA2 100%, #8e6f7e 100%);display: block;width: 54em;margin: auto;justify-self: center;position: absolute;">  
+				<div class="video-title" style="font-family:Inter;font-weight:bold;line-break: auto;max-width: max-content;margin: 0;margin-bottom: 0;padding: 0;"><%=video.Title%>  <a href="#metadata" style="font-weight: bolder;font-family: sans-serif;color: #fff;font-size: small;"> <%=convert(engagement.viewCount)%> Views - View More Metadata</a> </div>
+         
                <div class="channel-info__bordered" style="font-family:Inter;clear: both;margin-top: 18px;padding: 4.5px;background: #1c1c1c;margin-right: -13px;width: fit-content;height: fit-content;border-radius: 43px;font-size: 15px;margin-right: auto;display: flex;border: none;" name="chnl">
   <a name="chnl"></a>
 
@@ -399,7 +399,8 @@
 			</div>
                
                      <div>
-<div class="video-info-buttons" style="background:#1c1c1c;border-radius:16px;padding: 4px;border-style: none;min-height: 34px;height: min-content;width: fit-content;text-align: right;margin-left: auto;margin-right: -8px;justify-content: center;justify-items: center;justify-self: center;margin-top: -2.9em;">
+<div class="video-info-buttons" style="background:#1c1c1c;border-radius:16px;padding: 4px;border-style: none;min-height: 34px;height: min-content;width: fit-content;text-align: right;margin-left: auto;
+margin-right: inherit;justify-content: center;justify-items: center;justify-self: center;margin-top: -2.9em;">
   
   
  					<div title="<%=engagement.likes.toLocaleString()%> Likes">
@@ -448,21 +449,8 @@
               			</div>
                			</div>
 
-<div class="video-sub-info description" style="font-weight: bold;margin-top:  10px !important;border-radius: 21px;background: #1c1c1c;padding: 10px;margin-bottom: 20px;margin-left: 0;font-family: 'Poketube flex';font-stretch: expanded;">
-    <div class="video-title" style="color:#fff;font-family:Ginto Nord,sans-serif;font-weight:700;margin-top: 3px;margin-bottom: 10px;">Metadata</div>
- <hr style="clear: both;display: block;border: none;border-bottom: 0.5px solid #2f2f2f;/*! width: 4.5em; */height: 0;">
+<div class="video-sub-info description" style="font-weight: bold;margin-top:   7.5em !important;border-radius: 21px;background: #1c1c1c;padding: 10px;margin-bottom: 20px;margin-left: 0;font-family: 'Poketube flex';font-stretch: expanded;">
 
-     <p class="video-sub-info description" style="font-weight: bold;">
- 
-                    <span>Views : <%=engagement.viewCount.toLocaleString()%>  <br>
-                        Genre: <%-inv_vid.genre %>  <br>
-
-                      Upload date:  <%=date%> ^^
-
-                      
-                      </span> 
-                      
-                       </p>
   <div class="video-title" style="color:#fff;font-family:Ginto Nord,sans-serif;font-weight:700;margin-top: 3px;margin-bottom: 10px;">Description</div>
  <hr style="clear: both;display: block;border: none;border-bottom: 0.5px solid #2f2f2f;/*! width: 4.5em; */height: 0;">
   
@@ -491,7 +479,24 @@
  
                  
                      </p>
-                     <% } %>  
+                     <% } %> 
+                       <a id="metadata"></a>
+                           <div class="video-title" style="color:#fff;font-family:Ginto Nord,sans-serif;font-weight:700;margin-top: 10px;margin-bottom: 10px;">Metadata And Engagement</div>
+ <hr style="clear: both;display: block;border: none;border-bottom: 0.5px solid #2f2f2f;/*! width: 4.5em; */height: 0;">
+
+     <p class="video-sub-info description" style="font-weight: bold;">
+ 
+                    <span>Views : <%=engagement.viewCount.toLocaleString()%> <br>
+                        Genre: <%-inv_vid.genre %>  <br>
+
+                      Upload date:  <%=date%> ^^ <br>
+                       <hr style="clear: both;display: block;border: none;border-bottom: 0.5px solid #2f2f2f;/*! width: 4.5em; */height: 0;">
+                   Rating  :  <%=engagement.rating.toLocaleString()%> (<%=engagement.dislikes.toLocaleString()%>/<%=engagement.likes.toLocaleString()%> LTDR) <br>
+                      RYD date created : <%=engagement.dateCreated.toLocaleString()%>  <br>
+                      <a href="https://returnyoutubedislikeapi.com/votes?videoId=<%=video.id%>">See in json</a>
+                      </span> 
+                      
+                       </p>
                    
  
                          <div>

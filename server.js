@@ -76,7 +76,7 @@ app.get("/encryption", async function (req, res) {
 
   const json = fetching.video.Player;
   const h = await video.text();
-  const k = JSON.parse(modules.modules.toJson(h));
+  const k = JSON.parse(modules.toJson(h));
   if (!v) res.redirect("/");
 
   //video

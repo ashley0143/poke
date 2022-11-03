@@ -608,13 +608,36 @@ app.get("/", async function (req, res) {
   ).then((res) => res.text());
 
   const t = JSON.parse(invtrend);
+  
+  if(req.query.mobilesearch) {
+ var query = req.query.mobilesearch;
+tab = "search"
+  if (req.query.continuation) {
+    var continuation = req.query.continuation;
+  }
+  if (!req.query.continuation) {
+    var continuation = "";
+  }
 
+  const search = await modules.fetch(
+    `https://tube.kuylar.dev/api/search?query=${query}&continuation=${continuation}`
+  );
+
+  const text = await search.text();
+  var j = JSON.parse(modules.toJson(text));
+    
+  
+  }
+  
   renderTemplate(res, req, "main.ejs", {
     k: k,
     tab: req.query.tab,
     isMobile: req.useragent.isMobile,
+    mobilesearch:req.query.mobilesearch,
     inv: t,
     turntomins,
+    continuation,
+    j
   });
 });
 

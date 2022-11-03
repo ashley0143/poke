@@ -679,13 +679,13 @@ margin-right: inherit;justify-content: center;justify-items: center;justify-self
 
 
                   
-<div class="recommended-list" style="background-color:#1c1c1c;border-radius:25px;margin: 10px;height: fit-content;justify-self: center;margin-right: -1em;width: 20em;" align="center">
+<div class="recommended-list" style="background-color:#1c1c1c;border-radius:25px;margin: 10px;height: fit-content;justify-self: center;margin-right: -1em;width: 20.5em;" align="center">
     
              
 
                               <% if (!r) { %> 
  
- <div class="video-title" style="text-align:left;font-family:'Ginto Nord';font-weight:900;white-space:yes;">                                  Recommendations
+ <div class="video-title" style="text-align:left;font-family:'PokeTube Flex';font-weight:1000;white-space:yes;font-stretch: extra-expanded;">                                  Recommendations
                                 </div>   
                                 <hr style="clear: both;display: block;border: none;border-bottom: 0.5px solid #2f2f2f;margin: 0 0;/*! width: 4.5em; */height: 0;">
                                             
@@ -704,10 +704,10 @@ margin-right: inherit;justify-content: center;justify-items: center;justify-self
 							<div class="info">
                 
       <% if (!optout) { %> 
-								<a href="/watch?v=<%= x.id %>" class="title max-lines-2" title="<%= x.Title %>"><%= x.Title %></a>
+								<a href="/watch?v=<%= x.id %>" class="title max-lines-2" title="<%= x.Title %>" style="font-stretch: 100%;font-weight: 800;"><%= x.Title %></a>
                    <% } %>
    <% if (optout) { %> 
-								<a href="/watch?v=<%= x.id %>&t=f" class="title max-lines-2" title="<%= x.Title %>"><%= x.Title %></a>
+								<a href="/watch?v=<%= x.id %>&t=f" class="title max-lines-2" title="<%= x.Title %>" style="font-stretch: 100%;font-weight: 800;"><%= x.Title %></a>
                    <% } %>
 								<div>
                <a class="max-lines-2" href="/channel?id=<%= x.Channel.id %>"><%=x.Channel.Name %></a>

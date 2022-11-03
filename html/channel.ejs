@@ -451,15 +451,22 @@
 		</div>
                 
 	</div> 
-        
+                               
                                            <% } %>
-
+        <%  if (!Array.isArray(tj.Channel.Contents)) { %> 
+See https://codeberg.org/Ashley/poketube/issues/14#issuecomment-663938
+                                         <% } %>
      
-     <hr style="clear: both;display: block;border: none;border-bottom: 0.5px solid #2f2f2f;margin: 0 0;/*! width: 4.5em; */height: 0;">    <% if (!tab) { %>  
-    
+     <hr style="clear: both;display: block;border: none;border-bottom: 0.5px solid #2f2f2f;margin: 0 0;/*! width: 4.5em; */height: 0;">   
+                                             <% if (!tab) { %>  
+                                               
+
              <div align="center">
 
-   	<div class="video-grid" >
+
+                <%  if (Array.isArray(tj.Channel.Contents)) { %> 
+
+    	<div class="video-grid" >
                  <% if (!continuation) { %>
 
    <% tj.Channel.Contents.ItemSection.ItemSection.Video.forEach(x =>  { %>
@@ -511,6 +518,7 @@
                            
                     <% } %>                 
                       <% } %>
+                                           <% } %>
 
           <% } %>
 

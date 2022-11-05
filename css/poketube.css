@@ -67,7 +67,7 @@ a {
   height: fit-content;
   justify-self: center;
   margin-right: -1.5em;
-  width: 28.5em;
+  width: min-content;
   border: #7c44a0;
   border-style: solid;
 }

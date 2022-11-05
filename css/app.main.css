@@ -384,3 +384,23 @@ nav .right img {
     width: 30px;
     border-radius: 50%
 }
+
+
+@font-face {
+  font-family: "PokeTube Flex";
+  src: url("https://p.poketube.fun/https://raw.githubusercontent.com/oomfiee/oomfiee.github.io/Senpai/css/robotoflex.ttf");
+  font-style: normal;
+  font-stretch: 1% 800%;
+  font-display: swap;
+}
+
+.video > .thumbnail > .video-length {
+  font-size: smaller;
+  background-color: #0008;
+  color: #fff;
+  padding: 2px;
+  border-radius: 3px;
+  font-family: PokeTube Flex;
+  font-stretch: 100%;
+  font-weight: 600;
+}

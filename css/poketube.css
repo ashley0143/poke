@@ -66,10 +66,14 @@ a {
   margin-right: 10px;
   height: fit-content;
   justify-self: center;
-  margin-right: -1em;
-  width: 20.5em;
+  margin-right: -1.5em;
+  width: 35.5em;
   border: #7c44a0;
   border-style: solid;
+}
+
+.video-views {
+  display:block ruby;
 }
 
 .video-info-panel.gradient {

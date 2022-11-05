@@ -41,27 +41,7 @@
 <link href="/css/yt-ukraine.svg" rel=icon>
 <title> <%=video.Title%> - PokeTube </title>  
 <style>
-   a.class:hover {
-    text-decoration:underline;
-    font-weight:bold
-   }
-   summary{
-     color:gray;
-   }
-   summary:hover{
-    color:white;
-    }
-  :visited { color: #00c0ff }
-     
-  a{
-  color:#0ab7f0;
-   }
-  
-  
-   .video > .info > .title {
- 	font-family: "PokeTube flex";
-	font-stretch: extra-expanded;
-}
+ 
   .comments-area {
   background: #f1f9ff;
   padding: 50px 30px;
@@ -184,7 +164,7 @@
     padding-left: 0px;
   }
 }
-
+   
 .comment-form .form-control {
   padding: 8px 20px;
   background: #fff;
@@ -259,7 +239,8 @@
   <link href="/css/watch-util.css" rel=stylesheet>
   <link href="https://fonts.poketube.fun/css/fonts.css" rel=stylesheet>
   <link href="/css/watch-navbar.css?v=56" rel=stylesheet>
-  
+  <link href="/css/poketube.css?v=56" rel=stylesheet>
+ 
   <!-- ICONS -->
   
   <link href=https://p.poketube.fun/https://site-assets.fontawesome.com/releases/v6.1.1/css/all.css rel=stylesheet>
@@ -361,10 +342,10 @@
        </div>
                                                             <br>
 			<div class="video-info">           
-        	<div style="padding: 10px;border-radius: 11px;background-image: linear-gradient( 135deg, #F97794 10%, #623AA2 100%, #8e6f7e 100%);display: block;width: 54em;margin: auto;justify-self: center;position: absolute;">  
+        	<div class="video-info-panel gradient">  
 				<div class="video-title" style="font-family:Inter;font-weight:bold;line-break: auto;max-width: max-content;margin: 0;margin-bottom: 0;padding: 0;"><%=video.Title%>  <a href="#metadata" style="font-weight: bolder;font-family: sans-serif;color: #fff;font-size: small;"> <%=convert(engagement.viewCount)%> Views - View More Metadata</a> </div>
          
-               <div class="channel-info__bordered" style="font-family:Inter;clear: both;margin-top: 18px;padding: 4.5px;background: #1c1c1c;margin-right: -13px;width: fit-content;height: fit-content;border-radius: 43px;font-size: 15px;margin-right: auto;display: flex;border: none;" name="chnl">
+               <div class="video-chnl-info-pill"  name="chnl">
   <a name="chnl"></a>
 
 				<a href="/channel?id=<%=video.Channel.id%>" class="avatar">
@@ -373,7 +354,7 @@
 				<div class="name" >
  
          <div style="font-family:'Ginto Nord'">
-						<a title="<%=k.Video.Channel.Name%> " style="color:#fff;word-wrap: break-word;overflow: hidden;text-overflow: ellipsis;display: -webkit-box;-webkit-line-clamp: 3;line-clamp: 3;-webkit-box-orient: vertical;display: block ruby;text-overflow: ellipsis;max-width: 7em;" href="/channel?id=<%=k.Video.Channel.id%>" >  <%=k.Video.Channel.Name%> 
+						<a title="<%=k.Video.Channel.Name%> " class="video-info-pill-channelname">  <%=k.Video.Channel.Name%> 
               </a>   
             
               <% if (!video.Channel.Name.endsWith(' - Topic')) { %>  
@@ -399,8 +380,7 @@
 			</div>
                
                      <div>
-<div class="video-info-buttons" style="background:#1c1c1c;border-radius:16px;padding: 4px;border-style: none;min-height: 34px;height: min-content;width: fit-content;text-align: right;margin-left: auto;
-margin-right: inherit;justify-content: center;justify-items: center;justify-self: center;margin-top: -2.9em;">
+<div class="video-info-buttons pill" >
   
   
  					<div title="<%=engagement.likes.toLocaleString()%> Likes">
@@ -451,7 +431,7 @@ margin-right: inherit;justify-content: center;justify-items: center;justify-self
                			</div>
                     
                                            
-<div class="video-sub-info description" style="font-weight: bold;margin-top:   8.5em !important;border-radius: 21px;background: #1c1c1c;padding: 10px;margin-bottom: 20px;margin-left: 0;font-family: 'Poketube flex';font-stretch: expanded;">
+<div class="video-sub-info description">
 
   <div class="video-title" style="color:#fff;font-family:Ginto Nord,sans-serif;font-weight:700;margin-top: 3px;margin-bottom: 10px;">Description</div>
  <hr style="clear: both;display: block;border: none;border-bottom: 0.5px solid #2f2f2f;/*! width: 4.5em; */height: 0;">
@@ -486,7 +466,7 @@ margin-right: inherit;justify-content: center;justify-items: center;justify-self
                            <div class="video-title" style="color:#fff;font-family:Ginto Nord,sans-serif;font-weight:700;margin-top: 10px;margin-bottom: 10px;">Metadata And Engagement</div>
  <hr style="clear: both;display: block;border: none;border-bottom: 0.5px solid #2f2f2f;/*! width: 4.5em; */height: 0;">
 
-     <p class="video-sub-info description" style="font-weight: bold;">
+     <p  style="font-weight: bold;">
  
                     <span>Views : <%=engagement.viewCount.toLocaleString()%> <br>
                         Genre: <%-inv_vid.genre %>  <br>
@@ -513,7 +493,7 @@ margin-right: inherit;justify-content: center;justify-items: center;justify-self
                      
                    
                      <div style="display:none;">
-<div class="video-info-buttons" style="background:#1c1c1c;border-radius:16px;padding: 4px;border-style: none;min-height: 34px;height: min-content;width: fit-content;text-align: right;margin-left: auto;margin-right: -8px;justify-content: center;justify-items: center;justify-self: center;display: block ruby;margin-top: 2.7em;">
+<div class="video-pill-buttons">
   
   
  					<div title="<%=engagement.likes.toLocaleString()%> Likes">
@@ -562,7 +542,6 @@ margin-right: inherit;justify-content: center;justify-items: center;justify-self
               			</div>
                           
 			</div>
-                                                                                               <hr style="clear: both;display: block;border: none;border-bottom: 0.5px solid #2f2f2f;margin: 0 100px;/*! width: 4.5em; */height: 0;">
 
                <div style="display:none;">
                 
@@ -575,9 +554,9 @@ margin-right: inherit;justify-content: center;justify-items: center;justify-self
                                                                                                                                            <%  if (inv.comments) { %> 
                                                                                                                                                                               <div class="comments">                                                                   
 
-<div style="background: #1a1a1a;border-radius: 30px;padding: 10px;padding-top: 0;margin: auto">
+<div class="comments-class-or-something-i-cant-find-a-name-lol">
   
-                                                 <h5 style="font-family:ginto nord;margin-bottom: 11px;margin-top: 26px;padding-top: 10px;">
+                                                 <h5 style="font-family:ginto nord;margin-bottom: 11px;margin-top: 6px;padding-top: 10px;">
                                                    Comments <span style="font-family: inter;font-weight: 900;text-transform: lowercase;margin: 1px;">- <%- convert(inv.commentCount) %></span>
                                                    </h5> 
                                                      
@@ -601,7 +580,7 @@ margin-right: inherit;justify-content: center;justify-items: center;justify-self
             </div>
                                                           <%  if (!x.authorIsChannelOwner) { %> 
 
-                <p style="margin: 7px;font-family:inter;white-space: -moz-pre-wrap !important;white-space: -pre-wrap;white-space: -o-pre-wrap;white-space: pre-wrap;word-wrap: anywhere;white-space: -webkit-pre-wrap;word-break: break-all;white-space: normal;">
+                <p class="comments-author">
                   				<a href="/channel?id=<%- x.authorId%>" style="color: #fff;text-decoration: none;" >
 
                 <%- x.author%> 
@@ -616,7 +595,7 @@ margin-right: inherit;justify-content: center;justify-items: center;justify-self
                   </p>                                                                <% } %>   
 
                                           <%  if (x.authorIsChannelOwner) { %> 
-                               <p style="margin: 5px;font-family:inter;white-space: -moz-pre-wrap !important;white-space: -pre-wrap;white-space: -o-pre-wrap;white-space: pre-wrap;word-wrap: anywhere;white-space: -webkit-pre-wrap;word-break: break-all;white-space: normal;background: #4a4a4a;padding: 4px;border-radius: 6px;width: auto;height: 1.2em;justify-self: center; ">
+                               <p class="comments-author owner">
  
                   				<a href="/channel?id=<%- x.authorId%>" style="color: #fff;text-decoration: none;" >
 
@@ -679,7 +658,7 @@ margin-right: inherit;justify-content: center;justify-items: center;justify-self
 
 
                   
-<div class="recommended-list" style="background-color:#1c1c1c;border-radius:25px;margin: 10px;height: fit-content;justify-self: center;margin-right: -1em;width: 20.5em;" align="center">
+<div class="recommended-list" align="center">
     
              
 

@@ -1,0 +1,190 @@
+/*
+
+   This Source Code Form is subject to the terms of the GNU General Public License:
+
+    Copyright (C) 2021-2022 POKETUBE (https://github.com/iamashley0/poketube)
+    
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program. If not, see https://www.gnu.org/licenses/.
+
+*/
+
+a.class:hover {
+  text-decoration: underline;
+  font-weight: bold;
+}
+summary {
+  color: gray;
+}
+summary:hover {
+  color: white;
+}
+:visited {
+  color: #00c0ff;
+}
+
+a {
+  color: #0ab7f0;
+}
+
+.video > .info > .title {
+  font-family: "PokeTube flex";
+  font-stretch: extra-expanded;
+}
+
+.video-sub-info.description {
+  font-weight: bold;
+  margin-top: 8.5em !important;
+  border-radius: 21px;
+  background: #1c1c1c;
+  padding: 10px;
+  margin-bottom: 20px;
+  font-family: "Poketube flex";
+  font-stretch: expanded;
+  justify-self: center;
+  width: 38em;
+  border: #7c44a0;
+  border-style: solid;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.recommended-list {
+  background-color: #1c1c1c;
+  border-radius: 25px;
+  margin: 10px;
+  margin-right: 10px;
+  height: fit-content;
+  justify-self: center;
+  margin-right: -1em;
+  width: 20.5em;
+  border: #7c44a0;
+  border-style: solid;
+}
+
+.video-info-panel.gradient {
+  padding: 10px;
+  border-radius: 11px;
+  background-image: linear-gradient(
+    135deg,
+    #f97794 10%,
+    #623aa2 100%,
+    #8e6f7e 100%
+  );
+  display: block;
+  width: 54em;
+  margin: auto;
+  justify-self: center;
+  position: absolute;
+}
+
+.video-info-pill-channelname {
+  color: #fff;
+  word-wrap: break-word;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  line-clamp: 3;
+  -webkit-box-orient: vertical;
+  display: block ruby;
+  text-overflow: ellipsis;
+  max-width: 7em;
+}
+
+.comments-author.owner {
+  margin: 5px;
+  font-family: inter;
+  white-space: -moz-pre-wrap !important;
+  white-space: -pre-wrap;
+  white-space: -o-pre-wrap;
+  white-space: pre-wrap;
+  word-wrap: anywhere;
+  white-space: -webkit-pre-wrap;
+  word-break: break-all;
+  white-space: normal;
+  background: #4a4a4a;
+  padding: 4px;
+  border-radius: 6px;
+  width: auto;
+  height: 1.2em;
+  justify-self: center;
+}
+
+.video-chnl-info-pill {
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  display: grid;
+  grid-template-columns: 48px max-content 1fr min-content;
+  grid-template-rows: 16px 16px;
+  grid-auto-columns: 1fr;
+  column-gap: 8px;
+  row-gap: 4px;
+  grid-auto-flow: row;
+  grid-template-areas: "avatar name . subscribe-button" "avatar subs . subscribe-button";
+  padding: 8px;
+  border-radius: 35px;
+  font-family: Inter;
+  clear: both;
+  margin-top: 18px;
+  padding: 4.5px;
+  background: #1c1c1c;
+  margin-right: -13px;
+  width: fit-content;
+  height: fit-content;
+  border-radius: 43px;
+  font-size: 15px;
+  margin-right: auto;
+  display: flex;
+  border: none;
+}
+
+.video-info-buttons.pill {
+  background: #1c1c1c;
+  border-radius: 16px;
+  padding: 4px;
+  border-style: none;
+  min-height: 34px;
+  height: min-content;
+  width: fit-content;
+  text-align: right;
+  margin-left: auto;
+  margin-right: inherit;
+  justify-content: center;
+  justify-items: center;
+  justify-self: center;
+  margin-top: -2.9em;
+}
+
+.comments-author {
+  margin: 7px;
+  font-family: inter;
+  white-space: -moz-pre-wrap !important;
+  white-space: -pre-wrap;
+  white-space: -o-pre-wrap;
+  white-space: pre-wrap;
+  word-wrap: anywhere;
+  white-space: -webkit-pre-wrap;
+  word-break: break-all;
+  white-space: normal;
+}
+
+.comments-class-or-something-i-cant-find-a-name-lol {
+  background: #1a1a1a;
+  border-radius: 30px;
+  padding: 10px;
+  padding-top: 0;
+  margin: auto;
+  border: #7c44a0;
+  border-style: solid;
+}

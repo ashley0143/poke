@@ -690,8 +690,7 @@
                    <% } %>
 								<div>
                <a class="max-lines-2" href="/channel?id=<%= x.Channel.id %>"><%=x.Channel.Name %></a>
-									<div>
- <%= x.uploadedAt %> • <%= convert(x.views) %> views</div>
+									<div title=" <%= x.uploadedAt %> - <%= convert(x.views) %> views"> Hover for Info </div>
 								</div>
 							</div>
 						</div>

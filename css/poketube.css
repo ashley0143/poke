@@ -155,7 +155,10 @@ a {
   padding: 4px;
   border-style: none;
   min-height: 34px;
-  height: min-content;
+grid-area: buttons;
+display: flex;
+flex-direction: row;
+column-gap: 8px;  height: min-content;
   width: fit-content;
   text-align: right;
   margin-left: auto;
@@ -187,4 +190,15 @@ a {
   margin: auto;
   border: #7c44a0;
   border-style: solid;
+}
+
+.video > .thumbnail > .video-length {
+  font-size: smaller;
+  background-color: #0008;
+  color: #fff;
+  padding: 2px;
+  border-radius: 3px;
+  font-family: PokeTube Flex;
+  font-stretch: 100%;
+  font-weight: 600;
 }

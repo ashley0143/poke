@@ -106,6 +106,73 @@ padding: 10px;
 border-radius: 10px;
     }
   </style>
+                 <style>section p {
+ font-family:Whitney, Helvetica Neue, Helvetica, Arial, sans-serif;
+ font-weight:400;
+ color:#fff;
+ font-size:16px;
+ line-height:24px;
+ margin-top:12px
+}
+    
+.sticky-top {
+	 position: sticky;
+	 top: 0px;
+	 z-index: 999;
+}
+ .responsive {
+	 width: 100%;
+	 overflow-x: auto;
+}
+ .tabs {
+	 display: table;
+   font-family:inter;
+	 border-collapse: separate;
+	 table-layout: auto;
+}
+ .tabs.tabs-center {
+	 margin: auto;
+}
+ .tabs.tabs-justify {
+	 width: 100%;
+	 table-layout: fixed;
+}
+ .tabs a.tab {
+	 position: relative;
+	 display: table-cell;
+	 transition: all ease 0.3s;
+	 padding: 1em 1.6em;
+	 transform: translate3d(0, 0, 0);
+	 color: #fff;
+	 white-space: nowrap;
+	 cursor: pointer;
+}
+ .tabs a.tab:hover {
+	 color: #3cb4fa;
+}
+ .tabs a.tab:after {
+	 transition: all 0.3s cubic-bezier(1, 0, 0, 1);
+	 will-change: transform, box-shadow, opacity;
+	 position: absolute;
+	 content: '';
+	 height: 3px;
+	 bottom: 0px;
+	 left: 0px;
+	 right: 0px;
+	 border-radius: 3px 3px 0px 0px;
+	 background: #9fdafd;
+	 box-shadow: 0px 4px 10px 3px rgba(60, 180, 250, .15);
+	 opacity: 0;
+	 transform: scale(0, 1);
+}
+ .tabs a.tab.active {
+	 color: #fff;
+}
+ .tabs a.tab.active:after {
+	 opacity: 1;
+	 transform: scale(1, 1);
+}                 
+                     </style>
  </head>
 
   <body>
@@ -166,7 +233,9 @@ video[counter].classList.add("shake");
     
        </div>
   <div class="channel-page"   style="background-color: var(--channel-contents-background);">   
-
+  
+         
+  
             <%  if (Array.isArray( j.Search.Results.Video)) { %> 
                    <center>
 
@@ -211,7 +280,7 @@ video[counter].classList.add("shake");
         style="background-image: url('https://p.poketube.fun/https://i.ytimg.com/vi/<%= x.id %>/hqdefault.jpg?sqp=-oaymwEXCNAFEJQDSFryq4qpAwkIARUAAIhCGAE=&amp;rs=AOn4CLBmAOZV7CM3NdDKlEFxGX7PpI5UWQ');border-radius: 10px;"
          ><span class="video-length"><%=x.duration %></span></a>
       <div class="info" style="color:#fff;text-align: left;">
-        <a style="color:#fff;font-family: 'Ginto Nord'" href="/watch?v=<%= x.id %>" class="title max-lines-2"
+        <a style="font-family: 'PokeTube Flex';font-weight: 1000;font-size: large;text-align: left;" href="/watch?v=<%= x.id %>" class="title max-lines-2"
           ><%= x.Title %></a>
         <div style="display: flex; flex-direction: column; row-gap: 8px;font-family: 'Inter'">
           <a href="/watch?v=<%= x.id %>"><span><%= x.views %> views</span> <span>•</span> <span><%= x.uploadedAt %></span></a>
@@ -249,6 +318,7 @@ video[counter].classList.add("shake");
                                   <% } %>   
             <%  if (!Array.isArray( j.Search.Results.Video)) { %>
               <br>
+              <center>
              <h1 style="font-family:'Ginto nord';font-weight:900;white-space:yes;">
                <img src="https://p.poketube.fun/https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse2.explicit.bing.net%2Fth%3Fid%3DOIP.GUMY7MavfJyrfhjKbPKB9wHaDt%26pid%3DApi&f=1">
               </h1>
@@ -268,7 +338,8 @@ video[counter].classList.add("shake");
               </p>
        <meta http-equiv="refresh" content="10">
                                    <% } %>   
-                                    
+                                                      </center>
+
 
 
         </a>

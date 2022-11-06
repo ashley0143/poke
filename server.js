@@ -393,7 +393,7 @@ app.get("/channel/", async (req, res) => {
 
   //videos
   const channel = await modules.fetch(
-    config.tubeApi + `channel?id=${ID}&tab=videos&Continuation=${continuation}`
+    config.tubeApi + `channel?id=${ID}&tab=shorts&Continuation=${continuation}`
   );
   const c = await channel.text();
   const tj = JSON.parse(modules.toJson(c));

@@ -85,7 +85,7 @@ a {
 }
 
 .video-info-panel.gradient {
-  padding: 10px;
+  padding: 12px;
   border-radius: 11px;
   background-image: linear-gradient(
     135deg,
@@ -151,7 +151,7 @@ a {
   border-radius: 35px;
   font-family: Inter;
   clear: both;
-  margin-top: 18px;
+  margin-top: 1.1em;
   padding: 4.5px;
   background: #0009;
   margin-right: -13px;

@@ -43,7 +43,7 @@ a {
 }
 
 .video-sub-info.description {
-  font-weight: 700;
+  font-weight: 600;
   margin-top: 8.5em !important;
   border-radius: 21px;
   background: #1c1c1c;
@@ -52,6 +52,7 @@ a {
   font-stretch: expanded;
   justify-self: center;
   width: 38em;
+  font-family: "PokeTube Flex";
   border: #7c44a0;
   border-style: solid;
   margin-left: auto;

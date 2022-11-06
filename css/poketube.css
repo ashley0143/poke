@@ -151,7 +151,7 @@ a {
   clear: both;
   margin-top: 18px;
   padding: 4.5px;
-  background: #1c1c1c;
+  background: #0009;
   margin-right: -13px;
   width: fit-content;
   height: fit-content;
@@ -163,7 +163,7 @@ a {
 }
 
 .video-info-buttons.pill {
-  background: #1c1c1c;
+  background: #0009;
   border-radius: 16px;
   padding: 4px;
   border-style: none;
@@ -204,6 +204,19 @@ a {
   margin: auto;
   border: #7c44a0;
   border-style: solid;
+}
+
+.subscribe-button {
+  color: red;
+  margin: auto;
+  background: white;
+  border-radius: 2em;
+  margin-right: 6px;
+  text-transform: initial;
+}
+
+.subscribe-button > a {
+  color:black
 }
 
 .video > .thumbnail > .video-length {

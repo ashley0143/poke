@@ -353,7 +353,7 @@
 				</a>
 				<div class="name" >
  
-         <div style="font-family:'Ginto Nord'">
+         <div>
 						<a title="<%=k.Video.Channel.Name%> " class="video-info-pill-channelname">  <%=k.Video.Channel.Name%> 
               </a>   
             
@@ -433,7 +433,7 @@
                                            
 <div class="video-sub-info description">
 
-  <div class="video-title" style="color:#fff;font-family:Ginto Nord,sans-serif;font-weight:700;margin-top: 3px;margin-bottom: 10px;">Description</div>
+  <div class="video-title" style="color:#fff;font-family:'PokeTube Flex';font-weight:1000;font-stretch: extra-expanded;margin-top: 3px;margin-bottom: 10px;">Description</div>
  <hr style="clear: both;display: block;border: none;border-bottom: 0.5px solid #2f2f2f;/*! width: 4.5em; */height: 0;">
   
      <% if (String(video.Description) != "[object Object]")  { %>
@@ -447,7 +447,7 @@
                           <% } %>               
 
                    <% if (wiki.extract_html) { %> 
-<div class="video-title" style="color:#fff;font-family:Ginto Nord,sans-serif;font-weight:700;margin-top: 10px;margin-bottom: 10px;">From da web</div>
+<div class="video-title" style="color:#fff;font-family:'PokeTube Flex';font-weight:1000;font-stretch: extra-expanded;margin-top: 10px;margin-bottom: 10px;">From da web</div>
                      
 <hr style="clear: both;display: block;border: none;border-bottom: 0.5px solid #2f2f2f;/*! width: 4.5em; */height: 0;">
 
@@ -463,7 +463,7 @@
                      </p>
                      <% } %> 
                        <a id="metadata"></a>
-                           <div class="video-title" style="color:#fff;font-family:Ginto Nord,sans-serif;font-weight:700;margin-top: 10px;margin-bottom: 10px;">Metadata And Engagement</div>
+                           <div class="video-title" style="color:#fff;font-family:'PokeTube Flex';font-weight:1000;font-stretch: extra-expanded;margin-top: 10px;margin-bottom: 10px;">Metadata And Engagement</div>
  <hr style="clear: both;display: block;border: none;border-bottom: 0.5px solid #2f2f2f;/*! width: 4.5em; */height: 0;">
 
      <p  style="font-weight: bold;">
@@ -556,7 +556,7 @@
 
 <div class="comments-class-or-something-i-cant-find-a-name-lol">
   
-                                                 <h5 style="font-family:ginto nord;margin-bottom: 11px;margin-top: 6px;padding-top: 10px;">
+                                                 <h5 style="font-family:'PokeTube Flex';font-weight:1000;white-space:yes;font-stretch: ultra-expanded;margin-bottom: 11px;margin-top: 6px;padding-top: 10px;">
                                                    Comments <span style="font-family: inter;font-weight: 900;text-transform: lowercase;margin: 1px;">- <%- convert(inv.commentCount) %></span>
                                                    </h5> 
                                                      
@@ -589,6 +589,7 @@
                                 <%  if (x.verified) { %> 
                                                               
                                                                    <i class="icon ion ion-md-checkmark-circle"></i>
+                                  
                                                                                                 <% } %>   
 
                   
@@ -606,6 +607,7 @@
                                                               
                                                                    <i class="icon ion ion-md-checkmark-circle"></i>
                                                                                                 <% } %>   
+                                                                                                  
                                                                                                 <% } %>   
 
                   

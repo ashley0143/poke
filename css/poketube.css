@@ -43,13 +43,12 @@ a {
 }
 
 .video-sub-info.description {
-  font-weight: bold;
+  font-weight: 700;
   margin-top: 8.5em !important;
   border-radius: 21px;
   background: #1c1c1c;
   padding: 10px;
   margin-bottom: 20px;
-  font-family: "Poketube flex";
   font-stretch: expanded;
   justify-self: center;
   width: 38em;
@@ -57,6 +56,13 @@ a {
   border-style: solid;
   margin-left: auto;
   margin-right: auto;
+}
+
+.video-sub-info.description > .video-title {
+  font-family: "PokeTube Flex";
+  font-weight: 1000;
+  font-stretch: extra-expanded;
+  font-size: larger;
 }
 
 .recommended-list {
@@ -73,7 +79,7 @@ a {
 }
 
 .video-views {
-  display:block ruby;
+  display: block ruby;
 }
 
 .video-info-panel.gradient {
@@ -95,6 +101,9 @@ a {
 .video-info-pill-channelname {
   color: #fff;
   word-wrap: break-word;
+  font-family: "PokeTube Flex";
+  font-weight: 1000;
+  font-stretch: ultra-expanded;
   overflow: hidden;
   text-overflow: ellipsis;
   display: -webkit-box;
@@ -159,10 +168,11 @@ a {
   padding: 4px;
   border-style: none;
   min-height: 34px;
-grid-area: buttons;
-display: flex;
-flex-direction: row;
-column-gap: 8px;  height: min-content;
+  grid-area: buttons;
+  display: flex;
+  flex-direction: row;
+  column-gap: 8px;
+  height: min-content;
   width: fit-content;
   text-align: right;
   margin-left: auto;

@@ -453,9 +453,7 @@
 	</div> 
                                
                                            <% } %>
-        <%  if (!Array.isArray(tj.Channel.Contents)) { %> 
-See https://codeberg.org/Ashley/poketube/issues/14#issuecomment-663938
-                                         <% } %>
+   
      
      <hr style="clear: both;display: block;border: none;border-bottom: 0.5px solid #2f2f2f;margin: 0 0;/*! width: 4.5em; */height: 0;">   
                                              <% if (!tab) { %>  
@@ -464,21 +462,24 @@ See https://codeberg.org/Ashley/poketube/issues/14#issuecomment-663938
              <div align="center">
 
 
-                <%  if (Array.isArray(tj.Channel.Contents)) { %> 
-
+ 
     	<div class="video-grid" >
                  <% if (!continuation) { %>
 
-   <% tj.Channel.Contents.ItemSection.ItemSection.Video.forEach(x =>  { %>
+   <% tj.Channel.Contents.ItemSection[2].Shelf.Items.Video.forEach(x =>  { %>
 			<a href="/watch?v=<%- x.id %>" class="video">
 				<div class="thumbnail" style="background-image: url('https://p.poketube.fun/https://i.ytimg.com/vi/<%= x.id %>/hqdefault.jpg?sqp=-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLBy_x4UUHLNDZtJtH0PXeQGoRFTgw');border-radius: 10px;"><span class="video-length"><%- x.duration %></span></div>
 				<div class="info">
-					<span class="title max-lines-2" style="font-family:Ginto Nord,sans-serif;"><%- x.Title %></span>
+					<span class="title max-lines-2" style="font-family:PokeTube flex,sans-serif;font-weight: 1000;font-stretch: ultra-expanded;"><%- x.Title %></span>
 			 
             </div>
  			</a>	
  		 	               <% }) %>   
                                            <% } %>
+                                             
+                                             <p>
+                                               continuations are broken on channels atm
+                                             </p>
          <% if (continuation) { %>
 
    <% tj.Channel.Contents.Video.forEach(x =>  { %>
@@ -490,8 +491,7 @@ See https://codeberg.org/Ashley/poketube/issues/14#issuecomment-663938
             </div>
  			</a>	
  		 	               <% }) %>   
-                                           <% } %>
-
+ 
                        
                        </div>
                    <% if (!continuation) { %>

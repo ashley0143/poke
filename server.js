@@ -17,14 +17,16 @@
     You should have received a copy of the GNU General Public License
     along with this program. If not, see https://www.gnu.org/licenses/.
   */
- 
+
 const { fetcher, core, wiki, musicInfo, modules } = require("./src/libpoketube/loader.js")
-const { IsJsonString, convert, getFirstLine, capitalizeFirstLetter, turntomins } = require("./src/libpoketube/ptutils/libpt-coreutils.js");
+const { IsJsonString, convert, getFirstLine, capitalizeFirstLetter, turntomins, getRandomInt, getRandomArbitrary } = require("./src/libpoketube/ptutils/libpt-coreutils.js");
 
-const templateDir = modules.path.resolve(`${process.cwd()}${modules.path.sep}html`);
+const templateDir = modules.path.resolve(
+  `${process.cwd()}${modules.path.sep}html`
+);
 
-const sha384 = modules.hash
- 
+const sha384 = modules.hash;
+
 var app = modules.express();
 app.engine("html", require("ejs").renderFile);
 app.use(modules.express.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
@@ -278,9 +280,9 @@ app.get("/music", async function (req, res) {
   renderTemplate(res, req, "poketube-music.ejs", {
     url: url_e,
     info: song,
-    color: await modules.getColors(
-      `https://i.ytimg.com/vi/${v}/maxresdefault.jpg`
-    ).then((colors) => colors[0].hex()),
+    color: await modules
+      .getColors(`https://i.ytimg.com/vi/${v}/maxresdefault.jpg`)
+      .then((colors) => colors[0].hex()),
     engagement: engagement,
     process: process,
     ip: ip,
@@ -324,9 +326,9 @@ app.get("/download", async function (req, res) {
     k: k,
     video: json,
     date: k.Video.uploadDate,
-    color: await modules.getColors(
-      `https://i.ytimg.com/vi/${v}/maxresdefault.jpg`
-    ).then((colors) => colors[0].hex()),
+    color: await modules
+      .getColors(`https://i.ytimg.com/vi/${v}/maxresdefault.jpg`)
+      .then((colors) => colors[0].hex()),
   });
 });
 
@@ -363,7 +365,6 @@ app.get("/search", async (req, res) => {
     .summary(query + " ")
     .then((summary_) => (summary_.title !== "Not found." ? summary_ : "none"));
 
-  
   renderTemplate(res, req, "search.ejs", {
     j,
     continuation,
@@ -377,7 +378,9 @@ app.get("/channel/", async (req, res) => {
   const tab = req.query.tab;
 
   // about
-  const bout = await modules.fetch(config.tubeApi + `channel?id=${ID}&tab=about`);
+  const bout = await modules.fetch(
+    config.tubeApi + `channel?id=${ID}&tab=about`
+  );
   const h = await bout.text();
   const k = JSON.parse(modules.toJson(h));
 
@@ -443,7 +446,14 @@ app.get("/privacy", function (req, res) {
 });
 
 app.get("/143", function (req, res) {
-  renderTemplate(res, req, "143.ejs");
+  var number_easteregg = getRandomArbitrary(0, 150);
+
+  if (number_easteregg == "143") {
+    renderTemplate(res, req, "143.ejs");
+  }
+  if (number_easteregg != "143") {
+    return res.redirect("/");
+  }
 });
 
 app.get("/domains", function (req, res) {
@@ -603,41 +613,39 @@ app.get("/", async function (req, res) {
 
   if (!req.query.tab) var tab = "";
 
-  const invtrend = await modules.fetch(
-    `https://vid.puffyan.us/api/v1/trending${tab}`
-  ).then((res) => res.text());
+  const invtrend = await modules
+    .fetch(`https://vid.puffyan.us/api/v1/trending${tab}`)
+    .then((res) => res.text());
 
   const t = JSON.parse(invtrend);
-  
-  if(req.query.mobilesearch) {
- var query = req.query.mobilesearch;
-tab = "search"
-  if (req.query.continuation) {
-    var continuation = req.query.continuation;
-  }
-  if (!req.query.continuation) {
-    var continuation = "";
+
+  if (req.query.mobilesearch) {
+    var query = req.query.mobilesearch;
+    tab = "search";
+    if (req.query.continuation) {
+      var continuation = req.query.continuation;
+    }
+    if (!req.query.continuation) {
+      var continuation = "";
+    }
+
+    const search = await modules.fetch(
+      `https://tube.kuylar.dev/api/search?query=${query}&continuation=${continuation}`
+    );
+
+    const text = await search.text();
+    var j = JSON.parse(modules.toJson(text));
   }
 
-  const search = await modules.fetch(
-    `https://tube.kuylar.dev/api/search?query=${query}&continuation=${continuation}`
-  );
-
-  const text = await search.text();
-  var j = JSON.parse(modules.toJson(text));
-    
-  
-  }
-  
   renderTemplate(res, req, "main.ejs", {
     k: k,
     tab: req.query.tab,
     isMobile: req.useragent.isMobile,
-    mobilesearch:req.query.mobilesearch,
+    mobilesearch: req.query.mobilesearch,
     inv: t,
     turntomins,
     continuation,
-    j
+    j,
   });
 });
 

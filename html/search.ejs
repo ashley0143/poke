@@ -100,11 +100,12 @@ summary:hover{
         src:url('https://p.poketube.fun/https://cdn.statically.io/gh/brecert/discord-quote-generator/main/Ginto-Nord-800.woff') format("woff");
       }
     
-    .video-list > .video {
-    background: #1c1c1c;
-padding: 10px;
-border-radius: 10px;
-    }
+.video-list > .video {
+  background: #111;
+  padding: 10px;
+  border-radius: 10px;
+  border: #333 solid;
+}
   </style>
                  <style>section p {
  font-family:Whitney, Helvetica Neue, Helvetica, Arial, sans-serif;
@@ -280,7 +281,7 @@ video[counter].classList.add("shake");
         style="background-image: url('https://p.poketube.fun/https://i.ytimg.com/vi/<%= x.id %>/hqdefault.jpg?sqp=-oaymwEXCNAFEJQDSFryq4qpAwkIARUAAIhCGAE=&amp;rs=AOn4CLBmAOZV7CM3NdDKlEFxGX7PpI5UWQ');border-radius: 10px;"
          ><span class="video-length"><%=x.duration %></span></a>
       <div class="info" style="color:#fff;text-align: left;">
-        <a style="font-family: 'PokeTube Flex';font-weight: 1000;font-size: large;text-align: left;" href="/watch?v=<%= x.id %>" class="title max-lines-2"
+        <a style="font-family: 'PokeTube Flex';font-weight: 1000;font-size: large;text-align: left;font-stretch: extra-expanded;" href="/watch?v=<%= x.id %>" class="title max-lines-2"
           ><%= x.Title %></a>
         <div style="display: flex; flex-direction: column; row-gap: 8px;font-family: 'Inter'">
           <a href="/watch?v=<%= x.id %>"><span><%= x.views %> views</span> <span>•</span> <span><%= x.uploadedAt %></span></a>

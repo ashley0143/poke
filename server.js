@@ -130,73 +130,85 @@ app.get("/watch", async function (req, res) {
   const jj = await info.text();
   const ip = JSON.parse(jj);
 
-  core.video(v).then((data) => {
-    const k = data.video;
-    const json = data.json;
-    const engagement = data.engagement;
-    var inv_comments = data.comments;
-    const inv_vid = data.vid;
+  for (let i = 0; i < 2; i++) {
+    try {
+      core.video(v).then((data) => {
+        const k = data.video;
+        const json = data.json;
+        const engagement = data.engagement;
+        var inv_comments = data.comments;
+        const inv_vid = data.vid;
 
-    if (!data.comments) inv_comments = "Disabled";
+        if (!data.comments) inv_comments = "Disabled";
 
-    if (!core.video(v).b) {
-      var nnn = "";
-      var badges = "";
-      var comments = "";
+        if (!core.video(v).b) {
+          var nnn = "";
+          var badges = "";
+          var comments = "";
+        }
+
+        if (!v) res.redirect("/");
+
+        if (q === "medium") {
+          var url = `https://inv.vern.cc/latest_version?id=${v}&itag=18&local=true`;
+        }
+
+        // encryption
+        const url_e =
+          url +
+          "?e=" +
+          sha384(k.Video.Channel.id) +
+          sha384(k.Video.Channel.id) +
+          "Piwik" +
+          sha384(config.t_url);
+
+        const desc = data.desc;
+
+        var d = desc.toString().replace(/\n/g, " <br> ");
+
+        if (d === "[object Object]") {
+          var d = false;
+        }
+
+        renderTemplate(res, req, "poketube.ejs", {
+          url: url_e,
+          color: data.color,
+          engagement: engagement,
+          video: json,
+          date: k.Video.uploadDate,
+          e: e,
+          k: k,
+          process: process,
+          sha384: sha384,
+          isMobile: req.useragent.isMobile,
+          tj: data.channel,
+          r: r,
+          qua: q,
+          inv: inv_comments,
+          ip: ip,
+          convert: convert,
+          wiki: data.wiki,
+          f: f,
+          t: config.t_url,
+          optout: t,
+          badges: badges,
+          desc: desc,
+          comments: comments,
+          n: nnn,
+          inv_vid,
+          lyrics: "",
+        });
+      });
+      break;
+    } catch (err) {
+      if (err.status === 503) {
+        // retry after a bit
+        await new Promise((resolve) => setTimeout(resolve, 1000));
+      } else {
+        return "";
+      }
     }
-
-    if (!v) res.redirect("/");
-
-    if (q === "medium") {
-      var url = `https://inv.vern.cc/latest_version?id=${v}&itag=18&local=true`;
-    }
-
-    // encryption
-    const url_e =
-      url +
-      "?e=" +
-      sha384(k.Video.Channel.id) +
-      sha384(k.Video.Channel.id) +
-      "Piwik" +
-      sha384(config.t_url);
-
-    const desc = data.desc;
-
-    var d = desc.toString().replace(/\n/g, " <br> ");
-
-    if (d === "[object Object]") {
-      var d = false;
-    }
-
-    renderTemplate(res, req, "poketube.ejs", {
-      url: url_e,
-      color: data.color,
-      engagement: engagement,
-      video: json,
-      date: k.Video.uploadDate,
-      e: e,
-      k: k,
-      process: process,
-      sha384: sha384,
-      isMobile: req.useragent.isMobile,
-      tj: data.channel,
-      r: r,
-      qua: q,
-      inv: inv_comments,
-      ip: ip,
-      convert: convert,
-      wiki: data.wiki,
-      f: f,
-      t: config.t_url,
-      optout: t,
-      badges: badges,
-      desc: desc,
-      comments: comments,
-      n: nnn,
-      inv_vid,
-      lyrics: "",
-    });
-  });
+  }
 });
 
 app.get("/music", async function (req, res) {
@@ -588,7 +600,6 @@ app.get("/api/instances.json", async (req, res) => {
 ///////////// REDIRECTS / DEPRACATED  /////////////
 
 app.get("/discover", async function (req, res) {
-
   const trends = await modules.fetch(config.tubeApi + `trending`);
   const h = await trends.text();
   const k = JSON.parse(modules.toJson(h));
@@ -631,7 +642,6 @@ app.get("/discover", async function (req, res) {
     continuation,
     j,
   });
-  
 });
 
 app.get("/hashtag/:id", (req, res) => {
@@ -648,22 +658,17 @@ app.get("/video/upload", (req, res) => {
 
 ///////////// 404 AND MAIN PAGES ETC /////////////
 app.get("/:v*?", async function (req, res) {
-  
-  
-  if(req.params.v) {
-   const isvld = await core.isvalidvideo(req.params.v);
-    
-     if(isvld) {
-    return res.redirect(`/watch?v=${req.params.v}`)
+  if (req.params.v) {
+    const isvld = await core.isvalidvideo(req.params.v);
+
+    if (isvld) {
+      return res.redirect(`/watch?v=${req.params.v}`);
     } else {
-              return res.redirect("/discover");
+      return res.redirect("/discover");
     }
   } else {
-        return res.redirect("/discover");
-
+    return res.redirect("/discover");
   }
-   
-
 });
 
 app.get("/*", function (req, res) {

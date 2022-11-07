@@ -57,76 +57,56 @@ async function channel(id, cnt) {
 }
 
 async function video(v) {
-  if (v == null) return "Gib ID";
+  try {
+    if (v == null) return "Gib ID";
 
-  let nightlyRes;
+    let nightlyRes;
 
-  for (let i = 0; i < 2; i++) {
-    try {
-      const nightly = await fetch(
-        `https://lighttube-nightly.kuylar.dev/api/video?v=${v}`
-      ).then((res) => res.text());
+    const video = await fetch(`${config.tubeApi}video?v=${v}`)
+      .then((res) => res.text())
+      .then((xml) => JSON.parse(toJson(xml)));
 
-      nightlyRes = nightly;
-      break;
-    } catch (err) {
-      if (err.status === 500)
-        // Retry after a second.
-        await new Promise((resolve) => setTimeout(resolve, 1000));
-      else return "";
-    }
-  }
+    var inv_comments = await fetch(`${config.invapi}/comments/${v}`).then(
+      (res) => res.text()
+    );
 
-  const video = await fetch(`${config.tubeApi}video?v=${v}`)
-    .then((res) => res.text())
-    .then((xml) => JSON.parse(toJson(xml)));
+    var comments = await JSON.parse(inv_comments);
 
-  var inv_comments = await fetch(`${config.invapi}/comments/${v}`).then((res) =>
-    res.text()
-  );
+    var video_new_info = await fetch(`${config.invapi}/videos/${v}`).then(
+      (res) => res.text()
+    );
 
-  var comments = await JSON.parse(inv_comments);
-  
-  
-  var video_new_info = await fetch(`${config.invapi}/videos/${v}`).then((res) =>
-    res.text()
-  );
+    var vid = await JSON.parse(video_new_info);
 
-  var vid = await JSON.parse(video_new_info);
+    const a = await fetch(
+      `${config.tubeApi}channel?id=${video.Video.Channel.id}&tab=about`
+    )
+      .then((res) => res.text())
+      .then((xml) => JSON.parse(toJson(xml)));
 
-  const c = await fetch(
-    `${config.tubeApi}channel?id=${video.Video.Channel.id}&tab=videos`
-  )
-    .then((res) => res.text())
-    .then((xml) => JSON.parse(toJson(xml)));
+    const summary = await wiki
+      .summary(video.Video.Channel.Name + " ")
+      .then((summary_) =>
+        summary_.title !== "Not found." ? summary_ : "none"
+      );
 
-  const a = await fetch(
-    `${config.tubeApi}channel?id=${video.Video.Channel.id}&tab=about`
-  )
-    .then((res) => res.text())
-    .then((xml) => JSON.parse(toJson(xml)));
+    const data = await fetcher(v);
 
-  const summary = await wiki
-    .summary(video.Video.Channel.Name + " ")
-    .then((summary_) => (summary_.title !== "Not found." ? summary_ : "none"));
+    const nightlyJsonData = getJson(nightlyRes);
 
-  const data = await fetcher(v);
-
-  const nightlyJsonData = getJson(nightlyRes);
-
-  return {
-    json: data.video.Player,
-    video,
-    vid,
-    channel: c,
-    comments,
-    engagement: data.engagement,
-    wiki: summary,
-    desc: a.Channel.Contents.ItemSection.About.Description,
-    color: await getColors(
-      `https://i.ytimg.com/vi/${v}/maxresdefault.jpg`
-    ).then((colors) => colors[0].hex()),
+    return {
+      json: data.video.Player,
+      video,
+      vid,
+      comments,
+      engagement: data.engagement,
+      wiki: summary,
+      desc: a.Channel.Contents.ItemSection.About.Description,
+      color: await getColors(
+        `https://i.ytimg.com/vi/${v}/maxresdefault.jpg`
+      ).then((colors) => colors[0].hex()),
     };
+  } catch (err) {}
 }
 
 async function search(query, cnt) {
@@ -141,8 +121,23 @@ async function search(query, cnt) {
   return data;
 }
 
+async function isvalidvideo(v) {
+  var status;
+  const vld = await fetch(`${config.dislikes}${v}`).then((res) => {
+    status = res.status;
+    return res.json();
+  });
+
+  if (status == 400) {
+    return false;
+  } else {
+    return true;
+  }
+}
+
 module.exports = {
   search,
   video,
+  isvalidvideo,
   channel,
 };

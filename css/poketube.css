@@ -51,7 +51,7 @@ a {
   margin-bottom: 20px;
   font-stretch: expanded;
   justify-self: center;
-  width: max-content;
+  width: 39em;
   font-family: "PokeTube Flex";
   border: #7c44a0;
   border-style: solid;
@@ -118,9 +118,9 @@ a {
   }
 }
 
-@media screen and (min-width: 1400px) {
+@media screen and (min-width: 1350px) {
   .video-info-panel.gradient {
-    width: 60em;
+    width: 57em;
   }
 }
 
@@ -130,9 +130,14 @@ a {
   }
 }
 
+@media screen and (min-width: 1400px) {
+  .video-info-panel.gradient {
+    width: 60em;
+  }
+}
 @media screen and (min-width: 1600px) {
   .video-info-panel.gradient {
-    width: 72em;
+    width: 73em;
   }
 }
 

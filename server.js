@@ -130,7 +130,7 @@ app.get("/watch", async function (req, res) {
   const jj = await info.text();
   const ip = JSON.parse(jj);
 
-  for (let i = 0; i < 2; i++) {
+  for (let i = 0; i < 3 ; i++) {
     try {
       core.video(v).then((data) => {
         const k = data.video;

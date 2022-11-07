@@ -464,63 +464,7 @@
 
  
     	<div class="video-grid" >
-        <!-- 
-                 <% if (!continuation) { %>
-
-   <% tj.Channel.Contents.ItemSection[2].Shelf.Items.Video.forEach(x =>  { %>
-			<a href="/watch?v=<%- x.id %>" class="video">
-				<div class="thumbnail" style="background-image: url('https://p.poketube.fun/https://i.ytimg.com/vi/<%= x.id %>/hqdefault.jpg?sqp=-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLBy_x4UUHLNDZtJtH0PXeQGoRFTgw');border-radius: 10px;"><span class="video-length"><%- x.duration %></span></div>
-				<div class="info">
-					<span class="title max-lines-2" style="font-family:PokeTube flex,sans-serif;font-weight: 1000;font-stretch: ultra-expanded;"><%- x.Title %></span>
-			 
-            </div>
- 			</a>	
- 		 	               <% }) %>   
-                                           <% } %>
-                                             
-                                             <p>
-                                               continuations are broken on channels atm
-                                             </p>
-         <% if (continuation) { %>
-
-   <% tj.Channel.Contents.Video.forEach(x =>  { %>
-			<a href="/watch?v=<%- x.id %>" class="video">
-				<div class="thumbnail" style="background-image: url('https://p.poketube.fun/https://i.ytimg.com/vi/<%= x.id %>/hqdefault.jpg?sqp=-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLBy_x4UUHLNDZtJtH0PXeQGoRFTgw');border-radius: 10px;"><span class="video-length"><%- x.duration %></span></div>
-				<div class="info">
-					<span class="title max-lines-2" style="font-family:Ginto Nord,sans-serif;"><%- x.Title %></span>
-			 
-            </div>
- 			</a>	
- 		 	               <% }) %>   
- 
-                       
-                       </div>
-                   <% if (!continuation) { %>
-
-           <% if (tj.Channel.Contents.ItemSection.ItemSection.Continuation) { %>
-
-
-	<div class="pagination-buttons" style="border-top: none;justify-content: center">
-    <a style="color:#fff" href="/channel?id=<%=ID%>&continuation=<%=tj.Channel.Contents.ItemSection.ItemSection.Continuation.key%>">Next Page</a>
-
- 	</div>
-                           
-                    <% } %>                 
-                      <% } %>
-        <% if (continuation) { %>
-
-           <% if (tj.Channel.Contents.Continuation) { %>
-
-
-	<div class="pagination-buttons" style="border-top: none;justify-content: center">
-    <a style="color:#fff" href="/channel?id=<%=ID%>&continuation=<%=tj.Channel.Contents.Continuation.key%>">Next Page</a>
-
- 	</div>
-                           
-                    <% } %>                 
-                      <% } %>
-                                           <% } %>
--->
+         
         not workin rn :c
 
           <% } %>

@@ -2151,7 +2151,7 @@ More Epic options owo~
   navigator.share({
     title: document.title,
     text: "",
-    url: window.location.href + "&pw=m"
+    url: "https://" + window.location.hostname + "/<%=video.id%>"
   })
   .then(() => console.log('Successful share'))
   .catch(error => console.log('Error sharing:', error));

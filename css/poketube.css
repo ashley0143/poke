@@ -94,10 +94,28 @@ a {
     #8e6f7e 100%
   );
   display: block;
-  width: 54em;
+  width: 53em;
   margin: auto;
-  justify-self: center;
+  justify-self: left;
   position: absolute;
+}
+
+@media screen and (min-width: 1400px) {
+  .video-info-panel.gradient {
+  padding: 12px;
+  border-radius: 11px;
+  background-image: linear-gradient(
+    135deg,
+    #f97794 10%,
+    #623aa2 100%,
+    #8e6f7e 100%
+  );
+  display: block;
+  width: 63em;
+  margin: auto;
+  justify-self: left;
+  position: absolute;
+}
 }
 
 .video-info-pill-channelname {

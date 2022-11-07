@@ -173,7 +173,7 @@ app.get("/watch", async function (req, res) {
       color: data.color,
       engagement: engagement,
       video: json,
-      date: modules.moment(k.Video.uploadDate).format("LL"),
+      date: k.Video.uploadDate,
       e: e,
       k: k,
       process: process,
@@ -588,23 +588,7 @@ app.get("/api/instances.json", async (req, res) => {
 ///////////// REDIRECTS / DEPRACATED  /////////////
 
 app.get("/discover", async function (req, res) {
-  res.redirect("/");
-});
 
-app.get("/hashtag/:id", (req, res) => {
-  if (!req.params.id) {
-    return res.redirect("/");
-  }
-
-  return res.redirect(`/search?query=${req.params.id}&from=hashtag`);
-});
-
-app.get("/video/upload", (req, res) => {
-  res.redirect("https://youtube.com/upload");
-});
-
-///////////// 404 AND MAIN PAGES ETC /////////////
-app.get("/", async function (req, res) {
   const trends = await modules.fetch(config.tubeApi + `trending`);
   const h = await trends.text();
   const k = JSON.parse(modules.toJson(h));
@@ -647,9 +631,42 @@ app.get("/", async function (req, res) {
     continuation,
     j,
   });
+  
 });
 
-app.get("*", function (req, res) {
+app.get("/hashtag/:id", (req, res) => {
+  if (!req.params.id) {
+    return res.redirect("/");
+  }
+
+  return res.redirect(`/search?query=${req.params.id}&from=hashtag`);
+});
+
+app.get("/video/upload", (req, res) => {
+  res.redirect("https://youtube.com/upload");
+});
+
+///////////// 404 AND MAIN PAGES ETC /////////////
+app.get("/:v*?", async function (req, res) {
+  
+  
+  if(req.params.v) {
+   const isvld = await core.isvalidvideo(req.params.v);
+    
+     if(isvld) {
+    return res.redirect(`/watch?v=${req.params.v}`)
+    } else {
+              return res.redirect("/discover");
+    }
+  } else {
+        return res.redirect("/discover");
+
+  }
+   
+
+});
+
+app.get("/*", function (req, res) {
   const things = random_words[Math.floor(Math.random() * random_words.length)];
   renderTemplate(res, req, "404.ejs", {
     random: things,

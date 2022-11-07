@@ -62,10 +62,7 @@ async function video(v) {
 
     let nightlyRes;
 
-    const video = await fetch(`${config.tubeApi}video?v=${v}`)
-      .then((res) => res.text())
-      .then((xml) => JSON.parse(toJson(xml)));
-
+ 
     var inv_comments = await fetch(`${config.invapi}/comments/${v}`).then(
       (res) => res.text()
     );
@@ -96,7 +93,7 @@ async function video(v) {
 
     return {
       json: data.video.Player,
-      video,
+      video: await fetch(`${config.tubeApi}video?v=${v}`).then((res) => res.text())  .then((xml) => JSON.parse(toJson(xml))),
       vid,
       comments,
       engagement: data.engagement,

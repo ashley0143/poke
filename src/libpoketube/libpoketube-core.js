@@ -57,7 +57,6 @@ async function channel(id, cnt) {
 }
 
 async function video(v) {
-  try {
     if (v == null) return "Gib ID";
 
     let nightlyRes;
@@ -75,14 +74,14 @@ async function video(v) {
 
     var vid = await JSON.parse(video_new_info);
 
-    const a = await fetch(
-      `${config.tubeApi}channel?id=${video.Video.Channel.id}&tab=about`
+     const a = await fetch(
+      `${config.tubeApi}channel?id=${vid.authorId}&tab=about`
     )
       .then((res) => res.text())
       .then((xml) => JSON.parse(toJson(xml)));
 
     const summary = await wiki
-      .summary(video.Video.Channel.Name + " ")
+      .summary(vid.author + " ")
       .then((summary_) =>
         summary_.title !== "Not found." ? summary_ : "none"
       );
@@ -90,7 +89,6 @@ async function video(v) {
     const data = await fetcher(v);
 
     const nightlyJsonData = getJson(nightlyRes);
-
     return {
       json: data.video.Player,
       video: await fetch(`${config.tubeApi}video?v=${v}`).then((res) => res.text())  .then((xml) => JSON.parse(toJson(xml))),
@@ -103,7 +101,7 @@ async function video(v) {
         `https://i.ytimg.com/vi/${v}/maxresdefault.jpg`
       ).then((colors) => colors[0].hex()),
     };
-  } catch (err) {}
+
 }
 
 async function search(query, cnt) {

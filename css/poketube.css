@@ -94,48 +94,55 @@ a {
     #8e6f7e 100%
   );
   display: block;
-  width: 53em;
   margin: auto;
   justify-self: left;
   position: absolute;
+}
+
+/* RESPONSIVE STUFF */
+@media screen and (min-width: 1100px) {
+  .video-info-panel.gradient {
+    width: 41em;
+  }
+}
+
+@media screen and (min-width: 1200px) {
+  .video-info-panel.gradient {
+    width: 48em;
+  }
+}
+
+@media screen and (min-width: 1300px) {
+  .video-info-panel.gradient {
+    width: 54em;
+  }
 }
 
 @media screen and (min-width: 1400px) {
   .video-info-panel.gradient {
-  padding: 12px;
-  border-radius: 11px;
-  background-image: linear-gradient(
-    135deg,
-    #f97794 10%,
-    #623aa2 100%,
-    #8e6f7e 100%
-  );
-  display: block;
-  width: 63em;
-  margin: auto;
-  justify-self: left;
-  position: absolute;
-}
+    width: 60em;
+  }
 }
 
-@media screen and (max-width: 1200px) {
+@media screen and (min-width: 1500px) {
   .video-info-panel.gradient {
-  padding: 12px;
-  border-radius: 11px;
-  background-image: linear-gradient(
-    135deg,
-    #f97794 10%,
-    #623aa2 100%,
-    #8e6f7e 100%
-  );
-  display: block;
-  width: 48em;
-  margin: auto;
-  justify-self: left;
-  position: absolute;
-}
+    width: 66em;
+  }
 }
 
+@media screen and (min-width: 1600px) {
+  .video-info-panel.gradient {
+    width: 72em;
+  }
+}
+
+@media screen and (min-width: 1800px) {
+  .video-info-panel.gradient {
+    width: 85em;
+  }
+}
+
+/* RESPONSIVE END */
 
 .video-info-pill-channelname {
   color: #fff;

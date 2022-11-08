@@ -190,7 +190,7 @@ section#landing-page {
  
 .content {
            border-radius: 26px;
-          padding: 2em;
+          padding: 1em;
           margin: auto;
           display: flex;
          justify-content: center;
@@ -199,6 +199,10 @@ section#landing-page {
          top: 50%;
          transform: translateY(50%);
 }
+   
+   .content-inner{
+     padding: 10px;color:#fff;position: relative;top: 50%;transform: translateY(50%);
+   }
 .heading {
   color: #fff;
   font-size: xxx-large;
@@ -224,9 +228,42 @@ section#landing-page {
   margin: auto;
     margin-top: auto;
 }
+ 
+      .news {
+  display: flex;
+  justify-content: center;
+  background: #111;
+  width: 18em;
+  margin: auto;
+    margin-bottom: auto;
+  border-radius: 3em;
+  color: white;
+  margin-bottom: -10em;
+}
+    
    
+   .news > * {
+     color:#fff
+   }
+   
+   .news > a {
+     display: flex;
+  margin-block-start: 1em;
+  margin-block-end: 1em;
+  margin-inline-start: 0;
+  margin-inline-end: 0;
+  margin-top: 0;
+  margin-bottom: 1rem;
+ font-family: Whitney, Helvetica Neue, Helvetica, Arial, sans-serif;
+font-weight: 400;
+ font-size: 16px;
+line-height: 24px;
+margin-top: 12px;
+z-index: 10; /* Was 2 */"
+   }
       </style>
-<div class="app" style="background-image: url(/css/land.svg);background-size: auto;background-repeat: no-repeat;">
+
+       <div class="app" style="background-image: url(/css/land.svg);background-size: auto;background-repeat: no-repeat;">
      <nav>
              <div class="left">
 
@@ -255,9 +292,19 @@ section#landing-page {
   
   
  <div class="channel-page">
- 
-  
+          <div class="news"> 
+                           <img src="https://p.poketube.fun/https://twemoji.maxcdn.com/v/latest/svg/1f1fa-1f1e6.svg" style="width: 1.2em;align-self: center;margin-right: 3px;">
+
+   <a href="https://u24.gov.ua/">
+                   Support Ukraine
+      </a>
+            
+              
+    </div>
+
     <div class="content">
+
+  
 <div class="content-inner" style="padding: 10px;color:#fff;">
         <br>
         <h1 class="heading">PRIVACY IS YOUR RIGHT</h1>
@@ -267,7 +314,7 @@ section#landing-page {
       </div>
     </div>
     <div style="display: flex;justify-content: center;">
-           <img src="/css/product.svg" style="width: 25em;margin-top: 6em;transform: scale(1.3);margin-right: 1em;">
+           <img src="/css/product.svg" style="width: 25em;margin-top: 11.2em;transform: scale(1.3);margin-right: 1em;margin-bottom: 1em;">
          </div>
      </div>
          
@@ -278,7 +325,6 @@ section#landing-page {
    
   
 </div>
-        
  
  </body>
 </html>   

@@ -7,7 +7,7 @@
       "piwik": true,
       "region": "🇺🇸",
       "software": {
-        "name": "poketube-vannilla",
+        "name": "poketube-vanilla",
         "version": "lastest",
         "branch": "master"
       }
@@ -23,7 +23,7 @@
       "DEFAULT":true,
       "region": "🇺🇸",
       "software": {
-        "name": "poketube-vannilla",
+        "name": "poketube-vanilla",
         "version": "lastest",
         "branch": "master"
       }
@@ -37,7 +37,7 @@
       "piwik": true,
       "region": "🇺🇸",
       "software": {
-        "name": "poketube-vannilla",
+        "name": "poketube-vanilla",
         "version": "lastest",
         "branch": "master"
       }
@@ -51,7 +51,7 @@
       "piwik": true,
       "region": "🇺🇸",
       "software": {
-        "name": "poketube-vannilla",
+        "name": "poketube-vanilla",
         "version": "lastest",
         "branch": "master"
       }
@@ -65,7 +65,21 @@
       "piwik": true,
       "region": "🇺🇸",
       "software": {
-        "name": "poketube-vannilla",
+        "name": "poketube-vanilla",
+        "version": "lastest",
+        "branch": "master"
+      }
+    }
+  ],
+  [
+    "poketube.sylentpunk.xyz",
+    {
+      "uri": "https://poketube.sylentpunk.xyz",
+      "CLOUDFLARE": false,
+      "piwik": true,
+      "region": "🇮🇸",
+      "software": {
+        "name": "poketube-vanilla",
         "version": "lastest",
         "branch": "master"
       }

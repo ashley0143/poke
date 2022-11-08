@@ -18,8 +18,22 @@
     along with this program. If not, see https://www.gnu.org/licenses/.
   */
 
-const { fetcher, core, wiki, musicInfo, modules } = require("./src/libpoketube/loader.js")
-const { IsJsonString, convert, getFirstLine, capitalizeFirstLetter, turntomins, getRandomInt, getRandomArbitrary } = require("./src/libpoketube/ptutils/libpt-coreutils.js");
+const {
+  fetcher,
+  core,
+  wiki,
+  musicInfo,
+  modules,
+} = require("./src/libpoketube/loader.js");
+const {
+  IsJsonString,
+  convert,
+  getFirstLine,
+  capitalizeFirstLetter,
+  turntomins,
+  getRandomInt,
+  getRandomArbitrary,
+} = require("./src/libpoketube/ptutils/libpt-coreutils.js");
 
 const templateDir = modules.path.resolve(
   `${process.cwd()}${modules.path.sep}html`
@@ -130,7 +144,7 @@ app.get("/watch", async function (req, res) {
   const jj = await info.text();
   const ip = JSON.parse(jj);
 
-  for (let i = 0; i < 3 ; i++) {
+  for (let i = 0; i < 3; i++) {
     try {
       core.video(v).then((data) => {
         const k = data.video;
@@ -664,10 +678,18 @@ app.get("/:v*?", async function (req, res) {
     if (isvld) {
       return res.redirect(`/watch?v=${req.params.v}`);
     } else {
-      return res.redirect("/discover");
+      if (req.useragent.isMobile) {
+        return res.redirect(`/discover`);
+      } else {
+        return renderTemplate(res, req, "landing.ejs");
+      }
     }
   } else {
-    return res.redirect("/discover");
+    if (req.useragent.isMobile) {
+      return res.redirect(`/discover`);
+    } else {
+      return renderTemplate(res, req, "landing.ejs");
+    }
   }
 });
 

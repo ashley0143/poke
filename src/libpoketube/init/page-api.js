@@ -76,4 +76,4 @@ app.get("/api/instances.json", async (req, res) => {
   res.sendFile(__dirname + `/instances.json`);
 });
 
- });
+ }

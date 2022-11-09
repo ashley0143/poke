@@ -12,13 +12,30 @@
     
   */
 
+function initlog(args){
+  console.log("[LIBPT INTSYS] " + args) 
+}
+
+function init (app, port){
+  if(!port) port = "3000"
+  try {
+  app.listen(port, () => {
+    initlog("Loading Poketube: success!" + " on port " + port);
+  });
+  } catch (err) {
+  initlog("Loading Poketube: error", err);
+}
+
+}
 module.exports =
 {
   fetcher:require("../libpoketube/libpoketube-fetcher.js"),
   core:require("../libpoketube/libpoketube-core.js"),
   musicInfo:require("music-info"),
   wiki:require("wikipedia"),
-  version:"libpoketube-1.2-git",
+  initlog,
+  init,
+  version:"libpoketube-2.0-git",
   modules:{
     fetch:require("node-fetch"),
     toJson:require("xml2json").toJson,

@@ -24,7 +24,22 @@ const {
   wiki,
   musicInfo,
   modules,
-} = require("./src/libpoketube/loader.js");
+  version,
+  initlog,
+  init,
+} = require("./src/libpoketube/libpoketube-initsys.js");
+
+initlog("Loading...");
+initlog(
+  "[Welcome] Welcome To PokeTube :3 " +
+    "Running " +
+    `Node ${process.version} - V8 v${
+      process.versions.v8
+    } -  ${process.platform.replace("linux", "GNU/Linux")} ${
+      process.arch
+    } Server - libpt ${version}`
+);
+
 const {
   IsJsonString,
   convert,
@@ -35,6 +50,8 @@ const {
   getRandomArbitrary,
 } = require("./src/libpoketube/ptutils/libpt-coreutils.js");
 
+initlog("Loaded libpt-coreutils");
+
 const templateDir = modules.path.resolve(
   `${process.cwd()}${modules.path.sep}html`
 );
@@ -42,6 +59,7 @@ const templateDir = modules.path.resolve(
 const sha384 = modules.hash;
 
 var app = modules.express();
+initlog("Loaded express.js");
 app.engine("html", require("ejs").renderFile);
 app.use(modules.express.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
 app.use(modules.useragent.express());
@@ -84,6 +102,10 @@ app.use(function (req, res, next) {
   next();
 });
 
+////
+initlog("Loading pages ");
+///
+
 app.get("/encryption", async function (req, res) {
   var v = req.query.v;
 
@@ -118,11 +140,14 @@ app.get("/encryption", async function (req, res) {
     },
   };
 
-  res.json(re);
+  res.json(re); 
 });
 
 ///////////// VIDEO PAGES ETC. /////////////
 
+////
+initlog("Loading video pages ");
+///
 app.get("/watch", async function (req, res) {
   /*
    * QUERYS
@@ -327,6 +352,11 @@ app.get("/music", async function (req, res) {
   });
 });
 
+////
+initlog("Loaded video pages ");
+initlog("Loading Download and channel pages");
+///
+
 app.get("/download", async function (req, res) {
   var v = req.query.v;
 
@@ -465,8 +495,11 @@ app.get("/channel/", async (req, res) => {
     desc: d,
   });
 });
+initlog("Loaded Download and channel pages");
 
 /////////////  STATIC /////////////
+initlog("Loading static pages");
+
 app.get("/privacy", function (req, res) {
   renderTemplate(res, req, "priv.ejs");
 });
@@ -497,6 +530,8 @@ app.get("/css/:id", (req, res) => {
 app.get("/js/:id", (req, res) => {
   res.sendFile(__dirname + `/js/${req.params.id}`);
 });
+
+initlog("Loaded static pages");
 
 ///////////// API /////////////
 
@@ -672,24 +707,24 @@ app.get("/video/upload", (req, res) => {
 
 ///////////// 404 AND MAIN PAGES ETC /////////////
 app.get("/:v*?", async function (req, res) {
+  let rendermainpage = () => {
+    if (req.useragent.isMobile) {
+      return res.redirect(`/discover`);
+    } else {
+      return renderTemplate(res, req, "landing.ejs");
+    }
+  };
+
   if (req.params.v) {
     const isvld = await core.isvalidvideo(req.params.v);
 
     if (isvld) {
       return res.redirect(`/watch?v=${req.params.v}`);
     } else {
-      if (req.useragent.isMobile) {
-        return res.redirect(`/discover`);
-      } else {
-        return renderTemplate(res, req, "landing.ejs");
-      }
+      return rendermainpage();
     }
   } else {
-    if (req.useragent.isMobile) {
-      return res.redirect(`/discover`);
-    } else {
-      return renderTemplate(res, req, "landing.ejs");
-    }
+    return rendermainpage();
   }
 });
 
@@ -700,8 +735,9 @@ app.get("/*", function (req, res) {
   });
 });
 
+initlog("Loaded pages - initing poketube finnished :3");
+
 ////////////////////////////////////////////////////
 
 // listen
-
-app.listen("3000", () => {});
+init(app);

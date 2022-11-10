@@ -5,6 +5,9 @@ function initlog(args) {
 function init(app, config, rendertemplate) {
   initlog("Starting superinit");
   initlog("[START] Load pages");
+  if ( Math.random() < 0.5 ){
+    initlog("https://poketube.fun/watch?v=lpiB2wMc49g");
+  }
 
   try {
     initlog("Loading video pages ");

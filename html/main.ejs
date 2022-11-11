@@ -634,7 +634,16 @@ summary:hover{
   transition: opacity 0.6s;
   margin-bottom: 15px;
 }
-    
+    .downnav{
+       position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      margin: auto;
+      overflow: hidden;
+       z-index: 1;
+      background-color: #0f0f0f
+}
     .search button {
       transform: none;
   display: flex;
@@ -760,6 +769,103 @@ summary:hover{
      margin: auto;
    }
       </style>
+                
+                  
+  <style>
+    #more-button-container .backtotop {
+  margin: 0%;
+  display: none;
+}
+#more-button-container .backtotop a {
+   margin-top: .5em;
+}
+#more-button .close { display: none; }
+#more-button {
+font-size: .94em;
+line-height: 1.2em;
+text-align: left;
+padding: .6em 3%;
+margin: 0;
+background: #000;
+border-top: none;
+border-radius: 23px;
+height: 100%;
+}
+#set-language { margin-bottom: .2em; }
+#set-language + p { 
+   display: inline-block;
+   font-size: 1em;  /* 15px */
+   margin: .45em 0 0;
+}
+
+#more-buttons { padding: .4em 0; }
+#more-buttons p {margin: 0;
+font-weight: 900;
+font-stretch: ultra-expanded;
+padding: 3px;
+    }
+#more-buttons span {
+   display: inline-block;
+   width: 10.5em;
+   line-height: 2em;
+}
+#more-buttons span a {
+   line-height: 1.9em;
+}
+#more-buttons span.original { font-weight: bold; }
+/* Display/hide language list */
+
+   #more-button-container { display: none; }
+   #more-button-container:target { display: block; }
+     
+     #rec-cont:target { display: none; }
+   #rec-cont { display: block; }
+
+   .backtotop b { display: none; }
+
+   body { position: relative; }
+#more-button-container {
+  position: absolute;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  margin: auto;
+  overflow: hidden;
+  z-index: 1;
+  height: 13em;
+}
+   #language-container .backtotop a {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background: transparent;
+      border: none;
+      margin-top: 0;
+   }
+   #more-button .close {
+      float: right;
+      display: block;
+   }
+   #more-button.close span {
+      display: none;
+   }
+   #more-button .close:after {
+      content: "\2A09";
+      float: right;
+      position: relative; bottom: .1em;
+      cursor: pointer;
+   }
+  
+   #more-buttons {
+      column-width: 10em;
+      column-count: 3;
+      column-gap: 0;
+   }
+   #more-buttons span { display: block; }
+   #more-buttons span a { display: inline-block; }
+</style>
+  
   <body>
 
  <div class="app" >
@@ -773,7 +879,6 @@ summary:hover{
      
             <div class=right>
           
-              <a href="/video/upload?from="><i class="fa-light fa-video"></i></a> 
       <a href="?tab=search"><i class="fa-light fa-search"></i></a> 
 
             </div>
@@ -798,7 +903,6 @@ summary:hover{
                                     
                 <a href="?tab=music"class="tab">Music</a>
 
-                <a  href="?tab=search" class="tab">Search</a>
                       <% if (!isMobile) { %> 
 
                  <a href="?tab=movies" class="tab">Movies</a>
@@ -817,7 +921,6 @@ summary:hover{
                                     
                 <a href="" class="tab active ">Music</a>
 
-                <a  href="?tab=search" class="tab">Search</a>
                        <% if (!isMobile) { %> 
 
                  <a href="?tab=movies" class="tab">Movies</a>
@@ -840,7 +943,6 @@ summary:hover{
                                     
                 <a href="?tab=music" class="tab">Music</a>
 
-                <a href="" class="tab active">Search</a>
 
                        
 
@@ -856,7 +958,6 @@ summary:hover{
                                     
                 <a href="?tab=music" class="tab">Music</a>
 
-                <a href="" class="tab active">Search</a>
 
                        
 
@@ -881,12 +982,42 @@ summary:hover{
 
              </div>
 
- 			</a>	
-          
+ 			</a>	 		 	               <% }) %>   
 
- 		 	               <% }) %>   
-                       
+                           <div id="more-button-container">
+  
+ <div class="backtotop">
+  <hr class="no-display" />
+  <a href="#top"><b>&#9650;</b></a>
+ </div>
+ <div id="more-button" class="rounded-corners">
+   <a href="#top">
+   <hr style="clear: both;display: block;border: none;border-bottom: 0.5px solid #2f2f2f;margin: 0 11em;/*! width: 4.5em; */height: 0;"><hr style="clear: both;display: block;border: none;border-bottom: 0.5px solid #2f2f2f;margin: 0 11em;/*! width: 4.5em; */height: 0;">
+   </a>
  
+<div id="more-buttons" style="display: contents;">
+ <div style="padding: 1em;">
+                    <a href="/video/upload?from=" style=""><i class="fa-light fa-video" style="font-size: xx-large;background: #333;padding: 10px;border-radius: 50%;"></i>
+ <span style="margin-left: 2.4em;font-weight: 1000;font-size: x-large;margin-top: -2em;font-family: &quot;Poketube flex&quot;;font-stretch: ultra-expanded;">
+Upload
+  </span>
+   </a> 
+  
+  
+  </div>
+                                  
+ </div>    
+                             </div>
+                                                          </div>
+
+                  <div class="downnav">
+                      <a  href="#more-button-container">
+
+       
+                    <i style="font-size:xx-large;color:#fff;margin-top: 7px;margin-bottom: 7px;" class="fa-thin fa-circle-plus"></i>
+                  </a>
+                                        </div>
+
            		 	               <% } %>   
                                                  		 	               <% } %>   
 
@@ -939,6 +1070,7 @@ summary:hover{
             
                 <% }) %>   
      
+
             <%  if (continuation) { %>
               
 <p style="text-align: left;margin-left: 16em;color: var(--text-secondary);text-decoration: none;">

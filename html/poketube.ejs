@@ -1560,7 +1560,7 @@ padding: 3px;
               <a name="top"></a>
         </nav>
 	   <div class="mobile-page">
-	<div class="primary">
+	<div class="primary" >
 		<div class="video-player-container" style="background-color:#000">
 					<video class="player" autoplay style="border-radius: 6px;" controls  poster="https://i.ytimg.com/vi/<%=video.id%>/hqdefault.jpg?v=607ddcd4">
  
@@ -1595,7 +1595,12 @@ padding: 3px;
                                                                                                        <% } %>               
                                                            <% } %>                
  					</video>
-                                          <div style="display: flex;justify-content: center;align-items: center;flex-direction: row; column-gap: 3px;" align="center">
+                                                 
+ 		</div>
+			<div class="video-info">
+        <div style="background-image: linear-gradient( 135deg, #F97794 10%, #623AA2 100%, #8e6f7e 100%);border-radius: 10px;margin-bottom: 10px;padding-bottom: 1em;padding-top: 0.3em;">
+          
+                                        <div style="display: flex;justify-content: center;align-items: center;flex-direction: row; column-gap: 3px;" align="center">
                                 
   <% if (!qua) { %> 
 
@@ -1606,13 +1611,35 @@ padding: 3px;
 
                                                                       <% } %>               
 
-       </div>                                                 
- 		</div>
-			<div class="video-info">
-        <div style="background-image: linear-gradient( 135deg, #F97794 10%, #623AA2 100%, #8e6f7e 100%);border-radius: 10px;margin-bottom: 10px;">
+       </div>            
                   <div class="video-title" style="font-family:'Inter';font-weight:900;white-space:yes;padding: 10px;"><%=video.Title%> <a id="language-button" href="#desc-container" style="float: right;" class="switch">
 <i class="fa-thin fa-chevron-down"></i>
 </a> </div>
+                    
+					<div class="channel-info" style="border: none;padding: 10px;background: #333;border-radius: 15px;margin-left: 6px;margin-right: 12px;" name="chnl">
+               
+				<a class="avatar">
+					<img src=" <%= k.Video.Channel.Avatar[1].$t %>">
+				</a>
+              
+				<div class="name" style="font-family:'Ginto Nord'">
+		  <div>
+						<a style="color:#fff" href="/channel?id=<%=k.Video.Channel.id%>" >  <%=k.Video.Channel.Name%></a>   
+            
+         
+		<div class="subscriber-count" style="display: block ruby;">
+          <%= k.Video.Channel.subscriberCount %>
+ 				</div>
+              </div>
+				</div>
+               
+ 
+				<button class="subscribe-button" ><a style="color:#fff" href="https://www.youtube.com/channel/<%=video.Channel.id%>?view_as=subscriber?sub_confirmation=1">Suscribe</a></button>
+               
+			</div>
+            
+                        <div>
+                <div>
  				<div class="video-info-bar" style="font-family:'Inter';">
 
 <div class="video-info-buttons" style="font-family:'Inter';font-weight:900;white-space:yes;background:#333;border-radius: 15px;margin: 6px;align-self: center;align-items: center;">
@@ -1634,36 +1661,43 @@ padding: 3px;
  	<a style="color:#fff" href="#more-button-container"> <i style="font-size:x-large;color:#fff" class="fa-thin fa-circle-plus"></i>More.. </a>
             </div>
 				</div>
+       <%  if (Array.isArray( inv.comments)) { %> 
+<div style="padding: 0em;background: #333;border-radius: 16px;align-self: center;align-items: center;margin-left: 8px;margin-right: 12px;padding-bottom: 0;padding-top:1em">
+            <div class="video-title" style="font-family:'PokeTube flex';font-weight:1000;white-space:yes;margin-top: -0.5em;margin-left: 0.4em;">Comments
+                    <a id="language-button" href="#comments-container" style="float: right;margin-right: 0.5em;" class="switch">
+<i class="fa-thin fa-chevron-down"></i>
+</a> 
+                                                       </div> 
+           <div class="" style="padding: 0em !important;margin-left: 0.3em;">
+
+<div class="desc" style="display: flex;font-size: small;padding: 0;margin: -10px;margin-left: -0.5em">
+                   <h5 style="display: flex;margin-top: 7px;padding-top: 10px;">
+                     <div class="thumb">
+                     
+                     <div class="thumb">
+				<a href="/channel?id=<%-  inv.comments[0].authorId%>" class="avatar" style="width: 40px;height: 40px;margin: 4px;">
+					<img src="https://p.poketube.fun/<%=  inv.comments[0].authorThumbnails[1].url %>" style="width: 24px;height: 24px;margin-right: inherit;"  >
+                     </a>
+            </div>
+                      
+                           
+
+              </h5>
+              <p class="comment" style="font-weight: bold;color: #fff; word-wrap: break-word; overflow: hidden; text-overflow: ellipsis; display: -webkit-box;  -webkit-line-clamp: 2; line-clamp: 2; -webkit-box-orient: vertical; text-overflow: ellipsis;  max-width: 50em;align-self:center;">
+                <%-  inv.comments[0].contentHtml %>  
+               </p>
+            </div>
+    
+      </div>
+                          
           </div>
 
-					<div class="channel-info" name="chnl">
-				<a href="/channel?id=<%=video.Channel.id%>" class="avatar">
-					<img src=" <%= k.Video.Channel.Avatar[1].$t %>">
-				</a>
-				<div class="name" style="font-family:'Ginto Nord'">
-		  <div>
-						<a style="color:#fff" href="/channel?id=<%=k.Video.Channel.id%>" >  <%=k.Video.Channel.Name%></a>   
-            
-              <% if (!video.Channel.Name.endsWith(' - Topic')) { %>  
-            
-               <% if (badges) { %> 
+ 
+ 
+                                                                                               <% } %>   
+       
+          </div>
 
-              <% if (badges.tooltip === "Verified") { %> 
-<i class="fa-solid fa-badge-check" title="<%=badges.tooltip%>"></i>
-            <% } %>  <% if (badges.tooltip === "Official Artist Channel") { %> 
-<i class="fa-solid fa-music-note" title="<%=badges.tooltip%>"></i>
-             <% } %>             <% } %>  <% } %> 
-               
-		<div class="subscriber-count">
-          <%= k.Video.Channel.subscriberCount %>
- 				</div>
-              </div>
-				</div>
-		 
-				<button class="subscribe-button" ><a style="color:#fff" href="https://www.youtube.com/channel/<%=video.Channel.id%>?view_as=subscriber?sub_confirmation=1">Suscribe</a></button>
-			</div>
-                        <div>
-                <div>
 
 
 <div id="desc-container">
@@ -1732,7 +1766,7 @@ padding: 3px;
   
                                   <hr style="clear: both;display: block;border: none;border-bottom: 0.5px solid #2f2f2f;margin: 0 0;/*! width: 4.5em; */height: 0;"> 
 <p style="margin-top: 10px;margin-bottom: 10px;">
-                    <%=engagement.viewCount.toLocaleString()%> Views - Uploaded at <%=date%> :3
+                 Uploaded at <%=date%> :3
           </p>	
      <% if (String(video.Description) != "[object Object]")  { %>
 
@@ -2007,41 +2041,7 @@ More Epic options owo~
                    
                            <div>
  
-                                                     <%  if (Array.isArray( inv.comments)) { %> 
-
-                   <div class="video-title" style="font-family:'PokeTube flex';font-weight:1000;white-space:yes;margin-top: 10px;">Comments
-                    <a id="language-button" href="#comments-container" style="float: right;" class="switch">
-<i class="fa-thin fa-chevron-down"></i>
-</a> 
-                                                       </div> 
-           
-                             
-                                   <div class="<%- inv.comments[0].id %>" >
-
-<div class="desc" style="display: flex;font-size: small;padding: 0;margin: -8px;">
-                   <h5 style="display: flex;margin-top: 7px;padding-top: 10px;"><div class="thumb">
-				<a href="/channel?id=<%-  inv.comments[0].authorId%>" class="avatar" style="width: 40px;height: 40px;margin: 4px;">
-					<img src="https://p.poketube.fun/<%=  inv.comments[0].authorThumbnails[1].url %>" style="width: 24px;height: 24px;margin-right: inherit;"  >
-                     </a>
-            </div>
-                      
-                           
-
-              </h5>
-              <p class="comment" style="font-weight: bold;color: #fff; word-wrap: break-word; overflow: hidden; text-overflow: ellipsis; display: -webkit-box;  -webkit-line-clamp: 2; line-clamp: 2; -webkit-box-orient: vertical; text-overflow: ellipsis;  max-width: 50em;align-self:center;">
-                <%-  inv.comments[0].contentHtml %>  
-               </p>
-            </div>
-    
-      </div>
-                          
-
- 
- 
-                                 <hr style="clear: both;display: block;border: none;border-bottom: 0.5px solid #2f2f2f;margin: 0 0;/*! width: 4.5em; */height: 0;"> 
-               </div>
-                                                                                              <% } %>   
-       
+                                                   
                  
  	</div> 	</div>
 

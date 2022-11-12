@@ -81,7 +81,7 @@ a {
 }
 
 .video-views {
-  display: block ruby;
+  white-space: nowrap;
 }
 
 .video-info-panel.gradient {

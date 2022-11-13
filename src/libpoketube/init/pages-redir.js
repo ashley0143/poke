@@ -1,4 +1,13 @@
- const {  fetcher,core, wiki,musicInfo, modules, version, initlog, init,} = require("../libpoketube-initsys.js");
+const {
+  fetcher,
+  core,
+  wiki,
+  musicInfo,
+  modules,
+  version,
+  initlog,
+  init,
+} = require("../libpoketube-initsys.js");
 const {
   IsJsonString,
   convert,
@@ -11,18 +20,24 @@ const {
 
 const sha384 = modules.hash;
 
-module.exports = function (app,config, renderTemplate) {
- 
+module.exports = function (app, config, renderTemplate) {
+  app.get("/hashtag/:id", (req, res) => {
+    if (!req.params.id) {
+      return res.redirect("/");
+    }
 
-app.get("/hashtag/:id", (req, res) => {
-  if (!req.params.id) {
-    return res.redirect("/");
-  }
+    return res.redirect(`/search?query=${req.params.id}&from=hashtag`);
+  });
 
-  return res.redirect(`/search?query=${req.params.id}&from=hashtag`);
-});
+  app.get("/shorts/:id", (req, res) => {
+    if (!req.params.id) {
+      return res.redirect("/");
+    }
 
-app.get("/video/upload", (req, res) => {
-  res.redirect("https://youtube.com/upload");
-});
-}
+    return res.redirect(`/watch?v=${req.params.id}&from=short`);
+  });
+
+  app.get("/video/upload", (req, res) => {
+    res.redirect("https://youtube.com/upload");
+  });
+};

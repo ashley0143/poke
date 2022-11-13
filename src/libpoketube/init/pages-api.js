@@ -10,7 +10,43 @@ const {
 } = require("../ptutils/libpt-coreutils.js");
 
  module.exports = function (app, config, renderTemplate) {
- 
+   
+     
+app.get("/embed/:v", async function (req, res) {
+  var e = req.query.e;
+  var f = req.query.f;
+  var t = req.query.t;
+  var q = req.query.quality;
+  var v = req.params.v;
+
+  var fetching = await fetcher(v);
+  const video = await modules.fetch(config.tubeApi + `video?v=${v}`);
+
+  const json = fetching.video.Player;
+  const h = await video.text();
+  const k = JSON.parse(modules.toJson(h));
+  const engagement = fetching.engagement;
+
+  if (!v) res.redirect("/");
+
+  //video
+  if (!q) url = `https://tube.kuylar.dev/proxy/media/${v}/22`;
+  if (q === "medium") {
+    var url = `https://tube.kuylar.dev/proxy/media/${v}/18`;
+  }
+
+  renderTemplate(res, req, "poketube-iframe.ejs", {
+    video: json,
+    url: url,
+    sha384: modules.hash,
+    qua: q,
+    engagement: engagement,
+    k: k,
+    optout: t,
+    t: config.t_url,
+  });
+});
+
 
 app.get("/api/search", async (req, res) => {
   const query = req.query.query;

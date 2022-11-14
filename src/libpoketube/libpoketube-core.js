@@ -86,6 +86,9 @@ async function video(v) {
         summary_.title !== "Not found." ? summary_ : "none"
       );
 
+      const desc = a.Channel?.Contents.ItemSection.About.Description;
+
+    
     const data = await fetcher(v);
 
     const nightlyJsonData = getJson(nightlyRes);
@@ -96,7 +99,7 @@ async function video(v) {
       comments,
       engagement: data.engagement,
       wiki: summary,
-      desc: a.Channel.Contents.ItemSection.About.Description,
+      desc: desc,
       color: await getColors(
         `https://i.ytimg.com/vi/${v}/maxresdefault.jpg`
       ).then((colors) => colors[0].hex()),

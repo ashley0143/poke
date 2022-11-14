@@ -42,9 +42,22 @@ a {
   font-stretch: extra-expanded;
 }
 
+.video-info-panel > .video-title > a {
+  white-space: nowrap;
+}
+
+.video-info-panel > .video-title {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  max-width: max-content;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+}
+
 .video-sub-info.description {
   font-weight: 600;
-  margin-top: 8.5em !important;
+  margin-top: 9.5em !important;
   border-radius: 21px;
   background: #1c1c1c;
   padding: 10px;
@@ -114,6 +127,7 @@ a {
   display: block ruby;
   text-overflow: ellipsis;
   max-width: 7em;
+  white-space: nowrap;
 }
 
 .comments-author.owner {

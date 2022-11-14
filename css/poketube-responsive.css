@@ -190,6 +190,12 @@
   }
 }
 
+@media screen and (min-width: 2560px) {
+  .video-info-panel.gradient {
+    width: 132em;
+  }
+}
+
 @media screen and (min-width: 2600px) {
   .video-info-panel.gradient {
     width: 134em;

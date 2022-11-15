@@ -404,3 +404,11 @@ nav .right img {
   font-stretch: 100%;
   font-weight: 600;
 }
+
+.btn.btn-success {
+  transform: translate(21em, -1.25em) !important;
+}
+
+nav .middle .search-bar { 
+border-radius: 2em !important;
+}

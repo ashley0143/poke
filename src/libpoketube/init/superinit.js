@@ -40,8 +40,8 @@ function init(app, config, rendertemplate) {
     initlog("[OK] Load pages");
 
     initlog("Loaded pages - initing poketube finnished :3");
-  } catch {
-    initlog("[FAILED] Load pages");
+  } catch (err) {
+    initlog("[FAILED] Load pages \n" + err);
   }
 }
 

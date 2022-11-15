@@ -51,14 +51,12 @@ a {
   overflow: hidden;
   max-width: max-content;
   display: -webkit-box;
-  -webkit-line-clamp: 1;
-  -webkit-box-orient: vertical;
   word-break: break-all;
 }
 
 .video-sub-info.description {
   font-weight: 600;
-  margin-top: 9.5em !important;
+  margin-top: 1em !important;
   border-radius: 21px;
   background: #1c1c1c;
   padding: 10px;
@@ -110,7 +108,6 @@ a {
   display: block;
   margin: auto;
   justify-self: left;
-  position: absolute;
 }
 
 .video-info-pill-channelname {

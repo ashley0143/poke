@@ -19,6 +19,11 @@
 
 */
 
+
+
+
+
+
 /* RESPONSIVE STUFF */
 
 /* Formula for xx50px - inital widht + 3em */
@@ -36,7 +41,7 @@
 
 @media screen and (min-width: 1300px) {
   .video-info-panel.gradient {
-    width: 54em;
+    width: 54.4em;
   }
 }
 

@@ -80,6 +80,7 @@ module.exports = function (app, config, renderTemplate) {
     const ip = JSON.parse(jj);
     const isvld = await core.isvalidvideo(v);
 
+    
     if (isvld) {
      
           core.video(v).then((data) => {
@@ -88,7 +89,7 @@ module.exports = function (app, config, renderTemplate) {
             const engagement = data.engagement;
             var inv_comments = data.comments;
             const inv_vid = data.vid;
-
+           if(json.Title) {
             if (!data.comments) inv_comments = "Disabled";
 
             if (!core.video(v).b) {
@@ -139,7 +140,9 @@ module.exports = function (app, config, renderTemplate) {
               inv_vid,
               lyrics: "",
             });
+             }
           });
+          
  
     } else {
       res.redirect("/");

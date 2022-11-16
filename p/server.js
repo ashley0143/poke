@@ -2,13 +2,16 @@ const fs = require("fs");
 const express = require("express");
 const fetch = require("node-fetch");
 const htmlParser = require("node-html-parser");
-const lyrics = require("./lyrics.js");
 
 const app = express();
 
 app.use(express.json()); // for parsing application/json
 app.use(express.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
 
+app.use(function (req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  next();
+});
 let Proxy = async (req, res) => {
   const url = "https://" + req.originalUrl.slice(10);
 
@@ -43,18 +46,10 @@ const listener = (req, res) => {
   Proxy(req, res);
 };
 
-app.get("/", (req, res) => res.redirect(`https://poketube.fun/watch?v=l3eww1dnd0k&trck=we_dont_lol&hi=mom&i_like_this=yes&omgfr=tru&AAAAA=BBBBBB&unclebenwhathappend=squidgames`));
- 
+app.get("/", (req, res) =>
+  res.redirect(`https://poketube.fun/watch?v=l3eww1dnd0k`)
+);
 
-app.get("/api/lyrics", async (req, res) => {
-  const query = req.query.query;
- 
-  res.json(await lyrics(query))
-   
-});
-
-   
 app.all("/*", listener);
 
 app.listen(3000, () => {});
-

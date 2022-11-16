@@ -318,14 +318,22 @@
 
                         
     <% if (  video.Subtitles.Subtitle) { %>  
+      
      <%  if (Array.isArray( video.Subtitles.Subtitle)) { %> 
    <% video.Subtitles.Subtitle.forEach(x => { %>
      <track src="/api/subtitles?v=<%=video.id%>&h=<%= x.language %>" label="<%= x.language.replace("United States","Simplified - USA") %>" kind="subtitles">      
      
         <img src="https://t.poketube.fun/t/rep.gif?v=<%=btoa(video.id)%>&h=<%= x.language %>" id="subtitle_usage_rate" style="border:0;width: 0;visibility: hidden;"> 
          <% }) %>   
-                                                                                                       <% } %>               
-                                                           <% } %>                
+                                                                                                       <% } %>                     
+     <%  if (!Array.isArray( video.Subtitles.Subtitle)) { %> 
+     <track src="/api/subtitles?v=<%=video.id%>&h=<%=  video.Subtitles.Subtitle.language %>" label="<%=  video.Subtitles.Subtitle.language.replace("United States","Simplified - USA") %>" kind="subtitles">      
+     
+        <img src="https://t.poketube.fun/t/rep.gif?v=<%=btoa(video.id)%>&h=<%= video.Subtitles.Subtitle.language %>" id="subtitle_usage_rate" style="border:0;width: 0;visibility: hidden;"> 
+            
+                                                           <% } %>         
+                                                           <% } %>         
+                                                             
  					</video><img src="https://t.poketube.fun/t/rep.gif?video=<%=btoa(video.id)%>" style="border:0;width: 0;visibility: hidden;" id="video">
 <div style="display: flex;justify-content: center;align-items: center;flex-direction: row; column-gap: 3px;" align="center">
                                 

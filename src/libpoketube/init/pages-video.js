@@ -81,8 +81,7 @@ module.exports = function (app, config, renderTemplate) {
     const isvld = await core.isvalidvideo(v);
 
     if (isvld) {
-      for (let i = 0; i < 3; i++) {
-        try {
+     
           core.video(v).then((data) => {
             const k = data.video;
             const json = data.json;
@@ -141,16 +140,7 @@ module.exports = function (app, config, renderTemplate) {
               lyrics: "",
             });
           });
-          break;
-        } catch (err) {
-          if (err.status === 503) {
-            // retry after a bit
-            await new Promise((resolve) => setTimeout(resolve, 1000));
-          } else {
-            return "";
-          }
-        }
-      }
+ 
     } else {
       res.redirect("/");
     }

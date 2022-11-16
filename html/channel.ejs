@@ -16,8 +16,8 @@
     You should have received a copy of the GNU General Public License
     along with this program. If not, see https://www.gnu.org/licenses/.
 -->
-<!DOCTYPE html><html><head>
-    <% if (ID === "UCFAiFyGs6oDiF1Nf-rRJpZA") { %> 
+<!DOCTYPE html><html style="background: var(--channel-info-background);"><head>
+     <% if (ID === "UCFAiFyGs6oDiF1Nf-rRJpZA") { %> 
     <title>Technoblade Never Dies! - PokeTube</title>
  <% } %>
     <title><%=j.Channel.Metadata.Name%> - PokeTube</title>
@@ -343,8 +343,9 @@
 
                                                                                      <% } %>
 
-        <section class=youtube-video>
-<div class="channel-page">
+<section class="youtube-video" style="background: var(--channel-info-background);">
+  
+  <div class="channel-page">
 
 <div class="channel-page">
         <% if (isMobile) { %>  
@@ -395,7 +396,7 @@
 				<img src="https://p.poketube.fun/<%=j.Channel.Metadata.Avatars.Thumbnail.$t%>" alt="Channel Avatar">
 			</a>
 			<div class="name">
-				<p style="font-family:Ginto Nord,sans-serif;font-weight:900;white-space:yes;"><%=j.Channel.Metadata.Name%></p>
+				<p style="font-family:POkeTube flex;font-weight:1000;font-stretch: ultra-expanded;"><%=j.Channel.Metadata.Name%></p>
  			</div>
  
 			<button class="subscribe-button"><%=subs%></button>
@@ -403,24 +404,17 @@
               <% if (!isMobile) { %>  
    
      <div class="tabs tabs-center">
-            <% if (!tab) { %>
-
-                <a href="/channel?id=<%=ID%>" class="tab active">Uploads</a>
-                <a  href="/channel?id=<%=ID%>&tab=about"  class="tab">About</a>
-                                                               <% } %>
-                                                                             <% if (tab) { %>
-
-                <a href="/channel?id=<%=ID%>" class="tab">Uploads</a>
-                <a  href="/channel?id=<%=ID%>&tab=about" class="tab active">About</a>
-                                                               <% } %>
-
+ 
             </div>
      
+                
      
      
      <% } %>
 	</div> 
                                            <% } %>
+                                             
+                                             
                                                <% if (isMobile) { %>  
                    <div class="channel-info-container" style="text-align: center;">
 
@@ -454,33 +448,19 @@
                                
                                            <% } %>
    
-     
-     <hr style="clear: both;display: block;border: none;border-bottom: 0.5px solid #2f2f2f;margin: 0 0;/*! width: 4.5em; */height: 0;">   
-                                             <% if (!tab) { %>  
-                                               
+               <% if (!isMobile) { %>  
 
-             <div align="center">
-
-
- 
-    	<div class="video-grid" >
-         
-        not workin rn :c
-
-          <% } %>
-
-
- <% if (tab === "about") { %>
-   <div style="text-align: left;">   
-     <h3 style="color:#fff;font-family:Ginto Nord,sans-serif;font-weight:900;padding: 0px;margin: 0;margin-top: 7px;margin-left: 10px;">About</h3>
-
+     <hr style="clear: both;display: block;border: none;border-bottom: 0.5px solid #2f2f2f;margin: 0 0;/*! width: 4.5em; */height: 0;">    
+<div style="text-align: left;background: #111;padding: 1em;border-radius: 1em;margin-top: 0.5em;margin-bottom: 0.5em;">   
+     <h3 style="color:#fff;font-family:PokeTube Flex,sans-serif;font-weight:1000;padding: 0px;margin: 0;margin-top: 7px;margin-left: 10px;font-stretch: ultra-expanded;font-size: x-large;">About</h3>
 
      <% if (desc) { %>
 
  <p style="color:#fff;margin-left: 10px;font-weight: bold;"><%-desc.replace(/\n/g, " <br> ")%></p>
   <% } %>
           <% if (wiki.extract_html) { %> 
-                     <h3 style="color:#fff;font-family:Ginto Nord,sans-serif;font-weight:900;padding: 0px;margin: 0;margin-top: 7px;margin-left: 10px;">From the web</h3>
+                 
+     <h3 style="color:#fff;font-family:PokeTube Flex,sans-serif;font-weight:1000;padding: 0px;margin: 0;margin-top: 7px;margin-left: 10px;font-stretch: ultra-expanded;font-size: x-large;"> From the web</h3>
 
             <div style="color:#fff;margin-left: 10px;">
             <p style="color:#fff:font-weight: bold;"> 
@@ -509,10 +489,30 @@
 <p style="margin: 0px;margin-top: 2.5px;font-weight: bold;"><i class="fa-light fa-circle-info"></i>  <%- about.Joined%> </p>
 <p style="margin: 0px;margin-top: 2.5px;font-weight: bold;">   <i class="fa-light fa-arrow-trend-up"></i> <%- about.ViewCount%>   </p>
 
-  </div>
-                       </div>
-   <% } %>
-               </body>
+                         </div></div>
+                         <div style="text-align: left;background: #111;padding: 1em;border-radius: 1em;margin-top: 0.5em;margin-bottom: 0.5em;">   
+                           
+     <h3 style="color:#fff;font-family:PokeTube Flex,sans-serif;font-weight:1000;padding: 0px;margin: 0;margin-top: 7px;margin-left: 10px;font-stretch: ultra-expanded;font-size: x-large;">Content</h3>
+                           <p style="color:#fff;font-family:PokeTube Flex,sans-serif;font-weight:800;padding: 0px;margin: 0;margin-top: 7px;margin-left: 10px;font-stretch: ultra-expanded">
+                            Content to get you starded on this channel! (note : videos are broken atm on some channels - see issue <a href="https://codeberg.org/Ashley/poketube/issues/14">#14</a>)
+                           </p>
+                           
+<div class="video-grid" style="background:#111" >
+                 <% if ( tj.Channel.Contents.ItemSection[2]) { %>
+
+    <% tj.Channel.Contents.ItemSection[2].Shelf.Items.Video.forEach(x =>  { %>
+			<a href="/watch?v=<%- x.id %>" class="video">
+				<div class="thumbnail" style="background-image: url('https://p.poketube.fun/https://i.ytimg.com/vi/<%= x.id %>/hqdefault.jpg?sqp=-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLBy_x4UUHLNDZtJtH0PXeQGoRFTgw');border-radius: 10px;"><span class="video-length"><%- x.duration %></span></div>
+				<div class="info">
+ 					<span class="title max-lines-2" style="font-family:PokeTube flex,sans-serif;font-weight: 1000;font-stretch: ultra-expanded;"><%- x.Title %></span>
+			 
+            </div>
+ 			</a>	
+ 		 	               <% }) %>   
+                                           <% } %>
+                                                                                        <% } %>
+
+                </body>
  
    
  

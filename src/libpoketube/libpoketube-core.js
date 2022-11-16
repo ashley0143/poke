@@ -30,7 +30,7 @@ const config = {
 // Util functions
 function getJson(str) {
   try {
-    return JSON.parse(str);
+    return getJson(str);
   } catch {
     return null;
   }
@@ -47,64 +47,59 @@ async function channel(id, cnt) {
     `${config.tubeApi}channel?id=${id}&tab=videos&continuation=${cnt || ""}`
   )
     .then((res) => res.text())
-    .then((xml) => JSON.parse(toJson(xml)));
+    .then((xml) => getJson(toJson(xml)));
 
   const about = await fetch(`${config.tubeApi}channel?id=${id}&tab=about`)
     .then((res) => res.text())
-    .then((xml) => JSON.parse(toJson(xml)));
+    .then((xml) => getJson(toJson(xml)));
 
   return { videos, about };
 }
 
 async function video(v) {
-    if (v == null) return "Gib ID";
+  if (v == null) return "Gib ID";
 
-    let nightlyRes;
+  let nightlyRes;
 
- 
-    var inv_comments = await fetch(`${config.invapi}/comments/${v}`).then(
-      (res) => res.text()
-    );
+  var inv_comments = await fetch(`${config.invapi}/comments/${v}`).then((res) =>
+    res.text()
+  );
 
-    var comments = await JSON.parse(inv_comments);
+  var comments = await getJson(inv_comments);
 
-    var video_new_info = await fetch(`${config.invapi}/videos/${v}`).then(
-      (res) => res.text()
-    );
+  var video_new_info = await fetch(`${config.invapi}/videos/${v}`).then((res) =>
+    res.text()
+  );
 
-    var vid = await JSON.parse(video_new_info);
+  var vid = await getJson(video_new_info);
 
-     const a = await fetch(
-      `${config.tubeApi}channel?id=${vid.authorId}&tab=about`
-    )
+  const a = await fetch(`${config.tubeApi}channel?id=${vid.authorId}&tab=about`)
+    .then((res) => res.text())
+    .then((xml) => getJson(toJson(xml)));
+
+  const summary = await wiki
+    .summary(vid.author + " ")
+    .then((summary_) => (summary_.title !== "Not found." ? summary_ : "none"));
+
+  const desc = a.Channel?.Contents.ItemSection.About.Description;
+
+  const data = await fetcher(v);
+
+  const nightlyJsonData = getJson(nightlyRes);
+  return {
+    json: data.video.Player,
+    video: await fetch(`${config.tubeApi}video?v=${v}`)
       .then((res) => res.text())
-      .then((xml) => JSON.parse(toJson(xml)));
-
-    const summary = await wiki
-      .summary(vid.author + " ")
-      .then((summary_) =>
-        summary_.title !== "Not found." ? summary_ : "none"
-      );
-
-      const desc = a.Channel?.Contents.ItemSection.About.Description;
-
-    
-    const data = await fetcher(v);
-
-    const nightlyJsonData = getJson(nightlyRes);
-    return {
-      json: data.video.Player,
-      video: await fetch(`${config.tubeApi}video?v=${v}`).then((res) => res.text())  .then((xml) => JSON.parse(toJson(xml))),
-      vid,
-      comments,
-      engagement: data.engagement,
-      wiki: summary,
-      desc: desc,
-      color: await getColors(
-        `https://i.ytimg.com/vi/${v}/maxresdefault.jpg`
-      ).then((colors) => colors[0].hex()),
-    };
-
+      .then((xml) => getJson(toJson(xml))),
+    vid,
+    comments,
+    engagement: data.engagement,
+    wiki: summary,
+    desc: desc,
+    color: await getColors(
+      `https://i.ytimg.com/vi/${v}/maxresdefault.jpg`
+    ).then((colors) => colors[0].hex()),
+  };
 }
 
 async function search(query, cnt) {
@@ -114,7 +109,7 @@ async function search(query, cnt) {
     `${config.tubeApi}search?query=${query}&continuation=${cnt || ""}`
   )
     .then((res) => res.text())
-    .then((xml) => JSON.parse(toJson(xml)));
+    .then((xml) => getJson(toJson(xml)));
 
   return data;
 }

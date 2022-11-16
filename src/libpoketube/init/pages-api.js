@@ -20,6 +20,19 @@ const {
 
 const pkg = require("../../../package.json");
 
+const ver = "v22.1116-co21-stable"
+
+const response = {
+  pt_version: ver,
+  packages: {
+    libpt: version,
+    node: process.version,
+    v8: process.versions.v8,
+  },
+  process: process.versions,
+  dependencies: pkg.dependencies,
+};
+
 module.exports = function (app, config, renderTemplate) {
   app.get("/embed/:v", async function (req, res) {
     var e = req.query.e;
@@ -113,17 +126,6 @@ module.exports = function (app, config, renderTemplate) {
   });
 
   app.get("/api/version.json", async (req, res) => {
-    const response = {
-      pt_version: "v22.1115-abU9-stable",
-      packages: {
-        libpt: version,
-        node: process.version,
-        v8: process.versions.v8,
-      },
-      process: process.versions,
-      dependencies: pkg.dependencies,
-    };
-
     res.json(response);
   });
 
@@ -138,3 +140,5 @@ module.exports = function (app, config, renderTemplate) {
     res.json(f);
   });
 };
+
+module.exports.api = ver;

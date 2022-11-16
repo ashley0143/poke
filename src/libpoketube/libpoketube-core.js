@@ -30,7 +30,7 @@ const config = {
 // Util functions
 function getJson(str) {
   try {
-    return getJson(str);
+    return JSON.parse(str);
   } catch {
     return null;
   }

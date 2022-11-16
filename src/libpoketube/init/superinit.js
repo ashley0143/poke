@@ -33,17 +33,16 @@ function init(app, config, rendertemplate) {
       .then((res) => res.text())
       .then((json) => JSON.parse(json));
 
-    if (f.versionnumber === api) {
+    if (f.vernum == api) {
       console.log("[UPDATE DAEMON] PokeTube is up to date!");
     }
 
-    if ( api !== f.versionnumber) {
+    if (f.vernum != api) {
       console.warn(
         "[UPDATE DAEMON] PokeTube is out of date! please re-clone the poketube repo :p  "
       );
     }
   })();
-  
   
   if (Math.random() < 0.5) {
     initlog("https://poketube.fun/watch?v=lpiB2wMc49g");
@@ -72,7 +71,7 @@ function init(app, config, rendertemplate) {
 
     initlog("Loading static pages");
     require("../init/pages-static.js")(app, config, rendertemplate);
-    initlog("loaded static pages");
+    initlog("Loaded static pages");
     initlog("Loading main pages");
     require("../init/pages-404-and-main.js")(app, config, rendertemplate);
     initlog("Loaded main pages");

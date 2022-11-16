@@ -33,11 +33,11 @@ function init(app, config, rendertemplate) {
       .then((res) => res.text())
       .then((json) => JSON.parse(json));
 
-    if (f.pt_version == api) {
+    if (f.versionnumber === api) {
       console.log("[UPDATE DAEMON] PokeTube is up to date!");
     }
 
-    if (f.pt_version != api) {
+    if ( api !== f.versionnumber) {
       console.warn(
         "[UPDATE DAEMON] PokeTube is out of date! please re-clone the poketube repo :p  "
       );
@@ -45,7 +45,6 @@ function init(app, config, rendertemplate) {
   })();
   
   
-
   if (Math.random() < 0.5) {
     initlog("https://poketube.fun/watch?v=lpiB2wMc49g");
   }
@@ -57,7 +56,7 @@ function init(app, config, rendertemplate) {
     initlog("Loaded video pages ");
     initlog("Loading redirects/old pages ");
     require("../init/pages-redir.js")(app, config, rendertemplate);
-    initlog("loaded redirects/old pages ");
+    initlog("Loaded redirects/old pages ");
 
     initlog("Loading Download and channel pages");
     require("../init/pages-channel-and-download.js")(
@@ -69,14 +68,14 @@ function init(app, config, rendertemplate) {
     initlog("Loaded Download and channel pages");
     initlog("Loading api pages");
     require("../init/pages-api.js")(app, config, rendertemplate);
-    initlog("loaded api pages");
+    initlog("Loaded api pages");
 
     initlog("Loading static pages");
     require("../init/pages-static.js")(app, config, rendertemplate);
     initlog("loaded static pages");
     initlog("Loading main pages");
     require("../init/pages-404-and-main.js")(app, config, rendertemplate);
-    initlog("loaded main pages");
+    initlog("Loaded main pages");
 
     initlog("[OK] Load pages");
 

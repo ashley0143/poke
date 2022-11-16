@@ -20,10 +20,12 @@ const {
 
 const pkg = require("../../../package.json");
 
-const ver = "v22.1116-depU3-stable"
+const ver = "v22.1116-c8page-stable"
+const versionnumber = "56"
 
 const response = {
   pt_version: ver,
+  vernum:versionnumber,
   packages: {
     libpt: version,
     node: process.version,
@@ -141,4 +143,4 @@ module.exports = function (app, config, renderTemplate) {
   });
 };
 
-module.exports.api = ver;
+module.exports.api = versionnumber;

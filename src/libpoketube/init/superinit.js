@@ -1,10 +1,51 @@
-function initlog(args) {
-  console.log("[LIBPT INTSYS] " + args);
-}
+const {
+  fetcher,
+  core,
+  wiki,
+  musicInfo,
+  modules,
+  version,
+  initlog,
+} = require("../libpoketube-initsys.js");
+const {
+  IsJsonString,
+  convert,
+  getFirstLine,
+  capitalizeFirstLetter,
+  turntomins,
+  getRandomInt,
+  getRandomArbitrary,
+} = require("../ptutils/libpt-coreutils.js");
+
+const { api } = require("../init/pages-api.js");
 
 function init(app, config, rendertemplate) {
   initlog("Starting superinit");
+
   initlog("[START] Load pages");
+
+  /* PokeTube Update daemon - checks for updates in poketube */
+  (async () => {
+    const url = `https://poketube.fun/api/version.json`;
+
+    let f = await modules
+      .fetch(url)
+      .then((res) => res.text())
+      .then((json) => JSON.parse(json));
+
+    if (f.pt_version == api) {
+      console.log("[UPDATE DAEMON] PokeTube is up to date!");
+    }
+
+    if (f.pt_version != api) {
+      console.warn(
+        "[UPDATE DAEMON] PokeTube is out of date! please re-clone the poketube repo :p  "
+      );
+    }
+  })();
+  
+  
+
   if (Math.random() < 0.5) {
     initlog("https://poketube.fun/watch?v=lpiB2wMc49g");
   }

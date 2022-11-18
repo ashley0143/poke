@@ -260,7 +260,7 @@ video[counter].classList.add("shake");
                           <% if (j.Search.Results.DynamicItem) { %> 
 
             <% if (j.Search.Results.DynamicItem.id == "didYouMeanRenderer") { %> 
-<div style="text-align: left;margin-left: 15.5em;">
+<div style="text-align: left;margin-left: 14.5em;">
   <p>
      Did you mean: <a href="/search?query=<%= h.correctedQueryEndpoint.searchEndpoint.query  %>"><i><%= h.correctedQueryEndpoint.searchEndpoint.query  %></i></a> :3
   </p>
@@ -269,9 +269,9 @@ video[counter].classList.add("shake");
                                             <% } %>                                            <% } %>
 
                      </center>
-                            
-         
-                                                                    <%  if (!continuation) { %>
+                                                      <% if (!j.Search.Results.DynamicItem) { %> 
+
+                                                                     <%  if (!continuation) { %>
 
                       <% if (summary.extract_html) { %> 
 <div class="shelf wiki" style="white-space: -moz-pre-wrap !important;white-space: -pre-wrap;white-space: -o-pre-wrap;white-space: pre-wrap;word-wrap: break-word;white-space: -webkit-pre-wrap;word-break: break-all;white-space: normal;background: #1c1c1c;padding: 10px;margin-top: 10px;max-width: 51.8em;width: max-content;">
@@ -293,6 +293,7 @@ video[counter].classList.add("shake");
                                                                         </div>
 
                      <% } %>                       <% } %>  
+                     <% } %>                 
 
                            <% if (j.Search.Results.CardList) { %> 
 

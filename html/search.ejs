@@ -94,6 +94,19 @@ summary:hover{
      margin: auto;
    }
     
+    .shelf {
+          max-width: 51em;
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  row-gap: 16px;
+  padding: 16px;
+background: #111111;
+border: #333333 solid;
+border-radius: 19px;
+margin-top: 1em;
+    }
+    
         @font-face {
         font-family: 'Ginto Nord';
         font-weight: 800;
@@ -115,6 +128,11 @@ summary:hover{
  line-height:24px;
  margin-top:12px
 }
+                   
+                   .wiki > p {
+  margin-top: -2em;
+}
+                   
     
 .sticky-top {
 	 position: sticky;
@@ -239,51 +257,86 @@ video[counter].classList.add("shake");
   
             <%  if (Array.isArray( j.Search.Results.Video)) { %> 
                    <center>
-
+                  
 <p style="font-family: Inter;text-align: left;margin-left: 16em;">
   <%=j.Search.estimatedResults.toLocaleString()%> Results (estimated)
          <p style="text-align: left;margin-left: 16em;">
     <a  href="/search?query=<%=q%>&continuation=<%=j.Search.continuation%>">Next Page</a>              </p>
-
-              </p>
-  
-                     </center>
-<hr style="clear: both;display: block;border: none;border-bottom: 0.5px solid #2f2f2f;margin: 0 16em;/*! width: 4.5em; */height: 0;">
-                                 <% if (j.Search.Results.DynamicItem) { %> 
                               
-                   <% if (j.Search.Results.DynamicItem.id == "didYouMeanRenderer") { %> 
+       
+              </p>
+     <% if (j.Search.Results.DynamicItem) { %> 
+
+            <% if (j.Search.Results.DynamicItem.id == "didYouMeanRenderer") { %> 
 <div style="text-align: left;margin-left: 16em;">
   <p>
-     Did you mean: <a href="/search?query=<%= h.correctedQueryEndpoint.searchEndpoint.query  %>"><i><%= h.correctedQueryEndpoint.searchEndpoint.query  %></i></a> ?
+     Did you mean: <a href="/search?query=<%= h.correctedQueryEndpoint.searchEndpoint.query  %>"><i><%= h.correctedQueryEndpoint.searchEndpoint.query  %></i></a> :3
   </p>
                      </div>
                                                   
-                                            <% } %>  
-                                                                                          <% } %>  
+                                            <% } %>                                            <% } %>
 
-              
-                                 <% if (summary.extract_html) { %> 
-<div style="white-space: -moz-pre-wrap !important;white-space: -pre-wrap;white-space: -o-pre-wrap;white-space: pre-wrap;word-wrap: break-word;white-space: -webkit-pre-wrap;word-break: break-all;white-space: normal;padding: ;background: #1c1c1c;padding: 10px;border-radius: 10px;margin-left: 15.6em;margin-right: 15em;margin-top: 10px;">
+                     </center>
+<hr style="clear: both;display: block;border: none;border-bottom: 0.5px solid #2f2f2f;margin: 0 16em;/*! width: 4.5em; */height: 0;">
+                           
+         
+                                                                    <%  if (!continuation) { %>
+
+                      <% if (summary.extract_html) { %> 
+<div class="shelf wiki" style="white-space: -moz-pre-wrap !important;white-space: -pre-wrap;white-space: -o-pre-wrap;white-space: pre-wrap;word-wrap: break-word;white-space: -webkit-pre-wrap;word-break: break-all;white-space: normal;background: #1c1c1c;padding: 10px;margin-top: 10px;max-width: 51.8em;width: max-content;">
                                      
-<div class="video-title" style="color:#fff;font-family:Ginto Nord,sans-serif;font-weight:700;margin-top: 10px;margin-bottom: 10px;">From da web</div>
-                     
+<div class="video-title" style="color:#fff;font-family:PokeTube Flex;font-weight:700;margin-top: 0em;font-weight: 1000;font-stretch: ultra-expanded;font-size: large;">From da web <span style="font-size: small;font-family: sans-serif;"> <a href=" <%-summary.content_urls.desktop.page%>
+ ">From wikipedia </a> under CC-BY-SA 3.0
+                     </span></div>
+  
 <hr style="clear: both;display: block;border: none;border-bottom: 0.5px solid #2f2f2f;/*! width: 4.5em; */height: 0;">
 
   <%-summary.extract_html%>
    
-<p style="margin-bottom: 10px;">
+<span style="margin-bottom: -3em;">
 
-  <a href=" <%-summary.content_urls.desktop.page%>
- ">From wikipedia </a> under CC-BY-SA 3.0
-                     </p>
+  
  
                  
                      </p>
                                                                         </div>
 
-                     <% } %>  
+                     <% } %>                       <% } %>  
+
+                           <% if (j.Search.Results.CardList) { %> 
+
+                                               <% if (j.Search.Results.CardList.title == "People also search for") { %> 
+         
             
-                                              
+                                    <div class="shelf" style="">
+                                      
+     <h2 style="font-family: 'PokeTube Flex';font-weight: 1000;font-size: large;text-align: left;font-stretch: extra-expanded;">People also search for</h2>
+                                      
+             
+    <div class="card-list " style="overflow-y: hidden;">
+                                      <% j.Search.Results.CardList.Card.forEach (x => { %>
+
+        <a  style="background: #333;" class="card" href="/search?query=<%= x.title %> ">
+          
+                                      <% if (!x.Thumbnail.$t.endsWith("mqdefault.jpg")) { %> 
+
+          <img src="https://p.poketube.fun/<%= x.Thumbnail.$t%>" onerror="">
+                               <% } %>       
+                                 
+          <% if (x.Thumbnail.$t.endsWith("mqdefault.jpg")) { %> 
+
+          <img src="https://p.poketube.fun/<%= x.Thumbnail.$t.replace("//","https://")%>" onerror="">
+                               <% } %>         
+          <span><%= x.title %></span></a>
+                                                  <% }) %>  
+       
+    </div>
+
+ </div>                    
+            <hr style="clear: both;display: block;border: none;border-bottom: 0.5px solid #2f2f2f;margin: 0 16em;/*! width: 4.5em; */height: 0;margin-top: 1em;">
+
+                     <% } %>                       <% } %>  
+ 
 
        <% j.Search.Results.Video.forEach(x => { %>
          <div class="video-list" >
@@ -306,9 +359,17 @@ video[counter].classList.add("shake");
           
           </div>      
                                 </div>
+        
+        
 
-                <% }) %>   
-                  <center><hr style="clear: both;display: block;border: none;border-bottom: 0.5px solid #2f2f2f;margin: 0 16em;/*! width: 4.5em; */height: 0;">
+                <% }) %>  
+
+        
+                  
+                  
+                  
+                  <center> <hr style="clear: both;display: block;border: none;border-bottom: 0.5px solid #2f2f2f;margin: 0 16em;/*! width: 4.5em; */height: 0;margin-top: 1em;">
+
 <div style="border-top: 1px solid var(--border-color);width: 100%;display: flex;gap: 43em;padding: 0;margin: 0;">
           
             <%  if (continuation) { %>

@@ -257,28 +257,20 @@ video[counter].classList.add("shake");
   
             <%  if (Array.isArray( j.Search.Results.Video)) { %> 
                    <center>
-                  
-<p style="font-family: Inter;text-align: left;margin-left: 16em;">
-  <%=j.Search.estimatedResults.toLocaleString()%> Results (estimated)
-         <p style="text-align: left;margin-left: 16em;">
-    <a  href="/search?query=<%=q%>&continuation=<%=j.Search.continuation%>">Next Page</a>              </p>
-                              
-       
-              </p>
-     <% if (j.Search.Results.DynamicItem) { %> 
+                          <% if (j.Search.Results.DynamicItem) { %> 
 
             <% if (j.Search.Results.DynamicItem.id == "didYouMeanRenderer") { %> 
-<div style="text-align: left;margin-left: 16em;">
+<div style="text-align: left;margin-left: 14.5em;">
   <p>
      Did you mean: <a href="/search?query=<%= h.correctedQueryEndpoint.searchEndpoint.query  %>"><i><%= h.correctedQueryEndpoint.searchEndpoint.query  %></i></a> :3
   </p>
                      </div>
                                                   
                                             <% } %>                                            <% } %>
+<hr style="clear: both;display: block;border: none;border-bottom: 0.5px solid #2f2f2f;margin: 0 14.5em;/*! width: 4.5em; */height: 0;">
 
                      </center>
-<hr style="clear: both;display: block;border: none;border-bottom: 0.5px solid #2f2f2f;margin: 0 16em;/*! width: 4.5em; */height: 0;">
-                           
+                            
          
                                                                     <%  if (!continuation) { %>
 
@@ -363,6 +355,10 @@ video[counter].classList.add("shake");
         
 
                 <% }) %>  
+                  
+<p style="font-family: Inter;text-align: left;margin-left: 16em;">
+  <%=j.Search.estimatedResults.toLocaleString()%> Results (estimated)
+    </p>
 
         
                   

@@ -16,7 +16,12 @@
     You should have received a copy of the GNU General Public License
     along with this program. If not, see https://www.gnu.org/licenses/.
 -->
-<!DOCTYPE html><html style="background: var(--channel-info-background);"><head>
+<!DOCTYPE html>
+<html style="background: var(--channel-info-background);">
+  
+  <head>
+    
+    
      <% if (ID === "UCFAiFyGs6oDiF1Nf-rRJpZA") { %> 
     <title>Technoblade Never Dies! - PokeTube</title>
  <% } %>
@@ -498,7 +503,7 @@
                            </p>
                            
 <div class="video-grid" style="background:#111" >
-                 <% if ( tj.Channel.Contents.ItemSection[2]) { %>
+                 <% if ( tj.Channel.Contents.ItemSection[2].Shelf.Items.Video) { %>
 
     <% tj.Channel.Contents.ItemSection[2].Shelf.Items.Video.forEach(x =>  { %>
 			<a href="/watch?v=<%- x.id %>" class="video">

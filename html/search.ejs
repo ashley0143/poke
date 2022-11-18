@@ -249,6 +249,18 @@ video[counter].classList.add("shake");
   
                      </center>
 <hr style="clear: both;display: block;border: none;border-bottom: 0.5px solid #2f2f2f;margin: 0 16em;/*! width: 4.5em; */height: 0;">
+                                 <% if (j.Search.Results.DynamicItem) { %> 
+                              
+                   <% if (j.Search.Results.DynamicItem.id == "didYouMeanRenderer") { %> 
+<div style="text-align: left;margin-left: 16em;">
+  <p>
+     Did you mean: <a href="/search?query=<%= h.correctedQueryEndpoint.searchEndpoint.query  %>"><i><%= h.correctedQueryEndpoint.searchEndpoint.query  %></i></a> ?
+  </p>
+                     </div>
+                                                  
+                                            <% } %>  
+                                                                                          <% } %>  
+
               
                                  <% if (summary.extract_html) { %> 
 <div style="white-space: -moz-pre-wrap !important;white-space: -pre-wrap;white-space: -o-pre-wrap;white-space: pre-wrap;word-wrap: break-word;white-space: -webkit-pre-wrap;word-break: break-all;white-space: normal;padding: ;background: #1c1c1c;padding: 10px;border-radius: 10px;margin-left: 15.6em;margin-right: 15em;margin-top: 10px;">
@@ -270,7 +282,9 @@ video[counter].classList.add("shake");
                                                                         </div>
 
                      <% } %>  
-              
+            
+                                              
+
        <% j.Search.Results.Video.forEach(x => { %>
          <div class="video-list" >
            

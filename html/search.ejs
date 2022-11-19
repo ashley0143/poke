@@ -300,7 +300,7 @@ video[counter].classList.add("shake");
                                                <% if (j.Search.Results.CardList.title == "People also search for") { %> 
          
             
-                                    <div class="shelf" style="">
+                                    <div class="shelf" style="color:#fff;text-align: left;font-weight: 1000;">
                                       
      <h2 style="font-family: 'PokeTube Flex';font-weight: 1000;font-size: large;text-align: left;font-stretch: extra-expanded;">People also search for</h2>
                                       
@@ -339,10 +339,11 @@ video[counter].classList.add("shake");
         class="thumbnail"
         style="background-image: url('https://p.poketube.fun/https://i.ytimg.com/vi/<%= x.id %>/hqdefault.jpg?sqp=-oaymwEXCNAFEJQDSFryq4qpAwkIARUAAIhCGAE=&amp;rs=AOn4CLBmAOZV7CM3NdDKlEFxGX7PpI5UWQ');border-radius: 10px;"
          ><span class="video-length"><%=x.duration %></span></a>
-      <div class="info" style="color:#fff;text-align: left;">
-        <a style="font-family: 'PokeTube Flex';font-weight: 1000;font-size: large;text-align: left;font-stretch: extra-expanded;" href="/watch?v=<%= x.id %>" class="title max-lines-2"
+<div class="info" style="color:#fff;text-align: left;font-weight: 1000;">
+        <a style="font-family: 'PokeTube Flex';font-stretch: 151%;font-size: large;text-align: left;font-stretch: extra-expanded;
+           " href="/watch?v=<%= x.id %>" class="title max-lines-2"
           ><%= x.Title %></a>
-        <div style="display: flex; flex-direction: column; row-gap: 8px;font-family: 'Inter'">
+        <div style="display: flex; flex-direction: column; row-gap: 8px;font-weight:bold">
           <a href="/watch?v=<%= x.id %>"><span><%= x.views %> views</span> <span>•</span> <span><%= x.uploadedAt %></span></a>
           <a href="/channel?id=<%= x.Channel.id %>">By <%=x.Channel.Name %></a>
         </div>

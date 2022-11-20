@@ -132,7 +132,9 @@ margin-top: 1em;
                    .wiki > p {
   margin-top: -2em;
 }
-                   
+                   * {
+text-rendering: auto;
+                   }
     
 .sticky-top {
 	 position: sticky;
@@ -340,7 +342,8 @@ video[counter].classList.add("shake");
         style="background-image: url('https://p.poketube.fun/https://i.ytimg.com/vi/<%= x.id %>/hqdefault.jpg?sqp=-oaymwEXCNAFEJQDSFryq4qpAwkIARUAAIhCGAE=&amp;rs=AOn4CLBmAOZV7CM3NdDKlEFxGX7PpI5UWQ');border-radius: 10px;"
          ><span class="video-length"><%=x.duration %></span></a>
 <div class="info" style="color:#fff;text-align: left;font-weight: 1000;">
-        <a style="font-family: 'PokeTube Flex';font-stretch: 151%;font-size: large;text-align: left;font-stretch: extra-expanded;
+        <a style="font-family: 'PokeTube Flex';font-size: large;text-align: left;font-stretch: extra-expanded;
+font-weight: 1000;
            " href="/watch?v=<%= x.id %>" class="title max-lines-2"
           ><%= x.Title %></a>
         <div style="display: flex; flex-direction: column; row-gap: 8px;font-weight:bold">

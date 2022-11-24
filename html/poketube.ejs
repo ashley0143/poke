@@ -1636,8 +1636,23 @@ padding: 3px;
 	   <div class="mobile-page">
 	<div class="primary" >
 		<div class="video-player-container" style="background-color:#000">
-					<video class="player" autoplay style="border-radius: 6px;" controls  poster="https://i.ytimg.com/vi/<%=video.id%>/hqdefault.jpg?v=607ddcd4">
- 
+    <% if (lightOrDark(color) == "dark") { %>  
+
+<video class="player" id="<%=sha384(video.id)%>" style="border-radius: 6px;box-shadow: 0 0 20px <%=color2
+                                                        %>;" autoplay controls   
+       
+       poster="https://p.poketube.fun/https://i.ytimg.com/vi/<%=video.id%>/maxresdefault.jpg?v=607ddcd4">
+        
+                                                                                     <% } %>                
+   <% if (lightOrDark(color) == "light") { %>  
+
+<video class="player" id="<%=sha384(video.id)%>" style="border-radius: 6px;box-shadow: 0 0 20px <%=color
+                                                        %>;" autoplay controls   
+       
+       poster="https://p.poketube.fun/https://i.ytimg.com/vi/<%=video.id%>/maxresdefault.jpg?v=607ddcd4">
+        
+                                                                                     <% } %>                
+
   
         
                 

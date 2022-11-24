@@ -230,7 +230,7 @@
     white-space: -webkit-pre-wrap; /* Newer versions of Chrome/Safari*/
     word-break: break-all;
     white-space: normal;
-  }
+  } 
    </style>
  
   <link href=/css/app-cdn.min.css rel=stylesheet>
@@ -296,11 +296,23 @@
  	<div class="primary">
        
 		<div class="video-player-container">
-  
-<video class="player" id="<%=sha384(video.id)%>" style="border-radius: 16px;" autoplay controls   
+        <% if (lightOrDark(color) == "dark") { %>  
+
+<video class="player" id="<%=sha384(video.id)%>" style="border-radius: 16px;box-shadow: 0 0 20px <%=color2
+                                                        %>;" autoplay controls   
        
        poster="https://p.poketube.fun/https://i.ytimg.com/vi/<%=video.id%>/maxresdefault.jpg?v=607ddcd4">
         
+                                                                                     <% } %>                
+   <% if (lightOrDark(color) == "light") { %>  
+
+<video class="player" id="<%=sha384(video.id)%>" style="border-radius: 16px;box-shadow: 0 0 20px <%=color
+                                                        %>;" autoplay controls   
+       
+       poster="https://p.poketube.fun/https://i.ytimg.com/vi/<%=video.id%>/maxresdefault.jpg?v=607ddcd4">
+        
+                                                                                     <% } %>                
+
              
                   <% if (!qua) { %>  
 
@@ -393,53 +405,73 @@
                      <div>
 <div class="video-info-buttons pill" >
   
+<div class="new-button" style="height: 2.3em;gap: 2px;">
+    <div title="<%=engagement.likes.toLocaleString()%> Likes">
   
-  <div title="<%=engagement.likes.toLocaleString()%> Likes">
-  
+<div class="pill-button" style="margin-right: 4.5px;">
     <i class="fa-light fa-thumbs-up"></i>
      <%=convert(engagement.likes)%>
-          </div>
-    
-					<div title="<%=engagement.dislikes.toLocaleString()%> Dislikes">
+       </div>
+      </div>
+      
+        <div class = "vertical"></div>
+      
+					<div style="margin-left: -7.5px;" title="<%=engagement.dislikes.toLocaleString()%> Dislikes">
+                <div class="pill-button">
+
 <i class="fa-light fa-thumbs-down"></i> <%=convert(engagement.dislikes)%> 
-					</div>
+					</div>					</div>
 
-  
-            <div>
 
-					<a title="Download this Video :3" style="color:#fff;text-decoration: none; " href="/download?v=<%=video.id%>">
+      </div>
+      
+<div style="display: flex;">
+
+					<a class="new-button" title="Download this Video :3" style="color:#fff;text-decoration: none; " href="/download?v=<%=video.id%>">
+                            <div class="pill-button">
+
             <i class="fa-light fa-download"></i>
             Download
+            </div>
 					</a>
  
    
  <% if (!video.Channel.Name.endsWith(' - Topic')) { %> 
     <% if (!video.Title.endsWith('Audio)')) { %> 
 
-					<a title="Encryption duh" style="color:#fff;text-decoration: none;" href="/encryption?v=<%=video.id%>">
+      <div class="new-button">
+					<a   title="Encryption duh" style="color:#fff;text-decoration: none;" href="/encryption?v=<%=video.id%>">
+                                        <div class="pill-button">
+
                <i class="fa-light fa-shield"></i>
                 Encryption
+                                                      </div>                                                      </div>
+
+
    </a>
                                                                           <% }%>                                                                              <% }%>      
   
                                                                              <% if (video.Channel.Name.endsWith(' - Topic') || video.Title.endsWith('Audio)')) { %> 
                                                             
                             <% if (video.Channel.Name.endsWith(' - Topic') || video.Title.endsWith('Audio)'))  { %> 
-                                                 					<a title="open this song in poketube music player :3" style="color:#fff;text-decoration: none;" href="/music?v=<%=video.id%>">
+                                                 					<a  class="new-button" title="open this song in poketube music player :3" style="color:#fff;text-decoration: none;" href="/music?v=<%=video.id%>">
+                                                                                                    <div class="pill-button">
+
           <i class="fa-light fa-music"></i>
                   Open In Music Player
+                                                            </div>
                                                  </a>
 
                                                                        <% }%>                     
                                                                           <% }%>      
     
-                  					</div>
     
 
  
 				</div>
 
               			</div>
+                  					</div>
 
                			</div>
                     

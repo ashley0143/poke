@@ -97,8 +97,11 @@ async function video(v) {
     wiki: summary,
     desc: desc,
     color: await getColors(
-      `https://i.ytimg.com/vi/${v}/maxresdefault.jpg`
+      `https://i.ytimg.com/vi/${v}/hqdefault.jpg?sqp=-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLBy_x4UUHLNDZtJtH0PXeQGoRFTgw`
     ).then((colors) => colors[0].hex()),
+      color2: await getColors(
+      `https://i.ytimg.com/vi/${v}/hqdefault.jpg?sqp=-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLBy_x4UUHLNDZtJtH0PXeQGoRFTgw`
+    ).then((colors) => colors[1].hex()),
   };
 }
 

@@ -176,7 +176,6 @@ a {
 }
 
 .video-info-buttons.pill {
-  background: #0009;
   border-radius: 16px;
   padding: 4px;
   border-style: none;
@@ -184,7 +183,7 @@ a {
   grid-area: buttons;
   display: flex;
   flex-direction: row;
-  column-gap: 8px;
+  column-gap: 3px;
   height: min-content;
   width: fit-content;
   text-align: right;
@@ -257,3 +256,26 @@ a {
   word-break: break-all;
   white-space: nowrap;
 }
+
+.new-button {
+background: #0009;
+border-radius: 2em;
+padding-right: 1em;
+display: flex;
+justify-content: center;
+align-items: center;
+align-content: center;
+align-self: center;
+}
+
+
+.pill-button {
+margin-left: 1em;
+}
+
+.vertical {
+  border-left: 1px solid gray;
+  height: 15px;
+}
+         
+ 

@@ -1209,6 +1209,30 @@ body {
  font-size:18px;
  height:66px
 }
+    
+    
+.new-button {
+	background: #333;
+	border-radius: 2em;
+	padding-right: 1em;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	align-content: center;
+	width: max-content;
+	margin-top: 4px;
+	margin-left: 3px;
+	margin-right: 0;
+}
+.pill-button {
+margin-left: 1em;
+}
+
+.vertical {
+  border-left: 1px solid gray;
+  height: 15px;
+}
+         
          @-webkit-keyframes wiggle { 
             0% { -webkit-transform: skewX(9deg); }
             10% { -webkit-transform: skewX(-8deg); }
@@ -1729,8 +1753,60 @@ padding: 3px;
             
                         <div>
                 <div>
- 				<div class="video-info-bar" style="font-family:'Inter';">
+                    <div style="  display: flex;
+  white-space: nowrap;
+  overflow: scroll;
+  margin-bottom: 6px;
+  padding: 4px;
+">
 
+                  <div class="new-button" style="height: 2.3em">
+
+<div class="pill-button" style="margin-right: 4.5px;">
+    <i class="fa-light fa-thumbs-up"></i>
+     <%=convert(engagement.likes)%>
+       </div>
+       
+        <div class = "vertical"></div>
+      
+					<div style="margin-left: -7.5px;" title="<%=engagement.dislikes.toLocaleString()%> Dislikes">
+                <div class="pill-button">
+
+<i class="fa-light fa-thumbs-down"></i>  <%=convert(engagement.dislikes)%> 
+					</div>					</div>
+			
+            
+
+
+      </div>
+
+  					<a class="new-button" title="Download this Video :3" style="color:#fff;text-decoration: none;margin-right: 0; " href="/download?v=<%=video.id%>">
+                            <div class="pill-button">
+
+            <i class="fa-light fa-download"></i>
+            Download
+            </div>
+					</a>
+ 
+  
+              <a class="new-button" style="color:#fff" onclick="share()">   
+                                            <div class="pill-button">
+
+            <i class="fa-light fa-share"></i>
+            Share
+                </div>
+                </a>
+
+   	<a  class="new-button" style="color:#fff" href="#more-button-container"> 
+                                                  <div class="pill-button">
+
+                                                    <i style="color:#fff" class="fa-thin fa-circle-plus"></i> More.. </div></a>
+      
+  </div>
+                    
+ 				<div class="video-info-bar" style="font-family:'Inter';">
+  
+      <!--
 <div class="video-info-buttons" style="font-family:'Inter';font-weight:900;white-space:yes;background:#333;border-radius: 15px;margin: 6px;align-self: center;align-items: center;">
   <div>
    <i class="fa-light fa-thumbs-up"  style="font-size:x-large" ></i>
@@ -1749,6 +1825,8 @@ padding: 3px;
 					</a>
  	<a style="color:#fff" href="#more-button-container"> <i style="font-size:x-large;color:#fff" class="fa-thin fa-circle-plus"></i>More.. </a>
             </div>
+
+-->
 				</div>
        <%  if (Array.isArray( inv.comments)) { %> 
 <div style="padding: 0em;background: #333;border-radius: 16px;align-self: center;align-items: center;margin-left: 8px;margin-right: 12px;padding-bottom: 0;padding-top:1em">

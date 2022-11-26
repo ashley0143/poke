@@ -19,6 +19,7 @@
 
 */
 
+
 /* RESPONSIVE STUFF */
 
 /* Formula for xx50px - inital width + 3em */
@@ -36,19 +37,19 @@
 
 @media screen and (min-width: 1300px) {
   .video-info-panel.gradient {
-    width: 55.7em;
+    width: 54.4em;
   }
 }
 
 @media screen and (min-width: 1350px) {
   .video-info-panel.gradient {
-    width: 57.7em;
+    width: 57.05em;
   }
 }
 
 @media screen and (min-width: 1400px) {
   .video-info-panel.gradient {
-    width: 60.7em;
+    width: 60.3em;
   }
 }
 
@@ -60,163 +61,163 @@
 
 @media screen and (min-width: 1500px) {
   .video-info-panel.gradient {
-    width: 67em;
+    width: 66.5em;
   }
 }
 
 @media screen and (min-width: 1550px) {
   .video-info-panel.gradient {
-    width: 69.7em; /* Noice */
+    width: 69.3em; /* Noice */
   }
 }
 
 @media screen and (min-width: 1600px) {
   .video-info-panel.gradient {
-    width: 72.8em;
+    width: 73.3em;
   }
 }
 
 @media screen and (min-width: 1650px) {
   .video-info-panel.gradient {
-    width: 75.7em;
+    width: 75.3em;
   }
 }
 
 @media screen and (min-width: 1700px) {
   .video-info-panel.gradient {
-    width: 78.7em;
+    width: 78.3em;
   }
 }
 
 @media screen and (min-width: 1750px) {
   .video-info-panel.gradient {
-    width: 81.7em;
+    width: 81.3em;
   }
 }
 
 @media screen and (min-width: 1800px) {
   .video-info-panel.gradient {
-    width: 85.7em;
+    width: 85.3em;
   }
 }
 
 @media screen and (min-width: 1850px) {
   .video-info-panel.gradient {
-    width: 88.7em;
+    width: 88.3em;
   }
 }
 
 @media screen and (min-width: 1900px) {
   .video-info-panel.gradient {
-    width: 91.7em;
+    width: 91.3em;
   }
 }
 
 @media screen and (min-width: 1950px) {
   .video-info-panel.gradient {
-    width: 94.7em;
+    width: 94.3em;
   }
 }
 
 @media screen and (min-width: 2000px) {
   .video-info-panel.gradient {
-    width: 97.7em;
+    width: 97.3em;
   }
 }
 
 @media screen and (min-width: 2050px) {
   .video-info-panel.gradient {
-    width: 100.7em;
+    width: 100.3em;
   }
 }
 
 @media screen and (min-width: 2100px) {
   .video-info-panel.gradient {
-    width: 103.7em;
+    width: 103.3em;
   }
 }
 
 @media screen and (min-width: 2150px) {
   .video-info-panel.gradient {
-    width: 106.7em;
+    width: 106.3em;
   }
 }
 
 @media screen and (min-width: 2200px) {
   .video-info-panel.gradient {
-    width: 109.7em;
+    width: 109.3em;
   }
 }
 
 @media screen and (min-width: 2250px) {
   .video-info-panel.gradient {
-    width: 112.7em;
+    width: 112.3em;
   }
 }
 
 @media screen and (min-width: 2300px) {
   .video-info-panel.gradient {
-    width: 115.7em;
+    width: 115.3em;
   }
 }
 
 @media screen and (min-width: 2350px) {
   .video-info-panel.gradient {
-    width: 118.7em;
+    width: 118.3em;
   }
 }
 
 @media screen and (min-width: 2400px) {
   .video-info-panel.gradient {
-    width: 121.7em;
+    width: 121.3em;
   }
 }
 
 @media screen and (min-width: 2450px) {
   .video-info-panel.gradient {
-    width: 125.7em;
+    width: 125.3em;
   }
 }
 
 @media screen and (min-width: 2500px) {
   .video-info-panel.gradient {
-    width: 128.7em;
+    width: 128.3em;
   }
 }
 
 @media screen and (min-width: 2550px) {
   .video-info-panel.gradient {
-    width: 131.7em;
+    width: 131.3em;
   }
 }
 
 @media screen and (min-width: 2560px) {
   .video-info-panel.gradient {
-    width: 132.7em;
+    width: 132.3em;
   }
 }
 
 @media screen and (min-width: 2600px) {
   .video-info-panel.gradient {
-    width: 134.7em;
+    width: 134.3em;
   }
 }
 
 @media screen and (min-width: 2650px) {
   .video-info-panel.gradient {
-    width: 137.7em;
+    width: 137.3em;
   }
 }
 
 @media screen and (min-width: 2700px) {
   .video-info-panel.gradient {
-    width: 140.7em;
+    width: 140.3em;
   }
 }
 
 @media screen and (min-width: 2750px) {
   .video-info-panel.gradient {
-    width: 143.7em;
+    width: 143.3em;
   }
 }
 

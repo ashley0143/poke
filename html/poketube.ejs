@@ -299,7 +299,7 @@
         <% if (lightOrDark(color) == "dark") { %>  
 
 <video class="player" id="<%=sha384(video.id)%>" style="border-radius: 16px;box-shadow: 0 0 20px <%=color2
-                                                        %>;" autoplay controls   
+                                                        %>;margin-left: -4.8px;" autoplay controls   
        
        poster="https://p.poketube.fun/https://i.ytimg.com/vi/<%=video.id%>/maxresdefault.jpg?v=607ddcd4">
         
@@ -307,7 +307,7 @@
    <% if (lightOrDark(color) == "light") { %>  
 
 <video class="player" id="<%=sha384(video.id)%>" style="border-radius: 16px;box-shadow: 0 0 20px <%=color
-                                                        %>;" autoplay controls   
+                                                        %>;margin-left: -4.8px;" autoplay controls   
        
        poster="https://p.poketube.fun/https://i.ytimg.com/vi/<%=video.id%>/maxresdefault.jpg?v=607ddcd4">
         
@@ -359,10 +359,9 @@
                                                                       <% } %>               
 
        </div>
-                                 
        </div>
                                                             <br>
-			<div class="video-info">           
+<div class="video-info" style="margin-left: -4.8px;">           
         	<div class="video-info-panel gradient">  
             <div class="video-title" style="font-family:Inter;font-weight:bold;line-break: auto;max-width: max-content;margin: 0;margin-bottom: 0;padding: 0;" title="<%=video.Title%>"><%=video.Title%> </div>
           
@@ -625,7 +624,7 @@
  
                                                  
                                                                                                                                            <%  if (inv.comments) { %> 
-                                                                                                                                                                              <div class="comments">                                                                   
+                                                                                                                                                                              <div class="comments" style="margin-left: -4.8px;">                                                                   
 
 <div class="comments-class-or-something-i-cant-find-a-name-lol">
   

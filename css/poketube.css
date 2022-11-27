@@ -106,7 +106,7 @@ a {
     #8e6f7e 100%
   );
   display: block;
-  margin: auto;
+  margin: 0px 0 0px -2px;
   justify-self: left;
 }
 

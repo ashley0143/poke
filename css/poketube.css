@@ -18,11 +18,19 @@
     along with this program. If not, see https://www.gnu.org/licenses/.
 
 */
+   :root {
+    --text-link: #0ab7f0;
+    --text-link-visited: #00c0ff;
+    --text: #ffffff;
+}
+  
+
 
 a.class:hover {
   text-decoration: underline;
   font-weight: bold;
 }
+
 summary {
   color: gray;
 }
@@ -30,16 +38,16 @@ summary:hover {
   color: white;
 }
 :visited {
-  color: #00c0ff;
+  color: var(--text-link-visited);
 }
 
 a {
-  color: #0ab7f0;
+  color: var(--text-link);
 }
 
 .video > .info > .title {
   font-family: "PokeTube flex";
-  font-stretch: extra-expanded;
+  width: 10em;
 }
 
 .video-info-panel > .video-title > a {
@@ -87,9 +95,11 @@ a {
   height: fit-content;
   justify-self: center;
   margin-right: -1.5em;
-  width: min-content;
+  /* width: min-content;*/
   border: #7c44a0;
   border-style: solid;
+  max-width: 371px;
+  width: 371px;
 }
 
 .video-views {
@@ -258,24 +268,21 @@ a {
 }
 
 .new-button {
-background: #0009;
-border-radius: 2em;
-padding-right: 1em;
-display: flex;
-justify-content: center;
-align-items: center;
-align-content: center;
-align-self: center;
+  background: #0009;
+  border-radius: 2em;
+  padding-right: 1em;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  align-content: center;
+  align-self: center;
 }
 
-
 .pill-button {
-margin-left: 1em;
+  margin-left: 1em;
 }
 
 .vertical {
   border-left: 1px solid gray;
   height: 15px;
 }
-         
- 

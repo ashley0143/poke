@@ -31,7 +31,7 @@
 <meta content="<%=video.Channel.Name%>" name=twitter:author>
 <meta content=@youtube name=twitter:site>
 <meta content="https://poketube.fun/watch?v=<%=video.id%>" name=twitter:url>
-<meta content="<%=video.Title%> - PokeTube" name=twitter:title>
+<meta content="<%=video.Title%> | PokeTube" name=twitter:title>
 <meta content="Watch this video by <%=video.Channel.Name%> On PokeTube. The YouTube front-end that doesnt track you!" property=twitter:description>
 <meta content="https://i.ytimg.com/vi/<%=video.id%>/maxresdefault.jpg" property=og:image>
 <meta content=summary_large_image name=twitter:card>
@@ -39,7 +39,7 @@
 <link href="http://www.youtube.com/channel/<%=video.Channel.id%>" itemprop=url>
  <% } %> <!-- close the } -->
 <link href="/css/yt-ukraine.svg" rel=icon>
-<title> <%=video.Title%> - PokeTube </title>  
+<title> <%=video.Title%> | PokeTube </title>  
 <style>
  
   .comments-area {
@@ -738,9 +738,8 @@
 
                               <% if (!r) { %> 
  
- <div class="video-title" style="text-align:left;font-family:'PokeTube Flex';font-weight:1000;white-space:yes;font-stretch: extra-expanded;">                                  Recommendations
+ <div class="video-title" style="text-align:left;font-family:'PokeTube Flex';font-weight:1000;white-space:yes;font-stretch: extra-expanded;">                                  Recommendations 
                                 </div>   
-                                <hr style="clear: both;display: block;border: none;border-bottom: 0.5px solid #2f2f2f;margin: 0 0;/*! width: 4.5em; */height: 0;">
                                             
                               <% if (!f) { %> 
      <% k.Video.Recommendations.Video.forEach(x => { %>       

@@ -91,6 +91,7 @@ a {
   background-color: #1c1c1c;
   border-radius: 25px;
   margin: 10px;
+  margin-top: 0px;
   margin-right: 10px;
   height: fit-content;
   justify-self: center;
@@ -116,7 +117,7 @@ a {
     #8e6f7e 100%
   );
   display: block;
-  margin: 0px 0 0px -2px;
+  margin: 0px 0 0px -3px;
   justify-self: left;
 }
 

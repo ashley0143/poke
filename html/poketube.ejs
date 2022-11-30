@@ -449,8 +449,7 @@
 
    </a>
                                                                           <% }%>                                                                              <% }%>      
-  
-                                                                             <% if (video.Channel.Name.endsWith(' - Topic') || video.Title.endsWith('Audio)')) { %> 
+                                                                                                                                                         <% if (video.Channel.Name.endsWith(' - Topic') || video.Title.endsWith('Audio)')) { %> 
                                                             
                             <% if (video.Channel.Name.endsWith(' - Topic') || video.Title.endsWith('Audio)'))  { %> 
                                                  					<a  class="new-button" title="open this song in poketube music player :3" style="color:#fff;text-decoration: none;" href="/music?v=<%=video.id%>">
@@ -465,6 +464,17 @@
                                                                           <% }%>      
     
     
+                                                                            
+      <div class="new-button" style=";margin-left: -3px;">
+					<a title="Low Bandwidth? try PokeTube Lite!" style="color:#fff;text-decoration: none" href="/lite?v=<%=video.id%>">
+                                        <div class="pill-button">
+
+               <i class="fa-light fa-bolt"></i>
+               Go Lite!
+                                                      </div>       
+        </a>
+                                                                            </div>
+
 
  
 				</div>
@@ -738,6 +748,7 @@
 
                               <% if (!r) { %> 
  
+
  <div class="video-title" style="text-align:left;font-family:'PokeTube Flex';font-weight:1000;white-space:yes;font-stretch: extra-expanded;">                                  Recommendations 
                                 </div>   
                                             

@@ -196,6 +196,100 @@ module.exports = function (app, config, renderTemplate) {
     }
   });
 
+  
+  app.get("/lite", async function (req, res) {
+    /*
+     * QUERYS
+     * v = Video ID
+     * e = Embed
+     * r = Recommended videos
+     * f = Recent videos from channel
+     * t = Piwik OptOut
+     * q = quality obv
+     */
+    var v = req.query.v;
+    var e = req.query.e;
+    var r = req.query.r;
+    var f = req.query.f;
+    var t = req.query.t;
+    var q = req.query.quality;
+
+    const info = await modules.fetch("http://ip-api.com/json/");
+    const jj = await info.text();
+    const ip = JSON.parse(jj);
+    const isvld = await core.isvalidvideo(v);
+
+    
+    if (isvld) {
+     
+          core.video(v).then((data) => {
+            const k = data.video;
+            const json = data.json;
+            const engagement = data.engagement;
+            var inv_comments = data.comments;
+            const inv_vid = data.vid;
+           if(json.Title) {
+            if (!data.comments) inv_comments = "Disabled";
+
+            if (!core.video(v).b) {
+              var nnn = "";
+              var badges = "";
+              var comments = "";
+            }
+
+            if (!v) res.redirect("/");
+
+            if (q === "medium") {
+              var url = `https://inv.vern.cc/latest_version?id=${v}&itag=18&local=true`;
+            }
+
+            const desc = data.desc;
+            if (d) {
+              var d = desc.toString().replace(/\n/g, " <br> ");
+            }
+
+            if (d === "[object Object]") {
+              var d = false;
+            }
+
+            renderTemplate(res, req, "lite.ejs", {
+              color: data.color,
+              color2:data.color2,
+              engagement: engagement,
+              video: json,
+              date: k.Video.uploadDate,
+              e: e,
+              k: k,
+              process: process,
+              sha384: sha384,
+              lightOrDark,
+              isMobile: req.useragent.isMobile,
+              tj: data.channel,
+              r: r,
+              qua: q,
+              inv: inv_comments,
+              ip: ip,
+              convert: convert,
+              wiki: data.wiki,
+              f: f,
+              t: config.t_url,
+              optout: t,
+              badges: badges,
+              desc: desc,
+              comments: comments,
+              n: nnn,
+              inv_vid,
+              lyrics: "",
+            });
+             }
+          });
+          
+ 
+    } else {
+      res.redirect("/");
+    }
+  });
+
   app.get("/music", async function (req, res) {
     /*
      * QUERYS

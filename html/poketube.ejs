@@ -464,7 +464,9 @@
                                                                           <% }%>      
     
     
-                                                                            
+                                                    
+ <% if (!video.Channel.Name.endsWith(' - Topic')) { %> 
+    <% if (!video.Title.endsWith('Audio)')) { %>                         
       <div class="new-button" style=";margin-left: -3px;">
 					<a title="Low Bandwidth? try PokeTube Lite!" style="color:#fff;text-decoration: none" href="/lite?v=<%=video.id%>">
                                         <div class="pill-button">
@@ -474,7 +476,8 @@
                                                       </div>       
         </a>
                                                                             </div>
-
+ <% }%>                     
+                                                                          <% }%>      
 
  
 				</div>

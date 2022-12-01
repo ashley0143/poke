@@ -100,7 +100,7 @@ a {
   border: #7c44a0;
   border-style: solid;
   max-width: 371px;
-  width: 371px;
+  width: max-content;
 }
 
 .video-views {

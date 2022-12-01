@@ -503,6 +503,14 @@
                            </p>
                            
 <div class="video-grid" style="background:#111" >
+                           <% if ( tj ) { %>
+
+                         <% if ( tj.Channel) { %>
+
+                       <% if ( tj.Channel.Contents) { %>
+                     <% if ( tj.Channel.Contents.ItemSection[2]) { %>
+
+                   <% if ( tj.Channel.Contents.ItemSection[2].Shelf) { %>
                  <% if ( tj.Channel.Contents.ItemSection[2].Shelf.Items.Video) { %>
 
     <% tj.Channel.Contents.ItemSection[2].Shelf.Items.Video.forEach(x =>  { %>
@@ -514,7 +522,13 @@
             </div>
  			</a>	
  		 	               <% }) %>   
-                                           <% } %>
+                                           <% } %>                                      
+                                           <% } %>          
+                                           <% } %>          
+
+                                           <% } %>    
+                                                                                        <% } %>
+     <% } %>
                                                                                         <% } %>
 
                 </body>

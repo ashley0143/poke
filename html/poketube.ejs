@@ -41,6 +41,20 @@
 <link href="/css/yt-ukraine.svg" rel=icon>
 <title> <%=video.Title%> | PokeTube </title>  
 <style>
+  
+     <% if (lightOrDark(color) == "light") { %>  
+     .player.video-ambient-container  { 
+         box-shadow: 0 0 20px <%=color%>; 
+         }
+        
+                                                                                     <% } %>          
+  
+     <% if (lightOrDark(color) == "dark") { %>  
+     .player.video-ambient-container  { 
+         box-shadow: 0 0 20px <%=color2%>; 
+        }
+        
+                                                                                     <% } %>     
  
   .comments-area {
   background: #f1f9ff;
@@ -294,25 +308,16 @@
  <div class="watch-page">
 
  	<div class="primary">
-       
+
 		<div class="video-player-container">
-        <% if (lightOrDark(color) == "dark") { %>  
-
-<video class="player" id="<%=sha384(video.id)%>" style="border-radius: 16px;box-shadow: 0 0 20px <%=color2
-                                                        %>;margin-left: -5.5px;" autoplay controls   
+ 
+ 
+<video class="player video-ambient-container" id="<%=sha384(video.id)%>" style="border-radius: 16px; margin-left: -5.5px;" autoplay controls   
        
        poster="https://p.poketube.fun/https://i.ytimg.com/vi/<%=video.id%>/maxresdefault.jpg?v=607ddcd4">
         
-                                                                                     <% } %>                
-   <% if (lightOrDark(color) == "light") { %>  
-
-<video class="player" id="<%=sha384(video.id)%>" style="border-radius: 16px;box-shadow: 0 0 20px <%=color
-                                                        %>;margin-left: -5.5px;" autoplay controls   
-       
-       poster="https://p.poketube.fun/https://i.ytimg.com/vi/<%=video.id%>/maxresdefault.jpg?v=607ddcd4">
-        
-                                                                                     <% } %>                
-
+      
+ 
              
                   <% if (!qua) { %>  
 
@@ -346,7 +351,9 @@
                                                            <% } %>         
                                                            <% } %>         
                                                              
- 					</video><img src="https://t.poketube.fun/t/rep.gif?video=<%=btoa(video.id)%>" style="border:0;width: 0;visibility: hidden;" id="video">
+                                                             </video>
+                                                             
+                                                             <img src="https://t.poketube.fun/t/rep.gif?video=<%=btoa(video.id)%>" style="border:0;width: 0;visibility: hidden;" id="video">
 <div style="display: flex;justify-content: center;align-items: center;flex-direction: row; column-gap: 3px;" align="center">
                                 
   <% if (!qua) { %> 

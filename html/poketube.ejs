@@ -124,7 +124,7 @@
 }
 
 .comments-area .btn-reply {
-  background-color: #fff;
+  background-color: var(--text-color);
   color: #002347;
   border: 1px solid #eee;
   padding: 2px 18px;
@@ -181,7 +181,7 @@
    
 .comment-form .form-control {
   padding: 8px 20px;
-  background: #fff;
+  background: var(--text-color);
   border: none;
   border-radius: 0px;
   width: 100%;
@@ -266,7 +266,7 @@
    
   <body>
     
-<div class="app" style="color:#fff">
+<div class="app" style="color:var(--text-color)">
     
             
     <nav>
@@ -274,15 +274,15 @@
 
                   <% if (inv_vid.genre != "Music") { %> 
 
-              <a class="class" href="/143" style=font-family:Inter,sans-serif;color:#fff>  <img style="transform: scale(1.3);padding-left:0.9em;width: 8.5em;display: block;margin-left: auto;margin-right: auto;" src="/css/logo.svg?v=5"></a>
+              <a class="class" href="/143" style=font-family:Inter,sans-serif;color:var(--text-color)>  <img style="transform: scale(1.3);padding-left:0.9em;width: 8.5em;display: block;margin-left: auto;margin-right: auto;" src="/css/logo.svg?v=5"></a>
                       		 	               <% } %>   
      <% if (inv_vid.genre === "Music") { %> 
 
-              <a class="class" href="/143" style=font-family:Inter,sans-serif;color:#fff>  <img style="transform: scale(1.3);padding-left:0.9em;width: 7.5em;display: block;margin-left: auto;margin-right: auto;" src="/css/music.svg?v=5"></a>
+              <a class="class" href="/143" style=font-family:Inter,sans-serif;color:var(--text-color)>  <img style="transform: scale(1.3);padding-left:0.9em;width: 7.5em;display: block;margin-left: auto;margin-right: auto;" src="/css/music.svg?v=5"></a>
                       		 	               <% } %>   
             </div>               
        <div class="middle">
-        <form action="/search"><input class="search-bar" autocomplete="on" id="fname" name="query" style="color:#fff;font-family:Inter,sans-serif;border-radius: 2em;" data-ddg-inputtype="identities.firstName">
+        <form action="/search"><input class="search-bar" autocomplete="on" id="fname" name="query" style="color:var(--text-color);font-family:Inter,sans-serif;border-radius: 2em;" data-ddg-inputtype="identities.firstName">
 <button class="btn btn-success" type="submit" style="transform: translate(21em, -1.25em);"><i class="fa-light fa-search"></i></button>             
          </form>
              
@@ -372,7 +372,7 @@
         	<div class="video-info-panel gradient">  
             <div class="video-title" style="font-family:Inter;font-weight:bold;line-break: auto;max-width: max-content;margin: 0;margin-bottom: 0;padding: 0;" title="<%=video.Title%>"><%=video.Title%> </div>
           
-          <a href="#metadata" style="font-weight: bolder;font-family: sans-serif;color: #fff;font-size: small;"> <%=convert(engagement.viewCount)%> Views - View More Metadata</a>
+          <a href="#metadata" style="font-weight: bolder;font-family: sans-serif;color: var(--text-color);font-size: small;"> <%=convert(engagement.viewCount)%> Views - View More Metadata</a>
          
                <div class="video-chnl-info-pill"  name="chnl">
   <a name="chnl"></a>
@@ -433,7 +433,7 @@
       
 <div style="display: flex;">
 
-					<a class="new-button" title="Download this Video :3" style="color:#fff;text-decoration: none; " href="/download?v=<%=video.id%>">
+					<a class="new-button" title="Download this Video :3" style="color:var(--text-color);text-decoration: none; " href="/download?v=<%=video.id%>">
                             <div class="pill-button">
 
             <i class="fa-light fa-download"></i>
@@ -446,7 +446,7 @@
     <% if (!video.Title.endsWith('Audio)')) { %> 
 
       <div class="new-button">
-					<a   title="Encryption duh" style="color:#fff;text-decoration: none;" href="/encryption?v=<%=video.id%>">
+					<a   title="Encryption duh" style="color:var(--text-color);text-decoration: none;" href="/encryption?v=<%=video.id%>">
                                         <div class="pill-button">
 
                <i class="fa-light fa-shield"></i>
@@ -459,7 +459,7 @@
                                                                                                                                                          <% if (video.Channel.Name.endsWith(' - Topic') || video.Title.endsWith('Audio)')) { %> 
                                                             
                             <% if (video.Channel.Name.endsWith(' - Topic') || video.Title.endsWith('Audio)'))  { %> 
-                                                 					<a  class="new-button" title="open this song in poketube music player :3" style="color:#fff;text-decoration: none;" href="/music?v=<%=video.id%>">
+                                                 					<a  class="new-button" title="open this song in poketube music player :3" style="color:var(--text-color);text-decoration: none;" href="/music?v=<%=video.id%>">
                                                                                                     <div class="pill-button">
 
           <i class="fa-light fa-music"></i>
@@ -475,7 +475,7 @@
  <% if (!video.Channel.Name.endsWith(' - Topic')) { %> 
     <% if (!video.Title.endsWith('Audio)')) { %>                         
       <div class="new-button" style=";margin-left: -4px;">
-					<a title="Low Bandwidth? try PokeTube Lite!" style="color:#fff;text-decoration: none" href="/lite?v=<%=video.id%>">
+					<a title="Low Bandwidth? try PokeTube Lite!" style="color:var(--text-color);text-decoration: none" href="/lite?v=<%=video.id%>">
                                         <div class="pill-button">
 
                <i class="fa-light fa-bolt"></i>
@@ -497,7 +497,7 @@
                                            
 <div class="video-sub-info description">
 
-  <div class="video-title" style="color:#fff;font-family:'PokeTube Flex';font-weight:1000;font-stretch: extra-expanded;margin-top: 3px;margin-bottom: 10px;">Description</div>
+  <div class="video-title" style="color:var(--text-color);font-family:var(--text-font-primary);;font-weight:var(--text-header-weight);font-stretch: extra-expanded;margin-top: 3px;margin-bottom: 10px;">Description</div>
  <hr style="clear: both;display: block;border: none;border-bottom: 0.5px solid #2f2f2f;/*! width: 4.5em; */height: 0;">
   
      <% if (String(video.Description) != "[object Object]")  { %>
@@ -515,7 +515,7 @@
 
                             
                    <% if (wiki.extract_html) { %> 
-<div class="video-title" style="color:#fff;font-family:'PokeTube Flex';font-weight:1000;font-stretch: extra-expanded;margin-top: 10px;margin-bottom: 10px;">From da web</div>
+<div class="video-title" style="color:var(--text-color);font-family:var(--text-font-primary);;font-weight:var(--text-header-weight);font-stretch: extra-expanded;margin-top: 10px;margin-bottom: 10px;">From da web</div>
                      
 <hr style="clear: both;display: block;border: none;border-bottom: 0.5px solid #2f2f2f;/*! width: 4.5em; */height: 0;">
 
@@ -531,7 +531,7 @@
                      </p>
                      <% } %> 
                        <a id="metadata"></a>
-                           <div class="video-title" style="color:#fff;font-family:'PokeTube Flex';font-weight:1000;font-stretch: extra-expanded;margin-top: 10px;margin-bottom: 10px;">Metadata And Engagement</div>
+                           <div class="video-title" style="color:var(--text-color);font-family:var(--text-font-primary);;font-weight:var(--text-header-weight);font-stretch: extra-expanded;margin-top: 10px;margin-bottom: 10px;">Metadata And Engagement</div>
  <hr style="clear: both;display: block;border: none;border-bottom: 0.5px solid #2f2f2f;/*! width: 4.5em; */height: 0;">
 
      <p  style="font-weight: bold;">
@@ -552,12 +552,12 @@
                                                  <hr style="clear: both;display: block;border: none;border-bottom: 0.5px solid #2f2f2f;/*! width: 4.5em; */height: 0;">
      <%  if (Array.isArray(video.Tags.Tag)) { %> 
 
-                            <div class="video-title" style="color:#fff;font-family:'PokeTube Flex';font-weight:1000;font-stretch: extra-expanded;margin-top: 10px;margin-bottom: 10px;">Tags</div>
+                            <div class="video-title" style="color:var(--text-color);font-family:var(--text-font-primary);;font-weight:var(--text-header-weight);font-stretch: extra-expanded;margin-top: 10px;margin-bottom: 10px;">Tags</div>
                       <div class="tags">
         
  <% video.Tags.Tag.forEach(x => { %>
  <div class="tag">
-   <a href="/hashtag/<%=x %>" style="color:#fff">
+   <a href="/hashtag/<%=x %>" style="color:var(--text-color)">
    <%=x %>
      </a>
    </div>
@@ -599,7 +599,7 @@
          
             <div>
 
-					<a title="Download this Video :3" style="color:#fff;text-decoration: none; " href="/download?v=<%=video.id%>">
+					<a title="Download this Video :3" style="color:var(--text-color);text-decoration: none; " href="/download?v=<%=video.id%>">
             <i class="fa-light fa-download"></i>
             Download
 					</a>
@@ -608,7 +608,7 @@
  <% if (!video.Channel.Name.endsWith(' - Topic')) { %> 
     <% if (!video.Title.endsWith('Audio)')) { %> 
 
-					<a title="Encryption duh" style="color:#fff;text-decoration: none;" href="/encryption?v=<%=video.id%>">
+					<a title="Encryption duh" style="color:var(--text-color);text-decoration: none;" href="/encryption?v=<%=video.id%>">
                <i class="fa-light fa-shield"></i>
                 Encryption
    </a>
@@ -617,7 +617,7 @@
                                                                              <% if (video.Channel.Name.endsWith(' - Topic') || video.Title.endsWith('Audio)')) { %> 
                                                             
                             <% if (video.Channel.Name.endsWith(' - Topic') || video.Title.endsWith('Audio)'))  { %> 
-                                                 					<a title="open this song in poketube music player :3" style="color:#fff;text-decoration: none;" href="/music?v=<%=video.id%>">
+                                                 					<a title="open this song in poketube music player :3" style="color:var(--text-color);text-decoration: none;" href="/music?v=<%=video.id%>">
           <i class="fa-light fa-music"></i>
                   Open In Music Player
                                                  </a>
@@ -648,7 +648,7 @@
 
 <div class="comments-class-or-something-i-cant-find-a-name-lol">
   
-                                                 <h5 style="font-family:'PokeTube Flex';font-weight:1000;white-space:yes;font-stretch: ultra-expanded;margin-bottom: 11px;margin-top: 6px;padding-top: 10px;">
+                                                 <h5 style="font-family:var(--text-font-primary);font-weight:var(--text-header-weight);white-space:yes;font-stretch: ultra-expanded;margin-bottom: 11px;margin-top: 6px;padding-top: 10px;">
                                                    Comments <span style="font-family: inter;font-weight: 900;text-transform: lowercase;margin: 1px;">- <%- convert(inv.commentCount) %></span>
                                                    </h5> 
                                                      
@@ -673,7 +673,7 @@
                                                           <%  if (!x.authorIsChannelOwner) { %> 
 
                 <p class="comments-author">
-                  				<a href="/channel?id=<%- x.authorId%>" style="color: #fff;text-decoration: none;" >
+                  				<a href="/channel?id=<%- x.authorId%>" style="color: var(--text-color);text-decoration: none;" >
 
                 <%- x.author%> 
                   </a>
@@ -690,7 +690,7 @@
                                           <%  if (x.authorIsChannelOwner) { %> 
                                <p class="comments-author owner">
  
-                  				<a href="/channel?id=<%- x.authorId%>" style="color: #fff;text-decoration: none;" >
+                  				<a href="/channel?id=<%- x.authorId%>" style="color: var(--text-color);text-decoration: none;" >
 
                                 <%- x.author%> 
                   </a>
@@ -759,7 +759,7 @@
                               <% if (!r) { %> 
  
 
- <div class="video-title" style="text-align:left;font-family:'PokeTube Flex';font-weight:1000;white-space:yes;font-stretch: extra-expanded;">                                  Recommendations 
+ <div class="video-title" style="text-align:left;font-family:var(--text-font-primary);font-weight:var(--text-header-weight);white-space:yes;font-stretch: extra-expanded;">                                  Recommendations 
                                 </div>   
                                             
                               <% if (!f) { %> 
@@ -840,7 +840,7 @@
  See how our lyrics search works:<a href="https://github.com/iamashley0/poketube/blob/main/src/lyrics.js">Here</a>
            </p>
                         <p style="color: white;">
-                                        <p style=color:#fff>
+                                        <p style=color:var(--text-color)>
                                             <%-lyrics%>
                                         </p> 
                                                                       <% } %>
@@ -862,7 +862,7 @@
                   <div style="font-family:Inter,sans-serif;font-weight:900;white-space:yes;" align="center">
 
 <a href="/watch?v=<%=video.id%>&t=f"> 
- Opt out of Metrics</a> (<a href="/privacy" style="color:#fff">Wut?</a>)
+ Opt out of Metrics</a> (<a href="/privacy" style="color:var(--text-color)">Wut?</a>)
                
    </div>
      <% } %>

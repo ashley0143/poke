@@ -48,7 +48,7 @@
 
 @media screen and (min-width: 1400px) {
   .video-info-panel.gradient {
-    width: 60.3em;
+    width: 59.8em;
   }
 }
 
@@ -60,19 +60,19 @@
 
 @media screen and (min-width: 1500px) {
   .video-info-panel.gradient {
-    width: 66.5em;
+    width: 66.08em;
   }
 }
 
 @media screen and (min-width: 1550px) {
   .video-info-panel.gradient {
-    width: 69.3em; /* Noice */
+    width: 69em; /* Noice */
   }
 }
 
 @media screen and (min-width: 1600px) {
   .video-info-panel.gradient {
-    width: 73.3em;
+    width: 72.4em;
   }
 }
 
@@ -84,7 +84,7 @@
 
 @media screen and (min-width: 1700px) {
   .video-info-panel.gradient {
-    width: 78.3em;
+    width: 78.4em;
   }
 }
 
@@ -96,27 +96,28 @@
 
 @media screen and (min-width: 1800px) {
   .video-info-panel.gradient {
-    width: 85.3em;
+    width: 84.8em;
   }
 }
 
 @media screen and (min-width: 1850px) {
   .video-info-panel.gradient {
-    width: 88.3em;
+    width: 88.2em;
   }
 }
 
 @media screen and (min-width: 1900px) {
   .video-info-panel.gradient {
-    width: 91.3em;
+    width: 90.5em;
   }
 }
 
 @media screen and (min-width: 1950px) {
   .video-info-panel.gradient {
-    width: 94.3em;
+    width: 94em;
   }
 }
+
 
 @media screen and (min-width: 2000px) {
   .video-info-panel.gradient {
@@ -224,6 +225,6 @@
 
 @media screen and (min-width: 2000px) {
   .video-info-panel.gradient {
-    margin: 0px 0 0px 0.5px;
+    margin: 0px 0 0px -2.5px;
   }
 }

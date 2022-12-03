@@ -19,7 +19,6 @@
 
 */
 
-
 /* RESPONSIVE STUFF */
 
 /* Formula for xx50px - inital width + 3em */
@@ -222,3 +221,9 @@
 }
 
 /* RESPONSIVE END */
+
+@media screen and (min-width: 2000px) {
+  .video-info-panel.gradient {
+    margin: 0px 0 0px 0.5px;
+  }
+}

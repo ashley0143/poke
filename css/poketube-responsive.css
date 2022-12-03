@@ -54,13 +54,13 @@
 
 @media screen and (min-width: 1450px) {
   .video-info-panel.gradient {
-    width: 63em;
+    width: 62.8em;
   }
 }
 
 @media screen and (min-width: 1500px) {
   .video-info-panel.gradient {
-    width: 66.08em;
+    width: 65.8em;
   }
 }
 
@@ -118,7 +118,7 @@
   }
 }
 
-
+/* //////////////////////////////////////////////////////////////////////////////////////// */
 @media screen and (min-width: 2000px) {
   .video-info-panel.gradient {
     width: 97.3em;

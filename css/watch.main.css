@@ -258,28 +258,11 @@ a.icon-button > img {
   .watch-page {
     flex-direction: column;
   }
-  .video-info {
-    display: grid;
-    grid-auto-rows: 1fr;
-    grid-template-columns: 1fr;
-    grid-template-rows: max-content max-content max-content;
-    gap: 8px;
-    grid-template-areas: "title" "info" "buttons";
-  }
   .recommended-list {
     width: calc(100vw - 48px) !important;
   }
 }
-@media screen and (min-width: 1000px) {
-  .video-info {
-    display: grid;
-    grid-auto-rows: 1fr;
-    grid-template-columns: 615px 1fr max-content;
-    grid-template-rows: max-content max-content;
-    gap: 8px;
-    grid-template-areas: "title title title" "info . buttons";
-  }
-}
+
 .watch-page > .primary {
   flex-grow: 1;
 }
@@ -306,6 +289,10 @@ a.icon-button > img {
   color: #fff;
 }
 .video-info {
+  position:relative;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
   color: var(--text-secondary);
 }
 .video-title {

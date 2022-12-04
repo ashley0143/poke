@@ -104,6 +104,7 @@ a {
   border-radius: 25px;
   margin: 10px;
   margin-top: 0px;
+  margin-left:24px; 
   margin-right: 10px;
   height: fit-content;
   justify-self: center;
@@ -124,7 +125,6 @@ a {
   border-radius: 11px;
   background-image: var(--div-gradient);
   display: block;
-  margin: 0px 0 0px -3px;
   box-sizing:border-box;
   min-width:100%;
 }
@@ -295,3 +295,4 @@ a {
   border-left: 1px solid gray;
   height: 15px;
 }
+ 

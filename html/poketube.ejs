@@ -311,7 +311,10 @@
 		<div class="video-player-container">
  
  
-<video class="player video-ambient-container" id="<%=sha384(video.id)%>" style="border-radius: 16px; " autoplay controls   
+<video class="player video-ambient-container" id="<%=sha384(video.id)%>" style="border-radius: 16px;
+box-sizing: border-box;
+min-width: 100%;
+display: block;" autoplay controls   
        
        poster="https://p.poketube.fun/https://i.ytimg.com/vi/<%=video.id%>/maxresdefault.jpg?v=607ddcd4">
         
@@ -353,7 +356,7 @@
                                                              </video>
                                                              
                                                              <img src="https://t.poketube.fun/t/rep.gif?video=<%=btoa(video.id)%>" style="border:0;width: 0;visibility: hidden;" id="video">
-<div style="display: flex;justify-content: center;align-items: center;flex-direction: row; column-gap: 3px;" align="center">
+<div style="display: flex;justify-content: center;align-items: center;flex-direction: row; column-gap: 3px;margin-top: -1em;" align="center">
                                 
   <% if (!qua) { %> 
 
@@ -2349,7 +2352,6 @@ More Epic options owo~
 }
  }
      // @license-end
-                
                                           </script>
  <% if (!optout) { %> 
           <!-- MORE INFO :https://poketube.fun/privacy -->

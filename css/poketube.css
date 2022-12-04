@@ -77,6 +77,8 @@ a {
 }
 
 .video-sub-info.description {
+  box-sizing:border-box;
+  min-width:100%;
   font-weight: 600;
   margin-top: 1em !important;
   border-radius: 21px;
@@ -85,13 +87,9 @@ a {
   margin-bottom: 20px;
   font-stretch: expanded;
   justify-self: center;
-  width: 39em;
   font-family: var(--text-font-primary);
   border: var(--div-border-color);
   border-style: solid;
-  margin-left: auto;
-  margin-right: auto;
-  position: static;
 }
 
 .video-sub-info.description > .video-title {
@@ -127,8 +125,8 @@ a {
   background-image: var(--div-gradient);
   display: block;
   margin: 0px 0 0px -3px;
-  justify-self: left;
-  width: auto;
+  box-sizing:border-box;
+  min-width:100%;
 }
 
 .video-info-pill-channelname {

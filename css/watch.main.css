@@ -265,9 +265,7 @@ a.icon-button > img {
 
 .watch-page > .primary {
   flex-grow: 1;
-    margin-left: -0.75em;
-
-}
+ }
 .video-player-container {
   max-width: 100%;
   margin: auto;

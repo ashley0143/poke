@@ -20,8 +20,8 @@ const {
 
 const pkg = require("../../../package.json");
 
-const ver = "v22.1130-c98Lu-stable"
-const versionnumber = "95"
+const ver = "v22.1205-c98Lu-stable"
+const versionnumber = "99"
 
 const response = {
   pt_version: ver,

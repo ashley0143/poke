@@ -104,8 +104,8 @@ app.use(function (req, res, next) {
   next();
 });
 
-   sinit(app, config, renderTemplate);
- 
+sinit(app, config, renderTemplate);
+
 
 init(app);
  

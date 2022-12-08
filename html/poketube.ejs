@@ -1044,7 +1044,7 @@ display: block;" autoplay controls
                                                     </div>
          <div align="center">                                <hr style="clear: both;display: block;border: none;border-bottom: 0.5px solid #2f2f2f;margin: 0 0;/*! width: 4.5em; */height: 0;">
 
-                                                             <h1 style="font-family:'Ginto Nord',sans-serif;font-weight:900;white-space:yes;" align="center">
+                                                             <h1 style="font-family:var(--text-font-primary);font-weight:var(--text-header-weight);;white-space:yes;" align="center">
  Lyrics 
                         </h1>  
            <p>
@@ -1057,7 +1057,7 @@ display: block;" autoplay controls
                                                                       <% } %>
 
                                         <% } %>                                      </details>
-    <div style="font-family:Inter,sans-serif;font-weight:900;white-space:yes;" align="center">
+    <div style="font-family:Inter,sans-serif;;white-space:yes;" align="center">
                                  <hr style="clear: both;display: block;border: none;border-bottom: 0.5px solid #2f2f2f;margin: 0 0;/*! width: 4.5em; */height: 0;">
 <br>
        <a href="https://youtube.com/watch?v=<%=video.id%>">Open On YouTube</a> • <a href="/privacy">Privacy</a> • <a href="https://github.com/iamashley0/poketube/">Git</a> 
@@ -1070,7 +1070,7 @@ display: block;" autoplay controls
      
       <% if (!optout) { %> 
         
-                  <div style="font-family:Inter,sans-serif;font-weight:900;white-space:yes;" align="center">
+                  <div style="font-family:Inter,sans-serif;;white-space:yes;" align="center">
 
 <a href="/watch?v=<%=video.id%>&t=f"> 
  Opt out of Metrics</a> (<a href="/privacy" style="color:var(--text-color)">Wut?</a>)
@@ -1080,7 +1080,7 @@ display: block;" autoplay controls
             
 
             	           <% if (lyrics && !r) { %>
-                                             <div style="font-family:Inter,sans-serif;font-weight:900;white-space:yes;" align="center">
+                                             <div style="font-family:Inter,sans-serif;;white-space:yes;" align="center">
 
       <% if (optout) { %> 
      <a href="/watch?v=<%=video.id%>&r=f">Lyrics (Wow)</a>
@@ -1217,6 +1217,27 @@ body {
 .v-chip:not(.v-chip--outlined).success,
 .v-chip:not(.v-chip--outlined).warning {
  color:#fff
+}
+    
+:root {
+  /* text */
+  --text-link: #0ab7f0;
+  --text-link-visited: #00c0ff;
+  --text-color: #ffffff;
+  --text-font-primary: "PokeTube Flex";
+  --text-header-weight: 1000;
+
+  /* Divs */
+  --div-gradient: linear-gradient(
+    135deg,
+    #f97794 10%,
+    #623aa2 100%,
+    #8e6f7e 100%
+  );
+  --div-border-color: #7c44a0;
+  --div-prim-bg: #1c1c1c;
+  --div-second-bg: #1a1a1a;
+  --div-transparent-bg: #0009;
 }
 .theme--light.v-chip {
  border-color:rgba(0,0,0,.12);
@@ -1631,7 +1652,7 @@ padding: 3px;
    body { position: relative; }
    #desc-container {
       position: absolute;
- margin-top: -12.4em;
+ margin-top: -20.4em;
      left: 0;
       width: 100%;
       height: 100%;
@@ -1720,7 +1741,7 @@ padding: 3px;
    body { position: relative; }
    #comments-container {
       position: absolute;
- margin-top: -12.4em;
+ margin-top: -20.4em;
      left: 0;
       width: 100%;
       height: 100%;
@@ -1835,7 +1856,7 @@ padding: 3px;
    body { position: relative; }
    #more-button-container {
       position: absolute;
- margin-top: -12.4em;
+ margin-top: -20.4em;
      left: 0;
       width: 100%;
       height: 100%;
@@ -1869,6 +1890,11 @@ padding: 3px;
    }
    #more-buttons span { display: block; }
    #more-buttons span a { display: inline-block; }
+    
+    .date-publish {
+
+}
+
 </style>
   
   <style>body, html { margin: 0; padding: 0; } * { font-family: sans-serif; color:#fff } .player { background-color: #000 !important; display: grid; grid-template-columns: 1fr min-content; grid-template-rows: max-content 1fr max-content max-content max-content; gap: 0 0; width: 100%; /* height: 100%; */ aspect-ratio: 16 / 9; } .player * { color: #fff; } .player.embed, video.embed { position: fixed; top: 0; bottom: 0; left: 0; right: 0; } .player * { -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none; } .player > video { position: relative; width: 100%; height: 100%; z-index: 0; grid-area: 1 / 1 / 6 / 3; } .player.hide-controls > .player-title, .player.hide-controls > .player-controls, .player.hide-controls > .player-playback-bar-container, .player.hide-controls > .player-menu { display: none !important; } .player-controls { background-color: #0007; display: flex; justify-content: center; align-items: center; z-index: 1; grid-area: 1 / 1 / 6 / 3; } .player-button { width: 96px; height: 96px; font-size: 90px; text-align: center; line-height: 48px; } .player-tiny-button { width: 40px; font-size: 20px; text-align: center; } .player-tiny-button > i { color: #ddd; } .player-button, .player-button * { color: #dddddd !important; text-decoration: none; } .player-button > i { min-width: 48px; } .player-button:hover, .player-button:hover * { color: #fff !important; } .player-playback-bar { transition: width linear 100ms; } .player-playback-bar-container { grid-area: 4 / 1 / 5 / 3; display: flex; column-gap: 8px; justify-content: center; align-items: center; height: 8px; transition: height linear 100ms; width: 100%; z-index: 2; margin-bottom: 10px; } .player-playback-bar-bg { background-color: #fff3 !important; width: 100%; height: 100%; z-index: 2; display: grid; grid-template-columns: 1fr; grid-template-rows: 1fr; } .player-playback-bar-bg > * { grid-area: 1 / 1 / 2 / 2; } .player-playback-bar-buffer { background-color: #fffa !important; height: 100%; width: 0; z-index: 3; } .player-playback-bar-fg { background-color: #f00 !important; height: 100%; width: 0; z-index: 4; } .player-buffering { grid-area: 1 / 1 / 6 / 3; z-index: 1; display: flex; justify-content: center; align-items: center; } .player-buffering-spinner { width: 80px; height: 80px; }</style>
@@ -1954,7 +1980,7 @@ padding: 3px;
                                                                       <% } %>               
 
        </div>            
-                  <div class="video-title" style="font-family:'Inter';font-weight:900;white-space:yes;padding: 10px;"><%=video.Title%> <a id="language-button" href="#desc-container" style="float: right;" class="switch">
+                  <div class="video-title" style="font-family:'Inter';;white-space:yes;padding: 10px;"><%=video.Title%> <a id="language-button" href="#desc-container" style="float: right;" class="switch">
 <i class="fa-thin fa-chevron-down"></i>
 </a> </div>
                     
@@ -1964,7 +1990,7 @@ padding: 3px;
 					<img src=" https://p.poketube.fun/<%= k.Video.Channel.Avatar[1].$t %>">
 				</a>
               
-				<div class="name" style="font-family:'Ginto Nord'">
+				<div class="name" style="font-family:var(--text-font-primary);font-weight:var(--text-header-weight);">
 		  <div>
 						<a style="color:#fff" href="/channel?id=<%=k.Video.Channel.id%>" >  <%=k.Video.Channel.Name%></a>   
             
@@ -2036,7 +2062,7 @@ padding: 3px;
  				<div class="video-info-bar" style="font-family:'Inter';">
   
       <!--
-<div class="video-info-buttons" style="font-family:'Inter';font-weight:900;white-space:yes;background:#333;border-radius: 15px;margin: 6px;align-self: center;align-items: center;">
+<div class="video-info-buttons" style="font-family:'Inter';;white-space:yes;background:#333;border-radius: 15px;margin: 6px;align-self: center;align-items: center;">
   <div>
    <i class="fa-light fa-thumbs-up"  style="font-size:x-large" ></i>
      <%=convert(engagement.likes)%>
@@ -2110,23 +2136,26 @@ padding: 3px;
    </a>
   </div>
 <div id="descs" style="display: contents;">
-  <h3 style="font-family:'Ginto Nord';font-weight:900;white-space:yes"> Description  
+  <h3 style="font-family:var(--text-font-primary);font-weight:var(--text-header-weight);;;white-space:yes"> Description  
    <a href="#top" class="close" style="color: #fff;"></a>
   </h3>
 <hr style="clear: both;display: block;border: none;border-bottom: 0.5px solid #2f2f2f;/*! width: 4.5em; */height: 0;">
 
-         <div class="video-title" style="font-family:'Inter';font-weight:900;white-space:yes;margin-bottom: 8px;"><%=video.Title%></div>
+         <div class="video-title" style="font-family:'Inter';;white-space:yes;margin-bottom: 8px;"><%=video.Title%></div>
+                 <!--
+
 <div class="channel-info" name="chnl" style="padding: 0;border: none;">
   <a href="/channel?id=<%=video.Channel.id%>" class="avatar">
 					<img src=" <%= k.Video.Channel.Avatar[1].$t %>">
 				</a>
-				<div class="name" style="font-family:'Ginto Nord'">
+				<div class="name" style="font-family:var(--text-font-primary);font-weight:var(--text-header-weight);">
 		  <div>
 						<a style="color:#fff" href="/channel?id=<%=k.Video.Channel.id%>" >  <%=k.Video.Channel.Name%></a>   
                           </div>
 				</div>
 		 
  			</div>
+-->
                  
 <div style="display: flex;justify-content: center;gap: 3em;">
     
@@ -2178,24 +2207,11 @@ padding: 3px;
                     <div style="justify-content: center;display: flex;padding: 11px;font-family: Ginto nord;gap: 3px;background: #1f1f1f;border-top-left-radius: 10px;border-top-right-radius: 10px;">
 More from  <%=k.Video.Channel.Name%>
           </div>  
-                            <div style="justify-content: center;display: flex;padding: 11px;font-family: Ginto nord;gap: 3px;background: #1f1f1f;">
-                             
-<div style="border-radius: 5px;background: #333;width: fit-content;padding: 18px;">
-		<a style="color:#fff" href="/channel?id=<%=k.Video.Channel.id%>&tab=about" > 
-
-  <i class="fa-thin fa-square-user"></i> About
-  </a>
-                       </div>                     
-
-                     <div style="border-radius: 5px;background: #333;width: fit-content;padding: 17px;">
-		<a style="color:#fff" href="/channel?id=<%=k.Video.Channel.id%>" > 
-      <i class="fa-thin fa-play"></i> Videos </a>
-                       </div>      
+ 
                               
 
                               
-            </div>  
-                                                           <div style="background:#181818;" class="fromtheweb-outer">
+                                                            <div style="background:#181818;" class="fromtheweb-outer">
                           <div class="fromtheweb-inner">
                              
                    <% if (wiki.extract_html) { %> 
@@ -2231,7 +2247,7 @@ More from  <%=k.Video.Channel.Name%>
  			</div> 
                           <p style="font-family:MonoSpace;">
          <b>
-PokeTube Mobile v12.10.22a - Node <%=process.version%> - V8 v<%=process.versions.v8%> -  <%=process.platform.replace("linux", "GNU/Linux")%> <%=process.arch%> Server ( <%=ip.org%> )
+PokeTube Mobile v8.12.22a - Node <%=process.version%> - V8 v<%=process.versions.v8%> -  <%=process.platform.replace("linux", "GNU/Linux")%> <%=process.arch%> Server ( <%=ip.org%> )
            </b>
          
                 </p>            
@@ -2255,14 +2271,14 @@ PokeTube Mobile v12.10.22a - Node <%=process.version%> - V8 v<%=process.versions
 
   </div>
 <div id="more-buttons" style="display: contents;">
-  <h3 style="font-family:'Ginto Nord';font-weight:900;white-space:yes"> M O A R
+  <h3 style="font-family:var(--text-font-primary);font-weight:var(--text-header-weight);;;white-space:yes"> M O A R
     <a href="#top" class="close" style="color: #fff;"></a> </h3>
   <p style="padding: 0;margin: 0;font-family: Inter;">
 More Epic options owo~
   </p>
   <hr style="clear: both;display: block;border: none;border-bottom: 0.5px solid #2f2f2f;/*! width: 4.5em; */height: 0;">
 
-           <div style="font-family:Inter,sans-serif;font-weight:900;white-space:yes;">
+           <div style="font-family:Inter,sans-serif;;white-space:yes;">
      <a href="https://youtube.com/watch?v=<%=video.id%>">Open On YouTube</a>  •  <a href="/privacy">Privacy</a>    • <a href="https://github.com/iamashley0/poketube/">Git</a> 
                                 <% if (optout) { %> 
  <% } %>
@@ -2300,7 +2316,7 @@ More Epic options owo~
             <a href="/watch?v=<%=video.id%>">See the Recommended videos instead</a> - <a href="https://github.com/iamashley0/poketube/issues">Report wrong lyrics qwq</a>
                                                     </p>
          <div align="center">                                <hr style="clear: both;display: block;border: none;border-bottom: 0.5px solid #2f2f2f;margin: 0 0;/*! width: 4.5em; */height: 0;">
-                                                              <h1 style="font-family:'Ginto Nord',sans-serif;font-weight:900;white-space:yes;" align="center">
+                                                              <h1 style="font-family:var(--text-font-primary);font-weight:var(--text-header-weight);;white-space:yes;" align="center">
  Lyrics 
                         </h1>  
            <p>
@@ -2330,7 +2346,7 @@ More Epic options owo~
    </a>
   </div>
 <div id="commentss" style="display: contents;">
-   <h3 style="font-family:'Ginto Nord';font-weight:900;white-space:yes"> Comments <a href="#top" class="close" style="color: #fff;"></a> </h3>
+   <h3 style="font-family:var(--text-font-primary);font-weight:var(--text-header-weight);;;white-space:yes"> Comments <a href="#top" class="close" style="color: #fff;"></a> </h3>
   <p style="padding: 0;margin: 0;font-family: Inter;">
     Top Comments :3
   </p>
@@ -2374,7 +2390,12 @@ More Epic options owo~
                 <p style="margin: 7px;font-family:inter;white-space: -moz-pre-wrap !important;white-space: -pre-wrap;white-space: -o-pre-wrap;white-space: pre-wrap;word-wrap: anywhere;white-space: -webkit-pre-wrap;word-break: break-all;white-space: normal;">
                   				<a href="/channel?id=<%- x.authorId%>" style="color: #fff;text-decoration: none;" >
 
-                <%- x.author%> 
+                <%- x.author%> <p style="  margin: 0; 
+  margin-top: 12px; !important;
+  font-size: small; !important;
+  color: gray !important;">
+                  <%- x.publishedText %>
+                  </p>
                   </a>
                             
                                 <%  if (x.verified) { %> 
@@ -2390,7 +2411,12 @@ More Epic options owo~
   
                   				<a href="/channel?id=<%- x.authorId%>" style="color: #fff;text-decoration: none;" >
 
-                                <%- x.author%> 
+                                <%- x.author%> <p style="  margin: 0; 
+  margin-top: 12px; !important;
+  font-size: small; !important;
+  color: gray !important;">
+                  <%- x.publishedText %>
+                  </p>
                   </a>
                                   
                                                             <%  if (x.verified) { %> 
@@ -2405,7 +2431,8 @@ More Epic options owo~
               </h5>
               <p class="comment" style="font-weight: bold;">
                 <%- x.contentHtml %>
-                 <span style="display: block ruby;"><%- x.publishedText %> - <%- convert(x.likeCount) %> Likes <%   if(x.creatorHeart) { %> 
+              <span style="  white-space: nowrap;">   <i class="fa-light fa-thumbs-up"></i>
+ <%- convert(x.likeCount) %> | <i class="fa-light fa-thumbs-down"></i>  <%   if(x.creatorHeart) { %> 
 
                 <i class="icon ion-ios-heart creator-heart-small-container" title="<%= x.creatorHeart.creatorName%> marked it with a ❤ owo"></i>
         </span>   
@@ -2456,20 +2483,20 @@ More Epic options owo~
  						<div class="video">
                     <% if (!optout) { %> 
 
-      <a  href="/watch?v=<%= x.id %>" class="thumbnail" style="background-image: url('https://p.poketube.fun/https://i.ytimg.com/vi/<%= x.id %>/hqdefault.jpg?sqp=-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLBy_x4UUHLNDZtJtH0PXeQGoRFTgw');border-radius: 9.5px;"  >								<span class="video-length"><%=x.duration %></span>
+      <a  href="/watch?v=<%= x.id %>" class="thumbnail" style="background-image: url('https://p.poketube.fun/https://i.ytimg.com/vi/<%= x.id %>/hqdefault.jpg?sqp=-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLBy_x4UUHLNDZtJtH0PXeQGoRFTgw');border-radius: 9.5px;border: 2px solid white;"  >								<span class="video-length"><%=x.duration %></span>
                            <% } %>
    <% if (optout) { %> 
 
-      <a  href="/watch?v=<%= x.id %>&t=f" class="thumbnail" style="background-image: url('https://p.poketube.fun/https://i.ytimg.com/vi/<%= x.id %>/hqdefault.jpg?sqp=-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLBy_x4UUHLNDZtJtH0PXeQGoRFTgw');border-radius: 9.5px;"  >								<span class="video-length"><%=x.duration %></span>
+      <a  href="/watch?v=<%= x.id %>&t=f" class="thumbnail" style="background-image: url('https://p.poketube.fun/https://i.ytimg.com/vi/<%= x.id %>/hqdefault.jpg?sqp=-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLBy_x4UUHLNDZtJtH0PXeQGoRFTgw');border-radius: 9.5px;border: 2px solid white;"  >								<span class="video-length"><%=x.duration %></span>
                            <% } %>
 							</a>
 							<div class="info">
                 
       <% if (!optout) { %> 
-								<a href="/watch?v=<%= x.id %>" class="title max-lines-2"><%= x.Title %></a>
+								<a href="/watch?v=<%= x.id %>" class="title max-lines-2" style="margin-top: 4px;"><%= x.Title %></a>
                    <% } %>
    <% if (optout) { %> 
-								<a href="/watch?v=<%= x.id %>&t=f" class="title max-lines-2"><%= x.Title %></a>
+								<a href="/watch?v=<%= x.id %>&t=f" style="margin-top: 4px;" class="title max-lines-2"><%= x.Title %></a>
                    <% } %>
 								<div  style="color:#fff" >
                <a class="max-lines-2" style="color:#fff" href="/channel?id=<%= x.Channel.id %>"><%=x.Channel.Name %></a> • <div>

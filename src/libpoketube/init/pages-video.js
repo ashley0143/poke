@@ -19,7 +19,54 @@ const {
 } = require("../ptutils/libpt-coreutils.js");
 
 const sha384 = modules.hash;
+const fetch = modules.fetch;
+const htmlToText = require("html-to-text");
+const encoding = require("encoding");
+const delim1 =
+  '</div></div></div></div><div class="hwc"><div class="BNeawe tAd8D AP7Wnd"><div><div class="BNeawe tAd8D AP7Wnd">';
+const delim2 =
+  '</div></div></div></div></div><div><span class="hwc"><div class="BNeawe uEec3 AP7Wnd">';
+const url = "https://www.google.com/search?q=";
 
+async function lyricsFinder(e = "", d = "") {
+  let i;
+  try {
+    i = await fetch(`${url}${encodeURIComponent(d + " " + e)}+lyrics`);
+    i = await i.textConverted();
+    [, i] = i.split(delim1);
+    [i] = i.split(delim2);
+  } catch (m) {
+    try {
+      i = await fetch(`${url}${encodeURIComponent(d + " " + e)}+song+lyrics`);
+      i = await i.textConverted();
+      [, i] = i.split(delim1);
+      [i] = i.split(delim2);
+    } catch (n) {
+      try {
+        i = await fetch(`${url}${encodeURIComponent(d + " " + e)}+song`);
+        i = await i.textConverted();
+        [, i] = i.split(delim1);
+        [i] = i.split(delim2);
+      } catch (o) {
+        try {
+          i = await fetch(`${url}${encodeURIComponent(d + " " + e)}`);
+          i = await i.textConverted();
+          [, i] = i.split(delim1);
+          [i] = i.split(delim2);
+        } catch (p) {
+          i = "";
+        }
+      }
+    }
+  }
+  const ret = i.split("\n");
+  let final = "";
+  for (let j = 0; j < ret.length; j += 1) {
+    final = `${final}${htmlToText.fromString(ret[j])}\n`;
+  }
+  return String(encoding.convert(final)).trim();
+}
+  
 function lightOrDark(color) {
 
     // Variables for red, green, blue values
@@ -361,10 +408,10 @@ module.exports = function (app, config, renderTemplate) {
     if (!song) {
       res.redirect(`/watch?v=${v}`);
     }
-    var lyrics = await musicInfo
-      .searchLyrics({ title: song.title, artist: song.artist })
-      .catch(() => null);
-
+   
+   const lyrics = await lyricsFinder(song.artist + song.title );
+  if (lyrics == undefined) lyrics = "Lyrics not found";
+   
     var ly = "";
 
     if (lyrics === null) {
@@ -372,7 +419,7 @@ module.exports = function (app, config, renderTemplate) {
     }
 
     if (lyrics) {
-      ly = lyrics.lyrics.replace(/\n/g, " <br> ");
+      ly = lyrics.replace(/\n/g, " <br> ");
     }
 
     renderTemplate(res, req, "poketube-music.ejs", {

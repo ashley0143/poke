@@ -18,27 +18,26 @@
     along with this program. If not, see https://www.gnu.org/licenses/.
 
 */
- :root {
-    /* text */
-    --text-link: #0ab7f0;
-    --text-link-visited: #00c0ff;
-    --text-color: #ffffff;
-    --text-font-primary:'PokeTube Flex';
-    --text-header-weight:1000;
-      
-    /* Divs */
-    --div-gradient: linear-gradient(
+:root {
+  /* text */
+  --text-link: #0ab7f0;
+  --text-link-visited: #00c0ff;
+  --text-color: #ffffff;
+  --text-font-primary: "PokeTube Flex";
+  --text-header-weight: 1000;
+
+  /* Divs */
+  --div-gradient: linear-gradient(
     135deg,
     #f97794 10%,
     #623aa2 100%,
     #8e6f7e 100%
   );
-   --div-border-color:#7c44a0;
-   --div-prim-bg:#1c1c1c;
-   --div-second-bg:#1a1a1a;
-   --div-transparent-bg:#0009;
+  --div-border-color: #7c44a0;
+  --div-prim-bg: #1c1c1c;
+  --div-second-bg: #1a1a1a;
+  --div-transparent-bg: #0009;
 }
-
 
 a.class:hover {
   text-decoration: underline;
@@ -77,8 +76,8 @@ a {
 }
 
 .video-sub-info.description {
-  box-sizing:border-box;
-  min-width:100%;
+  box-sizing: border-box;
+  min-width: 100%;
   font-weight: 600;
   margin-top: 1em !important;
   border-radius: 21px;
@@ -104,7 +103,7 @@ a {
   border-radius: 25px;
   margin: 10px;
   margin-top: 0px;
-  margin-left:24px; 
+  margin-left: 24px;
   margin-right: 10px;
   height: fit-content;
   justify-self: center;
@@ -125,8 +124,8 @@ a {
   border-radius: 11px;
   background-image: var(--div-gradient);
   display: block;
-  box-sizing:border-box;
-  min-width:100%;
+  box-sizing: border-box;
+  min-width: 100%;
 }
 
 .video-info-pill-channelname {
@@ -295,4 +294,15 @@ a {
   border-left: 1px solid gray;
   height: 15px;
 }
- 
+
+.date-publish {
+  margin: 0;
+  margin-top: 0px;
+  margin-top: 12px;
+  font-size: small;
+  color: gray !important;
+}
+
+.video > .thumbnail {
+  border: 1px white solid;
+}

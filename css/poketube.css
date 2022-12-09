@@ -301,6 +301,8 @@ a {
   margin-top: 12px;
   font-size: small;
   color: gray !important;
+   white-space: nowrap;
+  
 }
 
 .video > .thumbnail {

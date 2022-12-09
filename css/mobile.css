@@ -20,6 +20,7 @@ body {
   -webkit-animation-iteration-count: infinite;
   -o-animation-iteration-count: infinite;
 }
+
 .v-chip:not(.v-chip--outlined).accent,
 .v-chip:not(.v-chip--outlined).error,
 .v-chip:not(.v-chip--outlined).info,
@@ -29,27 +30,7 @@ body {
 .v-chip:not(.v-chip--outlined).warning {
   color: #fff;
 }
-
-:root {
-  /* text */
-  --text-link: #0ab7f0;
-  --text-link-visited: #00c0ff;
-  --text-color: #ffffff;
-  --text-font-primary: "PokeTube Flex";
-  --text-header-weight: 1000;
-
-  /* Divs */
-  --div-gradient: linear-gradient(
-    135deg,
-    #f97794 10%,
-    #623aa2 100%,
-    #8e6f7e 100%
-  );
-  --div-border-color: #7c44a0;
-  --div-prim-bg: #1c1c1c;
-  --div-second-bg: #1a1a1a;
-  --div-transparent-bg: #0009;
-}
+ 
 .theme--light.v-chip {
   border-color: rgba(0, 0, 0, 0.12);
   color: rgba(0, 0, 0, 0.87);
@@ -2053,4 +2034,35 @@ a.icon-link > i {
 
 h3 {
   font-stretch: ultra-expanded !important;
+}
+
+:visited {
+  color: var(--text-link-visited) !important;
+}
+ 
+
+a {
+  color: var(--text-link) !important;
+}
+ 
+
+:root {
+  /* text */
+  --text-link: #0ab7f0;
+  --text-link-visited: #00c0ff;
+  --text-color: #ffffff;
+  --text-font-primary: "PokeTube Flex";
+  --text-header-weight: 1000;
+
+  /* Divs */
+  --div-gradient: linear-gradient(
+    135deg,
+    #f97794 10%,
+    #623aa2 100%,
+    #8e6f7e 100%
+  );
+  --div-border-color: #7c44a0;
+  --div-prim-bg: #1c1c1c;
+  --div-second-bg: #1a1a1a;
+  --div-transparent-bg: #0009;
 }

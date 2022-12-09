@@ -1183,6 +1183,15 @@ display: block;" autoplay controls
 summary:hover{
     color:white;
 }
+  :visited {
+  color: var(--text-link-visited) 
+}
+ 
+
+a {
+  color: var(--text-link) 
+}
+ 
 </style>
    
   
@@ -1309,7 +1318,7 @@ summary:hover{
 
                   <div class="new-button" style="height: 2.3em">
 
-<div class="pill-button" style="margin-right: 5.5px;">
+<div class="pill-button" style="margin-right: 7.5px;">
     <i class="fa-light fa-thumbs-up"></i>
      <%=convert(engagement.likes)%>
        </div>
@@ -1376,7 +1385,7 @@ summary:hover{
 -->
 				</div>
        <%  if (Array.isArray( inv.comments)) { %> 
-<div style="padding: 0em;background: #333;border-radius: 16px;align-self: center;align-items: center;margin-left: 8px;margin-right: 12px;padding-bottom: 0;padding-top:1em">
+<div style="padding: 0em;background: #0009;border-radius: 16px;align-self: center;align-items: center;margin-left: 8px;margin-right: 12px;padding-bottom: 0;padding-top:1em">
             <div class="video-title" style="font-family:'PokeTube flex';font-weight:1000;white-space:yes;margin-top: -0.5em;margin-left: 0.4em;">Comments - <%- convert(inv.commentCount) %>
                     <a id="language-button" href="#comments-container" style="float: right;margin-right: 0.5em;" class="switch">
 <i class="fa-thin fa-chevron-down"></i>

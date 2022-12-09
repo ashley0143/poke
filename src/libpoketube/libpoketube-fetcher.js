@@ -34,10 +34,11 @@ function getJson(str) {
 }
 
   const dislike = await fetch(`${dislike_api}${video_id}`).then((res) =>
-    getJson(res)
+    res.json()
   );
 
-   const headers = {};
+ 
+  const headers = {};
   /*
    * Parses and fetches an xml
    */

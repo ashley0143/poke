@@ -18,7 +18,16 @@ const {
   getRandomArbitrary,
 } = require("../ptutils/libpt-coreutils.js");
 
-const sha384 = modules.hash;
+const sha384 = modules.hash
+
+function getJson(str) {
+  try {
+    return JSON.parse(str);
+  } catch {
+    return null;
+  }
+}
+
 
 module.exports = function (app, config, renderTemplate) {
   app.get("/download", async function (req, res) {
@@ -123,12 +132,12 @@ module.exports = function (app, config, renderTemplate) {
     }
 
     //videos
-    const channel = await modules.fetch(
-      config.tubeApi +
-        `channel?id=${ID}&tab=shorts&Continuation=${continuation}`
-    );
-    const c = await channel.text();
-    const tj = JSON.parse(modules.toJson(c));
+    const a = await modules.fetch(`${config.invapi}/channels/videos/${ID}/`).then((res) =>
+    res.text()
+  );
+
+      var tj = await getJson(a);
+
 
     const summary = await wiki.summary(k.Channel.Metadata.Name);
 
@@ -158,6 +167,7 @@ module.exports = function (app, config, renderTemplate) {
       tab: tab,
       j: k,
       tj: tj,
+      turntomins,
       dnoreplace: dnoreplace,
       continuation: continuation,
       wiki: w,

@@ -254,7 +254,7 @@ body {
 }
 
 .new-button {
-  background: #333;
+  background:  #0009;
   border-radius: 2em;
   padding-right: 1em;
   display: flex;
@@ -362,7 +362,7 @@ body {
 :root {
   --text-primary: #fff;
   --text-secondary: #fff;
-  --text-link: #3ea6ff;
+  --text-link: #0ab7f0;
 
   --app-background: #0a0101;
   --context-menu-background: #333;
@@ -513,7 +513,7 @@ body {
 }
 #desc-container {
   position: absolute;
-  margin-top: -20.4em;
+  margin-top: -19.4em;
   left: 0;
   width: 100%;
   height: 100%;
@@ -628,7 +628,7 @@ body {
 }
 #comments-container {
   position: absolute;
-  margin-top: -20.4em;
+  margin-top: -19.4em;
   left: 0;
   width: 100%;
   height: 100%;
@@ -765,7 +765,7 @@ body {
 }
 #more-button-container {
   position: absolute;
-  margin-top: -20.4em;
+  margin-top: -19.4em;
   left: 0;
   width: 100%;
   height: 100%;
@@ -2036,19 +2036,11 @@ h3 {
   font-stretch: ultra-expanded !important;
 }
 
-:visited {
-  color: var(--text-link-visited) !important;
-}
- 
 
-a {
-  color: var(--text-link) !important;
-}
- 
 
 :root {
   /* text */
-  --text-link: #0ab7f0;
+  --text-link: #0ab7f0 !important;
   --text-link-visited: #00c0ff;
   --text-color: #ffffff;
   --text-font-primary: "PokeTube Flex";

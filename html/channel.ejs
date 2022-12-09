@@ -108,7 +108,7 @@
 }
   
   .subs {
-    margin: 0.6em;text-align: left;margin-left: 0px;margin-top: -0.4em;font-family: "PokeTube flex";font-weight: 1000;font-stretch: ultra-expanded;
+    margin: 0.6em;text-align: left;margin-left: 0px;margin-top: -1em;font-family: "PokeTube flex";font-weight: 1000;font-stretch: ultra-expanded;
   }
    </style>
    
@@ -217,6 +217,12 @@
                      
   <% if(!isMobile) { %>
     <style>
+      .name{
+        text-align: left;
+      }
+        .subs {
+    margin: 0.6em;text-align: left;margin-left: 0px;margin-top: -1em;font-family: "PokeTube flex";font-weight: 1000;font-stretch: ultra-expanded;
+  }
           .video-grid {
   display: flex;
   flex-wrap: wrap;
@@ -234,6 +240,20 @@
  
                        <% if (isMobile) { %>  
 <style>
+  .subscribe-button {
+  background-color: white !important;
+  color: black !important;
+  text-transform: none !important;
+  font-weight: bold !important;
+  padding: 0px 15px !important;
+  border: none !important;
+  margin: auto !important;
+  height: 37px !important;
+  border-radius: 34px !important;
+  font-stretch: ultra-expanded !important;
+  font-family: "PokeTube flex";
+  width: 20em;
+}
   .video-grid{
     justify-content:center;
   }       
@@ -369,7 +389,92 @@
 <div class="channel-page">
 
 <div class="channel-page">
-        <% if (isMobile) { %>  
+       
+               
+      
+                                 
+          <% if (!isMobile) { %>  
+            <div class="channel-info-container" style="text-align: center;">
+
+        <% if (j.Channel.Metadata.Banners.Thumbnail) { %>
+
+          <img src="https://p.poketube.fun/<%=j.Channel.Metadata.Banners.Thumbnail[2].$t%>">
+                               <% } %>
+		<div class="channel-info" >
+			<a href="/channel?id=<%=ID%>" class="avatar">
+				<img src="https://p.poketube.fun/<%=j.Channel.Metadata.Avatars.Thumbnail.$t%>" alt="Channel Avatar">
+			</a>
+			<div class="name">
+				<p style="font-family:Ginto Nord,sans-serif;font-weight:900;white-space:yes;"><%=j.Channel.Metadata.Name%><br>
+          </p>
+                    <p class="subs"><%=subs%> subscribers</p>
+
+ 			</div>
+ 
+			<button class="subscribe-button">Suscribe</button>
+		</div>
+              <% if (!isMobile) { %>  
+   
+     <div class="tabs tabs-center">
+            <% if (!tab) { %>
+
+                <a href="/channel?id=<%=ID%>" class="tab active">Uploads</a>
+                <a  href="/channel?id=<%=ID%>&tab=about"  class="tab">About</a>
+                                                               <% } %>
+                                                                             <% if (tab) { %>
+
+                <a href="/channel?id=<%=ID%>" class="tab">Uploads</a>
+                <a  href="/channel?id=<%=ID%>&tab=about" class="tab active">About</a>
+                                                               <% } %>
+
+            </div>
+     
+     
+     
+     <% } %>
+	</div> 
+                                           <% } %>
+                                               <% if (isMobile) { %>  
+                   <div class="channel-info-container" style="text-align: center;">
+
+                                      <% if (j.Channel.Metadata.Banners.Thumbnail) { %>
+
+          <img src="https://p.poketube.fun/<%=j.Channel.Metadata.Banners.Thumbnail[2].$t%>">
+                               <% } %>
+                                 
+ 
+<div class="channel-info" style="display: flex;
+padding-bottom: 0;
+font-weight: bold;
+justify-content: center;
+flex-direction: column;
+gap: 0px;
+margin: auto;">
+
+
+			<a href="/channel?id=<%=ID%>" class="avatar" style="height: 6em;
+display: flex;
+flex-direction: column;
+align-content: center;
+margin: auto;
+width: fit-content;margin-left: 8em;
+">
+				<img src="https://p.poketube.fun/<%=j.Channel.Metadata.Avatars.Thumbnail.$t%>" alt="Channel Avatar">
+			</a>
+			<div class="name">
+				<p style="font-family:Ginto Nord,sans-serif;font-weight:900;white-space:yes;"><%=j.Channel.Metadata.Name%></p>
+ 			</div>
+ 
+			<%=subs%> Subscribers 
+ 
+      <p style="padding:0;font-weight:bold;"> 
+   <%-getFirstLine(desc)%> <a href="/channel?id=<%=ID%>&tab=about">
+<i class="fa-thin fa-angle-right"></i></a>
+        </p>
+        			<button class="subscribe-button">Suscribe</button>
+
+        
+  <% if (isMobile) { %>  
  
                
  
@@ -402,77 +507,6 @@
                                               <% } %>
 
         
-               
-      
-                                 
-          <% if (!isMobile) { %>  
-            <div class="channel-info-container" style="text-align: center;">
-
-        <% if (j.Channel.Metadata.Banners.Thumbnail) { %>
-
-          <img src="https://p.poketube.fun/<%=j.Channel.Metadata.Banners.Thumbnail[2].$t%>">
-                               <% } %>
-		<div class="channel-info" >
-			<a href="/channel?id=<%=ID%>" class="avatar">
-				<img src="https://p.poketube.fun/<%=j.Channel.Metadata.Avatars.Thumbnail.$t%>" alt="Channel Avatar">
-			</a>
-			<div class="name">
-				<p style="font-family:Ginto Nord,sans-serif;font-weight:900;white-space:yes;"><%=j.Channel.Metadata.Name%><br>
-          </p>
-                    <span class="subs"><%=subs%> subscribers</span>
-
- 			</div>
- 
-			<button class="subscribe-button">Suscribe</button>
-		</div>
-              <% if (!isMobile) { %>  
-   
-     <div class="tabs tabs-center">
-            <% if (!tab) { %>
-
-                <a href="/channel?id=<%=ID%>" class="tab active">Uploads</a>
-                <a  href="/channel?id=<%=ID%>&tab=about"  class="tab">About</a>
-                                                               <% } %>
-                                                                             <% if (tab) { %>
-
-                <a href="/channel?id=<%=ID%>" class="tab">Uploads</a>
-                <a  href="/channel?id=<%=ID%>&tab=about" class="tab active">About</a>
-                                                               <% } %>
-
-            </div>
-     
-     
-     
-     <% } %>
-	</div> 
-                                           <% } %>
-                                               <% if (isMobile) { %>  
-                   <div class="channel-info-container" style="text-align: center;">
-
-         <% if (!tab) { %>
-                                      <% if (j.Channel.Metadata.Banners.Thumbnail) { %>
-
-          <img src="https://p.poketube.fun/<%=j.Channel.Metadata.Banners.Thumbnail[2].$t%>">
-                               <% } %>
-<div class="channel-info" style="display: inline-block;padding-bottom:0;font-weight:bold;">
-
-
-			<a href="/channel?id=<%=ID%>" class="avatar" style="height: 100px;display: inline-block;">
-				<img src="https://p.poketube.fun/<%=j.Channel.Metadata.Avatars.Thumbnail.$t%>" alt="Channel Avatar">
-			</a>
-			<div class="name">
-				<p style="font-family:Ginto Nord,sans-serif;font-weight:900;white-space:yes;"><%=j.Channel.Metadata.Name%></p>
- 			</div>
- 
-			<%=subs%> Subscribers 
-         <% if (!tab) { %>
-
-      <p style="padding:0;font-weight:bold;"> 
-   <%-getFirstLine(desc)%> <a href="/channel?id=<%=ID%>&tab=about">
-<i class="fa-thin fa-angle-right"></i></a>
-        </p>
-              <% } %>              <% } %>
-
 		</div>
                 
 	</div> 

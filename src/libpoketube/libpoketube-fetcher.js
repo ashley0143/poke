@@ -24,13 +24,20 @@ var dislike_api = `https://returnyoutubedislikeapi.com/votes?videoId=`;
 var new_api_url = `https://tube.kuylar.dev/api/player`;
 
 module.exports = async function (video_id) {
+  
+function getJson(str) {
+  try {
+    return JSON.parse(str);
+  } catch {
+    return null;
+  }
+}
+
   const dislike = await fetch(`${dislike_api}${video_id}`).then((res) =>
-    res.json()
+    getJson(res)
   );
 
-  const dislikes = dislike.dislikes || "none";
-
-  const headers = {};
+   const headers = {};
   /*
    * Parses and fetches an xml
    */

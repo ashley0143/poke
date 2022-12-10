@@ -104,6 +104,7 @@ a {
   margin: 10px;
   margin-top: 0px;
   margin-left: 24px;
+    height: -moz-fit-content;
   height: fit-content;
   justify-self: center;
   margin-right: -0.9em;
@@ -185,6 +186,8 @@ a {
   margin-right: -13px;
   width: fit-content;
   height: fit-content;
+   width: -moz-fit-content;
+  height: -moz-fit-content;
   border-radius: 43px;
   font-size: 15px;
   margin-right: auto;
@@ -202,6 +205,8 @@ a {
   flex-direction: row;
   column-gap: 3px;
   height: min-content;
+  width: -moz-fit-content;
+
   width: fit-content;
   text-align: right;
   margin-left: auto;

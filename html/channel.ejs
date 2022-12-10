@@ -466,7 +466,7 @@ text-transform:uppercase;
             <% if (!tab) { %>
 
                 <a href="/channel?id=<%=ID%>" class="tab active">Lastest Videos</a>
-                           <%  if (Array.isArray( c.comments)) { %> 
+  <%  if (c.comments.length != "0") { %> 
 
      <a  href="/channel?id=<%=ID%>&tab=community"  class="tab">Community</a>
                                                                                             <% } %>
@@ -477,7 +477,7 @@ text-transform:uppercase;
                                                                              <% if (tab === "about") { %>
 
                 <a href="/channel?id=<%=ID%>" class="tab">Lastest Videos</a>
-  <%  if (Array.isArray( c.comments)) { %> 
+  <%  if (c.comments.length != "0") { %> 
 
      <a  href="/channel?id=<%=ID%>&tab=community"  class="tab">Community</a>
                                                                                             <% } %>

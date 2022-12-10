@@ -89,6 +89,47 @@
   color:#0ab7f0;
    }
   
+  .community {
+    display: flex;
+flex-direction: column;
+align-items: center;
+border-radius: 30px;
+padding: 10px;
+  padding-bottom: 10px;
+width: fit-content;
+margin-top: 12px;
+margin-left: auto;
+margin-right: auto;
+padding-bottom: 32px;
+  }
+.community-content {
+  margin-bottom: 1em;
+  margin-top: 1em;
+  padding: 13px;
+  text-align: left;
+  background: #111;
+  width:50.562em;
+  border-radius: 22px;
+}
+  
+   .community-attachment-video {
+ 
+  }
+  
+  .comments-author {
+  margin: 7px;
+    margin-top: -2px;
+  font-family: inter;
+  white-space: -moz-pre-wrap !important;
+  white-space: -pre-wrap;
+  white-space: -o-pre-wrap;
+  white-space: pre-wrap;
+  word-wrap: anywhere;
+  white-space: -webkit-pre-wrap;
+  word-break: break-all;
+  white-space: normal;
+}
+  
   .video-grid > .video {
   border-radius: 16px;
   background: black;
@@ -148,6 +189,7 @@
 <link href=https://p.poketube.fun/https://site-assets.fontawesome.com/releases/v6.1.1/css/all.css rel=stylesheet>
 
       <style>section p {
+        
  font-family:Whitney, Helvetica Neue, Helvetica, Arial, sans-serif;
  font-weight:400;
  color:#fff;
@@ -181,15 +223,17 @@
  .tabs a.tab {
 	 position: relative;
 	 display: table-cell;
+text-transform:uppercase;
 	 transition: all ease 0.3s;
 	 padding: 1em 1.6em;
 	 transform: translate3d(0, 0, 0);
-	 color: #fff;
+	 color: #898989;
 	 white-space: nowrap;
 	 cursor: pointer;
 }
  .tabs a.tab:hover {
-	 color: #3cb4fa;
+	 color: #fff;
+   text-decoration: none;
 }
  .tabs a.tab:after {
 	 transition: all 0.3s cubic-bezier(1, 0, 0, 1);
@@ -234,6 +278,7 @@
       .channel-page .video-grid {
   background-color: black;
 }
+      
     </style>
    <% } %>
 
@@ -287,6 +332,7 @@
  .tabs a.tab {
 	 position: relative;
 	 display: table-cell;
+   text-transform:uppercase;
 	 transition: all ease 0.3s;
 	 padding: 1em 1.6em;
 	 transform: translate3d(0, 0, 0);
@@ -412,19 +458,40 @@
  			</div>
  
 			<button class="subscribe-button">Suscribe</button>
+      
 		</div>
-              <% if (!isMobile) { %>  
+                                    <% if (!isMobile) { %>  
    
-     <div class="tabs tabs-center">
+     <div class="tabs  tabs-center">
             <% if (!tab) { %>
 
-                <a href="/channel?id=<%=ID%>" class="tab active">Uploads</a>
-                <a  href="/channel?id=<%=ID%>&tab=about"  class="tab">About</a>
-                                                               <% } %>
-                                                                             <% if (tab) { %>
+                <a href="/channel?id=<%=ID%>" class="tab active">Lastest Videos</a>
+                           <%  if (Array.isArray( c.comments)) { %> 
 
-                <a href="/channel?id=<%=ID%>" class="tab">Uploads</a>
-                <a  href="/channel?id=<%=ID%>&tab=about" class="tab active">About</a>
+     <a  href="/channel?id=<%=ID%>&tab=community"  class="tab">Community</a>
+                                                                                            <% } %>
+
+ 
+                 <a  href="/channel?id=<%=ID%>&tab=about"  class="tab">About</a>
+                                                               <% } %>
+                                                                             <% if (tab === "about") { %>
+
+                <a href="/channel?id=<%=ID%>" class="tab">Lastest Videos</a>
+  <%  if (Array.isArray( c.comments)) { %> 
+
+     <a  href="/channel?id=<%=ID%>&tab=community"  class="tab">Community</a>
+                                                                                            <% } %>
+
+                 <a  href="/channel?id=<%=ID%>&tab=about" class="tab active">About</a>
+                                                               <% } %>
+                                                                 
+                                                                      <% if (tab === "community") { %>
+
+                <a href="/channel?id=<%=ID%>" class="tab">Lastest Videos</a>
+ 
+     <a  href="/channel?id=<%=ID%>&tab=community"  class="tab active">Community</a>
+ 
+                 <a  href="/channel?id=<%=ID%>&tab=about" class="tab">About</a>
                                                                <% } %>
 
             </div>
@@ -432,6 +499,7 @@
      
      
      <% } %>
+           
 	</div> 
                                            <% } %>
                                                <% if (isMobile) { %>  
@@ -523,7 +591,7 @@ width: fit-content;margin-left: 8.5em;
 
  
     	<div class="video-grid" >
-                 <% if (!continuation) { %>
+             <%  if (Array.isArray( tj)) { %> 
 
    <% tj.forEach (x =>  { %>
 			<a href="/watch?v=<%- x.videoId %>" class="video">
@@ -534,51 +602,98 @@ width: fit-content;margin-left: 8.5em;
             </div>
  			</a>	
  		 	               <% }) %>   
-                                           <% } %>
+ <% } %>
+
                                              
  
-         <% if (continuation) { %>
-
-   <% tj.forEach (x =>  { %>
-			<a href="/watch?v=<%- x.videoId %>" class="video">
-				<div class="thumbnail" style="background-image: url('https://p.poketube.fun/https://i.ytimg.com/vi/<%= x.videoId %>/hqdefault.jpg?sqp=-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLBy_x4UUHLNDZtJtH0PXeQGoRFTgw');border-radius: 10px;"><span class="video-length"><%- turntomins(x.lengthSeconds) %></span></div>
-				<div class="info">
-					<span class="title max-lines-2" style="font-family:PokeTube flex,sans-serif;font-weight: 1000;font-stretch: ultra-expanded;"><%- x.title %></span>
-			 
-            </div>
- 			</a>	
- 		 	               <% }) %>   
+         
  
                        
                        </div>
-                   <% if (!continuation) { %>
-
-           <% if (tj.Channel.Contents.ItemSection.ItemSection.Continuation) { %>
-
-
-	<div class="pagination-buttons" style="border-top: none;justify-content: center">
-    <a style="color:#fff" href="/channel?id=<%=ID%>&continuation=<%=tj.Channel.Contents.ItemSection.ItemSection.Continuation.key%>">Next Page</a>
-
- 	</div>
-                           
-                    <% } %>                 
-                      <% } %>
-        <% if (continuation) { %>
-
-           <% if (tj.Channel.Contents.Continuation) { %>
-
-
-	<div class="pagination-buttons" style="border-top: none;justify-content: center">
-    <a style="color:#fff" href="/channel?id=<%=ID%>&continuation=<%=tj.Channel.Contents.Continuation.key%>">Next Page</a>
-
- 	</div>
-                           
-                    <% } %>                 
-                      <% } %>
-                                           <% } %>
-
+                  
+ 
           <% } %>
+    <% if (tab === "community") { %>
+    <%  if (Array.isArray( c.comments)) { %> 
+<div class="community">
+  
+   <% c.comments.forEach (x =>  { %>
+     <div class="community-content">
+    
 
+                     <h5 style="display: flex;margin-top: -1em;padding-top: 10px;margin-bottom:10px"><div class="thumb">
+				<a href="/channel?id=UC0n83khlA76NRfDfm7BNtkQ" class="avatar" style="width: 40px;height: 40px;">
+					<img src="https://p.poketube.fun/<%=j.Channel.Metadata.Avatars.Thumbnail.$t%>">
+				</a>
+                       
+            </div>
+                                                           
+
+                <p class="comments-author">
+                  				<a href="" style="color: var(--text-color);text-decoration: none;"><%=j.Channel.Metadata.Name%> 
+
+                                                                                                  </a>
+                            
+                            <span>
+                                <br>   <%- x.publishedText %> -                         <span>   
+ <%- convert(x.likeCount) %>   likes
+        </span>   
+
+                            </span>
+
+                  
+ 
+                                             
+
+                  
+                </p>
+
+              </h5>
+             <p>
+                      <%- x.contentHtml %>
+
+                            </p>
+
+             <% if (x.attachment) { %>
+                      <% if (x.attachment.type === "video") { %>
+ 
+ 		<div class="video-player-container">
+
+<video class="player"  style="border-radius: 16px;
+"  controls   
+       
+       poster="https://p.poketube.fun/https://i.ytimg.com/vi/<%=x.attachment.videoId%>/maxresdefault.jpg?v=607ddcd4">
+        
+                           
+                                                <source src="https://tube.kuylar.dev/proxy/media/<%=x.attachment.videoId%>/22" type="video/mp4; codecs=&quot;avc1.64001F, mp4a.40.2&quot;" label="hd720" selected="false">
+
+                                                                           
+                                                                             </video>
+                                                                                   </div>
+
+                        
+               <% } %>
+                                       <% if (x.attachment.type === "image") { %>
+ 
+                                                                                 <% if (x.attachment.imageThumbnails[4] ) { %>
+ 
+                                                                                   <img style="  width: 100%;
+  border-radius: 26px;" src="https://p.poketube.fun/<%- x.attachment.imageThumbnails[4].url%>">
+               <% } %>               <% } %>
+
+                 
+               <% } %>
+
+   
+              </div>
+
+                  
+    <% }) %>   
+
+                                                               <% } %>                                                               <% } %>
+
+
+                                                                 
  <% if (tab === "about") { %>
    <div style="text-align: left;">   
      <h3 style="color:#fff;font-family:Ginto Nord,sans-serif;font-weight:900;padding: 0px;margin: 0;margin-top: 7px;margin-left: 10px;">About</h3>

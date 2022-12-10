@@ -139,6 +139,12 @@ module.exports = function (app, config, renderTemplate) {
       var tj = await getJson(a);
 
 
+        const  community = await modules.fetch(`${config.invapi}/channels/community/${ID}/`).then((res) =>
+    res.text()
+  );
+
+      var c = await getJson(community);
+
     const summary = await wiki.summary(k.Channel.Metadata.Name);
 
     var w = "";
@@ -163,10 +169,12 @@ module.exports = function (app, config, renderTemplate) {
     }
 
     renderTemplate(res, req, "channel.ejs", {
-      ID: ID,
-      tab: tab,
+     ID,
+      tab,
       j: k,
-      tj: tj,
+      tj,
+      c,
+      convert,
       turntomins,
       dnoreplace: dnoreplace,
       continuation: continuation,

@@ -1,4 +1,27 @@
 <svg width="215" height="215" viewBox="0 0 215 215" fill="none" xmlns="http://www.w3.org/2000/svg">
-<rect x="11" y="11" width="194" height="194" rx="97" fill="#FF00E3D4"/>
+<svg height="100%" width="100%">
+  <defs>
+    <radialGradient id="0" gradientTransform="translate(-0.9 0) scale(2, 2)">
+      <stop offset="0%" stop-color="#fdd575"/>
+      <stop offset="14.29%" stop-color="#fcc06a"/>
+      <stop offset="28.57%" stop-color="#fbaa63"/>
+      <stop offset="42.86%" stop-color="#f99262"/>
+      <stop offset="57.14%" stop-color="#f77868"/>
+      <stop offset="71.43%" stop-color="#f55973"/>
+      <stop offset="100%" stop-color="#d22e8c"/>
+    </radialGradient>
+    <linearGradient id="1" x1="0.35" y1="0.02" x2="0.65" y2="0.98">
+      <stop offset="0%" stop-color="#4964da"/>
+      <stop offset="11.8%" stop-color="rgba(146, 73, 221, 0.8)"/>
+      <stop offset="23.6%" stop-color="rgba(176, 60, 196, 0.6)"/>
+      <stop offset="35.4%" stop-color="rgba(192, 55, 173, 0.4)"/>
+      <stop offset="59%" stop-color="rgba(217, 46, 116, 0)"/>
+    </linearGradient>
+  </defs>
+  <rect xmlns="http://www.w3.org/2000/svg" x="11" y="11" width="194" height="194" rx="97" style="fill: ;" fill=" url(#0)"/>
+  <rect xmlns="http://www.w3.org/2000/svg" x="11" y="11" width="194" height="194" rx="97" style="fill: ;" fill=" url(#1)"/>
+</svg>
+
+
 <path d="M82.9527 71.7271C82.9527 68.6479 86.286 66.7234 88.9527 68.263L151.349 104.288C154.016 105.827 154.016 109.676 151.349 111.216L88.9527 147.24C86.286 148.78 82.9527 146.855 82.9527 143.776L82.9527 71.7271Z" fill="white"/>
 </svg>

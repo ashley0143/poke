@@ -21,7 +21,7 @@ const getColors = require("get-image-colors");
 const wiki = require("wikipedia");
 
 const config = {
-  tubeApi: "https://tube.kuylar.dev/api/",
+  tubeApi: "https://tube-srv.ashley143.gay/api/",
   invapi: "https://vid.puffyan.us/api/v1",
   dislikes: "https://returnyoutubedislikeapi.com/votes?videoId=",
   t_url: "https://t.poketube.fun/", //  def matomo url

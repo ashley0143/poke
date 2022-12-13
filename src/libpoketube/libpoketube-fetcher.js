@@ -21,7 +21,7 @@ const { toJson } = require("xml2json");
 
 var youtube_url = `https://www.youtube.com/watch?v=`;
 var dislike_api = `https://returnyoutubedislikeapi.com/votes?videoId=`;
-var new_api_url = `https://tube.kuylar.dev/api/player`;
+var new_api_url = `https://tube-srv.ashley143.gay/api/player`;
 
 module.exports = async function (video_id) {
   

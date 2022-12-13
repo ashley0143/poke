@@ -92,7 +92,7 @@ const random_words = [
 this is our config file,you can change stuff here
 */
 const config = {
-  tubeApi: "https://tube.kuylar.dev/api/",
+  tubeApi: "https://tube-srv.ashley143.gay",
   invapi: "https://inv.vern.cc/api/v1",
   dislikes: "https://returnyoutubedislikeapi.com/votes?videoId=",
   t_url: "https://t.poketube.fun/", //  def matomo url

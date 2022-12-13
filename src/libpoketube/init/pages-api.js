@@ -20,8 +20,8 @@ const {
 
 const pkg = require("../../../package.json");
 
-const ver = "v22.1209-c98Lu-stable"
-const versionnumber = "100"
+const ver = "v22.1213-c98Lu-stable"
+const versionnumber = "101"
 
 const response = {
   pt_version: ver,
@@ -109,7 +109,7 @@ module.exports = function (app, config, renderTemplate) {
     const id = req.query.v;
     const l = req.query.h;
 
-    const url = `https://tube.kuylar.dev/proxy/caption/${id}/${l}/`;
+    const url = `https://tube-srv.ashley143.gay/proxy/caption/${id}/${l}/`;
 
     let f = await modules.fetch(url);
     const body = await f.text();

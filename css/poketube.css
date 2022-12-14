@@ -112,7 +112,7 @@ a {
     height: -moz-fit-content;
   height: fit-content;
   justify-self: center;
-  margin-right: -1.0em;
+  margin-right: -0.9em;
   /* width: min-content;*/
   border: var(--div-border-color);
   border-style: solid;

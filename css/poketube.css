@@ -37,6 +37,11 @@
   --div-prim-bg: #1c1c1c;
   --div-second-bg: #1a1a1a;
   --div-transparent-bg: #0009;
+  
+  /* video player */
+
+  --video-player-height-max: 720px;
+	--video-player-width-max: 1280px;
 }
 
 a.class:hover {
@@ -311,4 +316,15 @@ a {
 
 .video > .thumbnail {
   border: 1px white solid;
+}
+
+ 
+
+.video-player-container {
+  max-width: max-content;
+  margin: inherit;
+  max-height: fit-content;
+  max-height: -moz-fit-content;
+
+  aspect-ratio: inherit;
 }

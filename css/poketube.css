@@ -318,7 +318,8 @@ a {
   border: 1px white solid;
 }
 
-    
+ 
+
 .video-player-container {
   max-width: max-content;
   margin: inherit;
@@ -335,4 +336,8 @@ a {
     --gutter: 1.67em;
     gap: var(--gutter);
     margin-inline: var(--gutter);
+  
+   /* For older chrome versions - yup they dont have margin-inline for some reason LMAFO */
+    margin-left: var(--gutter);
+    margin-right: var(--gutter);
 }

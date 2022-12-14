@@ -327,8 +327,8 @@ a {
 }
 
 .watch-page {
-  display: grid;
-  grid-template-columns: repeat(2, auto);
+  display: flex;
+  /* grid-template-columns: repeat(2, auto); */
 
   gap: var(--gutter);
   margin-inline: var(--gutter);

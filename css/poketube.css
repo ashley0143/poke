@@ -333,7 +333,8 @@ a {
   gap: var(--gutter);
   margin-inline: var(--gutter);
 
-  /* For older chrome versions - yup they dont have margin-inline for some reason LMAFO */
-  margin-left: var(--gutter);
-  margin-right: var(--gutter);
+  max-width: 80.9em;
+  justify-content: center;
+  margin-left: auto;
+  margin-right: auto;
 }

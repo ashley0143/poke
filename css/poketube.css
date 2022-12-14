@@ -37,11 +37,12 @@
   --div-prim-bg: #1c1c1c;
   --div-second-bg: #1a1a1a;
   --div-transparent-bg: #0009;
-  
+  --gutter: 1.67em; /* gutter variable - see line 330 */
+
   /* video player */
 
   --video-player-height-max: 720px;
-	--video-player-width-max: 1280px;
+  --video-player-width-max: 1280px;
 }
 
 a.class:hover {
@@ -109,7 +110,7 @@ a {
   margin: 10px;
   margin-top: 0px;
   margin-left: 0px;
-    height: -moz-fit-content;
+  height: -moz-fit-content;
   height: fit-content;
   justify-self: center;
   margin-right: -0.9em;
@@ -191,7 +192,7 @@ a {
   margin-right: -13px;
   width: fit-content;
   height: fit-content;
-   width: -moz-fit-content;
+  width: -moz-fit-content;
   height: -moz-fit-content;
   border-radius: 43px;
   font-size: 15px;
@@ -310,34 +311,29 @@ a {
   margin-top: 12px;
   font-size: small;
   color: gray !important;
-   white-space: nowrap;
-  
+  white-space: nowrap;
 }
 
 .video > .thumbnail {
   border: 1px white solid;
 }
 
- 
-
 .video-player-container {
-  max-width: max-content;
   margin: inherit;
-  max-height: fit-content;
-  max-height: -moz-fit-content;
-
-  aspect-ratio: 16 / 9;
+  max-width: 100%;
+  min-width: 100%;
+  width: 100%;
+  max-height: 100%;
 }
 
 .watch-page {
-    display: grid;
-    grid-template-columns: repeat(2, auto);
+  display: grid;
+  grid-template-columns: repeat(2, auto);
 
-    --gutter: 1.67em;
-    gap: var(--gutter);
-    margin-inline: var(--gutter);
-  
-   /* For older chrome versions - yup they dont have margin-inline for some reason LMAFO */
-    margin-left: var(--gutter);
-    margin-right: var(--gutter);
+  gap: var(--gutter);
+  margin-inline: var(--gutter);
+
+  /* For older chrome versions - yup they dont have margin-inline for some reason LMAFO */
+  margin-left: var(--gutter);
+  margin-right: var(--gutter);
 }

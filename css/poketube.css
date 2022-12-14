@@ -108,7 +108,7 @@ a {
   border-radius: 25px;
   margin: 10px;
   margin-top: 0px;
-  margin-left: 24px;
+  margin-left: 0px;
     height: -moz-fit-content;
   height: fit-content;
   justify-self: center;
@@ -318,8 +318,7 @@ a {
   border: 1px white solid;
 }
 
- 
-
+    
 .video-player-container {
   max-width: max-content;
   margin: inherit;
@@ -327,4 +326,13 @@ a {
   max-height: -moz-fit-content;
 
   aspect-ratio: 16 / 9;
+}
+
+.watch-page {
+    display: grid;
+    grid-template-columns: repeat(2, auto);
+
+    --gutter: 1.67em;
+    gap: var(--gutter);
+    margin-inline: var(--gutter);
 }

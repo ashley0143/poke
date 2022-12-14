@@ -321,10 +321,7 @@ a {
  
 
 .video-player-container {
-  max-width: max-content;
+  max-width:inherit ;
   margin: inherit;
-  max-height: fit-content;
-  max-height: -moz-fit-content;
-
-  aspect-ratio: inherit;
+  max-height: inherit;
 }

@@ -112,7 +112,7 @@ a {
     height: -moz-fit-content;
   height: fit-content;
   justify-self: center;
-  margin-right: -0.9em;
+  margin-right: -1.0em;
   /* width: min-content;*/
   border: var(--div-border-color);
   border-style: solid;
@@ -323,7 +323,8 @@ a {
 .video-player-container {
   max-width: max-content;
   margin: inherit;
-  max-height: inherit;
- 
-  aspect-ratio: inherit;
+  max-height: fit-content;
+  max-height: -moz-fit-content;
+
+  aspect-ratio: 16 / 9;
 }

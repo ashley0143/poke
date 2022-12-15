@@ -93,7 +93,7 @@ module.exports = function (app, config, renderTemplate) {
 
     const json = fetching.video.Player;
 
-    const url = `https://tube.kuylar.dev/proxy/download/${v}/${q}/${json.Title}.${format}`;
+    const url = `https://tube.kuylar.dev/proxy/media/${v}/${q}/${json.Title}.${format}`;
 
     res.redirect(url);
   });

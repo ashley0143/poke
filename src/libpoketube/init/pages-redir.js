@@ -40,4 +40,16 @@ module.exports = function (app, config, renderTemplate) {
   app.get("/video/upload", (req, res) => {
     res.redirect("https://youtube.com/upload");
   });
+
+  app.get("/sex", (req, res) => {
+    res.redirect("https://poketube.fun/watch?v=dQw4w9WgXcQ&e=f");
+  });
+
+  app.get("/results", (req, res) => {
+    if (!req.query.search_query) {
+      return res.redirect("/");
+    }
+
+    return res.redirect("/search?query=" + req.query.search_query);
+  });
 };

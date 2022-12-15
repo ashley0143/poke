@@ -48,7 +48,7 @@ module.exports = function (app, config, renderTemplate) {
       }
 
       const search = await modules.fetch(
-        `https://tube.kuylar.dev/api/search?query=${query}&continuation=${continuation}`
+        `https://tube-srv.ashley143.gay/api/search?query=${query}&continuation=${continuation}`
       );
 
       const text = await search.text();

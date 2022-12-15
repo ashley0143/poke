@@ -56,6 +56,7 @@ summary {
 summary:hover {
   color: white;
 }
+
 :visited {
   color: var(--text-link-visited);
 }
@@ -212,7 +213,6 @@ a {
   column-gap: 3px;
   height: min-content;
   width: -moz-fit-content;
-
   width: fit-content;
   text-align: right;
   margin-left: auto;
@@ -320,6 +320,7 @@ a {
 
 .video-player-container {
   margin: inherit;
+  
   max-width: 100%;
   min-width: 100%;
   width: 100%;
@@ -328,8 +329,6 @@ a {
 
 .watch-page {
   display: flex;
-  /* grid-template-columns: repeat(2, auto); */
-
   gap: var(--gutter);
   margin-inline: var(--gutter);
 }

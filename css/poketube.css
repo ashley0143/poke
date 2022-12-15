@@ -332,9 +332,13 @@ a {
 
   gap: var(--gutter);
   margin-inline: var(--gutter);
+}
 
-  max-width: 80.9em;
-  justify-content: center;
-  margin-left: auto;
-  margin-right: auto;
+@media screen and (min-width: 1340px) {
+  .watch-page {
+    max-width: 80.9em;
+    justify-content: center;
+    margin-left: auto;
+    margin-right: auto;
+  }
 }

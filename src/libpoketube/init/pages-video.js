@@ -66,52 +66,41 @@ async function lyricsFinder(e = "", d = "") {
   }
   return String(encoding.convert(final)).trim();
 }
-  
+
 function lightOrDark(color) {
+  // Variables for red, green, blue values
+  var r, g, b, hsp;
 
-    // Variables for red, green, blue values
-    var r, g, b, hsp;
-    
-    // Check the format of the color, HEX or RGB?
-    if (color.match(/^rgb/)) {
-
-        // If RGB --> store the red, green, blue values in separate variables
-        color = color.match(/^rgba?\((\d+),\s*(\d+),\s*(\d+)(?:,\s*(\d+(?:\.\d+)?))?\)$/);
-        
-        r = color[1];
-        g = color[2];
-        b = color[3];
-    } 
-    else {
-        
-        // If hex --> Convert it to RGB: http://gist.github.com/983661
-        color = +("0x" + color.slice(1).replace( 
-        color.length < 5 && /./g, '$&$&'));
-
-        r = color >> 16;
-        g = color >> 8 & 255;
-        b = color & 255;
-    }
-    
-    // HSP (Highly Sensitive Poo) equation from http://alienryderflex.com/hsp.html
-    hsp = Math.sqrt(
-    0.299 * (r * r) +
-    0.587 * (g * g) +
-    0.114 * (b * b)
+  // Check the format of the color, HEX or RGB?
+  if (color.match(/^rgb/)) {
+    // If RGB --> store the red, green, blue values in separate variables
+    color = color.match(
+      /^rgba?\((\d+),\s*(\d+),\s*(\d+)(?:,\s*(\d+(?:\.\d+)?))?\)$/
     );
 
-    // Using the HSP value, determine whether the color is light or dark
-    if (hsp>127.5) {
+    r = color[1];
+    g = color[2];
+    b = color[3];
+  } else {
+    // If hex --> Convert it to RGB: http://gist.github.com/983661
+    color = +("0x" + color.slice(1).replace(color.length < 5 && /./g, "$&$&"));
 
-        return 'light';
-    } 
-    else {
+    r = color >> 16;
+    g = (color >> 8) & 255;
+    b = color & 255;
+  }
 
-        return 'dark';
-    }
+  // HSP (Highly Sensitive Poo) equation from http://alienryderflex.com/hsp.html
+  hsp = Math.sqrt(0.299 * (r * r) + 0.587 * (g * g) + 0.114 * (b * b));
+
+  // Using the HSP value, determine whether the color is light or dark
+  if (hsp > 127.5) {
+    return "light";
+  } else {
+    return "dark";
+  }
 }
 
- 
 module.exports = function (app, config, renderTemplate) {
   app.get("/encryption", async function (req, res) {
     var v = req.query.v;
@@ -172,83 +161,81 @@ module.exports = function (app, config, renderTemplate) {
     const ip = JSON.parse(jj);
     const isvld = await core.isvalidvideo(v);
 
-    
     if (isvld) {
-     
-          core.video(v).then((data) => {
-            const k = data.video;
-            const json = data.json;
-            const engagement = data.engagement;
-            var inv_comments = data.comments;
-            const inv_vid = data.vid;
-            if(data.video) {
-                       if(json) {
+      core.video(v).then((data) => {
+        if (data) {
+          const k = data.video;
+          const json = data.json;
+          const engagement = data.engagement;
+          var inv_comments = data.comments;
+          const inv_vid = data.vid;
+          if (data.video) {
+            if (json) {
+              if (json.Title) {
+                if (!data.comments) inv_comments = "Disabled";
 
-           if(json.Title) {
-            if (!data.comments) inv_comments = "Disabled";
+                if (!core.video(v).b) {
+                  var nnn = "";
+                  var badges = "";
+                  var comments = "";
+                }
 
-            if (!core.video(v).b) {
-              var nnn = "";
-              var badges = "";
-              var comments = "";
+                if (!v) res.redirect("/");
+
+                if (q === "medium") {
+                  var url = `https://inv.vern.cc/latest_version?id=${v}&itag=18&local=true`;
+                }
+
+                const desc = data.desc;
+                if (d) {
+                  var d = desc.toString().replace(/\n/g, " <br> ");
+                }
+
+                if (d === "[object Object]") {
+                  var d = false;
+                }
+
+                renderTemplate(res, req, "poketube.ejs", {
+                  color: data.color,
+                  color2: data.color2,
+                  engagement: engagement,
+                  video: json,
+                  date: k.Video.uploadDate,
+                  e: e,
+                  k: k,
+                  process: process,
+                  sha384: sha384,
+                  lightOrDark,
+                  isMobile: req.useragent.isMobile,
+                  tj: data.channel,
+                  r: r,
+                  qua: q,
+                  inv: inv_comments,
+                  ip: ip,
+                  convert: convert,
+                  wiki: data.wiki,
+                  f: f,
+                  t: config.t_url,
+                  optout: t,
+                  badges: badges,
+                  desc: desc,
+                  comments: comments,
+                  n: nnn,
+                  inv_vid,
+                  lyrics: "",
+                });
+              }
             }
-
-            if (!v) res.redirect("/");
-
-            if (q === "medium") {
-              var url = `https://inv.vern.cc/latest_version?id=${v}&itag=18&local=true`;
-            }
-
-            const desc = data.desc;
-            if (d) {
-              var d = desc.toString().replace(/\n/g, " <br> ");
-            }
-
-            if (d === "[object Object]") {
-              var d = false;
-            }
-
-            renderTemplate(res, req, "poketube.ejs", {
-              color: data.color,
-              color2:data.color2,
-              engagement: engagement,
-              video: json,
-              date: k.Video.uploadDate,
-              e: e,
-              k: k,
-              process: process,
-              sha384: sha384,
-              lightOrDark,
-              isMobile: req.useragent.isMobile,
-              tj: data.channel,
-              r: r,
-              qua: q,
-              inv: inv_comments,
-              ip: ip,
-              convert: convert,
-              wiki: data.wiki,
-              f: f,
-              t: config.t_url,
-              optout: t,
-              badges: badges,
-              desc: desc,
-              comments: comments,
-              n: nnn,
-              inv_vid,
-              lyrics: "",
-            });
-             }                       }          
-
-            }
-          });
-          
- 
+          }
+        } else {
+          res.redirect("/");
+        }
+      });
     } else {
       res.redirect("/");
     }
   });
 
-  
   app.get("/lite", async function (req, res) {
     /*
      * QUERYS
@@ -271,72 +258,68 @@ module.exports = function (app, config, renderTemplate) {
     const ip = JSON.parse(jj);
     const isvld = await core.isvalidvideo(v);
 
-    
     if (isvld) {
-     
-          core.video(v).then((data) => {
-            const k = data.video;
-            const json = data.json;
-            const engagement = data.engagement;
-            var inv_comments = data.comments;
-            const inv_vid = data.vid;
-           if(json.Title) {
-            if (!data.comments) inv_comments = "Disabled";
+      core.video(v).then((data) => {
+        const k = data.video;
+        const json = data.json;
+        const engagement = data.engagement;
+        var inv_comments = data.comments;
+        const inv_vid = data.vid;
+        if (json.Title) {
+          if (!data.comments) inv_comments = "Disabled";
 
-            if (!core.video(v).b) {
-              var nnn = "";
-              var badges = "";
-              var comments = "";
-            }
+          if (!core.video(v).b) {
+            var nnn = "";
+            var badges = "";
+            var comments = "";
+          }
 
-            if (!v) res.redirect("/");
+          if (!v) res.redirect("/");
 
-            if (q === "medium") {
-              var url = `https://inv.vern.cc/latest_version?id=${v}&itag=18&local=true`;
-            }
+          if (q === "medium") {
+            var url = `https://inv.vern.cc/latest_version?id=${v}&itag=18&local=true`;
+          }
 
-            const desc = data.desc;
-            if (d) {
-              var d = desc.toString().replace(/\n/g, " <br> ");
-            }
+          const desc = data.desc;
+          if (d) {
+            var d = desc.toString().replace(/\n/g, " <br> ");
+          }
 
-            if (d === "[object Object]") {
-              var d = false;
-            }
+          if (d === "[object Object]") {
+            var d = false;
+          }
 
-            renderTemplate(res, req, "lite.ejs", {
-              color: data.color,
-              color2:data.color2,
-              engagement: engagement,
-              video: json,
-              date: k.Video.uploadDate,
-              e: e,
-              k: k,
-              process: process,
-              sha384: sha384,
-              lightOrDark,
-              isMobile: req.useragent.isMobile,
-              tj: data.channel,
-              r: r,
-              qua: q,
-              inv: inv_comments,
-              ip: ip,
-              convert: convert,
-              wiki: data.wiki,
-              f: f,
-              t: config.t_url,
-              optout: t,
-              badges: badges,
-              desc: desc,
-              comments: comments,
-              n: nnn,
-              inv_vid,
-              lyrics: "",
-            });
-             }
+          renderTemplate(res, req, "lite.ejs", {
+            color: data.color,
+            color2: data.color2,
+            engagement: engagement,
+            video: json,
+            date: k.Video.uploadDate,
+            e: e,
+            k: k,
+            process: process,
+            sha384: sha384,
+            lightOrDark,
+            isMobile: req.useragent.isMobile,
+            tj: data.channel,
+            r: r,
+            qua: q,
+            inv: inv_comments,
+            ip: ip,
+            convert: convert,
+            wiki: data.wiki,
+            f: f,
+            t: config.t_url,
+            optout: t,
+            badges: badges,
+            desc: desc,
+            comments: comments,
+            n: nnn,
+            inv_vid,
+            lyrics: "",
           });
-          
- 
+        }
+      });
     } else {
       res.redirect("/");
     }
@@ -409,10 +392,10 @@ module.exports = function (app, config, renderTemplate) {
     if (!song) {
       res.redirect(`/watch?v=${v}`);
     }
-   
-   const lyrics = await lyricsFinder(song.artist + song.title );
-  if (lyrics == undefined) lyrics = "Lyrics not found";
-   
+
+    const lyrics = await lyricsFinder(song.artist + song.title);
+    if (lyrics == undefined) lyrics = "Lyrics not found";
+
     var ly = "";
 
     if (lyrics === null) {

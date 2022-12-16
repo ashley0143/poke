@@ -43,6 +43,12 @@
 
   --video-player-height-max: 720px;
   --video-player-width-max: 1280px;
+
+  --ptd-margin-6x: 24px;
+  --ptd-watch-min-player-height: 360px;
+  --ptd-watch-width-ratio: 16;
+  --ptd-watch-height-ratio: 9;
+  --ptd-watch-sidebar-min-width: 300px;
 }
 
 a.class:hover {
@@ -320,7 +326,7 @@ a {
 
 .video-player-container {
   margin: inherit;
-  
+
   max-width: 100%;
   min-width: 100%;
   width: 100%;
@@ -333,11 +339,17 @@ a {
   margin-inline: var(--gutter);
 }
 
-@media screen and (min-width: 1340px) {
+@media screen and (min-width: 1400px) {
   .watch-page {
-    max-width: 80.9em;
+    max-width: calc(1280px + 3 * var(--ptd-margin-6x));
+    min-width: calc(
+      var(--ptd-watch-min-player-height) *
+        var(--ptd-watch-width-ratio) / var(--ptd-watch-height-ratio) +
+        3 * var(--ptd-margin-6x) + var(--ptd-watch-sidebar-min-width)
+    );
     justify-content: center;
     margin-left: auto;
     margin-right: auto;
+    gap: var(--gutter);
   }
 }

@@ -36,6 +36,14 @@ function getJson(str) {
   }
 }
 
+ function checkUnexistingObject(obj) {
+  if (obj !== undefined) {
+    if (obj.authorId !== undefined) {
+     return true;
+    }
+  }
+}
+
 /*
  * Api functions
  */
@@ -58,8 +66,8 @@ async function channel(id, cnt) {
 
 async function video(v) {
   if (v == null) return "Gib ID";
-
-  let nightlyRes;
+  
+     let nightlyRes;
 
   var inv_comments = await fetch(`${config.invapi}/comments/${v}`).then((res) =>
     res.text()
@@ -72,6 +80,7 @@ async function video(v) {
   );
 
   var vid = await getJson(video_new_info);
+  if(checkUnexistingObject(vid))  {
 
   const a = await fetch(`${config.tubeApi}channel?id=${vid.authorId}&tab=about`)
     .then((res) => res.text())
@@ -103,6 +112,7 @@ async function video(v) {
       `https://i.ytimg.com/vi/${v}/hqdefault.jpg?sqp=-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLBy_x4UUHLNDZtJtH0PXeQGoRFTgw`
     ).then((colors) => colors[1].hex()),
   };
+  }
 }
 
 async function search(query, cnt) {

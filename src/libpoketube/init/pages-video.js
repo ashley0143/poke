@@ -181,6 +181,7 @@ module.exports = function (app, config, renderTemplate) {
             const engagement = data.engagement;
             var inv_comments = data.comments;
             const inv_vid = data.vid;
+            if(data.video) {
                        if(json) {
 
            if(json.Title) {
@@ -238,7 +239,7 @@ module.exports = function (app, config, renderTemplate) {
             });
              }                       }          
 
-
+            }
           });
           
  

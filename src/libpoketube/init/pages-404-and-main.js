@@ -22,7 +22,7 @@ const sha384 = modules.hash;
 
 function getJson(str) {
   try {
-    return getJson(str);
+    return JSON.parse(str);
   } catch {
     return null;
   }

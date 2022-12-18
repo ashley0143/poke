@@ -77,12 +77,14 @@ module.exports = function (app, config, renderTemplate) {
     };
 
     if (req.params.v) {
-      const isvld = await core.isvalidvideo(req.params.v);
+      if (/[a-zA-Z0-9]+/.test(req.param.v)) {
+        const isvld = await core.isvalidvideo(req.params.v);
 
-      if (isvld) {
-        return res.redirect(`/watch?v=${req.params.v}`);
-      } else {
-        return rendermainpage();
+        if (isvld) {
+          return res.redirect(`/watch?v=${req.params.v}`);
+        } else {
+          return rendermainpage();
+        }
       }
     } else {
       return rendermainpage();

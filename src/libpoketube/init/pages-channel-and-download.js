@@ -18,7 +18,7 @@ const {
   getRandomArbitrary,
 } = require("../ptutils/libpt-coreutils.js");
 
-const sha384 = modules.hash
+const sha384 = modules.hash;
 
 function getJson(str) {
   try {
@@ -27,7 +27,6 @@ function getJson(str) {
     return null;
   }
 }
-
 
 module.exports = function (app, config, renderTemplate) {
   app.get("/download", async function (req, res) {
@@ -132,61 +131,64 @@ module.exports = function (app, config, renderTemplate) {
     }
 
     //videos
-    const a = await modules.fetch(`${config.invapi}/channels/videos/${ID}/`).then((res) =>
-    res.text()
-  );
+    const a = await modules
+      .fetch(`${config.invapi}/channels/videos/${ID}/`)
+      .then((res) => res.text());
 
-      var tj = await getJson(a);
+    var tj = await getJson(a);
 
+    const community = await modules
+      .fetch(`${config.invapi}/channels/community/${ID}/`)
+      .then((res) => res.text());
 
-        const  community = await modules.fetch(`${config.invapi}/channels/community/${ID}/`).then((res) =>
-    res.text()
-  );
+    var c = await getJson(community);
 
-      var c = await getJson(community);
+    try {
+      const summary = await wiki.summary(k.Channel.Metadata.Name);
 
-    const summary = await wiki.summary(k.Channel.Metadata.Name);
+      var w = "";
+      if (summary.title === "Not found.") {
+        w = "none";
+      }
+      if (summary.title !== "Not found.") {
+        w = summary;
+      }
 
-    var w = "";
-    if (summary.title === "Not found.") {
-      w = "none";
+      const { Subscribers: subscribers } = k.Channel.Metadata;
+      const description = k.Channel.Contents.ItemSection.About.Description;
+
+      var d = description.toString().replace(/\n/g, " <br> ");
+      if (d === "[object Object]") {
+        var d = "";
+      }
+
+      var dnoreplace = description.toString();
+      if (dnoreplace === "[object Object]") {
+        var dnoreplace = "";
+      }
+
+      renderTemplate(res, req, "channel.ejs", {
+        ID,
+        tab,
+        j: k,
+        tj,
+        c,
+        convert,
+        turntomins,
+        dnoreplace: dnoreplace,
+        continuation: continuation,
+        wiki: w,
+        getFirstLine: getFirstLine,
+        isMobile: req.useragent.isMobile,
+        about: k.Channel.Contents.ItemSection.About,
+        subs:
+          typeof subscribers === "string"
+            ? subscribers.replace("subscribers", "")
+            : "Private",
+        desc: d,
+      });
+    } catch {
+      res.redirect("/");
     }
-    if (summary.title !== "Not found.") {
-      w = summary;
-    }
-
-    const { Subscribers: subscribers } = k.Channel.Metadata;
-    const description = k.Channel.Contents.ItemSection.About.Description;
-
-    var d = description.toString().replace(/\n/g, " <br> ");
-    if (d === "[object Object]") {
-      var d = "";
-    }
-
-    var dnoreplace = description.toString();
-    if (dnoreplace === "[object Object]") {
-      var dnoreplace = "";
-    }
-
-    renderTemplate(res, req, "channel.ejs", {
-     ID,
-      tab,
-      j: k,
-      tj,
-      c,
-      convert,
-      turntomins,
-      dnoreplace: dnoreplace,
-      continuation: continuation,
-      wiki: w,
-      getFirstLine: getFirstLine,
-      isMobile: req.useragent.isMobile,
-      about: k.Channel.Contents.ItemSection.About,
-      subs:
-        typeof subscribers === "string"
-          ? subscribers.replace("subscribers", "")
-          : "Private",
-      desc: d,
-    });
   });
 };

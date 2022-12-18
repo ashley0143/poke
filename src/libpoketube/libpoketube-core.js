@@ -36,10 +36,10 @@ function getJson(str) {
   }
 }
 
- function checkUnexistingObject(obj) {
+function checkUnexistingObject(obj) {
   if (obj !== undefined) {
     if (obj.authorId !== undefined) {
-     return true;
+      return true;
     }
   }
 }
@@ -66,8 +66,8 @@ async function channel(id, cnt) {
 
 async function video(v) {
   if (v == null) return "Gib ID";
-  
-     let nightlyRes;
+
+  let nightlyRes;
 
   var inv_comments = await fetch(`${config.invapi}/comments/${v}`).then((res) =>
     res.text()
@@ -80,38 +80,41 @@ async function video(v) {
   );
 
   var vid = await getJson(video_new_info);
-  if(checkUnexistingObject(vid))  {
-
-  const a = await fetch(`${config.tubeApi}channel?id=${vid.authorId}&tab=about`)
-    .then((res) => res.text())
-    .then((xml) => getJson(toJson(xml)));
-
-  const summary = await wiki
-    .summary(vid.author + " ")
-    .then((summary_) => (summary_.title !== "Not found." ? summary_ : "none"));
-
-  const desc = a.Channel?.Contents.ItemSection.About.Description;
-
-  const data = await fetcher(v);
-
-  const nightlyJsonData = getJson(nightlyRes);
-  return {
-    json: data.video.Player,
-    video: await fetch(`${config.tubeApi}video?v=${v}`)
+  if (checkUnexistingObject(vid)) {
+    const a = await fetch(
+      `${config.tubeApi}channel?id=${vid.authorId}&tab=about`
+    )
       .then((res) => res.text())
-      .then((xml) => getJson(toJson(xml))),
-    vid,
-    comments,
-    engagement: data.engagement,
-    wiki: summary,
-    desc: desc,
-    color: await getColors(
-      `https://i.ytimg.com/vi/${v}/hqdefault.jpg?sqp=-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLBy_x4UUHLNDZtJtH0PXeQGoRFTgw`
-    ).then((colors) => colors[0].hex()),
+      .then((xml) => getJson(toJson(xml)));
+
+    const summary = await wiki
+      .summary(vid.author + " ")
+      .then((summary_) =>
+        summary_.title !== "Not found." ? summary_ : "none"
+      );
+
+    const desc = a.Channel?.Contents.ItemSection.About.Description;
+
+    const data = await fetcher(v);
+
+    const nightlyJsonData = getJson(nightlyRes);
+    return {
+      json: data.video.Player,
+      video: await fetch(`${config.tubeApi}video?v=${v}`)
+        .then((res) => res.text())
+        .then((xml) => getJson(toJson(xml))),
+      vid,
+      comments,
+      engagement: data.engagement,
+      wiki: summary,
+      desc: desc,
+      color: await getColors(
+        `https://i.ytimg.com/vi/${v}/hqdefault.jpg?sqp=-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLBy_x4UUHLNDZtJtH0PXeQGoRFTgw`
+      ).then((colors) => colors[0].hex()),
       color2: await getColors(
-      `https://i.ytimg.com/vi/${v}/hqdefault.jpg?sqp=-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLBy_x4UUHLNDZtJtH0PXeQGoRFTgw`
-    ).then((colors) => colors[1].hex()),
-  };
+        `https://i.ytimg.com/vi/${v}/hqdefault.jpg?sqp=-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLBy_x4UUHLNDZtJtH0PXeQGoRFTgw`
+      ).then((colors) => colors[1].hex()),
+    };
   }
 }
 
@@ -128,16 +131,19 @@ async function search(query, cnt) {
 }
 
 async function isvalidvideo(v) {
-  var status;
-  const vld = await fetch(`${config.dislikes}${v}`).then((res) => {
-    status = res.status;
-    return res.json();
-  });
+  if (v != "assets") {
+    var status;
 
-  if (status == 400) {
-    return false;
-  } else {
-    return true;
+    const vld = await fetch(`${config.dislikes}${v}`).then((res) => {
+      status = res.status;
+      return res.json();
+    });
+
+    if (status == 400) {
+      return false;
+    } else {
+      return true;
+    }
   }
 }
 

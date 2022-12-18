@@ -44,11 +44,47 @@
   --video-player-height-max: 720px;
   --video-player-width-max: 1280px;
 
-  --ptd-margin-6x: 24px;
   --ptd-watch-min-player-height: 360px;
   --ptd-watch-width-ratio: 16;
   --ptd-watch-height-ratio: 9;
   --ptd-watch-sidebar-min-width: 300px;
+
+  --ptd-grid-base: 103px;
+  --ptd-margin-base: 4px;
+  --ptd-avatar-size: 32px;
+  --ptd-toolbar-height: 56px;
+  --ptd-margin-2x: 8px;
+  --ptd-margin-3x: 12px;
+  --ptd-margin-4x: 16px;
+  --ptd-margin-5x: 20px;
+  --ptd-margin-6x: 24px;
+  --ptd-margin-7x: 28px;
+  --ptd-margin-8x: 32px;
+  --ptd-margin-9x: 36px;
+  --ptd-margin-10x: 40px;
+  --ptd-margin-11x: 44px;
+  --ptd-margin-12x: 48px;
+  --ptd-margin-14x: 56px;
+  --ptd-margin-16x: 64px;
+  --ptd-margin-17x: 68px;
+  --ptd-margin-24x: 96px;
+  --ptd-margin-25x: 100px;
+  --ptd-margin-35x: 140px;
+  --ptd-neg-margin-base: -4px;
+  --ptd-neg-margin-2x: -8px;
+  --ptd-neg-margin-3x: -12px;
+  --ptd-neg-margin-4x: -16px;
+  --ptd-neg-margin-5x: -20px;
+  --ptd-neg-margin-6x: -24px;
+  --ptd-neg-margin-7x: -28px;
+  --ptd-neg-margin-8x: -32px;
+  --ptd-neg-margin-10x: -40px;
+  --ptd-neg-margin-11x: -44px;
+  --ptd-neg-margin-12x: -48px;
+  --ptd-neg-margin-14x: -56px;
+  --ptd-neg-margin-16x: -64px;
+  --ptd-neg-margin-24x: -96px;
+  --ptd-neg-margin-25x: -100px;
 }
 
 a.class:hover {
@@ -343,9 +379,9 @@ a {
   .watch-page {
     max-width: calc(1280px + 3 * var(--ptd-margin-6x));
     min-width: calc(
-      var(--ptd-watch-min-player-height) *
-        var(--ptd-watch-width-ratio) / var(--ptd-watch-height-ratio) +
-        3 * var(--ptd-margin-6x) + var(--ptd-watch-sidebar-min-width)
+      var(--ptd-watch-min-player-height) * var(--ptd-watch-width-ratio) /
+        var(--ptd-watch-height-ratio) + 3 * var(--ptd-margin-6x) +
+        var(--ptd-watch-sidebar-min-width)
     );
     justify-content: center;
     margin-left: auto;

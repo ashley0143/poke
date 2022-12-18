@@ -98,13 +98,6 @@ module.exports = function (app, config, renderTemplate) {
     res.redirect(url);
   });
 
-  app.get("/api/video/downloadjson", async function (req, res) {
-    var v = req.query.v;
-    var fetching = await fetcher(v);
-    const url = fetching.video.Player.Formats.Format[1].URL;
-    res.json(url);
-  });
-
   app.get("/api/subtitles", async (req, res) => {
     const id = req.query.v;
     const l = req.query.h;

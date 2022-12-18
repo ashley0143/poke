@@ -20,11 +20,19 @@ const {
 
 const sha384 = modules.hash;
 
+function getJson(str) {
+  try {
+    return getJson(str);
+  } catch {
+    return null;
+  }
+}
+
 module.exports = function (app, config, renderTemplate) {
   app.get("/discover", async function (req, res) {
     const trends = await modules.fetch(config.tubeApi + `trending`);
     const h = await trends.text();
-    const k = JSON.parse(modules.toJson(h));
+    const k = getJson(modules.toJson(h));
 
     if (req.query.tab)
       var tab = `/?type=${capitalizeFirstLetter(req.query.tab)}`;
@@ -35,7 +43,7 @@ module.exports = function (app, config, renderTemplate) {
       .fetch(`https://vid.puffyan.us/api/v1/trending${tab}`)
       .then((res) => res.text());
 
-    const t = JSON.parse(invtrend);
+    const t = getJson(invtrend);
 
     if (req.query.mobilesearch) {
       var query = req.query.mobilesearch;
@@ -52,7 +60,7 @@ module.exports = function (app, config, renderTemplate) {
       );
 
       const text = await search.text();
-      var j = JSON.parse(modules.toJson(text));
+      var j = getJson(modules.toJson(text));
     }
 
     renderTemplate(res, req, "main.ejs", {

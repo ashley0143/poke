@@ -91,11 +91,11 @@ function init(app, config, rendertemplate) {
             );
           }
         })();
-      }, 990000);
+      }, 1230000);
     } catch (err) {
       initlog("[FAILED] Load pages \n" + err);
     }
-  }, 960000);
+  }, 1200000);
 }
 
 module.exports = {

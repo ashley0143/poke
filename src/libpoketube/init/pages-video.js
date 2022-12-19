@@ -164,12 +164,12 @@ module.exports = function (app, config, renderTemplate) {
     if (isvld) {
       core.video(v).then((data) => {
         if (data) {
-          const k = data.video;
-          const json = data.json;
-          const engagement = data.engagement;
-          var inv_comments = data.comments;
-          const inv_vid = data.vid;
           if (data.video) {
+            const k = data.video;
+            const json = data.json;
+            const engagement = data.engagement;
+            var inv_comments = data.comments;
+            const inv_vid = data.vid;
             if (json) {
               if (json.Title) {
                 if (!data.comments) inv_comments = "Disabled";

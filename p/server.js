@@ -1,7 +1,5 @@
-const fs = require("fs");
 const express = require("express");
 const fetch = require("node-fetch");
-const htmlParser = require("node-html-parser");
 const { URL } = require("url");
 
 // Array of hostnames that will be proxied

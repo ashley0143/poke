@@ -37,9 +37,13 @@ function getJson(str) {
 }
 
 function checkUnexistingObject(obj) {
-  if (obj !== undefined) {
-    if (obj.authorId !== undefined) {
-      return true;
+  if (obj !== null) {
+    if (obj.authorId !== null) {
+      if (obj !== undefined) {
+        if (obj.authorId !== undefined) {
+          return true;
+        }
+      }
     }
   }
 }

@@ -35,7 +35,7 @@ module.exports =
   wiki:require("wikipedia"),
   initlog,
   init,
-  version:"libpoketube-2.0-git",
+  version:"libpoketube-2.1-git",
   modules:{
     fetch:require("node-fetch"),
     toJson:require("xml2json").toJson,

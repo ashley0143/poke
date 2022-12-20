@@ -40,16 +40,11 @@ module.exports = function (app, config, renderTemplate) {
     if (!v) res.redirect("/");
 
     var fetching = await fetcher(v);
-    const j = fetching.video.Player.Formats.Format,
-      j_ = Array.isArray(j) ? j[j.length - 1] : j;
-    let url;
-    if (j_.URL != undefined) url = j_.URL;
 
     const json = fetching.video.Player;
     const engagement = fetching.engagement;
 
     renderTemplate(res, req, "download.ejs", {
-      url: url,
       engagement: engagement,
       k: k,
       video: json,

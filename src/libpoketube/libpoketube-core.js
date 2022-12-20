@@ -72,6 +72,7 @@ async function video(v) {
   if (v == null) return "Gib ID";
 
   let nightlyRes;
+  var desc;
 
   var inv_comments = await fetch(`${config.invapi}/comments/${v}`).then((res) =>
     res.text()
@@ -97,11 +98,16 @@ async function video(v) {
         summary_.title !== "Not found." ? summary_ : "none"
       );
 
-    const desc = a.Channel?.Contents.ItemSection.About.Description;
+    if (a.Channel?.Contents.ItemSection.About) {
+      desc = a.Channel?.Contents.ItemSection.About.Description;
+    } else {
+      desc = "No about section";
+    }
 
     const data = await fetcher(v);
 
     const nightlyJsonData = getJson(nightlyRes);
+
     return {
       json: data.video.Player,
       video: await fetch(`${config.tubeApi}video?v=${v}`)

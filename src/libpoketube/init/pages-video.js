@@ -131,9 +131,6 @@ module.exports = function (app, config, renderTemplate) {
                 title: sha384(json.Title),
                 date: sha384(btoa(Date.now()).toString()),
               },
-              info: {
-                desc: sha384(json.Description),
-              },
               video: {
                 title: sha384(json.Title),
                 url: sha384(url),

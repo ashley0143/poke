@@ -72,7 +72,7 @@ async function video(v) {
   if (v == null) return "Gib ID";
 
   let nightlyRes;
-  var desc;
+  var desc = "";
 
   var inv_comments = await fetch(`${config.invapi}/comments/${v}`).then((res) =>
     res.text()
@@ -98,11 +98,7 @@ async function video(v) {
         summary_.title !== "Not found." ? summary_ : "none"
       );
 
-    if (a.Channel?.Contents.ItemSection.About) {
-      desc = a.Channel?.Contents.ItemSection.About.Description;
-    } else {
-      desc = "No about section";
-    }
+    desc = a.Channel?.Contents?.ItemSection?.About?.Description;
 
     const data = await fetcher(v);
 
@@ -158,7 +154,7 @@ async function isvalidvideo(v) {
     } else {
       status = "200";
     }
-    
+
     if (status == 400) {
       return false;
     } else {

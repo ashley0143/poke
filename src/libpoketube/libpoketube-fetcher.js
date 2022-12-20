@@ -33,10 +33,8 @@ function getJson(str) {
   }
 }
 
-  const dislike = await fetch(`${dislike_api}${video_id}`).then((res) =>
-    res.json()
-  );
-
+  const dislike = await fetch(`${dislike_api}${video_id}`)
+  const engagement = getJson(dislike)
  
   const headers = {};
   /*
@@ -55,7 +53,7 @@ function getJson(str) {
    */
   const returner = {
     video: await parsexml(video_id),
-    engagement: dislike,
+    engagement,
     video_url_youtube: `${youtube_url}${video_id}`,
   };
   return returner;

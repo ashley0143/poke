@@ -119,24 +119,32 @@ module.exports = function (app, config, renderTemplate) {
     let url;
     if (j_.URL != undefined) url = j_.URL;
 
-    // json response
-    const re = {
-      main: {
-        video_id: sha384(json.id),
-        channel: sha384(json.Channel.Name),
-        title: sha384(json.Title),
-        date: sha384(btoa(Date.now()).toString()),
-      },
-      info: {
-        desc: sha384(json.Description),
-      },
-      video: {
-        title: sha384(json.Title),
-        url: sha384(url),
-      },
-    };
+    if (json) {
+      if (json.Title) {
+        if (json.Channel.Name) {
+          if (json.Description) {
+            // json response
+            const re = {
+              main: {
+                video_id: sha384(json.id),
+                channel: sha384(json.Channel.Name),
+                title: sha384(json.Title),
+                date: sha384(btoa(Date.now()).toString()),
+              },
+              info: {
+                desc: sha384(json.Description),
+              },
+              video: {
+                title: sha384(json.Title),
+                url: sha384(url),
+              },
+            };
 
-    res.json(re);
+            res.json(re);
+          }
+        }
+      }
+    }
   });
 
   app.get("/watch", async function (req, res) {
@@ -332,7 +340,6 @@ module.exports = function (app, config, renderTemplate) {
       res.redirect("/");
     }
   });
-
 
   app.get("/music", async function (req, res) {
     /*

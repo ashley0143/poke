@@ -1,0 +1,12 @@
+version: '3.1'
+
+# TODO: Dockerize the other services
+
+services:
+  proxy:
+    build:
+      context: .
+      dockerfile: p/Dockerfile
+    restart: unless-stopped
+    ports:
+      - 3000:3000

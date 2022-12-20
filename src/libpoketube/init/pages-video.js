@@ -260,70 +260,79 @@ module.exports = function (app, config, renderTemplate) {
 
     if (isvld) {
       core.video(v).then((data) => {
-        const k = data.video;
-        const json = data.json;
-        const engagement = data.engagement;
-        var inv_comments = data.comments;
-        const inv_vid = data.vid;
-        if (json.Title) {
-          if (!data.comments) inv_comments = "Disabled";
+        if (data) {
+          if (data.video) {
+            const k = data.video;
+            const json = data.json;
+            const engagement = data.engagement;
+            var inv_comments = data.comments;
+            const inv_vid = data.vid;
+            if (json) {
+              if (json.Title) {
+                if (!data.comments) inv_comments = "Disabled";
 
-          if (!core.video(v).b) {
-            var nnn = "";
-            var badges = "";
-            var comments = "";
+                if (!core.video(v).b) {
+                  var nnn = "";
+                  var badges = "";
+                  var comments = "";
+                }
+
+                if (!v) res.redirect("/");
+
+                if (q === "medium") {
+                  var url = `https://inv.vern.cc/latest_version?id=${v}&itag=18&local=true`;
+                }
+
+                const desc = data.desc;
+                if (d) {
+                  var d = desc.toString().replace(/\n/g, " <br> ");
+                }
+
+                if (d === "[object Object]") {
+                  var d = false;
+                }
+
+                renderTemplate(res, req, "lite.ejs", {
+                  color: data.color,
+                  color2: data.color2,
+                  engagement: engagement,
+                  video: json,
+                  date: k.Video.uploadDate,
+                  e: e,
+                  k: k,
+                  process: process,
+                  sha384: sha384,
+                  lightOrDark,
+                  isMobile: req.useragent.isMobile,
+                  tj: data.channel,
+                  r: r,
+                  qua: q,
+                  inv: inv_comments,
+                  ip: ip,
+                  convert: convert,
+                  wiki: data.wiki,
+                  f: f,
+                  t: config.t_url,
+                  optout: t,
+                  badges: badges,
+                  desc: desc,
+                  comments: comments,
+                  n: nnn,
+                  inv_vid,
+                  lyrics: "",
+                });
+              }
+            }
           }
-
-          if (!v) res.redirect("/");
-
-          if (q === "medium") {
-            var url = `https://inv.vern.cc/latest_version?id=${v}&itag=18&local=true`;
-          }
-
-          const desc = data.desc;
-          if (d) {
-            var d = desc.toString().replace(/\n/g, " <br> ");
-          }
-
-          if (d === "[object Object]") {
-            var d = false;
-          }
-
-          renderTemplate(res, req, "lite.ejs", {
-            color: data.color,
-            color2: data.color2,
-            engagement: engagement,
-            video: json,
-            date: k.Video.uploadDate,
-            e: e,
-            k: k,
-            process: process,
-            sha384: sha384,
-            lightOrDark,
-            isMobile: req.useragent.isMobile,
-            tj: data.channel,
-            r: r,
-            qua: q,
-            inv: inv_comments,
-            ip: ip,
-            convert: convert,
-            wiki: data.wiki,
-            f: f,
-            t: config.t_url,
-            optout: t,
-            badges: badges,
-            desc: desc,
-            comments: comments,
-            n: nnn,
-            inv_vid,
-            lyrics: "",
-          });
+        } else {
+          res.redirect("/");
         }
       });
     } else {
       res.redirect("/");
     }
   });
+
 
   app.get("/music", async function (req, res) {
     /*

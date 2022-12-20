@@ -24,20 +24,14 @@ var dislike_api = `https://returnyoutubedislikeapi.com/votes?videoId=`;
 var new_api_url = `https://tube-srv.ashley143.gay/api/player`;
 
 module.exports = async function (video_id) {
-  
-function getJson(str) {
-  try {
-    return JSON.parse(str);
-  } catch {
-    return null;
+  function getJson(str) {
+    try {
+      return JSON.parse(str);
+    } catch {
+      return null;
+    }
   }
-}
 
-  const engagement = await fetch(`${dislike_api}${video_id}`).then((res) =>
-    res.json()
-  );
-  
- 
   const headers = {};
   /*
    * Parses and fetches an xml
@@ -50,6 +44,17 @@ function getJson(str) {
     return getJson(j);
   }
 
+  async function ryd() {
+    try {
+      const engagement = await fetch(`${dislike_api}${video_id}`).then((res) =>
+        res.json()
+      );
+      return engagement;
+    } catch {}
+  }
+
+  const engagement = await ryd();
+
   /*
    * Returner object
    */
@@ -58,5 +63,6 @@ function getJson(str) {
     engagement,
     video_url_youtube: `${youtube_url}${video_id}`,
   };
+
   return returner;
 };

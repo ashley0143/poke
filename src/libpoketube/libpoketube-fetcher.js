@@ -47,7 +47,7 @@ function getJson(str) {
     const player = await fetch(`${new_api_url}?v=${id}`, headers);
     var h = await player.text();
     var j = toJson(h);
-    return JSON.parse(j);
+    return getJson(j);
   }
 
   /*

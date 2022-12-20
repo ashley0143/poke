@@ -144,11 +144,21 @@ async function isvalidvideo(v) {
   if (v != "assets") {
     var status;
 
-    const vld = await fetch(`${config.dislikes}${v}`).then((res) => {
-      status = res.status;
-      return res.json();
-    });
+    async function ryd() {
+      try {
+        const engagement = await fetch(`${config.dislikes}${v}`).then((res) =>
+          res.json()
+        );
+        return engagement;
+      } catch {}
+    }
 
+    if (ryd.status) {
+      status = await ryd.status();
+    } else {
+      status = "200";
+    }
+    
     if (status == 400) {
       return false;
     } else {

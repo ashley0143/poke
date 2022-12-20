@@ -42,7 +42,7 @@ const proxy = async (req, res) => {
     let url;
 
     try {
-      url = new URL("https://" + req.originalUrl.slice(1));
+      url = new URL("https://" + req.originalUrl.slice(10));
     } catch(e) {
       console.log('==> Cannot parse URL: ' + e);
       return res.status(400).send('Malformed URL');

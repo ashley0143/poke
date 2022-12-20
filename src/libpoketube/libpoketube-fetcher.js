@@ -33,8 +33,10 @@ function getJson(str) {
   }
 }
 
-  const dislike = await fetch(`${dislike_api}${video_id}`)
-  const engagement = getJson(dislike)
+  const engagement = await fetch(`${dislike_api}${video_id}`).then((res) =>
+    res.json()
+  );
+  
  
   const headers = {};
   /*

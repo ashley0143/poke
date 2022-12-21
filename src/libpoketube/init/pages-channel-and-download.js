@@ -111,13 +111,16 @@ module.exports = function (app, config, renderTemplate) {
     const ID = req.query.id;
     const tab = req.query.tab;
 
-    // about
-    const bout = await modules.fetch(
-      config.tubeApi + `channel?id=${ID}&tab=about`
-    );
-    const h = await bout.text();
-    const k = JSON.parse(modules.toJson(h));
-
+    try {
+      // about
+      const bout = await modules.fetch(
+        config.tubeApi + `channel?id=${ID}&tab=about`
+      );
+      const h = await bout.text();
+      var k = JSON.parse(modules.toJson(h));
+    } catch {
+      k = " ";
+    }
     if (req.query.continuation) {
       var continuation = req.query.continuation;
     }

@@ -86,12 +86,19 @@ async function video(v) {
 
   var vid = await getJson(video_new_info);
   if (checkUnexistingObject(vid)) {
-    const a = await fetch(
+ 
+    var a;
+    
+    try {
+    var a = await fetch(
       `${config.tubeApi}channel?id=${vid.authorId}&tab=about`
     )
       .then((res) => res.text())
       .then((xml) => getJson(toJson(xml)));
-
+    } catch {
+      var a = ""  
+    }
+    
     const summary = await wiki
       .summary(vid.author + " ")
       .then((summary_) =>

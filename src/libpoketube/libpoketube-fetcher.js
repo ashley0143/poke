@@ -38,10 +38,17 @@ module.exports = async function (video_id) {
    */
 
   async function parsexml(id) {
-    const player = await fetch(`${new_api_url}?v=${id}`, headers);
-    var h = await player.text();
-    var j = toJson(h);
-    return getJson(j);
+    async function fetchxmlvideo() {
+      try {
+        const player = await fetch(`${new_api_url}?v=${id}`, headers);
+        var h = await player.text();
+        var j = toJson(h);
+        return getJson(j);
+      } catch {}
+    }
+
+    const a = await fetchxmlvideo();
+    return a;
   }
 
   async function ryd() {

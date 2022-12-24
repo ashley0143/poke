@@ -6,6 +6,7 @@
       "CLOUDFLARE": true,
       "piwik": true,
       "region": "🇺🇸",
+      "official":true,
       "software": {
         "name": "poketube-vanilla",
         "version": "lastest",
@@ -20,6 +21,7 @@
       "CLOUDFLARE": false,
       "piwik": true,
       "proxy":true,
+      "official":true,
       "DEFAULT":true,
       "region": "🇺🇸",
       "software": {
@@ -35,6 +37,7 @@
       "uri": "https://poketube.site",
       "CLOUDFLARE": true,
       "piwik": true,
+      "official":true,
       "region": "🇺🇸",
       "software": {
         "name": "poketube-vanilla",
@@ -49,6 +52,7 @@
       "uri": "https://poketube.online",
       "CLOUDFLARE": true,
       "piwik": true,
+      "official":true,
       "region": "🇺🇸",
       "software": {
         "name": "poketube-vanilla",
@@ -62,6 +66,7 @@
     {
       "uri": "https://poketube.xyz",
       "CLOUDFLARE": true,
+      "official":true,
       "piwik": true,
       "region": "🇺🇸",
       "software": {

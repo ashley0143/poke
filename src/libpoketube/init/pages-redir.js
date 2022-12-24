@@ -37,6 +37,22 @@ module.exports = function (app, config, renderTemplate) {
     return res.redirect(`/watch?v=${req.params.id}&from=short`);
   });
 
+  app.get("/v/:id", (req, res) => {
+    if (!req.params.id) {
+      return res.redirect("/");
+    }
+
+    return res.redirect(`/watch?v=${req.params.id}&from=v_url`);
+  });
+
+  app.get("/c/:id", (req, res) => {
+    if (!req.params.id) {
+      return res.redirect("/");
+    }
+
+    return res.redirect(`/channel?id=${req.params.id}&from=c_channel_url`);
+  });
+
   app.get("/video/upload", (req, res) => {
     res.redirect("https://youtube.com/upload");
   });

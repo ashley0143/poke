@@ -119,22 +119,27 @@ module.exports = function (app, config, renderTemplate) {
     let url;
     if (j_.URL != undefined) url = j_.URL;
 
-    if ("Title" in json) {
-      // json response
-      const re = {
-        main: {
-          video_id: sha384(json.id),
-          channel: sha384(json.Channel.Name),
-          title: sha384(json.Title),
-          date: sha384(btoa(Date.now()).toString()),
-        },
-        video: {
-          title: sha384(json.Title),
-          url: sha384(url),
-        },
-      };
+    //checks if json exists
+    if (json) {
+      //checks if title exists in the json object
 
-      res.json(re);
+      if ("Title" in json) {
+        // json response
+        const re = {
+          main: {
+            video_id: sha384(json.id),
+            channel: sha384(json.Channel.Name),
+            title: sha384(json.Title),
+            date: sha384(btoa(Date.now()).toString()),
+          },
+          video: {
+            title: sha384(json.Title),
+            url: sha384(url),
+          },
+        };
+
+        res.json(re);
+      }
     }
   });
 

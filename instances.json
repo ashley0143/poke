@@ -72,6 +72,20 @@
     }
   ],
   [
+    "pt.exhq.dev",
+    {
+      "uri": "pt.exhq.dev",
+      "CLOUDFLARE": true,
+      "piwik": true,
+      "region": "🇩🇪",
+      "software": {
+        "name": "poketube-vanilla",
+        "version": "lastest",
+        "branch": "master"
+      }
+    }
+  ],
+  [
     "poketube.sylentpunk.xyz",
     {
       "uri": "https://poketube.sylentpunk.xyz",

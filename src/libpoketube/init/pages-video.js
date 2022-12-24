@@ -119,28 +119,22 @@ module.exports = function (app, config, renderTemplate) {
     let url;
     if (j_.URL != undefined) url = j_.URL;
 
-    if (json) {
-      if (json.Title) {
-        if (json.Channel.Name) {
-          if (json.Description) {
-            // json response
-            const re = {
-              main: {
-                video_id: sha384(json.id),
-                channel: sha384(json.Channel.Name),
-                title: sha384(json.Title),
-                date: sha384(btoa(Date.now()).toString()),
-              },
-              video: {
-                title: sha384(json.Title),
-                url: sha384(url),
-              },
-            };
+    if ("Title" in json) {
+      // json response
+      const re = {
+        main: {
+          video_id: sha384(json.id),
+          channel: sha384(json.Channel.Name),
+          title: sha384(json.Title),
+          date: sha384(btoa(Date.now()).toString()),
+        },
+        video: {
+          title: sha384(json.Title),
+          url: sha384(url),
+        },
+      };
 
-            res.json(re);
-          }
-        }
-      }
+      res.json(re);
     }
   });
 
@@ -164,72 +158,73 @@ module.exports = function (app, config, renderTemplate) {
     const info = await modules.fetch("http://ip-api.com/json/");
     const jj = await info.text();
     const ip = JSON.parse(jj);
+
     const isvld = await core.isvalidvideo(v);
 
     if (isvld) {
       core.video(v).then((data) => {
         if (data) {
-          if (data.video) {
+          if ("video" in data) {
             const k = data.video;
             const json = data.json;
             const engagement = data.engagement;
             var inv_comments = data.comments;
             const inv_vid = data.vid;
-            if (json) {
-              if (json.Title) {
-                if (!data.comments) inv_comments = "Disabled";
 
-                if (!core.video(v).b) {
-                  var nnn = "";
-                  var badges = "";
-                  var comments = "";
-                }
+            if ("Title" in json) {
+              if (!data.comments) inv_comments = "Disabled";
 
-                if (!v) res.redirect("/");
-
-                if (q === "medium") {
-                  var url = `https://inv.vern.cc/latest_version?id=${v}&itag=18&local=true`;
-                }
-
-                const desc = data.desc;
-                if (d) {
-                  var d = desc.toString().replace(/\n/g, " <br> ");
-                }
-
-                if (d === "[object Object]") {
-                  var d = false;
-                }
-
-                renderTemplate(res, req, "poketube.ejs", {
-                  color: data.color,
-                  color2: data.color2,
-                  engagement: engagement,
-                  video: json,
-                  date: k.Video.uploadDate,
-                  e: e,
-                  k: k,
-                  process: process,
-                  sha384: sha384,
-                  lightOrDark,
-                  isMobile: req.useragent.isMobile,
-                  tj: data.channel,
-                  r: r,
-                  qua: q,
-                  inv: inv_comments,
-                  ip: ip,
-                  convert: convert,
-                  wiki: data.wiki,
-                  f: f,
-                  t: config.t_url,
-                  optout: t,
-                  badges: badges,
-                  desc: desc,
-                  comments: comments,
-                  n: nnn,
-                  inv_vid,
-                  lyrics: "",
-                });
+              if (!core.video(v).b) {
+                var nnn = "";
+                var badges = "";
+                var comments = "";
               }
+
+              if (!v) res.redirect("/");
+
+              if (q === "medium") {
+                var url = `https://inv.vern.cc/latest_version?id=${v}&itag=18&local=true`;
+              }
+
+              const desc = data.desc;
+
+              if (d) {
+                var d = desc.toString().replace(/\n/g, " <br> ");
+              }
+
+              if (d === "[object Object]") {
+                var d = false;
+              }
+
+              renderTemplate(res, req, "poketube.ejs", {
+                color: data.color,
+                color2: data.color2,
+                engagement: engagement,
+                video: json,
+                date: k.Video.uploadDate,
+                e: e,
+                k: k,
+                process: process,
+                sha384: sha384,
+                lightOrDark,
+                isMobile: req.useragent.isMobile,
+                tj: data.channel,
+                r: r,
+                qua: q,
+                inv: inv_comments,
+                ip: ip,
+                convert: convert,
+                wiki: data.wiki,
+                f: f,
+                t: config.t_url,
+                optout: t,
+                badges: badges,
+                desc: desc,
+                comments: comments,
+                n: nnn,
+                inv_vid,
+                lyrics: "",
+              });
             }
           }
         } else {

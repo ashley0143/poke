@@ -37,18 +37,37 @@
   --div-prim-bg: #1c1c1c;
   --div-second-bg: #1a1a1a;
   --div-transparent-bg: #0009;
+
   --gutter: 1.67em; /* gutter variable - see line 330 */
 
-  /* video player */
+  /* PTD start */
 
   --video-player-height-max: 720px;
   --video-player-width-max: 1280px;
+
+  /* poketube color palette */
+  --ptc-very-red: #ff0000;
+  --ptc-very-blue: #0000ff;
+  --ptc-very-green: #00ff00;
+  --ptc-very-pink: #ff00ff;
+  --ptc-very-yellow: #ffff00;
+  --ptc-cyan: #00ffff;
+  --ptc-href-color: #0ab7f0;
+  --ptc-transparent: #0009;
+  --ptc-purple-borders: #7c44a0;
+  --ptc-gradient: linear-gradient(
+    135deg,
+    #f97794 10%,
+    #623aa2 100%,
+    #8e6f7e 100%
+  );
 
   --ptd-watch-min-player-height: 360px;
   --ptd-watch-width-ratio: 16;
   --ptd-watch-height-ratio: 9;
   --ptd-watch-sidebar-min-width: 300px;
 
+  /* margins */
   --ptd-grid-base: 103px;
   --ptd-margin-base: 4px;
   --ptd-avatar-size: 32px;

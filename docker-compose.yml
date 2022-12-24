@@ -1,12 +1,28 @@
-version: '3.1'
-
-# TODO: Dockerize the other services
-
 services:
   proxy:
     build:
       context: .
       dockerfile: p/Dockerfile
+    labels:
+      caddy: example.me # Change me
+      caddy.reverse_proxy: "{{upstreams 3000}}"
     restart: unless-stopped
+    expose:
+      - 3000
+  caddy:
+    image: docker.io/lucaslorentz/caddy-docker-proxy:ci-alpine
     ports:
-      - 3000:3000
+      - 80:80
+      - 443:443
+    environment:
+      - CADDY_INGRESS_NETWORKS=caddy
+    networks:
+      - caddy
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      # - caddy_data:/data
+    restart: unless-stopped
+
+networks:
+  caddy:
+    external: true

@@ -20,8 +20,8 @@ const {
 
 const pkg = require("../../../package.json");
 
-const ver = "v22.1220-cA9aBA-stable-git"
-const versionnumber = "106"
+const ver = "v22.1224-cMrvBa-stable-git"
+const versionnumber = "107"
 
 const response = {
   pt_version: ver,
@@ -86,9 +86,11 @@ module.exports = function (app, config, renderTemplate) {
     var format = "mp4";
     var q = "22";
     if (req.query.q) q = req.query.q;
+    
     if (req.query.f) {
       var format = "mp3";
     }
+    
     var fetching = await fetcher(v);
 
     const json = fetching.video.Player;
@@ -133,6 +135,7 @@ module.exports = function (app, config, renderTemplate) {
       .then((json) => JSON.parse(json));
 
     res.json(f);
+    
   });
 };
 

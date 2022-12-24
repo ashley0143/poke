@@ -37,14 +37,8 @@ function getJson(str) {
 }
 
 function checkUnexistingObject(obj) {
-  if (obj !== null) {
-    if (obj.authorId !== null) {
-      if (obj !== undefined) {
-        if (obj.authorId !== undefined) {
-          return true;
-        }
-      }
-    }
+  if (Object.hasOwn(obj, "authorId")) {
+    return true;
   }
 }
 
@@ -86,19 +80,18 @@ async function video(v) {
 
   var vid = await getJson(video_new_info);
   if (checkUnexistingObject(vid)) {
- 
     var a;
-    
+
     try {
-    var a = await fetch(
-      `${config.tubeApi}channel?id=${vid.authorId}&tab=about`
-    )
-      .then((res) => res.text())
-      .then((xml) => getJson(toJson(xml)));
+      var a = await fetch(
+        `${config.tubeApi}channel?id=${vid.authorId}&tab=about`
+      )
+        .then((res) => res.text())
+        .then((xml) => getJson(toJson(xml)));
     } catch {
-      var a = ""  
+      var a = "";
     }
-    
+
     const summary = await wiki
       .summary(vid.author + " ")
       .then((summary_) =>

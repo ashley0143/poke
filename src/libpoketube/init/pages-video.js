@@ -112,33 +112,34 @@ module.exports = function (app, config, renderTemplate) {
     const h = await video.text();
     const k = JSON.parse(modules.toJson(h));
     if (!v) res.redirect("/");
+    if ("Formats" in fetching.video.Player) {
+      //video
+      const j = fetching.video.Player.Formats.Format,
+        j_ = Array.isArray(j) ? j[j.length - 1] : j;
+      let url;
+      if (j_.URL != undefined) url = j_.URL;
 
-    //video
-    const j = fetching.video.Player.Formats.Format,
-      j_ = Array.isArray(j) ? j[j.length - 1] : j;
-    let url;
-    if (j_.URL != undefined) url = j_.URL;
+      //checks if json exists
+      if (json) {
+        //checks if title exists in the json object
 
-    //checks if json exists
-    if (json) {
-      //checks if title exists in the json object
+        if ("Title" in json) {
+          // json response
+          const re = {
+            main: {
+              video_id: sha384(json.id),
+              channel: sha384(json.Channel.Name),
+              title: sha384(json.Title),
+              date: sha384(btoa(Date.now()).toString()),
+            },
+            video: {
+              title: sha384(json.Title),
+              url: sha384(url),
+            },
+          };
 
-      if ("Title" in json) {
-        // json response
-        const re = {
-          main: {
-            video_id: sha384(json.id),
-            channel: sha384(json.Channel.Name),
-            title: sha384(json.Title),
-            date: sha384(btoa(Date.now()).toString()),
-          },
-          video: {
-            title: sha384(json.Title),
-            url: sha384(url),
-          },
-        };
-
-        res.json(re);
+          res.json(re);
+        }
       }
     }
   });

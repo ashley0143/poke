@@ -69,6 +69,7 @@ module.exports = function (app, config, renderTemplate) {
     if (req.query.continuation) {
       var continuation = req.query.continuation;
     }
+
     if (!req.query.continuation) {
       var continuation = "";
     }
@@ -121,9 +122,11 @@ module.exports = function (app, config, renderTemplate) {
     } catch {
       k = " ";
     }
+
     if (req.query.continuation) {
       var continuation = req.query.continuation;
     }
+
     if (!req.query.continuation) {
       var continuation = "";
     }
@@ -156,11 +159,13 @@ module.exports = function (app, config, renderTemplate) {
       const description = k.Channel.Contents.ItemSection.About.Description;
 
       var d = description.toString().replace(/\n/g, " <br> ");
+
       if (d === "[object Object]") {
         var d = "";
       }
 
       var dnoreplace = description.toString();
+
       if (dnoreplace === "[object Object]") {
         var dnoreplace = "";
       }

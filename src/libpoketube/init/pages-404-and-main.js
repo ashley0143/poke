@@ -40,7 +40,7 @@ module.exports = function (app, config, renderTemplate) {
     if (!req.query.tab) var tab = "";
 
     const invtrend = await modules
-      .fetch(`https://vid.puffyan.us/api/v1/trending${tab}`)
+      .fetch(`https://inv.vern.cc/api/v1/trending${tab}`)
       .then((res) => res.text());
 
     const t = getJson(invtrend);

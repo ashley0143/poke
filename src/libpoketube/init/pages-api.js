@@ -20,8 +20,8 @@ const {
 
 const pkg = require("../../../package.json");
 
-const ver = "v22.1224-cMrvBa-fix2-stable-git"
-const versionnumber = "107.2"
+const ver = "v22.1225-cMrvBa-stable-git"
+const versionnumber = "108"
 
 const response = {
   pt_version: ver,

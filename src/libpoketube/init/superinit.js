@@ -21,6 +21,7 @@ const { api } = require("../init/pages-api.js");
 
 function init(app, config, rendertemplate) {
   var didstart = false;
+
   initlog("wait a few mins... pt on timeout rn");
 
   app.get("/*", function (req, res, next) {

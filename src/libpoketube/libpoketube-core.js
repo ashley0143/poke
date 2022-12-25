@@ -37,8 +37,10 @@ function getJson(str) {
 }
 
 function checkUnexistingObject(obj) {
-  if (Object.hasOwn(obj, "authorId")) {
-    return true;
+  if (obj) {
+    if ("authorId" in obj) {
+      return true;
+    }
   }
 }
 

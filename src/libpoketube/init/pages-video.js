@@ -101,6 +101,14 @@ function lightOrDark(color) {
   }
 }
 
+function IsInArray(array, id) {
+  for (var i = 0; i < array.length; i++) {
+    if (array[i].id === id) return true;
+  }
+  return false;
+}
+
+
 module.exports = function (app, config, renderTemplate) {
   app.get("/encryption", async function (req, res) {
     var v = req.query.v;
@@ -167,6 +175,14 @@ module.exports = function (app, config, renderTemplate) {
 
     const isvld = await core.isvalidvideo(v);
 
+    var secure;
+    
+    if(req.hostname == "poketube.fun" || req.hostname == "poketube.site" || req.hostname == "poketube.online" || req.hostname == "poketube.xyz" || req.hostname == "watch.poketalebot.com") {
+      secure = true
+    } else {
+      secure = false
+    }
+
     if (isvld) {
       core.video(v).then((data) => {
         if (data) {
@@ -212,10 +228,11 @@ module.exports = function (app, config, renderTemplate) {
                   engagement: engagement,
                   video: json,
                   date: k.Video.uploadDate,
-                  e: e,
-                  k: k,
-                  process: process,
-                  sha384: sha384,
+                  e,
+                  k,
+                  secure,
+                  process,
+                  sha384,
                   lightOrDark,
                   isMobile: req.useragent.isMobile,
                   tj: data.channel,

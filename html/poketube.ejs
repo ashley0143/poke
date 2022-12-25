@@ -281,6 +281,26 @@
 
               <a title="PokeTube Homepage" class="class" href="/143" style=font-family:Inter,sans-serif;color:var(--text-color)>  <img style="transform: scale(1.3);padding-left:0.9em;width: 7.5em;display: block;margin-left: auto;margin-right: auto;" src="/css/music.svg?v=5"></a>
                       		 	               <% } %>   
+                                             
+                                             
+     <% if (secure) { %> 
+       
+                 <i style="margin-left: 2em;" class="fa-light fa-lock"
+                  title="This is a secure and/or offical instance!
+you can trust this instance becuase:
+------------                  
+- its a offical instance (offical instances have the max. privacy rules )
+- logs are kept closed
+------------
+if you see this lock icon, you can trust the instance!!
+                         
+But Please note that unofficial instances can add the same lock icon, so please be careful about dad :D!
+"
+                  ></i>
+
+                              		 	               <% } %>   
+
+                                             
             </div>               
        <div class="middle">
         <form action="/search"><input class="search-bar" autocomplete="on" id="fname" name="query" style="color:var(--text-color);font-family:Inter,sans-serif;border-radius: 2em;" data-ddg-inputtype="identities.firstName">

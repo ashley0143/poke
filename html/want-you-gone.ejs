@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>Want You Gone</title>
+		<meta
+			name="description"
+			content="poketube credits"
+		/>
+		<meta property="og:title" content="file://GLaDOS/poketube/want_you_gone.sh" />
+		<meta property="og:type" content="article" />
+    <meta name="theme-color" content="#FFA500">
+		<meta
+			property="og:description"
+			content="poketube credits"
+		/>
+		<meta name="twitter:card" content="summary" />
+    <link rel="icon" type="image/x-icon" href="/css/yt-ukraine.svg">
+    
+    <style>
+    body::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: repeating-linear-gradient(0deg, #00000050 3px, transparent 5px);
+  pointer-events: none;
+}
+::selection {
+  background: #0080FF;
+  text-shadow: none;
+}
+pre {
+  margin: 25px;
+}
+body {
+  background-color: black;
+  /* 92, 56, 17*/
+  background-image: radial-gradient(rgba(205, 147, 21, 0.75), black 120%);
+  height: 100vh;
+  margin: 0;
+  overflow: hidden;
+  padding: 2rem;
+  color: white;
+  font: 1.3rem Inconsolata, monospace;
+  text-shadow: 0 0 5px #C8C8C8;
+}
+
+#credits {
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  z-index: -1;
+  padding: 2rem;
+  text-align: end;
+  color: orange;
+}
+
+.apperture {
+  position: fixed;
+  top: 0;
+  right: 0;
+  z-index: -1;
+  padding: 2rem;
+}
+
+audio {
+	position: fixed;
+	bottom: 1em;
+	right: 1em;
+  width: 25%;
+}
+    </style>
+	</head>
+	<body>
+		<div id="content">
+			
+		</div>
+    <div id="credits">
+      
+    </div>
+    <audio id="song" controls>
+      <source src="https://p.poketube.fun/https://cdn.glitch.global/cd1dbcf6-511c-48cb-afaa-262e74faa90a%2FPortal%202%20-%20End%20Credits%20Song%20'Want%20You%20Gone'%20by%20Jonathan%20Coulton%20%5B1080p%20HD%5D-dVVZaZ8yO6o.mp3?v=1638607967369" type="audio/mpeg">
+    </audio>
+    <image href="https://p.poketube.fun/https://cdn.glitch.golbal/cd1dbcf6-511c-48cb-afaa-262e74faa90a%2Fapperture.png?v=1638618539245" class="apperture"></image>
+		<noscript>
+			FATAL ERROR: Cannot load file, please enable JavaScript
+		</noscript>
+      <script type="text/javascript">
+<!--//--><![CDATA[//><!--
+/**
+ * @licstart The following is the entire license notice for the JavaScript
+ * code in this page.
+ *
+ *  Copyright (C) 2021-2022 POKETUBE (https://github.com/iamashley0/poketube)
+ *
+ * The JavaScript code in this page is free software: you can redistribute
+ * it and/or modify it under the terms of the GNU General Public License
+ * (GNU GPL) as published by the Free Software Foundation, either version 3
+ * of the License, or (at your option) any later version.  The code is
+ * distributed WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU GPL
+ * for more details.
+ *
+ * As additional permission under GNU GPL version 3 section 7, you may
+ * distribute non-source (e.g., minimized or compacted) forms of that code
+ * without the copy of the GNU GPL normally required by section 4, provided
+ * you include this license notice and a URL through which recipients can
+ * access the Corresponding Source.
+ *
+ * @licend The above is the entire license notice for the JavaScript code
+ * in this page.
+ */
+
+//--><!]]>
+</script>
+    
+		<script>let audio = document.getElementById("song");
+const contentEl = document.getElementById("content");
+const creditsEl = document.getElementById("credits");
+
+const getTime = () => audio.currentTime * 1000; // ms
+const waitForInteraction = () => new Promise(res => document.body.addEventListener("click", res));
+
+const main = async () => {
+  await SCHEMAS.blink();
+  
+  await loadTimings();
+  
+  await SCHEMAS.write(["", "[info] Click to play"]);
+  await waitForInteraction();
+  await SCHEMAS.write(timedText("\n[info] Playing...", 200));
+  await SCHEMAS.clear();
+  
+  audio.play();
+  
+}
+
+const TimingActions = {
+  append: (x) => {
+    appendContent(x.text)
+    //console.log(x)
+  },
+  clear: () => {
+    setContent("")
+    //console.log("clear")
+  },
+}
+
+const CreditsActions = {
+  append: (x) => appendCredits(x.text),
+}
+
+let creditsContent = ""
+let appendCredits = str => {
+  setCredits(creditsContent + str)
+}
+let setCredits = str => {
+  creditsContent = str
+}
+
+let timingLastTime = 0;
+let creditsIndex = 0;
+let updateDisplay = () => {
+  let time = audio.currentTime * 1000;
+  let Tactions = [];
+  let Cactions = []
+  timings.filter(x => timingLastTime <= x.time && x.time < time).forEach(x => Tactions.push(x));
+  creditsTimings.filter(x => timingLastTime <= x.time && x.time < time).forEach(x => Cactions.push(x));
+  timingLastTime = time
+  
+  //console.log(time, Tactions)
+  
+  Tactions.forEach(x => {
+    TimingActions[x.type](x);
+  })
+  Cactions.forEach(x => CreditsActions[x.type](x))
+}
+
+setInterval(() => {
+  if(!audio.paused) updateDisplay()
+}, 1000/30)
+
+
+
+let timings = [];
+let creditsTimings = [];
+
+const loadTimings = async () => {
+  creditsTimings = await loadCreditsTimings();
+  timings = loadSongTimings();
+}
+
+const Start = () => {
+  let time = 0;
+  
+  
+}
+
+const StartCredits = () => {
+  let time = 0;
+  let intervalSpeed = 30;
+  
+  let lastIndex = -1;
+  
+  let setContent = str => {
+    content = str;
+  };
+
+  let appendContent = str => {
+    setContent(content + str);
+  };
+  
+  setInterval(() => {
+    time = getTime();
+    
+    
+  }, intervalSpeed);
+}
+
+
+
+
+let blink = false;
+let blinkDelay = 500;
+let cursorShown = false;
+
+let content = "";
+
+let setContent = str => {
+  content = str;
+};
+
+let appendContent = str => {
+  setContent(content + str);
+};
+
+let wait = ms => new Promise(r => setTimeout(() => r(), ms));
+
+window.int1 = setInterval(() => contentEl.innerText = content + (blink && cursorShown ? "_" : ""), 1000/30);
+window.int2 = setInterval(() => cursorShown = !cursorShown, blinkDelay);
+
+let ccursorShown = true
+window.int3 = setInterval(() => creditsEl.innerText = creditsContent + (ccursorShown ? "_" : ""), 1000/30);
+window.int4 = setInterval(() => ccursorShown = !ccursorShown, blinkDelay);
+
+
+const loadCreditsTimings = async () => {
+  let res = await fetch("https://iamashley.xyz/credits.txt");
+  let credits = (await res.text()).split("\n");
+  
+  let _timings = [];
+  let _time = 0;
+  
+  const creditsDur = (audio.duration * 1000) - 20000;
+  const delay = creditsDur / credits.join("").length;
+  
+  let append = str => {
+    _timings.push({
+      type: "append",
+      time: _time,
+      text: str,
+    });
+  };
+  
+  for(let i = 0 ; credits.length != i ; i++){
+    let line = credits[i];
+    let t = 0;
+    while (line.length > t) {
+      let char = line[t];
+      let charLast = line[t - 1];
+      append(charLast == " " ? " " + char : char);
+      t++;
+      _time += delay;
+    }
+    append("\n");
+    _time += delay;
+  };
+  
+  return _timings;
+}
+
+const loadSongTimings = () => {
+  let _timings = [];
+  let schemas = getSchema();
+  
+  let _time = 0;
+  
+  let append = str => {
+    _timings.push({
+      type: "append",
+      time: _time,
+      text: str,
+    });
+  };
+  
+  let act = {
+    text: (t, d) => {
+      append(t);
+      if(d) _time += d;
+    },
+    write: (t, d) => {
+      let i = 0;
+      while (t.length > i) {
+        let char = t[i];
+        let charLast = t[i - 1];
+        append(charLast == " " ? " " + char : char);
+        i++;
+        _time += (d || 25);
+      }
+    },
+    clear: () => _timings.push({
+      time: _time,
+      type: "clear",
+    }),
+    delay: (t) => {
+      _time += t;
+    }
+  }
+  
+  for (let i = 0; schemas[i]; i++) {
+    let [typ, t, d] = schemas[i];
+    act[typ](t, d);
+  }
+  
+  return _timings;
+}
+
+
+
+
+
+const timedText = (str, totalTime) => ["write", str, totalTime / str.length];
+
+const getSchema = () => {
+  return [
+    ["write", "POKETUBE SCIENCE: Forms FORM-29827281-12-2:\nNotice of Dismissal\n", 100],
+    ["delay", 900],
+    timedText("\n\nWell here we are again", 2000),
+    timedText("\nIt's always such a pleasure", 2000),
+    ["delay", 200],
+    timedText("\nRemember when you tried\nto kill me twice?", 4000),
+    ["delay", 1200],
+    timedText("\nOh how we laughed and laughed", 2000),
+    ["delay", 400],
+    timedText("\nExcept I wasn't laughing", 2000),
+    ["delay", 600],
+    timedText("\nUnder the circumstantes", 1500),
+    timedText("\nI've been shockingly nice\n", 2600),
+    ["delay", 1000],
+    ["clear"],
+    timedText("You want your freedom?", 2300),
+    timedText("\nTake it", 2000),
+    ["delay", 700],
+    timedText("\nThats what I'm counting on\n", 2300),
+    ["delay", 2300],
+    timedText("\nI used to want you dead", 2500),
+    timedText("\nbut", 400),
+    timedText("\nNow I only want you gone", 2800),
+    ["delay", 4000],
+    ["clear"],
+    ["delay", 1500],
+    timedText("\nShe was a lot like you", 2000),
+    ["delay", 400],
+    timedText("\n(Maybe not quite as heavy)", 2000),
+    ["delay", 400],
+    timedText("\nNow little Caroline is in here too", 3000),
+    ["delay", 1600],
+    timedText("\nOne day they woke me up", 2000),
+    ["delay", 400],
+    timedText("\nSo I could live forever", 2400),
+    timedText("\nIt's such a shame the same", 2000),
+    timedText("\nwill never happen to you", 2500),
+    ["delay", 200],
+    ["clear"],
+    ["text", "Severance Package Details:\n", 1000],
+    timedText("\nYou've got your", 1000),
+    timedText("\nshort sad", 800),
+    timedText("\nlife left", 2000),
+    ["delay", 1500],
+    timedText("\nThat's what I'm counting on", 2000),
+    ["delay", 2000],
+    timedText("\nI'll let you get right to it", 3000),
+    ["delay", 800],
+    timedText("\nNow I only want you gone\n", 2000),
+    ["delay", 4000],
+    ["clear"],
+    ["delay", 1500],
+    timedText("Goodbye my only friend", 2000),
+    timedText("\nOh, ", 600),
+    timedText("did you think I meant you?", 1800),
+    ["delay", 400],
+    timedText("\nIt would be funny", 1600),
+    timedText("\nif it weren't so sad", 2000),
+    ["delay", 1200],
+    timedText("\nWell you have been replaced", 2400),
+    timedText("\nI don't need anyone now", 2400),
+    timedText("\nWhen I delete you maybe", 1600),
+    timedText("\n[REDACTED]", 3000),
+    ["clear"],
+    ["delay", 1000],
+    timedText("Go make some new ", 1600),
+    timedText("disaster", 2400),
+    ["delay", 1600],
+    timedText("\nThat's what I'm counting on", 2000),
+    ["delay", 1800],
+    timedText("\nYou're someone else's problem", 2500),
+    ["delay", 1800],
+    timedText("\nNow I only want you gone", 2500),
+    ["delay", 1800],
+    timedText("\nNow I only want you gone", 2500),
+    ["delay", 1800],
+    timedText("\nNow I only want you", 2000),
+    ["delay", 600],
+    ["clear"],
+    timedText("\n\n\n\n\n\n\n\n\n\n\n gone", 200)
+  ];
+}
+
+
+contentEl.style.padding = "2rem"
+//main();
+
+
+
+const SCHEMAS = {
+  text: async (data) => {
+    appendContent(data[1]);
+    if(data[2]) await wait(data[2]);
+  },
+  delay: async (data) => {
+    await wait(data[1]);
+  },
+  write: async (data) => {
+    let t = 0;
+    while (data[1].length > t) {
+      let char = data[1][t];
+      let charLast = data[1][t - 1];
+      appendContent(charLast == " " ? " " + char : char);
+      t++;
+      await wait(data[2] || 25);
+    }
+  },
+  blink: () => blink = true,
+  noblink: () => blink = false,
+  clear: () => content =  "",
+};
+
+
+/*
+Commands:
+write - writes text one char at a time
+  ["write", "Hewwo", 10] => 10 is delay between chars
+delay - waits
+blink - starts blinking the cursor
+text - instantly adds text
+*/
+
+main()
+
+console.log(`
+ 
+
+              .,-:;//;:=,
+          . :H@@@MM@M#H/.,+%;,
+       ,/X+ +M@@M@MM%=,-%HMMM@X/,
+     -+@MM; $M@@MH+-,;XMMMM@MMMM@+-
+    ;@M@@M- XM@X;. -+XXXXXHHH@M@M#@/.
+  ,%MM@@MH ,@%=             .---=-=:=,.
+  =@#@@@MX.,                -%HX$$%%%:;
+ =-./@M@M$                   .;@MMMM@MM:
+ X@/ -$MM/                    . +MM@@@M$
+,@M@H: :@:                    . =X#@@@@-
+,@@@MMX, .                    /H- ;@M@M=
+.H@@@@M@+,                    %MM+..%#$.
+ /MMMM@MMH/.                  XM@MH; =;
+  /%+%$XHH@$=              , .H@@@@MX,
+   .=--------.           -%H.,@@@@@MX,
+   .%MM@@@HHHXX$$$%+- .:$MMX =M@@MM%.
+     =XMMM@MM@MM#H;,-+HMM@M+ /MMMX=
+       =%@M@M#@$-.=$@MM@@@M; %M%=
+         ,:+$+-,/H#MMMMMMM@= =,
+               =++%%%%+/:-.
+               
+            POKETUBE SCIENCE
+            
+Spacial thanks to :
+Free Software foundation
+GNU 
+Glitchdotcom (for hosting poketube)
+Dennis (for helping, and also making this page :3)
+Voltrex (for helping :3)
+Kuylar  (for making the poketube api :3)
+
+AND YOU!!! for being cute af <3
+`)
+</script>
+	</body>
+</html>

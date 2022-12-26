@@ -46,6 +46,10 @@ module.exports = function (app, config, renderTemplate) {
     renderTemplate(res, req, "license.ejs");
   });
 
+  app.get("/credits", function (req, res) {
+    renderTemplate(res, req, "want-you-gone.ejs");
+  });
+
   app.get("/css/:id", (req, res) => {
     res.sendFile(req.params.id, { root: html_location });
   });

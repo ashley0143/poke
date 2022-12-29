@@ -4,18 +4,21 @@ const { URL } = require("url");
 
 // Array of hostnames that will be proxied
 const URL_WHITELIST = [
-  'i.ytimg.com',
-  'yt3.googleusercontent.com',
-  'cdn.glitch.global',
-  'cdn.statically.io',
-  'site-assets.fontawesome.com',
-  'fonts.gstatic.com',
-  'yt3.ggpht.com',
-  'tube.kuylar.dev',
-  'lh3.googleusercontent.com',
-  'is4-ssl.mzstatic.com',
-  'twemoji.maxcdn.com',
-  'unpkg.com',
+  "i.ytimg.com",
+  "yt3.googleusercontent.com",
+  "cdn.glitch.global",
+  "cdn.statically.io",
+  "site-assets.fontawesome.com",
+  "fonts.gstatic.com",
+  "yt3.ggpht.com",
+  "tube.kuylar.dev",
+  "lh3.googleusercontent.com",
+  "is4-ssl.mzstatic.com",
+  "is2-ssl.mzstatic.com",
+  "is1-ssl.mzstatic.com",
+  "is3-ssl.mzstatic.com",
+  "twemoji.maxcdn.com",
+  "unpkg.com",
 ];
 
 const app = express();
@@ -24,7 +27,7 @@ app.use(express.json()); // for parsing application/json
 app.use(express.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
 
 app.use(function (req, res, next) {
-  console.log(`=> ${req.method} ${req.originalUrl.slice(1)}`)
+  console.log(`=> ${req.method} ${req.originalUrl.slice(1)}`);
   next();
 });
 
@@ -34,8 +37,8 @@ app.use(function (req, res, next) {
 });
 
 /**
- * @param {express.Request} req 
- * @param {express.Response} res 
+ * @param {express.Request} req
+ * @param {express.Response} res
  */
 const proxy = async (req, res) => {
   try {
@@ -43,9 +46,9 @@ const proxy = async (req, res) => {
 
     try {
       url = new URL("https://" + req.originalUrl.slice(10));
-    } catch(e) {
-      console.log('==> Cannot parse URL: ' + e);
-      return res.status(400).send('Malformed URL');
+    } catch (e) {
+      console.log("==> Cannot parse URL: " + e);
+      return res.status(400).send("Malformed URL");
     }
 
     if (!URL_WHITELIST.includes(url.host)) {
@@ -61,9 +64,10 @@ const proxy = async (req, res) => {
     });
 
     f.body.pipe(res);
-  } catch(e) {
+    
+  } catch (e) {
     console.log(`==> Error: ${e}`);
-    res.status(500).send('Internal server error');
+    res.status(500).send("Internal server error");
   }
 };
 
@@ -77,4 +81,4 @@ app.get("/", (req, res) =>
 
 app.all("/*", listener);
 
-app.listen(3000, () => console.log('Listening on 0.0.0.0:3000'));
+app.listen(3000, () => console.log("Listening on 0.0.0.0:3000"));

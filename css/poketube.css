@@ -149,13 +149,10 @@ a {
   font-weight: 600;
   margin-top: 1em !important;
   border-radius: 21px;
-  background: var(--div-prim-bg);
-  padding: 10px;
-  margin-bottom: 20px;
+  margin-bottom: 0.1em;
   font-stretch: expanded;
   justify-self: center;
   font-family: var(--text-font-primary);
-  border: var(--div-border-color);
   border-style: solid;
 }
 
@@ -298,8 +295,8 @@ a {
 }
 
 .comments-class-or-something-i-cant-find-a-name-lol {
-  background: var(--div-second-bg);
-  border-radius: 30px;
+  background: var(--div-prim-bg);
+  border-radius: 2em;
   padding: 10px;
   padding-top: 0;
   margin: auto;
@@ -407,4 +404,15 @@ a {
     margin-right: auto;
     gap: var(--gutter);
   }
+}
+
+.description-new {
+  grid-area: description;
+  font-size: 1rem;
+  color: var(--text-primary);
+  background: var(--div-prim-bg);
+  padding: 16px;
+  border-radius: 1.2em;
+  border: var(--div-border-color);
+  border-style: solid;
 }

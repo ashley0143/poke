@@ -142,7 +142,7 @@ module.exports = function (app, config, renderTemplate) {
       .fetch(`${config.invapi}/channels/community/${ID}/`)
       .then((res) => res.text());
 
-    var c = await getJson(community);
+     var c = await getJson(community);
 
     try {
       const summary = await wiki.summary(k.Channel.Metadata.Name);

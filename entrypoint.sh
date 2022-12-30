@@ -16,13 +16,12 @@ if [[ -v "HOSTNAME" && -v "EMAIL" ]]; then
     echo Starting certbot
     certbot run --nginx -n \
         -d $HOSTNAME \
-        -d www.$HOSTNAME\
-        --agree-tos \
+        -d www.$HOSTNAME --agree-tos \
         --email $EMAIL \
         $TEST
     echo Starting nginx
     nginx -s reload
-    
+
 else
     echo Please set HOSTNAME and/or EMAIL!
     exit 1

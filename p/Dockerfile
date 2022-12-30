@@ -82,16 +82,16 @@ ENV NODE_ENV production
 # Final image
 FROM release-base as release
 # EXPOSE 3000/tcp
-ENTRYPOINT [ "node", "server.js" ]
+CMD [ "node", "server.js" ]
 
 # Final image with extras
 FROM release-base AS release-aio
 # Grab nginx and certbot
 COPY --from=proxy-installer /rpms /
 
-COPY p/entrypoint.sh entrypoint.sh
+COPY entrypoint.sh entrypoint.sh
 RUN chmod +x entrypoint.sh
-COPY p/nginx.conf.example /etc/nginx/conf.d/poketube.conf
+COPY nginx.conf.example /etc/nginx/conf.d/poketube.conf
 
 # EXPOSE 80/tcp
 # EXPOSE 443/tcp

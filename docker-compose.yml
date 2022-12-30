@@ -1,12 +1,17 @@
-version: '3.1'
-
-# TODO: Dockerize the other services
-
 services:
   proxy:
     build:
       context: .
       dockerfile: p/Dockerfile
+      target: release-aio
+      # cache_to: 
+      # cache_from: 
     restart: unless-stopped
     ports:
-      - 3000:3000
+      - 80:80
+      - 443:443
+      # - 3000:3000
+    environment:
+      - HOSTNAME=example.com
+      - EMAIL=user@email.com    # required for https
+      - STAGING=true           # Set to "true" to use staging

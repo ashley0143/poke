@@ -108,7 +108,6 @@ function IsInArray(array, id) {
   return false;
 }
 
-
 module.exports = function (app, config, renderTemplate) {
   app.get("/encryption", async function (req, res) {
     var v = req.query.v;
@@ -174,13 +173,19 @@ module.exports = function (app, config, renderTemplate) {
     const ip = JSON.parse(jj);
 
     const isvld = await core.isvalidvideo(v);
-
+    if (!v) res.redirect("/");
     var secure;
-    
-    if(req.hostname == "poketube.fun" || req.hostname == "poketube.site" || req.hostname == "poketube.online" || req.hostname == "poketube.xyz" || req.hostname == "watch.poketalebot.com") {
-      secure = true
+
+    if (
+      req.hostname == "poketube.fun" ||
+      req.hostname == "poketube.site" ||
+      req.hostname == "poketube.online" ||
+      req.hostname == "poketube.xyz" ||
+      req.hostname == "watch.poketalebot.com"
+    ) {
+      secure = true;
     } else {
-      secure = false
+      secure = false;
     }
 
     if (isvld) {

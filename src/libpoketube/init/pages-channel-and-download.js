@@ -74,38 +74,43 @@ module.exports = function (app, config, renderTemplate) {
       var continuation = "";
     }
 
-    const search = await modules.fetch(
-      `https://tube-srv.ashley143.gay/api/search?query=${query.replace("&", "and")}&continuation=${continuation}`
-    );
-
-    const text = await search.text();
-    const j = JSON.parse(modules.toJson(text));
-
     if (!query) {
       return res.redirect("/");
     }
 
-    h = " ";
-
-    if (j.Search.Results.DynamicItem) {
-      if (j.Search.Results.DynamicItem.id == "didYouMeanRenderer") {
-        var h = JSON.parse(j.Search.Results.DynamicItem.Title);
-      }
-    }
-
-    const summary = await wiki
-      .summary(query + " ")
-      .then((summary_) =>
-        summary_.title !== "Not found." ? summary_ : "none"
+    if (query) {
+      const search = await modules.fetch(
+        `https://tube-srv.ashley143.gay/api/search?query=${query.replace(
+          "&",
+          "and"
+        )}&continuation=${continuation}`
       );
 
-    renderTemplate(res, req, "search.ejs", {
-      j,
-      h,
-      continuation,
-      q: query,
-      summary,
-    });
+      const text = await search.text();
+      const j = JSON.parse(modules.toJson(text));
+
+      h = " ";
+
+      if (j.Search.Results.DynamicItem) {
+        if (j.Search.Results.DynamicItem.id == "didYouMeanRenderer") {
+          var h = JSON.parse(j.Search.Results.DynamicItem.Title);
+        }
+      }
+
+      const summary = await wiki
+        .summary(query + " ")
+        .then((summary_) =>
+          summary_.title !== "Not found." ? summary_ : "none"
+        );
+
+      renderTemplate(res, req, "search.ejs", {
+        j,
+        h,
+        continuation,
+        q: query,
+        summary,
+      });
+    }
   });
 
   app.get("/channel/", async (req, res) => {
@@ -142,7 +147,7 @@ module.exports = function (app, config, renderTemplate) {
       .fetch(`${config.invapi}/channels/community/${ID}/`)
       .then((res) => res.text());
 
-     var c = await getJson(community);
+    var c = await getJson(community);
 
     try {
       const summary = await wiki.summary(k.Channel.Metadata.Name);

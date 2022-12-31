@@ -43,21 +43,30 @@
 
 <title> <%=video.Title%> | PokeTube </title>  
 <style>
-  
+       <% if (!a) { %>  
+
      <% if (lightOrDark(color) == "light") { %>  
      .player.video-ambient-container  { 
-         box-shadow: 0 0 20px <%=color%>; 
+         box-shadow: 0 0 2.4em <%=color%>; 
          }
         
                                                                                      <% } %>          
   
      <% if (lightOrDark(color) == "dark") { %>  
      .player.video-ambient-container  { 
-         box-shadow: 0 0 20px <%=color2%>; 
+         box-shadow: 0 0 2.4em <%=color2%>; 
         }
         
                                                                                      <% } %>     
- 
+                                                                                      <% } %>     
+       <% if (a) { %>  
+
+      .player.video-ambient-container  { 
+         box-shadow: 0 0 0em <%=color%>; 
+         }
+        
+                                                                                     <% } %>          
+    
   .comments-area {
   background: #f1f9ff;
   padding: 50px 30px;
@@ -276,11 +285,11 @@
 
                   <% if (inv_vid.genre != "Music") { %> 
 
-              <a title="PokeTube Homepage" class="class" href="/143" style=font-family:Inter,sans-serif;color:var(--text-color)>  <img style="transform: scale(1.3);padding-left:0.9em;width: 8.5em;display: block;margin-left: auto;margin-right: auto;" src="/css/logo.svg?v=5"></a>
+              <a title="PokeTube Homepage" class="class" href="/143" style=font-family:Inter,sans-serif;color:var(--text-color)>  <img loading="lazy" style="transform: scale(1.3);padding-left:0.9em;width: 8.5em;display: block;margin-left: auto;margin-right: auto;" src="/css/logo.svg?v=5"></a>
                       		 	               <% } %>   
      <% if (inv_vid.genre === "Music") { %> 
 
-              <a title="PokeTube Homepage" class="class" href="/143" style=font-family:Inter,sans-serif;color:var(--text-color)>  <img style="transform: scale(1.3);padding-left:0.9em;width: 7.5em;display: block;margin-left: auto;margin-right: auto;" src="/css/music.svg?v=5"></a>
+              <a title="PokeTube Homepage" class="class" href="/143" style=font-family:Inter,sans-serif;color:var(--text-color)>  <img loading="lazy" style="transform: scale(1.3);padding-left:0.9em;width: 7.5em;display: block;margin-left: auto;margin-right: auto;" src="/css/music.svg?v=5"></a>
                       		 	               <% } %>   
                                              
                                              
@@ -308,7 +317,7 @@ But Please note that unofficial instances can add the same lock icon, so please 
 <button class="btn btn-success" type="submit" style="transform: translate(21em, -1.25em);"><i class="fa-light fa-search"></i></button>             
          </form>
              
-           <img src="https://search-metrics.poketube.fun/t/rep.gif"  style="border:0;width: 0;visibility: hidden;"> 
+           <img loading="lazy" src="https://search-metrics.poketube.fun/t/rep.gif"  style="border:0;width: 0;visibility: hidden;"> 
 
       </div>
       <div class="right">
@@ -335,7 +344,24 @@ But Please note that unofficial instances can add the same lock icon, so please 
                             <i  class="fa-light fa-code"></i>
  View Embed
         </a>
+                          <% if (!a) { %>  
+
+        		<a href="/watch?v=<%=video.id%>&a=false" style="text-decoration: none;" class="dropdown__item">
+<i class="fa-light fa-lightbulb-on"></i>
+              Ambient mode • on
+        </a>
         
+                                                                                     <% } %>                
+     <% if (a) { %>  
+
+
+        		<a href="/watch?v=<%=video.id%>" style="text-decoration: none;" class="dropdown__item">
+<i class="fa-light fa-lightbulb" style="width: 1em;margin-left: 4px;"></i>
+              Ambient mode • off
+        </a>
+        
+                                      
+                                                                                     <% } %>       
         <hr style="clear: both;display: block;border: none;border-bottom: 0.5px solid #1a1111;width: 16.5em;height: 0;">
         
            
@@ -389,20 +415,20 @@ display: block;" autoplay controls
    <% video.Subtitles.Subtitle.forEach(x => { %>
      <track src="/api/subtitles?v=<%=video.id%>&h=<%= x.language %>" label="<%= x.language.replace("United States","Simplified - USA") %>" kind="subtitles">      
      
-        <img src="https://t.poketube.fun/t/rep.gif?v=<%=btoa(video.id)%>&h=<%= x.language %>" id="subtitle_usage_rate" style="border:0;width: 0;visibility: hidden;"> 
+        <img loading="lazy" src="https://t.poketube.fun/t/rep.gif?v=<%=btoa(video.id)%>&h=<%= x.language %>" id="subtitle_usage_rate" style="border:0;width: 0;visibility: hidden;"> 
          <% }) %>   
                                                                                                        <% } %>                     
      <%  if (!Array.isArray( video.Subtitles.Subtitle)) { %> 
      <track src="/api/subtitles?v=<%=video.id%>&h=<%=  video.Subtitles.Subtitle.language %>" label="<%=  video.Subtitles.Subtitle.language.replace("United States","Simplified - USA") %>" kind="subtitles">      
      
-        <img src="https://t.poketube.fun/t/rep.gif?v=<%=btoa(video.id)%>&h=<%= video.Subtitles.Subtitle.language %>" id="subtitle_usage_rate" style="border:0;width: 0;visibility: hidden;"> 
+        <img loading="lazy" src="https://t.poketube.fun/t/rep.gif?v=<%=btoa(video.id)%>&h=<%= video.Subtitles.Subtitle.language %>" id="subtitle_usage_rate" style="border:0;width: 0;visibility: hidden;"> 
             
                                                            <% } %>         
                                                            <% } %>         
                                                              
                                                              </video>
                                                              
-                                                             <img src="https://t.poketube.fun/t/rep.gif?video=<%=btoa(video.id)%>" style="border:0;width: 0;visibility: hidden;" id="video">
+                                                             <img loading="lazy" src="https://t.poketube.fun/t/rep.gif?video=<%=btoa(video.id)%>" style="border:0;width: 0;visibility: hidden;" id="video">
 <div style="display: flex;justify-content: center;align-items: center;flex-direction: row; column-gap: 3px;margin-top: -1em;" align="center">
                                 
   <% if (!qua) { %> 
@@ -427,7 +453,7 @@ display: block;" autoplay controls
   <a name="chnl"></a>
 
 				<a href="/channel?id=<%=video.Channel.id%>" class="avatar">
-					<img src="https://p.poketube.fun/<%= k.Video.Channel.Avatar[1].$t %>">
+					<img loading="lazy" src="https://p.poketube.fun/<%= k.Video.Channel.Avatar[1].$t %>">
 				</a>
 				<div class="name" >
  
@@ -722,7 +748,7 @@ display: block;" autoplay controls
             <div class="desc">
                    <h5 style="display: flex;margin-top: 7px;padding-top: 10px;"><div class="thumb">
 				<a href="/channel?id=<%- x.authorId%>" class="avatar" style="width: 40px;height: 40px;">
-					<img src="https://p.poketube.fun/<%= x.authorThumbnails[1].url %>">
+					<img loading="lazy" src="https://p.poketube.fun/<%= x.authorThumbnails[1].url %>">
 				</a>
             </div>
                                                           <%  if (!x.authorIsChannelOwner) { %> 
@@ -785,7 +811,7 @@ display: block;" autoplay controls
  
                                                               </div>
                               <!-- This is to see how much comments loaded in a video, i dont collect the comment metadata - its sha hashed (see /privacy ) -->
-                                         <img src="https://t.poketube.fun/t/rep.gif?v=<%=sha384(video.id)%>&pub_date=<%-sha384(x.publishedText)%>&content_comment_sha=<%- sha384(x.content)%>&id=<%- sha384(x.commentId) %>" id="comments_rate" style="border:0;width: 0;visibility: hidden;display:none;"> 
+                                         <img loading="lazy" src="https://t.poketube.fun/t/rep.gif?v=<%=sha384(video.id)%>&pub_date=<%-sha384(x.publishedText)%>&content_comment_sha=<%- sha384(x.content)%>&id=<%- sha384(x.commentId) %>" id="comments_rate" style="border:0;width: 0;visibility: hidden;display:none;"> 
 
                             </div>
 
@@ -956,12 +982,12 @@ display: block;" autoplay controls
          <!-- START <%=t%> -->  
    
         <!-- SESSION -->
-        <img src="<%=t%>t/rep.gif?ID=<%=btoa(Date.now())%>" style="width: 0;visibility: hidden;" id="SesionID">
-        <img src="<%=t%>t/rep.gif?piwik=t" style="width: 0;visibility: hidden;" id="piwik_noip_no_personal-info_collect">
+        <img loading="lazy" src="<%=t%>t/rep.gif?ID=<%=btoa(Date.now())%>" style="width: 0;visibility: hidden;" id="SesionID">
+        <img loading="lazy" src="<%=t%>t/rep.gif?piwik=t" style="width: 0;visibility: hidden;" id="piwik_noip_no_personal-info_collect">
    
         <!-- VIDEO -->
-        <img src="<%=t%>t/rep.gif?video_id=<%=btoa(video.id)%>" style="width: 0;visibility: hidden;" id="videoID">
-        <img src="<%=t%>t/rep.gif?channel_ID=<%=btoa(video.Channel.id)%>" style="width: 0;visibility: hidden;" id="channel">
+        <img loading="lazy" src="<%=t%>t/rep.gif?video_id=<%=btoa(video.id)%>" style="width: 0;visibility: hidden;" id="videoID">
+        <img loading="lazy" src="<%=t%>t/rep.gif?channel_ID=<%=btoa(video.Channel.id)%>" style="width: 0;visibility: hidden;" id="channel">
    
 
         <!-- END <%=t%> -->  

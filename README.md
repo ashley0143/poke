@@ -15,7 +15,7 @@
 
 
 ## Welcome! 
-This is the source code of PokeTube, the privacy-friendly youtube front-end built with the Litetube API that's packed with some pretty cool stuff including:
+This is the source code of PokeTube, the privacy-friendly youtube front-end built with the InnerTube API ([Docs](https://docs.poketube.fun)) that's packed with some pretty cool stuff including:
 - ZERO ads
 - Lyrics to songs
 - A clean and modern UI

@@ -79,39 +79,43 @@ module.exports = function (app, config, renderTemplate) {
     }
 
     if (query) {
-      const search = await modules.fetch(
-        `https://tube-srv.ashley143.gay/api/search?query=${query.replace(
-          "&",
-          "and"
-        )}&continuation=${continuation}`
-      );
-
-      const text = await search.text();
-      const j = JSON.parse(modules.toJson(text));
-
-      h = " ";
-
-      if (j.Search) {
-        if ("Results.DynamicItem" in j.Search) {
-          if (j.Search.Results.DynamicItem.id == "didYouMeanRenderer") {
-            var h = JSON.parse(j.Search.Results.DynamicItem.Title);
-          }
-        }
-      }
-
-      const summary = await wiki
-        .summary(query + " ")
-        .then((summary_) =>
-          summary_.title !== "Not found." ? summary_ : "none"
+      try {
+        const search = await modules.fetch(
+          `https://tube-srv.ashley143.gay/api/search?query=${query.replace(
+            "&",
+            "and"
+          )}&continuation=${continuation}`
         );
 
-      renderTemplate(res, req, "search.ejs", {
-        j,
-        h,
-        continuation,
-        q: query,
-        summary,
-      });
+        const text = await search.text();
+        const j = JSON.parse(modules.toJson(text));
+
+        h = " ";
+
+        if (j.Search) {
+          if ("Results.DynamicItem" in j.Search) {
+            if (j.Search.Results.DynamicItem.id == "didYouMeanRenderer") {
+              var h = JSON.parse(j.Search.Results.DynamicItem.Title);
+            }
+          }
+        }
+
+        const summary = await wiki
+          .summary(query + " ")
+          .then((summary_) =>
+            summary_.title !== "Not found." ? summary_ : "none"
+          );
+
+        renderTemplate(res, req, "search.ejs", {
+          j,
+          h,
+          continuation,
+          q: query,
+          summary,
+        });
+      } catch {
+        res.redirect("/");
+      }
     }
   });
 

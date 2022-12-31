@@ -45,17 +45,6 @@ nav .middle {
   justify-content: center;
   align-items: center;
   border-radius: 5px;
-  margin-left: auto;
-  margin-right: 26em;
 }
-
-@media screen and (min-width: 1600px) {
-  nav .middle {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border-radius: 5px;
-    margin-left: auto;
-    margin-right: auto;
-  }
-}
+ 
+ 

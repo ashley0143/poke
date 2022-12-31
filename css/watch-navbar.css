@@ -49,7 +49,7 @@ nav .middle {
   margin-right: 26em;
 }
 
-@media screen and (min-width: 1400px) {
+@media screen and (min-width: 1600px) {
   nav .middle {
     display: flex;
     justify-content: center;

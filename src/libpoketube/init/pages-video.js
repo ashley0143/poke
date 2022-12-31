@@ -160,6 +160,7 @@ module.exports = function (app, config, renderTemplate) {
      * f = Recent videos from channel
      * t = Piwik OptOut
      * q = quality obv
+     * a = ambient mode
      */
     var v = req.query.v;
     var e = req.query.e;
@@ -167,6 +168,7 @@ module.exports = function (app, config, renderTemplate) {
     var f = req.query.f;
     var t = req.query.t;
     var q = req.query.quality;
+    var a = req.query.a;
 
     const info = await modules.fetch("http://ip-api.com/json/");
     const jj = await info.text();
@@ -234,6 +236,7 @@ module.exports = function (app, config, renderTemplate) {
                   video: json,
                   date: k.Video.uploadDate,
                   e,
+                  a,
                   k,
                   secure,
                   process,

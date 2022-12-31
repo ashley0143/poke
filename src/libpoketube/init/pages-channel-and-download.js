@@ -91,9 +91,11 @@ module.exports = function (app, config, renderTemplate) {
 
       h = " ";
 
-      if (j.Search.Results.DynamicItem) {
-        if (j.Search.Results.DynamicItem.id == "didYouMeanRenderer") {
-          var h = JSON.parse(j.Search.Results.DynamicItem.Title);
+      if (j.Search) {
+        if ("Results.DynamicItem" in j.Search) {
+          if (j.Search.Results.DynamicItem.id == "didYouMeanRenderer") {
+            var h = JSON.parse(j.Search.Results.DynamicItem.Title);
+          }
         }
       }
 

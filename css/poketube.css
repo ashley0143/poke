@@ -126,9 +126,14 @@ a {
   color: var(--text-link);
 }
 
+
 .video > .info > .title {
   font-family: var(--text-font-primary);
   width: 10em;
+}
+
+.dropdown__menu > a {
+ text-decoration: none;
 }
 
 .video-info-panel > .video-title > a {
@@ -415,4 +420,64 @@ a {
   border-radius: 1.2em;
   border: var(--div-border-color);
   border-style: solid;
+}
+
+ 
+.dropdown {
+	position: relative;
+	display: flex;
+}
+
+.dropdown > input[type="checkbox"] {
+	display: none;
+}
+
+.dropdown > label {
+	width: 100%;
+	height: 100%;
+	margin: -8px;
+	padding: 8px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+  
+
+.dropdown__menu {
+	position: absolute;
+	z-index: 999;
+	display: none;
+  margin-right: 4em;
+	top: 40px;
+	padding: 6px 0;
+	margin: 0;
+	width: 300px;
+	border-radius: 8px;
+	box-shadow: var(--border-color) 0 0 5px;
+	background-color: var(--context-menu-background)
+}
+
+
+.dropdown__item {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	padding: 0 16px;
+	height: 40px;
+	column-gap: 16px;
+	color: var(--text-primary);
+	text-decoration: none;
+}
+
+.dropdown__item:hover {
+	background-color: var(--chip-background-hover);
+}
+
+.dropdown__item:active {
+	background-color: var(--chip-background-active);
+}
+
+.dropdown > input[type="checkbox"]:checked ~ div,
+.dropdown__menu:target {
+	display: block;
 }

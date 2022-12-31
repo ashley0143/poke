@@ -48,3 +48,14 @@ nav .middle {
   margin-left: auto;
   margin-right: 26em;
 }
+
+@media screen and (min-width: 1400px) {
+  nav .middle {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 5px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+}

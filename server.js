@@ -65,9 +65,9 @@ initlog("Loaded express.js");
 app.engine("html", require("ejs").renderFile);
 app.use(modules.express.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
 app.use(modules.useragent.express());
+app.use(modules.express.json()); // for parsing application/json
 
-app.set("view engine", "html");
-
+ 
 const renderTemplate = async (res, req, template, data = {}) => {
   res.render(
     modules.path.resolve(`${templateDir}${modules.path.sep}${template}`),

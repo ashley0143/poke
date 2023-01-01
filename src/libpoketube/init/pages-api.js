@@ -20,12 +20,12 @@ const {
 
 const pkg = require("../../../package.json");
 
-const ver = "v22.1230-cMrvBa-stable-git"
-const versionnumber = "109"
+const ver = "v23.0101-cMrvBa-stable-git";
+const versionnumber = "110";
 
 const response = {
   pt_version: ver,
-  vernum:versionnumber,
+  vernum: versionnumber,
   packages: {
     libpt: version,
     node: process.version,
@@ -86,11 +86,11 @@ module.exports = function (app, config, renderTemplate) {
     var format = "mp4";
     var q = "22";
     if (req.query.q) q = req.query.q;
-    
+
     if (req.query.f) {
       var format = "mp3";
     }
-    
+
     var fetching = await fetcher(v);
 
     const json = fetching.video.Player;
@@ -104,12 +104,24 @@ module.exports = function (app, config, renderTemplate) {
     const id = req.query.v;
     const l = req.query.h;
 
-    const url = `https://tube-srv.ashley143.gay/proxy/caption/${id}/${l}/`;
+    let url = `https://tube-srv.ashley143.gay/proxy/caption/${id}/${l}/`;
 
     let f = await modules.fetch(url);
     const body = await f.text();
 
     res.send(body);
+  });
+
+  app.get("/feeds/videos.xml", async (req, res) => {
+    const id = req.query.channel_id;
+
+    let url = `https://youtube.com/feeds/videos.xml?channel_id=${id}`;
+
+    let f = await modules.fetch(url, {
+      method: req.method,
+    });
+
+    f.body.pipe(res);
   });
 
   app.get("/api/redirect", async (req, res) => {
@@ -135,7 +147,6 @@ module.exports = function (app, config, renderTemplate) {
       .then((json) => JSON.parse(json));
 
     res.json(f);
-    
   });
 };
 

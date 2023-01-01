@@ -146,6 +146,10 @@ a {
   max-width: max-content;
   display: -webkit-box;
   word-break: break-all;
+  font-family: var(--text-font-primary) !important;
+  font-stretch: extra-expanded;
+  font-weight: 900  !important;
+
 }
 
 .video-sub-info.description {
@@ -218,7 +222,9 @@ a {
 
 .comments-author.owner {
   margin: 5px;
-  font-family: inter;
+  font-family: var(--text-font-primary);
+  font-weight: 1000;
+  font-stretch: ultra-expanded;
   white-space: -moz-pre-wrap !important;
   white-space: -pre-wrap;
   white-space: -o-pre-wrap;
@@ -284,11 +290,16 @@ a {
   justify-items: center;
   justify-self: center;
   margin-top: -2.9em;
+  font-family: var(--text-font-primary);
+  font-stretch: expanded;
 }
+
 
 .comments-author {
   margin: 7px;
-  font-family: inter;
+  font-family: var(--text-font-primary);
+  font-weight: 1000;
+  font-stretch: ultra-expanded;
   white-space: -moz-pre-wrap !important;
   white-space: -pre-wrap;
   white-space: -o-pre-wrap;
@@ -331,6 +342,12 @@ a {
   font-family: var(--text-font-primary);
   font-stretch: 100%;
   font-weight: 600;
+}
+
+.comment {
+  font-family: var(--text-font-primary);
+  font-stretch: expanded;
+  font-weight: 600 !important;
 }
 
 .tags {

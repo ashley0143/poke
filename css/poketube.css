@@ -72,8 +72,8 @@
   --ptd-margin-base: 4px;
   --ptd-avatar-size: 32px;
   --ptd-toolbar-height: 56px;
-  
-   /* margins */
+
+  /* margins */
   --ptd-margin-2x: 8px;
   --ptd-margin-3x: 12px;
   --ptd-margin-4x: 16px;
@@ -495,7 +495,6 @@ a {
   display: block;
 }
 
-
 .dropdown-button {
   position: relative;
   display: flex;
@@ -551,7 +550,6 @@ a {
 .dropdown-button-button__menu:target {
   display: block;
 }
- 
 
 .new-button.engagement:hover {
   background-color: #0009;
@@ -565,32 +563,28 @@ a.new-button:hover {
   background-color: #0008;
 }
 
-
-
 @media screen and (max-width: 1340px) {
- .new-button.button-download {
-    display:none;
+  .new-button.button-encryption {
+    display: none;
   }
-   .new-button.button-lite {
-  display:none;
+  .new-button.button-lite {
+    display: none;
   }
-  
-   .new-button.button-dropdown {
-    display:flex;
+
+  .new-button.button-dropdown {
+    display: none;
   }
 }
-
 
 @media screen and (min-width: 1340px) {
- .new-button.button-download {
-    display:flex;
+  .new-button.button-encryption {
+    display: flex;
   }
-   .new-button.button-lite {
-  display:flex;
+  .new-button.button-lite {
+    display: flex;
   }
-  
-   .new-button.button-dropdown {
-    display:none;
+
+  .new-button.button-dropdown {
+    display: none;
   }
 }
-

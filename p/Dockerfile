@@ -59,7 +59,7 @@ RUN mkdir -p /usr/src/app
 WORKDIR /usr/src/app
 COPY package.json ./
 RUN npm install --frozen-lockfile
-COPY ./ ./
+# COPY ./ ./
 COPY p/server.js ./
 
 #################################################################################                                     

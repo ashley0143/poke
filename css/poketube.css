@@ -68,11 +68,12 @@
   --ptd-watch-height-ratio: 9;
   --ptd-watch-sidebar-min-width: 300px;
 
-  /* margins */
   --ptd-grid-base: 103px;
   --ptd-margin-base: 4px;
   --ptd-avatar-size: 32px;
   --ptd-toolbar-height: 56px;
+  
+   /* margins */
   --ptd-margin-2x: 8px;
   --ptd-margin-3x: 12px;
   --ptd-margin-4x: 16px;
@@ -147,8 +148,8 @@ a {
   display: -webkit-box;
   word-break: break-all;
   font-family: var(--text-font-primary) !important;
-  font-stretch: extra-expanded;
-  font-weight: 900 !important;
+  font-stretch: expanded;
+  font-weight: 850 !important;
 }
 
 .video-sub-info.description {
@@ -398,11 +399,11 @@ a {
 
 .video-player-container {
   margin: inherit;
-
   max-width: 100%;
   min-width: 100%;
   width: 100%;
   max-height: 100%;
+  aspect-ratio: var(--ptd-watch-width-ratio) / var(--ptd-watch-height-ratio);
 }
 
 .watch-page {
@@ -494,6 +495,64 @@ a {
   display: block;
 }
 
+
+.dropdown-button {
+  position: relative;
+  display: flex;
+}
+
+.dropdown-button > input[type="checkbox"] {
+  display: none;
+}
+
+.dropdown-button > label {
+  width: 100%;
+  height: 100%;
+  padding: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.dropdown-button__menu {
+  position: absolute;
+  z-index: 999;
+  display: none;
+  margin-right: 4em;
+  top: 40px;
+  padding: 6px 0;
+  margin: 0;
+  width: 300px;
+  border-radius: 8px;
+  box-shadow: var(--border-color) 0 0 5px;
+  background-color: var(--context-menu-background);
+}
+
+.dropdown-button__item {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 0 16px;
+  height: 40px;
+  column-gap: 16px;
+  color: var(--text-primary);
+  text-decoration: none;
+}
+
+.dropdown-button__item:hover {
+  background-color: var(--chip-background-hover);
+}
+
+.dropdown-button__item:active {
+  background-color: var(--chip-background-active);
+}
+
+.dropdown-button-button > input[type="checkbox"]:checked ~ div,
+.dropdown-button-button__menu:target {
+  display: block;
+}
+ 
+
 .new-button.engagement:hover {
   background-color: #0009;
 }
@@ -505,3 +564,33 @@ div.new-button:hover {
 a.new-button:hover {
   background-color: #0008;
 }
+
+
+
+@media screen and (max-width: 1340px) {
+ .new-button.button-download {
+    display:none;
+  }
+   .new-button.button-lite {
+  display:none;
+  }
+  
+   .new-button.button-dropdown {
+    display:flex;
+  }
+}
+
+
+@media screen and (min-width: 1340px) {
+ .new-button.button-download {
+    display:flex;
+  }
+   .new-button.button-lite {
+  display:flex;
+  }
+  
+   .new-button.button-dropdown {
+    display:none;
+  }
+}
+

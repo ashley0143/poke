@@ -16,9 +16,11 @@ const URL_WHITELIST = [
   "is4-ssl.mzstatic.com",
   "is2-ssl.mzstatic.com",
   "is1-ssl.mzstatic.com",
+  "is5-ssl.mzstatic.com",
   "is3-ssl.mzstatic.com",
   "twemoji.maxcdn.com",
   "unpkg.com",
+  "youtube.com"
 ];
 
 const app = express();

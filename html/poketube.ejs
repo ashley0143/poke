@@ -341,7 +341,7 @@ But Please note that unofficial instances can add the same lock icon, so please 
         
            						<a href="/video/upload" style="text-decoration: none;" class="dropdown__item">
                             <i  class="fa-light fa-video"></i>
- Create
+Create
         </a>
  
  						<a href="/embed/<%=video.id%>" style="text-decoration: none;" class="dropdown__item">
@@ -512,21 +512,19 @@ display: block;" autoplay controls
       
 <div style="display: flex;">
 
-					<a class="new-button button-download" title="Download this Video :3" style="color:var(--text-color);text-decoration: none; " href="/download?v=<%=video.id%>">
-                            <div class="pill-button">
+<a class="new-button" title="Download this Video :3" style="color:var(--text-color);text-decoration: none; " href="/download?v=<%=video.id%>">
+  <div class="pill-button">
 
             <i class="fa-light fa-download"></i>
             Download
             </div>
 					</a>
  
-       
-
    
  <% if (!video.Channel.Name.endsWith(' - Topic')) { %> 
     <% if (!video.Title.endsWith('Audio)')) { %> 
 
-      <div class="new-button">
+      <div class="new-button button-encryption">
 					<a   title="Encryption duh" style="color:var(--text-color);text-decoration: none;" href="/encryption?v=<%=video.id%>">
                                         <div class="pill-button">
 
@@ -554,27 +552,22 @@ display: block;" autoplay controls
     
                                                     
  <% if (!video.Channel.Name.endsWith(' - Topic')) { %> 
-    <% if (!video.Title.endsWith('Audio)')) { %>             
-      <div style="display: flex;">
-
+    <% if (!video.Title.endsWith('Audio)')) { %>                         
       <div class="new-button button-lite" style=";margin-left: -4px;">
-					<a title="Low Bandwidth? try PokeTube Lite!" style="color:var(--text-color);text-decoration: none" href="/lite?v=<%=video.id%>">
-                                        <div class="pill-button ">
+        <a title="Low Bandwidth? try PokeTube Lite!" style="color:var(--text-color);text-decoration: none" href="/lite?v=<%=video.id%>">
+                                        <div class="pill-button">
 
                <i class="fa-light fa-bolt"></i>
                Go Lite!
-                                                      </div>   
-                                                                  </div>       
-
+                                                      </div>       
         </a>
                                                                             </div>
-                                                                                  </div>
-
  <% }%>                     
                                                                           <% }%>      
+
  
-   
-    
+				</div>
+
               			</div>
                   					</div>
 
@@ -859,17 +852,18 @@ display: block;" autoplay controls
 
  <div class="video-title" style="text-align:left;font-family:var(--text-font-primary);font-weight:var(--text-header-weight);white-space:yes;font-stretch: ultra-expanded;">For You
 </div>   
+                                
                                             
                               <% if (!f) { %> 
      <% k.Video.Recommendations.Video.forEach(x => { %>       
  						<div class="video" >
                     <% if (!optout) { %> 
 
-      <a  href="/watch?v=<%= x.id %>" class="thumbnail" alt="<%= x.Title %>" style="background-image: url('https://p.poketube.fun/https://i.ytimg.com/vi/<%= x.id %>/hqdefault.jpg?sqp=-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLBy_x4UUHLNDZtJtH0PXeQGoRFTgw');border-radius: 9.5px;"  >								<span class="video-length"><%=x.duration %></span>
+      <a  href="/watch?v=<%= x.id %>"  alt="<%= x.Title %>" class="thumbnail" style="background-image: url('https://p.poketube.fun/https://i.ytimg.com/vi/<%= x.id %>/hqdefault.jpg?sqp=-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLBy_x4UUHLNDZtJtH0PXeQGoRFTgw');border-radius: 9.5px;"  >								<span class="video-length"><%=x.duration %></span>
                            <% } %>
    <% if (optout) { %> 
 
-      <a  href="/watch?v=<%= x.id %>&t=f" class="thumbnail" alt="<%= x.Title %>" style="background-image: url('https://p.poketube.fun/https://i.ytimg.com/vi/<%= x.id %>/hqdefault.jpg?sqp=-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLBy_x4UUHLNDZtJtH0PXeQGoRFTgw');border-radius: 9.5px;"  >								<span class="video-length"><%=x.duration %></span>
+      <a  href="/watch?v=<%= x.id %>&t=f"  alt="<%= x.Title %>" class="thumbnail" style="background-image: url('https://p.poketube.fun/https://i.ytimg.com/vi/<%= x.id %>/hqdefault.jpg?sqp=-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLBy_x4UUHLNDZtJtH0PXeQGoRFTgw');border-radius: 9.5px;"  >								<span class="video-length"><%=x.duration %></span>
                            <% } %>
 							</a>
 							<div class="info">
@@ -1417,8 +1411,8 @@ font-size: 13px;margin:0;padding:0;white-space: nowrap;
                             
   <div style="margin: 10px;">
                     <div style="justify-content: center;display: flex;padding: 11px;font-family: Ginto nord;gap: 3px;background: #1f1f1f;border-top-left-radius: 10px;border-top-right-radius: 10px;">
-About  <%=k.Video.Channel.Name%>
-          </div>  
+More info about the video
+    </div>  
  
                               
 

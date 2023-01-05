@@ -61,6 +61,10 @@ module.exports = function (app, config, renderTemplate) {
     res.redirect("https://poketube.fun/watch?v=dQw4w9WgXcQ&e=f");
   });
 
+  app.get("/gaming", (req, res) => {
+    res.redirect("/discover?tab=gaming");
+  });
+
   app.get("/results", (req, res) => {
     if (!req.query.search_query) {
       return res.redirect("/");

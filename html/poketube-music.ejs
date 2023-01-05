@@ -258,7 +258,7 @@ pointer-events:none;
  Lyrics 
                         </h1>  
 <p style="overflow: auto;overflow-x: hidden;height: 12em;">
-           <%-lyrics%>
+           <%-lyrics || " none :p "%>
           </p>
    
     </div>
@@ -267,7 +267,7 @@ pointer-events:none;
       <img class="img" src="https://p.poketube.fun/<%=info.artwork%>"/>
         <div class="info">
      <div class="video-title center" style="font-family:Ginto Nord;font-weight:900;white-space:yes;text-align: left;">
-            <%=info.title%></div>
+            <%=info.title%>    <i title="hq audio" class="fa-light fa-waveform-lines"></i> </div>
               <div class="video-title center" style="font-family:Inter;font-weight:900;white-space:yes;text-align: left;">             <%=info.artist%>
 </div>
 <div style="margin-top: 7px;">

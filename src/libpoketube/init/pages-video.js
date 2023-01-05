@@ -176,6 +176,7 @@ module.exports = function (app, config, renderTemplate) {
 
     const isvld = await core.isvalidvideo(v);
     if (!v) res.redirect("/");
+    
     var secure;
 
     if (
@@ -389,8 +390,9 @@ module.exports = function (app, config, renderTemplate) {
     const n = await info.text();
     const ip = JSON.parse(n);
 
-    if (!v) res.redirect("/");
-
+    if (!v) {
+      res.redirect("/discover?tab=music");
+    } else {
     var fetching = await fetcher(v);
 
     const json = fetching.video.Player;
@@ -405,7 +407,7 @@ module.exports = function (app, config, renderTemplate) {
     }
 
     //video
-    var url = `https://tube.kuylar.dev/proxy/media/${v}/18`;
+    var url = `https://tube.kuylar.dev/proxy/media/${v}/22`;
 
     // encryption
     const url_e =
@@ -438,14 +440,10 @@ module.exports = function (app, config, renderTemplate) {
     }
 
     const lyrics = await lyricsFinder(song.artist + song.title);
-    if (lyrics == undefined) lyrics = "Lyrics not found";
+    if (lyrics == undefined) ly = "This Is Where I'd Put The songs lyrics. IF IT HAD ONE ";
+
 
     var ly = "";
-
-    if (lyrics === null) {
-      ly = "This Is Where I'd Put The songs lyrics. IF IT HAD ONE ";
-    }
-
     if (lyrics) {
       ly = lyrics.replace(/\n/g, " <br> ");
     }
@@ -472,5 +470,7 @@ module.exports = function (app, config, renderTemplate) {
       optout: t,
       lyrics: ly,
     });
+    }
   });
+  
 };

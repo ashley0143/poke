@@ -588,3 +588,53 @@ a.new-button:hover {
     display: none;
   }
 }
+
+.stats-for-nerds {
+  color: var(--text-color);
+  font-family: var(--text-font-primary);
+  font-weight: var(--text-header-weight);
+  font-stretch: extra-expanded;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  font-size: 19.2px;
+}
+
+.div_box {
+  display: none;
+}
+
+.pwp > input[type="checkbox"]:checked ~ div,
+.div_box:target {
+  display: flex;
+  margin-top: -51em;
+  text-align: left;
+  background: #0009;
+  border-radius: 10px;
+  height: 11em;
+  padding: 10px;
+  margin-left: -11em;
+  width: 43em;
+  position: absolute;
+  white-space: -moz-pre-wrap !important; /* Mozilla, since 1999 */
+  white-space: -pre-wrap; /* Opera 4-6 */
+  white-space: -o-pre-wrap; /* Opera 7 */
+  white-space: pre-wrap; /* css-3 */
+  word-wrap: break-word; /* Internet Explorer 5.5+ */
+  white-space: -webkit-pre-wrap; /* Newer versions of Chrome/Safari*/
+  word-break: break-all;
+  white-space: normal;
+}
+
+.checkbox:checked + .fnt {
+  font-weight: 900;
+}
+
+@media screen and (max-width: 1340px) {
+  .h {
+    display: none;
+  }
+
+  .div_box {
+    display: none;
+  }
+}

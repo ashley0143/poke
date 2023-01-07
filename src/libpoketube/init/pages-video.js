@@ -178,10 +178,6 @@ module.exports = function (app, config, renderTemplate) {
     var q = req.query.quality;
     var a = req.query.a;
 
-    const info = await modules.fetch("http://ip-api.com/json/");
-    const jj = await info.text();
-    const ip = JSON.parse(jj);
-
     const isvld = await core.isvalidvideo(v);
     if (!v) res.redirect("/");
 
@@ -200,6 +196,10 @@ module.exports = function (app, config, renderTemplate) {
     }
 
     try {
+      const info = await modules.fetch("http://ip-api.com/json/");
+      const jj = await info.text();
+      const ip = JSON.parse(jj);
+
       if (isvld) {
         core.video(v).then((data) => {
           if (data) {

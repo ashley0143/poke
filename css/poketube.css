@@ -78,7 +78,7 @@
   --ptd-margin-3x: 12px;
   --ptd-margin-4x: 16px;
   --ptd-margin-5x: 20px;
-  --ptd-margin-6x: 24px;
+  --ptd-margin-6x: 24px; /* default */
   --ptd-margin-7x: 28px;
   --ptd-margin-8x: 32px;
   --ptd-margin-9x: 36px;
@@ -91,6 +91,8 @@
   --ptd-margin-24x: 96px;
   --ptd-margin-25x: 100px;
   --ptd-margin-35x: 140px;
+  
+  
   --ptd-neg-margin-base: -4px;
   --ptd-neg-margin-2x: -8px;
   --ptd-neg-margin-3x: -12px;
@@ -106,6 +108,7 @@
   --ptd-neg-margin-16x: -64px;
   --ptd-neg-margin-24x: -96px;
   --ptd-neg-margin-25x: -100px;
+  
 }
 
 a.class:hover {
@@ -116,6 +119,7 @@ a.class:hover {
 summary {
   color: gray;
 }
+
 summary:hover {
   color: white;
 }
@@ -174,7 +178,7 @@ a {
 
 .recommended-list {
   background-color: var(--div-prim-bg);
-  border-radius: 25px;
+  border-radius: 1.5em;
   margin: 10px;
   margin-top: 0px;
   margin-left: 0px;

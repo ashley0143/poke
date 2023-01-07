@@ -108,6 +108,14 @@ function IsInArray(array, id) {
   return false;
 }
 
+function getJson(str) {
+  try {
+    return JSON.parse(str);
+  } catch {
+    return false;
+  }
+}
+
 module.exports = function (app, config, renderTemplate) {
   app.get("/encryption", async function (req, res) {
     var v = req.query.v;
@@ -194,7 +202,7 @@ module.exports = function (app, config, renderTemplate) {
     if (isvld) {
       core.video(v).then((data) => {
         if (data) {
-          if ("video" in data) {
+          if ("video" in getJson(data)) {
             const k = data.video;
             const json = data.json;
             const engagement = data.engagement;

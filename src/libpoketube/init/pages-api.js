@@ -20,8 +20,8 @@ const {
 
 const pkg = require("../../../package.json");
 
-const ver = "v23.0101-cMrvBa-stable-git";
-const versionnumber = "110";
+const ver = "v23.0107-cMrvBa-stable-git";
+const versionnumber = "111";
 
 const response = {
   pt_version: ver,
@@ -139,14 +139,18 @@ module.exports = function (app, config, renderTemplate) {
   });
 
   app.get("/api/instances.json", async (req, res) => {
-    const url = `https://codeberg.org/Ashley/poketube/raw/branch/main/instances.json`;
+    try {
+      const url = `https://codeberg.org/Ashley/poketube/raw/branch/main/instances.json`;
 
-    let f = await modules
-      .fetch(url)
-      .then((res) => res.text())
-      .then((json) => JSON.parse(json));
+      let f = await modules
+        .fetch(url)
+        .then((res) => res.text())
+        .then((json) => JSON.parse(json));
 
-    res.json(f);
+      res.json(f);
+    } catch {
+      res.json("error while fetching instances");
+    }
   });
 };
 

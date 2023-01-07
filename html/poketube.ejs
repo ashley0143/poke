@@ -3,7 +3,7 @@
 
     This Source Code Form is subject to the terms of the GNU General Public License:
 
-    Copyright (C) 2021-2022 POKETUBE (https://github.com/iamashley0/poketube)
+    Copyright (C) 2021-2023 POKETUBE (https://github.com/iamashley0/poketube)
     
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -327,7 +327,8 @@ But Please note that unofficial instances can add the same lock icon, so please 
       <div class="right">
                 <a href="/domains"><i  style="display: block;margin-left: auto;margin-right: auto;" class="fa-light fa-server"></i>  </a>
               <a href="/privacy"><i class="fa-light fa-shield" style="margin-right: 1.5em;"></i></a>
-        <div class="icon-button dropdown">
+
+          <div class="icon-button dropdown">
 			<input type="checkbox" id="loggedout-dropdown" autocomplete="off">
 			<label for="loggedout-dropdown">
                   <i style="display: block;margin-left: auto;margin-right: auto;" class="fa-light  fa-ellipsis-vertical"></i>
@@ -343,10 +344,12 @@ But Please note that unofficial instances can add the same lock icon, so please 
                             <i  class="fa-light fa-video"></i>
 Create
         </a>
+        
  
+         
  						<a href="/embed/<%=video.id%>" style="text-decoration: none;" class="dropdown__item">
                             <i  class="fa-light fa-code"></i>
- View Embed
+ View In Embed
         </a>
                           <% if (!a) { %>  
 
@@ -419,7 +422,7 @@ display: block;" autoplay controls
    <% video.Subtitles.Subtitle.forEach(x => { %>
      <track src="/api/subtitles?v=<%=video.id%>&h=<%= x.language %>" label="<%= x.language.replace("United States","Simplified - USA") %>" kind="subtitles">      
      
-        <img loading="lazy" src="https://t.poketube.fun/t/rep.gif?v=<%=btoa(video.id)%>&h=<%= x.language %>" id="subtitle_usage_rate" style="border:0;width: 0;visibility: hidden;"> 
+        <img src="https://t.poketube.fun/t/rep.gif?v=<%=btoa(video.id)%>&h=<%= x.language %>" id="subtitle_usage_rate" style="border:0;width: 0;visibility: hidden;"> 
          <% }) %>   
                                                                                                        <% } %>                     
      <%  if (!Array.isArray( video.Subtitles.Subtitle)) { %> 
@@ -433,7 +436,7 @@ display: block;" autoplay controls
                                                              </video>
                                                              
                                                              <img loading="lazy" src="https://t.poketube.fun/t/rep.gif?video=<%=btoa(video.id)%>" style="border:0;width: 0;visibility: hidden;" id="video">
-<div style="display: flex;justify-content: center;align-items: center;flex-direction: row; column-gap: 3px;margin-top: -1em;" align="center">
+<div class="pwp" style="display: flex;justify-content: center;align-items: center;flex-direction: row; column-gap: 3px;margin-top: -1em;" align="center">
                                 
   <% if (!qua) { %> 
 
@@ -442,7 +445,25 @@ display: block;" autoplay controls
                                <% if (qua) { %> 
                                  <a href="/watch?v=<%=video.id%>">  <i style="display: block;"  title="High Definition" class="fa-light fa-high-definition"></i> </a>  <i style="display: block;" title="Standard Definition [Current]"  class="fa-solid fa-standard-definition"></i>
 
-                                                                      <% } %>               
+                                                                      <% } %>   
+                                                                         <input type="checkbox" class="checkbox" id="box" style="display:none">
+                                                                        <label class="h" for="box">
+                                                                          <div class="fnt">
+                                                                            
+                                                                         <i  class="fa-light fa-bug"></i>                                                                          </div>
+
+                                                                        </label>
+           <div class="div_box">
+         Video id : <%=video.id%> <br>
+       AmbientModecolor: <% if (lightOrDark(color) == "light") { %><%=color%> (color 1)<% } %><% if (lightOrDark(color) == "dark") { %> <%=color2%> (color 2) <% } %> <br>  
+        VideoFormat :<% if (!qua) { %> 22 avc1.64001F <% } %>                
+      <% if (qua === "medium") { %> 18 avc1.64001F <% } %>       <br>         
+       PokeTubeEncryptID: <%=sha384(video.id)%> <br>
+       PokeTube Proxy ID: 1 ( <%=ip.org%> ) <br>
+       Date : <%- Date.now() %>  <br>
+       Mystery text : <br>
+       143 : true <br>
+</div>  
 
        </div>
        </div>
@@ -575,7 +596,7 @@ display: block;" autoplay controls
 
                              
 <div class="video-sub-info description">
-           
+
 		
                   <details open="true" class="description-new">
          	<summary style="color:#fff;">
@@ -630,10 +651,13 @@ display: block;" autoplay controls
                       <a href="https://returnyoutubedislikeapi.com/votes?videoId=<%=video.id%>">See in json</a>
                       
                   
-                      
-                      </span> 
-                      
+                                                <a id="nerdy"></a>
+
+                      </span>                              
+
+
                                                  <hr style="clear: both;display: block;border: none;border-bottom: 0.5px solid #2f2f2f;/*! width: 4.5em; */height: 0;">
+        
      <%  if (Array.isArray(video.Tags.Tag)) { %> 
 
                             <div class="video-title" style="color:var(--text-color);font-family:var(--text-font-primary);;font-weight:var(--text-header-weight);font-stretch: extra-expanded;margin-top: 10px;margin-bottom: 10px;">Tags</div>
@@ -652,7 +676,11 @@ display: block;" autoplay controls
    
            <hr style="clear: both;display: block;border: none;border-bottom: 0.5px solid #2f2f2f;/*! width: 4.5em; */height: 0;">
             <% } %>  
-		</details>
+              
+  
+                       
+            		</details>
+
 
 
 
@@ -875,7 +903,7 @@ display: block;" autoplay controls
 								<a href="/watch?v=<%= x.id %>&t=f" class="title max-lines-2" title="<%= x.Title %>" style="font-stretch: 100%;font-weight: 800;"><%= x.Title %></a>
                    <% } %>
 								<div>
-               <a class="max-lines-2" href="/channel?id=<%= x.Channel.id %>"><%=x.Channel.Name %></a>
+               <a class="max-lines-2" href="/channel?id=<%= x.Channel.id %>" style="-webkit-line-clamp: 1;width: 12em;word-wrap: break-word;"><%=x.Channel.Name %></a>
 									<div class="video-views">  <%= x.uploadedAt %> • <%= convert(x.views) %> views </div>
 								</div>
 							</div>
@@ -972,7 +1000,10 @@ display: block;" autoplay controls
                        <a href="/watch?v=<%=video.id%>&r=f">Lyrics (Wow)</a>
  <% } %>
                     </div>
-                           <% } %> 
+                           <% } %>
+                             		     <hr style="clear: both;display: block;border: none;border-bottom: 0.5px solid #2f2f2f;margin: 0 0;/*! width: 4.5em; */height: 0;">
+                             
+             
                      </div>
  
 	</div>  
@@ -1010,7 +1041,7 @@ display: block;" autoplay controls
      <!--
     This Source Code Form is subject to the terms of the GNU General Public License:
 
-    Copyright (C) 2021-2022 POKETUBE (https://github.com/iamashley0/poketube)
+    Copyright (C) 2021-2023 POKETUBE (https://github.com/iamashley0/poketube)
     
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -1777,7 +1808,7 @@ More Epic options owo~
  * @licstart The following is the entire license notice for the JavaScript
  * code in this page.
  *
- *  Copyright (C) 2021-2022 POKETUBE (https://github.com/iamashley0/poketube)
+ *  Copyright (C) 2021-2023 POKETUBE (https://github.com/iamashley0/poketube)
  *
  * The JavaScript code in this page is free software: you can redistribute
  * it and/or modify it under the terms of the GNU General Public License

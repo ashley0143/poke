@@ -92,11 +92,11 @@ function init(app, config, rendertemplate) {
             );
           }
         })();
-      }, 1230000);
+      }, 150000);
     } catch (err) {
       initlog("[FAILED] Load pages \n" + err);
     }
-  }, 1200000);
+  }, 120000);
 }
 
 module.exports = {

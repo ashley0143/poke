@@ -91,8 +91,7 @@
   --ptd-margin-24x: 96px;
   --ptd-margin-25x: 100px;
   --ptd-margin-35x: 140px;
-  
-  
+
   --ptd-neg-margin-base: -4px;
   --ptd-neg-margin-2x: -8px;
   --ptd-neg-margin-3x: -12px;
@@ -108,7 +107,6 @@
   --ptd-neg-margin-16x: -64px;
   --ptd-neg-margin-24x: -96px;
   --ptd-neg-margin-25x: -100px;
-  
 }
 
 a.class:hover {
@@ -614,7 +612,7 @@ a.new-button:hover {
   text-align: left;
   background: #0009;
   border-radius: 10px;
-  height: 11em;
+  height: fit-content;
   padding: 10px;
   margin-left: -11em;
   width: 43em;
@@ -627,6 +625,10 @@ a.new-button:hover {
   white-space: -webkit-pre-wrap; /* Newer versions of Chrome/Safari*/
   word-break: break-all;
   white-space: normal;
+  height: -moz-fit-content;
+  height: -webkit-fit-content;
+  max-width: 708px;
+  max-height: 185.6px;
 }
 
 .checkbox:checked + .fnt {

@@ -184,7 +184,7 @@ module.exports = function (app, config, renderTemplate) {
 
     const isvld = await core.isvalidvideo(v);
     if (!v) res.redirect("/");
-    
+
     var secure;
 
     if (
@@ -199,84 +199,88 @@ module.exports = function (app, config, renderTemplate) {
       secure = false;
     }
 
-    if (isvld) {
-      core.video(v).then((data) => {
-        if (data) {
-          if ("video" in getJson(data)) {
-            const k = data.video;
-            const json = data.json;
-            const engagement = data.engagement;
-            var inv_comments = data.comments;
-            const inv_vid = data.vid;
-            //checks if json exists
+    try {
+      if (isvld) {
+        core.video(v).then((data) => {
+          if (data) {
+            if ("video" in data) {
+              const k = data.video;
+              const json = data.json;
+              const engagement = data.engagement;
+              var inv_comments = data.comments;
+              const inv_vid = data.vid;
+              //checks if json exists
 
-            if (json) {
-              //checks if title exists in the json object
+              if (json) {
+                //checks if title exists in the json object
 
-              if ("Title" in json) {
-                if (!data.comments) inv_comments = "Disabled";
+                if ("Title" in json) {
+                  if (!data.comments) inv_comments = "Disabled";
 
-                if (!core.video(v).b) {
-                  var nnn = "";
-                  var badges = "";
-                  var comments = "";
+                  if (!core.video(v).b) {
+                    var nnn = "";
+                    var badges = "";
+                    var comments = "";
+                  }
+
+                  if (!v) res.redirect("/");
+
+                  if (q === "medium") {
+                    var url = `https://inv.vern.cc/latest_version?id=${v}&itag=18&local=true`;
+                  }
+
+                  const desc = data.desc;
+
+                  if (d) {
+                    var d = desc.toString().replace(/\n/g, " <br> ");
+                  }
+
+                  if (d === "[object Object]") {
+                    var d = false;
+                  }
+
+                  renderTemplate(res, req, "poketube.ejs", {
+                    color: data.color,
+                    color2: data.color2,
+                    engagement: engagement,
+                    video: json,
+                    date: k.Video.uploadDate,
+                    e,
+                    a,
+                    k,
+                    secure,
+                    process,
+                    sha384,
+                    lightOrDark,
+                    isMobile: req.useragent.isMobile,
+                    tj: data.channel,
+                    r: r,
+                    qua: q,
+                    inv: inv_comments,
+                    ip: ip,
+                    convert: convert,
+                    wiki: data.wiki,
+                    f: f,
+                    t: config.t_url,
+                    optout: t,
+                    badges: badges,
+                    desc: desc,
+                    comments: comments,
+                    n: nnn,
+                    inv_vid,
+                    lyrics: "",
+                  });
                 }
-
-                if (!v) res.redirect("/");
-
-                if (q === "medium") {
-                  var url = `https://inv.vern.cc/latest_version?id=${v}&itag=18&local=true`;
-                }
-
-                const desc = data.desc;
-
-                if (d) {
-                  var d = desc.toString().replace(/\n/g, " <br> ");
-                }
-
-                if (d === "[object Object]") {
-                  var d = false;
-                }
-
-                renderTemplate(res, req, "poketube.ejs", {
-                  color: data.color,
-                  color2: data.color2,
-                  engagement: engagement,
-                  video: json,
-                  date: k.Video.uploadDate,
-                  e,
-                  a,
-                  k,
-                  secure,
-                  process,
-                  sha384,
-                  lightOrDark,
-                  isMobile: req.useragent.isMobile,
-                  tj: data.channel,
-                  r: r,
-                  qua: q,
-                  inv: inv_comments,
-                  ip: ip,
-                  convert: convert,
-                  wiki: data.wiki,
-                  f: f,
-                  t: config.t_url,
-                  optout: t,
-                  badges: badges,
-                  desc: desc,
-                  comments: comments,
-                  n: nnn,
-                  inv_vid,
-                  lyrics: "",
-                });
               }
             }
+          } else {
+            res.redirect("/");
           }
-        } else {
-          res.redirect("/");
-        }
-      });
-    } else {
+        });
+      } else {
+        res.redirect("/");
+      }
+    } catch {
       res.redirect("/");
     }
   });
@@ -401,84 +405,83 @@ module.exports = function (app, config, renderTemplate) {
     if (!v) {
       res.redirect("/discover?tab=music");
     } else {
-    var fetching = await fetcher(v);
+      var fetching = await fetcher(v);
 
-    const json = fetching.video.Player;
+      const json = fetching.video.Player;
 
-    const video = await modules.fetch(config.tubeApi + `video?v=${v}`);
+      const video = await modules.fetch(config.tubeApi + `video?v=${v}`);
 
-    const h = await video.text();
-    const k = JSON.parse(modules.toJson(h));
+      const h = await video.text();
+      const k = JSON.parse(modules.toJson(h));
 
-    if (!json.Channel.Name.endsWith(" - Topic")) {
-      res.redirect(`/watch?v=${v}`);
-    }
+      if (!json.Channel.Name.endsWith(" - Topic")) {
+        res.redirect(`/watch?v=${v}`);
+      }
 
-    //video
-    var url = `https://tube.kuylar.dev/proxy/media/${v}/22`;
+      //video
+      var url = `https://tube.kuylar.dev/proxy/media/${v}/22`;
 
-    // encryption
-    const url_e =
-      url +
-      "?e=" +
-      sha384(k.Video.Channel.id) +
-      sha384(k.Video.Channel.id) +
-      "Piwik" +
-      sha384(config.t_url);
+      // encryption
+      const url_e =
+        url +
+        "?e=" +
+        sha384(k.Video.Channel.id) +
+        sha384(k.Video.Channel.id) +
+        "Piwik" +
+        sha384(config.t_url);
 
-    // channel info
-    const engagement = fetching.engagement;
-    const channel = await modules.fetch(
-      config.tubeApi + `channel?id=${k.Video.Channel.id}&tab=videos`
-    );
-    const c = await channel.text();
-    const tj = JSON.parse(modules.toJson(c));
+      // channel info
+      const engagement = fetching.engagement;
+      const channel = await modules.fetch(
+        config.tubeApi + `channel?id=${k.Video.Channel.id}&tab=videos`
+      );
+      const c = await channel.text();
+      const tj = JSON.parse(modules.toJson(c));
 
-    // info
-    const song = await musicInfo.searchSong(
-      {
-        title: k.Video.Title,
-        artist: json.Channel.Name.replace("- Topic", ""),
-      },
-      1000
-    );
+      // info
+      const song = await musicInfo.searchSong(
+        {
+          title: k.Video.Title,
+          artist: json.Channel.Name.replace("- Topic", ""),
+        },
+        1000
+      );
 
-    if (!song) {
-      res.redirect(`/watch?v=${v}`);
-    }
+      if (!song) {
+        res.redirect(`/watch?v=${v}`);
+      }
 
-    const lyrics = await lyricsFinder(song.artist + song.title);
-    if (lyrics == undefined) ly = "This Is Where I'd Put The songs lyrics. IF IT HAD ONE ";
+      const lyrics = await lyricsFinder(song.artist + song.title);
+      if (lyrics == undefined)
+        ly = "This Is Where I'd Put The songs lyrics. IF IT HAD ONE ";
 
+      var ly = "";
+      if (lyrics) {
+        ly = lyrics.replace(/\n/g, " <br> ");
+      }
 
-    var ly = "";
-    if (lyrics) {
-      ly = lyrics.replace(/\n/g, " <br> ");
-    }
-
-    renderTemplate(res, req, "poketube-music.ejs", {
-      url: url_e,
-      info: song,
-      color: await modules
-        .getColors(`https://i.ytimg.com/vi/${v}/maxresdefault.jpg`)
-        .then((colors) => colors[0].hex()),
-      engagement: engagement,
-      process: process,
-      ip: ip,
-      video: json,
-      date: modules.moment(k.Video.uploadDate).format("LL"),
-      e: e,
-      k: k,
-      sha384: sha384,
-      isMobile: req.useragent.isMobile,
-      tj: tj,
-      r: r,
-      f: f,
-      t: config.t_url,
-      optout: t,
-      lyrics: ly,
-    });
+      renderTemplate(res, req, "poketube-music.ejs", {
+        url: url_e,
+        info: song,
+        color: await modules
+          .getColors(`https://i.ytimg.com/vi/${v}/maxresdefault.jpg`)
+          .then((colors) => colors[0].hex()),
+        engagement: engagement,
+        process: process,
+        ip: ip,
+        video: json,
+        date: modules.moment(k.Video.uploadDate).format("LL"),
+        e: e,
+        k: k,
+        sha384: sha384,
+        isMobile: req.useragent.isMobile,
+        tj: tj,
+        r: r,
+        f: f,
+        t: config.t_url,
+        optout: t,
+        lyrics: ly,
+      });
     }
   });
-  
 };

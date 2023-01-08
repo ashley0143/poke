@@ -2078,3 +2078,25 @@ h3 {
 ptd-custom-more {
   color: #ffffff;
 }
+
+/* Landscape */
+@media screen and (orientation: landscape) {
+  .ptnewbuttons {
+    margin-left: auto;
+    width: fit-content;
+    margin-right: auto;
+    width: -moz-fit-content;
+  }
+}
+
+.new-button.engagement:hover {
+  background-color: #0009;
+}
+
+div.new-button:hover {
+  background-color: #0008;
+}
+
+a.new-button:hover {
+  background-color: #0008;
+}

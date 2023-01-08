@@ -18,6 +18,7 @@
     along with this program. If not, see https://www.gnu.org/licenses/.
 
 */
+
 :root {
   /* text */
   --text-link: #0ab7f0;
@@ -331,7 +332,10 @@ a {
 }
 
 .subscribe-button > a {
-  color: black;
+  color: black !important;
+  font-family: var(--text-font-primary);
+  font-stretch: ultra-expanded;
+  font-weight: 900;
 }
 
 .video > .thumbnail > .video-length {
@@ -650,6 +654,6 @@ a.new-button:hover {
   }
 
   .div_box {
-    display: none !important; 
+    display: none !important;
   }
 }

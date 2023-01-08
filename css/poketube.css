@@ -198,7 +198,7 @@ a {
 .video-info-panel.gradient {
   padding: 12px;
   border-radius: 11px;
-  background-image: var(--div-gradient);
+  background-image: var(--div-gradient) !important;
   display: block;
   box-sizing: border-box;
   min-width: 100%;
@@ -631,6 +631,15 @@ a.new-button:hover {
   max-height: 185.6px;
 }
 
+@media screen and (min-width: 1400px) {
+  .pwp > input[type="checkbox"]:checked ~ div,
+  .div_box:target {
+    display: flex;
+    margin-top: -54em;
+    margin-left: -14em;
+  }
+}
+
 .checkbox:checked + .fnt {
   font-weight: 900;
 }
@@ -641,6 +650,6 @@ a.new-button:hover {
   }
 
   .div_box {
-    display: none;
+    display: none !important; 
   }
 }

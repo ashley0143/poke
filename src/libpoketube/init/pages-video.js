@@ -238,7 +238,7 @@ module.exports = function (app, config, renderTemplate) {
                   if (d === "[object Object]") {
                     var d = false;
                   }
-
+                  
                   renderTemplate(res, req, "poketube.ejs", {
                     color: data.color,
                     color2: data.color2,

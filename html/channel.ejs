@@ -284,7 +284,33 @@ text-transform:uppercase;
 
  
                        <% if (isMobile) { %>  
+                         
+                         
 <style>
+  .community-content{ 
+  margin-bottom: 1em;
+  margin-top: 1em;
+  padding: 13px;
+   text-align: left;
+   background: #1a1a1a;
+  width: fit-content;
+  border-radius: 22px;
+  }
+  
+  .community {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border-radius: 30px;
+  padding: 10px;
+    padding-bottom: 10px;
+  padding-bottom: 10px;
+  margin-top: 12px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-bottom: 32px;
+  max-width: 37em;
+}
   .subscribe-button {
   background-color: white !important;
   color: black !important;
@@ -323,6 +349,7 @@ text-transform:uppercase;
 }
  .tabs.tabs-center {
 	 margin: auto;
+   font-size:15px
 }
   
  .tabs.tabs-justify {
@@ -532,21 +559,23 @@ display: flex;
 flex-direction: column;
 align-content: center;
 margin: auto;
-width: fit-content;margin-left: 8.5em;
+width: fit-content;
 ">
 				<img src="https://p.poketube.fun/<%=j.Channel.Metadata.Avatars.Thumbnail.$t%>" alt="Channel Avatar">
 			</a>
 			<div class="name">
-				<p style="font-family:Ginto Nord,sans-serif;font-weight:900;white-space:yes;"><%=j.Channel.Metadata.Name%></p>
+				<p style="font-family:PokeTube Flex,sans-serif;font-weight:1000;font-stretch: ultra-expanded;white-space:yes;"><%=j.Channel.Metadata.Name%>  </p>
+          <p style="margin: -9px;">
+            			<%=subs%> subscribers  
+
+        </p>
  			</div>
- 
-			<%=subs%> Subscribers 
- 
       <p style="padding:0;font-weight:bold;"> 
    <%-getFirstLine(desc)%> <a href="/channel?id=<%=ID%>&tab=about">
 <i class="fa-thin fa-angle-right"></i></a>
         </p>
-        			<button class="subscribe-button">Suscribe</button>
+         <a href="/feeds/videos.xml?channel_id=<%=ID%>"><button class="subscribe-button">Rss feed</button>
+</a> 
 
         
   <% if (isMobile) { %>  
@@ -559,12 +588,27 @@ width: fit-content;margin-left: 8.5em;
             <% if (!tab) { %>
 
                 <a href="/channel?id=<%=ID%>" class="tab active">Home</a>
+              <%  if (Array.isArray(c.comments)) { %> 
+
+  <%  if (c.comments.length != "0") { %> 
+
+     <a  href="/channel?id=<%=ID%>&tab=community"  class="tab">Community</a>
+                                                                         <% } %>
+                                                                         <% } %>
                 <a  href="/channel?id=<%=ID%>&tab=about"  class="tab">About</a>
                                                                <% } %>
-                                                                             <% if (tab) { %>
+                                                                             <% if (tab ==="about") { %>
 
                 <a href="/channel?id=<%=ID%>" class="tab">Home</a>
+                <a href="/channel?id=<%=ID%>&tab=community"  class="tab">Community</a>
                 <a  href="/channel?id=<%=ID%>&tab=about" class="tab active">About</a>
+                                                               <% } %>
+                                                                 
+                                                                     <% if (tab ==="community") { %>
+
+                <a href="/channel?id=<%=ID%>" class="tab">Home</a>
+                <a href="/channel?id=<%=ID%>&tab=community"  class="tab active">Community</a>
+                <a  href="/channel?id=<%=ID%>&tab=about" class="tab">About</a>
                                                                <% } %>
 
             </div>

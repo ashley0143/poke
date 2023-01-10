@@ -36,6 +36,17 @@ const {
 module.exports = async function (video_id) {
   var url;
 
+  // bad proxys - the proxys that dont work
+  var badurls = [
+    "invidious.tiekoetter.com",
+    "yewtu.be",
+    "invidious.slipfox.xyz",
+    "vid.priv.au",
+  ];
+
+  // good proxys - proxys that DO work alot good
+  var goodurls = ["invidious.sethforprivacy.com", "invidious.weblibre.org"];
+
   function toObject(arr) {
     var rv = {};
     for (var i = 0; i < arr.length; ++i)
@@ -61,7 +72,18 @@ module.exports = async function (video_id) {
   if (stringed[1].type != "https") {
     url = "https://vid.puffyan.us";
   } else {
-    url = stringed[1].uri;
+    url = stringed[1].uri
+      .replace("invidious.tiekoetter.com", "invidious.weblibre.org")
+      .replace(
+        "yewtu.be",
+        "invidious.sethforprivacy.com",
+        "invidious.slipfox.xyz",
+        "invidious.weblibre.org",
+        "vid.priv.au",
+        "invidious.weblibre.org",
+        "invidious.snopyta.org",
+        "invidious.weblibre.org"
+      );
   }
 
   if (stringed[1].uri == "https://inv.vern.cc") url = "https://vid.puffyan.us";

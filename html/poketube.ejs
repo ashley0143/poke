@@ -423,13 +423,13 @@ display: block;" autoplay controls
 
 
                      
-                                                <source src="https://tube.kuylar.dev/proxy/media/<%=video.id%>/22" type="video/mp4; codecs=&quot;avc1.64001F, mp4a.40.2&quot;" label="hd720" selected="false">
+                                                <source src="<%=u%>/latest_version?id=<%=video.id%>&itag=22&local=true" type="video/mp4; codecs=&quot;avc1.64001F, mp4a.40.2&quot;" label="hd720" selected="true">
 
                                                                              <% } %>                
 
       <% if (qua === "medium") { %>  
 
-                                                <source src="https://tube.kuylar.dev/proxy/media/<%=video.id%>/18" type="video/mp4; codecs=&quot;avc1.64001F, mp4a.40.2&quot;" label="hd720" selected="false">
+                                                <source src="<%=u%>/latest_version?id=<%=video.id%>&itag=22&local=true" type="video/mp4; codecs=&quot;avc1.64001F, mp4a.40.2&quot;" label="sd360" selected="true">
         
                                                                            <% } %>                
 
@@ -474,10 +474,10 @@ display: block;" autoplay controls
            <div class="div_box">
          Video id : <%=video.id%> <br>
        AmbientModecolor: <% if (lightOrDark(color) == "light") { %><%=color%> (color 1)<% } %><% if (lightOrDark(color) == "dark") { %> <%=color2%> (color 2) <% } %> <br>  
-        Video Format :<% if (!qua) { %>  22 (720p) avc1.64001F-libre mp4a.40.2  | 44100Hz  <% } %>
-      <% if (qua === "medium") { %>  18 (320p) avc1.64001F-libre mp4a.40.2 | 44100Hz  <% } %>       <br> 
+        Video Format :<% if (!qua) { %>  22 (720p) gstreamer1-libav openh264 mp4a.40.2  | 44100Hz  <% } %>
+      <% if (qua === "medium") { %>  18 (320p) gstreamer1-libav openh264 mp4a.40.2 | 44100Hz  <% } %>       <br> 
        PokeTubeEncryptID: <%=sha384(video.id)%> <br>
-       PokeTube Proxy ID: 1 ( <%=ip.org%> ) <br>
+       Proxy : <%= u.replace("https://","") %> - refresh the page to change the proxy location<br>
        Date : <%- Date.now() %>  <br>
        Mystery text : <br>
        143 : true <br>

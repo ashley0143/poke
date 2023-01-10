@@ -17,6 +17,7 @@ const {
   getRandomInt,
   getRandomArbitrary,
 } = require("../ptutils/libpt-coreutils.js");
+const media_proxy = require("../libpoketube-video.js");
 
 const sha384 = modules.hash;
 const fetch = modules.fetch;
@@ -181,6 +182,8 @@ module.exports = function (app, config, renderTemplate) {
     const isvld = await core.isvalidvideo(v);
     if (!v) res.redirect("/");
 
+    const u = await media_proxy(v);
+
     var secure;
 
     if (
@@ -238,11 +241,12 @@ module.exports = function (app, config, renderTemplate) {
                   if (d === "[object Object]") {
                     var d = false;
                   }
-                  
+
                   renderTemplate(res, req, "poketube.ejs", {
                     color: data.color,
                     color2: data.color2,
                     engagement: engagement,
+                    u,
                     video: json,
                     date: k.Video.uploadDate,
                     e,

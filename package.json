@@ -1,6 +1,6 @@
 {
   "name": "poketube",
-  "version": "20.22",
+  "version": "20.23",
   "description": "Libre youtube front-end",
   "main": "server.js",
   "scripts": {
@@ -10,20 +10,20 @@
     "express": "^4.18.2",
     "ejs": "^3.1.8",
     "path": "^0.12.7",
-    "html-to-text": "^8.2.1",
+    "html-to-text": "^9.0.3",
     "encoding": "^0.1.13",
     "node-fetch": "^2.6.7",
     "xml-js": "^1.6.11",
     "request": "^2.88.2",
     "xml2json": "^0.12.0",
-    "fast-xml-parser": "^4.0.11",
+    "fast-xml-parser": "^4.0.13",
     "moment": "^2.29.4",
     "node-html-parser": "^6.1.4",
     "get-image-colors": "^4.0.1",
     "express-useragent": "^1.0.15",
     "js-sha512": "0.8.0",
     "music-info": "^1.2.1",
-    "wikipedia": "^1.1.9"
+    "wikipedia": "^2.0.0"
   },
   "engines": {
     "node": "16.x"

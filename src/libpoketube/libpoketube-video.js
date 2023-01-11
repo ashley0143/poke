@@ -84,6 +84,7 @@ module.exports = async function (video_id) {
         "invidious.snopyta.org",
         "invidious.weblibre.org"
       );
+    
   }
 
   if (stringed[1].uri == "https://inv.vern.cc") url = "https://vid.puffyan.us";

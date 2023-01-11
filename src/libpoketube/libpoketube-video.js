@@ -70,24 +70,17 @@ module.exports = async function (video_id) {
   const stringed = toObject(instance);
 
   if (stringed[1].type != "https") {
-    url = "https://vid.puffyan.us";
+    url = "https://invidious.weblibre.org";
   } else {
     url = stringed[1].uri
       .replace("invidious.tiekoetter.com", "invidious.weblibre.org")
-      .replace(
-        "yewtu.be",
-        "invidious.sethforprivacy.com",
-        "invidious.slipfox.xyz",
-        "invidious.weblibre.org",
-        "vid.priv.au",
-        "invidious.weblibre.org",
-        "invidious.snopyta.org",
-        "invidious.weblibre.org"
-      );
-    
+      .replace("yewtu.be", "invidious.sethforprivacy.com")
+      .replace("invidious.slipfox.xyz", "invidious.weblibre.org")
+      .replace("vid.priv.au", "invidious.weblibre.org")
+      .replace("invidious.snopyta.org", "invidious.weblibre.org");
   }
 
-  if (stringed[1].uri == "https://inv.vern.cc") url = "https://vid.puffyan.us";
+  if (stringed[1].uri == "https://inv.vern.cc") url = "https://invidious.weblibre.org";
 
   return url;
 };

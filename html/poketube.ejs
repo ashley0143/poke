@@ -371,18 +371,18 @@ Create
         </a>
                           <% if (!a) { %>  
 
-        		<a href="/watch?v=<%=video.id%>&a=false" style="text-decoration: none;" class="dropdown__item">
+        		<a href="/watch?v=<%=video.id%>&a=false" title="Ambient mode uses a lighting effect to make watching videos more immersive by casting gentle colors from the video into your screen’s background! owo" style="text-decoration: none;" class="dropdown__item">
 <i class="fa-light fa-lightbulb-on"></i>
-              Ambient mode • on
+               Ambient mode • on
         </a>
         
                                                                                      <% } %>                
      <% if (a) { %>  
 
 
-        		<a href="/watch?v=<%=video.id%>" style="text-decoration: none;" class="dropdown__item">
+        		<a title="Ambient mode uses a lighting effect to make watching videos more immersive by casting gentle colors from the video into your screen’s background! owo" href="/watch?v=<%=video.id%>" style="text-decoration: none;" class="dropdown__item">
 <i class="fa-light fa-lightbulb" style="width: 1em;margin-left: 4px;"></i>
-              Ambient mode • off
+             Ambient mode • off
         </a>
         
                                       
@@ -473,13 +473,13 @@ display: block;" autoplay controls
                                                                         </label>
            <div class="div_box">
          Video id : <%=video.id%> <br>
-       AmbientModecolor: <% if (lightOrDark(color) == "light") { %><%=color%> (color 1)<% } %><% if (lightOrDark(color) == "dark") { %> <%=color2%> (color 2) <% } %> <br>  
+       ImmersiveAmbientModecolor: <% if (lightOrDark(color) == "light") { %><%=color%> (color 1)<% } %><% if (lightOrDark(color) == "dark") { %> <%=color2%> (color 2) <% } %> <br>  
         Video Format :<% if (!qua) { %>  22 (720p) gstreamer1-libav openh264 mp4a.40.2  | 44100Hz  <% } %>
       <% if (qua === "medium") { %>  18 (320p) gstreamer1-libav openh264 mp4a.40.2 | 44100Hz  <% } %>       <br> 
        PokeTubeEncryptID: <%=sha384(video.id)%> <br>
        Proxy : <%= u.replace("https://","") %> - refresh the page to change the proxy location<br>
        Date : <%- Date.now() %>  <br>
-       Mystery text : <br>
+       Mystery text :  <%=btoa(video.id + " i " + " lov " + " u " + u.replace("https://","") ) %> <br>
        143 : true <br>
         </div>  
        </div>

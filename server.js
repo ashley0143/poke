@@ -94,7 +94,7 @@ this is our config file,you can change stuff here
 */
   const config = {
     tubeApi: "https://tube-srv.ashley143.gay/api/",
-    invapi: u + "/api/v1",
+    invapi: "https://invidious.weblibre.org/api/v1",
     dislikes: "https://returnyoutubedislikeapi.com/votes?videoId=",
     t_url: "https://t.poketube.fun/", //  def matomo url
   };

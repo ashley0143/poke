@@ -144,7 +144,7 @@ module.exports = function (app, config, renderTemplate) {
 
     //videos
     const a = await modules
-      .fetch(`${config.invapi}/channels/videos/${ID}/`)
+      .fetch(`https://invidious.weblibre.org/channels/videos/${ID}/`)
       .then((res) => res.text());
 
     var tj = await getJson(a);

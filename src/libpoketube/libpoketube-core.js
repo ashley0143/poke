@@ -2,7 +2,7 @@
 
     PokeTube is a Free/Libre youtube front-end !
     
-    Copyright (C) 2021-2022 POKETUBE
+    Copyright (C) 2021-2023 POKETUBE
  
     This file is Licensed under LGPL-3.0-or-later. Poketube itself is GPL, Only this file is LGPL.
     
@@ -22,7 +22,7 @@ const wiki = require("wikipedia");
 
 const config = {
   tubeApi: "https://tube-srv.ashley143.gay/api/",
-  invapi: "https://inv.vern.cc/api/v1",
+  invapi: "https://invidious.weblibre.org/api/v1",
   dislikes: "https://returnyoutubedislikeapi.com/votes?videoId=",
   t_url: "https://t.poketube.fun/", //  def matomo url
 };

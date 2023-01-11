@@ -468,7 +468,7 @@ display: block;" autoplay controls
                                                                         <label class="h" for="box">
                                                                           <div class="fnt">
                                                                             
-                                                                         <i  class="fa-light fa-bug"></i>                                                                          </div>
+                                                                         <i  title="Stats for nerdys" class="fa-light fa-bug"></i>                                                                          </div>
 
                                                                         </label>
            <div class="div_box">
@@ -487,7 +487,12 @@ display: block;" autoplay controls
                                                             <br>
 <div class="video-info" >           
         	<div class="video-info-panel gradient">  
-            <div class="video-title t" style="font-family:Inter;font-weight:bold;line-break: auto;max-width: max-content;margin: 0;margin-bottom: 0;padding: 0;" title="<%=video.Title%>"> <%-k.Video.Title%> </div>
+            <div class="video-title t" style="font-family:Inter;font-weight:bold;line-break: auto;max-width: max-content;margin: 0;margin-bottom: 0;padding: 0;"
+                 
+                                <% if (video.Title !== k.Video.Title) { %>
+                 title="Non-Translated title : <%=video.Title%>"
+               <% } %> 
+            > <%-k.Video.Title%> </div>
           
           <a  style="font-weight: bolder;font-family: sans-serif;color: var(--text-color);font-size: small;">content source : youtube.com </a>
          

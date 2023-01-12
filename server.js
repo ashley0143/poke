@@ -32,7 +32,6 @@
   const media_proxy = require("./src/libpoketube/libpoketube-video.js");
   const { sinit } = require("./src/libpoketube/init/superinit.js");
   const u = await media_proxy();
-
   initlog("Loading...");
   initlog(
     "[Welcome] Welcome To PokeTube :3 " +
@@ -68,6 +67,7 @@
   app.use(modules.express.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
   app.use(modules.useragent.express());
   app.use(modules.express.json()); // for parsing application/json
+  app.enable("trust proxy");
 
   const renderTemplate = async (res, req, template, data = {}) => {
     res.render(
@@ -101,6 +101,19 @@ this is our config file,you can change stuff here
 
   app.use(function (req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
+    if (req.secure) {
+      res.header(
+        "Strict-Transport-Security",
+        "max-age=31536000; includeSubDomains; preload"
+      );
+    }
+    next();
+  });
+  
+  app.use(function (request, response, next) {
+    if (process.env.NODE_ENV != "development" && !request.secure) {
+      return response.redirect("https://" + request.headers.host + request.url);
+    }
 
     next();
   });

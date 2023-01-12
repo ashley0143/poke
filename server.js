@@ -93,7 +93,7 @@
 this is our config file,you can change stuff here
 */
   const config = {
-    tubeApi: "https://tube-srv.ashley143.gay/api/",
+    tubeApi: "https://api.poketube.fun/api/",
     invapi: "https://invidious.sethforprivacy.com/api/v1",
     dislikes: "https://returnyoutubedislikeapi.com/votes?videoId=",
     t_url: "https://t.poketube.fun/", //  def matomo url

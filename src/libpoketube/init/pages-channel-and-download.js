@@ -144,7 +144,7 @@ module.exports = function (app, config, renderTemplate) {
 
     //videos
     const a = await modules
-      .fetch(`https://invidious.weblibre.org/channels/videos/${ID}/`)
+      .fetch(`https://inv.riverside.rocks/api/v1/channels/videos/${ID}/`)
       .then((res) => res.text());
 
     var tj = await getJson(a);

@@ -580,6 +580,10 @@ a.avatar {
   display: block;
 }
 
+label[for="loggedout-dropdown"] {
+cursor: pointer;
+}
+
 .new-button.engagement:hover {
   background-color: #0009;
 }

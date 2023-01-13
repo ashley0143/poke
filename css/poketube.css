@@ -131,6 +131,16 @@ a {
   color: var(--text-link);
 }
 
+a.avatar {
+  height: 36px;
+  margin-left: 6px;
+  font-size: 0;
+}
+
+.video-chnl-info-pill > a:first-child {
+  margin-right: -8px;
+}
+
 .video > .info > .title {
   font-family: var(--text-font-primary);
   width: 10em;
@@ -260,7 +270,7 @@ a {
   font-family: Inter;
   clear: both;
   margin-top: 1.1em;
-  padding: 4.5px;
+  padding: 5px 0;
   background: #0009;
   margin-right: -13px;
   width: fit-content;
@@ -282,7 +292,7 @@ a {
   grid-area: buttons;
   display: flex;
   flex-direction: row;
-  column-gap: 3px;
+  column-gap: 6px;
   height: min-content;
   width: -moz-fit-content;
   width: fit-content;

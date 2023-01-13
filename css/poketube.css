@@ -141,6 +141,19 @@ a.avatar {
   margin-right: -8px;
 }
 
+.video-info-buttons.pill > .engagement {
+  margin-right: 2px;
+}
+
+.video-info-buttons.pill > div:nth-child(2) > .new-button, .button-encryption {
+  margin-right: 4px;
+}
+
+/* div.button-encryption { */
+/* color: red !important; */
+/*   margin-right: 2px; */
+/* } */
+
 .video > .info > .title {
   font-family: var(--text-font-primary);
   width: 10em;

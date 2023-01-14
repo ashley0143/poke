@@ -576,7 +576,7 @@ a.avatar {
 }
 
 label[for="loggedout-dropdown"] {
-cursor: pointer;
+  cursor: pointer;
 }
 
 .new-button.engagement:hover {

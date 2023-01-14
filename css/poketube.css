@@ -149,11 +149,6 @@ a.avatar {
   margin-right: 4px;
 }
 
-/* div.button-encryption { */
-/* color: red !important; */
-/*   margin-right: 2px; */
-/* } */
-
 .video > .info > .title {
   font-family: var(--text-font-primary);
   width: 10em;

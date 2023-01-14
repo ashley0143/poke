@@ -51,13 +51,6 @@ a:not([href]):hover {
   text-decoration: none;
 }
 
-.channel-page > div:nth-child(3) {
-  position: relative;
-  top: 11.5em;
-  padding-bottom: 2em;
-  overflow: hidden;
-}
-
 .page-footer-section a,
 .page-footer-section p {
   color: #b2b4bf;

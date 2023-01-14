@@ -322,7 +322,7 @@ a.icon-button > img {
   color: var(--text-primary);
   justify-content: center;
   align-content: center;
-  column-gap: 4px;
+  column-gap: var(--ptd-button-spacing);
   text-decoration: none;
   height: 36px;
   line-height: 32px;

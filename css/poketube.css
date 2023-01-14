@@ -73,6 +73,7 @@
   --ptd-margin-base: 4px;
   --ptd-avatar-size: 32px;
   --ptd-toolbar-height: 56px;
+  --ptd-button-spacing: 6px;
 
   /* margins */
   --ptd-margin-2x: 8px;
@@ -129,6 +130,21 @@ summary:hover {
 
 a {
   color: var(--text-link);
+}
+
+a.avatar {
+  height: 36px;
+  margin-left: 6px;
+  font-size: 0;
+}
+
+.video-chnl-info-pill > a:first-child {
+  margin-right: -8px;
+}
+
+/* If the "Encryption duh" duplication bug is fixed, remove this rule. */
+.new-button.button-encryption + a[title="Encryption duh"] {
+  display: none;
 }
 
 .video > .info > .title {
@@ -260,7 +276,7 @@ a {
   font-family: Inter;
   clear: both;
   margin-top: 1.1em;
-  padding: 4.5px;
+  padding: 5px 0;
   background: #0009;
   margin-right: -13px;
   width: fit-content;
@@ -282,7 +298,7 @@ a {
   grid-area: buttons;
   display: flex;
   flex-direction: row;
-  column-gap: 3px;
+  column-gap: var(--ptd-button-spacing);
   height: min-content;
   width: -moz-fit-content;
   width: fit-content;
@@ -555,6 +571,10 @@ a {
 .dropdown-button-button > input[type="checkbox"]:checked ~ div,
 .dropdown-button-button__menu:target {
   display: block;
+}
+
+label[for="loggedout-dropdown"] {
+  cursor: pointer;
 }
 
 .new-button.engagement:hover {

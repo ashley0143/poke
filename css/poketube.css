@@ -73,7 +73,7 @@
   --ptd-margin-base: 4px;
   --ptd-avatar-size: 32px;
   --ptd-toolbar-height: 56px;
-  --ptd-button-spacing: 6px;
+  --ptd-button-spacing: 4px;
 
   /* margins */
   --ptd-margin-2x: 8px;
@@ -142,9 +142,12 @@ a.avatar {
   margin-right: -8px;
 }
 
-/* If the "Encryption duh" duplication bug is fixed, remove this rule. */
-.new-button.button-encryption + a[title="Encryption duh"] {
-  display: none;
+.video-info-buttons.pill > .engagement {
+  margin-right: 2px;
+}
+
+.video-info-buttons.pill > div:nth-child(2) > .new-button, .button-encryption {
+  margin-right: 2px;
 }
 
 .video > .info > .title {

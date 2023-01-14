@@ -146,7 +146,7 @@ a.avatar {
 }
 
 .video-info-buttons.pill > div:nth-child(2) > .new-button, .button-encryption {
-  margin-right: 4px;
+  margin-right: 2px;
 }
 
 .video > .info > .title {
@@ -300,7 +300,7 @@ a.avatar {
   grid-area: buttons;
   display: flex;
   flex-direction: row;
-  column-gap: 6px;
+  column-gap: 4px;
   height: min-content;
   width: -moz-fit-content;
   width: fit-content;

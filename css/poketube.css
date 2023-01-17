@@ -146,7 +146,8 @@ a.avatar {
   margin-right: 2px;
 }
 
-.video-info-buttons.pill > div:nth-child(2) > .new-button, .button-encryption {
+.video-info-buttons.pill > div:nth-child(2) > .new-button,
+.button-encryption {
   margin-right: 2px;
 }
 
@@ -632,7 +633,7 @@ a.new-button:hover {
   display: none;
 }
 
-.pwp > input[type="checkbox"]:checked ~ div,
+.pwp > .v:checked ~ div,
 .div_box:target {
   display: flex;
   margin-top: -51em;
@@ -659,7 +660,7 @@ a.new-button:hover {
 }
 
 @media screen and (min-width: 1400px) {
-  .pwp > input[type="checkbox"]:checked ~ div,
+  .pwp > .v:checked ~ div,
   .div_box:target {
     display: flex;
     margin-top: -54em;
@@ -679,4 +680,34 @@ a.new-button:hover {
   .div_box {
     display: none !important;
   }
+}
+
+.flying_cmnt {
+  display: none;
+}
+
+.hj:checked ~ .flying_cmnt {
+  display: grid;
+  position: absolute;
+  max-height: 72em;
+  margin-top: -31em;
+  margin-left: auto;
+  width: 68em;
+  margin-right: auto;
+  white-space: -moz-pre-wrap !important;
+  white-space: -pre-wrap;
+  white-space: -o-pre-wrap;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  white-space: -webkit-pre-wrap;
+  word-break: break-all;
+  white-space: normal;
+  max-width: 913px;
+}
+
+marquee {
+  margin-top: 19px;
+  font-family: var(--text-font-primary);
+  font-stretch: extra-expanded;
+  font-weight: 900;
 }

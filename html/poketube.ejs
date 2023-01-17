@@ -464,13 +464,38 @@ display: block;" autoplay controls
                                  <a href="/watch?v=<%=video.id%>">  <i style="display: block;"  title="High Definition" class="fa-light fa-high-definition"></i> </a>  <i style="display: block;" title="Standard Definition [Current]"  class="fa-solid fa-standard-definition"></i>
 
                                                                       <% } %>   
-                                                                         <input type="checkbox" class="checkbox" id="box" style="display:none">
+                                                                          <input type="checkbox" class="v" id="box" style="display:none">
                                                                         <label class="h" for="box">
                                                                           <div class="fnt">
                                                                             
                                                                          <i  title="Stats for nerdys" class="fa-light fa-bug"></i>                                                                          </div>
 
                                                                         </label>
+                                                                        
+                                                                                                                                                                                                                    <%  if (inv.comments) { %> 
+                <input type="checkbox" class="hj" id="j" style="display:none">
+                                                                        <label class="hj" for="j">
+                                                                          <div class="fnt">
+                                                                            
+                                                                         <i  title="FLYING COMMENTS" class="fa-light fa-comments"></i>                                                                          </div>
+
+                                                                        </label>
+                                                                      <% } %>   
+
+                                                                                                                                                                                                                                                                                            <%  if (inv.comments.length > 8 ) { %> 
+
+                                                                             <div class="flying_cmnt">
+                                                                                         <% inv.comments.slice(-8).forEach(x =>{ %>
+ <marquee loop>
+                 <%- x.contentHtml %>
+                   </marquee>
+            
+  
+                                                                        <% }) %>   
+                                                                                                                                                <% } %>   
+
+          </div>  
+                                                                        
            <div class="div_box">
          Video id : <%=video.id%> <br>
        ImmersiveAmbientModecolor: <% if (lightOrDark(color) == "light") { %><%=color%> (color 1)<% } %><% if (lightOrDark(color) == "dark") { %> <%=color2%> (color 2) <% } %> <br>  

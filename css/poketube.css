@@ -633,8 +633,7 @@ a.new-button:hover {
   display: none;
 }
 
-.pwp > .v:checked ~ div,
-.div_box:target {
+.v:checked ~ .div_box {
   display: flex;
   margin-top: -51em;
   text-align: left;
@@ -660,8 +659,7 @@ a.new-button:hover {
 }
 
 @media screen and (min-width: 1400px) {
-  .pwp > .v:checked ~ div,
-  .div_box:target {
+  .v:checked ~ .div_box {
     display: flex;
     margin-top: -54em;
     margin-left: -14em;

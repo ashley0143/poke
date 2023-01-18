@@ -464,11 +464,12 @@ display: block;" autoplay controls
                                  <a href="/watch?v=<%=video.id%>">  <i style="display: block;"  title="High Definition" class="fa-light fa-high-definition"></i> </a>  <i style="display: block;" title="Standard Definition [Current]"  class="fa-solid fa-standard-definition"></i>
 
                                                                       <% } %>   
-                                                                          <input type="checkbox" class="v" id="box" style="display:none">
+                                                                           <input type="checkbox" class="v" id="box" style="display:none">
                                                                         <label class="h" for="box">
                                                                           <div class="fnt">
                                                                             
-                                                                         <i  title="Stats for nerdys" class="fa-light fa-bug"></i>                                                                          </div>
+<i title="Stats for nerdys" class="fa-light fa-bug" style="margin-left: 0.9em;"></i>
+                                                                          </div>
 
                                                                         </label>
                                                                         
@@ -481,8 +482,9 @@ display: block;" autoplay controls
 
                                                                         </label>
                                                                       <% } %>   
-
-                                                                                                                                                                                                                                                                                            <%  if (inv.comments.length > 8 ) { %> 
+                                                                        
+                                                                      <!-- comments -->
+                                                                          <%  if (inv.comments.length > 8 ) { %> 
 
                                                                              <div class="flying_cmnt">
                                                                                          <% inv.comments.slice(-8).forEach(x =>{ %>
@@ -493,9 +495,9 @@ display: block;" autoplay controls
                                                                         <% }) %>   
                             </div>
                                                                                                                        <% } %>   
-
-          
-                                                                        
+                                                                                                                         
+<!-- Stats for nerds -->
+                                                                                                                         
            <div class="div_box">
          Video id : <%=video.id%> <br>
        ImmersiveAmbientModecolor: <% if (lightOrDark(color) == "light") { %><%=color%> (color 1)<% } %><% if (lightOrDark(color) == "dark") { %> <%=color2%> (color 2) <% } %> <br>  
@@ -506,7 +508,9 @@ display: block;" autoplay controls
        Date : <%- Date.now() %>  <br>
        Mystery text :  <%=btoa(video.id + " i " + " lov " + " u " + u.replace("https://","") ) %> <br>
        143 : true <br>
-        </div>  
+        </div>
+        
+                      
        </div>
        </div>
                                                             <br>
@@ -598,7 +602,9 @@ display: block;" autoplay controls
 
                <i class="fa-light fa-shield"></i>
                 Encryption
-                                                      </div>                                                      </div>
+            </div>
+            
+            </div>
 
 
    </a>

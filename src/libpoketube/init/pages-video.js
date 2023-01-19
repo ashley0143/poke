@@ -194,9 +194,8 @@ module.exports = function (app, config, renderTemplate) {
       req.hostname == "poketube.fun" ||
       req.hostname == "poketube.site" ||
       req.hostname == "poketube.online" ||
-      req.hostname == "poketube.xyz" ||
-      req.hostname == "watch.poketalebot.com"
-    ) {
+      req.hostname == "poketube.xyz"
+     ) {
       secure = true;
     } else {
       secure = false;
@@ -282,14 +281,14 @@ module.exports = function (app, config, renderTemplate) {
               }
             }
           } else {
-            res.redirect("/");
+            res.redirect("/?fromerror=24");
           }
         });
       } else {
-        res.redirect("/");
+        res.redirect("/?fromerror=21");
       }
     } catch {
-      res.redirect("/");
+      return res.redirect("/?fromerror=43");
     }
   });
 
@@ -458,38 +457,41 @@ module.exports = function (app, config, renderTemplate) {
       if (!song) {
         res.redirect(`/watch?v=${v}`);
       }
+      try {
+        const lyrics = await lyricsFinder(song.artist + song.title);
+        if (lyrics == undefined)
+          ly = "This Is Where I'd Put The songs lyrics. IF IT HAD ONE ";
 
-      const lyrics = await lyricsFinder(song.artist + song.title);
-      if (lyrics == undefined)
-        ly = "This Is Where I'd Put The songs lyrics. IF IT HAD ONE ";
+        var ly = "";
+        if (lyrics) {
+          ly = lyrics.replace(/\n/g, " <br> ");
+        }
 
-      var ly = "";
-      if (lyrics) {
-        ly = lyrics.replace(/\n/g, " <br> ");
+        renderTemplate(res, req, "poketube-music.ejs", {
+          url: url_e,
+          info: song,
+          color: await modules
+            .getColors(`https://i.ytimg.com/vi/${v}/maxresdefault.jpg`)
+            .then((colors) => colors[0].hex()),
+          engagement: engagement,
+          process: process,
+          ip: ip,
+          video: json,
+          date: modules.moment(k.Video.uploadDate).format("LL"),
+          e: e,
+          k: k,
+          sha384: sha384,
+          isMobile: req.useragent.isMobile,
+          tj: tj,
+          r: r,
+          f: f,
+          t: config.t_url,
+          optout: t,
+          lyrics: ly,
+        });
+      } catch {
+        return res.redirect("/?fromerror=43");
       }
-
-      renderTemplate(res, req, "poketube-music.ejs", {
-        url: url_e,
-        info: song,
-        color: await modules
-          .getColors(`https://i.ytimg.com/vi/${v}/maxresdefault.jpg`)
-          .then((colors) => colors[0].hex()),
-        engagement: engagement,
-        process: process,
-        ip: ip,
-        video: json,
-        date: modules.moment(k.Video.uploadDate).format("LL"),
-        e: e,
-        k: k,
-        sha384: sha384,
-        isMobile: req.useragent.isMobile,
-        tj: tj,
-        r: r,
-        f: f,
-        t: config.t_url,
-        optout: t,
-        lyrics: ly,
-      });
     }
   });
 };

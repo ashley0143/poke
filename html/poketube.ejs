@@ -406,13 +406,13 @@ Version
 
  	<div class="primary">
 
-		<div class="video-player-container">
+		<div id="<%=sha384(video.id)%>" class="video-player-container">
  
  
-<video class="player video-ambient-container" id="<%=sha384(video.id)%>" style="border-radius: 16px;
+<video class="player video-ambient-container" id="video" style="border-radius: 16px;
 box-sizing: border-box;
 min-width: 100%;
-display: block;" autoplay controls   
+display: block; !important;" autoplay controls   
        
        poster="https://p.poketube.fun/https://i.ytimg.com/vi/<%=video.id%>/maxresdefault.jpg?v=607ddcd4">
         
@@ -450,11 +450,11 @@ display: block;" autoplay controls
             
                                                            <% } %>         
                                                            <% } %>         
-                                                             
+                                                                          
                                                              </video>
                                                              
                                                              <img loading="lazy" src="https://t.poketube.fun/t/rep.gif?video=<%=btoa(video.id)%>" style="border:0;width: 0;visibility: hidden;" id="video">
-<div class="pwp" style="display: flex;justify-content: center;align-items: center;flex-direction: row; column-gap: 3px;margin-top: -1em;" align="center">
+<div class="pwp" style="display: flex;justify-content: center;align-items: center;flex-direction: row; column-gap: 3px;margin-top: -1em" align="center">
                                 
   <% if (!qua) { %> 
 
@@ -483,12 +483,14 @@ display: block;" autoplay controls
                                                                         </label>
                                                                       <% } %>   
                                                                         
-                                                                      <!-- comments -->
+                                                                   <a href="#video"  class="maxi"  id="maximize">  <i style="display: block;"  title="Maximise!" class="fa-light fa-maximize"></i> </a> 
+                                                                           
+                                                                       <!-- comments -->
                                                                           <%  if (inv.comments.length > 8 ) { %> 
 
                                                                              <div class="flying_cmnt">
                                                                                          <% inv.comments.slice(-8).forEach(x =>{ %>
- <marquee loop="-1">
+ <marquee loop="INFINITY">
                  <%- x.contentHtml %>
                    </marquee>
             

@@ -709,3 +709,19 @@ marquee {
   font-stretch: extra-expanded;
   font-weight: 900;
 }
+
+.mini {
+  display:none;
+}
+ 
+
+#video {
+object-fit:initial;
+}
+
+#video:target {
+object-fit:none;
+}
+
+ 
+ 

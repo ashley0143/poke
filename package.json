@@ -10,7 +10,7 @@
     "express": "^4.18.2",
     "ejs": "^3.1.8",
     "path": "^0.12.7",
-    "html-to-text": "^9.0.3",
+    "html-to-text": "^8.2.1",
     "encoding": "^0.1.13",
     "node-fetch": "^2.6.7",
     "xml-js": "^1.6.11",

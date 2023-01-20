@@ -114,6 +114,8 @@ this is our config file,you can change stuff here
   app.use(function (request, response, next) {
     if (config.enablealwayshttps == true) {
       if (process.env.NODE_ENV != "development" && !request.secure) {
+        response.header("secure-poketube-instance", "1");
+
         return response.redirect(
           "https://" + request.headers.host + request.url
         );

@@ -545,4 +545,7 @@ nav .right img {
 
 nav .middle .search-bar {
   border-radius: 2em !important;
+  font-family: "poketube flex", sans-serif !important;
+  font-weight: 850 !important;
+  font-stretch: extra-expanded !important;
 }

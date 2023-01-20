@@ -713,11 +713,6 @@ marquee {
 .mini {
   display:none;
 }
- 
-
-#video {
-object-fit:initial;
-}
 
 #video:target {
 object-fit:none;

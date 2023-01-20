@@ -335,7 +335,7 @@ But Please note that unofficial instances can add the same lock icon, so please 
                                              
             </div>               
        <div class="middle">
-        <form action="/search"><input class="search-bar" autocomplete="on" id="fname" name="query" style="color:var(--text-color);font-family:Inter,sans-serif;border-radius: 2em;" data-ddg-inputtype="identities.firstName">
+        <form action="/search"><input class="search-bar" autocomplete="on" id="fname" name="query" style="color:var(--text-color);font-family:poketube flex,sans-serif;border-radius: 2em;font-weight: 850;font-stretch: extra-expanded;" data-ddg-inputtype="identities.firstName">
 <button class="btn btn-success" type="submit" style="transform: translate(21em, -1.25em);"><i class="fa-light fa-search"></i></button>             
          </form>
              
@@ -344,6 +344,7 @@ But Please note that unofficial instances can add the same lock icon, so please 
       </div>
       <div class="right">
                 <a><i  style="display: block;margin-left: auto;margin-right: auto;visibility: collapse;" class="fa-light fa-server"></i>  </a>
+              <a ><i class="fa-light fa-shield" style="visibility: collapse;margin-right: 1.5em;"></i></a>
               <a ><i class="fa-light fa-shield" style="visibility: collapse;margin-right: 1.5em;"></i></a>
 
           <div class="icon-button dropdown" style="margin-right: 4.5px;">
@@ -486,6 +487,8 @@ display: block; !important;" autoplay controls
                                                                    <a href="#video"  class="maxi"  id="maximize">  <i style="display: block;"  title="Maximise!" class="fa-light fa-maximize"></i> </a> 
                                                                            
                                                                        <!-- comments -->
+                                                                                                                                                                                                                                                                                            <%  if (inv.comments) { %> 
+
                                                                           <%  if (inv.comments.length > 8 ) { %> 
 
                                                                              <div class="flying_cmnt">
@@ -496,7 +499,8 @@ display: block; !important;" autoplay controls
             
                                                                         <% }) %>   
                             </div>
-                                                                                                                       <% } %>   
+                                                                                                                       <% } %>                                                                         <% } %>   
+
                                                                                                                          
 <!-- Stats for nerds -->
                                                                                                                          

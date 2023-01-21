@@ -472,7 +472,7 @@ module.exports = function (app, config, renderTemplate) {
           url: url_e,
           info: song,
           color: await modules
-            .getColors(`https://i.ytimg.com/vi/${v}/maxresdefault.jpg`)
+            .getColors(song.artwork)
             .then((colors) => colors[0].hex()),
           engagement: engagement,
           process: process,

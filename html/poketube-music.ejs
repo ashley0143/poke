@@ -41,199 +41,12 @@
 <link href=/css/app.main.css rel=stylesheet>
   <link href="https://fonts.poketube.fun/css/fonts.css" rel=stylesheet>
 <link href="/css/watch.main.css?v=56" rel=stylesheet>
+  <link href="/css/music.css?v=56" rel=stylesheet>
+
  <link href=https://site-assets.fontawesome.com/releases/v6.1.1/css/all.css rel=stylesheet>
    </head>
     
-<style>
-   a.class:hover {
-    text-decoration:underline;
-    font-weight:bold
-}
-  summary{
-    color:gray;
-}
-summary:hover{
-    color:white;
-}   
-  body{
-        overflow-x: hidden; /* Hide horizontal scrollbar */
-         color:#111111
-    }
-    
-   .animated {
-            -webkit-animation-duration: 10s; 
-            animation-duration: 10s; 
-            -webkit-animation-fill-mode: both;
-            animation-fill-mode: both; 
-            animation-iteration-count: infinite;
-            -moz-animation-iteration-count: infinite;
-            -webkit-animation-iteration-count: infinite;
-            -o-animation-iteration-count: infinite;
-         }
-         
-         @-webkit-keyframes wiggle { 
-            0% { -webkit-transform: skewX(9deg); }
-            10% { -webkit-transform: skewX(-8deg); }
-            20% { -webkit-transform: skewX(7deg); }
-            30% { -webkit-transform: skewX(-6deg); }
-            40% { -webkit-transform: skewX(5deg); } 
-            50% { -webkit-transform: skewX(-4deg); } 
-            60% { -webkit-transform: skewX(3deg); }
-            70% { -webkit-transform: skewX(-2deg); } 
-            80% { -webkit-transform: skewX(1deg); } 
-            90% { -webkit-transform: skewX(0deg); }
-            100% { -webkit-transform: skewX(0deg); } 
-         }
-         
-         @keyframes wiggle { 
-            0% { transform: skewX(9deg); } 
-            10% { transform: skewX(-8deg); } 
-            20% { transform: skewX(7deg); } 
-            30% { transform: skewX(-6deg); } 
-            40% { transform: skewX(5deg); } 
-            50% { transform: skewX(-4deg); } 
-            60% { transform: skewX(3deg); } 
-            70% { transform: skewX(-2deg); } 
-            80% { transform: skewX(1deg); } 
-            90% { transform: skewX(0deg); } 
-            100% { transform: skewX(0deg); } 
-         }
-         
-         .wiggle { 
-            -webkit-animation-name: wiggle;
-            animation-name: wiggle; 
-            -webkit-animation-timing-function: ease-in;
-            animation-timing-function: ease-in; 
-         }
-         
-         .animated.wiggle { 
-            -webkit-animation-duration: 0.75s; 
-            animation-duration: 0.75s;
-         }
-    
-    :root {
-    --text-primary: #fff;
-    --text-secondary: #fff;
-    --text-link: #3ea6ff;
 
-    --app-background: #111111;
-    --context-menu-background: #333;
-    --border-color: #444;
-    --item-hover-background: #373737;
-    --item-active-background: #383838;
-
-    --top-bar-background: #202020;
-    --guide-background: #212121;
-
-    --thumbnail-background: #252525;
-
-    --channel-info-background: #181818;
-    --channel-contents-background: #0f0f0f;
-}
-          @font-face {
-        font-family: 'Ginto Nord';
-        font-weight: 800;
-        src:url('https://cdn.statically.io/gh/brecert/discord-quote-generator/main/Ginto-Nord-800.woff') format("woff");
-      }
-
-.alert {
-  padding: 20px;
-  background-color: #f44336;
-  color: white;
-  opacity: 1;
-  transition: opacity 0.6s;
-  margin-bottom: 15px;
-}
-
-.alert.success {background-color: #04AA6D;}
-.alert.info {background-color: #2196F3;}
-.alert.warning {background-color: #ff9800;}
-
-.closebtn {
-  margin-left: 15px;
-  color: white;
-  font-weight: bold;
-  float: right;
-  font-size: 22px;
-  line-height: 20px;
-  cursor: pointer;
-  transition: 0.3s;
-}
-
-.closebtn:hover {
-  color: black;
-}
-    /* Mostly: http://ryanfait.com/sticky-footer/ */
-
-* {
-	margin: 0;
-}
-html, body {
-	height: 100%;
-}
-.page-wrap {
-  min-height: 100%;
- 	margin-bottom: 0; 
-}
-.page-wrap:after {
-  content: "";
-  display: block;
-}
-.site-footer, .page-wrap:after {
- 	height: auto; 
-}
-.site-footer {
-  background: black;
-}
-.align {
-  position: absolute;
-  bottom: 0px;
-  left: 0px;
-  padding: 3em;
-  display: flex;
-  flex-direction: row;
-  gap: 1em;
-  margin:24px;
-  margin-left:auto;
-}
-  img{
-    pointer-events:none;
-  }
-.downnav{
-       position: fixed;
-      bottom: 0;
-      left: 0;
-      width: 100%;
-      margin: auto;
-      overflow: hidden;
-       z-index: 1;
-      background-color: #0f0f0f
-}
-.img {
- left: 0;
-right: 0;
-text-align: center;
-height: auto !important;
-min-height: 52%;
-margin: 0;
- display: block;
-margin-inline: auto;
-width: 10em;
-border-radius: 11px;
-pointer-events:none;
-    }
-  .center {
-    text-align:center;
-  }
-.info {
-    display: block;
-    margin-inline: auto;
-     height: 2.5em;
-    width: fit-content;
-    padding: 0em 1em;
-    margin-block: 2vh;
-}
-  </style>
   <body>
      
      <nav>
@@ -242,34 +55,37 @@ pointer-events:none;
         <form action=/search><input class=search-bar autocomplete="on" id=fname name=query style="color:#fff;font-family:Inter,sans-serif;border-radius: 8px;"> <button class="btn btn-success" type=submit><i class="fa-light fa-search"></i></button></form>
       </div>
       <div class="right">
-        <a href="/privacy">
-          <i style="display: block;margin-left: auto;margin-right: auto;" class="fa-light fa-shield"></i>
-        </a>
+               <a ><i class="fa-light fa-shield" style="visibility: collapse;margin-right: 1.5em;"></i></a>
+
         <a href="/video/upload?from=">
           <i style="display: block;margin-left: auto;margin-right: auto;" class="fa-light fa-video"></i>
         </a>
         <a href="/download?v=<%=video.id%>">
           <i style="display: block;margin-left: auto;margin-right: auto;" class="fa-light fa-download"></i>
-        </a>                                   
+        </a>    
+                
+
       </div>
     </nav>
-        <div class="center">
-                                                                       <h1 style="font-family:'Ginto Nord',sans-serif;font-weight:900;white-space:yes;" align="center">
- Lyrics 
-                        </h1>  
-<p style="overflow: auto;overflow-x: hidden;height: 12em;">
-           <%-lyrics || " none :p "%>
-          </p>
-   
-    </div>
+       
    
      <div class="align">
+       <div style="margin: 10em;margin-bottom: auto;margin-top: auto;">
+         
       <img class="img" src="https://p.poketube.fun/<%=info.artwork%>"/>
-        <div class="info">
-     <div class="video-title center" style="font-family:Ginto Nord;font-weight:900;white-space:yes;text-align: left;">
+     <div class="video-title center" style="font-family:Poketube flex;font-weight:900;white-space:yes;text-align: center;font-stretch: extra-expanded">
             <%=info.title%>    <i title="hq audio" class="fa-light fa-waveform-lines"></i> </div>
-              <div class="video-title center" style="font-family:Inter;font-weight:900;white-space:yes;text-align: left;">             <%=info.artist%>
-</div>
+              <div class="video-title center" style="font-family:Inter;font-weight:900;white-space:yes;text-align: center;">             <%=info.artist%>
+</div>       </div>
+
+                
+                <div style="  position: fixed;
+  bottom: 0;
+  left: 0;
+  margin: 67px;
+  text-decoration: none;
+">
+                  
 <div style="margin-top: 7px;">
 <i class="fa-solid fa-heart"></i> <%=engagement.likes.toLocaleString()%> 
   </div>
@@ -284,6 +100,7 @@ pointer-events:none;
 					</a>
    
   </div>
+                </div>
  
                 
 <div style="position: fixed;bottom: 0;right: 0;margin: 67px;text-decoration: none;">
@@ -296,7 +113,6 @@ pointer-events:none;
         <audio class="player" id="<%=sha384(video.id)%>" autoplay controls src="https://p.poketube.fun/<%=url%>" poster="https://p.poketube.fun/https://i.ytimg.com/vi/<%=video.id%>/hqdefault.jpg?v=607ddcd4"><img src="https://t.poketube.fun/t/rep.gif?music=<%=btoa(video.id)%>" style="border:0;width: 0;visibility: hidden;" id="music-track">
             </audio>
       </div>
-    </div>
                 <!-- MORE INFO :https://poketube.fun/privacy -->
           <!-- MORE INFO :https://poketube.fun/privacy -->
        

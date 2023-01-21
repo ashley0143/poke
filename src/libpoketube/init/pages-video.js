@@ -195,7 +195,7 @@ module.exports = function (app, config, renderTemplate) {
       req.hostname == "poketube.site" ||
       req.hostname == "poketube.online" ||
       req.hostname == "poketube.xyz"
-     ) {
+    ) {
       secure = true;
     } else {
       secure = false;
@@ -445,19 +445,20 @@ module.exports = function (app, config, renderTemplate) {
       const c = await channel.text();
       const tj = JSON.parse(modules.toJson(c));
 
-      // info
-      const song = await musicInfo.searchSong(
-        {
-          title: k.Video.Title,
-          artist: json.Channel.Name.replace("- Topic", ""),
-        },
-        1000
-      );
-
-      if (!song) {
-        res.redirect(`/watch?v=${v}`);
-      }
       try {
+        // info
+        const song = await musicInfo.searchSong(
+          {
+            title: k.Video.Title,
+            artist: json.Channel.Name.replace("- Topic", ""),
+          },
+          1000
+        );
+
+        if (!song) {
+          res.redirect(`/watch?v=${v}`);
+        }
+
         const lyrics = await lyricsFinder(song.artist + song.title);
         if (lyrics == undefined)
           ly = "This Is Where I'd Put The songs lyrics. IF IT HAD ONE ";

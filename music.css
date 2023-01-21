@@ -1,0 +1,333 @@
+/*
+
+   This Source Code Form is subject to the terms of the GNU General Public License:
+
+    Copyright (C) 2021-202x POKETUBE (https://github.com/iamashley0/poketube)
+    
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program. If not, see https://www.gnu.org/licenses/.
+
+*/
+
+a.class:hover {
+  text-decoration: underline;
+  font-weight: bold;
+}
+summary {
+  color: gray;
+}
+summary:hover {
+  color: white;
+}
+body {
+  overflow: hidden; /* Hide horizontal scrollbar */
+
+  color: #111111;
+}
+
+.animated {
+  -webkit-animation-duration: 10s;
+  animation-duration: 10s;
+  -webkit-animation-fill-mode: both;
+  animation-fill-mode: both;
+  animation-iteration-count: infinite;
+  -moz-animation-iteration-count: infinite;
+  -webkit-animation-iteration-count: infinite;
+  -o-animation-iteration-count: infinite;
+}
+
+@-webkit-keyframes wiggle {
+  0% {
+    -webkit-transform: skewX(9deg);
+  }
+  10% {
+    -webkit-transform: skewX(-8deg);
+  }
+  20% {
+    -webkit-transform: skewX(7deg);
+  }
+  30% {
+    -webkit-transform: skewX(-6deg);
+  }
+  40% {
+    -webkit-transform: skewX(5deg);
+  }
+  50% {
+    -webkit-transform: skewX(-4deg);
+  }
+  60% {
+    -webkit-transform: skewX(3deg);
+  }
+  70% {
+    -webkit-transform: skewX(-2deg);
+  }
+  80% {
+    -webkit-transform: skewX(1deg);
+  }
+  90% {
+    -webkit-transform: skewX(0deg);
+  }
+  100% {
+    -webkit-transform: skewX(0deg);
+  }
+}
+
+@keyframes wiggle {
+  0% {
+    transform: skewX(9deg);
+  }
+  10% {
+    transform: skewX(-8deg);
+  }
+  20% {
+    transform: skewX(7deg);
+  }
+  30% {
+    transform: skewX(-6deg);
+  }
+  40% {
+    transform: skewX(5deg);
+  }
+  50% {
+    transform: skewX(-4deg);
+  }
+  60% {
+    transform: skewX(3deg);
+  }
+  70% {
+    transform: skewX(-2deg);
+  }
+  80% {
+    transform: skewX(1deg);
+  }
+  90% {
+    transform: skewX(0deg);
+  }
+  100% {
+    transform: skewX(0deg);
+  }
+}
+
+.wiggle {
+  -webkit-animation-name: wiggle;
+  animation-name: wiggle;
+  -webkit-animation-timing-function: ease-in;
+  animation-timing-function: ease-in;
+}
+
+.animated.wiggle {
+  -webkit-animation-duration: 0.75s;
+  animation-duration: 0.75s;
+}
+
+:root {
+  --text-primary: #fff;
+  --text-secondary: #fff;
+  --text-link: #3ea6ff;
+
+  --app-background: #111111;
+  --context-menu-background: #333;
+  --border-color: #444;
+  --item-hover-background: #373737;
+  --item-active-background: #383838;
+
+  --top-bar-background: #202020;
+  --guide-background: #212121;
+
+  --thumbnail-background: #252525;
+
+  --channel-info-background: #181818;
+  --channel-contents-background: #0f0f0f;
+}
+@font-face {
+  font-family: "Ginto Nord";
+  font-weight: 800;
+  src: url("https://cdn.statically.io/gh/brecert/discord-quote-generator/main/Ginto-Nord-800.woff")
+    format("woff");
+}
+
+.alert {
+  padding: 20px;
+  background-color: #f44336;
+  color: white;
+  opacity: 1;
+  transition: opacity 0.6s;
+  margin-bottom: 15px;
+}
+
+.alert.success {
+  background-color: #04aa6d;
+}
+.alert.info {
+  background-color: #2196f3;
+}
+.alert.warning {
+  background-color: #ff9800;
+}
+
+.closebtn {
+  margin-left: 15px;
+  color: white;
+  font-weight: bold;
+  float: right;
+  font-size: 22px;
+  line-height: 20px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.closebtn:hover {
+  color: black;
+}
+/* Mostly: http://ryanfait.com/sticky-footer/ */
+
+* {
+  margin: 0;
+}
+html,
+body {
+  height: 100%;
+}
+.page-wrap {
+  min-height: 100%;
+  margin-bottom: 0;
+}
+.page-wrap:after {
+  content: "";
+  display: block;
+}
+.site-footer,
+.page-wrap:after {
+  height: auto;
+}
+.site-footer {
+  background: black;
+}
+.align {
+  padding: 3em;
+  display: flex;
+  flex-direction: column;
+  margin: 24px;
+  margin-top: auto;
+  margin-left: auto;
+  max-height: 768px;
+}
+    @media only screen and (min-width: 72rem) {
+ .align {
+  margin:0 auto;
+  width:1024px;
+  margin-left: -1em;
+ }
+}
+
+
+.video-title.center {
+  margin-inline: auto;
+  margin-left: 20em;
+  width: 13em;
+}
+
+img {
+  pointer-events: none;
+}
+.downnav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  margin: auto;
+  overflow: hidden;
+  z-index: 1;
+  background-color: #0f0f0f;
+}
+.img {
+  text-align: center;
+  height: 23em !important;
+  min-height: 52%;
+  margin: 0;
+  display: block;
+  margin-inline: auto;
+  width: 23em;
+  border-radius: 11px;
+  pointer-events: none;
+  margin-left: 20em;
+}
+.center {
+  text-align: center;
+}
+.info {
+  display: block;
+  margin-inline: auto;
+  height: 2.5em;
+  width: fit-content;
+  padding: 0em 1em;
+  margin-block: 2vh;
+}
+#more-button-container .backtotop {
+  margin: 0%;
+  display: none;
+}
+#more-button-container .backtotop a {
+  margin-top: 0.5em;
+}
+#more-button .close {
+  display: none;
+}
+#more-button {
+  font-size: 0.94em;
+  line-height: 1.2em;
+  text-align: left;
+  padding: 0.6em 3%;
+  margin: 0;
+  background: #000;
+  border-top: none;
+  border-radius: 4px;
+  height: 100%;
+}
+#set-language {
+  margin-bottom: 0.2em;
+}
+#set-language + p {
+  display: inline-block;
+  font-size: 1em; /* 15px */
+  margin: 0.45em 0 0;
+}
+
+#more-buttons {
+  padding: 0.4em 0;
+}
+#more-buttons p {
+  margin: 0;
+  font-weight: 900;
+  font-stretch: ultra-expanded;
+  padding: 3px;
+}
+#more-buttons span {
+  display: inline-block;
+  width: 10.5em;
+  line-height: 2em;
+}
+#more-buttons span a {
+  line-height: 1.9em;
+}
+#more-buttons span.original {
+  font-weight: bold;
+}
+/* Display/hide language list */
+
+#more-button-container {
+  display: none;
+}
+#more-button-container:target {
+  display: block;
+}

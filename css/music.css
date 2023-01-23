@@ -217,23 +217,12 @@ body {
   padding: 3em;
   display: flex;
   flex-direction: column;
-  margin: 24px;
   margin-top: auto;
   margin-left: auto;
-  max-height: 768px;
 }
-    @media only screen and (min-width: 72rem) {
- .align {
-  margin:0 auto;
-  width:1024px;
-  margin-left: -1em;
- }
-}
-
 
 .video-title.center {
   margin-inline: auto;
-  margin-left: 20em;
   width: 13em;
 }
 
@@ -251,16 +240,10 @@ img {
   background-color: #0f0f0f;
 }
 .img {
-  text-align: center;
   height: 23em !important;
-  min-height: 52%;
-  margin: 0;
-  display: block;
-  margin-inline: auto;
   width: 23em;
   border-radius: 11px;
   pointer-events: none;
-  margin-left: 20em;
 }
 .center {
   text-align: center;
@@ -330,4 +313,10 @@ img {
 }
 #more-button-container:target {
   display: block;
+}
+
+.middle {
+  position: absolute;
+  transform: translateX(-50%);
+  left: 50%;
 }

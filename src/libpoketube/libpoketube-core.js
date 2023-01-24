@@ -78,11 +78,16 @@ async function video(v) {
   } catch {
     var comments = "";
   }
-  var video_new_info = await fetch(`${config.invapi}/videos/${v}`).then((res) =>
-    res.text()
-  );
+  try {
+    var video_new_info = await fetch(`${config.invapi}/videos/${v}`).then(
+      (res) => res.text()
+    );
 
-  var vid = await getJson(video_new_info);
+    var vid = await getJson(video_new_info);
+  } catch {
+    var vid = "";
+  }
+
   if (checkUnexistingObject(vid)) {
     var a;
 

@@ -69,13 +69,15 @@ async function video(v) {
 
   let nightlyRes;
   var desc = "";
+  try {
+    var inv_comments = await fetch(`${config.invapi}/comments/${v}`).then(
+      (res) => res.text()
+    );
 
-  var inv_comments = await fetch(`${config.invapi}/comments/${v}`).then((res) =>
-    res.text()
-  );
-
-  var comments = await getJson(inv_comments);
-
+    var comments = await getJson(inv_comments);
+  } catch {
+    var comments = "";
+  }
   var video_new_info = await fetch(`${config.invapi}/videos/${v}`).then((res) =>
     res.text()
   );

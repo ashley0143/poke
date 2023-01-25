@@ -356,6 +356,7 @@ a.avatar {
   font-family: var(--text-font-primary);
   font-stretch: ultra-expanded;
   font-weight: 900;
+  text-decoration: none;
 }
 
 .video > .thumbnail > .video-length {
@@ -593,6 +594,11 @@ a.new-button:hover {
   background-color: #0008;
 }
 
+.subscribe-button:hover {
+  background: #f2ebeb;
+  cursor: pointer;
+}
+
 @media screen and (max-width: 1340px) {
   .new-button.button-encryption {
     display: none;
@@ -720,6 +726,12 @@ object-fit:none;
 
 #secret-theme:target{
   background: linear-gradient(180deg, #5BCEFA 20%, #F5A9B8 20%, 40%, #FFFFFF 40%, 60%, #F5A9B8 60%, 80%, #5BCEFA 80%);
-
 }
- 
+
+.hj:hover {
+  cursor: pointer;
+}
+
+.h:hover {
+  cursor: pointer;
+}

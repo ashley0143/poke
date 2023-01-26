@@ -1,20 +1,5 @@
 [
   [
-    "watch.poketalebot.com",
-    {
-      "uri": "https://watch.poketalebot.com",
-      "CLOUDFLARE": true,
-      "piwik": true,
-      "region": "🇺🇸",
-      "official":true,
-      "software": {
-        "name": "poketube-vanilla",
-        "version": "lastest",
-        "branch": "master"
-      }
-    }
-  ],
-  [
     "poketube.fun",
     {
       "uri": "https://poketube.fun",

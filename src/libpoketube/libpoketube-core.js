@@ -19,6 +19,8 @@ const fetcher = require("../libpoketube/libpoketube-fetcher.js");
 const getColors = require("get-image-colors");
 
 const wiki = require("wikipedia");
+const sqp =
+  "-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLBy_x4UUHLNDZtJtH0PXeQGoRFTgw";
 
 const config = {
   tubeApi: "https://tube-srv.ashley143.gay/api/",
@@ -69,6 +71,7 @@ async function video(v) {
 
   let nightlyRes;
   var desc = "";
+
   try {
     var inv_comments = await fetch(`${config.invapi}/comments/${v}`).then(
       (res) => res.text()
@@ -78,6 +81,7 @@ async function video(v) {
   } catch {
     var comments = "";
   }
+
   try {
     var video_new_info = await fetch(`${config.invapi}/videos/${v}`).then(
       (res) => res.text()
@@ -114,7 +118,7 @@ async function video(v) {
     const nightlyJsonData = getJson(nightlyRes);
 
     return {
-      json: data.video.Player,
+      json: data?.video?.Player,
       video: await fetch(`${config.tubeApi}video?v=${v}`)
         .then((res) => res.text())
         .then((xml) => getJson(toJson(xml))),
@@ -124,10 +128,10 @@ async function video(v) {
       wiki: summary,
       desc: desc,
       color: await getColors(
-        `https://i.ytimg.com/vi/${v}/hqdefault.jpg?sqp=-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLBy_x4UUHLNDZtJtH0PXeQGoRFTgw`
+        `https://i.ytimg.com/vi/${v}/hqdefault.jpg?sqp=${sqp}`
       ).then((colors) => colors[0].hex()),
       color2: await getColors(
-        `https://i.ytimg.com/vi/${v}/hqdefault.jpg?sqp=-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLBy_x4UUHLNDZtJtH0PXeQGoRFTgw`
+        `https://i.ytimg.com/vi/${v}/hqdefault.jpg?sqp=${sqp}`
       ).then((colors) => colors[1].hex()),
     };
   }

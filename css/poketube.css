@@ -735,3 +735,7 @@ object-fit:none;
 .h:hover {
   cursor: pointer;
 }
+
+.hj {
+  display: none;
+}

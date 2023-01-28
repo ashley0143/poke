@@ -212,6 +212,7 @@ padding-bottom: 32px;
    font-family:inter;
 	 border-collapse: separate;
 	 table-layout: auto;
+	 border-spacing: 4px 0;
 }
  .tabs.tabs-center {
 	 margin: auto;
@@ -231,10 +232,7 @@ text-transform:uppercase;
 	 white-space: nowrap;
 	 cursor: pointer;
 }
- .tabs a.tab:hover {
-	 color: #fff;
-   text-decoration: none;
-}
+
  .tabs a.tab:after {
 	 transition: all 0.3s cubic-bezier(1, 0, 0, 1);
 	 will-change: transform, box-shadow, opacity;
@@ -256,7 +254,10 @@ text-transform:uppercase;
  .tabs a.tab.active:after {
 	 opacity: 1;
 	 transform: scale(1, 1);
-}                 
+}            
+        
+       
+                     
                      </style>
                      
   <% if(!isMobile) { %>
@@ -264,6 +265,13 @@ text-transform:uppercase;
       .name{
         text-align: left;
       }
+       .tabs a.tab:hover {
+	 color: #fff;
+   text-decoration: none;
+	 background: #333;
+	 border-top-left-radius: 1em;
+	 border-top-right-radius: 1em;
+}
         .subs {
     margin: 0.6em;text-align: left;margin-left: 0px;margin-top: -1em;font-family: "PokeTube flex";font-weight: 1000;font-stretch: ultra-expanded;
   }
@@ -296,6 +304,11 @@ text-transform:uppercase;
   width: fit-content;
   border-radius: 22px;
   }
+  
+       .tabs a.tab:hover {
+	 color: #fff;
+   text-decoration: none;
+}
   
   .community {
   display: flex;
@@ -351,7 +364,7 @@ text-transform:uppercase;
 	 margin: auto;
    font-size:15px
 }
-  
+
  .tabs.tabs-justify {
 	 width: 100%;
 	 table-layout: fixed;
@@ -395,8 +408,12 @@ text-transform:uppercase;
   body {
     background-color:#111
   }
-   
-
+    
+ .subscribe-button:hover {
+	text-decoration: none !important;
+	background: #f2ebeb !important;
+	cursor: pointer;
+}
   </style>
                  <% } %>
 
@@ -478,14 +495,14 @@ text-transform:uppercase;
 				<img src="https://p.poketube.fun/<%=j.Channel.Metadata.Avatars.Thumbnail.$t%>" alt="Channel Avatar">
 			</a>
 			<div class="name">
-				<p style="font-family:Ginto Nord,sans-serif;font-weight:900;white-space:yes;"><%=j.Channel.Metadata.Name%>       <a href="/feeds/videos.xml?channel_id=<%=ID%>"><i class="fa-light fa-rss"></i></a>
-<br>
-          </p>
+				<p style="font-family:PokeTube Flex,sans-serif;font-weight:1000;font-stretch: ultra-expanded;"><%=j.Channel.Metadata.Name%>
+           </p>
                     <p class="subs"><%=subs%> subscribers</p>
 
  			</div>
  
-			<button class="subscribe-button">Suscribe</button>
+  <button class="subscribe-button " style="text-decoration: none;">    <a style="color: black;
+white-space: nowrap;text-decoration: none;" href="/feeds/videos.xml?channel_id=<%=ID%>">Rss feed </a></button>
       
 		</div>
                                     <% if (!isMobile) { %>  
@@ -541,7 +558,7 @@ text-transform:uppercase;
 
                                       <% if (j.Channel.Metadata.Banners.Thumbnail) { %>
 
-          <img src="https://p.poketube.fun/<%=j.Channel.Metadata.Banners.Thumbnail[2].$t%>">
+          <img src="https://p.poketube.fun/<%=j.Channel.Metadata.Banners.Thumbnail[3].$t%>">
                                <% } %>
                                  
  

@@ -142,13 +142,17 @@ module.exports = function (app, config, renderTemplate) {
       var continuation = "";
     }
 
+    try {
     //videos
     const a = await modules
-      .fetch(`https://inv.riverside.rocks/api/v1/channels/videos/${ID}/`)
+      .fetch(`https://inv.vern.cc/api/v1/channels/videos/${ID}/`)
       .then((res) => res.text());
 
     var tj = await getJson(a);
-
+    } catch {
+      var tj = " "
+    }
+    
     const community = await modules
       .fetch(`${config.invapi}/channels/community/${ID}/`)
       .then((res) => res.text());

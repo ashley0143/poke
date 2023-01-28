@@ -823,7 +823,14 @@ display: block; !important;" autoplay controls
 
  
  
-                                                 
+                                                   <% if(!inv.comments) { %>  
+<p style="text-align: center">
+  no comments on this video (it may be disabled or theres just no comments lol)
+                                                     
+                                                     </p>
+                                                     <% } %>                     
+
+                                                     
                                                                                                                                            <%  if (inv.comments) { %> 
                                                                                                                                                                               <div class="comments">                                                                   
 
@@ -941,12 +948,22 @@ display: block; !important;" autoplay controls
                   
 <div class="recommended-list" align="center">
     
-             
+  <div class="tags rec" >
+        <div class="tag">
+Recommended Videos
+    </div>
+               
+             <a style="color:#fff" href="/channel?id=<%=video.Channel.Name %>" class="tag">
+               From <%=video.Channel.Name %>
+               </a>
+               
+  </div>
 
                               <% if (!r) { %> 
  
 
- <div class="video-title" style="text-align:left;font-family:var(--text-font-primary);font-weight:var(--text-header-weight);white-space:yes;font-stretch: ultra-expanded;">For You
+ <div>
+   
 </div>   
                                 
                                             
@@ -982,7 +999,7 @@ display: block; !important;" autoplay controls
  
      <% if (f) { %> 
 
-     <% tj.Contents.ItemSection.Video.forEach(x => { %>       
+     <% tj.forEach(x => { %>       
  						<div class="video">
                     <% if (!optout) { %> 
 
@@ -995,15 +1012,15 @@ display: block; !important;" autoplay controls
 							</a>
 							<div class="info">
        <% if (!optout) { %> 
-								<a href="/watch?v=<%= x.id %>" class="title max-lines-2" title="<%= x.Title %>"><%= x.Title %></a>
+								<a href="/watch?v=<%= x.id %>" class="title max-lines-2" style="font-stretch: 100%;font-weight: 800;" title="<%= x.Title %>"><%= x.Title %></a>
                    <% } %>
    <% if (optout) { %> 
-								<a href="/watch?v=<%= x.id %>&t=f" class="title max-lines-2" title="<%= x.Title %>"><%= x.Title %></a>
+								<a href="/watch?v=<%= x.id %>&t=f" class="title max-lines-2" title="<%= x.Title %>" style="font-stretch: 100%;font-weight: 800;"><%= x.Title %></a>
                    <% } %>
 								<div>
-               <a class="max-lines-2" href="/channel?id=<%= video.Channel.id %>"><%=video.Channel.Name %></a>
-									<div>
- <%= x.uploadedAt %> • <%= convert(x.views) %> views</div>
+                                 <a class="max-lines-2" href="/channel?id=<%=video.Channel.Name %>" style="-webkit-line-clamp: 1;width: 12em;word-wrap: break-word;"><%=video.Channel.Name %></a>
+									<div class="video-views">  <%= x.uploadedAt %> • <%= convert(x.views) %> views </div>
+
 								</div>
 							</div>
 						</div>

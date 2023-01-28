@@ -739,3 +739,17 @@ object-fit:none;
 .hj {
   display: none;
 }
+
+.tags.rec {
+  width: 21em;
+  margin-bottom: -1.3em;
+  font-weight: 600;
+  font-stretch: expanded;
+  overflow:hidden;
+  font-family: var(--text-font-primary);
+}
+
+.tags.rec:hover{
+  overflow-x:auto;
+}
+

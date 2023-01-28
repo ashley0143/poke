@@ -747,6 +747,8 @@ object-fit:none;
   font-stretch: expanded;
   overflow:hidden;
   font-family: var(--text-font-primary);
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .tags.rec:hover{

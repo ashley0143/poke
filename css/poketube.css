@@ -749,6 +749,7 @@ object-fit:none;
   font-family: var(--text-font-primary);
   margin-left: auto;
   margin-right: auto;
+  justify-content:center;
 }
 
 .tags.rec:hover{

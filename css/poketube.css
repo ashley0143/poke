@@ -741,7 +741,6 @@ object-fit:none;
 }
 
 .tags.rec {
-  width: 21em;
   margin-bottom: -1.3em;
   font-weight: 600;
   font-stretch: expanded;
@@ -749,7 +748,8 @@ object-fit:none;
   font-family: var(--text-font-primary);
   margin-left: auto;
   margin-right: auto;
-  justify-content:center;
+  width: auto;
+  max-width: 21em;
 }
 
 .tags.rec:hover{

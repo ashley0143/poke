@@ -186,10 +186,10 @@ module.exports = function (app, config, renderTemplate) {
     const isvld = await core.isvalidvideo(v);
     if (!v) res.redirect("/");
 
-
     const u = await media_proxy(v);
 
     var secure;
+    var verify;
 
     if (
       req.hostname == "poketube.fun" ||
@@ -200,6 +200,12 @@ module.exports = function (app, config, renderTemplate) {
       secure = true;
     } else {
       secure = false;
+    }
+
+    if (req.hostname == "pt.zzls.xyz") {
+      verify = true;
+    } else {
+      verify = false;
     }
 
     try {
@@ -245,7 +251,6 @@ module.exports = function (app, config, renderTemplate) {
                   if (d === "[object Object]") {
                     var d = false;
                   }
-                  
 
                   renderTemplate(res, req, "poketube.ejs", {
                     color: data.color,
@@ -257,6 +262,7 @@ module.exports = function (app, config, renderTemplate) {
                     e,
                     a,
                     k,
+                    verify,
                     secure,
                     process,
                     sha384,

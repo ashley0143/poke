@@ -16,6 +16,8 @@ const URL_WHITELIST = [
   "is4-ssl.mzstatic.com",
   "is2-ssl.mzstatic.com",
   "is1-ssl.mzstatic.com",
+  "fonts.bunny.net",
+  "demo.matomo.org",
   "is5-ssl.mzstatic.com",
   "is3-ssl.mzstatic.com",
   "twemoji.maxcdn.com",

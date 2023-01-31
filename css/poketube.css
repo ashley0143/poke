@@ -334,7 +334,7 @@ a.avatar {
 
 .comments-class-or-something-i-cant-find-a-name-lol {
   background: var(--div-prim-bg);
-  border-radius: 2em;
+  border-radius: 1.5em;
   padding: 10px;
   padding-top: 0;
   margin: auto;
@@ -389,6 +389,7 @@ a.avatar {
   border-radius: 4px;
   word-break: break-all;
   white-space: nowrap;
+  font-family: ubuntu, sans-serif;
 }
 
 .new-button {
@@ -460,7 +461,7 @@ a.avatar {
   color: var(--text-primary);
   background: var(--div-prim-bg);
   padding: 16px;
-  border-radius: 1.2em;
+  border-radius: 1.5em;
   border: var(--div-border-color);
   border-style: solid;
 }
@@ -494,6 +495,7 @@ a.avatar {
   margin: 0;
   width: 300px;
   border-radius: 8px;
+  font-family: ubuntu, sans-serif;
   box-shadow: var(--border-color) 0 0 5px;
   background-color: var(--context-menu-background);
 }
@@ -647,6 +649,7 @@ a.new-button:hover {
   border-radius: 10px;
   height: fit-content;
   padding: 10px;
+  font-family: ubuntu, sans-serif;
   margin-left: -11em;
   width: 43em;
   position: absolute;
@@ -756,3 +759,10 @@ object-fit:none;
   overflow-x:auto;
 }
 
+.tags.rec > .tag {
+  border-radius: 8px;
+}
+
+.video > .info {
+font-family: Ubuntu, sans-serif;
+}

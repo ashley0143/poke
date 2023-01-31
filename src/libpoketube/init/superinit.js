@@ -73,25 +73,27 @@ function init(app, config, rendertemplate) {
 
       initlog("Loaded pages - initing poketube finnished :3");
       setTimeout(function () {
-        /* PokeTube Update daemon - checks for updates in poketube */
-        (async () => {
-          const url = `https://poketube.fun/api/version.json`;
+        setInterval(function () {
+          /* PokeTube Update daemon - checks for updates in poketube */
+          (async () => {
+            const url = `https://poketube.fun/api/version.json`;
 
-          let f = await modules
-            .fetch(url)
-            .then((res) => res.text())
-            .then((json) => JSON.parse(json));
+            let f = await modules
+              .fetch(url)
+              .then((res) => res.text())
+              .then((json) => JSON.parse(json));
 
-          if (f.vernum == api) {
-            console.log("[UPDATE DAEMON] PokeTube is up to date!");
-          }
+            if (f.vernum == api) {
+              console.log("[UPDATE DAEMON] PokeTube is up to date!");
+            }
 
-          if (f.vernum != api) {
-            console.warn(
-              "[UPDATE DAEMON] PokeTube is out of date! please re-clone the poketube repo :p  "
-            );
-          }
-        })();
+            if (f.vernum != api) {
+              console.warn(
+                "[UPDATE DAEMON] PokeTube is out of date! please re-clone the poketube repo :p  "
+              );
+            }
+          })();
+        }, 150000);
       }, 150000);
     } catch (err) {
       initlog("[FAILED] Load pages \n" + err);

@@ -1,6 +1,8 @@
 <!DOCTYPE html>
  <html>
    <head>
+             <% if (video.Title) { %> 
+
      <title> <%=video.Title%> - PokeTube</title>
        <link href=/css/yt-ukraine.svg rel=icon>
   <!-- STYLES START -->
@@ -69,19 +71,22 @@ height: 100%;
 <div class="app" style="color:#fff;height: 100%;justify-content: center;width: 100%;">
 
 <nav style="height: auto;">
+  
     <p style="font-family:Ginto Nord;margin-left: 10px;">
        <%=video.Title%> 
+   <div style="display: flex;margin-right: 1em;background: #333;justify-items: center;border-radius: 1em;">
+    
          <p style="display: flex;"> 
 				<a href="/channel?id=<%=video.Channel.id%>" class="avatar" style="font-size: x-small;display: flex;align-items: center;align-self: center;align-content: center;margin-left: 4px;">
           By <%=k.Video.Channel.Name%>
           </p>
          </a>
       </p>
-      <p style="margin-left:10">
-        <i class="fa-light fa-thumbs-up"></i> <%=engagement.likes.toLocaleString()%>
+      <p style="white-space: nowrap;margin-right: 1em;">
+        <i class="fa-light fa-thumbs-up"></i> <%=engagement.likes.toLocaleString()%> <br>
         <i class="fa-light fa-thumbs-down"></i> <%=engagement.dislikes.toLocaleString()%> 
           </p>
-
+        </div>
         <div style="display: flex;justify-content: center;align-items: center;flex-direction: row; column-gap: 3px;margin: 7;margin-left: auto;margin-right: 1em;" align="center">
 
         <% if (!qua) { %> 
@@ -141,6 +146,7 @@ height: 100%;
         <!-- END <%=t%> -->  
  <% } %>
    
-     
+      <% } %>
+
    </body>
 </html>

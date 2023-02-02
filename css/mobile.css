@@ -12,6 +12,11 @@ body {
 body {
   position: relative;
 }
+
+* {
+  font-family:ubuntu, sans-serif;
+}
+
 .animated {
   -webkit-animation-duration: 10s;
   animation-duration: 10s;

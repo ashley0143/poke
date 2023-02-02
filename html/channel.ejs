@@ -66,6 +66,38 @@
     --channel-info-background: #000;
     --channel-contents-background: #000;
 }
+    
+    
+.tags.rec {
+  font-weight: 600;
+  font-stretch: expanded;
+  overflow:hidden;
+  width: auto;
+  max-width: fit-content;
+  margin-right: auto;
+  padding-left: 1.5em;
+  margin-top: 7px;
+  display: flex;
+  gap: 3px;
+}
+
+.tags.rec:hover{
+  overflow-x:auto;
+}
+
+.tags.rec > .tag {
+  border-radius: 8px;
+}
+
+.tag {
+  background: #333;
+  padding: 5px;
+  border-radius: 4px;
+  word-break: break-all;
+  white-space: nowrap;
+  font-family: ubuntu, sans-serif;
+}
+
   
 
       </style>  

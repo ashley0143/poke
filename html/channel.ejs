@@ -73,7 +73,7 @@
   
 <style>
    a.class:hover {
-    text-decoration:underline;
+    text-decoration:none;
     font-weight:bold
    }
    summary{
@@ -151,6 +151,11 @@ padding-bottom: 32px;
   .subs {
     margin: 0.6em;text-align: left;margin-left: 0px;margin-top: -1em;font-family: "PokeTube flex";font-weight: 1000;font-stretch: ultra-expanded;
   }
+  
+  
+  .tag.c:hover {
+  background: var(--chip-background-hover);
+}
    </style>
    
   <!-- STYLES START -->
@@ -511,6 +516,7 @@ white-space: nowrap;text-decoration: none;" href="/feeds/videos.xml?channel_id=<
             <% if (!tab) { %>
 
                 <a href="/channel?id=<%=ID%>" class="tab active">Videos</a>
+ 
                            <%  if (Array.isArray(c.comments)) { %> 
 
   <%  if (c.comments.length != "0") { %> 
@@ -653,15 +659,47 @@ width: fit-content;
      <hr style="clear: both;display: block;border: none;border-bottom: 0.5px solid #2f2f2f;margin: 0 0;/*! width: 4.5em; */height: 0;">   
                                              <% if (!tab) { %>  
                                                
+                             
 
              <div align="center">
+    <% if (!isMobile) { %>  
+            <div class="tags rec">
+                <% if (!sort) { %>  
 
+              <a class="tag" style="background:var(--chip-background-hover)">
+                Recently Uploaded
+              </a>
+                  
+                                <a href="/channel?id=<%=ID%>&sort_by=popular" style="color:#fff;text-decoration:none;
+" class="tag c">
+           Popular
+              </a>
+                   <% } %>
+
+                          <% if (sort) { %>  
+
+            <a  href="/channel?id=<%=ID%>" style="color:#fff;text-decoration:none;
+" class="tag c" >
+                Recently Uploaded
+              </a>
+                  
+                                <a  style="background:var(--chip-background-hover)" class="tag">
+           Popular
+              </a>
+                   <% } %>
+
+              
+
+                                       </div>
+ <% } %>
 
  
     	<div class="video-grid" >
-             <%  if (Array.isArray( tj)) { %> 
+            
+   
+             <%  if (Array.isArray( tj.videos)) { %> 
 
-   <% tj.forEach (x =>  { %>
+   <% tj.videos.forEach (x =>  { %>
 			<a href="/watch?v=<%- x.videoId %>" class="video">
 				<div class="thumbnail" style="background-image: url('https://p.poketube.fun/https://i.ytimg.com/vi/<%= x.videoId %>/hqdefault.jpg?sqp=-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLBy_x4UUHLNDZtJtH0PXeQGoRFTgw');border-radius: 10px;"><span class="video-length"><%- turntomins(x.lengthSeconds) %></span></div>
 				<div class="info">
@@ -679,6 +717,13 @@ width: fit-content;
                        
                        </div>
                   
+            <% if (tj.continuation) { %>
+	<div class="pagination-buttons" style="border-top: none;justify-content: center">
+    <a style="color:#fff" href="/channel?id=<%=ID%>&continuation=<%=tj.continuation%>">Next Page</a>
+ 	</div>
+                           
+                       <% } %>
+
  
           <% } %>
     <% if (tab === "community") { %>

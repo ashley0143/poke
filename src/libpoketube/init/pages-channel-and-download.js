@@ -135,7 +135,7 @@ module.exports = function (app, config, renderTemplate) {
     }
 
     if (req.query.continuation) {
-      var continuation = req.query.continuation;
+      var continuation = `&continuation=${req.query.continuation}`;
     }
 
     if (!req.query.continuation) {
@@ -145,7 +145,7 @@ module.exports = function (app, config, renderTemplate) {
     try {
     //videos
     const a = await modules
-      .fetch(`https://inv.vern.cc/api/v1/channels/videos/${ID}/`)
+      .fetch(`https://inv.zzls.xyz/api/v1/channels/videos/${ID}/?sort_by=${req.query.sort_by || "newest"}` + continuation)
       .then((res) => res.text());
 
     var tj = await getJson(a);
@@ -189,6 +189,7 @@ module.exports = function (app, config, renderTemplate) {
         ID,
         tab,
         j: k,
+        sort:req.query.sort_by,
         tj,
         c,
         convert,

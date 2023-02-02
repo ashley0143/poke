@@ -276,6 +276,7 @@ body {
 }
 .pill-button {
   margin-left: 1em;
+  font-family: ubuntu, sans-serif;
 }
 
 .vertical {
@@ -1165,6 +1166,7 @@ a.icon-link > i {
   color: #606060;
   column-gap: 8px;
   overflow-y: hidden;
+  font-family: ubuntu;
 }
 
 .video > .info > .title {
@@ -1553,6 +1555,7 @@ a.icon-link > i {
 
 .recommended-list > .video > .info {
   font-size: small;
+  font-family: ubuntu, sans-serif;
 }
 
 .recommended-list > .video > .info > a {
@@ -2092,6 +2095,7 @@ ptd-custom-more {
     width: fit-content;
     margin-right: auto;
     width: -moz-fit-content;
+    max-width: 150em !important;
   }
 }
 
@@ -2105,4 +2109,18 @@ div.new-button:hover {
 
 a.new-button:hover {
   background-color: #0008;
+}
+
+
+.video-chnl-info-pill > a:first-child {
+  margin-right: -8px;
+}
+
+.video-info-buttons.pill > .engagement {
+  margin-right: 2px;
+}
+
+.video-info-buttons.pill > div:nth-child(2) > .new-button,
+.button-encryption {
+  margin-right: 2px;
 }

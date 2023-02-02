@@ -288,6 +288,12 @@ video[counter].classList.add("shake");
                           <% if (j.Search.Results.DynamicItem) { %> 
 
             <% if (j.Search.Results.DynamicItem.id == "didYouMeanRenderer") { %> 
+                                                                    <% if (h) { %> 
+
+                                                      <% if (h.correctedQueryEndpoint) { %> 
+
+                                        <% if (h.correctedQueryEndpoint.searchEndpoint) { %> 
+
 <div style="text-align: left;margin-left: 14.5em;">
   <p>
      Did you mean: <a href="/search?query=<%= h.correctedQueryEndpoint.searchEndpoint.query  %>"><i><%= h.correctedQueryEndpoint.searchEndpoint.query  %></i></a> :3
@@ -295,6 +301,8 @@ video[counter].classList.add("shake");
                      </div>
  
                                             <% } %>                                            <% } %>
+                                                                                          <% } %>                                                                                        <% } %>
+                                                                                          <% } %>                                                                                     
 
                      </center>
                                                       <% if (!j.Search.Results.DynamicItem) { %> 

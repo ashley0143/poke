@@ -981,11 +981,11 @@ Recommended Videos
  						<div class="video" >
                     <% if (!optout) { %> 
 
-      <a  href="/watch?v=<%= x.id %>"  alt="<%= x.Title %>" class="thumbnail" style="background-image: url('https://p.poketube.fun/https://i.ytimg.com/vi/<%= x.id %>/hqdefault.jpg?sqp=-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLBy_x4UUHLNDZtJtH0PXeQGoRFTgw');border-radius: 9.5px;"  >								<span class="video-length"><%=x.duration %></span>
+      <a  href="/watch?v=<%= x.id %>"  alt="<%= x.Title %>" class="thumbnail" style="background-image: url('https://p.poketube.fun/https://i.ytimg.com/vi/<%= x.id %>/hqdefault.jpg?sqp=-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLBy_x4UUHLNDZtJtH0PXeQGoRFTgw');border-radius: 9.5px;"  >								<span class="video-length"><%- x.duration || "LIVE"%></span>
                            <% } %>
    <% if (optout) { %> 
 
-      <a  href="/watch?v=<%= x.id %>&t=f"  alt="<%= x.Title %>" class="thumbnail" style="background-image: url('https://p.poketube.fun/https://i.ytimg.com/vi/<%= x.id %>/hqdefault.jpg?sqp=-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLBy_x4UUHLNDZtJtH0PXeQGoRFTgw');border-radius: 9.5px;"  >								<span class="video-length"><%=x.duration %></span>
+      <a  href="/watch?v=<%= x.id %>&t=f"  alt="<%= x.Title %>" class="thumbnail" style="background-image: url('https://p.poketube.fun/https://i.ytimg.com/vi/<%= x.id %>/hqdefault.jpg?sqp=-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLBy_x4UUHLNDZtJtH0PXeQGoRFTgw');border-radius: 9.5px;"  >								<span class="video-length"><%- x.duration || "LIVE"%></span>
                            <% } %>
 							</a>
 							<div class="info">
@@ -998,7 +998,7 @@ Recommended Videos
                    <% } %>
 								<div>
                <a class="max-lines-2" href="/channel?id=<%= x.Channel.id %>" style="-webkit-line-clamp: 1;width: 12em;word-wrap: break-word;"><%=x.Channel.Name %></a>
-									<div class="video-views">  <%= x.uploadedAt %> • <%= convert(x.views) %> views </div>
+									<div class="video-views">  <%= x.uploadedAt.replace("Streamed", "Live") %> • <%= convert(x.views) %> views </div>
 								</div>
 							</div>
 						</div>

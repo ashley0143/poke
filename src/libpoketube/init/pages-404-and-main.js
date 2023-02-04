@@ -40,7 +40,7 @@ module.exports = function (app, config, renderTemplate) {
     if (!req.query.tab) var tab = "";
 
     const invtrend = await modules
-      .fetch(`https://invidious.privacydev.net/api/v1/trending${tab}`)
+      .fetch(`https://inv.zzls.xyz/api/v1/trending${tab}`)
       .then((res) => res.text());
 
     const t = getJson(invtrend);

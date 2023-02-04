@@ -153,6 +153,28 @@ module.exports = function (app, config, renderTemplate) {
       var tj = " "
     }
     
+     try {
+    //videos
+    const b = await modules
+      .fetch(`https://inv.zzls.xyz/api/v1/channels/${ID}/shorts?sort_by=${req.query.sort_by || "newest"}` + continuation)
+      .then((res) => res.text());
+
+    var shorts = await getJson(b);
+    } catch {
+      var shorts = " "
+    }
+    
+        try {
+    //videos
+    const c = await modules
+      .fetch(`https://inv.zzls.xyz/api/v1/channels/${ID}/streams?sort_by=${req.query.sort_by || "newest"}` + continuation)
+      .then((res) => res.text());
+
+    var stream = await getJson(c);
+    } catch {
+      var stream = " "
+    }
+    
     const community = await modules
       .fetch(`${config.invapi}/channels/community/${ID}/`)
       .then((res) => res.text());
@@ -188,8 +210,10 @@ module.exports = function (app, config, renderTemplate) {
       renderTemplate(res, req, "channel.ejs", {
         ID,
         tab,
+        shorts,
         j: k,
         sort:req.query.sort_by,
+        stream,
         tj,
         c,
         convert,

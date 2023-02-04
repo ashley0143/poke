@@ -162,6 +162,7 @@ a.avatar {
 
 .video-info-panel > .video-title > a {
   white-space: nowrap;
+  color: chartreuse;
 }
 
 .video-info-panel > .video-title {

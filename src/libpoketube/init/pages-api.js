@@ -20,8 +20,8 @@ const {
 
 const pkg = require("../../../package.json");
 
-const ver = "v23.0204-cMAarEbA-stable-git";
-const versionnumber = "201";
+const ver = "v23.0205-cMAarEbA-stable-git";
+const versionnumber = "202";
 
 const response = {
   pt_version: ver,
@@ -31,6 +31,12 @@ const response = {
     node: process.version,
     v8: process.versions.v8,
   },
+  flac : {
+    poketube_flac: "1.0a",
+    apple_musickit:"1.2.1",
+    poketube_normalize_volume:"1.2.23-yt",
+  },
+  piwik:"master",
   process: process.versions,
   dependencies: pkg.dependencies,
 };

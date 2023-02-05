@@ -43,6 +43,7 @@ module.exports = async function (video_id) {
     return rv;
   }
 
+  try {
   // gets invidious instances
   let inv_url = "https://api.invidious.io/instances.json?sort_by=type,health";
 
@@ -70,4 +71,7 @@ module.exports = async function (video_id) {
   }
 
   return url;
+  } catch {
+    return " "
+  }
 };

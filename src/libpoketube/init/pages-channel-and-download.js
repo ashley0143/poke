@@ -176,7 +176,7 @@ module.exports = function (app, config, renderTemplate) {
     }
     
     const community = await modules
-      .fetch(`${config.invapi}/channels/community/${ID}/`)
+      .fetch(`https://inv.zzls.xyz/api/v1/channels/community/${ID}/`)
       .then((res) => res.text());
 
     var c = await getJson(community);

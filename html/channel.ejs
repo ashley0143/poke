@@ -550,17 +550,25 @@ white-space: nowrap;text-decoration: none;" href="/feeds/videos.xml?channel_id=<
                 <a href="/channel?id=<%=ID%>" class="tab active">Videos</a>
               
 <%  if (Array.isArray(shorts.videos)) { %> 
+    <%  if (shorts.videos[0]) { %> 
 <%  if (turntomins(shorts.videos[0].lengthSeconds)  != "aN:aN" ) { %> 
+
 
                    <a href="/channel?id=<%=ID%>&tab=shorts" class="tab">Shorts</a>
   <% } %>
       <% } %>
+
+      <% } %>
         
                           <%  if (Array.isArray(stream.videos)) { %> 
+                                <%  if (stream.videos[0]) { %> 
+
 <%  if (turntomins(stream.videos[0].lengthSeconds)  != "aN:aN" ) { %> 
 
                    <a href="/channel?id=<%=ID%>&tab=live" class="tab">Live</a>
   <% } %>
+      <% } %>
+
       <% } %>
 
                            <%  if (Array.isArray(c.comments)) { %> 
@@ -653,6 +661,7 @@ white-space: nowrap;text-decoration: none;" href="/feeds/videos.xml?channel_id=<
 
                 <a href="/channel?id=<%=ID%>" class="tab">Videos</a>
 <%  if (Array.isArray(shorts.videos)) { %> 
+  
 <%  if (turntomins(shorts.videos[0].lengthSeconds)  != "aN:aN" ) { %> 
 
                    <a href="/channel?id=<%=ID%>&tab=shorts" class="tab">Shorts</a>

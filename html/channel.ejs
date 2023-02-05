@@ -548,14 +548,21 @@ white-space: nowrap;text-decoration: none;" href="/feeds/videos.xml?channel_id=<
             <% if (!tab) { %>
 
                 <a href="/channel?id=<%=ID%>" class="tab active">Videos</a>
-                                         <%  if (Array.isArray(shorts.videos)) { %> 
+              
+<%  if (Array.isArray(shorts.videos)) { %> 
+<%  if (turntomins(shorts.videos[0].lengthSeconds)  != "aN:aN" ) { %> 
 
                    <a href="/channel?id=<%=ID%>&tab=shorts" class="tab">Shorts</a>
   <% } %>
+      <% } %>
+        
                           <%  if (Array.isArray(stream.videos)) { %> 
+<%  if (turntomins(stream.videos[0].lengthSeconds)  != "aN:aN" ) { %> 
 
                    <a href="/channel?id=<%=ID%>&tab=live" class="tab">Live</a>
   <% } %>
+      <% } %>
+
                            <%  if (Array.isArray(c.comments)) { %> 
 
   <%  if (c.comments.length != "0") { %> 
@@ -570,15 +577,20 @@ white-space: nowrap;text-decoration: none;" href="/feeds/videos.xml?channel_id=<
                                                                              <% if (tab === "about") { %>
 
                 <a href="/channel?id=<%=ID%>" class="tab">Videos</a>
-                                                                                <%  if (Array.isArray(shorts.videos)) { %> 
+<%  if (Array.isArray(shorts.videos)) { %> 
+<%  if (turntomins(shorts.videos[0].lengthSeconds)  != "aN:aN" ) { %> 
 
                    <a href="/channel?id=<%=ID%>&tab=shorts" class="tab">Shorts</a>
   <% } %>
-    
-                                                                                    <%  if (Array.isArray(stream.videos)) { %> 
+      <% } %>
 
-                   <a href="/channel?id=<%=ID%>&tab=streams" class="tab">Live</a>
+ <%  if (Array.isArray(stream.videos)) { %> 
+<%  if (turntomins(stream.videos[0].lengthSeconds)  != "aN:aN" ) { %> 
+
+                   <a href="/channel?id=<%=ID%>&tab=live" class="tab">Live</a>
   <% } %>
+      <% } %>
+        
   <%  if (Array.isArray(c.comments)) { %> 
 
   <%  if (c.comments.length != "0") { %> 
@@ -593,14 +605,19 @@ white-space: nowrap;text-decoration: none;" href="/feeds/videos.xml?channel_id=<
                                                                       <% if (tab === "community") { %>
 
                 <a href="/channel?id=<%=ID%>" class="tab">Videos</a>
-  <%  if (Array.isArray(shorts.videos)) { %> 
+                       <%  if (Array.isArray(shorts.videos)) { %> 
+<%  if (turntomins(shorts.videos[0].lengthSeconds)  != "aN:aN" ) { %> 
 
                    <a href="/channel?id=<%=ID%>&tab=shorts" class="tab">Shorts</a>
   <% } %>
-     <%  if (Array.isArray(stream.videos)) { %> 
+      <% } %>
+    
+  <%  if (Array.isArray(stream.videos)) { %> 
+<%  if (turntomins(stream.videos[0].lengthSeconds)  != "aN:aN" ) { %> 
 
                    <a href="/channel?id=<%=ID%>&tab=live" class="tab">Live</a>
   <% } %>
+      <% } %>
     
      <a  href="/channel?id=<%=ID%>&tab=community"  class="tab active">Community</a>
  
@@ -610,15 +627,17 @@ white-space: nowrap;text-decoration: none;" href="/feeds/videos.xml?channel_id=<
                                                                                      <% if (tab === "shorts") { %>
 
                 <a href="/channel?id=<%=ID%>" class="tab">Videos</a>
-                                                                                <%  if (Array.isArray(shorts.videos)) { %> 
+<%  if (Array.isArray(shorts.videos)) { %> 
 
                    <a href="/channel?id=<%=ID%>&tab=shorts" class="tab active">Shorts</a>
   <% } %>
-     <%  if (Array.isArray(stream.videos)) { %> 
+ <%  if (Array.isArray(stream.videos)) { %> 
+<%  if (turntomins(stream.videos[0].lengthSeconds)  != "aN:aN" ) { %> 
 
                    <a href="/channel?id=<%=ID%>&tab=live" class="tab">Live</a>
   <% } %>
-    
+      <% } %>
+        
   <%  if (Array.isArray(c.comments)) { %> 
 
   <%  if (c.comments.length != "0") { %> 
@@ -633,10 +652,13 @@ white-space: nowrap;text-decoration: none;" href="/feeds/videos.xml?channel_id=<
                                                                                                  <% if (tab === "live") { %>
 
                 <a href="/channel?id=<%=ID%>" class="tab">Videos</a>
-                                                                                <%  if (Array.isArray(shorts.videos)) { %> 
+<%  if (Array.isArray(shorts.videos)) { %> 
+<%  if (turntomins(shorts.videos[0].lengthSeconds)  != "aN:aN" ) { %> 
 
                    <a href="/channel?id=<%=ID%>&tab=shorts" class="tab">Shorts</a>
   <% } %>
+      <% } %>
+        
      <%  if (Array.isArray(stream.videos)) { %> 
 
                    <a href="/channel?id=<%=ID%>&tab=live" class="tab active">Live</a>
@@ -941,7 +963,7 @@ width: fit-content;
                   
             <% if (stream.continuation) { %>
 	<div class="pagination-buttons" style="border-top: none;justify-content: center">
-    <a style="color:#fff" href="/channel?id=<%=ID%>&tab=shorts&continuation=<%=stream.continuation%>">Next Page</a>
+    <a style="color:#fff" href="/channel?id=<%=ID%>&tab=live&continuation=<%=stream.continuation%>">Next Page</a>
  	</div>
                            
                        <% } %>

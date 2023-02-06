@@ -22,7 +22,7 @@ const URL_WHITELIST = [
   "is3-ssl.mzstatic.com",
   "twemoji.maxcdn.com",
   "unpkg.com",
-  "youtube.com"
+  "youtube.com",
 ];
 
 const app = express();
@@ -37,6 +37,9 @@ app.use(function (req, res, next) {
 
 app.use(function (req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
+  res.setHeader("Cache-Control", "public, max-age=870"); // cache header
+  res.setHeader("poketube-cacher", "PROXY_FILES");
+
   next();
 });
 
@@ -68,7 +71,6 @@ const proxy = async (req, res) => {
     });
 
     f.body.pipe(res);
-    
   } catch (e) {
     console.log(`==> Error: ${e}`);
     res.status(500).send("Internal server error");

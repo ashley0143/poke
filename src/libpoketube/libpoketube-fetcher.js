@@ -1,20 +1,17 @@
 /*
-  
-    Copyright (C) 2021-2023 POKETUBE (https://github.com/iamashley0/poketube)
+
+    PokeTube is a Free/Libre youtube front-end !
     
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with this program. If not, see https://www.gnu.org/licenses/.
+    Copyright (C) 2021-2023 POKETUBE
+ 
+    This file is Licensed under LGPL-3.0-or-later. Poketube itself is GPL, Only this file is LGPL.
+    
+    see a copy here:https://www.gnu.org/licenses/lgpl-3.0.txt
+    
+    please dont remove this comment while sharing this code 
+    
   */
+
 
 const fetch = require("node-fetch"); //2.5.x
 const { toJson } = require("xml2json");

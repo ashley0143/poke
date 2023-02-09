@@ -53,4 +53,5 @@ module.exports = function (app, config, renderTemplate) {
   app.get("/css/:id", (req, res) => {
     res.sendFile(req.params.id, { root: html_location });
   });
+
 };

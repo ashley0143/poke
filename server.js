@@ -96,8 +96,8 @@ this is our config file,you can change stuff here
     tubeApi: "https://api.poketube.fun/api/",
     invapi: "https://invidious.sethforprivacy.com/api/v1",
     dislikes: "https://returnyoutubedislikeapi.com/votes?videoId=",
-    invchannel:"https://invidious.privacydev.net/api/v1",
-    cacher_max_age:"1800",
+    invchannel: "https://invidious.privacydev.net/api/v1",
+    cacher_max_age: "1800",
     enablealwayshttps: true, //enables always https on the server
     t_url: "https://t.poketube.fun/", //  def matomo url
   };
@@ -116,24 +116,32 @@ this is our config file,you can change stuff here
   });
 
   app.use(function (request, response, next) {
-       if (config.enablealwayshttps && !request.secure) {
-        return response.redirect(
-          "https://" + request.headers.host + request.url
-        );
-     }
+    if (config.enablealwayshttps && !request.secure) {
+      return response.redirect("https://" + request.headers.host + request.url);
+    }
 
     next();
   });
 
   app.use(function (req, res, next) {
     if (req.url.match(/^\/(css|js|img|font)\/.+/)) {
-        res.setHeader('Cache-Control', 'public, max-age=' + config.cacher_max_age); // cache header
-        res.setHeader("poketube-cacher", "STATIC_FILES");
-
+      res.setHeader(
+        "Cache-Control",
+        "public, max-age=" + config.cacher_max_age
+      ); // cache header
+      res.setHeader("poketube-cacher", "STATIC_FILES");
     }
     next();
-});
+  });
 
+  initlog("[OK] Load headers")
+  
+  app.get("/robots.txt", (req, res) => {
+    res.sendFile(__dirname + "/robots.txt");
+  });
+  
+  initlog("[OK] Load robots.txt")
+  
   sinit(app, config, renderTemplate);
 
   init(app);

@@ -29,6 +29,7 @@ function init(app, config, rendertemplate) {
 
     return rendertemplate(res, req, "timeout.ejs");
   });
+  
 
   setTimeout(function () {
     didstart = true;

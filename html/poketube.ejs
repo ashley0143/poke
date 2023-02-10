@@ -1161,11 +1161,13 @@ checkbox.addEventListener('change', function(e) {
     location.href = "/watch?v=<%- k.Video.Recommendations.Video[0].id%>&autoplay=<%-btoa("1f739d935676111cfff4b4693e3816e664797050" + k.Video.Recommendations.Video[0].id ) %>"
     }
   }
+  
   if (/[?&]autoplay=/.test(location.search)) {
-   if(!chebox.check) {
+   if(!checkbox.checked) {
        checkbox.checked = true;
    }    
   }
+  
 });
   
 if (/[?&]autoplay=/.test(location.search)) {

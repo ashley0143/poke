@@ -1148,6 +1148,18 @@ Recommended Videos
     
 <script>
 // @license magnet:?xt=urn:btih:1f739d935676111cfff4b4693e3816e664797050&dn=gpl-3.0.txt GPL-3.0-or-later  
+function removeParam(paramName) {
+  
+  let searchParams = new URLSearchParams(window.location.search);
+  searchParams.delete(paramName);
+
+  if (history.replaceState) {
+        let searchString = searchParams.toString().length > 0 ? '?' + searchParams.toString() : '';
+        let newUrl = window.location.protocol + "//" + window.location.host + window.location.pathname +  searchString + window.location.hash;
+        history.replaceState(null, '', newUrl);
+    }
+}
+
 checkbox = document.getElementById("continue");
 
 checkbox.addEventListener('change', function(e) {
@@ -1164,7 +1176,7 @@ checkbox.addEventListener('change', function(e) {
   
   if (/[?&]autoplay=/.test(location.search)) {
    if(!checkbox.checked) {
-       checkbox.checked = true;
+   removeParam("autoplay")
    }    
   }
   

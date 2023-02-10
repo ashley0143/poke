@@ -288,7 +288,7 @@
   <noscript>
   <style>
     .auto-play{
-      display:none !important;;
+      display:none !important;
     }  
   </style>
   </noscript>
@@ -1158,10 +1158,27 @@ checkbox.addEventListener('change', function(e) {
     document.getElementById('video').addEventListener('ended',autoplaynextvideo,false);
       
     function autoplaynextvideo(e) {
-    location.href = "/watch?v=<%- k.Video.Recommendations.Video[0].id%>"
+    location.href = "/watch?v=<%- k.Video.Recommendations.Video[0].id%>&autoplay=<%-btoa("1f739d935676111cfff4b4693e3816e664797050" + k.Video.Recommendations.Video[0].id ) %>"
     }
   }
+  if (/[?&]autoplay=/.test(location.search)) {
+   if(!chebox.check) {
+       checkbox.checked = true;
+   }    
+  }
 });
+  
+if (/[?&]autoplay=/.test(location.search)) {
+  checkbox.checked = true;
+  
+    console.log("[AUTOPLAY BETA] enabled")
+    
+    document.getElementById('video').addEventListener('ended',autoplaynextvideo,false);
+      
+    function autoplaynextvideo(e) {
+        location.href = "/watch?v=<%- k.Video.Recommendations.Video[0].id%>&autoplay=<%-btoa("1f739d935676111cfff4b4693e3816e664797050" + k.Video.Recommendations.Video[0].id ) %>"
+    }
+}
 </script>
    
  <% if (!optout) { %> 

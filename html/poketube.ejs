@@ -1332,7 +1332,7 @@ a {
 		<div class="video-player-container" style="background-color:#000">
     <% if (lightOrDark(color) == "dark") { %>  
 
-<video class="player" id="<%=sha384(video.id)%>" style="border-radius: 6px;box-shadow: 0 0 20px  <%=color2
+<video class="player" id="video" style="border-radius: 6px;box-shadow: 0 0 20px  <%=color2
                                                         %>;" autoplay controls   
        
        poster="https://p.poketube.fun/https://i.ytimg.com/vi/<%=video.id%>/maxresdefault.jpg?v=607ddcd4">
@@ -1340,7 +1340,7 @@ a {
                                                                                      <% } %>                
    <% if (lightOrDark(color) == "light") { %>  
 
-<video class="player" id="<%=sha384(video.id)%>" style="border-radius: 6px;box-shadow: 0 0 20px  <%=color
+<video class="player" id="video" style="border-radius: 6px;box-shadow: 0 0 20px  <%=color
                                                         %>;" autoplay controls   
        
        poster="https://p.poketube.fun/https://i.ytimg.com/vi/<%=video.id%>/maxresdefault.jpg?v=607ddcd4">
@@ -1918,6 +1918,12 @@ More Epic options owo~
 
 	<div class="recommended-list" style="color:#fff">
     
+       <div style="text-align: left;" class="auto-play">
+                                <label for="continue">AutoPlay:</label> 
+                                <input name="continue" id="continue" type="checkbox" >
+                                <a href="https://codeberg.org/Ashley/poketube/issues/new">give feedback</a>
+                             </div>
+    
                               <% if (!r) { %> 
                                  
                                 
@@ -2034,6 +2040,65 @@ More Epic options owo~
  }
      // @license-end
                                           </script>
+         
+             
+<script>
+// @license magnet:?xt=urn:btih:1f739d935676111cfff4b4693e3816e664797050&dn=gpl-3.0.txt GPL-3.0-or-later  
+function removeParam(paramName) {
+  
+  let searchParams = new URLSearchParams(window.location.search);
+  searchParams.delete(paramName);
+
+  if (history.replaceState) {
+        let searchString = searchParams.toString().length > 0 ? '?' + searchParams.toString() : '';
+        let newUrl = window.location.protocol + "//" + window.location.host + window.location.pathname +  searchString + window.location.hash;
+        history.replaceState(null, '', newUrl);
+    }
+}
+
+checkbox = document.getElementById("continue");
+
+checkbox.addEventListener('change', function(e) {
+  if(checkbox.checked) {
+    
+    console.log("[AUTOPLAY BETA] enabled")
+    
+    document.getElementById('video').addEventListener('ended',autoplaynextvideo,false);
+      
+    function autoplaynextvideo(e) {
+    location.href = "/watch?v=<%- k.Video.Recommendations.Video[0].id%>&autoplay=<%-btoa("1f739d935676111cfff4b4693e3816e664797050" + k.Video.Recommendations.Video[0].id ) %>"
+    }
+  }
+  
+  if (/[?&]autoplay=/.test(location.search)) {
+   if(!checkbox.checked) {
+   removeParam("autoplay")
+   }    
+  }
+  
+});
+  
+if (/[?&]autoplay=/.test(location.search)) {
+  checkbox.checked = true;
+  
+    console.log("[AUTOPLAY BETA] enabled")
+    
+    document.getElementById('video').addEventListener('ended',autoplaynextvideo,false);
+      
+    function autoplaynextvideo(e) {
+        location.href = "/watch?v=<%- k.Video.Recommendations.Video[0].id%>&autoplay=<%-btoa("1f739d935676111cfff4b4693e3816e664797050" + k.Video.Recommendations.Video[0].id ) %>"
+    }
+}
+</script>
+           
+  <noscript>
+  <style>
+    .auto-play{
+      display:none !important;
+    }  
+  </style>
+  </noscript>
+         
  <% if (!optout) { %> 
           <!-- MORE INFO :https://poketube.fun/privacy -->
           <!-- MORE INFO :https://poketube.fun/privacy -->

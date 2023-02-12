@@ -428,6 +428,10 @@ a.avatar {
 }
 
 .video > .thumbnail {
+  border: 1px gray solid;
+}
+
+.video:hover > .thumbnail {
   border: 1px white solid;
 }
 

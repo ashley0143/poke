@@ -244,6 +244,10 @@ a.avatar {
   white-space: nowrap;
 }
 
+.comment-list.left-padding:hover {
+  border: white solid;
+}
+
 .comments-author.owner {
   margin: 5px;
   font-family: var(--text-font-primary);

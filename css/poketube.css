@@ -246,6 +246,7 @@ a.avatar {
 
 .comment-list.left-padding:hover {
   border: white solid;
+  cursor:pointer;
 }
 
 .comments-author.owner {

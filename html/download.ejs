@@ -1,7 +1,7 @@
  <!--
     This Source Code Form is subject to the terms of the GNU General Public License:
 
-    Copyright (C) 2021-2022 POKETUBE (https://github.com/iamashley0/poketube)
+    Copyright (C) 2021-2023 POKETUBE (https://github.com/iamashley0/poketube)
     
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -17,7 +17,7 @@
     along with this program. If not, see https://www.gnu.org/licenses/.
 --><!DOCTYPE html><html>
 <head>
-    <title>PokeTube - Download Video</title>
+    <title>PokeTube | Download Video </title>
     <meta content="<%=color%>" name="theme-color">
     <link href=/css/yt-ukraine.svg?v=6 rel=icon>
     <meta content=website property=og:type>
@@ -48,8 +48,6 @@ summary:hove
   <style>
     body{
         overflow-x: hidden; /* Hide horizontal scrollbar */
-              overflow-y: hidden; /* Hide scrollbar */
-
         color:#111111
     }
     
@@ -147,14 +145,17 @@ summary:hove
   cursor: pointer;
   transition: 0.3s;
 }
-    a{
-      border-radius:13px
-    }
+a{
+border-radius:13px
+}
+    
+.video-list > p {
+font-family:Ubuntu
+}
 .closebtn:hover {
   color: black;
 }
-    
-   .download-format >  a:hover{
+.download-format >  a:hover{
     border:solid;
   }
   </style>
@@ -179,7 +180,7 @@ summary:hove
 
 <div class="playlist-page">
 <div class="playlist-info" style="border-radius:12px;font-family:'Inter';margin: 8px;padding: 18px;background: linear-gradient(135deg, #f97794 10%, #623aa2 100%,  #8e6f7e 100% );width: fit-content;height: fit-content;">
-  <div class="thumbnail" style="background-image: url(''https://i.ytimg.com/vi/<%=video.id%>/hqdefault.jpg');border-radius: 1em;">
+  <div class="thumbnail" style="background-image: url('https://i.ytimg.com/vi/<%=video.id%>/hqdefault.jpg');border-radius: 1em;">
       <a style="border-radius: 1em;" href="/watch?v=<%=video.id%>">Watch The Video</a> 
 		</div>
  		<p class="title" style="margin-top: 10px;margin-bottom: 10px;"><%=video.Title%></p>
@@ -200,7 +201,7 @@ summary:hove
 	<div class="video-list download-list playlist-video-list">
     <div>
     			<h1 style="font-family:'PokeTube Flex';font-weight:1000;white-space:yes;font-stretch: ultra-expanded;"> DOWNLOAD VIDEO</h1>
-          <p>Select an pog format qwq</p>
+          <p >Select an pog or epico format from da list :3 </p>
     </div>
   		<div class="format-list">
       	 <h2>Muxed formats</h2>
@@ -233,6 +234,10 @@ summary:hove
 					</a>
 				<br>
 				</div>
+        
+              <!-- ignore this -->
+
+        
         <p style="visibility: hidden;">
              we dont see the videos that you are downloading :P 
           </p>
@@ -259,9 +264,10 @@ summary:hove
 					</a>
 				<br>
 				</div>
+      
+      <!-- ignore this -->
         <p style="visibility: hidden;">
  gfhefdhgrdfhdfshfgddfsfdgdfsds gfhefdhgrdfhdfshfgddfsfdgdfsds
-
       </p>
  
 	</div>

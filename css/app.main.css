@@ -1,3 +1,4 @@
+
 :root{
     --chip-background-hover: #3f3f3f;
 }
@@ -991,3 +992,7 @@ nav .middle .search-bar {
   font-stretch: extra-expanded !important;
 }
 
+
+form > .btn.btn-success:hover {
+  cursor: pointer;
+}

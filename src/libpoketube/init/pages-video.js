@@ -18,6 +18,7 @@ const {
   getRandomArbitrary,
 } = require("../ptutils/libpt-coreutils.js");
 const media_proxy = require("../libpoketube-video.js");
+const atmos = require("../../../pokeatmosurls.json");
 
 const sha384 = modules.hash;
 const fetch = modules.fetch;
@@ -66,6 +67,12 @@ async function lyricsFinder(e = "", d = "") {
     final = `${final}${htmlToText.fromString(ret[j])}\n`;
   }
   return String(encoding.convert(final)).trim();
+}
+
+function toObject(arr) {
+  var rv = {};
+  for (var i = 0; i < arr.length; ++i) if (arr[i] !== undefined) rv[i] = arr[i];
+  return rv;
 }
 
 function lightOrDark(color) {
@@ -433,17 +440,38 @@ module.exports = function (app, config, renderTemplate) {
         res.redirect(`/watch?v=${v}`);
       }
 
+      if (req.useragent.isMobile) {
+        res.redirect(`/watch?v=${v}`);
+      }
+
       //video
       var url = `https://tube.kuylar.dev/proxy/media/${v}/22`;
 
       // encryption
-      const url_e =
+      var url_e =
         url +
         "?e=" +
         sha384(k.Video.Channel.id) +
         sha384(k.Video.Channel.id) +
         "Piwik" +
         sha384(config.t_url);
+
+      const stringed = toObject(atmos);
+ 
+      const search = what => atmos.find(element => element.id === what);
+      const mos = search(v)
+      
+      if (mos) {
+        var url_e =
+          mos.url +
+          "?e=" +
+          sha384(k.Video.Channel.id) +
+          sha384(k.Video.Channel.id) +
+          "Piwik" +
+          sha384(config.t_url);
+      } else {
+ 
+      }
 
       // channel info
       const engagement = fetching.engagement;

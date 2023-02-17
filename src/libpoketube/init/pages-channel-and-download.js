@@ -91,7 +91,8 @@ module.exports = function (app, config, renderTemplate) {
         const j = JSON.parse(modules.toJson(text));
 
         h = " ";
-
+     
+        // YOUTUBE WHY do you WANT me to do this oh ma gosh
         if (j.Search) {
           if ("Results.DynamicItem" in j.Search) {
             if (j.Search.Results.DynamicItem.id == "didYouMeanRenderer") {
@@ -133,58 +134,27 @@ module.exports = function (app, config, renderTemplate) {
     } catch {
       k = " ";
     }
-
-    if (req.query.continuation) {
-      var continuation = `&continuation=${req.query.continuation}`;
-    }
-
-    if (!req.query.continuation) {
-      var continuation = "";
-    }
-
-    try {
-    //videos
-    const a = await modules
-      .fetch(`https://inv.zzls.xyz/api/v1/channels/videos/${ID}/?sort_by=${req.query.sort_by || "newest"}` + continuation)
-      .then((res) => res.text());
-
-    var tj = await getJson(a);
-    } catch {
-      var tj = " "
-    }
+ 
+   // continuation stuff - whoa cool
+   let continuation  = req.query.continuation ? `&continuation=${req.query.continuation}` : "";
+   let continuationl = req.query.continuationl ? `&continuation=${req.query.continuationl}` : "";
+   let continuations = req.query.continuations ? `&continuation=${req.query.continuations}` : "";
     
-     try {
-    //videos
-    const b = await modules
-      .fetch(`https://inv.zzls.xyz/api/v1/channels/${ID}/shorts?sort_by=${req.query.sort_by || "newest"}` + continuation)
-      .then((res) => res.text());
+  // videos - i dont think this is readable at all but o welp if it works it works:tm:
+  // https://github.com/iv-org/invidious/blob/05258d56bdc3f4de1f0da0c0dbd2d540f68cbdd5/src/invidious/channels/videos.cr
 
-    var shorts = await getJson(b);
-    } catch {
-      var shorts = " "
-    }
-    
-        try {
-    //videos
-    const c = await modules
-      .fetch(`https://inv.zzls.xyz/api/v1/channels/${ID}/streams?sort_by=${req.query.sort_by || "newest"}` + continuation)
-      .then((res) => res.text());
-
-    var stream = await getJson(c);
-    } catch {
-      var stream = " "
-    }
-    
-    const community = await modules
-      .fetch(`https://inv.zzls.xyz/api/v1/channels/community/${ID}/`)
-      .then((res) => res.text());
-
-    var c = await getJson(community);
-
+   const tj  = await modules.fetch(`https://inv.zzls.xyz/api/v1/channels/videos/${ID}/?sort_by=${req.query.sort_by || "newest"}` + continuation).then((res) => res.text()).then((txt) => getJson(txt)).catch(" ") 
+   const shorts = await modules.fetch(`https://inv.zzls.xyz/api/v1/channels/${ID}/shorts?sort_by=${req.query.sort_by || "newest"}` + continuations).then((res) => res.text()).then((txt) => getJson(txt)).catch(" ") 
+   const stream = await modules.fetch(`https://inv.zzls.xyz/api/v1/channels/${ID}/streams?sort_by=${req.query.sort_by || "newest"}` + continuationl).then((res) => res.text()).then((txt) => getJson(txt)).catch(" ") 
+  
+   // community tab - protobuf Egljb21tdW5pdHk%3D
+    const c = await modules.fetch(`https://inv.zzls.xyz/api/v1/channels/community/${ID}/`).then((res) => res.text()) .then((txt) => getJson(txt));
+ 
     try {
       const summary = await wiki.summary(k.Channel.Metadata.Name);
 
       var w = "";
+      
       if (summary.title === "Not found.") {
         w = "none";
       }
@@ -227,7 +197,7 @@ module.exports = function (app, config, renderTemplate) {
         subs:
           typeof subscribers === "string"
             ? subscribers.replace("subscribers", "")
-            : "Private",
+            : "None",
         desc: d,
       });
     } catch {

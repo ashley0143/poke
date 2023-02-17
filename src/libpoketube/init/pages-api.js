@@ -20,8 +20,8 @@ const {
 
 const pkg = require("../../../package.json");
 
-const ver = "v23.0209-SaA3-stable-git";
-const versionnumber = "203";
+const ver = "v23.0218-CRsa-stable-git ( master )";
+const versionnumber = "204";
 
 const response = {
   pt_version: ver,

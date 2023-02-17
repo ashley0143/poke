@@ -20,11 +20,13 @@ const {
 
 const pkg = require("../../../package.json");
 
-const ver = "v23.0218-CRsa-stable-git ( master )";
-const versionnumber = "204";
+const ver = "v23.0218b-CRsAa-stable-git";
+const branch = "master"
+const versionnumber = "204.1";
 
 const response = {
   pt_version: ver,
+  branch:branch,
   vernum: versionnumber,
   packages: {
     libpt: version,

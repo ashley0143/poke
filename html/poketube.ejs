@@ -651,8 +651,29 @@ display: block; !important;" autoplay controls
             Download
             </div>
 					</a>
- 
-   
+  
+   <% if (!video.Channel.Name.endsWith(' - Topic')) { %> 
+    <% if (!video.Title.endsWith('Audio)')) { %> 
+   <% if (support != undefined) { %> 
+
+    <div class="new-button button-encryption">
+					<a   title="Support the Creator of the video!" style="color:var(--text-color);text-decoration: none;" href="https://www.patreon.com/join/<%- support.name %>">
+                                        <div class="pill-button">
+
+               <i class="fa-light fa-badge-dollar"></i>
+                Support
+            </div>
+            
+            </div>
+
+
+   </a>
+      
+                                     <% }%>                                                                              <% }%>      
+                         <% }%>   
+
+      <% if (support == undefined) { %> 
+
  <% if (!video.Channel.Name.endsWith(' - Topic')) { %> 
     <% if (!video.Title.endsWith('Audio)')) { %> 
 
@@ -669,7 +690,7 @@ display: block; !important;" autoplay controls
 
    </a>
                                                                           <% }%>                                                                              <% }%>      
-                                                                                                                                                         <% if (video.Channel.Name.endsWith(' - Topic') || video.Title.endsWith('Audio)')) { %> 
+                                                                                                                   <% }%>                                                                                                                          <% if (video.Channel.Name.endsWith(' - Topic') || video.Title.endsWith('Audio)')) { %> 
                                                             
                             <% if (video.Channel.Name.endsWith(' - Topic') || video.Title.endsWith('Audio)'))  { %> 
                                                  					<a  class="new-button" title="open this song in poketube music player :3" style="color:var(--text-color);text-decoration: none;" href="/music?v=<%=video.id%>">

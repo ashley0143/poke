@@ -124,6 +124,8 @@ function getJson(str) {
   }
 }
 
+const PATREON_REGEX = /https:\/\/www.patreon.com\/(?<name>[\w\d_-]+)/
+
 module.exports = function (app, config, renderTemplate) {
   app.get("/encryption", async function (req, res) {
     var v = req.query.v;
@@ -258,11 +260,16 @@ module.exports = function (app, config, renderTemplate) {
                   if (d === "[object Object]") {
                     var d = false;
                   }
+                  
+                  if (String(json.Description) != "[object Object]"){
+                    var support = (PATREON_REGEX.exec(json.Description) ?? {}).groups
+                  }
 
                   renderTemplate(res, req, "poketube.ejs", {
                     color: data.color,
                     color2: data.color2,
                     engagement: engagement,
+                    support,
                     u,
                     video: json,
                     date: k.Video.uploadDate,

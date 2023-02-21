@@ -94,9 +94,9 @@ this is our config file,you can change stuff here
 */
   const config = {
     tubeApi: "https://api.poketube.fun/api/",
-    invapi: "https://invidious.sethforprivacy.com/api/v1",
+    invapi: "https://inv.zzls.xyz/api/v1",
     dislikes: "https://returnyoutubedislikeapi.com/votes?videoId=",
-    invchannel: "https://invidious.privacydev.net/api/v1",
+    invchannel: "https://inv.zzls.xyz/api/v1",
     cacher_max_age: "1800",
     enablealwayshttps: true, //enables always https on the server
     t_url: "https://t.poketube.fun/", //  def matomo url

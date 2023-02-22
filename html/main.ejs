@@ -463,7 +463,8 @@ P.S : Ur a qt
  
                 
  
- 
+  <script src="/css/custom-css.js"> </script>
+
     </body >
 
 </html>
@@ -1100,13 +1101,13 @@ Privacy
     <a  href="/?mobilesearch=<%=mobilesearch%>">First Page</a>  
               </p>
               <p style="text-align: left;;color: var(--text-secondary);text-decoration: none;">
-    <a  href="/?mobilesearch=<%=mobilesearch%>&continuation=<%=j.Search.continuation%>">Next Page</a>     
+    <a  href="/discover?mobilesearch=<%=mobilesearch%>&continuation=<%=j.Search.continuation%>">Next Page</a>     
               </p>
                                                 <% } %> 
                                                   
                             <%  if (!continuation) { %>
                <p style="text-align: left;margin-left: 16em;;color: var(--text-secondary);text-decoration: none;">
-    <a  href="/?mobilesearch=<%=mobilesearch%>&continuation=<%=j.Search.continuation%>">Next Page</a>      
+    <a  href="/discover?mobilesearch=<%=mobilesearch%>&continuation=<%=j.Search.continuation%>">Next Page</a>      
                                </p>
 
                                                 <% } %>  

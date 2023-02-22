@@ -120,7 +120,8 @@ async function video(v) {
       json: data?.video?.Player,
       video: await fetch(`${config.tubeApi}video?v=${v}`)
         .then((res) => res.text())
-        .then((xml) => getJson(toJson(xml))),
+        .then((xml) => getJson(toJson(xml)))
+        .catch(" "),
       vid,
       comments,
       engagement: data.engagement,

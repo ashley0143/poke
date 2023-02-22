@@ -135,6 +135,8 @@ module.exports = function (app, config, renderTemplate) {
       k = " ";
     }
  
+    try {
+    
    // continuation stuff - whoa cool
    let continuation  = req.query.continuation ? `&continuation=${req.query.continuation}` : "";
    let continuationl = req.query.continuationl ? `&continuation=${req.query.continuationl}` : "";
@@ -150,7 +152,6 @@ module.exports = function (app, config, renderTemplate) {
    // community tab - protobuf Egljb21tdW5pdHk%3D
     const c = await modules.fetch(`https://inv.zzls.xyz/api/v1/channels/community/${ID}/`).then((res) => res.text()) .then((txt) => getJson(txt));
  
-    try {
       const summary = await wiki.summary(k.Channel.Metadata.Name);
 
       var w = "";
@@ -202,6 +203,6 @@ module.exports = function (app, config, renderTemplate) {
       });
     } catch {
       res.redirect("/");
-    }
+    } 
   });
 };

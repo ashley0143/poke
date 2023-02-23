@@ -54,8 +54,12 @@ module.exports = function (app, config, renderTemplate) {
     renderTemplate(res, req, "want-you-gone.ejs");
   });
   
-  app.get("/custom-theme", function (req, res) {
-    renderTemplate(res, req, "custom-css.ejs");
+  app.get("/customize", function (req, res) {
+     const tab = req.query.tab;
+
+     renderTemplate(res, req, "custom-css.ejs", {
+         tab,
+       });
   });
 
   app.get("/css/:id", (req, res) => {

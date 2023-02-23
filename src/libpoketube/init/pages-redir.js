@@ -65,6 +65,10 @@ module.exports = function (app, config, renderTemplate) {
     res.redirect("/discover?tab=gaming");
   });
 
+  app.get("/custom-theme", (req, res) => {
+    res.redirect("/customize");
+  });
+
   app.get("/results", (req, res) => {
     if (!req.query.search_query) {
       return res.redirect("/");

@@ -20,10 +20,10 @@
   
 <!DOCTYPE html><html>
 <head>
-    <title>PokeTube | Privacy Is Your Right</title>
+    <title>PokeTube | Customize</title>
     <link href=/css/yt-ukraine.svg?v=6 rel=icon>
-      <meta content="PokeTube | Custom Theme " property=og:title>
-      <meta content="Theme Poketube and do wild stuff!" property=twitter:description>
+      <meta content="PokeTube | Customize  " property=og:title>
+      <meta content="Theme poketube and do custom js stuff - go wild !" property=twitter:description>
        <meta content="https://cdn.glitch.global/33bc0843-7505-4fb9-92a6-4e8b0e74979f/0ddd4508-9a7d-4c3c-9f8e-da5a8c115e16.image.png?v=1671545627005" property="og:image"  />
     <meta content="summary_large_image" name="twitter:card" />
   <!--
@@ -296,12 +296,101 @@ resize: none;
 background: #111;
 min-height: 69vh;
 border: none;
+font-family:monospace;
 border-radius: 2em;
 margin-top: 1em;
 margin-bottom: 1em;
 padding:1em;
 }
+   
+.tabs {
+	 display: table;
+   font-family:inter;
+	 border-collapse: separate;
+	 table-layout: auto;
+	 border-spacing: 4px 0;
+}
+ .tabs.tabs-center {
+	 margin: auto;
+}
+ .tabs.tabs-justify {
+	 width: 100%;
+	 table-layout: fixed;
+}
+ .tabs a.tab {
+	 position: relative;
+	 display: table-cell;
+text-transform:uppercase;
+	 transition: all ease 0.3s;
+	 padding: 1em 1.6em;
+	 transform: translate3d(0, 0, 0);
+	 color: #898989;
+	 white-space: nowrap;
+	 cursor: pointer;
+}
+
+ .tabs a.tab:after {
+	 transition: all 0.3s cubic-bezier(1, 0, 0, 1);
+	 will-change: transform, box-shadow, opacity;
+	 position: absolute;
+	 content: '';
+	 height: 3px;
+	 bottom: 0px;
+	 left: 0px;
+	 right: 0px;
+	 border-radius: 3px 3px 0px 0px;
+	 background: #9fdafd;
+	 box-shadow: 0px 4px 10px 3px rgba(60, 180, 250, .15);
+	 opacity: 0;
+	 transform: scale(0, 1);
+}
+ .tabs a.tab.active {
+	 color: #fff;
+}
+ .tabs a.tab.active:after {
+	 opacity: 1;
+	 transform: scale(1, 1);
+}            
+        
+  .tags.rec {
+  font-weight: 600;
+  font-stretch: expanded;
+  overflow:hidden;
+  width: auto;
+  max-width: fit-content;
+  margin-right: auto;
+  padding-left: 1.5em;
+  margin-top: 7px;
+  display: flex;
+  gap: 3px;
+  margin-inline: auto;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.tags.rec:hover{
+  overflow-x:auto;
+}
+
+.tags.rec > .tag {
+  border-radius: 8px;
+  background:var(--chip-background-hover);
+
+}
+
+.tag {
+  padding: 5px;
+  border-radius: 4px;
+  word-break: break-all;
+  white-space: nowrap;
+  font-family: ubuntu, sans-serif;
+} 
+   
+ 
       </style>
+       
+                     
+
   <script type="text/javascript">
 <!--//--><![CDATA[//><!--
 /**
@@ -357,11 +446,26 @@ padding:1em;
             </div>
      
       </nav>
-  
+     
+                              <% if (!tab) { %> 
+                        
+            
+
+
          <div class="h">
-         <div class="video-title" style="font-family:PokeTube Flex,sans-serif;font-weight:1000;font-stretch: ultra-expanded;">
-            Custom Css
-           </div> 
+             <div class="tags rec">
+
+              <a  class="tag" style=" background: #111;">
+           Custom CSS
+                  </a>
+                                             
+                  
+                                <a href="/customize?tab=js" style="color:#fff;text-decoration:none;
+" class="tag c">
+                       Custom JS 
+              </a>
+                  
+                     </div>
 
            
            <textarea id="custom-css">
@@ -375,6 +479,7 @@ padding:1em;
            </button>    
          </div>
   
+         
          
 </div>
  
@@ -396,6 +501,71 @@ padding:1em;
           
           
         </script>
+         
+                                                     		 	               <% } %>   
+                                                                           
+   <% if (tab) { %> 
+                        
+            
+
+
+         <div class="h">
+             <div class="tags rec">
+
+              <a href="/customize" style="color:#fff;text-decoration:none;
+"  class="tag">
+           Custom CSS
+                  </a>
+                                             
+                  
+                                <a style="color:#fff;text-decoration:none;background:#111
+" class="tag c">
+                       Custom JS 
+              </a>
+                  
+                     </div>
+ 
+           <span style="position: absolute;bottom: 0;margin-bottom: 1em;margin-left: auto;margin-right: auto;left: 14em;color: aqua;">
+             For security reasons you should only use code that you understand or code that has been written by a developer you trust.
+
+           </span>
+           
+           <textarea id="custom-css">
+             
+             
+  
+           </textarea>
+           
+       <button onclick="setCustomCss()" style="background: #1a1a1a;width: fit-content;margin-left: auto;margin-right: auto;padding: 7px;border-radius: 8px;">
+           Save
+           </button>    
+         </div>
+  
+         
+         
+</div>
+ 
+        <script>
+          
+    const cookie = localStorage.getItem("poke-custom-script");
+          
+    if(cookie !== " ") {
+      document.getElementById("custom-css").value = cookie
+    }
+      
+     
+    
+    function setCustomCss(){
+      localStorage.setItem('poke-custom-script',  document.getElementById("custom-css").value);
+    alert("saved!")
+    
+     }
+          
+          
+        </script>
+         
+                                                     		 	               <% } %>   
+
        <script src="/css/custom-css.js"> </script>
  </body>
 </html>   

@@ -23,6 +23,7 @@ const URL_WHITELIST = [
   "twemoji.maxcdn.com",
   "unpkg.com",
   "youtube.com",
+  "returnyoutubedislikeapi.com"
 ];
 
 const app = express();

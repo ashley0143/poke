@@ -754,7 +754,10 @@ display: block; !important;" autoplay controls
                           <% } %>          
   
     <% if (String(video.Description) == "[object Object]")  { %>
+               <% if (String(inv_vid.descriptionHtml) == " ")  { %>
+
       <p> No Description On this Video ( sad innit :c )</p>
+                          <% } %>               
                           <% } %>               
 
                             

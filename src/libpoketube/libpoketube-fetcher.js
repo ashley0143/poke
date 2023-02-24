@@ -52,7 +52,7 @@ module.exports = async function (video_id) {
 
   async function ryd() {
     try {
-      const engagement = await fetch(`${dislike_api}${video_id}`).then((res) =>
+      const engagement = await fetch(`https://p.poketube.fun/${dislike_api}${video_id}`).then((res) =>
         res.json()
       );
       return engagement;

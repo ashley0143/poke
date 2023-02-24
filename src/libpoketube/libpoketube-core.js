@@ -82,7 +82,7 @@ async function video(v) {
   }
 
   try {
-    var video_new_info = await fetch(`https://invidious.weblibre.org/api/v1/videos/${v}`).then(
+    var video_new_info = await fetch(`https://invidious.privacydev.net/api/v1/videos/${v}`).then(
       (res) => res.text()
     );
 

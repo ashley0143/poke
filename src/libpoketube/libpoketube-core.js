@@ -87,7 +87,9 @@ async function video(v) {
   const urls = [
   "invidious.sethforprivacy.com",
   "invidious.weblibre.org",
-  "inv.vern.cc"
+  "inv.vern.cc",
+  "invidious.privacydev.net",
+  "inv.zzls.xyz"
 ];
 
 let vid;
@@ -96,7 +98,7 @@ for (const url of urls) {
   const videoInfo = await fetch(`https://${url}/api/v1/videos/${v}`).then(res => res.text());
   vid = await getJson(videoInfo);
 
-  if (vid.descriptionHtml !== "<p></p>") {
+  if (vid?.descriptionHtml !== "<p></p>") {
     break;
   }
 }

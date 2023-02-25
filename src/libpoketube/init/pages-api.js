@@ -20,10 +20,10 @@ const {
 
 const pkg = require("../../../package.json");
 
-const ver = "v23.0223-CRsAa-stable-git";
+const ver = "v23.0225-CRsAa-MAJOR-stable-git";
 const branch = "master"
 const codename = "pinkneko"
-const versionnumber = "206";
+const versionnumber = "207";
 
 const response = {
   pt_version: ver,

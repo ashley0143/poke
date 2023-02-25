@@ -29,6 +29,7 @@ const response = {
   pt_version: ver,
   branch,
   vernum: versionnumber,
+  codename,
   packages: {
     libpt: version,
     node: process.version,

@@ -119,8 +119,9 @@ module.exports = function (app, config, renderTemplate) {
       }
     }
   });
-
-  app.get("/channel/", async (req, res) => {
+  
+app.get("/channel/", async (req, res) => {
+  try {
     const ID = req.query.id;
     const tab = req.query.tab;
 
@@ -130,79 +131,65 @@ module.exports = function (app, config, renderTemplate) {
         config.tubeApi + `channel?id=${ID}&tab=about`
       );
       const h = await bout.text();
-      var k = JSON.parse(modules.toJson(h));
+      var boutJson = JSON.parse(modules.toJson(h));
     } catch {
-      k = " ";
+      boutJson = " ";
     }
- 
-    try {
     
-   // continuation stuff - whoa cool
-   let continuation  = req.query.continuation ? `&continuation=${req.query.continuation}` : "";
-   let continuationl = req.query.continuationl ? `&continuation=${req.query.continuationl}` : "";
-   let continuations = req.query.continuations ? `&continuation=${req.query.continuations}` : "";
-    
-  // videos - i dont think this is readable at all but o welp if it works it works:tm:
-  // https://github.com/iv-org/invidious/blob/05258d56bdc3f4de1f0da0c0dbd2d540f68cbdd5/src/invidious/channels/videos.cr
+    const continuation = req.query.continuation || "";
+    const continuationl = req.query.continuationl || "";
+    const continuations = req.query.continuations || "";
+    const sort_by = req.query.sort_by || "newest";
 
-   const tj  = await modules.fetch(`https://inv.zzls.xyz/api/v1/channels/videos/${ID}/?sort_by=${req.query.sort_by || "newest"}` + continuation).then((res) => res.text()).then((txt) => getJson(txt)).catch(" ") 
-   const shorts = await modules.fetch(`https://inv.zzls.xyz/api/v1/channels/${ID}/shorts?sort_by=${req.query.sort_by || "newest"}` + continuations).then((res) => res.text()).then((txt) => getJson(txt)).catch(" ") 
-   const stream = await modules.fetch(`https://inv.zzls.xyz/api/v1/channels/${ID}/streams?sort_by=${req.query.sort_by || "newest"}` + continuationl).then((res) => res.text()).then((txt) => getJson(txt)).catch(" ") 
-  
-   // community tab - protobuf Egljb21tdW5pdHk%3D
-    const c = await modules.fetch(`https://inv.zzls.xyz/api/v1/channels/community/${ID}/`).then((res) => res.text()) .then((txt) => getJson(txt));
- 
-      const summary = await wiki.summary(k.Channel.Metadata.Name);
-
-      var w = "";
-      
-      if (summary.title === "Not found.") {
-        w = "none";
+    const getChannelData = async (url) => {
+      try {
+        const response = await modules.fetch(url);
+        return JSON.parse(await response.text());
+      } catch (error) {
+        console.error("Failed to fetch channel data from API:", error);
+        return null;
       }
-      if (summary.title !== "Not found.") {
-        w = summary;
-      }
+    }
 
-      const { Subscribers: subscribers } = k.Channel.Metadata;
-      const description = k.Channel.Contents.ItemSection.About.Description;
+    const [tj, shorts, stream, c] = await Promise.all([
+      getChannelData(`https://inv.zzls.xyz/api/v1/channels/videos/${ID}/?sort_by=${sort_by}&continuation=${continuation}`),
+      getChannelData(`https://inv.zzls.xyz/api/v1/channels/${ID}/shorts?sort_by=${sort_by}&continuation=${continuations}`),
+      getChannelData(`https://inv.zzls.xyz/api/v1/channels/${ID}/streams?sort_by=${sort_by}&continuation=${continuationl}`),
+      getChannelData(`https://inv.zzls.xyz/api/v1/channels/community/${ID}/`),
+    ]);
 
-      var d = description.toString().replace(/\n/g, " <br> ");
+    const summary = await wiki.summary(boutJson.Channel.Metadata.Name);
+    const wikiSummary = summary.title !== "Not found." ? summary : "none";
 
-      if (d === "[object Object]") {
-        var d = "";
-      }
+    const subscribers = boutJson.Channel.Metadata.Subscribers;
+    const about = boutJson.Channel.Contents.ItemSection.About;
+    const description = about.Description.toString().replace(/\n/g, " <br> ");
+    const dnoreplace = about.Description.toString();
 
-      var dnoreplace = description.toString();
+    renderTemplate(res, req, "channel.ejs", {
+      ID,
+      tab,
+      shorts,
+      j: boutJson,
+      sort: sort_by,
+      stream,
+      tj,
+      c,
+      convert,
+      turntomins,
+      dnoreplace,
+      continuation,
+      wiki: wikiSummary,
+      getFirstLine,
+      isMobile: req.useragent.isMobile,
+      about,
+      subs: typeof subscribers === "string" ? subscribers.replace("subscribers", "") : "None",
+      desc: dnoreplace === "[object Object]" ? "" : description,
+    });
+  } catch (error) {
+    console.error("Failed to render channel page:", error);
+    res.redirect("/");
+  }
+});
 
-      if (dnoreplace === "[object Object]") {
-        var dnoreplace = "";
-      }
-
-      renderTemplate(res, req, "channel.ejs", {
-        ID,
-        tab,
-        shorts,
-        j: k,
-        sort:req.query.sort_by,
-        stream,
-        tj,
-        c,
-        convert,
-        turntomins,
-        dnoreplace: dnoreplace,
-        continuation: continuation,
-        wiki: w,
-        getFirstLine: getFirstLine,
-        isMobile: req.useragent.isMobile,
-        about: k.Channel.Contents.ItemSection.About,
-        subs:
-          typeof subscribers === "string"
-            ? subscribers.replace("subscribers", "")
-            : "None",
-        desc: d,
-      });
-    } catch {
-      res.redirect("/");
-    } 
-  });
 };

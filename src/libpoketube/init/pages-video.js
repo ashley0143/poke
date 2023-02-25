@@ -124,7 +124,7 @@ function getJson(str) {
   }
 }
 
-const PATREON_REGEX = /https:\/\/www.patreon.com\/(?<name>[\w\d_-]+)/
+const PATREON_REGEX = /https:\/\/www.patreon.com\/(?<name>[\w\d_-]+)/;
 
 module.exports = function (app, config, renderTemplate) {
   app.get("/encryption", async function (req, res) {
@@ -173,240 +173,173 @@ module.exports = function (app, config, renderTemplate) {
     }
   });
 
-  app.get("/watch", async function (req, res) {
-    /*
-     * QUERYS
-     * v = Video ID
-     * e = Embed
-     * r = Recommended videos
-     * f = Recent videos from channel
-     * t = Piwik OptOut
-     * q = quality obv
-     * a = ambient mode
-     */
-    var v = req.query.v;
-    var e = req.query.e;
-    var r = req.query.r;
-    var f = req.query.f;
-    var t = req.query.t;
-    var q = req.query.quality;
-    var a = req.query.a;
+  app.get("/watch", async (req, res) => {
+    const { v, e, r, f, t, quality: q, a } = req.query;
 
-    const isvld = await core.isvalidvideo(v);
-    if (!v) res.redirect("/");
+    if (!v) {
+      return res.redirect("/");
+    }
+
+    const isVideoValid = await core.isvalidvideo(v);
+    if (!isVideoValid) {
+      return res.redirect("/?fromerror=21");
+    }
 
     const u = await media_proxy(v);
 
-    var secure;
-    var verify;
+    const secure = [
+      "poketube.fun",
+      "poketube.site",
+      "poketube.online",
+      "poketube.xyz",
+    ].includes(req.hostname);
+    const verify = req.hostname === "pt.zzls.xyz";
 
-    if (
-      req.hostname == "poketube.fun" ||
-      req.hostname == "poketube.site" ||
-      req.hostname == "poketube.online" ||
-      req.hostname == "poketube.xyz"
-    ) {
-      secure = true;
-    } else {
-      secure = false;
-    }
+    const response = await modules.fetch("http://ip-api.com/json/");
+    const ip = await response.json();
 
-    if (req.hostname == "pt.zzls.xyz") {
-      verify = true;
-    } else {
-      verify = false;
-    }
+    core.video(v).then((data) => {
+      try {
+        const k = data.video;
+        const json = data.json;
+        const engagement = data.engagement;
+        const inv_comments = data.comments || "Disabled";
+        const inv_vid = data.vid;
+        const desc = data.desc || "";
 
-    try {
-      const info = await modules.fetch("http://ip-api.com/json/");
-      const jj = await info.text();
-      const ip = JSON.parse(jj);
+        let d = false;
+        if (desc !== "[object Object]") {
+          d = desc.toString().replace(/\n/g, " <br> ");
+        }
 
-      if (isvld) {
-        core.video(v).then((data) => {
-          if (data) {
-            if ("video" in data) {
-              const k = data.video;
-              const json = data.json;
-              const engagement = data.engagement;
-              var inv_comments = data.comments;
-              const inv_vid = data.vid;
-              //checks if json exists
+        let support;
+        if (String(json.Description) !== "[object Object]") {
+          support = (PATREON_REGEX.exec(json.Description) ?? {}).groups;
+        }
 
-              if (json) {
-                //checks if title exists in the json object
+        let badges = "";
+        let comments = "";
+        let nnn = "";
+        if (!core.video(v).b && !v) {
+          badges = "";
+          comments = "";
+          nnn = "";
+        }
 
-                if ("Title" in json) {
-                  if (!data.comments) inv_comments = "Disabled";
+        let url;
+        if (q === "medium") {
+          url = `https://inv.vern.cc/latest_version?id=${v}&itag=18&local=true`;
+        }
 
-                  if (!core.video(v).b) {
-                    var nnn = "";
-                    var badges = "";
-                    var comments = "";
-                  }
-
-                  if (!v) res.redirect("/");
-
-                  if (q === "medium") {
-                    var url = `https://inv.vern.cc/latest_version?id=${v}&itag=18&local=true`;
-                  }
-
-                  const desc = data.desc;
-
-                  if (d) {
-                    var d = desc.toString().replace(/\n/g, " <br> ");
-                  }
-
-                  if (d === "[object Object]") {
-                    var d = false;
-                  }
-                  
-                  if (String(json.Description) != "[object Object]"){
-                    var support = (PATREON_REGEX.exec(json.Description) ?? {}).groups
-                  }
-
-                  renderTemplate(res, req, "poketube.ejs", {
-                    color: data.color,
-                    color2: data.color2,
-                    engagement: engagement,
-                    support,
-                    u,
-                    video: json,
-                    date: k.Video.uploadDate,
-                    e,
-                    a,
-                    k,
-                    verify,
-                    secure,
-                    process,
-                    sha384,
-                    lightOrDark,
-                    isMobile: req.useragent.isMobile,
-                    tj: data.channel,
-                    r: r,
-                    qua: q,
-                    inv: inv_comments,
-                    ip: ip,
-                    convert: convert,
-                    wiki: data.wiki,
-                    f: f,
-                    t: config.t_url,
-                    optout: t,
-                    badges: badges,
-                    desc: desc,
-                    comments: comments,
-                    n: nnn,
-                    inv_vid,
-                    lyrics: "",
-                  });
-                }
-              }
-            }
-          } else {
-            res.redirect("/?fromerror=24");
-          }
+        renderTemplate(res, req, "poketube.ejs", {
+          color: data.color,
+          color2: data.color2,
+          engagement,
+          support,
+          u,
+          video: json,
+          date: k.Video.uploadDate,
+          e,
+          a,
+          k,
+          verify,
+          secure,
+          process,
+          sha384,
+          lightOrDark,
+          isMobile: req.useragent.isMobile,
+          tj: data.channel,
+          r,
+          qua: q,
+          inv: inv_comments,
+          ip,
+          convert,
+          wiki: data.wiki,
+          f,
+          t: config.t_url,
+          optout: t,
+          badges,
+          desc,
+          comments,
+          n: nnn,
+          inv_vid,
+          lyrics: "",
         });
-      } else {
-        res.redirect("/?fromerror=21");
+      } catch {
+        return res.redirect("/?fromerror=43");
       }
-    } catch {
-      return res.redirect("/?fromerror=43");
-    }
+    });
   });
 
   app.get("/lite", async function (req, res) {
-    /*
-     * QUERYS
-     * v = Video ID
-     * e = Embed
-     * r = Recommended videos
-     * f = Recent videos from channel
-     * t = Piwik OptOut
-     * q = quality obv
-     */
-    var v = req.query.v;
-    var e = req.query.e;
-    var r = req.query.r;
-    var f = req.query.f;
-    var t = req.query.t;
-    var q = req.query.quality;
+    const { v, e, r, f, t, quality: q } = req.query;
 
-    const info = await modules.fetch("http://ip-api.com/json/");
-    const jj = await info.text();
-    const ip = JSON.parse(jj);
-    const isvld = await core.isvalidvideo(v);
+    try {
+      const info = await modules.fetch("http://ip-api.com/json/");
+      const ip = await info.json();
 
-    if (isvld) {
-      core.video(v).then((data) => {
-        if (data) {
-          if (data.video) {
-            const k = data.video;
-            const json = data.json;
-            const engagement = data.engagement;
-            var inv_comments = data.comments;
-            const inv_vid = data.vid;
-            if (json) {
-              if (json.Title) {
-                if (!data.comments) inv_comments = "Disabled";
+      const {
+        video: k,
+        json,
+        engagement,
+        comments: inv_comments,
+        vid: inv_vid,
+      } = await core.video(v);
 
-                if (!core.video(v).b) {
-                  var nnn = "";
-                  var badges = "";
-                  var comments = "";
-                }
+      if (!k || !json || !json.Title) {
+        res.redirect("/");
+        return;
+      }
 
-                if (!v) res.redirect("/");
+      const data = await core.video(v);
+      const color = data.color;
+      const color2 = data.color2;
+      const desc = data.desc;
+      const isMobile = req.useragent.isMobile;
+      const wiki = data.wiki;
+      const { channel: tj } = data;
 
-                if (q === "medium") {
-                  var url = `https://inv.vern.cc/latest_version?id=${v}&itag=18&local=true`;
-                }
+      const d = desc.toString().replace(/\n/g, " <br> ");
+      const comments = inv_comments || "Disabled";
 
-                const desc = data.desc;
-                if (d) {
-                  var d = desc.toString().replace(/\n/g, " <br> ");
-                }
+      const url =
+        q === "medium"
+          ? `https://inv.vern.cc/latest_version?id=${v}&itag=18&local=true`
+          : null;
 
-                if (d === "[object Object]") {
-                  var d = false;
-                }
+      const templateData = {
+        color,
+        color2,
+        engagement,
+        video: json,
+        date: k.Video.uploadDate,
+        e,
+        k,
+        process,
+        sha384,
+        lightOrDark,
+        isMobile,
+        tj,
+        r,
+        qua: q,
+        inv: comments,
+        ip,
+        convert,
+        wiki,
+        f,
+        t: config.t_url,
+        optout: t,
+        badges: "",
+        desc,
+        comments,
+        n: "",
+        inv_vid,
+        lyrics: "",
+      };
 
-                renderTemplate(res, req, "lite.ejs", {
-                  color: data.color,
-                  color2: data.color2,
-                  engagement: engagement,
-                  video: json,
-                  date: k.Video.uploadDate,
-                  e: e,
-                  k: k,
-                  process: process,
-                  sha384: sha384,
-                  lightOrDark,
-                  isMobile: req.useragent.isMobile,
-                  tj: data.channel,
-                  r: r,
-                  qua: q,
-                  inv: inv_comments,
-                  ip: ip,
-                  convert: convert,
-                  wiki: data.wiki,
-                  f: f,
-                  t: config.t_url,
-                  optout: t,
-                  badges: badges,
-                  desc: desc,
-                  comments: comments,
-                  n: nnn,
-                  inv_vid,
-                  lyrics: "",
-                });
-              }
-            }
-          }
-        } else {
-          res.redirect("/");
-        }
-      });
-    } else {
+      renderTemplate(res, req, "lite.ejs", templateData);
+    } catch (error) {
+      console.error(error);
       res.redirect("/");
     }
   });
@@ -464,11 +397,11 @@ module.exports = function (app, config, renderTemplate) {
         sha384(config.t_url);
 
       const stringed = toObject(atmos);
- 
-      const search = what => atmos.find(element => element.id === what);
-      const mos = search(v)
-      
-/*
+
+      const search = (what) => atmos.find((element) => element.id === what);
+      const mos = search(v);
+
+      /*
      this is only for the alac codec being used
      
      * Copyright (c) 2023 Apple Inc. All rights reserved.
@@ -489,7 +422,7 @@ module.exports = function (app, config, renderTemplate) {
      * 
      * @APPLE_APACHE_LICENSE_HEADER_END@
  */
-      
+
       if (mos) {
         var url_e =
           mos.url +
@@ -499,7 +432,6 @@ module.exports = function (app, config, renderTemplate) {
           "Piwik" +
           sha384(config.t_url);
       } else {
- 
       }
 
       // channel info

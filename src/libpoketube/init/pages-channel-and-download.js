@@ -1,4 +1,4 @@
-const {
+ const {
   fetcher,
   core,
   wiki,
@@ -66,130 +66,114 @@ module.exports = function (app, config, renderTemplate) {
   app.get("/search", async (req, res) => {
     const query = req.query.query;
 
-    if (req.query.continuation) {
-      var continuation = req.query.continuation;
-    }
-
-    if (!req.query.continuation) {
-      var continuation = "";
-    }
-
     if (!query) {
       return res.redirect("/");
     }
 
-    if (query) {
-      try {
-        const search = await modules.fetch(
-          `https://tube-srv.ashley143.gay/api/search?query=${query.replace(
-            "&",
-            "and"
-          )}&continuation=${continuation}`
-        );
+    let continuation = req.query.continuation || "";
 
-        const text = await search.text();
-        const j = JSON.parse(modules.toJson(text));
+    try {
+      const searchUrl = `https://tube-srv.ashley143.gay/api/search?query=${encodeURIComponent(
+        query
+      )}&continuation=${encodeURIComponent(continuation)}`;
+      const searchResponse = await modules.fetch(searchUrl);
+      const searchText = await searchResponse.text();
+      const searchJson = JSON.parse(modules.toJson(searchText));
 
-        h = " ";
-     
-        // YOUTUBE WHY do you WANT me to do this oh ma gosh
-        if (j.Search) {
-          if ("Results.DynamicItem" in j.Search) {
-            if (j.Search.Results.DynamicItem.id == "didYouMeanRenderer") {
-              var h = JSON.parse(j.Search.Results.DynamicItem.Title);
-            }
-          }
-        }
+      let didYouMean;
+      if (
+        searchJson.Search?.Results?.DynamicItem?.id === "didYouMeanRenderer"
+      ) {
+        didYouMean = JSON.parse(searchJson.Search.Results.DynamicItem.Title);
+      }
 
-        const summary = await wiki
-          .summary(query + " ")
-          .then((summary_) =>
+      const summary = await wiki.summary(query + " ").then((summary_) =>
             summary_.title !== "Not found." ? summary_ : "none"
           );
 
-        renderTemplate(res, req, "search.ejs", {
-          j,
-          h,
-          continuation,
-          q: query,
-          summary,
-        });
-      } catch {
-        res.redirect("/");
-      }
+      renderTemplate(res, req, "search.ejs", {
+        j: searchJson,
+        h: didYouMean,
+        continuation,
+        q: query,
+       summary,
+      });
+    } catch (error) {
+      console.error(`Error while searching for '${query}':`, error);
+      res.redirect("/");
     }
   });
-  
-app.get("/channel/", async (req, res) => {
-  try {
-    const ID = req.query.id;
-    const tab = req.query.tab;
 
+  app.get("/channel/", async (req, res) => {
     try {
-      // about
-      const bout = await modules.fetch(
-        config.tubeApi + `channel?id=${ID}&tab=about`
-      );
-      const h = await bout.text();
-      var boutJson = JSON.parse(modules.toJson(h));
-    } catch {
-      boutJson = " ";
-    }
-    
-    const continuation = req.query.continuation || "";
-    const continuationl = req.query.continuationl || "";
-    const continuations = req.query.continuations || "";
-    const sort_by = req.query.sort_by || "newest";
+      const ID = req.query.id;
+      const tab = req.query.tab;
 
-    const getChannelData = async (url) => {
       try {
-        const response = await modules.fetch(url);
-        return JSON.parse(await response.text());
-      } catch (error) {
-        console.error("Failed to fetch channel data from API:", error);
-        return null;
+        // about
+        const bout = await modules.fetch(
+          config.tubeApi + `channel?id=${ID}&tab=about`
+        );
+        const h = await bout.text();
+        var boutJson = JSON.parse(modules.toJson(h));
+      } catch {
+        boutJson = " ";
       }
+
+      const continuation = req.query.continuation || "";
+      const continuationl = req.query.continuationl || "";
+      const continuations = req.query.continuations || "";
+      const sort_by = req.query.sort_by || "newest";
+
+      const getChannelData = async (url) => {
+        try {
+          const response = await modules.fetch(url);
+          return JSON.parse(await response.text());
+        } catch (error) {
+          console.error("Failed to fetch channel data from API:", error);
+          return null;
+        }
+      };
+
+   const tj  = await modules.fetch(`https://inv.zzls.xyz/api/v1/channels/videos/${ID}/?sort_by=${req.query.sort_by || "newest"}` + continuation).then((res) => res.text()).then((txt) => getJson(txt)).catch(" ") 
+   const shorts = await modules.fetch(`https://inv.zzls.xyz/api/v1/channels/${ID}/shorts?sort_by=${req.query.sort_by || "newest"}` + continuations).then((res) => res.text()).then((txt) => getJson(txt)).catch(" ") 
+   const stream = await modules.fetch(`https://inv.zzls.xyz/api/v1/channels/${ID}/streams?sort_by=${req.query.sort_by || "newest"}` + continuationl).then((res) => res.text()).then((txt) => getJson(txt)).catch(" ") 
+   const c = await modules.fetch(`https://inv.zzls.xyz/api/v1/channels/community/${ID}/`).then((res) => res.text()) .then((txt) => getJson(txt));
+
+      const summary = await wiki.summary(boutJson.Channel.Metadata.Name);
+      const wikiSummary = summary.title !== "Not found." ? summary : "none";
+
+      const subscribers = boutJson.Channel.Metadata.Subscribers;
+      const about = boutJson.Channel.Contents.ItemSection.About;
+      const description = about.Description.toString().replace(/\n/g, " <br> ");
+      const dnoreplace = about.Description.toString();
+
+      renderTemplate(res, req, "channel.ejs", {
+        ID,
+        tab,
+        shorts,
+        j: boutJson,
+        sort: sort_by,
+        stream,
+        tj,
+        c,
+        convert,
+        turntomins,
+        dnoreplace,
+        continuation,
+        wiki: wikiSummary,
+        getFirstLine,
+        isMobile: req.useragent.isMobile,
+        about,
+        subs:
+          typeof subscribers === "string"
+            ? subscribers.replace("subscribers", "")
+            : "None",
+        desc: dnoreplace === "[object Object]" ? "" : description,
+      });
+    } catch (error) {
+      console.error("Failed to render channel page:", error);
+      res.redirect("/");
     }
-
-    const [tj, shorts, stream, c] = await Promise.all([
-      getChannelData(`https://inv.zzls.xyz/api/v1/channels/videos/${ID}/?sort_by=${sort_by}&continuation=${continuation}`),
-      getChannelData(`https://inv.zzls.xyz/api/v1/channels/${ID}/shorts?sort_by=${sort_by}&continuation=${continuations}`),
-      getChannelData(`https://inv.zzls.xyz/api/v1/channels/${ID}/streams?sort_by=${sort_by}&continuation=${continuationl}`),
-      getChannelData(`https://inv.zzls.xyz/api/v1/channels/community/${ID}/`),
-    ]);
-
-    const summary = await wiki.summary(boutJson.Channel.Metadata.Name);
-    const wikiSummary = summary.title !== "Not found." ? summary : "none";
-
-    const subscribers = boutJson.Channel.Metadata.Subscribers;
-    const about = boutJson.Channel.Contents.ItemSection.About;
-    const description = about.Description.toString().replace(/\n/g, " <br> ");
-    const dnoreplace = about.Description.toString();
-
-    renderTemplate(res, req, "channel.ejs", {
-      ID,
-      tab,
-      shorts,
-      j: boutJson,
-      sort: sort_by,
-      stream,
-      tj,
-      c,
-      convert,
-      turntomins,
-      dnoreplace,
-      continuation,
-      wiki: wikiSummary,
-      getFirstLine,
-      isMobile: req.useragent.isMobile,
-      about,
-      subs: typeof subscribers === "string" ? subscribers.replace("subscribers", "") : "None",
-      desc: dnoreplace === "[object Object]" ? "" : description,
-    });
-  } catch (error) {
-    console.error("Failed to render channel page:", error);
-    res.redirect("/");
-  }
-});
-
+  });
 };

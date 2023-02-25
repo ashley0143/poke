@@ -19,7 +19,8 @@ const fetcher = require("../libpoketube/libpoketube-fetcher.js");
 const getColors = require("get-image-colors");
 
 const wiki = require("wikipedia");
-const sqp = "-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLBy_x4UUHLNDZtJtH0PXeQGoRFTgw";
+const sqp =
+  "-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLBy_x4UUHLNDZtJtH0PXeQGoRFTgw";
 
 const config = {
   tubeApi: "https://tube-srv.ashley143.gay/api/",
@@ -70,6 +71,7 @@ async function video(v) {
 
   let nightlyRes;
   var desc = "";
+  var iurl = "invidious.privacydev.net";
 
   try {
     var inv_comments = await fetch(`${config.invapi}/comments/${v}`).then(
@@ -80,16 +82,30 @@ async function video(v) {
   } catch {
     var comments = "";
   }
+ 
+  
+  const urls = [
+  "invidious.sethforprivacy.com",
+  "invidious.weblibre.org",
+  "inv.vern.cc"
+];
 
-  try {
-    var video_new_info = await fetch(`https://invidious.privacydev.net/api/v1/videos/${v}`).then(
-      (res) => res.text()
-    );
+let vid;
 
-    var vid = await getJson(video_new_info);
-  } catch {
-    var vid = "";
+for (const url of urls) {
+  const videoInfo = await fetch(`https://${url}/api/v1/videos/${v}`).then(res => res.text());
+  vid = await getJson(videoInfo);
+
+  if (vid.descriptionHtml !== "<p></p>") {
+    break;
   }
+}
+
+if (!vid) {
+  // Handle error case
+}
+
+
 
   if (checkUnexistingObject(vid)) {
     var a;

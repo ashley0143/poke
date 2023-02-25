@@ -30,72 +30,53 @@ function getJson(str) {
 
 module.exports = function (app, config, renderTemplate) {
   app.get("/discover", async function (req, res) {
-    const trends = await modules.fetch(config.tubeApi + `trending`);
+    const trends = await modules.fetch(`${config.tubeApi}trending`);
     const h = await trends.text();
     const k = getJson(modules.toJson(h));
 
-    if (req.query.tab)
-      var tab = `/?type=${capitalizeFirstLetter(req.query.tab)}`;
+    let tab = "";
+    if (req.query.tab) {
+      tab = `/?type=${capitalizeFirstLetter(req.query.tab)}`;
+    }
 
-    if (!req.query.tab) var tab = "";
+    const invtrend = await modules.fetch(`https://inv.zzls.xyz/api/v1/trending${tab}`);
+    const t = getJson(await invtrend.text());
 
-    const invtrend = await modules
-      .fetch(`https://inv.zzls.xyz/api/v1/trending${tab}`)
-      .then((res) => res.text());
-
-    const t = getJson(invtrend);
-
+    let j = null;
     if (req.query.mobilesearch) {
-      var query = req.query.mobilesearch;
-      tab = "search";
-      if (req.query.continuation) {
-        var continuation = req.query.continuation;
-      }
-      if (!req.query.continuation) {
-        var continuation = "";
-      }
-
-      const search = await modules.fetch(
-        `https://tube-srv.ashley143.gay/api/search?query=${query}&continuation=${continuation}`
-      );
-
+      const query = req.query.mobilesearch;
+      const continuation = req.query.continuation || "";
+      const search = await modules.fetch(`https://tube-srv.ashley143.gay/api/search?query=${query}&continuation=${continuation}`);
       const text = await search.text();
-      var j = getJson(modules.toJson(text));
+      j = getJson(modules.toJson(text));
     }
 
     renderTemplate(res, req, "main.ejs", {
-      k: k,
+      k,
       tab: req.query.tab,
       isMobile: req.useragent.isMobile,
       mobilesearch: req.query.mobilesearch,
       inv: t,
       turntomins,
-      continuation,
+      continuation: req.query.continuation,
       j,
     });
   });
 
   app.get("/:v*?", async function (req, res) {
-    let rendermainpage = () => {
+    const rendermainpage = () => {
       if (req.useragent.isMobile) {
-        return res.redirect(`/discover`);
-      } else {
-        return renderTemplate(res, req, "landing.ejs");
+        return res.redirect("/discover");
       }
+      return renderTemplate(res, req, "landing.ejs");
     };
 
-    if (req.params.v) {
-      if (/[a-zA-Z0-9]+/.test(req.param.v)) {
-        const isvld = await core.isvalidvideo(req.params.v);
-
-        if (isvld) {
-          return res.redirect(`/watch?v=${req.params.v}`);
-        } else {
-          return rendermainpage();
-        }
+    if (req.params.v && /[a-zA-Z0-9]+/.test(req.param.v)) {
+      const isvld = await core.isvalidvideo(req.params.v);
+      if (isvld) {
+        return res.redirect(`/watch?v=${req.params.v}`);
       }
-    } else {
-      return rendermainpage();
     }
+    return rendermainpage();
   });
 };

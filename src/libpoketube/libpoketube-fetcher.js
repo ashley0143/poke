@@ -16,59 +16,41 @@
 const fetch = require("node-fetch"); //2.5.x
 const { toJson } = require("xml2json");
 
-var youtube_url = `https://www.youtube.com/watch?v=`;
-var dislike_api = `https://returnyoutubedislikeapi.com/votes?videoId=`;
-var new_api_url = `https://tube-srv.ashley143.gay/api/player`;
+const youtubeUrl = "https://www.youtube.com/watch?v=";
+const dislikeApi = "https://p.poketube.fun/https://returnyoutubedislikeapi.com/votes?videoId=";
+const newApiUrl = "https://tube-srv.ashley143.gay/api/player";
 
-module.exports = async function (video_id) {
-  function getJson(str) {
-    try {
-      return JSON.parse(str);
-    } catch {
-      return null;
-    }
-  }
-
-  const headers = {};
-  /*
-   * Parses and fetches an xml
-   */
-
-  async function parsexml(id) {
-    
-    
-    async function fetchxmlvideo() {
-      try {
-        const player = await fetch(`${new_api_url}?v=${id}`, headers);
-        var h = await player.text();
-        var j = toJson(h);
-        return getJson(j);
-      } catch {}
-    }
-
-    const a = await fetchxmlvideo();
-    return a;
-  }
-
-  async function ryd() {
-    try {
-      const engagement = await fetch(`https://p.poketube.fun/${dislike_api}${video_id}`).then((res) =>
-        res.json()
-      );
-      return engagement;
-    } catch {}
-  }
-
-  const engagement = await ryd();
-
-  /*
-   * Returner object
-   */
-  const returner = {
-    video: await parsexml(video_id),
-    engagement,
-    video_url_youtube: `${youtube_url}${video_id}`,
-  };
-
-  return returner;
+const parseXml = async (videoId, headers) => {
+  const player = await fetch(`${newApiUrl}?v=${videoId}`, headers);
+  const xml = await player.text();
+  const json = toJson(xml);
+  return getJson(json);
 };
+
+const getJson = (str) => {
+  try {
+    return JSON.parse(str);
+  } catch {
+    return null;
+  }
+};
+
+const getEngagement = async (videoId) => {
+  const engagement = await fetch(`${dislikeApi}${videoId}`).then((res) => res.json());
+  return engagement;
+};
+
+const getPokeTubeData = async (videoId) => {
+  const headers = {};
+  const videoData = await parseXml(videoId, headers);
+  const engagement = await getEngagement(videoId);
+
+  return {
+    video: videoData,
+    engagement,
+    videoUrlYoutube: `${youtubeUrl}${videoId}`,
+  };
+};
+
+module.exports = getPokeTubeData
+ 

@@ -1,4 +1,4 @@
- const {
+const {
   fetcher,
   core,
   wiki,
@@ -87,16 +87,18 @@ module.exports = function (app, config, renderTemplate) {
         didYouMean = JSON.parse(searchJson.Search.Results.DynamicItem.Title);
       }
 
-      const summary = await wiki.summary(query + " ").then((summary_) =>
-            summary_.title !== "Not found." ? summary_ : "none"
-          );
+      const summary = await wiki
+        .summary(query + " ")
+        .then((summary_) =>
+          summary_.title !== "Not found." ? summary_ : "none"
+        );
 
       renderTemplate(res, req, "search.ejs", {
         j: searchJson,
         h: didYouMean,
         continuation,
         q: query,
-       summary,
+        summary,
       });
     } catch (error) {
       console.error(`Error while searching for '${query}':`, error);
@@ -127,18 +129,17 @@ module.exports = function (app, config, renderTemplate) {
 
       const getChannelData = async (url) => {
         try {
-          const response = await modules.fetch(url);
-          return JSON.parse(await response.text());
+          return await modules.fetch(url).then((res) => res.text()).then((txt) => getJson(txt));
         } catch (error) {
           console.error("Failed to fetch channel data from API:", error);
           return null;
         }
       };
 
-   const tj  = await modules.fetch(`https://inv.zzls.xyz/api/v1/channels/videos/${ID}/?sort_by=${req.query.sort_by || "newest"}` + continuation).then((res) => res.text()).then((txt) => getJson(txt)).catch(" ") 
-   const shorts = await modules.fetch(`https://inv.zzls.xyz/api/v1/channels/${ID}/shorts?sort_by=${req.query.sort_by || "newest"}` + continuations).then((res) => res.text()).then((txt) => getJson(txt)).catch(" ") 
-   const stream = await modules.fetch(`https://inv.zzls.xyz/api/v1/channels/${ID}/streams?sort_by=${req.query.sort_by || "newest"}` + continuationl).then((res) => res.text()).then((txt) => getJson(txt)).catch(" ") 
-   const c = await modules.fetch(`https://inv.zzls.xyz/api/v1/channels/community/${ID}/`).then((res) => res.text()) .then((txt) => getJson(txt));
+      const tj = await getChannelData(`https://inv.zzls.xyz/api/v1/channels/videos/${ID}/?sort_by=${req.query.sort_by || "newest"}` + continuation );
+      const shorts = await getChannelData(`https://inv.zzls.xyz/api/v1/channels/${ID}/shorts?sort_by=${req.query.sort_by || "newest"}` + continuations   );
+      const stream = await getChannelData(`https://inv.zzls.xyz/api/v1/channels/${ID}/streams?sort_by=${ req.query.sort_by || "newest"}` + continuationl );
+      const c = await getChannelData(`https://inv.zzls.xyz/api/v1/channels/community/${ID}/`);
 
       const summary = await wiki.summary(boutJson.Channel.Metadata.Name);
       const wikiSummary = summary.title !== "Not found." ? summary : "none";

@@ -1267,6 +1267,35 @@ window.addEventListener("load", () => {
     progressContainer1.style.display = 'none';
   }, 500);
 });
+  
+  document.addEventListener('DOMContentLoaded', function() {
+  let bgs = document.querySelectorAll('[data-bg]');
+  let bgCount = bgs.length;
+  
+  function loadBg(index) {
+    let bg = bgs[index];
+    let bgUrl = bg.getAttribute('data-bg');
+    bg.style.backgroundImage = `url(${bgUrl})`;
+    bg.removeAttribute('data-bg');
+    bg.classList.add('loaded');
+  }
+
+  function lazyLoadBg() {
+    for (let i = 0; i < bgCount; i++) {
+      let bg = bgs[i];
+      let bgRect = bg.getBoundingClientRect();
+      if (bgRect.top < window.innerHeight && bgRect.bottom > 0) {
+        loadBg(i);
+      }
+    }
+  }
+  
+  lazyLoadBg();
+  
+  window.addEventListener('scroll', lazyLoadBg);
+  window.addEventListener('resize', lazyLoadBg);
+});
+
 </script>
    
  <% if (!optout) { %> 

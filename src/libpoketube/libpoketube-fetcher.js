@@ -17,7 +17,7 @@ const fetch = require("node-fetch"); //2.5.x
 const { toJson } = require("xml2json");
 
 const youtubeUrl = "https://www.youtube.com/watch?v=";
-const dislikeApi = "https://p.poketube.fun/https://returnyoutubedislikeapi.com/votes?videoId=";
+const dislikeApi = "https://returnyoutubedislikeapi.com/votes?videoId=";
 const newApiUrl = "https://tube-srv.ashley143.gay/api/player";
 
 const parseXml = async (videoId, headers) => {
@@ -36,9 +36,22 @@ const getJson = (str) => {
 };
 
 const getEngagement = async (videoId) => {
-  const engagement = await fetch(`${dislikeApi}${videoId}`).then((res) => res.json());
-  return engagement;
+  const apiUrl = `${dislikeApi}${videoId}`;
+  const fallbackUrl = `https://p.poketube.fun/${apiUrl}`;
+
+  try {
+    const engagement = await fetch(apiUrl).then((res) => res.json());
+    return engagement;
+  } catch {
+    try {
+      const engagement = await fetch(fallbackUrl).then((res) => res.json());
+      return engagement;
+    } catch {
+      return;
+    }
+  }
 };
+
 
 const getPokeTubeData = async (videoId) => {
   const headers = {};

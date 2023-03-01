@@ -5,8 +5,6 @@
    <img src='https://raw.githubusercontent.com/squiresgrant/personal-site/main/badges/firefox4.gif'>
 </div>
 
-
-# 
  
 ## Table of Contents:
 - [Welcome!](#Welcome!)

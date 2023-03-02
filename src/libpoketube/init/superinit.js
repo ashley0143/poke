@@ -1,22 +1,5 @@
-const {
-  fetcher,
-  core,
-  wiki,
-  musicInfo,
-  modules,
-  version,
-  initlog,
-} = require("../libpoketube-initsys.js");
-const {
-  IsJsonString,
-  convert,
-  getFirstLine,
-  capitalizeFirstLetter,
-  turntomins,
-  getRandomInt,
-  getRandomArbitrary,
-} = require("../ptutils/libpt-coreutils.js");
-
+const { fetcher, core, wiki, musicInfo, modules, version, initlog } = require("../libpoketube-initsys.js");
+const { IsJsonString, convert, getFirstLine, capitalizeFirstLetter, turntomins, getRandomInt, getRandomArbitrary } = require("../ptutils/libpt-coreutils.js");
 const { api } = require("../init/pages-api.js");
 
 function init(app, config, rendertemplate) {

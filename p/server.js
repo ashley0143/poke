@@ -23,7 +23,16 @@ const URL_WHITELIST = [
   "twemoji.maxcdn.com",
   "unpkg.com",
   "youtube.com",
-  "returnyoutubedislikeapi.com"
+  "returnyoutubedislikeapi.com",
+  "invidious.sethforprivacy.com",
+  "invidious.weblibre.org",
+  "inv.vern.cc",
+  "invidious.privacydev.net",
+  "inv.zzls.xyz",
+  "vid.puffyan.us",
+  "invidious.lidarshield.cloud",
+  "invidious.epicsite.xyz",
+  "invidious.esmailelbob.xyz"
 ];
 
 const app = express();

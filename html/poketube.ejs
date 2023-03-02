@@ -791,7 +791,7 @@ display: block; !important;" autoplay controls
            <div style="margin-top:1em;">
              
         
-              <%-String(inv_vid.description).replace(/\n/g, " <br> ").replace(/twitter\.com/g, "nitter.net").replace(/reddit\.com/g, "teddit.net") %>
+              <%-String(linkify(inv_vid.description)).replace(/\n/g, " <br> ").replace(/twitter\.com/g, "nitter.net").replace(/reddit\.com/g, "teddit.net") %>
                    </div> 
                           <% } %>                          <% } %>                                  <% } %>          
                           <% } %>          

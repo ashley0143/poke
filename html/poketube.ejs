@@ -773,14 +773,29 @@ display: block; !important;" autoplay controls
      <% if (String(video.Description) != "[object Object]")  { %>
          <% if (String(inv_vid.descriptionHtml) != "undefined")  { %>
          <% if (String(inv_vid.descriptionHtml) != " ")  { %>
+           <% if (String(inv_vid.descriptionHtml) != "<p></p>")  { %>
 
            <div style="margin-top:1em;">
              
         
               <%-String(inv_vid.descriptionHtml).replace(/\n/g, " <br> ").replace(/twitter\.com/g, "nitter.net").replace(/reddit\.com/g, "teddit.net") %>
                    </div> 
-                          <% } %>                                  <% } %>          
+                          <% } %>                          <% } %>                                  <% } %>          
                           <% } %>          
+                            
+                         <% if (String(video.Description) != "[object Object]")  { %>
+         <% if (String(inv_vid.descriptionHtml) != "undefined")  { %>
+         <% if (String(inv_vid.descriptionHtml) != " ")  { %>
+           <% if (String(inv_vid.descriptionHtml) == "<p></p>")  { %>
+
+           <div style="margin-top:1em;">
+             
+        
+              <%-String(inv_vid.description).replace(/\n/g, " <br> ").replace(/twitter\.com/g, "nitter.net").replace(/reddit\.com/g, "teddit.net") %>
+                   </div> 
+                          <% } %>                          <% } %>                                  <% } %>          
+                          <% } %>          
+                            
   
     <% if (String(video.Description) == "[object Object]")  { %>
                <% if (String(inv_vid.descriptionHtml) == " ")  { %>

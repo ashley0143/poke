@@ -83,35 +83,37 @@ async function video(v) {
     var comments = "";
   }
  
-  const urls = [
+   const urls = [
   "invidious.sethforprivacy.com",
   "invidious.weblibre.org",
-  "inv.vern.cc",
-  "invidious.privacydev.net",
   "inv.zzls.xyz",
-  "vid.puffyan.us"
-];
-
+  "invidious.privacydev.net"
+   ];
+  
 let vid;
 
-try {
-  for (const url of urls) {
+ for (const url of urls) {
+  try {
     const videoInfo = await fetch(`https://${url}/api/v1/videos/${v}`).then(res => res.text());
     vid = await getJson(videoInfo);
 
-    if (vid?.descriptionHtml !== "<p></p>") {
-      break;
+    switch (true) {
+      case vid?.descriptionHtml !== "<p></p>":
+        break;
+      default:
+        continue;
     }
+    break;
+  } catch (error) {
+     continue;
   }
-
-  if (!vid) {
-    // Handle error case
-    throw new Error('Unable to fetch video information.');
-  }
-} catch (error) {
-  console.error(error);
-  // Handle error case
 }
+ 
+  
+if (!vid) {
+  console.log(`Sorry nya, we couldn't find any information about that video qwq`);
+}
+
 
   if (checkUnexistingObject(vid)) {
     var a;

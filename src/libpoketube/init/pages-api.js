@@ -20,10 +20,10 @@ const {
 
 const pkg = require("../../../package.json");
 
-const ver = "v23.0225-CRsAa-MAJOR-stable-git";
+const ver = "v23.0302-CRsAa-MAJOR-stable-git";
 const branch = "master"
 const codename = "pinkneko"
-const versionnumber = "207";
+const versionnumber = "210";
 
 const response = {
   pt_version: ver,
@@ -52,7 +52,8 @@ module.exports = function (app, config, renderTemplate) {
     var t = req.query.t;
     var q = req.query.quality;
     var v = req.params.v;
-
+    var type = req.query.type;
+    
     var fetching = await fetcher(v);
     const video = await modules.fetch(config.tubeApi + `video?v=${v}`);
 
@@ -76,6 +77,7 @@ module.exports = function (app, config, renderTemplate) {
       qua: q,
       engagement: engagement,
       k: k,
+      type,
       optout: t,
       t: config.t_url,
     });

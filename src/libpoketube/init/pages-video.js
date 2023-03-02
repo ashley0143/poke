@@ -195,6 +195,16 @@ module.exports = function (app, config, renderTemplate) {
     ].includes(req.hostname);
     const verify = req.hostname === "pt.zzls.xyz";
 
+     function linkify(text) {
+      // regular expression to match URLs
+     const urlRegex = /(https?:\/\/[^\s]+)/g;
+  
+    return text.replace(urlRegex, (url) => {
+    // wrap the URL in an <a> tag with the URL as the href attribute
+    return `<a href="${url.replace("https://youtube.com", "").replace("https://youtu.be", "")}" target="_blank">${url}</a>`;
+  });
+ }
+    
     const response = await modules.fetch("http://ip-api.com/json/");
     const ip = await response.json();
 
@@ -233,6 +243,7 @@ module.exports = function (app, config, renderTemplate) {
         renderTemplate(res, req, "poketube.ejs", {
           color: data.color,
           color2: data.color2,
+          linkify,
           engagement,
           support,
           u,

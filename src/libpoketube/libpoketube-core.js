@@ -88,7 +88,8 @@ async function video(v) {
   "invidious.weblibre.org",
   "inv.vern.cc",
   "invidious.privacydev.net",
-  "inv.zzls.xyz"
+  "inv.zzls.xyz",
+  "vid.puffyan.us"
 ];
 
 let vid;

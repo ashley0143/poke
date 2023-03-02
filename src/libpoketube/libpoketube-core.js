@@ -83,7 +83,6 @@ async function video(v) {
     var comments = "";
   }
  
-  
   const urls = [
   "invidious.sethforprivacy.com",
   "invidious.weblibre.org",
@@ -94,20 +93,24 @@ async function video(v) {
 
 let vid;
 
-for (const url of urls) {
-  const videoInfo = await fetch(`https://${url}/api/v1/videos/${v}`).then(res => res.text());
-  vid = await getJson(videoInfo);
+try {
+  for (const url of urls) {
+    const videoInfo = await fetch(`https://${url}/api/v1/videos/${v}`).then(res => res.text());
+    vid = await getJson(videoInfo);
 
-  if (vid?.descriptionHtml !== "<p></p>") {
-    break;
+    if (vid?.descriptionHtml !== "<p></p>") {
+      break;
+    }
   }
-}
 
-if (!vid) {
+  if (!vid) {
+    // Handle error case
+    throw new Error('Unable to fetch video information.');
+  }
+} catch (error) {
+  console.error(error);
   // Handle error case
 }
-
-
 
   if (checkUnexistingObject(vid)) {
     var a;

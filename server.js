@@ -134,6 +134,15 @@ this is our config file,you can change stuff here
       ); // cache header
       res.setHeader("poketube-cacher", "STATIC_FILES");
     }
+    
+    const a = config.cacher_max_age + 8000
+    if (!req.url.match(/^\/(css|js|img|font)\/.+/)) {
+      res.setHeader(
+        "Cache-Control",
+        "public, max-age=" + a
+      ); // cache header
+      res.setHeader("poketube-cacher", "PAGE");
+    }
     next();
   });
 

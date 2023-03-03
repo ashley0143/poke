@@ -81,7 +81,7 @@ async function video(v) {
   var desc = "";
  
   try {
-    var inv_comments = await fetch(`${config.invapi}/comments/${v}`).then(
+    var inv_comments = await fetch(`${config.invapi}/comments/${v}?region=US`).then(
       (res) => res.text()
     );
 
@@ -93,7 +93,7 @@ async function video(v) {
   let vid;
 
       try {
-      const videoInfo = await fetch(`https://yt.oelrichsgarcia.de/api/v1/videos/${v}`).then(res => res.text());
+      const videoInfo = await fetch(`https://yt.oelrichsgarcia.de/api/v1/videos/${v}?region=US`).then(res => res.text());
       vid = await getJson(videoInfo);
      } catch (error) {
        

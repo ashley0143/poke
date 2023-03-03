@@ -210,7 +210,8 @@ module.exports = function (app, config, renderTemplate) {
 
     core.video(v).then((data) => {
       try {
-        const k = data.video;
+         const k = data.video;
+      
         const json = data.json;
         const engagement = data.engagement;
         const inv_comments = data.comments || "Disabled";
@@ -239,6 +240,12 @@ module.exports = function (app, config, renderTemplate) {
         if(inv_vid?.error === "The uploader has not made this video available in your country"){
           res.send("error : " + inv_vid.error + " please refresh the page please qt ")
         }
+          if(inv_vid?.error === "This video is not available"){
+          res.send("error : " + inv_vid.error + " please refresh the page please qt ")
+        }
+      
+      
+      
 
         renderTemplate(res, req, "poketube.ejs", {
           color: data.color,
@@ -276,7 +283,7 @@ module.exports = function (app, config, renderTemplate) {
           lyrics: "",
         });
       } catch {
-        return res.redirect("/?fromerror=43");
+      return res.redirect("/?fromerror=41");
       }
     });
   });

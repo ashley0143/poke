@@ -1066,9 +1066,8 @@ display: block; !important;" autoplay controls
                   
 <div class="recommended-list" align="center">
       <div style="text-align: left;" class="auto-play">
-                                <label for="continue">[BETA] AutoPlay:</label> 
+                                <label for="continue">AutoPlay:</label> 
                                 <input name="continue" id="continue" type="checkbox" >
-                                <a href="https://codeberg.org/Ashley/poketube/issues/new">give feedback</a>
                              </div>
   
   <div class="tags rec" >
@@ -1238,7 +1237,7 @@ checkbox = document.getElementById("continue");
 checkbox.addEventListener('change', function(e) {
   if(checkbox.checked) {
     
-    console.log("[AUTOPLAY BETA] enabled")
+    console.log("[AUTOPLAY] enabled")
     
     document.getElementById('video').addEventListener('ended',autoplaynextvideo,false);
       
@@ -1258,7 +1257,7 @@ checkbox.addEventListener('change', function(e) {
 if (/[?&]autoplay=/.test(location.search)) {
   checkbox.checked = true;
   
-    console.log("[AUTOPLAY BETA] enabled")
+    console.log("[AUTOPLAY] enabled")
     
     document.getElementById('video').addEventListener('ended',autoplaynextvideo,false);
       

@@ -1,4 +1,4 @@
-/*
+ /*
 
     PokeTube is a Free/Libre youtube front-end !
     
@@ -24,7 +24,7 @@ const sqp =
 
 const config = {
   tubeApi: "https://tube-srv.ashley143.gay/api/",
-  invapi: "https://inv.zzls.xyz/api/v1",
+  invapi: "https://yt.oelrichsgarcia.de/api/v1",
   dislikes: "https://returnyoutubedislikeapi.com/votes?videoId=",
   t_url: "https://t.poketube.fun/", //  def matomo url
 };
@@ -66,13 +66,20 @@ async function channel(id, cnt) {
   return { videos, about };
 }
 
+const cache = {};
+
 async function video(v) {
   if (v == null) return "Gib ID";
 
+  // Check if result is already cached
+  if (cache[v] && (Date.now() - cache[v].timestamp) < 3600000) {
+    console.log("Returning cached result");
+    return cache[v].result;
+  }
+
   let nightlyRes;
   var desc = "";
-  var iurl = "invidious.privacydev.net";
-
+ 
   try {
     var inv_comments = await fetch(`${config.invapi}/comments/${v}`).then(
       (res) => res.text()
@@ -82,38 +89,20 @@ async function video(v) {
   } catch {
     var comments = "";
   }
- 
-   const urls = [
-  "invidious.sethforprivacy.com",
-  "invidious.weblibre.org",
-  "inv.zzls.xyz",
-  "invidious.privacydev.net"
-   ];
   
-let vid;
+  let vid;
 
- for (const url of urls) {
-  try {
-    const videoInfo = await fetch(`https://${url}/api/v1/videos/${v}`).then(res => res.text());
-    vid = await getJson(videoInfo);
-
-    switch (true) {
-      case vid?.descriptionHtml !== "<p></p>":
-        break;
-      default:
-        continue;
-    }
-    break;
-  } catch (error) {
-     continue;
+      try {
+      const videoInfo = await fetch(`https://yt.oelrichsgarcia.de/api/v1/videos/${v}`).then(res => res.text());
+      vid = await getJson(videoInfo);
+     } catch (error) {
+       
+     }
+   
+  
+  if (!vid) {
+    console.log(`Sorry nya, we couldn't find any information about that video qwq`);
   }
-}
- 
-  
-if (!vid) {
-  console.log(`Sorry nya, we couldn't find any information about that video qwq`);
-}
-
 
   if (checkUnexistingObject(vid)) {
     var a;
@@ -140,26 +129,33 @@ if (!vid) {
 
     const nightlyJsonData = getJson(nightlyRes);
 
-    return {
-      json: data?.video?.Player,
-      video: await fetch(`${config.tubeApi}video?v=${v}`)
-        .then((res) => res.text())
-        .then((xml) => getJson(toJson(xml)))
-        .catch(" "),
-      vid,
-      comments,
-      engagement: data.engagement,
-      wiki: summary,
-      desc: desc,
-      color: await getColors(
-        `https://i.ytimg.com/vi/${v}/hqdefault.jpg?sqp=${sqp}`
-      ).then((colors) => colors[0].hex()),
-      color2: await getColors(
-        `https://i.ytimg.com/vi/${v}/hqdefault.jpg?sqp=${sqp}`
-      ).then((colors) => colors[1].hex()),
+    // Store result in cache
+    cache[v] = {
+      result: {
+        json: data?.video?.Player,
+        video: await fetch(`${config.tubeApi}video?v=${v}`)
+          .then((res) => res.text())
+          .then((xml) => getJson(toJson(xml)))
+          .catch(" "),
+        vid,
+        comments,
+        engagement: data.engagement,
+        wiki: summary,
+        desc: desc,
+        color: await getColors(
+          `https://i.ytimg.com/vi/${v}/hqdefault.jpg?sqp=${sqp}`
+        ).then((colors) => colors[0].hex()),
+        color2: await getColors(
+          `https://i.ytimg.com/vi/${v}/hqdefault.jpg?sqp=${sqp}`
+        ).then((colors) => colors[1].hex()),
+      },
+      timestamp: Date.now()
     };
+
+    return cache[v].result;
   }
 }
+
 
 async function search(query, cnt) {
   if (query == null) return "Gib Query";

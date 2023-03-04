@@ -20,6 +20,10 @@ This is the source code of PokeTube, the privacy-friendly youtube front-end buil
 - A Javascript-free frontend
 - No cookies or data collection
 - And built-in dislike counts Thaks to the [Return YouTube Dislike Api](https://www.returnyoutubedislike.com/)!
+## No Non-free codec needed :3
+PokeTube uses openh264 which is free software! poketube does not inculude non free stuff owowowoow!!!!
+
+you can view the source code of the openh264 codec in this repo :3 --> https://github.com/cisco/openh264.git 
 #
 ## Hosting Poketube~
 - To self host your own Poketube instance, you'll need the following:

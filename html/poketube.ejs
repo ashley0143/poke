@@ -336,6 +336,33 @@ text-shadow: 1px 1px #000,1px 1px 0.1px #000;!important;
 </style>
                                             		 	               <% } %>   
 
+                                                                      <% if (universe) { %>  
+
+ <style>
+   :root {
+       --div-gradient: linear-gradient(to bottom right, #9666F7, #B37C6B);
+   }                                                       
+
+   details[open]  {
+   background: linear-gradient(to bottom, #1c1c1c, #101);
+   }  
+   
+   .new-button {
+   border-radius:1em;
+  }
+   
+   .comment-list.left-padding {
+  border-radius:  1em !important;
+}
+  
+   .comment-list.left-padding:hover {
+  filter: drop-shadow(0 0 0.75rem #df00ff);
+  transition-duration: 150ms;
+   }
+</style>
+        
+                                      
+                                                                                     <% } %>  
    </head>
     
  
@@ -475,7 +502,26 @@ Create
         </a>
         
                                       
-                                                                                     <% } %>       
+                                                                                     <% } %>    
+                                                                                       
+                                                                                           <% if (!universe) { %>  
+
+        		<a href="/watch?v=<%=video.id%>&universe=2" title="test out the new layout of poketube!" style="text-decoration: none;" class="dropdown__item">
+<i class="fa-light fa-flask" style="width: 16px;height: 17px;margin-left: 2px;"></i>
+              Testing Mode
+                                                                                             </a>
+        
+                                                                                     <% } %>                
+     <% if (universe) { %>  
+
+
+        		<a title="test out the new layout of poketube!" href="/watch?v=<%=video.id%>" style="text-decoration: none;" class="dropdown__item">
+<i class="fa-light fa-flask" style="width: 16px;height: 17px;margin-left: 2px;"></i>
+              Close testing mode
+        </a>
+        
+                                      
+                                                                                     <% } %>    
         <hr style="clear: both;display: block;border: none;border-bottom: 0.5px solid #1a1111;width: 16.5em;height: 0;">
         
            

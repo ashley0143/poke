@@ -1783,9 +1783,9 @@ font-size: 13px;margin:0;padding:0;white-space: nowrap;
 <p style="margin-top: 10px;margin-bottom: 10px;">
           </p>	
      <% if (String(video.Description) != "[object Object]")  { %>
+             
+       <%-String(linkify(inv_vid.description)).replace(/\n/g, " <br> ").replace(/twitter\.com/g, "nitter.net").replace(/reddit\.com/g, "teddit.net") %>
 
-              <%-String(inv_vid.descriptionHtml).replace(/\n/g, " <br> ").replace(/twitter\.com/g, "nitter.net").replace(/reddit\.com/g, "teddit.net") %>
-                
                           <% } %>          
                             
     <% if (String(video.Description) == "[object Object]")  { %>

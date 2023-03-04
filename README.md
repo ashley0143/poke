@@ -24,7 +24,7 @@ This is the source code of PokeTube, the privacy-friendly youtube front-end buil
 PokeTube uses openh264 which is free software! poketube does not inculude non free stuff owowowoow!!!!
 
 you can view the source code of the openh264 codec in this repo :3 --> https://github.com/cisco/openh264.git 
-#
+
 ## Hosting Poketube~
 - To self host your own Poketube instance, you'll need the following:
 

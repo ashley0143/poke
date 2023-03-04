@@ -137,7 +137,7 @@ module.exports = function (app, config, renderTemplate) {
   });
 
   app.get("/api/redirect", async (req, res) => {
-    const red_url = req.query.u;
+    const red_url = atob(req.query.u);
 
     if (!red_url) {
       res.redirect("/");

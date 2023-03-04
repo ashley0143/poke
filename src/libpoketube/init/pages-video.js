@@ -224,8 +224,8 @@ module.exports = function (app, config, renderTemplate) {
         }
 
         let support;
-        if (String(json.Description) !== "[object Object]") {
-          support = (PATREON_REGEX.exec(json.Description) ?? {}).groups;
+        if (String(inv_vid.description) !== "[object Object]") {
+          support = (PATREON_REGEX.exec(inv_vid.description) ?? {}).groups;
         }
 
         let badges = "";
@@ -283,10 +283,11 @@ module.exports = function (app, config, renderTemplate) {
           inv_vid,
           lyrics: "",
         });
-      } catch {
-      return res.redirect("/?fromerror=41");
+     } catch (error) {
+      console.error(error);
+       return res.redirect("/?fromerror=41");
       }
-    });
+     });
   });
 
   app.get("/lite", async function (req, res) {

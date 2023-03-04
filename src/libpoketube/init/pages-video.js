@@ -174,7 +174,7 @@ module.exports = function (app, config, renderTemplate) {
   });
 
   app.get("/watch", async (req, res) => {
-    const { v, e, r, f, t, quality: q, a } = req.query;
+    const { v, e, r, f, t, quality: q, a, universe } = req.query;
 
     if (!v) {
       return res.redirect("/");
@@ -271,6 +271,7 @@ module.exports = function (app, config, renderTemplate) {
           inv: inv_comments,
           ip,
           convert,
+          universe,
           wiki: data.wiki,
           f,
           t: config.t_url,

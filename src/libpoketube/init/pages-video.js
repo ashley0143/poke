@@ -201,7 +201,7 @@ module.exports = function (app, config, renderTemplate) {
   
     return text.replace(urlRegex, (url) => {
     // wrap the URL in an <a> tag with the URL as the href attribute
-    return `<a href="${url.replace("https://youtube.com", "").replace("https://youtu.be", "")}" target="_blank">${url}</a>`;
+    return `<a href="/api/redirect?u=${btoa(url.replace(/twitter\.com/g, "nitter.net").replace(/reddit\.com/g, "teddit.net").replace("https://youtube.com", "").replace("https://youtu.be", ""))}" target="_blank">${url}</a>`;
   });
  }
     

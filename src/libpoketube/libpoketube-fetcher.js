@@ -21,10 +21,15 @@ const dislikeApi = "https://returnyoutubedislikeapi.com/votes?videoId=";
 const newApiUrl = "https://tube-srv.ashley143.gay/api/player";
 
 const parseXml = async (videoId, headers) => {
-  const player = await fetch(`${newApiUrl}?v=${videoId}`, headers);
-  const xml = await player.text();
-  const json = toJson(xml);
-  return getJson(json);
+  try {
+    const player = await fetch(`${newApiUrl}?v=${videoId}`, headers);
+    const xml = await player.text();
+    const json = toJson(xml);
+    return getJson(json);
+  } catch (error) {
+    console.error(`Error parsing XML: ${error}`);
+    return null;
+  }
 };
 
 const getJson = (str) => {
@@ -35,7 +40,7 @@ const getJson = (str) => {
   }
 };
 
-const getEngagement = async (videoId) => {
+const getEngagementData = async (videoId) => {
   const apiUrl = `${dislikeApi}${videoId}`;
   const fallbackUrl = `https://p.poketube.fun/${apiUrl}`;
 
@@ -56,7 +61,7 @@ const getEngagement = async (videoId) => {
 const getPokeTubeData = async (videoId) => {
   const headers = {};
   const videoData = await parseXml(videoId, headers);
-  const engagement = await getEngagement(videoId);
+  const engagement = await getEngagementData(videoId);
 
   return {
     video: videoData,

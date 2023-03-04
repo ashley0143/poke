@@ -126,7 +126,7 @@ this is our config file,you can change stuff here
   app.use(function (req, res, next) {
    res.header("X-PokeTube-Youtube-Client-Name", "1");
    res.header("X-PokeTube-Youtube-Client-Version", "2.20210721.00.00");
-    
+   res.header("X-PokeTube-Speeder", "6 seconds no cache, 780ms w/cache") 
     if (req.url.match(/^\/(css|js|img|font)\/.+/)) {
       res.setHeader(
         "Cache-Control",
@@ -135,7 +135,7 @@ this is our config file,you can change stuff here
       res.setHeader("poketube-cacher", "STATIC_FILES");
     }
     
-    const a = config.cacher_max_age + 8000
+    const a = 890;
     if (!req.url.match(/^\/(css|js|img|font)\/.+/)) {
       res.setHeader(
         "Cache-Control",

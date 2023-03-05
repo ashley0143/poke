@@ -1,6 +1,4 @@
- <img src="https://www.thinkpenguin.com/files/RYF.png" width="80" align="right" >
-
-  <br>
+ <img src="https://www.thinkpenguin.com/files/RYF.png" width="67" align="right" >
 
    <div align="center">
   <a href="https://poketube.fun/watch?v=9sJUDx7iEJw&quality=medium&=sjohgteojgytrueugtye4jhtytjrjnyıı">

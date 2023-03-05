@@ -641,8 +641,8 @@ display: block; !important;" autoplay controls
            <div class="div_box">
          Video id : <%=video.id%> <br>
        ImmersiveAmbientModecolor: <% if (lightOrDark(color) == "light") { %><%=color%> (color 1)<% } %><% if (lightOrDark(color) == "dark") { %> <%=color2%> (color 2) <% } %> <br>  
-        Video Format :<% if (!qua) { %>  22 (720p) gstreamer1-libav openh264 mp4a.40.2  | 44100Hz  <% } %>
-      <% if (qua === "medium") { %>  18 (320p) gstreamer1-libav openh264 mp4a.40.2 | 44100Hz  <% } %>       <br> 
+        Video Format :<% if (!qua) { %>  22 (720p) openh264 ( https://github.com/cisco/openh264) mp4a.40.2  | 44100Hz  <% } %>
+      <% if (qua === "medium") { %>  18 (320p)  openh264 (https://github.com/cisco/openh264) mp4a.40.2 | 44100Hz  <% } %>       <br> 
        PokeTubeEncryptID: <%=sha384(video.id)%> <br>
        Proxy : <%= u.replace("https://","") %> - refresh the page to change the proxy location<br>
        Date : <%- Date.now() %>  <br>

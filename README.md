@@ -1,5 +1,8 @@
- <img src="https://www.thinkpenguin.com/files/RYF.png" width="67" align="right" >
+   <a href="https://fsf.org">
 
+ <img src="https://www.thinkpenguin.com/files/RYF.png" width="67" align="right" >
+  </a>
+  
    <div align="center">
   <a href="https://poketube.fun/watch?v=9sJUDx7iEJw&quality=medium&=sjohgteojgytrueugtye4jhtytjrjnyıı">
    <img src="https://poketube.fun/css/logo.svg" width="500"> </a><br>

@@ -204,14 +204,14 @@ module.exports = function (app, config, renderTemplate) {
     return `<a href="/api/redirect?u=${btoa(url.replace(/twitter\.com/g, "nitter.net").replace(/reddit\.com/g, "teddit.net").replace("https://youtube.com", "").replace("https://youtu.be", ""))}" target="_blank">${url}</a>`;
   });
  }
+     
     
     const response = await modules.fetch("http://ip-api.com/json/");
     const ip = await response.json();
 
     core.video(v).then((data) => {
       try {
-         const k = data.video;
-      
+        const k = data.video;
         const json = data.json;
         const engagement = data.engagement;
         const inv_comments = data.comments || "Disabled";

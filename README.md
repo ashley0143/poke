@@ -6,9 +6,11 @@
 </div>
 
  
-## Table of Contents:
+## Wats in dis readme uwu?:
 - [Welcome!](#Welcome!)
+- [No Non-free codec needed :3](#no-non-free-codec-needed-3)
 - [Hosting Poketube~](#hosting-poketube)
+- [PokeTube Offical Communitys](#poketube-community)
 - [The Legal Stuff](#the-legal-stuff)
 
 
@@ -20,6 +22,7 @@ This is the source code of PokeTube, the privacy-friendly youtube front-end buil
 - A Javascript-free frontend
 - No cookies or data collection
 - And built-in dislike counts Thaks to the [Return YouTube Dislike Api](https://www.returnyoutubedislike.com/)!
+
 ## No Non-free codec needed :3
 PokeTube uses openh264 which is free software! poketube does not inculude non free stuff owowowoow!!!!
 
@@ -51,8 +54,17 @@ node server.js
 ```
 Congrats, Poketube should now be running on `localhost:3000`!
 #
-## The Legal Stuff..
 
+## PokeTube community!
+Offical poketube community servers :3
+
+[Revolt](https://rvlt.gg/1em7QW8C)  <br>
+[Discord](https://discord.gg/a3JFtTHUnp) (requires nonfree js - see stallman.org/discord.html )
+
+## The Legal Stuff (boring tbh)
+
+[Code Of conduct](https://codeberg.org/Ashley/poketube/src/branch/main/CODE_OF_CONDUCT.md)   <br>
+-----------------
 [Privacy Policy](https://poketube.fun/privacy) <br>
 TL;DR: we dont collect or share your personal info, that's it lol
 

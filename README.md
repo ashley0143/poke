@@ -53,7 +53,7 @@ Once everythings installed, start your server with the following command:
 node server.js
 ```
 Congrats, Poketube should now be running on `localhost:3000`!
-#
+
 
 ## PokeTube community!
 Offical poketube community servers :3
@@ -62,9 +62,7 @@ Offical poketube community servers :3
 [Discord](https://discord.gg/a3JFtTHUnp) (requires nonfree js - see stallman.org/discord.html )
 
 ## The Legal Stuff (boring tbh)
-
 [Code Of conduct](https://codeberg.org/Ashley/poketube/src/branch/main/CODE_OF_CONDUCT.md)   <br>
------------------
 [Privacy Policy](https://poketube.fun/privacy) <br>
 TL;DR: we dont collect or share your personal info, that's it lol
 

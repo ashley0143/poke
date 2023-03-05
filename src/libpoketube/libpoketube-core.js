@@ -24,7 +24,7 @@ const sqp =
 
 const config = {
   tubeApi: "https://api.poketube.fun/api/",
-  invapi: "https://invidious.privacydev.net/api/v1",
+  invapi: "https://inv.zzls.xyz/api/v1",
   dislikes: "https://returnyoutubedislikeapi.com/votes?videoId=",
   t_url: "https://t.poketube.fun/", //  def matomo url
 };

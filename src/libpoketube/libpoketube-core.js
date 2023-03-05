@@ -23,7 +23,7 @@ const sqp =
   "-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLBy_x4UUHLNDZtJtH0PXeQGoRFTgw";
 
 const config = {
-  tubeApi: "https://tube-srv.ashley143.gay/api/",
+  tubeApi: "https://api.poketube.fun/api/",
   invapi: "https://yt.oelrichsgarcia.de/api/v1",
   dislikes: "https://returnyoutubedislikeapi.com/votes?videoId=",
   t_url: "https://t.poketube.fun/", //  def matomo url
@@ -93,7 +93,7 @@ async function video(v) {
   let vid;
 
       try {
-      const videoInfo = await fetch(`https://yt.oelrichsgarcia.de/api/v1/videos/${v}?region=US`).then(res => res.text());
+      const videoInfo = await fetch(`https://inv.vern.cc/api/v1/videos/${v}?region=US`).then(res => res.text());
       vid = await getJson(videoInfo);
      } catch (error) {
        
@@ -128,15 +128,17 @@ async function video(v) {
     const data = await fetcher(v);
 
     const nightlyJsonData = getJson(nightlyRes);
-
+    const video =  await fetch(`${config.tubeApi}video?v=${v}`)
+          .then((res) => res.text())
+          .then((xml) => getJson(toJson(xml)))
+          .catch(" ")
+    
+    
     // Store result in cache
     cache[v] = {
       result: {
         json: data?.video?.Player,
-        video: await fetch(`${config.tubeApi}video?v=${v}`)
-          .then((res) => res.text())
-          .then((xml) => getJson(toJson(xml)))
-          .catch(" "),
+        video,
         vid,
         comments,
         engagement: data.engagement,

@@ -24,7 +24,7 @@ const sqp =
 
 const config = {
   tubeApi: "https://api.poketube.fun/api/",
-  invapi: "https://invidious.slipfox.xyz/api/v1",
+  invapi: "https://invidious.privacydev.net/api/v1",
   dislikes: "https://returnyoutubedislikeapi.com/votes?videoId=",
   t_url: "https://t.poketube.fun/", //  def matomo url
 };
@@ -93,7 +93,7 @@ async function video(v) {
   let vid;
 
       try {
-      const videoInfo = await fetch(`https://invidious.slipfox.xyz/api/v1/videos/${v}`).then(res => res.text());
+      const videoInfo = await fetch(`${config.invapi}/videos/${v}`).then(res => res.text());
       vid = await getJson(videoInfo);
      } catch (error) {
        

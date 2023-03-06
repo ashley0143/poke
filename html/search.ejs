@@ -200,6 +200,36 @@ border:solid;
 	 opacity: 1;
 	 transform: scale(1, 1);
 }                 
+                   
+  .loading {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.7);
+  z-index: 9999;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.loading .spinner {
+  display: inline-block;
+  border: 5px solid rgba(255, 255, 255, 0.2);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: spin 1s ease-in-out infinite;
+  width: 50px;
+  height: 50px;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
                      </style>
  </head>
 
@@ -458,6 +488,37 @@ font-weight: 1000;
         </a>
         </div>
                                     
-                 <script src="/css/custom-css.js"> </script>          </body>
+                 <script src="/css/custom-css.js"> </script>
+                                    
+<script>
+// @license magnet:?xt=urn:btih:1f739d935676111cfff4b4693e3816e664797050&dn=gpl-3.0.txt GPL-3.0-or-later  
+  
+  // Get all anchor links on the page
+const links = document.querySelectorAll('a');
+
+// Add a click event listener to each link
+links.forEach(link => {
+  link.addEventListener('click', e => {
+    e.preventDefault(); // Prevent the default link behavior
+    
+    // Create a loading spinner element
+    const spinner = document.createElement('div');
+    spinner.classList.add('spinner');
+    
+    // Create a loading overlay element
+    const loading = document.createElement('div');
+    loading.classList.add('loading');
+    loading.appendChild(spinner);
+    
+    // Add the loading overlay to the body
+    document.body.appendChild(loading);
+    
+    // Redirect to the link after a short delay to show the loading overlay
+    setTimeout(() => {
+      window.location.href = link.href;
+    }, 500);
+  });
+});</script>
+                                    </body>
                               
  

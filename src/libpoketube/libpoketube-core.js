@@ -137,7 +137,7 @@ async function video(v) {
     // Store result in cache
     cache[v] = {
       result: {
-        json: data?.video?.Player,
+        json: data.video.Player,
         video,
         vid,
         comments,

@@ -18,32 +18,19 @@ const {
   getRandomArbitrary,
 } = require("../ptutils/libpt-coreutils.js");
 
+function getJson(str) {
+  try {
+    return JSON.parse(str);
+  } catch {
+    return null;
+  }
+}
+
 const pkg = require("../../../package.json");
-
 const ver = "v23.0302-CRsAa-MAJOR-stable-git";
-const branch = "master"
-const codename = "pinkneko"
+const branch = "master";
+const codename = "pinkneko";
 const versionnumber = "210";
-
-const response = {
-  pt_version: ver,
-  branch,
-  vernum: versionnumber,
-  codename,
-  packages: {
-    libpt: version,
-    node: process.version,
-    v8: process.versions.v8,
-  },
-  flac : {
-    poketube_flac: "1.0a",
-    apple_musickit:"1.2.1",
-    poketube_normalize_volume:"1.2.23-yt",
-  },
-  piwik:"master",
-  process: process.versions,
-  dependencies: pkg.dependencies,
-};
 
 module.exports = function (app, config, renderTemplate) {
   app.get("/embed/:v", async function (req, res) {
@@ -53,7 +40,7 @@ module.exports = function (app, config, renderTemplate) {
     var q = req.query.quality;
     var v = req.params.v;
     var type = req.query.type;
-    
+
     var fetching = await fetcher(v);
     const video = await modules.fetch(config.tubeApi + `video?v=${v}`);
 
@@ -147,6 +134,32 @@ module.exports = function (app, config, renderTemplate) {
   });
 
   app.get("/api/version.json", async (req, res) => {
+    const invidious = await modules
+      .fetch("https://inv-api.poketube.fun/api/v1/stats")
+      .then((res) => res.text())
+      .then((txt) => getJson(txt));
+
+    const response = {
+      pt_version: ver,
+      branch,
+      vernum: versionnumber,
+      codename,
+      packages: {
+        libpt: version,
+        node: process.version,
+        v8: process.versions.v8,
+      },
+      invidious,
+      flac: {
+        poketube_flac: "1.0a",
+        apple_musickit: "1.2.1",
+        poketube_normalize_volume: "1.2.23-yt",
+      },
+      piwik: "master",
+      process: process.versions,
+      dependencies: pkg.dependencies,
+    };
+
     res.json(response);
   });
 

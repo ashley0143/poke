@@ -32,6 +32,8 @@ PokeTube uses openh264 which is free software! poketube does not inculude non fr
 
 you can view the source code of the openh264 codec in this repo :3 --> https://github.com/cisco/openh264.git 
 
+PLEASE NOTE THAT THIS SOFTWARE MAY INCULUDE CODECS THAT IN CERTAIN COUNTRIES MAY BE COVERED BY PATENTS OR HAVE LEGAL ISSUES. PATENT AND COPYRIGHT LAWS OPERATE DIFFERENTLY DEPENDING ON WHICH COUNTRY YOU ARE IN. PLEASE OBTAIN LEGAL ADVICE IF YOU ARE UNSURE WHETHER A PARTICULAR PATENT OR RESTRICTION APPLIES TO A CODEC YOU WISH TO USE IN YOUR COUNTRY.
+
 ## Hosting Poketube~
 - To self host your own Poketube instance, you'll need the following:
 
@@ -69,6 +71,7 @@ Offical poketube community servers :3
 [Code Of conduct](https://codeberg.org/Ashley/poketube/src/branch/main/CODE_OF_CONDUCT.md)   <br>
 [Privacy Policy](https://poketube.fun/privacy) <br>
 TL;DR: we dont collect or share your personal info, that's it lol
+
 
 We additionally use the GNU Coding Standard, see https://www.gnu.org/prep/standards
 

@@ -18,7 +18,7 @@ const { toJson } = require("xml2json");
 
 const youtubeUrl = "https://www.youtube.com/watch?v=";
 const dislikeApi = "https://returnyoutubedislikeapi.com/votes?videoId=";
-const newApiUrl = "https://tube-srv.ashley143.gay/api/player";
+const newApiUrl = "https://inner-api.poketube.fun/api/player";
 
 const parseXml = async (videoId, headers) => {
   try {

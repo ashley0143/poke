@@ -44,32 +44,25 @@ module.exports = async function (video_id) {
     }, {});
   }
 
-  try {
-    // gets invidious instances
-    const invUrl = "https://api.invidious.io/instances.json?sort_by=type,health";
-    const invInstanceList = await modules
-      .fetch(invUrl)
-      .then((res) => res.text())
-      .then((json) => JSON.parse(json));
+  // gets invidious instances
+  const invInstanceList = require("./invapi.json");
 
-    // gets random instances from the list
-    const instance = invInstanceList[Math.floor(Math.random() * invInstanceList.length)];
+  // gets random instances from the list
+  const instance =
+    invInstanceList[Math.floor(Math.random() * invInstanceList.length)];
 
-    let url;
-    if (instance[1].type != "https") {
-      url = "https://invidious.weblibre.org";
-    } else {
-      url = instance[1].uri
-        .replace("invidious.tiekoetter.com", "invidious.weblibre.org")
-        .replace("yewtu.be", "invidious.sethforprivacy.com")
-        .replace("invidious.slipfox.xyz", "invidious.weblibre.org")
-        .replace("vid.priv.au", "inv.vern.cc")
-        .replace("invidious.snopyta.org", "invidious.sethforprivacy.com");
-    }
-
-    return url;
-  } catch (error) {
-    console.error("Failed to get Invidious instance:", error);
-    return " ";
+  let url;
+  if (instance[1].type != "https") {
+    url = "https://invidious.sethforprivacy.com";
+  } else {
+    url = instance[1].uri
+      .replace("invidious.tiekoetter.com", "invidious.sethforprivacy.com")
+      .replace("yewtu.be", "invidious.sethforprivacy.com")
+      .replace("invidious.slipfox.xyz", "invidious.sethforprivacy.com")
+      .replace("vid.priv.au", "inv.vern.cc")
+      .replace("invidious.snopyta.org", "invidious.sethforprivacy.com")
+      .replace("invidious.weblibre.org", "invidious.sethforprivacy.com");
   }
+
+  return url;
 };

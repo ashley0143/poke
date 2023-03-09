@@ -46,7 +46,7 @@ const getEngagementData = async (videoId) => {
 
   try {
     const engagement = await fetch(apiUrl).then((res) => res.json());
-    return engagement;
+    return engagement.data;
   } catch {
     try {
       const engagement = await fetch(fallbackUrl).then((res) => res.json());

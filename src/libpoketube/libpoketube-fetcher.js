@@ -17,7 +17,7 @@ const fetch = require("node-fetch"); //2.5.x
 const { toJson } = require("xml2json");
 
 const youtubeUrl = "https://www.youtube.com/watch?v=";
-const dislikeApi = "https://returnyoutubedislikeapi.com/votes?videoId=";
+const dislikeApi = "https://p.poketube.fun/api?v=";
 const newApiUrl = "https://inner-api.poketube.fun/api/player";
 
 const parseXml = async (videoId, headers) => {

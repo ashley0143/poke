@@ -23,8 +23,8 @@ const sqp =
   "-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLBy_x4UUHLNDZtJtH0PXeQGoRFTgw";
 
 const config = {
-  tubeApi: "https://api.poketube.fun/api/",
-  invapi: "https://inv-api.poketube.fun/api/v1",
+  tubeApi: "https://inner-api.poketube.fun/api/",
+  invapi: "https://invid-api.poketube.fun/api/v1",
   dislikes: "https://returnyoutubedislikeapi.com/votes?videoId=",
   t_url: "https://t.poketube.fun/", //  def matomo url
 };

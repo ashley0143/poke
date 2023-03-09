@@ -47,7 +47,7 @@ app.use(function (req, res, next) {
 
 app.use(function (req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
-  res.setHeader("Cache-Control", "public, max-age=870"); // cache header
+  res.setHeader("Cache-Control", "public, max-age=1848"); // cache header
   res.setHeader("poketube-cacher", "PROXY_FILES");
 
   next();
@@ -94,6 +94,36 @@ const listener = (req, res) => {
 app.get("/", (req, res) =>
   res.redirect(`https://poketube.fun/watch?v=l3eww1dnd0k`)
 );
+
+const apiUrl = "https://returnyoutubedislikeapi.com/votes?videoId=";
+
+// Define a cache object
+const cache = {};
+
+app.get('/api', async (req, res) => {
+  const cacheKey = req.query.v;
+
+  // Check if the result is already cached
+  if (cache[cacheKey] && Date.now() - cache[cacheKey].timestamp < 3600000) {
+    // If the cached result is less than 1 hour old, return it
+    const cachedData = cache[cacheKey].data;
+    const cachedDate = new Date(cache[cacheKey].timestamp);
+    return res.json({ data: cachedData, cachedDate });
+  }
+
+  // If the result is not cached or is older than 1 hour, fetch it from the API
+  const engagement = await fetch(apiUrl + req.query.v).then((res) => res.json());
+
+  // Cache the result for future requests
+  cache[cacheKey] = {
+    data: engagement,
+    timestamp: Date.now()
+  };
+
+  res.json({ data: engagement, cachedDate: new Date() });
+});
+
+
 
 app.all("/*", listener);
 

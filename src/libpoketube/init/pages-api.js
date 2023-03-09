@@ -103,7 +103,7 @@ module.exports = function (app, config, renderTemplate) {
     const id = req.query.v;
     const l = req.query.h;
 
-    let url = `https://tube-srv.ashley143.gay/proxy/caption/${id}/${l}/`;
+    let url = `https://inner-api.poketube.fun/proxy/caption/${id}/${l}/`;
 
     let f = await modules.fetch(url);
     const body = await f.text();
@@ -135,7 +135,7 @@ module.exports = function (app, config, renderTemplate) {
 
   app.get("/api/version.json", async (req, res) => {
     const invidious = await modules
-      .fetch("https://inv-api.poketube.fun/api/v1/stats")
+      .fetch("https://invid-api.poketube.fun/api/v1/stats")
       .then((res) => res.text())
       .then((txt) => getJson(txt));
 

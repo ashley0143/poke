@@ -60,7 +60,7 @@ function init(app, config, rendertemplate) {
         setInterval(function () {
           /* PokeTube Update daemon - checks for updates in poketube */
           (async () => {
-            const url = `https://poketube.fun/api/version.json`;
+            const url = `https://poketube.fun/api/version.json?v=3`;
 
             let f = await modules
               .fetch(url)

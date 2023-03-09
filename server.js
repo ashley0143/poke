@@ -93,10 +93,10 @@
 this is our config file,you can change stuff here
 */
   const config = {
-    tubeApi: "https://api.poketube.fun/api/",
-    invapi: "https://inv-api.poketube.fun/api/v1",
+    tubeApi: "https://inner-api.poketube.fun/api/",
+    invapi: "https://invid-api.poketube.fun/api/v1",
     dislikes: "https://returnyoutubedislikeapi.com/votes?videoId=",
-    invchannel: "https://inv-api.poketube.fun/api/v1",
+    invchannel: "https://invid-api.poketube.fun/api/v1",
     cacher_max_age: "1800",
     enablealwayshttps: true, //enables always https on the server
     t_url: "https://t.poketube.fun/", //  def matomo url

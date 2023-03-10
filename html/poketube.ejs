@@ -34,22 +34,22 @@
  <% } %>
   <% if (!e) { %>
 
-<meta content="<%=video.Title%>" name=title>
+<meta content="<%=inv_vid.title%>" name=title>
 <meta content="<%=color%>" name="theme-color">
-<meta content="<%=video.Channel.Name%>" name=twitter:author>
+<meta content="<%=k.Video.Channel.Name%>" name=twitter:author>
 <meta content=@youtube name=twitter:site>
 <meta content="https://poketube.fun/watch?v=<%=inv_vid.videoId%>" name=twitter:url>
-<meta content="<%=video.Title%> | PokeTube" name=twitter:title>
-<meta content="Watch this video by <%=video.Channel.Name%> On PokeTube. The YouTube front-end that doesnt track you!" property=twitter:description>
+<meta content="<%=inv_vid.title%> | PokeTube" name=twitter:title>
+<meta content="Watch this video by <%=video?.Channel?.Name%> On PokeTube. The YouTube front-end that doesnt track you!" property=twitter:description>
 <meta content="https://i.ytimg.com/vi/<%=inv_vid.videoId%>/maxresdefault.jpg" property=og:image>
 <meta content=summary_large_image name=twitter:card>
 <link href="https://poketube.fun/watch?v=<%=inv_vid.videoId%>" itemprop=url>
-<link href="http://www.youtube.com/channel/<%=video.Channel.id%>" itemprop=url>
+<link href="http://www.youtube.com/channel/<%=video?.Channel?.id%>" itemprop=url>
  <% } %> <!-- close the } -->
 <link href="/css/yt-ukraine.svg" rel=icon>
        <link href=/css/snow.css rel=stylesheet> 
 
-<title> <%=video.Title%> | PokeTube </title>  
+<title> <%=inv_vid.title%> | PokeTube </title>  
 <style>
        <% if (!a) { %>  
 
@@ -763,7 +763,7 @@ display: block; !important;" autoplay controls
 					</a>
   
    <% if (!video.Channel.Name.endsWith(' - Topic')) { %> 
-    <% if (!video.Title.endsWith('Audio)')) { %> 
+    <% if (!inv_vid.title.endsWith('Audio)')) { %> 
    <% if (support != undefined) { %> 
 
     <div class="new-button button-encryption">
@@ -785,7 +785,7 @@ display: block; !important;" autoplay controls
       <% if (support == undefined) { %> 
 
  <% if (!video.Channel.Name.endsWith(' - Topic')) { %> 
-    <% if (!video.Title.endsWith('Audio)')) { %> 
+    <% if (!inv_vid.title.endsWith('Audio)')) { %> 
 
       <div class="new-button button-encryption">
 					<a   title="Encryption duh" style="color:var(--text-color);text-decoration: none;" href="/encryption?v=<%=inv_vid.videoId%>">
@@ -800,9 +800,9 @@ display: block; !important;" autoplay controls
 
    </a>
                                                                           <% }%>                                                                              <% }%>      
-                                                                                                                   <% }%>                                                                                                                          <% if (video.Channel.Name.endsWith(' - Topic') || video.Title.endsWith('Audio)')) { %> 
+                                                                                                                   <% }%>                                                                                                                          <% if (video.Channel.Name.endsWith(' - Topic') || inv_vid.title.endsWith('Audio)')) { %> 
                                                             
-                            <% if (video.Channel.Name.endsWith(' - Topic') || video.Title.endsWith('Audio)'))  { %> 
+                            <% if (video.Channel.Name.endsWith(' - Topic') || inv_vid.title.endsWith('Audio)'))  { %> 
                                                  					<a  class="new-button" title="open this song in poketube music player :3" style="color:var(--text-color);text-decoration: none;" href="/music?v=<%=inv_vid.videoId%>">
                                                                                                     <div class="pill-button">
 
@@ -817,7 +817,7 @@ display: block; !important;" autoplay controls
     
                                                     
  <% if (!video.Channel.Name.endsWith(' - Topic')) { %> 
-    <% if (!video.Title.endsWith('Audio)')) { %>                         
+    <% if (!inv_vid.title.endsWith('Audio)')) { %>                         
       <div class="new-button button-lite" style=";margin-left: -4px;">
         <a title="Low Bandwidth? try PokeTube Lite!" style="color:var(--text-color);text-decoration: none" href="/lite?v=<%=inv_vid.videoId%>">
                                         <div class="pill-button">
@@ -981,7 +981,7 @@ display: block; !important;" autoplay controls
  
    
  <% if (!video.Channel.Name.endsWith(' - Topic')) { %> 
-    <% if (!video.Title.endsWith('Audio)')) { %> 
+    <% if (!inv_vid.title.endsWith('Audio)')) { %> 
 
 					<a title="Encryption duh" style="color:var(--text-color);text-decoration: none;" href="/encryption?v=<%=inv_vid.videoId%>">
                <i class="fa-light fa-shield"></i>
@@ -989,9 +989,9 @@ display: block; !important;" autoplay controls
    </a>
                                                                           <% }%>                                                                              <% }%>      
   
-                                                                             <% if (video.Channel.Name.endsWith(' - Topic') || video.Title.endsWith('Audio)')) { %> 
+                                                                             <% if (video.Channel.Name.endsWith(' - Topic') || inv_vid.title.endsWith('Audio)')) { %> 
                                                             
-                            <% if (video.Channel.Name.endsWith(' - Topic') || video.Title.endsWith('Audio)'))  { %> 
+                            <% if (video.Channel.Name.endsWith(' - Topic') || inv_vid.title.endsWith('Audio)'))  { %> 
                                                  					<a title="open this song in poketube music player :3" style="color:var(--text-color);text-decoration: none;" href="/music?v=<%=inv_vid.videoId%>">
           <i class="fa-light fa-music"></i>
                   Open In Music Player
@@ -1497,12 +1497,12 @@ links.forEach(link => {
     
  <% } %>
   <% if (!e) { %>
-<meta content="<%=video.Title%>" name=title>
+<meta content="<%=inv_vid.title%>" name=title>
 <meta content="<%=color%>" name="theme-color">
 <meta content="<%=video.Channel.Name%>" name=twitter:author>
 <meta content=@youtube name=twitter:site>
 <meta content="https://poketube.fun/watch?v=<%=inv_vid.videoId%>" name=twitter:url>
-<meta content="<%=video.Title%> - PokeTube" name=twitter:title>
+<meta content="<%=inv_vid.title%> - PokeTube" name=twitter:title>
 <meta content="mobile this video by <%=video.Channel.Name%> On PokeTube. The YouTube front-end that doesnt track you!" property=twitter:description>
 <meta content="https://i.ytimg.com/vi/<%=inv_vid.videoId%>/maxresdefault.jpg" property=og:image>
 <meta content=summary_large_image name=twitter:card>
@@ -1510,7 +1510,7 @@ links.forEach(link => {
  <% } %> <!-- close the } -->
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <link href=/css/yt-ukraine.svg?v=6 rel=icon>
-<title> <%=video.Title%> - PokeTube Mobile</title>
+<title> <%=inv_vid.title%> - PokeTube Mobile</title>
  <link href="/css/mobile.css" rel=stylesheet>
  <link href=/css/app.main.css rel=stylesheet>
     <link href=https://p.poketube.fun/https://unpkg.com/ionicons@4.5.10-0/dist/css/ionicons.css rel=stylesheet>

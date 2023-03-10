@@ -1442,6 +1442,21 @@ links.forEach(link => {
 
 
 </script>
+    
+ <script>
+      const videoElement = document.getElementById("video");
+
+      // Listen for full screen change events on the video element
+      videoElement.addEventListener("fullscreenchange", () => {
+        if (document.fullscreenElement === videoElement) {
+          // If the video element is in full screen mode, remove the border radius
+          videoElement.style.borderRadius = "0em ";
+        } else {
+          // If the video element exits full screen mode, restore the border radius
+          videoElement.style.borderRadius = "16px";
+        }
+      });
+    </script>
    
  <% if (!optout) { %> 
           <!-- MORE INFO :https://poketube.fun/privacy -->

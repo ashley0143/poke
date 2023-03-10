@@ -9,18 +9,6 @@ function init(app, config, rendertemplate) {
 
   app.get("/*", function (req, res, next) {
     if (didstart) return next();
-    const userAgent = req.useragent.source;
-    if (
-      userAgent.includes("Opera") ||
-      userAgent.includes("OPR") ||
-      userAgent.includes("OPRGX")
-    ) {
-      // Browser agent is Opera, Opera GX or OPRGX
-      res.redirect("https://www.mozilla.org/en-US/firefox/all/");
-    } else {
-      // Browser agent is not Opera, Opera GX or OPRGX
-      next();
-    }
 
     return rendertemplate(res, req, "timeout.ejs");
   });

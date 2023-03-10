@@ -81,7 +81,18 @@
   margin-top: 50px;
 }
 
-@media (max-width: 414px) {
+  /* CSS */
+.fade-in {
+  opacity: 0;
+  transition: opacity 0.5s ease-in-out;
+}
+.fade-in.fade-in-active {
+  opacity: 1;
+}
+
+
+  
+  @media (max-width: 414px) {
   .comments-area {
     padding: 50px 8px;
   }
@@ -344,6 +355,10 @@
     }  
     .progress-container {
             display:none !important;
+
+    }
+    .fade-in {
+        opacity: 1  !important;
 
     }
   </style>
@@ -1040,7 +1055,7 @@ display: block; !important;" autoplay controls
                                                                                        <hr style="clear: both;display: block;border: none;border-bottom: 0.5px solid #2f2f2f;margin: 0 0;/*! width: 4.5em; */height: 0;">
                                                       
                                  <% inv.comments.forEach(x =>{ %>
- <div class="<%- x.commentId %>.<%- btoa(x.commentId) %>">
+ <div class="<%- x.commentId %>.<%- btoa(x.commentId) %> fade-in ">
                                    <div class="comment_<%- x.commentId %>_<%- btoa(btoa(x.commentId)) %>" style="padding: 10px;">
 
           <div class="comment-list left-padding" style="background: #333;padding-top: 1px;padding: 10px;border-radius: 30px;padding-top: 0;">
@@ -1167,10 +1182,10 @@ Recommended Videos
                                             
                               <% if (!f) { %> 
      <% k.Video.Recommendations.Video.forEach(x => { %>       
- 						<div class="video" >
+ 						<div class="video fade-in"  >
                     <% if (!optout) { %> 
 
-      <a  href="/watch?v=<%= x.id %>"  alt="<%= x.Title %>" class="thumbnail" style="background-image: url('https://p.poketube.fun/https://i.ytimg.com/vi/<%= x.id %>/hqdefault.jpg?sqp=-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLBy_x4UUHLNDZtJtH0PXeQGoRFTgw');border-radius: 9.5px;"  >								<span class="video-length"><%- x.duration || "LIVE"%></span>
+      <a  href="/watch?v=<%= x.id %>"  alt="<%= x.Title %>" class="thumbnail " style="background-image: url('https://p.poketube.fun/https://i.ytimg.com/vi/<%= x.id %>/hqdefault.jpg?sqp=-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLBy_x4UUHLNDZtJtH0PXeQGoRFTgw');border-radius: 9.5px;"  >								<span class="video-length"><%- x.duration || "LIVE"%></span>
                            <% } %>
    <% if (optout) { %> 
 
@@ -1411,6 +1426,28 @@ window.addEventListener("load", () => {
   window.addEventListener('scroll', lazyLoadBg);
   window.addEventListener('resize', lazyLoadBg);
 });
+  
+const fadeInElements = () => {
+  const elements = document.querySelectorAll('.fade-in');
+  const viewportHeight = window.innerHeight;
+  elements.forEach(element => {
+    const elementTop = element.getBoundingClientRect().top;
+    const elementBottom = element.getBoundingClientRect().bottom;
+    const isVisible = (elementTop < viewportHeight && elementBottom > 0);
+    if (isVisible || document.fullscreenElement) {
+      element.classList.add('fade-in-active');
+    }
+  });
+};
+
+fadeInElements();
+
+window.addEventListener('scroll', fadeInElements);
+
+document.addEventListener('fullscreenchange', () => {
+  fadeInElements();
+});
+
 
   // Get all anchor links on the page
 const links = document.querySelectorAll('a');

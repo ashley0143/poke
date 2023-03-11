@@ -1382,7 +1382,6 @@ video.addEventListener('volumechange', function() {
   localStorage.setItem('playerVolume', this.volume);
 });
 
-
 // Get the progress bar and container elements
 const progressBar1 = document.querySelector(".progress-bar");
 const progressContainer1 = document.querySelector(".progress-container");
@@ -1399,14 +1398,14 @@ window.addEventListener("load", () => {
   }, 500);
 });
   
-  document.addEventListener('DOMContentLoaded', function() {
-  let bgs = document.querySelectorAll('[data-bg]');
-  let bgCount = bgs.length;
+document.addEventListener('DOMContentLoaded', function() {
+let bgs = document.querySelectorAll('[data-bg]');
+let bgCount = bgs.length;
   
-  function loadBg(index) {
-    let bg = bgs[index];
-    let bgUrl = bg.getAttribute('data-bg');
-    bg.style.backgroundImage = `url(${bgUrl})`;
+function loadBg(index) {
+ let bg = bgs[index];
+let bgUrl = bg.getAttribute('data-bg');
+  bg.style.backgroundImage = `url(${bgUrl})`;
     bg.removeAttribute('data-bg');
     bg.classList.add('loaded');
   }
@@ -1427,7 +1426,7 @@ window.addEventListener("load", () => {
   window.addEventListener('resize', lazyLoadBg);
 });
   
-const fadeInElements = () => {
+  const fadeInElements = () => {
   const elements = document.querySelectorAll('.fade-in');
   const viewportHeight = window.innerHeight;
   elements.forEach(element => {
@@ -1448,43 +1447,43 @@ document.addEventListener('fullscreenchange', () => {
   fadeInElements();
 });
 
+setInterval(fadeInElements, 500);
 
-  // Get all anchor links on the page
+
+// Get all anchor links on the page
 const links = document.querySelectorAll('a');
 
 // Add a click event listener to each link
 links.forEach(link => {
   link.addEventListener('click', e => {
-    e.preventDefault(); // Prevent the default link behavior
-    
-    // Create a loading spinner element
-    const spinner = document.createElement('div');
-    spinner.classList.add('spinner');
-    
-    // Create a loading overlay element
-    const loading = document.createElement('div');
-    loading.classList.add('loading');
-    loading.appendChild(spinner);
-    
-    // Add the loading overlay to the body
-    document.body.appendChild(loading);
-    
-    // Redirect to the link after a short delay to show the loading overlay
-    setTimeout(() => {
-      window.location.href = link.href;
-    }, 500);
+    // Check if the link's href includes a hash character
+    if (!link.href.includes('#')) {
+      e.preventDefault(); // Prevent the default link behavior
+
+      // Create a loading spinner element
+      const spinner = document.createElement('div');
+      spinner.classList.add('spinner');
+
+      // Create a loading overlay element
+      const loading = document.createElement('div');
+      loading.classList.add('loading');
+      loading.appendChild(spinner);
+
+      // Add the loading overlay to the body
+      document.body.appendChild(loading);
+
+      // Redirect to the link after a short delay to show the loading overlay
+      setTimeout(() => {
+        window.location.href = link.href;
+      }, 500);
+    }
   });
 });
 
+const videoElement = document.getElementById("video");
 
-
-</script>
-    
- <script>
-      const videoElement = document.getElementById("video");
-
-      // Listen for full screen change events on the video element
-      videoElement.addEventListener("fullscreenchange", () => {
+// Listen for full screen change events on the video element
+videoElement.addEventListener("fullscreenchange", () => {
         if (document.fullscreenElement === videoElement) {
           // If the video element is in full screen mode, remove the border radius
           videoElement.style.borderRadius = "0em ";
@@ -1493,9 +1492,10 @@ links.forEach(link => {
           videoElement.style.borderRadius = "16px";
         }
       });
-    </script>
-   
- <% if (!optout) { %> 
+
+</script>
+    
+  <% if (!optout) { %> 
           <!-- MORE INFO :https://poketube.fun/privacy -->
           <!-- MORE INFO :https://poketube.fun/privacy -->
        

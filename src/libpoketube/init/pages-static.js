@@ -62,8 +62,31 @@ module.exports = function (app, config, renderTemplate) {
        });
   });
 
-  app.get("/css/:id", (req, res) => {
-    res.sendFile(req.params.id, { root: html_location });
-  });
+const path = require("path");
+const fs = require("fs");
+const CleanCSS = require("clean-css");
+
+const cssDir = "./css/";
+
+app.get("/css/:id", (req, res) => {
+  const filePath = path.join(cssDir, req.params.id);
+  if (!fs.existsSync(filePath)) {
+    res.status(404).send("File not found");
+    return;
+  }
+
+  if (req.params.id.endsWith(".css")) {
+    // Minimize the CSS file
+    const css = fs.readFileSync(filePath, "utf8");
+    const minimizedCss = new CleanCSS().minify(css).styles;
+    // Serve the minimized CSS file
+    res.header("Content-Type", "text/css");
+    res.send(minimizedCss);
+  } else {
+    // Serve the original file
+    res.sendFile(req.params.id, { root: html_location });  
+  }
+});
+
 
 };

@@ -86,18 +86,19 @@ async function video(v) {
     );
 
     var comments = await getJson(inv_comments);
-  } catch {
+  } catch (error) {
+    console.error("Error getting comments", error);
     var comments = "";
   }
   
   let vid;
 
-      try {
-      const videoInfo = await fetch(`${config.invapi}/videos/${v}`).then(res => res.text());
-      vid = await getJson(videoInfo);
-     } catch (error) {
-       
-     }
+  try {
+    const videoInfo = await fetch(`${config.invapi}/videos/${v}`).then(res => res.text());
+    vid = await getJson(videoInfo);
+  } catch (error) {
+    console.error("Error getting video info", error);
+  }
    
   
   if (!vid) {
@@ -113,7 +114,8 @@ async function video(v) {
       )
         .then((res) => res.text())
         .then((xml) => getJson(toJson(xml)));
-    } catch {
+    } catch (error) {
+      console.error("Error getting channel info", error);
       var a = "";
     }
 
@@ -128,33 +130,40 @@ async function video(v) {
     const data = await fetcher(v);
 
     const nightlyJsonData = getJson(nightlyRes);
-    const video =  await fetch(`${config.tubeApi}video?v=${v}`)
-          .then((res) => res.text())
-          .then((xml) => getJson(toJson(xml)))
-          .catch(" ")
-    
-  
-    // Store result in cache
-    cache[v] = {
-      result: {
-        json: data?.video?.Player,
-        video,
-        vid,
-        comments,
-        engagement: data.engagement,
-        wiki: summary,
-        desc: desc,
-        color: await getColors(
-          `https://i.ytimg.com/vi/${v}/hqdefault.jpg?sqp=${sqp}`
-        ).then((colors) => colors[0].hex()),
-        color2: await getColors(
-          `https://i.ytimg.com/vi/${v}/hqdefault.jpg?sqp=${sqp}`
-        ).then((colors) => colors[1].hex()),
-      },
-      timestamp: Date.now()
-    };
 
-    return cache[v].result;
+    try {
+      const video = await fetch(`${config.tubeApi}video?v=${v}`)
+        .then((res) => res.text())
+        .then((xml) => getJson(toJson(xml)))
+        .catch(error => {
+          console.error("Error getting video", error);
+          return " ";
+        });
+
+      // Store result in cache
+      cache[v] = {
+        result: {
+          json: data?.video?.Player,
+          video,
+          vid,
+          comments,
+          engagement: data.engagement,
+          wiki: summary,
+          desc: desc,
+          color: await getColors(
+            `https://i.ytimg.com/vi/${v}/hqdefault.jpg?sqp=${sqp}`
+          ).then((colors) => colors[0].hex()),
+          color2: await getColors(
+            `https://i.ytimg.com/vi/${v}/hqdefault.jpg?sqp=${sqp}`
+          ).then((colors) => colors[1].hex()),
+        },
+        timestamp: Date.now()
+      };
+
+      return cache[v].result;
+    } catch (error) {
+      console.error("Error getting video", error);
+    }
   }
 }
 

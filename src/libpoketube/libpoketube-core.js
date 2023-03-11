@@ -133,11 +133,11 @@ async function video(v) {
           .then((xml) => getJson(toJson(xml)))
           .catch(" ")
     
-    
+  
     // Store result in cache
     cache[v] = {
       result: {
-        json: data.video.Player,
+        json: data?.video?.Player,
         video,
         vid,
         comments,

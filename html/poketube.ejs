@@ -404,6 +404,32 @@ text-shadow: 1px 1px #000,1px 1px 0.1px #000;!important;
   filter: drop-shadow(0 0 0.75rem #df00ff);
   transition-duration: 150ms;
    }
+   
+   nav {
+     z-index: 1;
+position: sticky; 
+     background:#0A0608 
+   }
+        <% if (lightOrDark(color) == "light") { %>  
+     .player.video-ambient-container  { 
+         box-shadow: 0 -8px 5.9em <%=color%>; 
+         }
+        
+                                                                                     <% } %>          
+  
+     <% if (lightOrDark(color) == "dark") { %>  
+     .player.video-ambient-container  { 
+         box-shadow: 0 -8px 5.9em <%=color2%>; 
+        }
+        
+                                                                                     <% } %>     
+        <% if (a) { %>  
+
+      .player.video-ambient-container  { 
+         box-shadow: 0 0 0em <%=color%>; 
+         }
+        
+                                                                                     <% } %>     
 </style>
         
                                       

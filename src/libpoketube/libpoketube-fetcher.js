@@ -1,36 +1,24 @@
-/*
+const { curly } = require('node-libcurl');
+const { toJson } = require('xml2json');
+const fetch = require("node-fetch");
 
-    PokeTube is a Free/Libre youtube front-end !
-    
-    Copyright (C) 2021-2023 POKETUBE
- 
-    This file is Licensed under LGPL-3.0-or-later. Poketube itself is GPL, Only this file is LGPL.
-    
-    see a copy here:https://www.gnu.org/licenses/lgpl-3.0.txt
-    
-    please dont remove this comment while sharing this code 
-    
-  */
-
-
-const fetch = require("node-fetch"); //2.5.x
-const { toJson } = require("xml2json");
-
-const youtubeUrl = "https://www.youtube.com/watch?v=";
-const dislikeApi = "https://p.poketube.fun/api?v=";
-const newApiUrl = "https://inner-api.poketube.fun/api/player";
+const youtubeUrl = 'https://www.youtube.com/watch?v=';
+const dislikeApi = 'https://p.poketube.fun/api?v=';
+const newApiUrl = 'https://inner-api.poketube.fun/api/player';
 
 const parseXml = async (videoId, headers) => {
   try {
-    const player = await fetch(`${newApiUrl}?v=${videoId}`, headers);
-    const xml = await player.text();
-    const json = toJson(xml);
+    var { data } = await curly.get(`${newApiUrl}?v=${videoId}`, {
+      httpHeader: Object.entries(headers).map(([k, v]) => `${k}: ${v}`)
+    });
+    const json = toJson(data);
     return getJson(json);
   } catch (error) {
     console.error(`Error parsing XML: ${error}`);
     return null;
   }
 };
+
 
 const getJson = (str) => {
   try {
@@ -39,6 +27,7 @@ const getJson = (str) => {
     return null;
   }
 };
+
 
 const getEngagementData = async (videoId) => {
   const apiUrl = `${dislikeApi}${videoId}`;
@@ -70,5 +59,4 @@ const getPokeTubeData = async (videoId) => {
   };
 };
 
-module.exports = getPokeTubeData
- 
+module.exports = getPokeTubeData;

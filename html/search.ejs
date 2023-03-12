@@ -200,7 +200,7 @@ border:solid;
 	 opacity: 1;
 	 transform: scale(1, 1);
 }                 
-                   
+         
   .loading {
   position: fixed;
   top: 0;
@@ -230,6 +230,9 @@ border:solid;
   }
 }
 
+                   .a {
+                     display:none;
+                   }
                      </style>
  </head>
 
@@ -296,8 +299,13 @@ video[counter].classList.add("shake");
 
       </div>          </div>
 
-     
+
             <div class=right>
+              
+<button title="Play/Pause Ambient music" class="a" id="audioButton" onclick="toggleAudio()">
+  <i id="audioIcon" class="fas fa-pause"></i>
+</button>
+
               <a href="/domains"><i  style="display: block;margin-left: auto;margin-right: auto;" class="fa-light fa-server"></i>  </a>
               <a href="/privacy"><i class="fa-light fa-shield"></i></a>
               <a href="/video/upload?from="><i class="fa-light fa-video"></i></a> 
@@ -431,7 +439,9 @@ font-weight: 1000;
   <%=j.Search.estimatedResults.toLocaleString()%> Results (estimated)
     </p>
 
-        
+  
+        <audio id="audio" style="display:none;" loop autoplay></audio>
+  
                   
                   
                   
@@ -518,7 +528,71 @@ links.forEach(link => {
       window.location.href = link.href;
     }, 500);
   });
-});</script>
+});
+  const audioElement = document.getElementById("audio");
+audioElement.volume = 0.1;  
+let audioToggled = JSON.parse(localStorage.getItem("audioToggled"));
+
+// When the audio player is loaded, check for stored time value and set current time
+audioElement.addEventListener("loadedmetadata", () => {
+  if (audioToggled) {
+    const storedTime = localStorage.getItem("audioTime");
+    if (storedTime) {
+      audioElement.currentTime = storedTime;
+    }
+  }
+});
+
+// When the user leaves the page, store the current time value
+window.addEventListener("beforeunload", () => {
+  if (audioToggled) {
+    localStorage.setItem("audioTime", audioElement.currentTime);
+  }
+});            
+  
+const audio = document.getElementById("audio");
+const button = document.getElementById("audioButton");
+const icon = document.getElementById("audioIcon");
+
+function toggleAudio() {
+  if (audio.paused) {
+    audio.play();
+    audio.volume = 0.1;
+    button.classList.add("playing");
+    icon.classList.remove("fa-play");
+    icon.classList.add("fa-pause");
+    localStorage.setItem("audioToggled", true); // save that audio is toggled
+  } else {
+    audio.pause();
+    button.classList.remove("playing");
+    icon.classList.remove("fa-pause");
+    icon.classList.add("fa-play");
+    localStorage.setItem("audioToggled", false); // save that audio is not toggled
+  }
+}
+
+if (audioToggled === null || audioToggled === undefined) {
+  audioToggled = true;
+}
+
+if (audioToggled == false) {
+  audio.pause();
+  button.classList.remove("playing");
+  icon.classList.remove("fa-pause");
+  icon.classList.add("fa-play");
+} else {
+  audio.play();
+  audio.volume = 0.1;
+  audio.src = "https://tube.kuylar.dev/proxy/media/MGPx242O--U/18"                             
+  button.classList.add("playing");
+  icon.classList.remove("fa-play");
+  icon.classList.add("fa-pause");
+}
+ 
+// Show the audio button
+button.style.display = "block";
+
+                                    </script>
                                     </body>
                               
  

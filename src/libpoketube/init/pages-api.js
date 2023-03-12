@@ -27,7 +27,7 @@ function getJson(str) {
 }
 
 const pkg = require("../../../package.json");
-const ver = "v23.1203-CRsAa-MAJOR-stable-git";
+const ver = "v23.1203-MicHi-MAJOR-stable-git";
 const branch = "master";
 const codename = "michiru";
 const versionnumber = "235";

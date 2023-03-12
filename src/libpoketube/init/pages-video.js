@@ -206,9 +206,7 @@ module.exports = function (app, config, renderTemplate) {
  }
      
     
-    const response = await modules.fetch("http://ip-api.com/json/");
-    const ip = await response.json();
-
+    
     core.video(v).then((data) => {
       try {
         const k = data.video;
@@ -269,7 +267,6 @@ module.exports = function (app, config, renderTemplate) {
           r,
           qua: q,
           inv: inv_comments,
-          ip,
           convert,
           universe,
           wiki: data.wiki,

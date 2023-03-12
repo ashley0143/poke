@@ -122,24 +122,47 @@ module.exports = function (app, config, renderTemplate) {
         boutJson = " ";
       }
 
-      const continuation = req.query.continuation || "";
-      const continuationl = req.query.continuationl || "";
-      const continuations = req.query.continuations || "";
+      const continuation = req.query.continuation
+        ? `&continuation=${req.query.continuation}`
+        : "";
+      const continuationl = req.query.continuationl
+        ? `&continuation=${req.query.continuationl}`
+        : "";
+      const continuations = req.query.continuations
+        ? `&continuation=${req.query.continuations}`
+        : "";
       const sort_by = req.query.sort_by || "newest";
 
       const getChannelData = async (url) => {
         try {
-          return await modules.fetch(url).then((res) => res.text()).then((txt) => getJson(txt));
+          return await modules
+            .fetch(url)
+            .then((res) => res.text())
+            .then((txt) => getJson(txt));
         } catch (error) {
           console.error("Failed to fetch channel data from API:", error);
           return null;
         }
       };
 
-      const tj = await getChannelData(`https://invid-api.poketube.fun/api/v1/channels/videos/${ID}/?sort_by=${req.query.sort_by || "newest"}` + `&continuation=${continuation}` );
-      const shorts = await getChannelData(`https://invid-api.poketube.fun/api/v1/channels/${ID}/shorts?sort_by=${req.query.sort_by || "newest"}` + `&continuation=${continuations}` );
-      const stream = await getChannelData(`https://invid-api.poketube.fun/api/v1/channels/${ID}/streams?sort_by=${ req.query.sort_by || "newest"}` + + `&continuation=${continuationl}`);
-      const c = await getChannelData(`https://invid-api.poketube.fun/api/v1/channels/community/${ID}/`);
+      const tj = await getChannelData(
+        `https://invid-api.poketube.fun/api/v1/channels/videos/${ID}/?sort_by=${
+          req.query.sort_by || "newest"
+        }${continuation}`
+      );
+      const shorts = await getChannelData(
+        `https://invid-api.poketube.fun/api/v1/channels/${ID}/shorts?sort_by=${
+          req.query.sort_by || "newest"
+        }${continuations}`
+      );
+      const stream = await getChannelData(
+        `https://invid-api.poketube.fun/api/v1/channels/${ID}/streams?sort_by=${
+          req.query.sort_by || "newest"
+        }${continuationl}`
+      );
+      const c = await getChannelData(
+        `https://invid-api.poketube.fun/api/v1/channels/community/${ID}/`
+      );
 
       const summary = await wiki.summary(boutJson.Channel.Metadata.Name);
       const wikiSummary = summary.title !== "Not found." ? summary : "none";

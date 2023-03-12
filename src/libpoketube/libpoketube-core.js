@@ -1,4 +1,4 @@
- /*
+/*
 
     PokeTube is a Free/Libre youtube front-end !
     
@@ -14,6 +14,7 @@
 
 const fetch = require("node-fetch");
 const { toJson } = require("xml2json");
+const { curly } = require("node-libcurl");
 
 const fetcher = require("../libpoketube/libpoketube-fetcher.js");
 const getColors = require("get-image-colors");
@@ -72,14 +73,14 @@ async function video(v) {
   if (v == null) return "Gib ID";
 
   // Check if result is already cached
-  if (cache[v] && (Date.now() - cache[v].timestamp) < 3600000) {
+  if (cache[v] && Date.now() - cache[v].timestamp < 3600000) {
     console.log("Returning cached result");
     return cache[v].result;
   }
 
   let nightlyRes;
   var desc = "";
- 
+
   try {
     var inv_comments = await fetch(`${config.invapi}/comments/${v}`).then(
       (res) => res.text()
@@ -90,19 +91,22 @@ async function video(v) {
     console.error("Error getting comments", error);
     var comments = "";
   }
-  
+
   let vid;
 
   try {
-    const videoInfo = await fetch(`${config.invapi}/videos/${v}`).then(res => res.text());
+    const videoInfo = await fetch(`${config.invapi}/videos/${v}`).then((res) =>
+      res.text()
+    );
     vid = await getJson(videoInfo);
   } catch (error) {
     console.error("Error getting video info", error);
   }
-   
-  
+
   if (!vid) {
-    console.log(`Sorry nya, we couldn't find any information about that video qwq`);
+    console.log(
+      `Sorry nya, we couldn't find any information about that video qwq`
+    );
   }
 
   if (checkUnexistingObject(vid)) {
@@ -127,27 +131,27 @@ async function video(v) {
 
     desc = a.Channel?.Contents?.ItemSection?.About?.Description;
 
-    const data = await fetcher(v);
+    const fe = await fetcher(v);
 
     const nightlyJsonData = getJson(nightlyRes);
 
     try {
-      const video = await fetch(`${config.tubeApi}video?v=${v}`)
-        .then((res) => res.text())
-        .then((xml) => getJson(toJson(xml)))
-        .catch(error => {
-          console.error("Error getting video", error);
-          return " ";
-        });
+      const headers = {};
+
+      var { data } = await curly.get(`${config.tubeApi}video?v=${v}`, {
+        httpHeader: Object.entries(headers).map(([k, v]) => `${k}: ${v}`),
+      });
+      var json = toJson(data);
+      const video = getJson(json);
 
       // Store result in cache
       cache[v] = {
         result: {
-          json: data?.video?.Player,
+          json: fe?.video?.Player,
           video,
           vid,
           comments,
-          engagement: data.engagement,
+          engagement: fe.engagement,
           wiki: summary,
           desc: desc,
           color: await getColors(
@@ -157,7 +161,7 @@ async function video(v) {
             `https://i.ytimg.com/vi/${v}/hqdefault.jpg?sqp=${sqp}`
           ).then((colors) => colors[1].hex()),
         },
-        timestamp: Date.now()
+        timestamp: Date.now(),
       };
 
       return cache[v].result;
@@ -166,7 +170,6 @@ async function video(v) {
     }
   }
 }
-
 
 async function search(query, cnt) {
   if (query == null) return "Gib Query";

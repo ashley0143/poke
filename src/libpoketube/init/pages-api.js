@@ -27,9 +27,9 @@ function getJson(str) {
 }
 
 const pkg = require("../../../package.json");
-const ver = "v23.1203-MicHi-MAJOR-stable-git";
+const ver = "v23.1203-nAzU-MAJOR-stable-nonLTS-git";
 const branch = "master";
-const codename = "michiru";
+const codename = "nazuna";
 const versionnumber = "235";
 
 module.exports = function (app, config, renderTemplate) {

@@ -46,6 +46,13 @@
   .img {
     box-shadow: 0px 0 6.4em <%=color%>;
   }
+  .lyrics {
+  margin-top: -26em;
+  height: 25em;
+  max-height: 22em;
+  overflow: auto;
+  margin-left: 54em;
+}
   </style>
  <link href=https://site-assets.fontawesome.com/releases/v6.1.1/css/all.css rel=stylesheet>
    </head>
@@ -80,9 +87,18 @@
      <div class="video-title center" style="font-family:Poketube flex;font-weight:900;white-space:yes;text-align: center;font-stretch: extra-expanded">
             <%=info.title%>    <i title="hq audio" class="fa-light fa-waveform-lines"></i> </div>
               <div class="video-title center" style="font-family:Inter;font-weight:900;white-space:yes;text-align: center;">             <%=info.artist%>
-</div>       </div>
+</div>     
+            <div class="lyrics">
+          <div class="video-title center" style="font-family:Poketube flex;font-weight:900;white-space:yes;text-align: center;font-stretch: extra-expanded">
+           Lyrics </div>
+                                   <%- lyrics.replace("&lt;","<").replace("&gt;", ">") || " no lyrics found "%> 
+                            <br>
+                                     lyrics by: musixmatch
+             </div>
+       </div>
 
-                         
+  
+
 
                 <div style="  position: fixed;
   bottom: 0;
@@ -107,7 +123,6 @@
   </div>
                 </div>
  
-                
 <div style="position: fixed;bottom: 0;right: 0;margin: 67px;text-decoration: none;">
         <p style="margin:0;">
          Powered By

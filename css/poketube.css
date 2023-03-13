@@ -45,7 +45,7 @@
 
   --video-player-height-max: 720px;
   --video-player-width-max: 1280px;
-
+    
   /* poketube color palette */
   --ptc-very-red: #ff0000;
   --ptc-very-blue: #0000ff;
@@ -63,12 +63,13 @@
     #8e6f7e 100%
   );
   --chip-background-hover: #3f3f3f;
-
+  --primary-header-rgb: 38,35,58;
+  --min-opacity:0;
   --ptd-watch-min-player-height: 360px;
   --ptd-watch-width-ratio: 16;
   --ptd-watch-height-ratio: 9;
   --ptd-watch-sidebar-min-width: 300px;
-
+   
   --ptd-grid-base: 103px;
   --ptd-margin-base: 4px;
   --ptd-avatar-size: 32px;

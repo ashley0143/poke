@@ -27,7 +27,7 @@
 
 -->
 <!DOCTYPE html>
-<html class="poketube_desktop_player" vid_id="<%=inv_vid.videoId%>" t="<%=btoa(Date.now())%>" version="browser_web">
+<html class="poketube_desktop_player event" universe="2" vid_id="<%=inv_vid.videoId%>" t="<%=btoa(Date.now())%>" version="browser_web">
 <head>
     <% if (e === false) { %>  
     <!-- MetaTag disabled -->
@@ -40,7 +40,7 @@
 <meta content=@youtube name=twitter:site>
 <meta content="https://poketube.fun/watch?v=<%=inv_vid.videoId%>" name=twitter:url>
 <meta content="<%=inv_vid.title%> | PokeTube" name=twitter:title>
-<meta content="Watch this video by <%=video?.Channel?.Name%> On PokeTube. The YouTube front-end that doesnt track you!" property=twitter:description>
+<meta content="Watch this video from <%=video?.Channel?.Name%> On PokeTube! The Libre YouTube Front end!1!" property=twitter:description>
 <meta content="https://i.ytimg.com/vi/<%=inv_vid.videoId%>/maxresdefault.jpg" property=og:image>
 <meta content=summary_large_image name=twitter:card>
 <link href="https://poketube.fun/watch?v=<%=inv_vid.videoId%>" itemprop=url>
@@ -387,8 +387,7 @@ text-shadow: 1px 1px #000,1px 1px 0.1px #000;!important;
 </style>
                                             		 	               <% } %>   
 
-                                                                      <% if (universe) { %>  
-
+ 
  <style>
    :root {
        --div-gradient: linear-gradient(to bottom right, #9666F7, #B37C6B);
@@ -398,12 +397,8 @@ text-shadow: 1px 1px #000,1px 1px 0.1px #000;!important;
    background: linear-gradient(to bottom, #1c1c1c, #101);
    }  
    
-   .new-button {
-   border-radius:1em;
-  }
-   
    .comment-list.left-padding {
-  border-radius:  1em !important;
+  border-radius: 1em !important;
 }
   
    .comment-list.left-padding:hover {
@@ -439,8 +434,7 @@ position: sticky;
 </style>
         
                                       
-                                                                                     <% } %>  
-   </head>
+    </head>
     
  
                       

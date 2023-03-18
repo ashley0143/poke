@@ -64,7 +64,7 @@ Congrats, Poketube should now be running on `localhost:3000`!
 ## PokeTube community!
 Offical poketube community servers :3
 
-[Revolt](https://rvlt.gg/1em7QW8C)  <br>
+[Revolt](https://rvlt.gg/poketube)  <br>
 [Discord](https://discord.gg/a3JFtTHUnp) (requires nonfree js - see stallman.org/discord.html )
 
 ## The Legal Stuff (boring tbh)

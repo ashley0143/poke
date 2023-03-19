@@ -24,8 +24,10 @@ module.exports = function (app, config, renderTemplate) {
   var html_location = "./css/";
 
   app.get("/privacy", function (req, res) {
-      if ( req.hostname == "poketube.fun" || req.hostname == "poketube.site" || req.hostname == "poketube.online" || req.hostname == "poketube.xyz" ) {
-    renderTemplate(res, req, "priv.ejs");
+      if ( req.hostname == "poketube.fun" ) {
+    renderTemplate(res, req, "priv.ejs", {
+        isMobile: req.useragent.isMobile,
+    });
     } else {
     renderTemplate(res, req, "priv-custom.ejs");
     }

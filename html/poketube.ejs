@@ -1354,18 +1354,7 @@ checkbox.addEventListener('change', function(e) {
     console.log("[AUTOPLAY] enabled");
     document.getElementById('video').addEventListener('ended', autoplaynextvideo, false);
     let url = window.location.hostname + "/watch?v=<%- k.Video.Recommendations.Video[0].id%>";
-    document.body.style.cursor = "wait"; // set cursor to "wait" before the fetch request starts
-    fetch(url)
-      .then(response => response.json())
-      .then(data => {
-        // do something with the data
-        document.body.style.cursor = "default"; // set cursor back to "default" after the fetch request completes
-      })
-      .catch(error => {
-        console.error(error);
-        document.body.style.cursor = "default"; // set cursor back to "default" after the fetch request completes
-      });
-
+   
     function autoplaynextvideo(e) {
       location.href = "/watch?v=<%- k.Video.Recommendations.Video[0].id%>&autoplay=<%-btoa("1f739d935676111cfff4b4693e3816e664797050" + k.Video.Recommendations.Video[0].id ) %>";
     }
@@ -1375,6 +1364,15 @@ checkbox.addEventListener('change', function(e) {
       removeParam("autoplay");
     }    
   }
+  
+  if (/[?&]autoplay=/.test(location.search)) {
+    if (checkbox.checked) {
+        fetch("https://" + window.location.hostname + "/watch?v=<%- k.Video.Recommendations.Video[0].id%>").then(() => {})
+      }    
+  }
+  
+  
+  
 });
   
 if (/[?&]autoplay=/.test(location.search)) {
@@ -1393,6 +1391,11 @@ if (/[?&]autoplay=/.test(location.search)) {
       document.body.style.cursor = "default"; // set cursor back to "default" after the fetch request completes
     });
   document.getElementById('video').addEventListener('ended', autoplaynextvideo, false);
+  if (/[?&]autoplay=/.test(location.search)) {
+    if (checkbox.checked) {
+        fetch("https://" + window.location.hostname + "/watch?v=<%- k.Video.Recommendations.Video[0].id%>").then(() => {})
+      }    
+  }
   function autoplaynextvideo(e) {
     location.href = "/watch?v=<%- k.Video.Recommendations.Video[0].id%>&autoplay=<%-btoa("1f739d935676111cfff4b4693e3816e664797050" + k.Video.Recommendations.Video[0].id ) %>";
   }

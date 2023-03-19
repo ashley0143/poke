@@ -53,15 +53,21 @@ module.exports = async function (video_id) {
 
   let url;
   if (instance[1].type != "https") {
-    url = "https://invidious.sethforprivacy.com";
+    url = "https://invidious.lunar.icu";
   } else {
+    //replaces bad proxys (e.g the proxys that do not support media proxys, or the proxys that are down )
     url = instance[1].uri
-      .replace("invidious.tiekoetter.com", "invidious.sethforprivacy.com")
-      .replace("yewtu.be", "invidious.sethforprivacy.com")
-      .replace("invidious.slipfox.xyz", "invidious.sethforprivacy.com")
+      .replace("invidious.tiekoetter.com", "inv.odyssey346.dev")
+      .replace("invidious.slipfox.xyz", "invidious.lunar.icu")
+      .replace("yewtu.be", "invidious.lunar.icu")
+      .replace("iv.melmac.space", "inv.vern.cc")
+      .replace("yt.oelrichsgarcia.de", "y.com.sb")
+      .replace("invidious.lidarshield.cloud", "inv.odyssey346.dev")
       .replace("vid.priv.au", "inv.vern.cc")
-      .replace("invidious.snopyta.org", "invidious.sethforprivacy.com")
-      .replace("invidious.weblibre.org", "invidious.sethforprivacy.com");
+      .replace("watch.thekitty.zone", "y.com.sb")
+      .replace("invidious.snopyta.org", "inv.odyssey346.dev")
+      .replace("invidious.weblibre.org", "invidious.lunar.icu")
+      .replace("invidious.sethforprivacy.com", "y.com.sb")
   }
 
   return url;

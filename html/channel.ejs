@@ -631,13 +631,17 @@ white-space: nowrap;text-decoration: none;" href="/feeds/videos.xml?channel_id=<
   <% } %>
       <% } %>
     
-  <%  if (Array.isArray(stream.videos)) { %> 
+ <%  if (Array.isArray(stream.videos)) { %> 
+   <%  if (stream.videos[0]) { %> 
+
 <%  if (turntomins(stream.videos[0].lengthSeconds)  != "aN:aN" ) { %> 
 
                    <a href="/channel?id=<%=ID%>&tab=live" class="tab">Live</a>
   <% } %>
       <% } %>
-    
+
+      <% } %>
+
      <a  href="/channel?id=<%=ID%>&tab=community"  class="tab active">Community</a>
  
                  <a  href="/channel?id=<%=ID%>&tab=about" class="tab">About</a>

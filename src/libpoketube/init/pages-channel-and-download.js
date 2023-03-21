@@ -73,7 +73,7 @@ module.exports = function (app, config, renderTemplate) {
     let continuation = req.query.continuation || "";
 
     try {
-      const searchUrl = `https://tube-srv.ashley143.gay/api/search?query=${encodeURIComponent(
+      const searchUrl = `https://inner-api.poketube.fun/api/search?query=${encodeURIComponent(
         query
       )}&continuation=${encodeURIComponent(continuation)}`;
       const searchResponse = await modules.fetch(searchUrl);

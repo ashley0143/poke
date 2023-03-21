@@ -30,10 +30,7 @@ function getJson(str) {
 
 module.exports = function (app, config, renderTemplate) {
   app.get("/discover", async function (req, res) {
-    const trends = await modules.fetch(`${config.tubeApi}trending`);
-    const h = await trends.text();
-    const k = getJson(modules.toJson(h));
-
+  
     let tab = "";
     if (req.query.tab) {
       tab = `/?type=${capitalizeFirstLetter(req.query.tab)}`;
@@ -46,13 +43,12 @@ module.exports = function (app, config, renderTemplate) {
     if (req.query.mobilesearch) {
       const query = req.query.mobilesearch;
       const continuation = req.query.continuation || "";
-      const search = await modules.fetch(`https://tube-srv.ashley143.gay/api/search?query=${query}&continuation=${continuation}`);
+      const search = await modules.fetch(`https://inner-api.poketube.fun/api/search?query=${query}&continuation=${continuation}`);
       const text = await search.text();
       j = getJson(modules.toJson(text));
     }
 
     renderTemplate(res, req, "main.ejs", {
-      k,
       tab: req.query.tab,
       isMobile: req.useragent.isMobile,
       mobilesearch: req.query.mobilesearch,

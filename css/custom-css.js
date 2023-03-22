@@ -20,3 +20,5 @@ var script_tag = document.createElement('script');
 script_tag.type = 'text/javascript';
 script_tag.text = localStorage.getItem("poke-custom-script");
 document.head.appendChild(script_tag);
+
+// @license-end

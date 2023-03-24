@@ -11,8 +11,10 @@ const parseXml = async (videoId, headers) => {
     var { data } = await curly.get(`${newApiUrl}?v=${videoId}`, {
       httpHeader: Object.entries(headers).map(([k, v]) => `${k}: ${v}`)
     });
+    
     const json = toJson(data);
     return getJson(json);
+  
   } catch (error) {
     console.error(`Error parsing XML: ${error}`);
     return null;

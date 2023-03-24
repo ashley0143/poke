@@ -27,10 +27,10 @@ function getJson(str) {
 }
 
 const pkg = require("../../../package.json");
-const ver = "v23.1903-mAtO-MAJOR-stable-nonLTS-git";
+const ver = "v23.2403-IcHi-MAJOR-stable-nonLTS-git";
 const branch = "master";
-const codename = "matoi";
-const versionnumber = "237";
+const codename = "ichigo";
+const versionnumber = "238";
 
 module.exports = function (app, config, renderTemplate) {
   app.get("/embed/:v", async function (req, res) {
@@ -151,8 +151,8 @@ module.exports = function (app, config, renderTemplate) {
       },
       invidious,
       flac: {
-        poketube_flac: "1.0a",
-        apple_musickit: "1.2.1",
+        poketube_flac: "1.2a",
+        apple_musickit: "1.2.3",
         poketube_normalize_volume: "1.2.23-yt",
       },
       piwik: "master",

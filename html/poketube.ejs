@@ -1512,47 +1512,62 @@ links.forEach(link => {
     }
   });
 });
-
 const urls = document.querySelectorAll('a[href*="/watch?v="]'); // get all links with "/watch?v=" in href attribute
 
-const fetchCount = urls.length;
-let fetchedCount = 0;
+const spinner = document.createElement('div');
+spinner.id = 'fetch-spinner';
+spinner.classList.add('hide');
+document.body.appendChild(spinner);
 
-const fetchCountElement = document.getElementById('fetch-count');
-fetchCountElement.textContent = ``;
+const text = document.createElement('div');
+text.id = 'fetch-text';
+ text.classList.add('hide');
+document.body.appendChild(text);
+ document.body.classList.add('blur');
+
+let fetchedCount = 0;
 
 urls.forEach(link => {
   const url = new URL(link.href);
 
   if (url.host !== 'www.youtube.com' && url.host !== 'youtube.com') {
+      if (url.host !== "redirect.poketube.fun") {
+
     console.log(`Fetching ${url.origin}`);
+
+    spinner.classList.remove('hide');
+    text.classList.remove('hide');
 
     fetch(url.href)
       .then(response => {
         if (response.status === 500) {
-          throw new Error('Server Error');
+          // do nothing
         }
         console.log(`Fetched ${url.origin}`);
-        // Only increment fetchedCount if the response is not a 500 error
-        if (response.ok) {
-          fetchedCount++;
+        fetchedCount++;
+
+        if (fetchedCount === urls.length) {
+          spinner.classList.add('hide');
+          text.classList.add('hide');
+           document.body.classList.remove('blur');
         }
-        fetchCountElement.textContent = ``;
-        // Check if all URLs have been fetched and hide the element if they have
-        if (fetchedCount === fetchCount) {
-          fetchCountElement.style.display = 'none';
-        }
-         console.clear();
-       })
+        // Do something with the response
+      })
       .catch(error => {
+        spinner.classList.add('hide');
+        text.classList.add('hide');
+
         // Ignore network errors
         if (!(error instanceof TypeError && error.message.includes('Failed to fetch'))) {
-           console.clear();
+          console.error(`Error fetching ${url.origin}: ${error}`);
         }
       });
   }
+      }
+
 });
 
+console.clear()
 
 const videoElement = document.getElementById("video");
 

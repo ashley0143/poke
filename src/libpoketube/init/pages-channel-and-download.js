@@ -30,6 +30,7 @@ function getJson(str) {
 
 module.exports = function (app, config, renderTemplate) {
   app.get("/download", async function (req, res) {
+    try {
     var v = req.query.v;
 
     // video
@@ -53,6 +54,9 @@ module.exports = function (app, config, renderTemplate) {
         .getColors(`https://i.ytimg.com/vi/${v}/maxresdefault.jpg`)
         .then((colors) => colors[0].hex()),
     });
+    } catch {
+      res.redirect("/")
+    }
   });
 
   app.get("/old/watch", async function (req, res) {

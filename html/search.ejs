@@ -570,6 +570,34 @@ function toggleAudio() {
     localStorage.setItem("audioToggled", false); // save that audio is not toggled
   }
 }
+  
+  
+const urls = document.querySelectorAll('a[href*="/watch?v="]'); // get all links with "/watch?v=" in href attribute
+
+urls.forEach(link => {
+  const url = new URL(link.href);
+
+  if (url.host !== 'www.youtube.com' && url.host !== 'youtube.com') {
+    console.log(`Fetching ${url.origin}`);
+
+    fetch(url.href)
+      .then(response => {
+        if (response.status === 500) {
+          // do nothing
+         }
+        console.log(`Fetched ${url.origin}`);
+        // Do something with the response
+      })
+      .catch(error => {
+        // Ignore network errors
+        if (!(error instanceof TypeError && error.message.includes('Failed to fetch'))) {
+          console.error(`Error fetching ${url.origin}: ${error}`);
+        }
+      });
+  }
+});
+
+
 
 if (audioToggled === null || audioToggled === undefined) {
   audioToggled = true;

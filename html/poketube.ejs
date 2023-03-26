@@ -528,7 +528,9 @@ But Please note that unofficial instances can add the same lock icon, so please 
                 <a><i  style="display: block;margin-left: auto;margin-right: auto;visibility: collapse;" class="fa-light fa-server"></i>  </a>
               <a ><i class="fa-light fa-shield" style="visibility: collapse;margin-right: 1.5em;"></i></a>
               <a ><i class="fa-light fa-shield" style="visibility: collapse;margin-right: 1.5em;"></i></a>
-
+<p id="fetch-count">
+                  
+                  </p>
           <div class="icon-button dropdown" style="margin-right: 4.5px;">
 			<input type="checkbox" id="loggedout-dropdown" autocomplete="off">
 			<label for="loggedout-dropdown">
@@ -1510,6 +1512,47 @@ links.forEach(link => {
     }
   });
 });
+
+const urls = document.querySelectorAll('a[href*="/watch?v="]'); // get all links with "/watch?v=" in href attribute
+
+const fetchCount = urls.length;
+let fetchedCount = 0;
+
+const fetchCountElement = document.getElementById('fetch-count');
+fetchCountElement.textContent = ``;
+
+urls.forEach(link => {
+  const url = new URL(link.href);
+
+  if (url.host !== 'www.youtube.com' && url.host !== 'youtube.com') {
+    console.log(`Fetching ${url.origin}`);
+
+    fetch(url.href)
+      .then(response => {
+        if (response.status === 500) {
+          throw new Error('Server Error');
+        }
+        console.log(`Fetched ${url.origin}`);
+        // Only increment fetchedCount if the response is not a 500 error
+        if (response.ok) {
+          fetchedCount++;
+        }
+        fetchCountElement.textContent = ``;
+        // Check if all URLs have been fetched and hide the element if they have
+        if (fetchedCount === fetchCount) {
+          fetchCountElement.style.display = 'none';
+        }
+         console.clear();
+       })
+      .catch(error => {
+        // Ignore network errors
+        if (!(error instanceof TypeError && error.message.includes('Failed to fetch'))) {
+           console.clear();
+        }
+      });
+  }
+});
+
 
 const videoElement = document.getElementById("video");
 

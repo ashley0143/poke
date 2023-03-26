@@ -122,11 +122,6 @@ async function video(v) {
       var a = "";
     }
 
-    const summary = await wiki
-      .summary(vid.author + " ")
-      .then((summary_) =>
-        summary_.title !== "Not found." ? summary_ : "none"
-      );
 
     desc = a.Channel?.Contents?.ItemSection?.About?.Description;
 
@@ -135,6 +130,13 @@ async function video(v) {
     const nightlyJsonData = getJson(nightlyRes);
 
     try {
+      
+    const summary = await wiki
+      .summary(vid.author + " ")
+      .then((summary_) =>
+        summary_.title !== "Not found." ? summary_ : "none"
+      );
+      
       const headers = {};
 
       var { data } = await curly.get(`${config.tubeApi}video?v=${v}`, {

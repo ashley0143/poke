@@ -68,7 +68,40 @@ summary:hover{
     .info > div {
       font-family:Ubuntu, sans-serif;
     }
-       
+       #fetch-spinner {
+  position: fixed;
+  top: 10px;
+  right: 10px;
+ z-index: 9999; 
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border-top: 2px solid #fff;
+  border-right: 2px solid #fff;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+#fetch-text {
+  position: fixed;
+  top: 10px;
+  right: 40px;
+  color: #fff;
+  font-weight: bold;
+  text-transform: uppercase;
+   z-index: 9999; 
+
+}
+
+.hide {
+  display: none;
+}
+
    .app{
     /* background-image:url("/css/head.svg"); */
     background-size: cover;
@@ -178,6 +211,8 @@ border:solid;
  .tabs a.tab:hover {
 	 color: #3cb4fa;
 }
+ 
+
  .tabs a.tab:after {
 	 transition: all 0.3s cubic-bezier(1, 0, 0, 1);
 	 will-change: transform, box-shadow, opacity;
@@ -570,33 +605,7 @@ function toggleAudio() {
     localStorage.setItem("audioToggled", false); // save that audio is not toggled
   }
 }
-  
-  
-const urls = document.querySelectorAll('a[href*="/watch?v="]'); // get all links with "/watch?v=" in href attribute
-
-urls.forEach(link => {
-  const url = new URL(link.href);
-
-  if (url.host !== 'www.youtube.com' && url.host !== 'youtube.com') {
-    console.log(`Fetching ${url.origin}`);
-
-    fetch(url.href)
-      .then(response => {
-        if (response.status === 500) {
-          // do nothing
-         }
-        console.log(`Fetched ${url.origin}`);
-        // Do something with the response
-      })
-      .catch(error => {
-        // Ignore network errors
-        if (!(error instanceof TypeError && error.message.includes('Failed to fetch'))) {
-          console.error(`Error fetching ${url.origin}: ${error}`);
-        }
-      });
-  }
-});
-
+ 
 
 
 if (audioToggled === null || audioToggled === undefined) {

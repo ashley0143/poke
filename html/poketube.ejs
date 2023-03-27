@@ -174,6 +174,13 @@
   color: #777777;
   margin-bottom: 0px;
 }
+  
+a[data-onclick="jump_to_time"] {
+  background: linear-gradient(to right, #8a2387, #e94057, #f27121);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
 
 .comments-area .btn-reply {
   background-color: var(--text-color);
@@ -1218,7 +1225,7 @@ Recommended Videos
                            <% } %>
    <% if (optout) { %> 
 
-      <a  href="/watch?v=<%= x.id %>&t=f"  alt="<%= x.Title %>" class="thumbnail" style="background-image: url('https://p.poketube.fun/https://i.ytimg.com/vi/<%= x.id %>/hqdefault.jpg?sqp=-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLBy_x4UUHLNDZtJtH0PXeQGoRFTgw');border-radius: 9.5px;"  >								<span class="video-length"><%- x.duration || "LIVE"%></span>
+      <a  href="/watch?v=<%= x.id %>&m=f"  alt="<%= x.Title %>" class="thumbnail" style="background-image: url('https://p.poketube.fun/https://i.ytimg.com/vi/<%= x.id %>/hqdefault.jpg?sqp=-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLBy_x4UUHLNDZtJtH0PXeQGoRFTgw');border-radius: 9.5px;"  >								<span class="video-length"><%- x.duration || "LIVE"%></span>
                            <% } %>
 							</a>
 							<div class="info">
@@ -1227,7 +1234,7 @@ Recommended Videos
 								<a href="/watch?v=<%= x.id %>" class="title max-lines-2" title="<%= x.Title %>" style="font-stretch: 100%;font-weight: 800;"><%= x.Title %></a>
                    <% } %>
    <% if (optout) { %> 
-								<a href="/watch?v=<%= x.id %>&t=f" class="title max-lines-2" title="<%= x.Title %>" style="font-stretch: 100%;font-weight: 800;"><%= x.Title %></a>
+								<a href="/watch?v=<%= x.id %>&m=f" class="title max-lines-2" title="<%= x.Title %>" style="font-stretch: 100%;font-weight: 800;"><%= x.Title %></a>
                    <% } %>
 								<div>
                <a class="max-lines-2" href="/channel?id=<%= x.Channel.id %>" style="-webkit-line-clamp: 1;width: 12em;word-wrap: break-word;"><%=x.Channel.Name %></a>
@@ -1249,7 +1256,7 @@ Recommended Videos
                            <% } %>
    <% if (optout) { %> 
 
-      <a  href="/watch?v=<%= x.id %>&t=f" class="thumbnail" style="background-image: url('https://p.poketube.fun/https://i.ytimg.com/vi/<%= x.id %>/hqdefault.jpg?sqp=-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLBy_x4UUHLNDZtJtH0PXeQGoRFTgw');border-radius: 9.5px;"  >								<span class="video-length"><%=x.duration %></span>
+      <a  href="/watch?v=<%= x.id %>&m=f" class="thumbnail" style="background-image: url('https://p.poketube.fun/https://i.ytimg.com/vi/<%= x.id %>/hqdefault.jpg?sqp=-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLBy_x4UUHLNDZtJtH0PXeQGoRFTgw');border-radius: 9.5px;"  >								<span class="video-length"><%=x.duration %></span>
                             <% } %>
 							</a>
 							<div class="info">
@@ -1257,7 +1264,7 @@ Recommended Videos
 								<a href="/watch?v=<%= x.id %>" class="title max-lines-2" style="font-stretch: 100%;font-weight: 800;" title="<%= x.Title %>"><%= x.Title %></a>
                    <% } %>
    <% if (optout) { %> 
-								<a href="/watch?v=<%= x.id %>&t=f" class="title max-lines-2" title="<%= x.Title %>" style="font-stretch: 100%;font-weight: 800;"><%= x.Title %></a>
+								<a href="/watch?v=<%= x.id %>&m=f" class="title max-lines-2" title="<%= x.Title %>" style="font-stretch: 100%;font-weight: 800;"><%= x.Title %></a>
                    <% } %>
 								<div>
                                  <a class="max-lines-2" href="/channel?id=<%=video.Channel.Name %>" style="-webkit-line-clamp: 1;width: 12em;word-wrap: break-word;"><%=video.Channel.Name %></a>
@@ -1308,7 +1315,7 @@ Recommended Videos
         
                   <div style="font-family:Inter,sans-serif;;white-space:yes;" align="center">
 
-<a href="/watch?v=<%=inv_vid.videoId%>&t=f"> 
+<a href="/watch?v=<%=inv_vid.videoId%>&m=f"> 
  Opt out of Metrics</a> (<a href="/privacy" style="color:var(--text-color)">Wut?</a>)
                
    </div>
@@ -1483,8 +1490,8 @@ document.addEventListener('fullscreenchange', () => {
 setInterval(fadeInElements, 500);
 
 
-// Get all anchor links on the page
-const links = document.querySelectorAll('a');
+// Get all anchor links on the page except for links with "jump_to_time" onclick attribute
+const links = document.querySelectorAll('a:not([data-onclick="jump_to_time"])');
 
 // Add a click event listener to each link
 links.forEach(link => {
@@ -1512,6 +1519,45 @@ links.forEach(link => {
     }
   });
 });
+
+  
+const a = document.querySelectorAll('a[data-onclick="jump_to_time"]');
+
+function jumpToTime(e) {
+  e.preventDefault();
+  
+  const link = e.target;
+  const video = document.getElementById('video');
+  const time = link.dataset.jumpTime;
+  
+  video.currentTime = time;
+
+  window.location.hash = 'top'; // Add #video to the URL
+
+  setTimeout(() => {
+    history.replaceState(null, null, ' '); // Remove #video after 1 second
+  }, 250);
+}
+
+a.forEach(link => {
+  const href = link.getAttribute('href');
+    if (link.dataset.jumpTime) {
+    link.removeAttribute('href');
+  }
+
+  if (href && href.includes('&t=')) {
+    const params = new URLSearchParams(href.split('?')[1]);
+    const time = params.get('t');
+    
+    if (time) {
+      link.dataset.jumpTime = time;
+      link.addEventListener('click', jumpToTime);
+      link.removeAttribute('href');
+    }
+  }
+});
+
+
 const urls = document.querySelectorAll('a[href*="/watch?v="]'); // get all links with "/watch?v=" in href attribute
 
 const spinner = document.createElement('div');
@@ -1545,6 +1591,7 @@ urls.forEach(link => {
         }
         console.log(`Fetched ${url.origin}`);
         fetchedCount++;
+        console.clear()
 
         if (fetchedCount === urls.length) {
           spinner.classList.add('hide');
@@ -1556,7 +1603,7 @@ urls.forEach(link => {
       .catch(error => {
         spinner.classList.add('hide');
         text.classList.add('hide');
-
+       console.clear()
         // Ignore network errors
         if (!(error instanceof TypeError && error.message.includes('Failed to fetch'))) {
           console.error(`Error fetching ${url.origin}: ${error}`);
@@ -2118,7 +2165,7 @@ More Epic options owo~
                                 <% if (optout) { %> 
  <% } %>
       <% if (!optout) { %> 
-   • <a href="/watch?v=<%=inv_vid.videoId%>&t=f"> 
+   • <a href="/watch?v=<%=inv_vid.videoId%>&m=f"> 
  Opt out of Metrics</a> (<a href="/privacy" style="color:#fff">Wut?</a>) 
      <% } %>
                         <% if (lyrics && !r) { %>                      
@@ -2329,7 +2376,7 @@ More Epic options owo~
                            <% } %>
    <% if (optout) { %> 
 
-      <a  href="/watch?v=<%= x.id %>&t=f" class="thumbnail" style="background-image: url('https://p.poketube.fun/https://i.ytimg.com/vi/<%= x.id %>/hqdefault.jpg?sqp=-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLBy_x4UUHLNDZtJtH0PXeQGoRFTgw');border-radius: 9.5px;border: 2px solid white;"  >								<span class="video-length"><%=x.duration %></span>
+      <a  href="/watch?v=<%= x.id %>&m=f" class="thumbnail" style="background-image: url('https://p.poketube.fun/https://i.ytimg.com/vi/<%= x.id %>/hqdefault.jpg?sqp=-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLBy_x4UUHLNDZtJtH0PXeQGoRFTgw');border-radius: 9.5px;border: 2px solid white;"  >								<span class="video-length"><%=x.duration %></span>
                            <% } %>
 							</a>
 							<div class="info">
@@ -2338,7 +2385,7 @@ More Epic options owo~
 								<a href="/watch?v=<%= x.id %>" class="title max-lines-2" style="margin-top: 4px;"><%= x.Title %></a>
                    <% } %>
    <% if (optout) { %> 
-								<a href="/watch?v=<%= x.id %>&t=f" style="margin-top: 4px;" class="title max-lines-2"><%= x.Title %></a>
+								<a href="/watch?v=<%= x.id %>&m=f" style="margin-top: 4px;" class="title max-lines-2"><%= x.Title %></a>
                    <% } %>
 								<div  style="color:#fff" >
                <a class="max-lines-2" style="color:#fff" href="/channel?id=<%= x.Channel.id %>"><%=x.Channel.Name %></a> • <div>
@@ -2360,7 +2407,7 @@ More Epic options owo~
                            <% } %>
    <% if (optout) { %> 
 
-      <a  href="/watch?v=<%= x.id %>&t=f" class="thumbnail" style="background-image: url('https://p.poketube.fun/https://i.ytimg.com/vi/<%= x.id %>/hqdefault.jpg?sqp=-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLBy_x4UUHLNDZtJtH0PXeQGoRFTgw');border-radius: 9.5px;"  >								<span class="video-length"><%=x.duration %></span>
+      <a  href="/watch?v=<%= x.id %>&m=f" class="thumbnail" style="background-image: url('https://p.poketube.fun/https://i.ytimg.com/vi/<%= x.id %>/hqdefault.jpg?sqp=-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLBy_x4UUHLNDZtJtH0PXeQGoRFTgw');border-radius: 9.5px;"  >								<span class="video-length"><%=x.duration %></span>
                            <% } %>
 							</a>
 							<div class="info">
@@ -2368,7 +2415,7 @@ More Epic options owo~
 								<a href="/watch?v=<%= x.id %>" class="title max-lines-2"><%= x.Title %></a>
                    <% } %>
    <% if (optout) { %> 
-								<a href="/watch?v=<%= x.id %>&t=f" class="title max-lines-2"><%= x.Title %></a>
+								<a href="/watch?v=<%= x.id %>&m=f" class="title max-lines-2"><%= x.Title %></a>
                    <% } %>
 								<div>
                <a class="max-lines-2" style="color:#fff"  href="/channel?id=<%= video.Channel.id %>"><%=video.Channel.Name %></a>

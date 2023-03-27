@@ -174,7 +174,7 @@ module.exports = function (app, config, renderTemplate) {
   });
 
   app.get("/watch", async (req, res) => {
-    const { v, e, r, f, t, quality: q, a, universe } = req.query;
+    const { v, e, r, f, m, quality: q, a, universe } = req.query;
 
     if (!v) {
       return res.redirect("/");
@@ -188,10 +188,7 @@ module.exports = function (app, config, renderTemplate) {
     const u = await media_proxy(v);
 
     const secure = [
-      "poketube.fun",
-      "poketube.site",
-      "poketube.online",
-      "poketube.xyz",
+      "poketube.fun"
     ].includes(req.hostname);
     const verify = req.hostname === "pt.zzls.xyz";
 
@@ -272,7 +269,7 @@ module.exports = function (app, config, renderTemplate) {
           wiki: data.wiki,
           f,
           t: config.t_url,
-          optout: t,
+          optout: m,
           badges,
           desc,
           comments,

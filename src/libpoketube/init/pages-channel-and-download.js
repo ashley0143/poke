@@ -150,19 +150,13 @@ module.exports = function (app, config, renderTemplate) {
       };
 
       const tj = await getChannelData(
-        `https://invid-api.poketube.fun/api/v1/channels/videos/${ID}/?sort_by=${
-          req.query.sort_by || "newest"
-        }${continuation}`
+        `https://invid-api.poketube.fun/api/v1/channels/videos/${ID}/?sort_by=${sort_by}${continuation}`
       );
       const shorts = await getChannelData(
-        `https://invid-api.poketube.fun/api/v1/channels/${ID}/shorts?sort_by=${
-          req.query.sort_by || "newest"
-        }${continuations}`
+        `https://invid-api.poketube.fun/api/v1/channels/${ID}/shorts?sort_by=${sort_by}${continuations}`
       );
       const stream = await getChannelData(
-        `https://invid-api.poketube.fun/api/v1/channels/${ID}/streams?sort_by=${
-          req.query.sort_by || "newest"
-        }${continuationl}`
+        `https://invid-api.poketube.fun/api/v1/channels/${ID}/streams?sort_by=${sort_by}${continuationl}`
       );
       const c = await getChannelData(
         `https://invid-api.poketube.fun/api/v1/channels/community/${ID}/`

@@ -816,15 +816,12 @@ width: fit-content;
              <div align="center">
     <% if (!isMobile) { %>  
             <div class="tags rec">
-                <% if (!sort) { %>  
+                <% if (sort == "newest") { %>  
 
               <a class="tag" style="background:var(--chip-background-hover)">
                 Recently Uploaded
               </a>
-                                                <a href="/dQw4w9WgXcQ" style="display:none;color:#fff;text-decoration:none;
-" class="tag c">
-           Oldest Uploaded
-              </a>
+                    
                   
                                 <a href="/channel?id=<%=ID%>&sort_by=popular" style="color:#fff;text-decoration:none;
 " class="tag c">
@@ -833,8 +830,9 @@ width: fit-content;
                   
 
                    <% } %>
-
                           <% if (sort) { %>  
+
+                          <% if (sort != "newest") { %>  
 
             <a  href="/channel?id=<%=ID%>" style="color:#fff;text-decoration:none;
 " class="tag c" >
@@ -844,6 +842,7 @@ width: fit-content;
                                 <a  style="background:var(--chip-background-hover)" class="tag">
            Popular
               </a>
+                   <% } %>
                    <% } %>
 
               

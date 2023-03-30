@@ -7,9 +7,10 @@
   <a href="https://poketube.fun/watch?v=9sJUDx7iEJw&quality=medium&=sjohgteojgytrueugtye4jhtytjrjnyıı">
    <img src="https://poketube.fun/css/logo.svg" width="500"> </a><br>
    <img src='https://raw.githubusercontent.com/squiresgrant/personal-site/main/badges/firefox4.gif'>
- <a href="https://tosdr.org/en/service/7114">
+<div align=center> <a href="https://tosdr.org/en/service/7114">
     <img src="https://shields.tosdr.org/en_7114.svg"/>
-</a>
+</a><img src="https://raw.githubusercontent.com/vshymanskyy/StandWithUkraine/main/badges/StandWithUkraine.svg"></div>
+
 </div>
 
  
@@ -80,5 +81,4 @@ We additionally use the GNU Coding Standard, see https://www.gnu.org/prep/standa
 
 <a href="https://codeberg.org/Ashley/poketube/src/branch/main/LICENSE"> <img src="https://www.gnu.org/graphics/gplv3-88x31.png"> </a>
 #
-<div align=center><img src="https://raw.githubusercontent.com/vshymanskyy/StandWithUkraine/main/badges/StandWithUkraine.svg"></div>
 

@@ -7,6 +7,9 @@
   <a href="https://poketube.fun/watch?v=9sJUDx7iEJw&quality=medium&=sjohgteojgytrueugtye4jhtytjrjnyıı">
    <img src="https://poketube.fun/css/logo.svg" width="500"> </a><br>
    <img src='https://raw.githubusercontent.com/squiresgrant/personal-site/main/badges/firefox4.gif'>
+ <a href="https://tosdr.org/en/service/7114">
+    <img src="https://shields.tosdr.org/en_7114.svg"/>
+</a>
 </div>
 
  

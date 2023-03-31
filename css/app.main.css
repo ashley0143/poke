@@ -1,3 +1,34 @@
+@font-face {
+  font-family: "PokeTube Flex";
+  src: url("https://p.poketube.fun/https://cdn.glitch.global/43b6691a-c8db-41d4-921c-8cf6aa0d9108/robotoflex.ttf?v=1668343428681");
+  font-style: normal;
+  font-stretch: 1% 800%;
+  font-display: swap;
+}
+
+
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 900;
+  font-display: swap;
+  src: url(https://p.poketube.fun/https://fonts.gstatic.com/s/inter/v12/UcCO3FwrK3iLTeHuS_fvQtMwCp50KnMw2boKoduKmMEVuBWYMZg.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Sigmar One';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url(https://p.poketube.fun/https://fonts.gstatic.com/s/sigmarone/v16/co3DmWZ8kjZuErj9Ta3dk6M.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url(https://p.poketube.fun/https://fonts.gstatic.com/s/roboto/v30/KFOlCnqEu92Fr1MmEU9vAw.ttf) format('truetype');
+}
+
 :root {
   --chip-background-hover: #3f3f3f;
 }

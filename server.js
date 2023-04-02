@@ -33,14 +33,7 @@
   const { sinit } = require("./src/libpoketube/init/superinit.js");
   const u = await media_proxy();
   initlog("Loading...");
-  initlog(
-    "[Welcome] Welcome To PokeTube :3 " +
-      "Running " +
-      `Node ${process.version} - V8 v${
-        process.versions.v8
-      } -  ${process.platform.replace("linux", "GNU/Linux")} ${
-        process.arch
-      } Server - libpt ${version}`
+  initlog("[Welcome] Welcome To PokeTube :3 " +"Running " +`Node ${process.version} - V8 v${process.versions.v8} -  ${process.platform.replace("linux", "GNU/Linux")} ${process.arch} Server - libpt ${version}`
   );
 
   const {
@@ -70,10 +63,7 @@
   app.enable("trust proxy");
 
   const renderTemplate = async (res, req, template, data = {}) => {
-    res.render(
-      modules.path.resolve(`${templateDir}${modules.path.sep}${template}`),
-      Object.assign(data)
-    );
+    res.render(modules.path.resolve(`${templateDir}${modules.path.sep}${template}`),Object.assign(data));
   };
 
   const random_words = [
@@ -102,6 +92,7 @@ this is our config file,you can change stuff here
     t_url: "https://t.poketube.fun/", //  def matomo url
   };
 
+  try {
   app.use(function (req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
     if (req.secure) {
@@ -117,42 +108,45 @@ this is our config file,you can change stuff here
 
   app.use(function (request, response, next) {
     if (config.enablealwayshttps && !request.secure) {
-      return response.redirect("https://" + request.headers.host + request.url);
+      if (!/^https:/i.test(request.headers["x-forwarded-proto"] || request.protocol)) {
+        return response.redirect("https://" + request.headers.host + request.url);
+      }
     }
 
     next();
   });
 
   app.use(function (req, res, next) {
-   res.header("X-PokeTube-Youtube-Client-Name", "1");
-   res.header("X-PokeTube-Youtube-Client-Version", "2.20210721.00.00");
-   res.header("X-PokeTube-Speeder", "6 seconds no cache, 780ms w/cache") 
+    res.header("X-PokeTube-Youtube-Client-Name", "1");
+    res.header("X-PokeTube-Youtube-Client-Version", "2.20210721.00.00");
+    res.header("X-PokeTube-Speeder", "6 seconds no cache, 780ms w/cache");
     if (req.url.match(/^\/(css|js|img|font)\/.+/)) {
-      res.setHeader(
-        "Cache-Control",
-        "public, max-age=" + config.cacher_max_age
-      ); // cache header
+      res.setHeader("Cache-Control","public, max-age=" + config.cacher_max_age); // cache header
       res.setHeader("poketube-cacher", "STATIC_FILES");
     }
-    
+
     const a = 890;
     if (!req.url.match(/^\/(css|js|img|font)\/.+/)) {
-      res.setHeader(
-        "Cache-Control",
-        "public, max-age=" + a
-      ); // cache header
+      res.setHeader("Cache-Control", "public, max-age=" + a); // cache header
       res.setHeader("poketube-cacher", "PAGE");
     }
     next();
   });
 
-  initlog("[OK] Load headers")
+  initlog("[OK] Load headers");
+  } catch {
+  initlog("[FAILED] load headers")
+  }
   
+  try {
   app.get("/robots.txt", (req, res) => {
     res.sendFile(__dirname + "/robots.txt");
   });
-  
-  initlog("[OK] Load robots.txt")
+   
+  initlog("[OK] Load robots.txt");
+  } catch {
+    initlog("[FAILED] load robots.txt")
+  }
   
   sinit(app, config, renderTemplate);
 

@@ -27,10 +27,10 @@ function getJson(str) {
 }
 
 const pkg = require("../../../package.json");
-const ver = "v23.2403-IcHi-MAJOR-stable-nonLTS-git";
+const ver = "v23.0203-IcHi-MAJOR-stable-nonLTS-git";
 const branch = "master";
 const codename = "ichigo";
-const versionnumber = "238";
+const versionnumber = "239";
 
 module.exports = function (app, config, renderTemplate) {
   app.get("/embed/:v", async function (req, res) {
@@ -158,6 +158,7 @@ module.exports = function (app, config, renderTemplate) {
       piwik: "master",
       process: process.versions,
       dependencies: pkg.dependencies,
+      poketubeapicode: btoa(Date.now() + invidious.software.version)
     };
 
     res.json(response);

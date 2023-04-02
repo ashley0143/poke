@@ -650,10 +650,10 @@ display: block; !important;" autoplay controls
                                                                            <% } %>                
 
                         
-    <% if (  video.Subtitles.Subtitle) { %>  
+    <% if (  video?.Subtitles?.Subtitle) { %>  
       
      <%  if (Array.isArray( video.Subtitles.Subtitle)) { %> 
-   <% video.Subtitles.Subtitle.forEach(x => { %>
+   <% video?.Subtitles?.Subtitle?.forEach(x => { %>
      <track src="/api/subtitles?v=<%=inv_vid.videoId%>&h=<%= x.language %>" label="<%= x.language.replace("United States","Simplified - USA") %>" kind="subtitles">      
      
         <img src="https://t.poketube.fun/t/rep.gif?v=<%=btoa(inv_vid.videoId)%>&h=<%= x.language %>" id="subtitle_usage_rate" style="border:0;width: 0;visibility: hidden;"> 
@@ -739,8 +739,8 @@ display: block; !important;" autoplay controls
         	<div class="video-info-panel gradient">  
             <div class="video-title t" style="font-family:Inter;font-weight:bold;line-break: auto;max-width: max-content;margin: 0;margin-bottom: 0;padding: 0;"
                  
-                                <% if (video.Title !== k.Video.Title) { %>
-                 title="Non-Translated title : <%=video.Title%>"
+                                <% if (video?.Title !== k.Video.Title) { %>
+                 title="Non-Translated title : <%=video?.Title%>"
                <% } %> 
             > <%-k.Video.Title%> </div>
           
@@ -749,7 +749,7 @@ display: block; !important;" autoplay controls
                <div class="video-chnl-info-pill"  name="chnl">
   <a name="chnl"></a>
 
-				<a href="/channel?id=<%=video.Channel.id%>" class="avatar">
+				<a href="/channel?id=<%=video?.Channel.id%>" class="avatar">
 					<img loading="lazy" src="https://p.poketube.fun/<%= k.Video.Channel.Avatar[1].$t %>">
 				</a>
 				<div class="name" >
@@ -758,7 +758,7 @@ display: block; !important;" autoplay controls
 						<a title="<%=k.Video.Channel.Name%> " class="video-info-pill-channelname">  <%=k.Video.Channel.Name%> 
               </a>   
             
-              <% if (!video.Channel.Name.endsWith(' - Topic')) { %>  
+              <% if (!video?.Channel.Name.endsWith(' - Topic')) { %>  
                <% if (badges) { %> 
               <% if (badges.tooltip === "Verified") { %> 
 <i class="fa-solid fa-badge-check" title="<%=badges.tooltip%>"></i>
@@ -777,7 +777,7 @@ display: block; !important;" autoplay controls
 
 				</div>
 	 
-				<button class="subscribe-button"><a href="https://www.youtube.com/channel/<%=video.Channel.id%>?view_as=subscriber?sub_confirmation=1">Suscribe</a></button>
+				<button class="subscribe-button"><a href="https://www.youtube.com/channel/<%=video?.Channel.id%>?view_as=subscriber?sub_confirmation=1">Suscribe</a></button>
 			</div>
                
                      <div>
@@ -813,7 +813,7 @@ display: block; !important;" autoplay controls
             </div>
 					</a>
   
-   <% if (!video.Channel.Name.endsWith(' - Topic')) { %> 
+   <% if (!video?.Channel.Name.endsWith(' - Topic')) { %> 
     <% if (!inv_vid.title.endsWith('Audio)')) { %> 
    <% if (support != undefined) { %> 
 
@@ -835,7 +835,7 @@ display: block; !important;" autoplay controls
 
       <% if (support == undefined) { %> 
 
- <% if (!video.Channel.Name.endsWith(' - Topic')) { %> 
+ <% if (!video?.Channel.Name.endsWith(' - Topic')) { %> 
     <% if (!inv_vid.title.endsWith('Audio)')) { %> 
 
       <div class="new-button button-encryption">
@@ -851,9 +851,9 @@ display: block; !important;" autoplay controls
 
    </a>
                                                                           <% }%>                                                                              <% }%>      
-                                                                                                                   <% }%>                                                                                                                          <% if (video.Channel.Name.endsWith(' - Topic') || inv_vid.title.endsWith('Audio)')) { %> 
+                                                                                                                   <% }%>                                                                                                                          <% if (video?.Channel.Name.endsWith(' - Topic') || inv_vid.title.endsWith('Audio)')) { %> 
                                                             
-                            <% if (video.Channel.Name.endsWith(' - Topic') || inv_vid.title.endsWith('Audio)'))  { %> 
+                            <% if (video?.Channel.Name.endsWith(' - Topic') || inv_vid.title.endsWith('Audio)'))  { %> 
                                                  					<a  class="new-button" title="open this song in poketube music player :3" style="color:var(--text-color);text-decoration: none;" href="/music?v=<%=inv_vid.videoId%>">
                                                                                                     <div class="pill-button">
 
@@ -867,7 +867,7 @@ display: block; !important;" autoplay controls
     
     
                                                     
- <% if (!video.Channel.Name.endsWith(' - Topic')) { %> 
+ <% if (!video?.Channel.Name.endsWith(' - Topic')) { %> 
     <% if (!inv_vid.title.endsWith('Audio)')) { %>                         
       <div class="new-button button-lite" style=";margin-left: -4px;">
         <a title="Low Bandwidth? try PokeTube Lite!" style="color:var(--text-color);text-decoration: none" href="/lite?v=<%=inv_vid.videoId%>">
@@ -897,8 +897,7 @@ display: block; !important;" autoplay controls
          	<summary style="color:#fff;">
                                 <%=engagement.viewCount.toLocaleString()%> Views  •  <%=date%> • Click to toggle off description                                             </summary>
    
-     <% if (String(video.Description) != "[object Object]")  { %>
-         <% if (String(inv_vid.descriptionHtml) != "undefined")  { %>
+          <% if (String(inv_vid.descriptionHtml) != "undefined")  { %>
          <% if (String(inv_vid.descriptionHtml) != " ")  { %>
            <% if (String(inv_vid.descriptionHtml) != "<p></p>")  { %>
 
@@ -908,10 +907,8 @@ display: block; !important;" autoplay controls
               <%-String(inv_vid.descriptionHtml).replace(/\n/g, " <br> ").replace(/twitter\.com/g, "nitter.net").replace(/reddit\.com/g, "teddit.net") %>
                    </div> 
                           <% } %>                          <% } %>                                  <% } %>          
-                          <% } %>          
-                            
-                         <% if (String(video.Description) != "[object Object]")  { %>
-         <% if (String(inv_vid.descriptionHtml) != "undefined")  { %>
+                             
+          <% if (String(inv_vid.descriptionHtml) != "undefined")  { %>
          <% if (String(inv_vid.descriptionHtml) != " ")  { %>
            <% if (String(inv_vid.descriptionHtml) == "<p></p>")  { %>
 
@@ -921,15 +918,12 @@ display: block; !important;" autoplay controls
               <%-String(linkify(inv_vid.description)).replace(/\n/g, " <br> ").replace(/twitter\.com/g, "nitter.net").replace(/reddit\.com/g, "teddit.net") %>
                    </div> 
                           <% } %>                          <% } %>                                  <% } %>          
-                          <% } %>          
-                            
+                             
   
-    <% if (String(video.Description) == "[object Object]")  { %>
-               <% if (String(inv_vid.descriptionHtml) == " ")  { %>
+                <% if (String(inv_vid.description) == " ")  { %>
 
       <p> No Description On this Video ( sad innit :c )</p>
-                          <% } %>               
-                          <% } %>               
+                           <% } %>               
 
                             
                    <% if (wiki.extract_html) { %> 
@@ -971,12 +965,12 @@ display: block; !important;" autoplay controls
 
                                                  <hr style="clear: both;display: block;border: none;border-bottom: 0.5px solid #2f2f2f;/*! width: 4.5em; */height: 0;">
         
-     <%  if (Array.isArray(video.Tags.Tag)) { %> 
+     <%  if (Array.isArray(video?.Tags.Tag)) { %> 
 
                             <div class="video-title" style="color:var(--text-color);font-family:var(--text-font-primary);;font-weight:var(--text-header-weight);font-stretch: extra-expanded;margin-top: 10px;margin-bottom: 10px;">Tags</div>
                       <div class="tags">
         
- <% video.Tags.Tag.forEach(x => { %>
+ <% video?.Tags.Tag.forEach(x => { %>
  <div class="tag">
    <a href="/hashtag/<%=x %>" style="color:var(--text-color)">
    <%=x %>
@@ -1031,7 +1025,7 @@ display: block; !important;" autoplay controls
 					</a>
  
    
- <% if (!video.Channel.Name.endsWith(' - Topic')) { %> 
+ <% if (!video?.Channel.Name.endsWith(' - Topic')) { %> 
     <% if (!inv_vid.title.endsWith('Audio)')) { %> 
 
 					<a title="Encryption duh" style="color:var(--text-color);text-decoration: none;" href="/encryption?v=<%=inv_vid.videoId%>">
@@ -1040,9 +1034,9 @@ display: block; !important;" autoplay controls
    </a>
                                                                           <% }%>                                                                              <% }%>      
   
-                                                                             <% if (video.Channel.Name.endsWith(' - Topic') || inv_vid.title.endsWith('Audio)')) { %> 
+                                                                             <% if (video?.Channel.Name.endsWith(' - Topic') || inv_vid.title.endsWith('Audio)')) { %> 
                                                             
-                            <% if (video.Channel.Name.endsWith(' - Topic') || inv_vid.title.endsWith('Audio)'))  { %> 
+                            <% if (video?.Channel.Name.endsWith(' - Topic') || inv_vid.title.endsWith('Audio)'))  { %> 
                                                  					<a title="open this song in poketube music player :3" style="color:var(--text-color);text-decoration: none;" href="/music?v=<%=inv_vid.videoId%>">
           <i class="fa-light fa-music"></i>
                   Open In Music Player
@@ -1202,8 +1196,8 @@ display: block; !important;" autoplay controls
 Recommended Videos
     </div>
                
-             <a style="color:#fff" href="/channel?id=<%=video.Channel.id %>" class="tag">
-               From <%=video.Channel.Name %>
+             <a style="color:#fff" href="/channel?id=<%=video?.Channel.id %>" class="tag">
+               From <%=k.Video.Channel.Name%> 
                </a>
                
   </div>
@@ -1645,7 +1639,7 @@ videoElement.addEventListener("fullscreenchange", () => {
    
         <!-- VIDEO -->
         <img src="<%=t%>t/rep.gif?video_id=<%=btoa(inv_vid.videoId)%>" style="width: 0;visibility: hidden;" id="videoID">
-        <img src="<%=t%>t/rep.gif?channel_ID=<%=btoa(video.Channel.id)%>" style="width: 0;visibility: hidden;" id="channel">
+        <img src="<%=t%>t/rep.gif?channel_ID=<%=btoa(video?.Channel.id)%>" style="width: 0;visibility: hidden;" id="channel">
    
 
         <!-- END <%=t%> -->  

@@ -631,13 +631,17 @@ white-space: nowrap;text-decoration: none;" href="/feeds/videos.xml?channel_id=<
   <% } %>
       <% } %>
     
-  <%  if (Array.isArray(stream.videos)) { %> 
+ <%  if (Array.isArray(stream.videos)) { %> 
+   <%  if (stream.videos[0]) { %> 
+
 <%  if (turntomins(stream.videos[0].lengthSeconds)  != "aN:aN" ) { %> 
 
                    <a href="/channel?id=<%=ID%>&tab=live" class="tab">Live</a>
   <% } %>
       <% } %>
-    
+
+      <% } %>
+
      <a  href="/channel?id=<%=ID%>&tab=community"  class="tab active">Community</a>
  
                  <a  href="/channel?id=<%=ID%>&tab=about" class="tab">About</a>
@@ -812,15 +816,12 @@ width: fit-content;
              <div align="center">
     <% if (!isMobile) { %>  
             <div class="tags rec">
-                <% if (!sort) { %>  
+                <% if (sort == "newest") { %>  
 
               <a class="tag" style="background:var(--chip-background-hover)">
                 Recently Uploaded
               </a>
-                                                <a href="/dQw4w9WgXcQ" style="display:none;color:#fff;text-decoration:none;
-" class="tag c">
-           Oldest Uploaded
-              </a>
+                    
                   
                                 <a href="/channel?id=<%=ID%>&sort_by=popular" style="color:#fff;text-decoration:none;
 " class="tag c">
@@ -829,8 +830,9 @@ width: fit-content;
                   
 
                    <% } %>
-
                           <% if (sort) { %>  
+
+                          <% if (sort != "newest") { %>  
 
             <a  href="/channel?id=<%=ID%>" style="color:#fff;text-decoration:none;
 " class="tag c" >
@@ -840,6 +842,7 @@ width: fit-content;
                                 <a  style="background:var(--chip-background-hover)" class="tag">
            Popular
               </a>
+                   <% } %>
                    <% } %>
 
               

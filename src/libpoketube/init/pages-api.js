@@ -27,10 +27,10 @@ function getJson(str) {
 }
 
 const pkg = require("../../../package.json");
-const ver = "v23.1203-MicHi-MAJOR-stable-git";
-const branch = "master";
+const ver = "v23.1203.1-MicHi-MAJOR-LTS-git";
+const branch = "lts";
 const codename = "michiru";
-const versionnumber = "235";
+const versionnumber = "235.1";
 
 module.exports = function (app, config, renderTemplate) {
   app.get("/embed/:v", async function (req, res) {

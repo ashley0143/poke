@@ -15,19 +15,5 @@
         "branch": "dev"
       }
     }
-  ],
-  [
-    "pt.zzls.xyz",
-    {
-      "uri": "https://pt.zzls.xyz",
-      "CLOUDFLARE": false,
-      "piwik": false,
-      "region": "🇨🇱",
-      "software": {
-        "name": "poketube-vanilla",
-        "version": "lastest",
-        "branch": "master"
-      }
-    }
   ]
 ]

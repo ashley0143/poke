@@ -324,6 +324,17 @@ text-transform:uppercase;
   max-inline-size: 164ch;
   justify-content: space-around;
  } 
+      .s{
+width: 23em;
+margin: auto;
+  margin-right: auto;
+  margin-left: auto;
+margin-left: -3.5em;
+margin-right: -79px;
+      }
+        .shorts-title{
+    font-family:PokeTube flex,sans-serif;font-weight: 1000;font-stretch: ultra-expanded;position: absolute;margin-top: -43px;background: #0009;white-space: -moz-pre-wrap !important;white-space: -pre-wrap;white-space: -o-pre-wrap;white-space: pre-wrap;word-wrap: break-word;white-space: -webkit-pre-wrap;word-break: break-all;white-space: normal;width: 12.87em;margin-left: 145px;
+  } 
       .channel-page .video-grid {
   background-color: black;
 }
@@ -449,6 +460,7 @@ text-transform:uppercase;
   body {
     background-color:#111
   }
+  
     
  .subscribe-button:hover {
 	text-decoration: none !important;
@@ -897,19 +909,22 @@ width: fit-content;
  <% } %>
 
  
-    	<div class="video-grid" >
+    	<div class="video-grid" style="max-inline-size: 92em !important;
+margin-left: 8em;" >
             
    
              <%  if (Array.isArray( shorts.videos)) { %> 
 
    <% shorts.videos.forEach (x =>  { %>
-			<a href="/watch?v=<%- x.videoId %>" class="video">
-				<div class="thumbnail" style="background-image: url('https://p.poketube.fun/https://i.ytimg.com/vi/<%= x.videoId %>/hqdefault.jpg?sqp=-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLBy_x4UUHLNDZtJtH0PXeQGoRFTgw');border-radius: 10px;"><span class="video-length"><%- turntomins(x.lengthSeconds) %></span></div>
-				<div class="info">
-					<span class="title max-lines-2" style="font-family:PokeTube flex,sans-serif;font-weight: 1000;font-stretch: ultra-expanded;"><%- x.title %></span>
+     
+			<a href="/shorts/<%- x.videoId %>" class="s" >
+				<img load="lazy" src='https://p.poketube.fun/https://i.ytimg.com/vi/<%= x.videoId %>/hqdefault.jpg?sqp=-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLBy_x4UUHLNDZtJtH0PXeQGoRFTgw' style="border-radius: 10px;width: 31em;object-fit: cover;aspect-ratio: 19/9;height: 20em;object-position: 101% 51%;clip-path: inset(2px 139px);">
+          
+          
+          
+ 					<span class="title max-lines-2 shorts-title"><%- x.title %></span>
 			 
-            </div>
- 			</a>	
+  			</a>	
  		 	               <% }) %>   
  <% } %>
 

@@ -1,0 +1,9 @@
+{
+    "tubeApi": "https://inner-api.poketube.fun/api/",
+    "invapi": "https://invid-api.poketube.fun/api/v1",
+    "dislikes": "https://returnyoutubedislikeapi.com/votes?videoId=",
+    "invchannel": "https://invid-api.poketube.fun/api/v1",
+    "cacher_max_age": "1800",
+    "enablealwayshttps": true,
+    "t_url": "https://t.poketube.fun/" 
+  }

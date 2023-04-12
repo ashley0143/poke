@@ -31,6 +31,7 @@
   } = require("./src/libpoketube/libpoketube-initsys.js");
   const media_proxy = require("./src/libpoketube/libpoketube-video.js");
   const { sinit } = require("./src/libpoketube/init/superinit.js");
+  const config = require("./config.json");
   const u = await media_proxy();
   initlog("Loading...");
   initlog("[Welcome] Welcome To PokeTube :3 " +"Running " +`Node ${process.version} - V8 v${process.versions.v8} -  ${process.platform.replace("linux", "GNU/Linux")} ${process.arch} Server - libpt ${version}`
@@ -78,19 +79,6 @@
     "Minecraft movie trailer",
     "monke",
   ];
-
-  /*
-this is our config file,you can change stuff here
-*/
-  const config = {
-    tubeApi: "https://inner-api.poketube.fun/api/",
-    invapi: "https://invid-api.poketube.fun/api/v1",
-    dislikes: "https://returnyoutubedislikeapi.com/votes?videoId=",
-    invchannel: "https://invid-api.poketube.fun/api/v1",
-    cacher_max_age: "1800",
-    enablealwayshttps: true, //enables always https on the server
-    t_url: "https://t.poketube.fun/", //  def matomo url
-  };
 
   try {
   app.use(function (req, res, next) {

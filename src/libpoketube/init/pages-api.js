@@ -27,10 +27,10 @@ function getJson(str) {
 }
 
 const pkg = require("../../../package.json");
-const ver = "v23.0203-IcHi-MAJOR-stable-nonLTS-git";
+const ver = "v23.1303-aStFO-MAJOR-stable-nonLTS-git";
 const branch = "master";
-const codename = "ichigo";
-const versionnumber = "239";
+const codename = "astolfo";
+const versionnumber = "240";
 
 module.exports = function (app, config, renderTemplate) {
   app.get("/embed/:v", async function (req, res) {

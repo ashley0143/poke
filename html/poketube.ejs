@@ -1,4 +1,5 @@
-  <% if (!isMobile) { %> 
+<!-- PTHTML START -->
+<% if (!isMobile) { %> 
 <!--
   HEYOOOOOOOOOO!!!!!!
 
@@ -393,7 +394,7 @@ text-shadow: 1px 1px #000,1px 1px 0.1px #000;!important;
                                             		 	               <% } %>   
 
  
- <style>
+ <style data-universe="2">
    :root {
        --div-gradient: linear-gradient(to bottom right, #9666F7, #B37C6B);
    }                                                       
@@ -542,21 +543,16 @@ But Please note that unofficial instances can add the same lock icon, so please 
                   <i style="display: block;margin-left: auto;margin-right: auto;" class="fa-light  fa-ellipsis-vertical"></i>
  			</label>
 			<div class="dropdown__menu" style="right: -1em;">
-         						<a href="https://redirect.poketube.fun/watch?v=<%=inv_vid.videoId%>" style="text-decoration: none;" class="dropdown__item">
-                            <i  class="fa-light fa-rocket-launch"></i>
-                      Switch Instance
-        </a>
-
-        				<a href="/custom-theme" style="text-decoration: none;" class="dropdown__item">
+        				<a href="/customize" style="text-decoration: none;" class="dropdown__item">
                             <i  class="fa-light fa-brush"></i>
-                      Customize Poketube
+                      Customize PokeTube
         </a>
     
 
         
            						<a href="/video/upload" style="text-decoration: none;" class="dropdown__item">
                             <i  class="fa-light fa-video"></i>
-Create
+Upload
         </a>
         
  
@@ -838,11 +834,11 @@ display: block; !important;" autoplay controls
     <% if (!inv_vid.title.endsWith('Audio)')) { %> 
 
       <div class="new-button button-encryption">
-					<a   title="Encryption duh" style="color:var(--text-color);text-decoration: none;" href="/encryption?v=<%=inv_vid.videoId%>">
+					<a   title="Switch PokeTube Instance :3" style="color:var(--text-color);text-decoration: none;" href="https://redirect.poketube.fun/watch?v=<%=inv_vid.videoId%>">
                                         <div class="pill-button">
 
-               <i class="fa-light fa-shield"></i>
-                Encryption
+               <i class="fa-light fa-rocket-launch"></i>
+                Switch Instance
             </div>
             
             </div>
@@ -1188,8 +1184,12 @@ display: block; !important;" autoplay controls
       <div style="text-align: left;" class="auto-play">
                                 <label for="continue">AutoPlay:</label> 
                                 <input name="continue" id="continue" type="checkbox" >
+          
+                                      <a href="/encryption?v=<%=inv_vid.videoId%>"><i class="fa-duotone fa-shield-halved " style="margin-left: 13em;"></i></a>
+
                              </div>
-  
+
+   
   <div class="tags rec" >
         <div class="tag" style="background:var(--chip-background-hover)">
 Recommended Videos
@@ -1208,8 +1208,8 @@ Recommended Videos
    
 </div>   
                                 
-                                            
-                              <% if (!f) { %> 
+                                
+                                <% if (!f) { %> 
      <% k.Video.Recommendations.Video.forEach(x => { %>       
  						<div class="video fade-in"  >
                     <% if (!optout) { %> 
@@ -1339,8 +1339,7 @@ Recommended Videos
 
     
 <script>
-// @license magnet:?xt=urn:btih:1f739d935676111cfff4b4693e3816e664797050&dn=gpl-3.0.txt GPL-3.0-or-later  
-function removeParam(paramName) {
+ function removeParam(paramName) {
   let searchParams = new URLSearchParams(window.location.search);
   searchParams.delete(paramName);
   if (history.replaceState) {
@@ -1402,7 +1401,10 @@ if (/[?&]autoplay=/.test(location.search)) {
 }
 </script>
 
-<script>
+<script data-api-endpoint="/api/">
+  /*
+  * Loads modules
+  */
   try {
   const app_main = "/static/app.js?ver=<%-btoa("1f739d935676111cfff4b4693e3816e664797050" + k.Video.Recommendations.Video[0].id ) %>";
   const script = document.createElement("script");

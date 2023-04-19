@@ -80,6 +80,13 @@
     "monke",
   ];
 
+  const initPokeTube = function() {
+  sinit(app, config, renderTemplate);
+  initlog("inited super init")
+  init(app);    
+  initlog("inited app")
+  }
+  
   try {
   app.use(function (req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
@@ -136,7 +143,5 @@
     initlog("[FAILED] load robots.txt")
   }
   
-  sinit(app, config, renderTemplate);
-
-  init(app);
+  initPokeTube()
 })();

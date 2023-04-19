@@ -17,21 +17,23 @@ if (style.styleSheet){
 }
 
 var script_tag = document.createElement('script');
+
+
 script_tag.type = 'text/javascript';
+
 script_tag.text = localStorage.getItem("poke-custom-script");
+
 document.head.appendChild(script_tag);
 
 /*
  * This script adds the Plausible analytics telemetry code to the page for the
- * domain poketube.fun. The telemetry is opt-in by default, meaning that the
- * Plausible script will only be added if the user has not explicitly opted out
- * by setting the "plausible-enabled" key in local storage to "false".
- *
- * To opt out of telemetry, u can can set the "plausible-enabled" key to "false"
- * in local storage. The data collected by Plausible is anonymous and aggregated,
- * and no personal information is collected or stored.
- */
-if (window.location.hostname === "poketube.fun") {
+ * domain poketube.fun.
+*/
+
+var config = {}
+config.plausible_enabled = false
+
+if (window.location.hostname === "poketube.fun" && config.plausible_enabled == true) {
   const plausble_main = "https://telemetry.poketube.fun/js/p.js";
   const script = document.createElement("script");
   const isTrackingEnabled = localStorage.getItem("plausible-enabled") !== "false";

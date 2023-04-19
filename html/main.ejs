@@ -930,12 +930,27 @@ padding: 3px;
    #more-buttons {
       column-width: 10em;
       column-count: 3;
-      column-gap: 0;
+      column-gap: 0; 
    }
    #more-buttons span { display: block; }
    #more-buttons span a { display: inline-block; }
-</style>
-  
+</style>                
+<script type="application/manifest+json">
+      {
+        "name": "PokeTube Mobile TWA",
+        "short_name": "PokeTube",
+        "start_url": "/",
+        "display": "standalone",
+        "background_color": "#ffffff",
+        "icons": [
+          {
+            "src": "/css/yt-ukraine.svg",
+            "sizes": "215x215",
+             "type": "image/svg+xml"
+        }
+        ]
+      }
+</script>
   <body>
 
  <div class="app" >

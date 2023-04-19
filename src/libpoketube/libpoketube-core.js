@@ -29,6 +29,11 @@ const config = {
   t_url: "https://t.poketube.fun/", //  def matomo url
 };
 
+function initerr(args){
+  console.error("[LIBPT CORE ERROR]" + args) 
+}
+
+
 // Util functions
 function getJson(str) {
   try {
@@ -87,7 +92,7 @@ async function video(v) {
 
     var comments = await getJson(inv_comments);
   } catch (error) {
-    console.error("Error getting comments", error);
+    initerr("Error getting comments", error);
     var comments = "";
   }
 
@@ -99,7 +104,7 @@ async function video(v) {
     );
     vid = await getJson(videoInfo);
   } catch (error) {
-    console.error("Error getting video info", error);
+    initerr("Error getting video info", error);
   }
 
   if (!vid) {
@@ -118,7 +123,7 @@ async function video(v) {
         .then((res) => res.text())
         .then((xml) => getJson(toJson(xml)));
     } catch (error) {
-      console.error("Error getting channel info", error);
+      initerr("Error getting channel info", error);
       var a = "";
     }
 
@@ -167,7 +172,7 @@ async function video(v) {
 
       return cache[v].result;
     } catch (error) {
-      console.error("Error getting video", error);
+      initerr("Error getting video", error);
     }
   }
 }

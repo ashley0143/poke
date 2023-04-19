@@ -1,22 +1,5 @@
-const {
-  fetcher,
-  core,
-  wiki,
-  musicInfo,
-  modules,
-  version,
-  initlog,
-  init,
-} = require("../libpoketube-initsys.js");
-const {
-  IsJsonString,
-  convert,
-  getFirstLine,
-  capitalizeFirstLetter,
-  turntomins,
-  getRandomInt,
-  getRandomArbitrary,
-} = require("../ptutils/libpt-coreutils.js");
+const { fetcher, core, wiki, musicInfo, modules, version, initlog, init, } = require("../libpoketube-initsys.js");
+const { IsJsonString, convert, getFirstLine, capitalizeFirstLetter, turntomins, getRandomInt, getRandomArbitrary} = require("../ptutils/libpt-coreutils.js");
 const media_proxy = require("../libpoketube-video.js");
 const atmos = require("../../../pokeatmosurls.json");
 
@@ -182,7 +165,7 @@ module.exports = function (app, config, renderTemplate) {
 
     const isVideoValid = await core.isvalidvideo(v);
     if (!isVideoValid) {
-      return res.redirect("/?fromerror=21");
+      return res.redirect("/?fromerror=21_video_not_valid");
     }
 
     const u = await media_proxy(v);
@@ -192,19 +175,17 @@ module.exports = function (app, config, renderTemplate) {
     ].includes(req.hostname);
     const verify = req.hostname === "pt.zzls.xyz";
 
-     function linkify(text) {
-      // regular expression to match URLs
-     const urlRegex = /(https?:\/\/[^\s]+)/g;
+function linkify(text) {
+    // regular expression to match URLs
+    const urlRegex = /(https?:\/\/[^\s]+)/g;
   
     return text.replace(urlRegex, (url) => {
     // wrap the URL in an <a> tag with the URL as the href attribute
     return `<a href="/api/redirect?u=${btoa(url.replace(/twitter\.com/g, "nitter.net").replace(/reddit\.com/g, "teddit.net").replace("https://youtube.com", "").replace("https://youtu.be", ""))}" target="_blank">${url}</a>`;
-  });
+   });
  }
      
-    
-    
-    core.video(v).then((data) => {
+core.video(v).then((data) => {
       try {
         const k = data.video;
         const json = data.json;
@@ -235,13 +216,11 @@ module.exports = function (app, config, renderTemplate) {
         if(inv_vid?.error === "The uploader has not made this video available in your country"){
           res.send("error : " + inv_vid.error + " please refresh the page please qt ")
         }
-          if(inv_vid?.error === "This video is not available"){
+      
+        if(inv_vid?.error === "This video is not available"){
           res.send("error : " + inv_vid.error + " please refresh the page please qt ")
         }
       
-      
-      
-
         renderTemplate(res, req, "poketube.ejs", {
           color: data.color,
           color2: data.color2,
@@ -279,7 +258,7 @@ module.exports = function (app, config, renderTemplate) {
         });
      } catch (error) {
       console.error(error);
-       return res.redirect("/?fromerror=41");
+       return res.redirect("/?fromerror=41_generic_error");
       }
      });
   });
@@ -291,18 +270,7 @@ module.exports = function (app, config, renderTemplate) {
       const info = await modules.fetch("http://ip-api.com/json/");
       const ip = await info.json();
 
-      const {
-        video: k,
-        json,
-        engagement,
-        comments: inv_comments,
-        vid: inv_vid,
-      } = await core.video(v);
-
-      if (!k || !json || !json.Title) {
-        res.redirect("/");
-        return;
-      }
+      const {video: k,json,engagement,comments: inv_comments,vid: inv_vid,} = await core.video(v);
 
       const data = await core.video(v);
       const color = data.color;
@@ -314,11 +282,6 @@ module.exports = function (app, config, renderTemplate) {
 
       const d = desc.toString().replace(/\n/g, " <br> ");
       const comments = inv_comments || "Disabled";
-
-      const url =
-        q === "medium"
-          ? `https://inv.vern.cc/latest_version?id=${v}&itag=18&local=true`
-          : null;
 
       const templateData = {
         color,
@@ -353,7 +316,7 @@ module.exports = function (app, config, renderTemplate) {
       renderTemplate(res, req, "lite.ejs", templateData);
     } catch (error) {
       console.error(error);
-      res.redirect("/");
+      res.redirect("/?err=" + error);
     }
   });
 

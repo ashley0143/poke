@@ -187,7 +187,7 @@ function linkify(text) {
      
 core.video(v).then((data) => {
       try {
-        const k = data.video;
+        const k = data?.video;
         const json = data.json;
         const engagement = data.engagement;
         const inv_comments = data.comments || "Disabled";

@@ -3,6 +3,17 @@ const { IsJsonString, convert, getFirstLine, capitalizeFirstLetter, turntomins, 
 const media_proxy = require("../libpoketube-video.js");
 const atmos = require("../../../pokeatmosurls.json");
 
+
+function linkify(text) {
+    // regular expression to match URLs
+    const urlRegex = /(https?:\/\/[^\s]+)/g;
+  
+    return text.replace(urlRegex, (url) => {
+    // wrap the URL in an <a> tag with the URL as the href attribute
+    return `<a href="/api/redirect?u=${btoa(url.replace(/twitter\.com/g, "nitter.net").replace(/reddit\.com/g, "teddit.net").replace("https://youtube.com", "").replace("https://youtu.be", ""))}" target="_blank">${url}</a>`;
+   });
+ }
+
 const sha384 = modules.hash;
 const fetch = modules.fetch;
 const htmlToText = require("html-to-text");
@@ -175,15 +186,6 @@ module.exports = function (app, config, renderTemplate) {
     ].includes(req.hostname);
     const verify = req.hostname === "pt.zzls.xyz";
 
-function linkify(text) {
-    // regular expression to match URLs
-    const urlRegex = /(https?:\/\/[^\s]+)/g;
-  
-    return text.replace(urlRegex, (url) => {
-    // wrap the URL in an <a> tag with the URL as the href attribute
-    return `<a href="/api/redirect?u=${btoa(url.replace(/twitter\.com/g, "nitter.net").replace(/reddit\.com/g, "teddit.net").replace("https://youtube.com", "").replace("https://youtu.be", ""))}" target="_blank">${url}</a>`;
-   });
- }
      
 core.video(v).then((data) => {
       try {
@@ -267,6 +269,7 @@ core.video(v).then((data) => {
     const { v, e, r, f, t, quality: q } = req.query;
 
     try {
+      
       const info = await modules.fetch("http://ip-api.com/json/");
       const ip = await info.json();
 
@@ -301,6 +304,7 @@ core.video(v).then((data) => {
         inv: comments,
         ip,
         convert,
+        linkify,
         wiki,
         f,
         t: config.t_url,

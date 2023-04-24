@@ -28,8 +28,9 @@
 
 -->
 <!DOCTYPE html>
-<html class="poketube_desktop_player event" universe="2" vid_id="<%=inv_vid.videoId%>" t="<%=btoa(Date.now())%>" version="browser_web">
-<head>
+<html class="poketube_desktop_player event" invidproxy="<%u%>" universe="2" vid_id="<%=inv_vid.videoId%>" t="<%=btoa(Date.now())%>" version="browser_web">
+  <head>
+  
     <% if (e === false) { %>  
     <!-- MetaTag disabled -->
  <% } %>
@@ -47,9 +48,12 @@
 <link href="https://poketube.fun/watch?v=<%=inv_vid.videoId%>" itemprop=url>
 <link href="http://www.youtube.com/channel/<%=video?.Channel?.id%>" itemprop=url>
  <% } %> <!-- close the } -->
-<link href="/css/yt-ukraine.svg" rel=icon>
-       <link href=/css/snow.css rel=stylesheet> 
-
+<link href="/css/yt-ukraine.svg?v=3" rel=icon>
+<link href=/css/snow.css rel=stylesheet> 
+<ptd-event-chunks>
+  poketube.eventloader = this.eventloader
+  load()
+</ptd-event-chunks>
 <title> <%=inv_vid.title%> | PokeTube </title>  
 <style>
        <% if (!a) { %>  
@@ -165,6 +169,10 @@
   margin-right: 20px;
 }
 
+ptd-event-chunks {
+      display: none;
+}
+  
 .comments-area .date {
   font-size: 13px;
   color: #777777;
@@ -453,7 +461,7 @@ text-shadow: 1px 1px #000,1px 1px 0.1px #000;!important;
  * @licstart The following is the entire license notice for the JavaScript
  * code in this page.
  *
- *  Copyright (C) 2021-2023 PokeTube (https://github.com/iamashley0/poketube)
+ *  Copyright (C) 2021-2023 PokeTube Project (https://github.com/iamashley0/poketube)
  *
  * The JavaScript code in this page is free software: you can redistribute
  * it and/or modify it under the terms of the GNU General Public License
@@ -475,6 +483,7 @@ text-shadow: 1px 1px #000,1px 1px 0.1px #000;!important;
 
 //--><!]]>
 </script>
+<ptd-app-ejs>
 <div class="app" id="secret-theme" style="color:var(--text-color)">
  <div class="progress-container">
   <div class="progress-bar"></div>
@@ -527,7 +536,7 @@ But Please note that unofficial instances can add the same lock icon, so please 
 <button class="btn btn-success" type="submit" style="transform: translate(21em, -1.25em);"><i class="fa-light fa-search"></i></button>             
          </form>
              
-           <img src="https://search-metrics.poketube.fun/t/rep.gif"  style="border:0;width: 0;visibility: hidden;"> 
+           <img src="https://t.poketube.fun/t/rep.gif"  style="border:0;width: 0;visibility: hidden;"> 
 
       </div>
       <div class="right">
@@ -628,22 +637,22 @@ display: block; !important;" autoplay controls
        poster="https://p.poketube.fun/https://i.ytimg.com/vi/<%=inv_vid.videoId%>/maxresdefault.jpg?v=607ddcd4">
         
       
- 
-             
+       
                   <% if (!qua) { %>  
 
 
                      
-                                                <source src="<%=u%>/latest_version?id=<%=inv_vid.videoId%>&itag=22&local=true" type="video/mp4; codecs=&quot;avc1.64001F, mp4a.40.2&quot;" label="hd720" selected="true">
+                                                <source src="https://tube.kuylar.dev/proxy/media/<%=inv_vid.videoId%>/22" type="video/mp4; codecs=&quot;avc1.64001F, mp4a.40.2&quot;" label="hd720" selected="false">
 
                                                                              <% } %>                
 
       <% if (qua === "medium") { %>  
 
-                                                <source src="<%=u%>/latest_version?id=<%=inv_vid.videoId%>&itag=18&local=true" type="video/mp4; codecs=&quot;avc1.64001F, mp4a.40.2&quot;" label="sd360" selected="true">
+                                                <source src="https://tube.kuylar.dev/proxy/media/<%=inv_vid.videoId%>/18" type="video/mp4; codecs=&quot;avc1.64001F, mp4a.40.2&quot;" label="hd720" selected="false">
         
                                                                            <% } %>                
 
+                                      
                         
     <% if (  video?.Subtitles?.Subtitle) { %>  
       
@@ -813,7 +822,7 @@ display: block; !important;" autoplay controls
    <% if (support != undefined) { %> 
 
     <div class="new-button button-encryption">
-					<a   title="Support the Creator of the video!" style="color:var(--text-color);text-decoration: none;" href="https://www.patreon.com/join/<%- support.name %>">
+					<a title="Support the Creator of the video!" style="color:var(--text-color);text-decoration: none;" href="https://www.patreon.com/join/<%- support.name %>">
                                         <div class="pill-button">
 
                <i class="fa-light fa-badge-dollar"></i>
@@ -1182,8 +1191,8 @@ display: block; !important;" autoplay controls
                   
 <div class="recommended-list" align="center">
       <div style="text-align: left;" class="auto-play">
-                                <label for="continue">AutoPlay:</label> 
-                                <input name="continue" id="continue" type="checkbox" >
+                                <label title="autoplay the next video" for="continue">AutoPlay:</label> 
+                                <input title="autoplay the next video" name="continue" id="continue" type="checkbox" >
           
                                       <a href="/encryption?v=<%=inv_vid.videoId%>"><i class="fa-duotone fa-shield-halved " style="margin-left: 13em;"></i></a>
 
@@ -1201,6 +1210,7 @@ Recommended Videos
                
   </div>
 
+    
                               <% if (!r) { %> 
  
 
@@ -1436,7 +1446,9 @@ if (/[?&]autoplay=/.test(location.search)) {
         <!-- END <%=t%> -->  
 
  <% } %>
+   
 </div>
+    </ptd-app-ejs>
 </body>
 </html>
 
@@ -1593,11 +1605,11 @@ a {
             
                 
             
-               <%  if (Array.isArray( video.Subtitles.Subtitle)) { %> 
+               <%  if (Array.isArray( video?.Subtitles?.Subtitle)) { %> 
 
-    <% if (  video.Subtitles.Subtitle) { %>  
+    <% if (  video?.Subtitles?.Subtitle) { %>  
 
-   <% video.Subtitles.Subtitle.forEach(x => { %><track src="/api/subtitles?v=<%=inv_vid.videoId%>&h=<%= x.language %>" label="<%= x.language %>" kind="subtitles">                                                             
+   <% video.Subtitles?.Subtitle?.forEach(x => { %><track src="/api/subtitles?v=<%=inv_vid.videoId%>&h=<%= x.language %>" label="<%= x.language %>" kind="subtitles">                                                             
          <% }) %>   
                                                                                                        <% } %>               
                                                            <% } %>                
@@ -1620,7 +1632,7 @@ a {
 
        </div>            
                   <div class="video-title" style="font-family:'Inter';;white-space:yes;padding: 10px;
-"><%=video.Title%><br>    
+"><%=inv_vid.title%><br>    
                     <a id="language-button" href="#desc-container" style="color: pink;
 margin: 0;
 font-size: 13px;margin:0;padding:0;white-space: nowrap;

@@ -753,11 +753,10 @@ display: block; !important;" autoplay controls
                <div class="video-chnl-info-pill"  name="chnl">
   <a name="chnl"></a>
 
-				<a href="/channel?id=<%=video?.Channel.id%>" class="avatar">
+				<a href="/channel?id=<%=video?.Channel.id || k.Video.Channel.id%>" class="avatar">
 					<img loading="lazy" src="https://p.poketube.fun/<%= k.Video.Channel.Avatar[1].$t %>">
 				</a>
 				<div class="name" >
- 
          <div>
 						<a title="<%=k.Video.Channel.Name%> " class="video-info-pill-channelname">  <%=k.Video.Channel.Name%> 
               </a>   
@@ -781,7 +780,7 @@ display: block; !important;" autoplay controls
 
 				</div>
 	 
-				<button class="subscribe-button"><a href="https://www.youtube.com/channel/<%=video?.Channel.id%>?view_as=subscriber?sub_confirmation=1">Suscribe</a></button>
+				<button class="subscribe-button"><a href="https://www.youtube.com/channel/<%=video?.Channel.id || k.Video.Channel.id%>?view_as=subscriber?sub_confirmation=1">Suscribe</a></button>
 			</div>
                
                      <div>
@@ -1204,7 +1203,7 @@ display: block; !important;" autoplay controls
 Recommended Videos
     </div>
                
-             <a style="color:#fff" href="/channel?id=<%=video?.Channel.id %>" class="tag">
+             <a style="color:#fff" href="/channel?id=<%=video?.Channel.id || k.Video.Channel.id %>" class="tag">
                From <%=k.Video.Channel.Name%> 
                </a>
                
@@ -1270,7 +1269,7 @@ Recommended Videos
 								<a href="/watch?v=<%= x.id %>&m=f" class="title max-lines-2" title="<%= x.Title %>" style="font-stretch: 100%;font-weight: 800;"><%= x.Title %></a>
                    <% } %>
 								<div>
-                                 <a class="max-lines-2" href="/channel?id=<%=video.Channel.Name %>" style="-webkit-line-clamp: 1;width: 12em;word-wrap: break-word;"><%=video.Channel.Name %></a>
+                                 <a class="max-lines-2" href="/channel?id=<%= video?.Channel?.Name || k.Video.Channel.Name %>" style="-webkit-line-clamp: 1;width: 12em;word-wrap: break-word;"><%= video?.Channel?.Name || k.Video.Channel.Name %></a>
 									<div class="video-views">  <%= x.uploadedAt %> • <%= convert(x.views) %> views </div>
 
 								</div>
@@ -1440,7 +1439,7 @@ if (/[?&]autoplay=/.test(location.search)) {
    
         <!-- VIDEO -->
         <img src="<%=t%>t/rep.gif?video_id=<%=btoa(inv_vid.videoId)%>" style="width: 0;visibility: hidden;" id="videoID">
-        <img src="<%=t%>t/rep.gif?channel_ID=<%=btoa(video?.Channel.id)%>" style="width: 0;visibility: hidden;" id="channel">
+        <img src="<%=t%>t/rep.gif?channel_ID=<%=btoa(video?.Channel.id || k.Video.Channel.id)%>" style="width: 0;visibility: hidden;" id="channel">
    
 
         <!-- END <%=t%> -->  
@@ -1483,11 +1482,11 @@ if (/[?&]autoplay=/.test(location.search)) {
   <% if (!e) { %>
 <meta content="<%=inv_vid.title%>" name=title>
 <meta content="<%=color%>" name="theme-color">
-<meta content="<%=video.Channel.Name%>" name=twitter:author>
+<meta content="<%= video?.Channel?.Name || k.Video.Channel.Name%>" name=twitter:author>
 <meta content=@youtube name=twitter:site>
 <meta content="https://poketube.fun/watch?v=<%=inv_vid.videoId%>" name=twitter:url>
 <meta content="<%=inv_vid.title%> - PokeTube" name=twitter:title>
-<meta content="mobile this video by <%=video.Channel.Name%> On PokeTube. The YouTube front-end that doesnt track you!" property=twitter:description>
+<meta content="mobile this video by <%= video?.Channel?.Name || k.Video.Channel.Name%> On PokeTube. The YouTube front-end that doesnt track you!" property=twitter:description>
 <meta content="https://i.ytimg.com/vi/<%=inv_vid.videoId%>/maxresdefault.jpg" property=og:image>
 <meta content=summary_large_image name=twitter:card>
 <link href="https://poketube.fun/watch?v=<%=inv_vid.videoId%>" itemprop=url>
@@ -1659,7 +1658,7 @@ font-size: 13px;margin:0;padding:0;white-space: nowrap;
 				</div>
                
  
-				<button class="subscribe-button" ><a style="color:#fff" href="https://www.youtube.com/channel/<%=video.Channel.id%>?view_as=subscriber?sub_confirmation=1">Suscribe</a></button>
+				<button class="subscribe-button" ><a style="color:#fff" href="https://www.youtube.com/channel/<%=k.Video.Channel.id%>?view_as=subscriber?sub_confirmation=1">Suscribe</a></button>
                
 			</div>
             
@@ -1802,11 +1801,11 @@ font-size: 13px;margin:0;padding:0;white-space: nowrap;
   </h3>
 <hr style="clear: both;display: block;border: none;border-bottom: 0.5px solid #2f2f2f;/*! width: 4.5em; */height: 0;">
 
-         <div class="video-title" style="font-family:'Inter';;white-space:yes;margin-bottom: 8px;"><%=video.Title%></div>
+         <div class="video-title" style="font-family:'Inter';;white-space:yes;margin-bottom: 8px;"><%=inv_vid.title%></div>
                  <!--
 
 <div class="channel-info" name="chnl" style="padding: 0;border: none;">
-  <a href="/channel?id=<%=video.Channel.id%>" class="avatar">
+  <a href="/channel?id=<%=video?.Channel.id || k.Video.Channel.id%>" class="avatar">
 					<img src=" <%= k.Video.Channel.Avatar[1].$t %>">
 				</a>
 				<div class="name" style="font-family:var(--text-font-primary);font-weight:var(--text-header-weight);">
@@ -1853,15 +1852,10 @@ font-size: 13px;margin:0;padding:0;white-space: nowrap;
                                   <hr style="clear: both;display: block;border: none;border-bottom: 0.5px solid #2f2f2f;margin: 0 0;/*! width: 4.5em; */height: 0;"> 
 <p style="margin-top: 10px;margin-bottom: 10px;">
           </p>	
-     <% if (String(video.Description) != "[object Object]")  { %>
-             
+              
        <%-String(linkify(inv_vid.description)).replace(/\n/g, " <br> ").replace(/twitter\.com/g, "nitter.net").replace(/reddit\.com/g, "teddit.net") %>
 
-                          <% } %>          
-                            
-    <% if (String(video.Description) == "[object Object]")  { %>
-      <p> No Description On this Video ( sad innit :c )</p>
-                          <% } %>               
+  
                             
   <div style="margin: 10px;">
                     <div style="justify-content: center;display: flex;padding: 11px;font-family: Ginto nord;gap: 3px;background: #1f1f1f;border-top-left-radius: 10px;border-top-right-radius: 10px;">
@@ -1907,7 +1901,7 @@ More info about the video
  			</div>
   
                                                    <hr style="clear: both;display: block;border: none;border-bottom: 0.5px solid #2f2f2f;/*! width: 4.5em; */height: 0;">
-     <%  if (Array.isArray(video.Tags.Tag)) { %> 
+     <%  if (Array.isArray(video?.Tags?.Tag)) { %> 
 
                             <div class="video-title" style="color:var(--text-color);font-family:var(--text-font-primary);;font-weight:var(--text-header-weight);font-stretch: extra-expanded;margin-top: 10px;margin-bottom: 10px;">Tags</div>
                       <div class="tags">
@@ -2214,7 +2208,7 @@ More Epic options owo~
 								<a href="/watch?v=<%= x.id %>&m=f" class="title max-lines-2"><%= x.Title %></a>
                    <% } %>
 								<div>
-               <a class="max-lines-2" style="color:#fff"  href="/channel?id=<%= video.Channel.id %>"><%=video.Channel.Name %></a>
+               <a class="max-lines-2" style="color:#fff"  href="/channel?id=<%= video?.Channel.id || k.Video.Channel.id%>"><%= video?.Channel?.Name || k.Video.Channel.Name %></a>
 									<div>  
  <%= x.uploadedAt %>  </div>
 								</div>
@@ -2347,7 +2341,7 @@ if (/[?&]autoplay=/.test(location.search)) {
    
         <img src="<%=t%>t/rep.gif?ID=<%=btoa(Date.now())%>" style="width: 0;visibility: hidden;" id="SesionID">
         <img src="<%=t%>t/rep.gif?video_id=<%=btoa(inv_vid.videoId)%>" style="width: 0;visibility: hidden;" id="videoID">
-        <img src="<%=t%>t/rep.gif?channel_ID=<%=btoa(video.Channel.id)%>" style="width: 0;visibility: hidden;" id="channel">
+        <img src="<%=t%>t/rep.gif?channel_ID=<%=btoa(video?.Channel.id || k.Video.Channel.id)%>" style="width: 0;visibility: hidden;" id="channel">
         <img src="<%=t%>t/rep.gif?piwik=t" style="width: 0;visibility: hidden;" id="piwik_noip_no_personal-info_collect">
         <!-- END <%=t%> -->  
  <% } %>

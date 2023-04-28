@@ -3,7 +3,7 @@
 
     This Source Code Form is subject to the terms of the GNU General Public License:
 
-    Copyright (C) 2021-2022 POKETUBE (https://github.com/iamashley0/poketube)
+    Copyright (C) 2021-2023 POKETUBE (https://github.com/iamashley0/poketube)
     
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -312,12 +312,10 @@ background: none !important;
        
        poster="https://p.poketube.fun/https://i.ytimg.com/vi/<%=inv_vid.videoId%>/maxresdefault.jpg?v=607ddcd4">
          
-             
-        
 
-
-                                                <source src="https://tube.kuylar.dev/proxy/media/<%=inv_vid.videoId%>/18" type="video/mp4; codecs=&quot;avc1.64001F, mp4a.40.2&quot;" label="hd720" selected="false">
+                                                <source src="<%=u%>/latest_version?id=<%=inv_vid.videoId%>&itag=18&local=true" type="video/mp4; codecs=&quot;avc1.64001F, mp4a.40.2&quot;" label="sd360" selected="true">
         
+ 
 
                         
     <% if (  video?.Subtitles?.Subtitle) { %>  

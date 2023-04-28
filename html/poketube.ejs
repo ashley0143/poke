@@ -483,6 +483,15 @@ text-shadow: 1px 1px #000,1px 1px 0.1px #000;!important;
 
 //--><!]]>
 </script>
+<ptd-app-iconfixer>
+<script>
+var link = document.querySelector("link[rel*='icon']") || document.createElement('link');
+link.type = 'image/svg';
+link.rel = 'shortcut icon';
+link.href = '/css/yt-ukraine.svg';
+document.getElementsByTagName('head')[0].appendChild(link);
+</script>    
+</ptd-app-iconfixer>
 <ptd-app-ejs>
 <div class="app" id="secret-theme" style="color:var(--text-color)">
  <div class="progress-container">

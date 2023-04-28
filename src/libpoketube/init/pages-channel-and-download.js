@@ -31,31 +31,31 @@ function getJson(str) {
 module.exports = function (app, config, renderTemplate) {
   app.get("/download", async function (req, res) {
     try {
-    var v = req.query.v;
+      var v = req.query.v;
 
-    // video
-    const video = await modules.fetch(config.tubeApi + `video?v=${v}`);
-    const h = await video.text();
-    const k = JSON.parse(modules.toJson(h));
+      // video
+      const video = await modules.fetch(config.tubeApi + `video?v=${v}`);
+      const h = await video.text();
+      const k = JSON.parse(modules.toJson(h));
 
-    if (!v) res.redirect("/");
+      if (!v) res.redirect("/");
 
-    var fetching = await fetcher(v);
+      var fetching = await fetcher(v);
 
-    const json = fetching.video.Player;
-    const engagement = fetching.engagement;
+      const json = fetching.video.Player;
+      const engagement = fetching.engagement;
 
-    renderTemplate(res, req, "download.ejs", {
-      engagement: engagement,
-      k: k,
-      video: json,
-      date: k.Video.uploadDate,
-      color: await modules
-        .getColors(`https://i.ytimg.com/vi/${v}/maxresdefault.jpg`)
-        .then((colors) => colors[0].hex()),
-    });
+      renderTemplate(res, req, "download.ejs", {
+        engagement: engagement,
+        k: k,
+        video: json,
+        date: k.Video.uploadDate,
+        color: await modules
+          .getColors(`https://i.ytimg.com/vi/${v}/maxresdefault.jpg`)
+          .then((colors) => colors[0].hex()),
+      });
     } catch {
-      res.redirect("/")
+      res.redirect("/");
     }
   });
 
@@ -114,6 +114,7 @@ module.exports = function (app, config, renderTemplate) {
     try {
       const ID = req.query.id;
       const tab = req.query.tab;
+      const cache = {};
 
       try {
         // about
@@ -148,19 +149,33 @@ module.exports = function (app, config, renderTemplate) {
           return null;
         }
       };
-
-      const tj = await getChannelData(
+      var tj = await getChannelData(
         `https://invid-api.poketube.fun/api/v1/channels/videos/${ID}/?sort_by=${sort_by}${continuation}`
       );
-      const shorts = await getChannelData(
+      var shorts = await getChannelData(
         `https://invid-api.poketube.fun/api/v1/channels/${ID}/shorts?sort_by=${sort_by}${continuations}`
       );
-      const stream = await getChannelData(
+      var stream = await getChannelData(
         `https://invid-api.poketube.fun/api/v1/channels/${ID}/streams?sort_by=${sort_by}${continuationl}`
       );
-      const c = await getChannelData(
+      var c = await getChannelData(
         `https://invid-api.poketube.fun/api/v1/channels/community/${ID}/`
       );
+
+      cache[ID] = {
+        result: {
+          tj,
+          shorts,
+          stream,
+          c,
+          boutJson,
+        },
+        timestamp: Date.now(),
+      };
+
+      if (cache[ID] && Date.now() - cache[ID].timestamp < 3600000) {
+        var { tj, shorts, stream, c, boutJson } = cache[ID].result;
+      }
 
       const summary = await wiki.summary(boutJson.Channel.Metadata.Name);
       const wikiSummary = summary.title !== "Not found." ? summary : "none";

@@ -250,4 +250,47 @@ videoElement.addEventListener("fullscreenchange", () => {
           videoElement.style.borderRadius = "16px";
         }
       });
+
+
+const chnlurl = document.querySelectorAll('a[href*="/channel?id="]'); // get all links with "/watch?v=" in href attribute
+
+let fetchedCountChannel = 0;
+
+chnlurl.forEach(link => {
+  const url = new URL(link.href);
+
+  if (url.host !== 'www.youtube.com' && url.host !== 'youtube.com') {
+      if (url.host !== "redirect.poketube.fun") {
+
+    console.log(`Fetching ${url.origin}`);
+ 
+    fetch(url.href)
+      .then(response => {
+        if (response.status === 500) {
+          // do nothing
+        }
+        console.log(`Fetched ${url.origin}`);
+        fetchedCountChannel++;
+        console.clear()
+
+        if (fetchedCountChannel === chnlurl.length) {
+          
+           document.body.classList.remove('blur');
+        }
+        // Do something with the response
+      })
+      .catch(error => {
+    
+       console.clear()
+        // Ignore network errors
+        if (!(error instanceof TypeError && error.message.includes('Failed to fetch'))) {
+          console.error(`Error fetching ${url.origin}: ${error}`);
+        }
+      
+      });
+  }
+      }
+
+});
 // @license-end
+

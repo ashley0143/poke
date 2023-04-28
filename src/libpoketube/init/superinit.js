@@ -81,7 +81,7 @@ function init(app, config, rendertemplate) {
     } catch (err) {
       initlog("[FAILED] Load pages \n" + err);
     }
-  }, 120000);
+  }, 20000);
 }
 
 module.exports = {

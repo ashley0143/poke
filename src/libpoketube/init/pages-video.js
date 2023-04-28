@@ -282,7 +282,7 @@ core.video(v).then((data) => {
       const isMobile = req.useragent.isMobile;
       const wiki = data.wiki;
       const { channel: tj } = data;
-
+      const u = await media_proxy(v);
       const d = desc.toString().replace(/\n/g, " <br> ");
       const comments = inv_comments || "Disabled";
 
@@ -290,6 +290,7 @@ core.video(v).then((data) => {
         color,
         color2,
         engagement,
+        u,
         video: json,
         date: k.Video.uploadDate,
         e,

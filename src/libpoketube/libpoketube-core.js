@@ -20,21 +20,13 @@ const fetcher = require("../libpoketube/libpoketube-fetcher.js");
 const getColors = require("get-image-colors");
 
 const wiki = require("wikipedia");
-const sqp = "-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLBy_x4UUHLNDZtJtH0PXeQGoRFTgw";
-
-const config = {
-  tubeApi: "https://inner-api.poketube.fun/api/",
-  invapi: "https://invid-api.poketube.fun/api/v1",
-  dislikes: "https://returnyoutubedislikeapi.com/votes?videoId=",
-  t_url: "https://t.poketube.fun/", //  def matomo url
-};
-
-function initerr(args){
-  console.error("[LIBPT CORE ERROR]" + args) 
-}
 
 
 // Util functions
+
+/*
+ * Api functions
+ */
 function getJson(str) {
   try {
     return JSON.parse(str);
@@ -51,27 +43,19 @@ function checkUnexistingObject(obj) {
   }
 }
 
-/*
- * Api functions
- */
-
-async function channel(id, cnt) {
-  if (id == null) return "Gib ID";
-
-  const videos = await fetch(
-    `${config.tubeApi}channel?id=${id}&tab=videos&continuation=${cnt || ""}`
-  )
-    .then((res) => res.text())
-    .then((xml) => getJson(toJson(xml)));
-
-  const about = await fetch(`${config.tubeApi}channel?id=${id}&tab=about`)
-    .then((res) => res.text())
-    .then((xml) => getJson(toJson(xml)));
-
-  return { videos, about };
-}
-
 const cache = {};
+const sqp = "-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLBy_x4UUHLNDZtJtH0PXeQGoRFTgw";
+
+const config = {
+  tubeApi: "https://inner-api.poketube.fun/api/",
+  invapi: "https://invid-api.poketube.fun/api/v1",
+  dislikes: "https://returnyoutubedislikeapi.com/votes?videoId=",
+  t_url: "https://t.poketube.fun/", //  def matomo url
+};
+
+function initerr(args){
+  console.error("[LIBPT CORE ERROR]" + args) 
+}
 
 async function video(v) {
   if (v == null) return "Gib ID";
@@ -82,8 +66,7 @@ async function video(v) {
     return cache[v].result;
   }
 
-  let nightlyRes;
-  var desc = "";
+   var desc = "";
 
   try {
     var inv_comments = await fetch(`${config.invapi}/comments/${v}`).then(
@@ -126,13 +109,9 @@ async function video(v) {
       initerr("Error getting channel info", error);
       var a = "";
     }
-
-
+    
     desc = a.Channel?.Contents?.ItemSection?.About?.Description;
-
     const fe = await fetcher(v);
-
-    const nightlyJsonData = getJson(nightlyRes);
 
     try {
       
@@ -177,17 +156,6 @@ async function video(v) {
   }
 }
 
-async function search(query, cnt) {
-  if (query == null) return "Gib Query";
-
-  const data = await fetch(
-    `${config.tubeApi}search?query=${query}&continuation=${cnt || ""}`
-  )
-    .then((res) => res.text())
-    .then((xml) => getJson(toJson(xml)));
-
-  return data;
-}
 
 async function isvalidvideo(v) {
     if (v != "assets") {
@@ -198,8 +166,6 @@ async function isvalidvideo(v) {
  }
 
 module.exports = {
-  search,
   video,
-  isvalidvideo,
-  channel,
+  isvalidvideo
 };

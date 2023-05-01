@@ -177,7 +177,7 @@ module.exports = function (app, config, renderTemplate) {
         var { tj, shorts, stream, c, boutJson } = cache[ID].result;
       }
 
-      const summary = await wiki.summary(boutJson.Channel.Metadata.Name);
+      const summary = await wiki.summary(boutJson?.Channel?.Metadata.Name);
       const wikiSummary = summary.title !== "Not found." ? summary : "none";
 
       const subscribers = boutJson.Channel.Metadata.Subscribers;

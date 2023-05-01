@@ -1,70 +1,118 @@
-const { curly } = require('node-libcurl');
-const { toJson } = require('xml2json');
+const { curly } = require("node-libcurl");
+const { toJson } = require("xml2json");
 const fetch = require("node-fetch");
 
-const youtubeUrl = 'https://www.youtube.com/watch?v=';
-const dislikeApi = 'https://p.poketube.fun/api?v=';
-const newApiUrl = 'https://inner-api.poketube.fun/api/player';
+const YOUTUBE_URL = "https://www.youtube.com/watch?v=";
+const DISLIKE_API = "https://p.poketube.fun/api?v=";
+const NEW_API_URL = "https://inner-api.poketube.fun/api/player";
 
-function initerr(args){
-  console.error("[LIBPT FETCHER ERROR]" + args) 
-}
-
-const getInnerTubeData = async (videoId, headers) => {
-  try {
-    var { data } = await curly.get(`${newApiUrl}?v=${videoId}`, {
-      httpHeader: Object.entries(headers).map(([k, v]) => `${k}: ${v}`)
-    });
-    
-    const json = toJson(data);
-    return getJson(json);
-  
-  } catch (error) {
-    initerr(`Error parsing XML: ${error}`);
-    return null;
+/**
+ * A class representing a PokeTube API instance for a specific video.
+ */
+class PokeTubeAPI {
+  /**
+   * Creates a new PokeTube API instance for the given video ID.
+   * @param {string} videoId - The ID of the YouTube video.
+   */
+  constructor(videoId) {
+    this.videoId = videoId;
+    this.engagement = null;
+    this.videoData = null;
+    this.headers = {};
   }
-};
 
-
-const getJson = (str) => {
-  try {
-    return JSON.parse(str);
-  } catch {
-    return null;
-  }
-};
-
-
-const getEngagementData = async (videoId) => {
-  // return youtube dislike api - https://www.returnyoutubedislike.com/
-  const apiUrl = `${dislikeApi}${videoId}`;
-  const fallbackUrl = `https://p.poketube.fun/${apiUrl}`;
-
-  try {
-    const engagement = await fetch(apiUrl).then((res) => res.json());
-    return engagement.data;
-    // if an error occurs - try the fallback url 
-  } catch {
+  /**
+   * Retrieves data about the YouTube video from the InnerTube API.
+   * @deprecated This method is deprecated and may no longer work due to changes in the InnerTube API. Please use the `video()` function defined in `libpoketube-core` to retrieve video data.
+   * @returns {Promise<object|null>} A Promise that resolves with the video data, or null if an error occurs.
+   * @private
+   */
+  async _getInnerTubeData() {
     try {
-      const engagement = await fetch(fallbackUrl).then((res) => res.json());
-      return engagement;
-    } catch {
-      // if that also doesnt work do nothing lol
-      return;
+      const { data } = await curly.get(`${NEW_API_URL}?v=${this.videoId}`, {
+        httpHeader: Object.entries(this.headers).map(([k, v]) => `${k}: ${v}`),
+      });
+
+      const json = toJson(data);
+      return this._getJson(json);
+    } catch (error) {
+      this._handleError(`Error parsing XML: ${error}`);
+      return null;
     }
   }
-};
+
+  /**
+   * Parses a JSON string and returns the resulting object.
+   * @param {string} str - The JSON string to parse.
+   * @returns {object|null} The parsed JSON object, or null if an error occurs.
+   * @private
+   */
+  _getJson(str) {
+    try {
+      return JSON.parse(str);
+    } catch {
+      return null;
+    }
+  }
+  /**
+   * Retrieves engagement data for the YouTube video.
+   * @returns {Promise<object|null>} A Promise that resolves with the engagement data, or null if an error occurs.
+   * @private
+   */
+  async _getEngagementData() {
+    const apiUrl = `${DISLIKE_API}${this.videoId}`;
+    const fallbackUrl = `https://p.poketube.fun/${apiUrl}`;
+
+    try {
+      const engagement = await fetch(apiUrl).then((res) => res.json());
+      return engagement.data;
+    } catch {
+      try {
+        const engagement = await fetch(fallbackUrl).then((res) => res.json());
+        return engagement;
+      } catch {
+        return null;
+      }
+    }
+  }
+
+  /**
+   * Retrieves data about the YouTube video and its engagement.
+   * @returns {Promise<object>} A Promise that resolves with an object containing video and engagement data.
+   */
+  async getData() {
+    this.videoData = await this._getInnerTubeData();
+    this.engagement = await this._getEngagementData();
+
+    return {
+      video: this.videoData,
+      engagement: this.engagement,
+      videoUrlYoutube: `${YOUTUBE_URL}${this.videoId}`,
+    };
+  }
+
+  /**
+   * Logs an error message to the console.
+   * @param {string} args - The error message to log.
+   * @private
+   */
+  _handleError(args) {
+    console.error(`[LIBPT FETCHER ERROR] ${args}`);
+  }
+}
+
+/*
+Returns basic data about a given YouTube video using PokeTubeAPI.
+@async
+@function
+@param {string} videoId - The YouTube video ID to get data for.
+@returns {Promise<Object>} An object containing the video data and engagement data, as well as the YouTube URL for the video.
+@throws {Error} If the video ID is invalid or the request fails.
+*/
 
 const getBasicPokeTubeData = async (videoId) => {
-  const headers = {};
-  const InnerTubeData = await getInnerTubeData(videoId, headers);
-  const engagement = await getEngagementData(videoId);
-
-  return {
-    video: InnerTubeData,
-    engagement,
-    videoUrlYoutube: `${youtubeUrl}${videoId}`,
-  };
+  const pokeTubeAPI = new PokeTubeAPI(videoId);
+  return await pokeTubeAPI.getData();
 };
 
 module.exports = getBasicPokeTubeData;

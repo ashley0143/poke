@@ -45,4 +45,31 @@ if (window.location.hostname === "poketube.fun" && config.plausible_enabled == t
   }
 }
 
+const setFont = () => {
+  const poketubeFlexFont = 'Poketube Flex';
+  const gintoNordFont = 'Ginto Nord';
+  const gintoNordWidth = '1000px';
+  
+  const elements = document.getElementsByTagName('*');
+  
+  for (let i = 0; i < elements.length; i++) {
+    const style = window.getComputedStyle(elements[i]);
+    const font = style.getPropertyValue('font-family');
+    const width = style.getPropertyValue('width');
+    
+    if (font === poketubeFlexFont && width === gintoNordWidth) {
+      elements[i].style.fontFamily = gintoNordFont;
+    }
+  }
+};
+
+const userAgent = window.navigator.userAgent;
+const isWindows10OrNewer = /Windows NT 10/.test(userAgent);
+const isOlderWindows = /Windows NT [6-8]\./.test(userAgent);
+
+if (isOlderWindows && !isWindows10OrNewer) {
+  setFont();
+}
+
 // @license-end
+

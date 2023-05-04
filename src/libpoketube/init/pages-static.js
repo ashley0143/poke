@@ -8,6 +8,7 @@ const {
   initlog,
   init,
 } = require("../libpoketube-initsys.js");
+
 const {
   IsJsonString,
   convert,
@@ -19,6 +20,7 @@ const {
 } = require("../ptutils/libpt-coreutils.js");
 
 const sha384 = modules.hash;
+const notice = "/* the code is Licensed in gpl-3.0-or-later. This program comes with ABSOLUTELY NO WARRANTY. This is free software, and you are welcome to redistribute it under certain conditions. See the GNU General Public License for more detailsYou should have received a copy of the GNU General Public Licensealong with this program.  If not, see <https://www.gnu.org/licenses/>. - add the param nomin to view source code. (eg poketube.fun/css/poketube.css?nomin=true) */"
 
 module.exports = function (app, config, renderTemplate) {
   var html_location = "./css/";
@@ -77,13 +79,13 @@ module.exports = function (app, config, renderTemplate) {
       return;
     }
 
-    if (req.params.id.endsWith(".css")) {
+    if (req.params.id.endsWith(".css") && !req.query.nomin) {
       // Minimize the CSS file
       const css = fs.readFileSync(filePath, "utf8");
       const minimizedCss = new CleanCSS().minify(css).styles;
       // Serve the minimized CSS file
       res.header("Content-Type", "text/css");
-      res.send(minimizedCss);
+     res.send(notice + " " + minimizedCss);
     } else {
       // Serve the original file
       res.sendFile(req.params.id, { root: html_location });

@@ -130,7 +130,7 @@ module.exports = function (app, config, renderTemplate) {
       res.redirect("/");
     }
 
-    res.redirect(red_url);
+    res.redirect(red_url + "?f=" + req.query.u);
   });
 
   app.get("/api/version.json", async (req, res) => {

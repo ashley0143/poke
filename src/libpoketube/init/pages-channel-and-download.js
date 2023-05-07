@@ -70,6 +70,19 @@ module.exports = function (app, config, renderTemplate) {
   app.get("/search", async (req, res) => {
     const query = req.query.query;
 
+    const poketube_universe_value = "poketube_smart_search"
+    
+    if(query.includes("youtube.com")){
+      try {
+      var videoid = query.split("v=")
+      
+      res.redirect("/watch?v=" + videoid[1])
+      } catch {
+        return;
+      }
+      
+    }
+    
     if (!query) {
       return res.redirect("/");
     }

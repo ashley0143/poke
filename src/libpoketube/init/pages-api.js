@@ -27,10 +27,11 @@ function getJson(str) {
 }
 
 const pkg = require("../../../package.json");
-const ver = "v23.2804-SnKo-MAJOR-stable-nonLTS-git";
+const ver = "v23.0805-ArIa-MAJOR-stable-nonLTS-git-MTY4MzU2MzMxNQ==";
 const branch = "master";
-const codename = "senko";
-const versionnumber = "242";
+const codename = "aria";
+const versionnumber = "243";
+const relaseunixdate = "MTY4MzU2MzMxNQ==";
 
 module.exports = function (app, config, renderTemplate) {
   app.get("/embed/:v", async function (req, res) {
@@ -142,6 +143,7 @@ module.exports = function (app, config, renderTemplate) {
     const response = {
       pt_version: ver,
       branch,
+      relaseunixdate,
       vernum: versionnumber,
       codename,
       packages: {

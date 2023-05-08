@@ -209,11 +209,7 @@ core.video(v).then((data) => {
         let badges = "";
         let comments = "";
         let nnn = "";
-   
-        let url;
-        if (q === "medium") {
-          url = `https://inv.vern.cc/latest_version?id=${v}&itag=18&local=true`;
-        }
+    
         
         if(inv_vid?.error === "The uploader has not made this video available in your country"){
           res.send("error : " + inv_vid.error + " please refresh the page please qt ")
@@ -223,13 +219,16 @@ core.video(v).then((data) => {
           res.send("error : " + inv_vid.error + " please refresh the page please qt ")
         }
       
+      
+        
         renderTemplate(res, req, "poketube.ejs", {
           color: data.color,
           color2: data.color2,
           linkify,
           engagement,
           support,
-          u,
+          u:u.url,
+          isvidious:u.isInvidiousURL,
           video: json,
           date: k.Video.uploadDate,
           e,

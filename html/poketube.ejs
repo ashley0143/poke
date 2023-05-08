@@ -646,11 +646,8 @@ display: block; !important;" autoplay controls
        poster="https://p.poketube.fun/https://i.ytimg.com/vi/<%=inv_vid.videoId%>/maxresdefault.jpg?v=607ddcd4">
         
       
-       
-                   <% if (!qua) { %>  
-
-
-                     
+              <% if (isvidious) { %>
+                   <% if (!qua) { %>                       
                                                 <source src="<%=u%>/latest_version?id=<%=inv_vid.videoId%>&itag=22&local=true" type="video/mp4; codecs=&quot;avc1.64001F, mp4a.40.2&quot;" label="hd720" selected="true">
 
                                                                              <% } %>                
@@ -660,6 +657,21 @@ display: block; !important;" autoplay controls
                                                 <source src="<%=u%>/latest_version?id=<%=inv_vid.videoId%>&itag=18&local=true" type="video/mp4; codecs=&quot;avc1.64001F, mp4a.40.2&quot;" label="sd360" selected="true">
         
                                                                            <% } %>                
+                                                                                                       <% } %>                     
+
+              <% if (!isvidious) { %>
+                
+                   <% if (!qua) { %>                       
+                                                <source src="https://tube.kuylar.dev/proxy/media/<%=inv_vid.videoId%>/22" type="video/mp4; codecs=&quot;avc1.64001F, mp4a.40.2&quot;" label="hd720" selected="true">
+
+                                                                             <% } %>                
+
+      <% if (qua === "medium") { %>  
+
+                                                <source src="https://tube.kuylar.dev/proxy/media/<%=x.attachment.videoId%>/18" type="video/mp4; codecs=&quot;avc1.64001F, mp4a.40.2&quot;" label="sd360" selected="true">
+        
+                                                                           <% } %>                
+                                                                                                       <% } %>                     
 
                                       
                         
@@ -738,9 +750,24 @@ display: block; !important;" autoplay controls
         Video Format :<% if (!qua) { %>  22 (720p) openh264 ( https://github.com/cisco/openh264) mp4a.40.2  | 44100Hz  <% } %>
       <% if (qua === "medium") { %>  18 (320p)  openh264 (https://github.com/cisco/openh264) mp4a.40.2 | 44100Hz  <% } %>       <br> 
        PokeTubeEncryptID: <%=sha384(inv_vid.videoId)%> <br>
+                      <% if (isvidious) { %>
+
        Proxy : <%= u.replace("https://","") %> - refresh the page to change the proxy location<br>
+                          <% } %>
+                             <% if (!isvidious) { %>
+
+       Proxy : tube.kuylar.dev - refresh the page to change the proxy location<br>
+                          <% } %>   
        Date : <%- Date.now() %>  <br>
+                                                  <% if (isvidious) { %>
+
        Mystery text :  <%=btoa(inv_vid.videoId + " i " + " lov " + " u " + u.replace("https://","") ) %> <br>
+                                                                              <% } %>  
+                                                                                                                                  <% if (!isvidious) { %>
+
+       Mystery text :  <%=btoa(inv_vid.videoId + " i " + " lov " + " u " + "tube.kuylar.dev" ) %> <br>
+                                                                              <% } %>   
+
        143 : true <br>
         </div>
         

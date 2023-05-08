@@ -57,7 +57,7 @@ module.exports = function (app, config, renderTemplate) {
       });
       */
       
-      res.send("download page is broken rn - will be fixed soon !!!!!!! sorry for the inco")
+      res.send("download page is broken rn - will be fixed soon !!!!!!! sorry :c - btw ily")
     } catch {
       res.redirect("/");
     }

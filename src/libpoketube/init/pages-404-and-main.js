@@ -66,13 +66,14 @@ module.exports = function (app, config, renderTemplate) {
       }
       return renderTemplate(res, req, "landing.ejs");
     };
-
+     
     if (req.params.v && /[a-zA-Z0-9]+/.test(req.param.v)) {
       const isvld = await core.isvalidvideo(req.params.v);
       if (isvld) {
         return res.redirect(`/watch?v=${req.params.v}`);
       }
     }
+    
     return rendermainpage();
   });
 };

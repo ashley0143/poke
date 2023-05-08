@@ -53,7 +53,7 @@ module.exports = async function (video_id) {
 
   let url;
   if (instance[1].type != "https") {
-    url = "https://y.com.sb";
+    url = "https://tube.kuylar.dev";
   } else {
     //replaces bad proxys (e.g the proxys that do not support media proxys, or the proxys that are down )
     url = instance[1].uri
@@ -65,12 +65,23 @@ module.exports = async function (video_id) {
       .replace("yt.funami.tech", "y.com.sb")
       .replace("invidious.lidarshield.cloud", "inv.odyssey346.dev")
       .replace("vid.priv.au", "inv.vern.cc")
-      .replace("invidious.privacydev.net", "inv.vern.cc")
+      .replace("invidious.privacydev.net", "tube.kuylar.dev")
       .replace("watch.thekitty.zone", "y.com.sb")
       .replace("invidious.snopyta.org", "inv.odyssey346.dev")
       .replace("invidious.weblibre.org", "y.com.sb")
       .replace("invidious.sethforprivacy.com", "y.com.sb")
   }
 
-  return url;
+  if(url == "https://tube.kuylar.dev") {
+   var isInvidiousURL = false
+  } else {
+    isInvidiousURL = true;
+  }
+  
+  const videoProxyObject = {
+    isInvidiousURL,
+    url
+  }
+  
+  return videoProxyObject;
 };

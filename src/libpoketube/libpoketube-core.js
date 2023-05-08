@@ -21,7 +21,6 @@ const getColors = require("get-image-colors");
 
 const wiki = require("wikipedia");
 
-
 // Util functions
 
 /*
@@ -158,8 +157,8 @@ async function video(v) {
 
 
 async function isvalidvideo(v) {
-    if (v != "assets") {
-      return true;
+    if (v != "assets" && v != "cdn-cgi" && v != "404") {
+    return true;
     } else {
     return false;
     }

@@ -45,6 +45,7 @@ module.exports = function (app, config, renderTemplate) {
       const json = fetching.video.Player;
       const engagement = fetching.engagement;
 
+     /* 
       renderTemplate(res, req, "download.ejs", {
         engagement: engagement,
         k: k,
@@ -54,6 +55,9 @@ module.exports = function (app, config, renderTemplate) {
           .getColors(`https://i.ytimg.com/vi/${v}/maxresdefault.jpg`)
           .then((colors) => colors[0].hex()),
       });
+      */
+      
+      res.send("download page is broken rn - will be fixed soon !!!!!!! sorry for the inco")
     } catch {
       res.redirect("/");
     }

@@ -33,32 +33,15 @@ module.exports = function (app, config, renderTemplate) {
     try {
       var v = req.query.v;
 
-      // video
-      const video = await modules.fetch(config.tubeApi + `video?v=${v}`);
-      const h = await video.text();
-      const k = JSON.parse(modules.toJson(h));
-
-      if (!v) res.redirect("/");
-
-      var fetching = await fetcher(v);
-
-      const json = fetching.video.Player;
-      const engagement = fetching.engagement;
-
-     /* 
       renderTemplate(res, req, "download.ejs", {
-        engagement: engagement,
-        k: k,
-        video: json,
-        date: k.Video.uploadDate,
+        v, 
         color: await modules
           .getColors(`https://i.ytimg.com/vi/${v}/maxresdefault.jpg`)
           .then((colors) => colors[0].hex()),
       });
-      */
+       
       
-      res.send("download page is broken rn - will be fixed soon !!!!!!! sorry :c - btw ily")
-    } catch {
+     } catch {
       res.redirect("/");
     }
   });

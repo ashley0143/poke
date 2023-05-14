@@ -22,8 +22,8 @@
     <link href=/css/yt-ukraine.svg?v=6 rel=icon>
     <meta content=website property=og:type>
     <meta content="PokeTube - Video Downloader" property=og:title>
-    <meta content="You wouldn't download a car... Right? welp i would - Download this video by <%=video.Channel.Name%> on PokeTube! for the price of 0$!" property=twitter:description>
-    <meta content="https://i.ytimg.com/vi/<%=video.id%>/maxresdefault.jpg" property=og:image>
+    <meta content="You wouldn't download a car... Right? welp i would - Download this video on PokeTube! for the price of 0$!" property=twitter:description>
+    <meta content="https://i.ytimg.com/vi/<%=v%>/maxresdefault.jpg" property=og:image>
      <meta content=summary_large_image name=twitter:card>
     <meta content=@PoketaleBot name=twitter:site>
     <meta content=@PoketaleBot name=twitter:creator>
@@ -158,12 +158,28 @@ font-family:Ubuntu
 .download-format >  a:hover{
     border:solid;
   }
+    .download-format:{
+      width:65px;
+    }
+    .download-list {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  column-gap: 32px;
+  max-width: 27em;
+  margin-left: auto;
+  margin-right: auto;
+  background: #333;
+ height: 56em;
+  border-radius: 10px;
+  margin-top: 2em;
+}
   </style>
  </head>
  
 <body>
  
-       <div class="app" style="background:linear-gradient(to bottom right, #9666F7, #B37C6B) !important;height:100vh">      
+       <div class="app" style="background:linear-gradient(to bottom right, #9666F7, #B37C6B) !important;height: 67em;">      
 	   <nav>
        <div class=left><a class="class" href="/143" style=font-family:Inter,sans-serif;color:#fff><img style="transform: scale(1.3);padding-left:0.9em;width: 8.5em;display: block;margin-left: auto;margin-right: auto;" src="/css/logo.svg?v=5">  </a>                                                                                               </div>               
             <div class="middle">
@@ -177,39 +193,26 @@ font-family:Ubuntu
             <div class=right><a href="/privacy"><i class="fa-light fa-shield"></i></a><a href="/video/upload?from="><i class="fa-light fa-video"></i></a> <a href="https://github.com/iamashley0/poketube/"><i class="fab fa-git-alt"></i></a><a href="https://github.com/iamashley0/poketube/issues"><i class="fa-light fa-bug"></i></a></a></div>
         </nav>
 	   
-
-<div class="playlist-page">
-<div class="playlist-info" style="border-radius:12px;font-family:'Inter';margin: 8px;padding: 18px;background:#111;width: fit-content;height: fit-content;">
-  <div class="thumbnail" style="background-image: url('https://i.ytimg.com/vi/<%=video.id%>/hqdefault.jpg');border-radius: 1em;">
-      <a style="border-radius: 1em;" href="/watch?v=<%=video.id%>">Watch The Video</a> 
-		</div>
- 		<p class="title" style="margin-top: 10px;margin-bottom: 10px;"><%=video.Title%></p>
-		<span class="info"><%=engagement.viewCount.toLocaleString()%> Views • Uploaded <%=date%></span>
-		<div class="channel-info" style="background: #0009;padding-top: 3px;margin-top: 10px;border-radius: 2em;">
-       
-		<a  href="/channel?id=<%=video.Channel.id%>" class="avatar">
-					<img src=" <%= k.Video.Channel.Avatar[1].$t %>"  style="margin-left: 10px;width: 44px;height: 44px;">
-				</a>
-			</a>
-			<div class="name" style="margin-left: 3px;">
-				<a class="name"  href="/channel?id=<%=video.Channel.id%>"><%=video.Channel.Name%></a>
-			</div>
-		</div>
- 	</div>
-      
+ 
       
 	<div class="video-list download-list playlist-video-list">
     <div>
-    			<h1 style="font-family:'PokeTube Flex';font-weight:1000;white-space:yes;font-stretch: ultra-expanded;"> DOWNLOAD VIDEO</h1>
-          <p >Select an pog or epico format from da list :3 </p>
-    </div>
+            <h3 style="font-family:'PokeTube Flex';font-weight:1000;white-space:yes;font-stretch: ultra-expanded;"> DOWNLOAD VIDEO / MUSIC</h3>
+      <span>ID: <%=v%></span>
+<hr>
+<img src="https://i.ytimg.com/vi/<%=v%>/maxresdefault.jpg" style="height: 15em;border-radius: 1em;">
+      
+     </div>
   		<div class="format-list">
+        <p style="text-align: center;margin-top: 0;margin-bottom: 10px;">
+          select a format to download :3
+        </p>
       	 <h2>Muxed formats</h2>
        
-      <div class="download-format" style="background: black;margin: 6px;border-radius: 14px;/*! text-align: center; */"><div style="font-family:&quot;PokeTube flex&quot;;font-stretch: ultra-expanded;font-weight: 700;"> 
+      <div class="download-format" style="background: black;margin: 6px;width: 25em;border-radius: 14px;/*! text-align: center; */"><div style="font-family:&quot;PokeTube flex&quot;;font-stretch: ultra-expanded;font-weight: 700;"> 
             3GPP 
           </div>
-					<a style="color:#fff;font-family:Ubuntu" href="/api/video/download?v=<%=video.id%>&q=17">
+					<a style="color:#fff;font-family:Ubuntu" href="/api/video/download?v=<%=v%>&q=17">
             <i class="fa-light fa-download"></i>
 						Download 
 					</a>
@@ -219,7 +222,7 @@ font-family:Ubuntu
            <div class="download-format" style="background: black;margin: 6px;border-radius: 14px;/*! text-align: center; */"><div style="font-family:&quot;PokeTube flex&quot;;font-stretch: ultra-expanded;font-weight: 700;"> 
             MP4 (480p)
           </div>
-					<a style="color:#fff;font-family:Ubuntu" href="/api/video/download?v=<%=video.id%>&q=18">
+					<a style="color:#fff;font-family:Ubuntu" href="/api/video/download?v=<%=v%>&q=18">
             <i class="fa-light fa-download"></i>
 						Download 
 					</a>
@@ -228,7 +231,7 @@ font-family:Ubuntu
       
       <div class="download-format" style="background: black;margin: 6px;border-radius: 14px;/*! text-align: center; */">					          <div style="font-family:&quot;PokeTube flex&quot;;font-stretch: ultra-expanded;font-weight: 700;">  MP4 (720p)
            </div>
-					<a style="color:#fff;font-family:Ubuntu" href="/api/video/download?v=<%=video.id%>">
+					<a style="color:#fff;font-family:Ubuntu" href="/api/video/download?v=<%=v%>">
             <i class="fa-light fa-download"></i>
 						Download 
 					</a>
@@ -241,13 +244,13 @@ font-family:Ubuntu
           </p>
 		</div>
 	 
-    <div class="format-list">
+    <div class="format-list" style="margin-top: -2em;">
       
 			<h2>Audio-Only formats</h2>
       
         <div class="download-format" style="background: black;margin: 6px;border-radius: 14px;/*! text-align: center; */">					          <div style="font-family:&quot;PokeTube flex&quot;;font-stretch: ultra-expanded;font-weight: 700;">  webm (low) 
            </div>
-			  	<a style="color:#fff;font-family:Ubuntu" href="/api/video/download?v=<%=video.id%>&q=249&f=webm">
+			  	<a style="color:#fff;font-family:Ubuntu" href="/api/video/download?v=<%=v%>&q=249&f=webm">
             <i class="fa-light fa-download"></i>
 						Download 
 					</a>
@@ -256,7 +259,7 @@ font-family:Ubuntu
       
         <div class="download-format" style="background: black;margin: 6px;border-radius: 14px;/*! text-align: center; */">					           <div style="font-family:&quot;PokeTube flex&quot;;font-stretch: ultra-expanded;font-weight: 700;">  webm (HIGH) 
            </div>
-			  	<a style="color:#fff;font-family:Ubuntu" href="/api/video/download?v=<%=video.id%>&q=251&f=webm">
+			  	<a style="color:#fff;font-family:Ubuntu" href="/api/video/download?v=<%=v%>&q=251&f=webm">
             <i class="fa-light fa-download"></i>
 						Download 
 					</a>
@@ -271,7 +274,7 @@ font-family:Ubuntu
 	</div>
 </div>
  
-<img src="https://t.poketube.fun/t/rep.gif?download_video=<%=btoa(video.id)%>" style="width: 0;visibility: hidden;" id="download_page">
+<img src="https://t.poketube.fun/t/rep.gif?download_video=<%=btoa(v)%>" style="width: 0;visibility: hidden;" id="download_page">
 
 </div>
       

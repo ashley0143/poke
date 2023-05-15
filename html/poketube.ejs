@@ -375,11 +375,9 @@ a[data-onclick="jump_to_time"] {
     }  
     .progress-container {
             display:none !important;
-
     }
     .fade-in {
         opacity: 1  !important;
-
     }
   </style>
   </noscript>
@@ -403,6 +401,7 @@ text-shadow: 1px 1px #000,1px 1px 0.1px #000;!important;
 
  
  <style data-universe="2">
+   
    :root {
        --div-gradient: linear-gradient(to bottom right, #9666F7, #B37C6B);
    }                                                       
@@ -410,6 +409,16 @@ text-shadow: 1px 1px #000,1px 1px 0.1px #000;!important;
    details[open]  {
    background: linear-gradient(to bottom, #1c1c1c, #101);
    }  
+   
+   .new-button {
+     border: 2.1px solid;
+     border-color: #cba6f7;
+   }
+   
+    .new-button:hover {
+     border: 2.1px solid;
+     border-color: white;
+   }
    
    .comment-list.left-padding {
   border-radius: 1em !important;
@@ -779,8 +788,8 @@ display: block; !important;" autoplay controls
         	<div class="video-info-panel gradient">  
             <div class="video-title t" style="font-family:Inter;font-weight:bold;line-break: auto;max-width: max-content;margin: 0;margin-bottom: 0;padding: 0;"
                  
-                                <% if (video?.Title !== k.Video.Title) { %>
-                 title="Non-Translated title : <%=video?.Title%>"
+                                <% if (inv_vid?.title !== k.Video.Title) { %>
+                 title="Non-Translated title : <%=inv_vid.title%>"
                <% } %> 
             > <%-k.Video.Title.replace(/\/channel\//g, "/channel?id=").replace(/https:\/\/youtube.com/g, ""); %> </div>
           
@@ -836,7 +845,7 @@ display: block; !important;" autoplay controls
 					<div style="margin-left: -7.5px;" title="<%=engagement.dislikes.toLocaleString()%> Dislikes">
                 <div class="pill-button">
 
-<i class="fa-light fa-thumbs-down"></i> <%=convert(engagement.dislikes)%> 
+ <%=convert(engagement.dislikes)%>  <i class="fa-light fa-thumbs-down" style="margin-left: 1.5px;"></i>
 					</div>					</div>
 
 
@@ -844,7 +853,7 @@ display: block; !important;" autoplay controls
       
 <div style="display: flex;">
 
-<a class="new-button" title="Download this Video :3" style="color:var(--text-color);text-decoration: none;border: solid;border-color: lime; " href="/download?v=<%=inv_vid.videoId%>">
+<a class="new-button" title="Download this Video :3" style="color:var(--text-color);text-decoration: none; " href="/download?v=<%=inv_vid.videoId%>">
   <div class="pill-button" style="">
 
             <i class="fa-light fa-download"></i>

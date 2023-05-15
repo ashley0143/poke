@@ -8,9 +8,9 @@ function init(app, config, rendertemplate) {
   initlog("wait a few mins... pt on timeout rn");
 
   app.get("/*", function (req, res, next) {
-    if (didstart) return next();
+     if (didstart) return next();
 
-    return rendertemplate(res, req, "timeout.ejs");
+    return rendertemplate(res, req, "timeout.ejs");    
   });
 
   setTimeout(function () {

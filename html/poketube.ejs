@@ -399,6 +399,25 @@ text-shadow: 1px 1px #000,1px 1px 0.1px #000;!important;
 </style>
                                             		 	               <% } %>   
 
+                                                                   
+            <% if(IsOldWindows) { %>
+              <style>
+                :root {
+                  --text-font-primary: "Inter" !important;
+                }
+                
+                .video-info-buttons.pill {
+                  font-family:inherit !important;
+                }
+                
+                .video-sub-info.description {
+                    font-family:ubuntu !important;
+                }
+              </style>
+              
+                                                      		 	               <% } %>   
+
+                                                                   
  
  <style data-universe="2">
    

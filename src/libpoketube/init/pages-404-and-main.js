@@ -30,20 +30,23 @@ function getJson(str) {
 
 module.exports = function (app, config, renderTemplate) {
   app.get("/discover", async function (req, res) {
-  
     let tab = "";
     if (req.query.tab) {
       tab = `/?type=${capitalizeFirstLetter(req.query.tab)}`;
     }
 
-    const invtrend = await modules.fetch(`https://invid-api.poketube.fun/api/v1/trending${tab}`);
+    const invtrend = await modules.fetch(
+      `https://invid-api.poketube.fun/api/v1/trending${tab}`
+    );
     const t = getJson(await invtrend.text());
 
     let j = null;
     if (req.query.mobilesearch) {
       const query = req.query.mobilesearch;
       const continuation = req.query.continuation || "";
-      const search = await modules.fetch(`https://inner-api.poketube.fun/api/search?query=${query}&continuation=${continuation}`);
+      const search = await modules.fetch(
+        `https://inner-api.poketube.fun/api/search?query=${query}&continuation=${continuation}`
+      );
       const text = await search.text();
       j = getJson(modules.toJson(text));
     }
@@ -60,20 +63,34 @@ module.exports = function (app, config, renderTemplate) {
   });
 
   app.get("/:v*?", async function (req, res) {
+    var uaos = req.useragent.os;
+    var IsOldWindows;
+
+    if (uaos == "Windows 7" && req.useragent.browser == "Firefox") {
+      IsOldWindows = true;
+    } else if (uaos == "Windows 8" && req.useragent.browser == "Firefox") {
+      IsOldWindows = true;
+    } else {
+      IsOldWindows = false;
+    }
+
     const rendermainpage = () => {
       if (req.useragent.isMobile) {
         return res.redirect("/discover");
       }
-      return renderTemplate(res, req, "landing.ejs");
+      
+    return renderTemplate(res, req, "landing.ejs", {
+    IsOldWindows
+    });
     };
-     
+
     if (req.params.v && /[a-zA-Z0-9]+/.test(req.param.v)) {
       const isvld = await core.isvalidvideo(req.params.v);
       if (isvld) {
         return res.redirect(`/watch?v=${req.params.v}`);
       }
     }
-    
+
     return rendermainpage();
   });
 };

@@ -34,14 +34,12 @@ module.exports = function (app, config, renderTemplate) {
       var v = req.query.v;
 
       renderTemplate(res, req, "download.ejs", {
-        v, 
+        v,
         color: await modules
           .getColors(`https://i.ytimg.com/vi/${v}/maxresdefault.jpg`)
           .then((colors) => colors[0].hex()),
       });
-       
-      
-     } catch {
+    } catch {
       res.redirect("/");
     }
   });
@@ -57,19 +55,29 @@ module.exports = function (app, config, renderTemplate) {
   app.get("/search", async (req, res) => {
     const query = req.query.query;
 
-    const poketube_universe_value = "poketube_smart_search"
-    
-    if(query.includes("youtube.com")){
+    var uaos = req.useragent.os;
+    var IsOldWindows;
+
+    if (uaos == "Windows 7" && req.useragent.browser == "Firefox") {
+      IsOldWindows = true;
+    } else if (uaos == "Windows 8" && req.useragent.browser == "Firefox") {
+      IsOldWindows = true;
+    } else {
+      IsOldWindows = false;
+    }
+
+    const poketube_universe_value = "poketube_smart_search";
+
+    if (query.includes("youtube.com")) {
       try {
-      var videoid = query.split("v=")
-      
-      res.redirect("/watch?v=" + videoid[1])
+        var videoid = query.split("v=");
+
+        res.redirect("/watch?v=" + videoid[1]);
       } catch {
         return;
       }
-      
     }
-    
+
     if (!query) {
       return res.redirect("/");
     }
@@ -99,6 +107,7 @@ module.exports = function (app, config, renderTemplate) {
 
       renderTemplate(res, req, "search.ejs", {
         j: searchJson,
+        IsOldWindows,
         h: didYouMean,
         continuation,
         q: query,

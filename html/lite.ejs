@@ -311,10 +311,19 @@ background: none !important;
 <video class="player" id="<%=sha384(inv_vid.videoId)%>" style="border-radius: 0px:mrgin-left: -5.5px;" autoplay controls   
        
        poster="https://p.poketube.fun/https://i.ytimg.com/vi/<%=inv_vid.videoId%>/maxresdefault.jpg?v=607ddcd4">
-         
-
+               
+              <% if (isvidious) { %>
+                 
+ 
                                                 <source src="<%=u%>/latest_version?id=<%=inv_vid.videoId%>&itag=18&local=true" type="video/mp4; codecs=&quot;avc1.64001F, mp4a.40.2&quot;" label="sd360" selected="true">
         
+                                                                                                        <% } %>                     
+
+              <% if (!isvidious) { %>
+                 
+                                                <source src="https://tube.kuylar.dev/proxy/media/<%=inv_vid.videoId%>/18" type="video/mp4; codecs=&quot;avc1.64001F, mp4a.40.2&quot;" label="sd360" selected="true">
+        
+                                                                                                        <% } %>                     
  
 
                         

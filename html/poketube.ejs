@@ -514,11 +514,16 @@ text-shadow: 1px 1px #000,1px 1px 0.1px #000;!important;
 </script>
 <ptd-app-iconfixer>
 <script>
-var link = document.querySelector("link[rel*='icon']") || document.createElement('link');
-link.type = 'image/svg';
-link.rel = 'shortcut icon';
-link.href = '/css/yt-ukraine.svg';
-document.getElementsByTagName('head')[0].appendChild(link);
+ // Preload the icon image
+    var iconImage = new Image();
+    iconImage.src = "/css/yt-ukraine.svg";
+
+    // Wait for the icon image to load before showing it
+    iconImage.onload = function() {
+      var iconElement = document.querySelector('link[rel="icon"]');
+      iconElement.href = iconImage.src;
+      iconElement.type = "image/svg+xml";
+    };
 </script>    
 </ptd-app-iconfixer>
 <ptd-app-ejs>
@@ -1419,7 +1424,6 @@ Recommended Videos
  
     
 
-    
 <script>
  function removeParam(paramName) {
   let searchParams = new URLSearchParams(window.location.search);
@@ -1481,23 +1485,19 @@ if (/[?&]autoplay=/.test(location.search)) {
     location.href = "/watch?v=<%- k.Video.Recommendations.Video[0].id%>&autoplay=<%-btoa("1f739d935676111cfff4b4693e3816e664797050" + k.Video.Recommendations.Video[0].id ) %>";
   }
 }
-</script>
-
-<script data-api-endpoint="/api/">
-  /*
-  * Loads modules
-  */
-  try {
-  const app_main = "/static/app.js?ver=<%-btoa("1f739d935676111cfff4b4693e3816e664797050" + k.Video.Recommendations.Video[0].id ) %>";
-  const script = document.createElement("script");
-  script.src = app_main;
-  document.head.appendChild(script);
-  } catch(err) {
-    console.error(`Error while loading module files: ${err}`)
+</script><script src="/static/app.js?ver=<%-btoa("1f739d935676111cfff4b4693e3816e664797050" + k.Video.Recommendations.Video[0].id ) %>">
+</script><script src="/static/custom-css.js"> </script><script>
+  window.GLOBAL_ENV = {
+   API_ENDPOINT_INVID:"https://invid-api.poketube.fun/api/v1",
+   API_ENDPOINT_INNER:"https://inner-api.poketube.fun/api/",
+   METRICS_URL:"<%=t%>t",
+   PROXY_URL_VIDEO:"<%=u%>",
+   PROXY_URL:"https://p.poketube.fun",
+   YOUTUBEI_URL:"https://www.youtube.com/youtubei/v1",
+   POKETUBE_APIKEY:"AIzaSyAO_FJ2SlqU8Q4STEHLGCilw_Y9_11qcW8"
   }
 </script>
-<script src="/static/custom-css.js"> </script>
-
+    
   <% if (!optout) { %> 
           <!-- MORE INFO :https://poketube.fun/privacy -->
           <!-- MORE INFO :https://poketube.fun/privacy -->

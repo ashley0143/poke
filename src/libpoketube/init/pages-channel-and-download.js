@@ -158,15 +158,24 @@ module.exports = function (app, config, renderTemplate) {
           return null;
         }
       };
+      
+      
       var tj = await getChannelData(
         `https://invid-api.poketube.fun/api/v1/channels/videos/${ID}/?sort_by=${sort_by}${continuation}`
       );
+           
+      if(tab === "shorts") {
       var shorts = await getChannelData(
         `https://invid-api.poketube.fun/api/v1/channels/${ID}/shorts?sort_by=${sort_by}${continuations}`
       );
+      } 
+      
+      if(tab === "live") {
       var stream = await getChannelData(
         `https://invid-api.poketube.fun/api/v1/channels/${ID}/streams?sort_by=${sort_by}${continuationl}`
       );
+      }
+      
       var c = await getChannelData(
         `https://invid-api.poketube.fun/api/v1/channels/community/${ID}/`
       );

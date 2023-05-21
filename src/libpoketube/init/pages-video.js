@@ -221,16 +221,9 @@ core.video(v).then((data) => {
       
       
         var uaos = req.useragent.os
-        var IsOldWindows;
-        
-        
-        if(uaos == "Windows 7" && req.useragent.browser == "Firefox" ) {
-          IsOldWindows = true
-        } else if(uaos == "Windows 8" && req.useragent.browser == "Firefox") {
-          IsOldWindows = true
-        } else {
-          IsOldWindows = false
-        }
+        const browser = req.useragent.browser;
+        const IsOldWindows = (uaos === "Windows 7" || uaos === "Windows 8") && browser === "Firefox";
+
         
         renderTemplate(res, req, "poketube.ejs", {
           color: data.color,

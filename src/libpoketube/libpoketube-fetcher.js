@@ -1,3 +1,11 @@
+/**
+ * PokeTube is a Free/Libre youtube front-end !
+ *
+ * This file is Licensed under LGPL-3.0-or-later. Poketube itself is GPL, Only this file is LGPL.
+ * See a copy here: https://www.gnu.org/licenses/lgpl-3.0.txt
+ * Please don't remove this comment while sharing this code.
+ */
+
 const { curly } = require("node-libcurl");
 const { toJson } = require("xml2json");
 const fetch = require("node-fetch");
@@ -22,23 +30,10 @@ class PokeTubeAPI {
   }
 
   /**
-   * Retrieves data about the YouTube video from the InnerTube API.
-   * @deprecated This method is deprecated and may no longer work due to changes in the InnerTube API. Please use the `video()` function defined in `libpoketube-core` to retrieve video data.
-   * @returns {Promise<object|null>} A Promise that resolves with the video data, or null if an error occurs.
-   * @private
+   * @deprecated This method is deprecated. Please use the `video()` function defined in `libpoketube-core` to retrieve video data.
    */
   async _getInnerTubeData() {
-    try {
-      const { data } = await curly.get(`${NEW_API_URL}?v=${this.videoId}`, {
-        httpHeader: Object.entries(this.headers).map(([k, v]) => `${k}: ${v}`),
-      });
-
-      const json = toJson(data);
-      return this._getJson(json);
-    } catch (error) {
-      this._handleError(`Error parsing XML: ${error}`);
-      return null;
-    }
+    return;
   }
 
   /**

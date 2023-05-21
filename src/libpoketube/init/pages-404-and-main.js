@@ -61,36 +61,31 @@ module.exports = function (app, config, renderTemplate) {
       j,
     });
   });
+  
+app.get("/:v*?", async function (req, res) {
+  const uaos = req.useragent.os;
+  const browser = req.useragent.browser;
+  const isOldWindows =
+    (uaos === "Windows 7" || uaos === "Windows 8") && browser === "Firefox";
 
-  app.get("/:v*?", async function (req, res) {
-    var uaos = req.useragent.os;
-    var IsOldWindows;
-
-    if (uaos == "Windows 7" && req.useragent.browser == "Firefox") {
-      IsOldWindows = true;
-    } else if (uaos == "Windows 8" && req.useragent.browser == "Firefox") {
-      IsOldWindows = true;
-    } else {
-      IsOldWindows = false;
+  const rendermainpage = () => {
+    if (req.useragent.isMobile) {
+      return res.redirect("/discover");
     }
 
-    const rendermainpage = () => {
-      if (req.useragent.isMobile) {
-        return res.redirect("/discover");
-      }
-      
     return renderTemplate(res, req, "landing.ejs", {
-    IsOldWindows
+      isOldWindows,
     });
-    };
+  };
 
-    if (req.params.v && /[a-zA-Z0-9]+/.test(req.param.v)) {
-      const isvld = await core.isvalidvideo(req.params.v);
-      if (isvld) {
-        return res.redirect(`/watch?v=${req.params.v}`);
-      }
+  if (req.params.v && /[a-zA-Z0-9]+/.test(req.params.v)) {
+    const isvld = await core.isvalidvideo(req.params.v);
+    if (isvld) {
+      return res.redirect(`/watch?v=${req.params.v}`);
     }
+  }
 
-    return rendermainpage();
-  });
+  return rendermainpage();
+});
+
 };

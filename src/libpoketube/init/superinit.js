@@ -76,8 +76,8 @@ function init(app, config, rendertemplate) {
               );
             }
           })();
-        }, 46000); /* setInterval */
-      }, 46000);
+        }, 12000); /* setInterval */
+      }, 12000);
     } catch (err) {
       initlog("[FAILED] Load pages \n" + err);
     }

@@ -27,11 +27,11 @@ function getJson(str) {
 }
 
 const pkg = require("../../../package.json");
-const ver = "v23.0805-ArIa-MAJOR-stable-nonLTS-git-MTY4MzU2MzMxNQ==";
+const ver = "v23.0206-aStfl-MAJOR-stable-nonLTS-git-MTY4MzU2MzMxNQ==";
 const branch = "master";
-const codename = "aria";
-const versionnumber = "243";
-const relaseunixdate = "MTY4MzU2MzMxNQ==";
+const codename = "astolfo-2";
+const versionnumber = "244";
+const relaseunixdate = "MTY4NTcxNzAzOQ==";
 
 module.exports = function (app, config, renderTemplate) {
   app.get("/embed/:v", async function (req, res) { 

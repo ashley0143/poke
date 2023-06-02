@@ -131,7 +131,7 @@ class PokeTubeCore {
         // Store result in cache
         this.cache[v] = {
           result: {
-            json: fe?.video?.Player,
+            json: json?.video,
             video,
             vid,
             comments,
@@ -179,11 +179,11 @@ class PokeTubeCore {
 }
 
 // Create an instance of PokeTubeCore with the provided config
-const pokeTubeCore = new PokeTubeCore({
+const pokeTubeApiCore = new PokeTubeCore({
   tubeApi: "https://inner-api.poketube.fun/api/",
   invapi: "https://invid-api.poketube.fun/api/v1",
   dislikes: "https://returnyoutubedislikeapi.com/votes?videoId=",
   t_url: "https://t.poketube.fun/",
 });
 
-module.exports = pokeTubeCore;
+module.exports = pokeTubeApiCore;

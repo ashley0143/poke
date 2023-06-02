@@ -418,7 +418,7 @@ text-shadow: 1px 1px #000,1px 1px 0.1px #000;!important;
                                                       		 	               <% } %>   
 
                                                                    
- 
+                                                  
  <style data-universe="2">
    
    :root {
@@ -476,7 +476,48 @@ text-shadow: 1px 1px #000,1px 1px 0.1px #000;!important;
         
                                                                                      <% } %>     
 </style>
-        
+             <% if(dm) { %>
+             <style>
+               :root {
+                 --div-gradient: linear-gradient(to bottom right, #33078c, #7a4d3f) !important;
+               }
+               
+               .subscribe-button > a {
+               color: rgb(232, 230, 227) !important;
+            text-decoration-color: currentcolor;
+          }
+               
+               .subscribe-button {
+               color: rgb(255, 26, 26);
+               background-color: rgb(24, 26, 27);
+              background-image: none;
+         } 
+               
+          .subscribe-button:hover {
+            background-color: rgb(24, 26, 27);
+  background-image: linear-gradient(90deg, rgb(166, 30, 99), rgb(111, 88, 0), rgb(166, 30, 99), rgb(111, 88, 0));
+  box-shadow: rgb(0, 0, 0) 0px 3px 14px;
+}
+               
+               * {
+  scrollbar-color: #454a4d #202324;
+}
+               
+.new-button:hover {
+  border-color: rgb(48, 52, 54);
+  box-shadow: rgb(0, 0, 0) 0px 3px 14px;
+}
+
+.new-button.engagement:hover {
+  background-color: rgba(0, 0, 0, 0.6);
+}
+               
+.new-button {
+  border-color: rgb(61, 11, 120);
+}
+       </style>
+      <% } %>
+                           
                                       
     </head>
     
@@ -615,6 +656,27 @@ But Please note that unofficial instances can add the same lock icon, so please 
         
                                       
                                                                                      <% } %>    
+               
+                                                                                       
+                          <% if (!dm) { %>  
+
+        		<a href="/watch?v=<%=inv_vid.videoId%>&dm=true" title="Enable dark video info panel" style="text-decoration: none;" class="dropdown__item">
+<i class="fa-light fa-sun-bright"></i>
+               Dark Info Panel • off
+        </a>
+        
+                                                                                     <% } %>                
+     <% if (dm) { %>  
+
+
+        		<a title="Enable Dark video info" href="/watch?v=<%=inv_vid.videoId%>" style="text-decoration: none;" class="dropdown__item">
+<i class="fa-light fa-moon" style="width: 1em;margin-left: 4px;"></i>
+             Dark Info Panel • on
+        </a>
+        
+                                      
+                                                                                     <% } %>    
+                                                         
                                                                                        
                                                                                            <% if (!universe) { %>  
 

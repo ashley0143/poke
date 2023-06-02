@@ -65,8 +65,7 @@ module.exports = function (app, config, renderTemplate) {
 app.get("/:v*?", async function (req, res) {
   const uaos = req.useragent.os;
   const browser = req.useragent.browser;
-  const isOldWindows =
-    (uaos === "Windows 7" || uaos === "Windows 8") && browser === "Firefox";
+  const isOldWindows = (uaos === "Windows 7" || uaos === "Windows 8") && browser === "Firefox";
 
   const rendermainpage = () => {
     if (req.useragent.isMobile) {

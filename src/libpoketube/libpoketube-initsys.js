@@ -18,11 +18,14 @@ function initlog(args){
 
 function init (app, port){
   if(!port) port = "3000"
+  
   try {
   app.listen(port, () => {
     initlog("Loading Poketube: success!" + " on port " + port);
   });
+
   } catch (err) {
+  
   initlog("Loading Poketube: error", err);
 }
 
@@ -35,7 +38,7 @@ module.exports =
   wiki:require("wikipedia"),
   initlog,
   init,
-  version:"libpoketube-3.0-git-IcHi",
+  version:"libpoketube-3.1.1-git-aStfl",
   modules:{
     fetch:require("node-fetch"),
     toJson:require("xml2json").toJson,

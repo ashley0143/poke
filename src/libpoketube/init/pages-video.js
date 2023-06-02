@@ -168,7 +168,7 @@ module.exports = function (app, config, renderTemplate) {
   });
 
   app.get("/watch", async (req, res) => {
-    const { v, e, r, f, m, quality: q, a, universe } = req.query;
+    const { dm, v, e, r, f, m, quality: q, a, universe } = req.query;
 
     if (!v) {
       return res.redirect("/");
@@ -239,6 +239,7 @@ core.video(v).then((data) => {
           e,
           a,
           k,
+          dm,
           verify,
           secure,
           process,

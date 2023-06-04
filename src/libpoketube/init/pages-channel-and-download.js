@@ -158,27 +158,23 @@ module.exports = function (app, config, renderTemplate) {
           return null;
         }
       };
-      
-      
-      var tj = await getChannelData(
+
+      var tjPromise = getChannelData(
         `https://invid-api.poketube.fun/api/v1/channels/videos/${ID}/?sort_by=${sort_by}${continuation}`
       );
-           
-      if(tab === "shorts") {
-      var shorts = await getChannelData(
+      var shortsPromise = getChannelData(
         `https://invid-api.poketube.fun/api/v1/channels/${ID}/shorts?sort_by=${sort_by}${continuations}`
       );
-      } 
-      
-      if(tab === "live") {
-      var stream = await getChannelData(
+      var streamPromise = getChannelData(
         `https://invid-api.poketube.fun/api/v1/channels/${ID}/streams?sort_by=${sort_by}${continuationl}`
       );
-      }
-      
-      var c = await getChannelData(
+      var cPromise = getChannelData(
         `https://invid-api.poketube.fun/api/v1/channels/community/${ID}/`
       );
+      var tj = await tjPromise;
+      var shorts = await shortsPromise;
+      var stream = await streamPromise;
+      var c = await cPromise;
 
       cache[ID] = {
         result: {

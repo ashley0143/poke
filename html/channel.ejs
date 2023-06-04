@@ -569,7 +569,7 @@ white-space: nowrap;text-decoration: none;" href="/feeds/videos.xml?channel_id=<
 
                 <a href="/channel?id=<%=ID%>" class="tab active" style="color:#cfe2f3;">Videos</a>
               
-<%  if (Array.isArray(shorts.videos)) { %> 
+<%  if (Array.isArray(shorts?.videos)) { %> 
     <%  if (shorts.videos[0]) { %> 
 <%  if (turntomins(shorts.videos[0].lengthSeconds)  != "aN:aN" ) { %> 
 
@@ -580,7 +580,7 @@ white-space: nowrap;text-decoration: none;" href="/feeds/videos.xml?channel_id=<
 
       <% } %>
         
-                          <%  if (Array.isArray(stream.videos)) { %> 
+                          <%  if (Array.isArray(stream?.videos)) { %> 
                                 <%  if (stream.videos[0]) { %> 
 
 <%  if (turntomins(stream.videos[0].lengthSeconds)  != "aN:aN" ) { %> 
@@ -605,7 +605,7 @@ white-space: nowrap;text-decoration: none;" href="/feeds/videos.xml?channel_id=<
                                                                              <% if (tab === "about") { %>
 
                 <a href="/channel?id=<%=ID%>" class="tab" style="color:#cfe2f3;">Videos</a>
-<%  if (Array.isArray(shorts.videos)) { %> 
+<%  if (Array.isArray(shorts?.videos)) { %> 
 <%  if (shorts.videos[0]) { %> 
 <%  if (turntomins(shorts.videos[0].lengthSeconds)  != "aN:aN" ) { %> 
 
@@ -666,11 +666,11 @@ white-space: nowrap;text-decoration: none;" href="/feeds/videos.xml?channel_id=<
                                                                                      <% if (tab === "shorts") { %>
 
                 <a href="/channel?id=<%=ID%>" class="tab" style="color:#cfe2f3;">Videos</a>
-<%  if (Array.isArray(shorts.videos)) { %> 
+<%  if (Array.isArray(shorts?.videos)) { %> 
 
                    <a href="/channel?id=<%=ID%>&tab=shorts" class="tab active shr">Shorts</a>
   <% } %>
- <%  if (Array.isArray(stream.videos)) { %> 
+ <%  if (Array.isArray(stream?.videos)) { %> 
    <%  if (stream.videos[0]) { %> 
 <%  if (turntomins(stream.videos[0].lengthSeconds)  != "aN:aN" ) { %> 
 
@@ -694,7 +694,7 @@ white-space: nowrap;text-decoration: none;" href="/feeds/videos.xml?channel_id=<
                                                                                                  <% if (tab === "live") { %>
 
                 <a href="/channel?id=<%=ID%>" class="tab"  style="color:#cfe2f3;">Videos</a>
-<%  if (Array.isArray(shorts.videos)) { %> 
+<%  if (Array.isArray(shorts?.videos)) { %> 
   
 <%  if (turntomins(shorts.videos[0].lengthSeconds)  != "aN:aN" ) { %> 
 
@@ -702,7 +702,7 @@ white-space: nowrap;text-decoration: none;" href="/feeds/videos.xml?channel_id=<
   <% } %>
       <% } %>
         
-     <%  if (Array.isArray(stream.videos)) { %> 
+     <%  if (Array.isArray(stream?.videos)) { %> 
 
                    <a href="/channel?id=<%=ID%>&tab=live" class="tab active" style="color:#d9ead3;">Live</a>
   <% } %>

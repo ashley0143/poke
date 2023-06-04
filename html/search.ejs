@@ -639,6 +639,65 @@ if (audioToggled == false) {
 // Show the audio button
 button.style.display = "block";
 // @license-end
+  
+const urls = document.querySelectorAll('a[href*="/watch?v="]'); // get all links with "/watch?v=" in href attribute
+
+const spinner = document.createElement('div');
+spinner.id = 'fetch-spinner';
+spinner.classList.add('hide');
+document.body.appendChild(spinner);
+
+const text = document.createElement('div');
+text.id = 'fetch-text';
+ text.classList.add('hide');
+document.body.appendChild(text);
+ document.body.classList.add('blur');
+
+let fetchedCount = 0;
+
+urls.forEach(link => {
+  const url = new URL(link.href);
+
+  if (url.host !== 'www.youtube.com' && url.host !== 'youtube.com') {
+      if (url.host !== "redirect.poketube.fun") {
+
+    console.log(`Fetching ${url.origin}`);
+
+    spinner.classList.remove('hide');
+    text.classList.remove('hide');
+
+    fetch(url.href)
+      .then(response => {
+        if (response.status === 500) {
+          // do nothing
+        }
+        console.log(`Fetched ${url.origin}`);
+        fetchedCount++;
+        console.clear()
+
+        if (fetchedCount === urls.length) {
+          spinner.classList.add('hide');
+          text.classList.add('hide');
+           document.body.classList.remove('blur');
+        }
+        // Do something with the response
+      })
+      .catch(error => {
+        spinner.classList.add('hide');
+        text.classList.add('hide');
+       console.clear()
+        // Ignore network errors
+        if (!(error instanceof TypeError && error.message.includes('Failed to fetch'))) {
+          console.error(`Error fetching ${url.origin}: ${error}`);
+        }
+      
+      });
+  }
+      }
+
+});
+
+console.clear()
 
                                     </script>
                                     </body>

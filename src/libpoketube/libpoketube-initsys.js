@@ -6,47 +6,149 @@
  
     This file is Licensed under LGPL-3.0-or-later. Poketube itself is GPL, Only this file is LGPL.
     
-    see a copy here:https://www.gnu.org/licenses/lgpl-3.0.txt
+    see a copy here: https://www.gnu.org/licenses/lgpl-3.0.txt
     
     please dont remove this comment while sharing this code 
     
-  */
+*/
 
-function initlog(args){
-  console.log("[LIBPT INTSYS] " + args) 
+const fetcher = require("../libpoketube/libpoketube-fetcher.js");
+const core = require("../libpoketube/libpoketube-core.js");
+const musicInfo = require("music-info");
+const wiki = require("wikipedia");
+
+const fetch = require("node-fetch");
+const toJson = require("xml2json").toJson;
+const express = require("express");
+const useragent = require("express-useragent");
+
+const path = require("path");
+const hash = require("js-sha512").sha384;
+const moment = require("moment");
+const getColors = require("get-image-colors");
+
+/**
+ * Logs a message to the console with a specific prefix
+ *
+ * @param {string} args - The message to wood (get it log wood im so funny)
+ */
+function initlog(args) {
+  console.log("[LIBPT INTSYS] " + args);
 }
 
-function init (app, port){
-  if(!port) port = "3000"
-  
+/**
+ * Initializes the application and starts listening on the specified port or something idk aaaaa help me
+ *
+ * @param {object} app - The express application
+ * @param {string} [port="3000"] - The port to listen on
+ */
+function init(app, port) {
+  if (!port) port = "3000";
   try {
-  app.listen(port, () => {
-    initlog("Loading Poketube: success!" + " on port " + port);
-  });
-
+    app.listen(port, () => {
+      initlog("Loading Poketube: success!" + " on port " + port);
+    });
   } catch (err) {
-  
-  initlog("Loading Poketube: error", err);
-}
+    initlog("Loading Poketube: error", err);
+  }
 
 }
-module.exports =
-{
-  fetcher:require("../libpoketube/libpoketube-fetcher.js"),
-  core:require("../libpoketube/libpoketube-core.js"),
-  musicInfo:require("music-info"),
-  wiki:require("wikipedia"),
+
+
+module.exports = {
+  /**
+   * The fetcher module
+   * @type {object}
+   */
+  fetcher,
+  
+  /**
+   * The core module
+   * @type {object}
+   */
+  core,
+  
+  /**
+   * The musicInfo module
+   * @type {object}
+   */
+  musicInfo,
+  
+  /**
+   * The wiki module
+   * @type {object}
+   */
+  wiki,
+  
+  /**
+   * Logs a message to the console with a specific prefix
+   * @type {Function}
+   */
   initlog,
+  
+  /**
+   * Initializes the application and starts listening on the specified port
+   * @type {Function}
+   */
   init,
-  version:"libpoketube-3.1.1-git-aStfl",
-  modules:{
-    fetch:require("node-fetch"),
-    toJson:require("xml2json").toJson,
-    express:require("express"),
-    useragent:require("express-useragent"),
-    path:require("path"),
-    hash:require("js-sha512").sha384,
-    moment:require("moment"),
-    getColors:require("get-image-colors"),
+  
+  /**
+   * The version of the LIB-PokeTube module
+   * @type {string}
+   */
+  version: "libpoketube-3.1.1-git-aStfl",
+  
+  /**
+   * The external modules used by PokeTube
+   * @type {object}
+   */
+  modules: {
+    /**
+     * The fetch module 
+     * @type {object}
+     */
+    fetch,
+    
+    /**
+     * The toJson module
+     * @type {Function}
+     */
+    toJson,
+    
+    /**
+     * The express module
+     * @type {object}
+     */
+    express,
+    
+    /**
+     * The useragent module
+     * @type {object}
+     */
+    useragent,
+    
+    /**
+     * The path module
+     * @type {object}
+     */
+    path,
+    
+    /**
+     * The hash module
+     * @type {Function}
+     */
+    hash,
+    
+    /**
+     * The moment module
+     * @type {object}
+     */
+    moment,
+    
+    /**
+     * The getColors module
+     * @type {Function}
+     */
+    getColors,
   }
-}
+};

@@ -25,7 +25,8 @@
     "music-info": "^1.2.1",
     "wikipedia": "^2.0.0",
     "clean-css": "^5.3.2",
-    "node-libcurl": "^2.3.3"
+    "node-libcurl": "^2.3.3",
+    "uglify-js": "^3.17.4"
   },
   "engines": {
     "node": "16.x"

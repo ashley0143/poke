@@ -57,11 +57,7 @@ module.exports = function (app, config, renderTemplate) {
     if (req.query.f) {
       var format = "mp3";
     }
-
-    var fetching = await fetcher(v);
-
-    const json = fetching.video.Player;
-
+ 
     const url = `https://tube.kuylar.dev/proxy/media/${v}/${q}`;
 
     res.redirect(url);

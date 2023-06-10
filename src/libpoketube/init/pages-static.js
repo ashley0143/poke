@@ -66,41 +66,54 @@ module.exports = function (app, config, renderTemplate) {
     });
   });
 
-  const path = require("path");
-  const fs = require("fs");
-  const CleanCSS = require("clean-css");
+ const path = require("path");
+const fs = require("fs");
+const CleanCSS = require("clean-css");
 
-  const cssDir = "./css/";
+const cssDir = "./css/";
 
-  app.get("/css/:id", (req, res) => {
-    const filePath = path.join(cssDir, req.params.id);
+app.get("/css/:id", (req, res) => {
+  const filePath = path.join(cssDir, req.params.id);
+  if (!fs.existsSync(filePath)) {
+    res.status(404).send("File not found");
+    return;
+  }
+
+  if (req.params.id.endsWith(".css") && !req.query.nomin) {
+    // Minimize the CSS file
+    const css = fs.readFileSync(filePath, "utf8");
+    const minimizedCss = new CleanCSS().minify(css).styles;
+    // Serve the minimized CSS file
+    res.header("Content-Type", "text/css");
+    res.send(notice + " " + minimizedCss);
+  } else {
+    // Serve the original file
+    res.sendFile(req.params.id, { root: html_location });
+  }
+
+  if (req.params.id.endsWith(".js")) {
+    res.redirect("/static/" + req.params.id);
+  }
+});
+
+app.get("/static/:id", (req, res) => {
+  if (req.params.id.endsWith(".css")) {
+    res.redirect("/css/" + req.params.id);
+  } else if (req.params.id.endsWith(".js")) {
+    const filePath = path.join(html_location, req.params.id);
     if (!fs.existsSync(filePath)) {
       res.status(404).send("File not found");
       return;
     }
-
-    if (req.params.id.endsWith(".css") && !req.query.nomin) {
-      // Minimize the CSS file
-      const css = fs.readFileSync(filePath, "utf8");
-      const minimizedCss = new CleanCSS().minify(css).styles;
-      // Serve the minimized CSS file
-      res.header("Content-Type", "text/css");
-     res.send(notice + " " + minimizedCss);
-    } else {
-      // Serve the original file
-      res.sendFile(req.params.id, { root: html_location });
-    }
-
-    if (req.params.id.endsWith(".js")) {
-      res.redirect("/static/" + req.params.id);
-    }
-  });
-
-  app.get("/static/:id", (req, res) => {
-      if (req.params.id.endsWith(".css")) {
-      res.redirect("/css/" + req.params.id);
-    }
-    
+    // Minimize the JavaScript file
+    const js = fs.readFileSync(filePath, "utf8");
+    const minimizedJs = require("uglify-js").minify(js).code;
+    // Serve the minimized JavaScript file
+    res.header("Content-Type", "text/javascript");
+    res.send("// @license magnet:?xt=urn:btih:1f739d935676111cfff4b4693e3816e664797050&dn=gpl-3.0.txt GPL-3.0-or-later"  + " "  + minimizedJs + " " + "// @license-end");
+  } else {
     res.sendFile(req.params.id, { root: html_location });
-  });
+  }
+});
+
 };

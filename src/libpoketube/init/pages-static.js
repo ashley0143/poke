@@ -110,7 +110,7 @@ app.get("/static/:id", (req, res) => {
     const minimizedJs = require("uglify-js").minify(js).code;
     // Serve the minimized JavaScript file
     res.header("Content-Type", "text/javascript");
-    res.send("// @license magnet:?xt=urn:btih:1f739d935676111cfff4b4693e3816e664797050&dn=gpl-3.0.txt GPL-3.0-or-later"  + " "  + minimizedJs + " " + "// @license-end");
+    res.send("// @license magnet:?xt=urn:btih:1f739d935676111cfff4b4693e3816e664797050&dn=gpl-3.0.txt GPL-3.0-or-later"  + `\n` + minimizedJs + `\n` + "// @license-end");
   } else {
     res.sendFile(req.params.id, { root: html_location });
   }

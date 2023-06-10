@@ -92,6 +92,23 @@ links.forEach(link => {
   });
 });
 
+function jumpToTime(e) {
+  e.preventDefault();
+  
+  const link = e.target;
+  const video = document.getElementById('video');
+  const time = link.dataset.jumpTime;
+  
+  video.currentTime = time;
+
+  window.location.hash = 'top'; // Add #video to the URL
+
+  setTimeout(() => {
+    history.replaceState(null, null, ' '); // Remove #video after 1 second
+  }, 250);
+}
+
+
 // Handle click events for time-based links
 const timeLinks = document.querySelectorAll('a[data-onclick="jump_to_time"]');
 timeLinks.forEach(link => {

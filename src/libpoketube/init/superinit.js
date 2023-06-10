@@ -76,12 +76,12 @@ function init(app, config, rendertemplate) {
               );
             }
           })();
-        }, 3500000); /* setInterval */
-      }, 3000000);
+        }, 1580000); /* setInterval */
+      }, 600000);
     } catch (err) {
       initlog("[FAILED] Load pages \n" + err);
     }
-  }, 3000000);
+  }, 600000);
 }
 
 module.exports = {

@@ -122,49 +122,9 @@ const PATREON_REGEX = /https:\/\/www.patreon.com\/(?<name>[\w\d_-]+)/;
 
 module.exports = function (app, config, renderTemplate) {
   app.get("/encryption", async function (req, res) {
-    var v = req.query.v;
-
-    const video = await modules.fetch(config.tubeApi + `video?v=${v}`);
-    var fetching = await fetcher(v);
-
-    const json = fetching.video.Player;
-    const h = await video.text();
-    const k = JSON.parse(modules.toJson(h));
-    if (!v) res.redirect("/");
-    try {
-      if ("Formats" in fetching.video.Player) {
-        //video
-        const j = fetching.video.Player.Formats.Format,
-          j_ = Array.isArray(j) ? j[j.length - 1] : j;
-        let url;
-        if (j_.URL != undefined) url = j_.URL;
-
-        //checks if json exists
-        if (json) {
-          //checks if title exists in the json object
-
-          if ("Title" in json) {
-            // json response
-            const re = {
-              main: {
-                video_id: sha384(json.id),
-                channel: sha384(json.Channel.Name),
-                title: sha384(json.Title),
-                date: sha384(btoa(Date.now()).toString()),
-              },
-              video: {
-                title: sha384(json.Title),
-                url: sha384(url),
-              },
-            };
-
-            res.json(re);
-          }
-        }
-      }
-    } catch {
+     
       res.json("error in parsing");
-    }
+     
   });
 
   app.get("/watch", async (req, res) => {

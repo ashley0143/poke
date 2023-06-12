@@ -19,6 +19,10 @@ const {
   getRandomArbitrary,
 } = require("../ptutils/libpt-coreutils.js");
 
+const path = require("path");
+const fs = require("node:fs");
+const CleanCSS = require("clean-css");
+
 const sha384 = modules.hash;
 const notice = "/* the code is Licensed in gpl-3.0-or-later. This program comes with ABSOLUTELY NO WARRANTY. This is free software, and you are welcome to redistribute it under certain conditions. See the GNU General Public License for more detailsYou should have received a copy of the GNU General Public Licensealong with this program.  If not, see <https://www.gnu.org/licenses/>. - add the param nomin to view source code. (eg poketube.fun/css/poketube.css?nomin=true) */"
 
@@ -66,10 +70,6 @@ module.exports = function (app, config, renderTemplate) {
     });
   });
 
- const path = require("path");
-const fs = require("fs");
-const CleanCSS = require("clean-css");
-
 const cssDir = "./css/";
 
 app.get("/css/:id", (req, res) => {
@@ -110,7 +110,7 @@ app.get("/static/:id", (req, res) => {
     const minimizedJs = require("uglify-js").minify(js).code;
     // Serve the minimized JavaScript file
     res.header("Content-Type", "text/javascript");
-    res.send("// @license magnet:?xt=urn:btih:1f739d935676111cfff4b4693e3816e664797050&dn=gpl-3.0.txt GPL-3.0-or-later"  + `\n` + minimizedJs + `\n` + "// @license-end");
+    res.send("// @license magnet:?xt=urn:btih:1f739d935676111cfff4b4693e3816e664797050&dn=gpl-3.0.txt GPL-3.0-or-later" + `\n`  + `// Source code can be found in: https://codeberg.org/Ashley/poketube/src/branch/main/css/${req.params.id}` + `\n` + minimizedJs + `\n` + "// @license-end");
   } else {
     res.sendFile(req.params.id, { root: html_location });
   }

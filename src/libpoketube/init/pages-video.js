@@ -161,30 +161,22 @@ core.video(v).then((data) => {
           d = desc.toString().replace(/\n/g, " <br> ");
         }
 
-        let support;
-        if (String(inv_vid.description) !== "[object Object]") {
-          support = (PATREON_REGEX.exec(inv_vid.description) ?? {}).groups;
-        }
+       const support = (String(inv_vid.description) !== "[object Object]") ? (PATREON_REGEX.exec(inv_vid.description) ?? {}).groups : undefined;
 
         let badges = "";
         let comments = "";
         let nnn = "";
     
-        
-        if(inv_vid?.error === "The uploader has not made this video available in your country"){
-          res.send("error : " + inv_vid.error + " please refresh the page please qt ")
-        }
-      
-        if(inv_vid?.error === "This video is not available"){
-          res.send("error : " + inv_vid.error + " please refresh the page please qt ")
-        }
-      
-      
+        if (inv_vid?.error === "The uploader has not made this video available in your country" || inv_vid?.error === "This video is not available") {
+  res.send("error: " + inv_vid.error + " please refresh the page please qt");
+}
+  
         var uaos = req.useragent.os
         const browser = req.useragent.browser;
         const IsOldWindows = (uaos === "Windows 7" || uaos === "Windows 8") && browser === "Firefox";
 
-        
+        if (uaos === "Windows XP" || uaos === "Windows Vista") res.redirect("/lite?v=" + req.query.v);
+
         renderTemplate(res, req, "poketube.ejs", {
           color: data.color,
           color2: data.color2,

@@ -29,7 +29,7 @@ function getJson(str) {
 }
 
 module.exports = function (app, config, renderTemplate) {
-  app.get("/discover", async function (req, res) {
+  app.get("/app", async function (req, res) {
     let tab = "";
     if (req.query.tab) {
       tab = `/?type=${capitalizeFirstLetter(req.query.tab)}`;

@@ -57,6 +57,10 @@ module.exports = function (app, config, renderTemplate) {
     res.redirect("https://youtube.com/upload");
   });
 
+  app.get("/discover", (req, res) => {
+    res.redirect("/app");
+  });
+
   app.get("/sex", (req, res) => {
     res.redirect("https://poketube.fun/watch?v=dQw4w9WgXcQ&e=f");
   });

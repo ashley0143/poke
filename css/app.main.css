@@ -7,6 +7,11 @@
 }
 
 
+.emoji {
+  width: 16px;
+  pointer-events:none;
+}
+
 @font-face {
   font-family: 'Inter';
   font-style: normal;

@@ -1479,7 +1479,9 @@ Recommended Videos
 	</div>  
  
     
-
+<!-- SCRIPTS -->
+    
+<!-- AUTOPLAY -->
 <script>
  function removeParam(paramName) {
   let searchParams = new URLSearchParams(window.location.search);
@@ -1541,8 +1543,9 @@ if (/[?&]autoplay=/.test(location.search)) {
     location.href = "/watch?v=<%- k.Video.Recommendations.Video[0].id%>&autoplay=<%-btoa("1f739d935676111cfff4b4693e3816e664797050" + k.Video.Recommendations.Video[0].id ) %>";
   }
 }
-</script><script src="/static/app.js?ver=<%-btoa("1f739d935676111cfff4b4693e3816e664797050" + k.Video.Recommendations.Video[0].id ) %>">
-</script><script src="/static/custom-css.js"> </script><script>
+</script><!-- bundled app.js --><script src="/static/app.js?ver=<%-btoa("1f739d935676111cfff4b4693e3816e664797050" + k.Video.Recommendations.Video[0].id ) %>">
+</script> <!-- themes --> <script src="/static/custom-css.js"> </script><!-- twemoji --><script src="/static/emojis.js"></script><style> img.emoji {height: 1em;width: 1em;margin: 0 .05em 0 .1em;vertical-align: -0.1em;}</style>
+<script>twemoji.parse(document.body,{ base: 'https://cdn.zptr.cc/twemoji/' })</script><script>
   window.GLOBAL_ENV = {
    API_ENDPOINT_INVID:"https://invid-api.poketube.fun/api/v1",
    API_ENDPOINT_INNER:"https://inner-api.poketube.fun/api/",
@@ -1553,7 +1556,7 @@ if (/[?&]autoplay=/.test(location.search)) {
    POKETUBE_APIKEY:"AIzaSyAO_FJ2SlqU8Q4STEHLGCilw_Y9_11qcW8"
   }
 </script>
-    
+<!-- SCRIPTS END -->
   <% if (!optout) { %> 
           <!-- MORE INFO :https://poketube.fun/privacy -->
           <!-- MORE INFO :https://poketube.fun/privacy -->

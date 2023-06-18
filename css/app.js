@@ -72,26 +72,7 @@ function fadeInElements() {
 window.addEventListener('scroll', fadeInElements);
 document.addEventListener('fullscreenchange', fadeInElements);
 setInterval(fadeInElements, 500);
-
-// Handle click events on links
-const links = document.querySelectorAll('a:not([data-onclick="jump_to_time"])');
-links.forEach(link => {
-  link.addEventListener('click', e => {
-    if (!link.href.includes('#')) {
-      e.preventDefault();
-      const spinner = document.createElement('div');
-      spinner.classList.add('spinner');
-      const loading = document.createElement('div');
-      loading.classList.add('loading');
-      loading.appendChild(spinner);
-      document.body.appendChild(loading);
-      setTimeout(() => {
-        window.location.href = link.href;
-      }, 100);
-    }
-  });
-});
-
+ 
 function jumpToTime(e) {
   e.preventDefault();
   
@@ -144,6 +125,7 @@ urls.forEach(link => {
     console.log(`Fetching ${url.origin}`);
     spinner.classList.remove('hide');
     text.classList.remove('hide');
+
     fetch(url.href)
       .then(response => {
         if (response.status === 500) {
@@ -259,4 +241,54 @@ downloadUrls.forEach(link => {
       });
   }
 });
+
+ var popupMenu = document.getElementById("popupMenu");
+        var loopOption = document.getElementById("loopOption");
+        var speedOption = document.getElementById("speedOption");
+
+         video.addEventListener("contextmenu", function(event) {
+            event.preventDefault();  
+
+             popupMenu.style.display = "block";
+            popupMenu.style.left = event.pageX + "px";
+            popupMenu.style.top = event.pageY + "px";
+        });
+
+        // Hide the popup menu when clicking outside of it
+        window.addEventListener("click", function(event) {
+            if (event.target !== video) {
+                popupMenu.style.display = "none";
+            }
+        });
+  
+    loopOption.addEventListener("click", function() {
+            video.loop = !video.loop;
+            if (video.loop) {
+                alert("Looped!");
+            } else {
+              alert("unlooped!")
+            }
+        });
+
+ speedOption.addEventListener("click", function() {
+            var currentSpeed = video.playbackRate;
+            var newSpeed = getNextSpeed(currentSpeed);
+            video.playbackRate = newSpeed;
+            speedOption.textContent = "Speed: " + newSpeed.toFixed(2) + "x";
+        });
+
+        function getNextSpeed(currentSpeed) {
+            if (currentSpeed === 2) {
+                return 0.25;
+            } else if (currentSpeed === 0.25) {
+                return 0.5;
+            } else if (currentSpeed === 0.5) {
+                return 0.75;
+            } else if (currentSpeed === 0.75) {
+                return 1;
+            } else {
+                return 2;
+            }
+        }
+
 // @license-end

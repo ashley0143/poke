@@ -122,7 +122,27 @@
 .comments-area .comment-list {
   padding-bottom: 30px;
 }
-
+.popup {
+ display: none;
+ position: absolute;
+background-color: #333;
+padding: 10px;
+border: solid 1.5px gray;
+border-radius: 10px;
+        }
+  
+  .popup > div {
+margin-bottom: 2px;
+font-family: var(--text-font-primary);
+font-weight: 1000;
+font-stretch: ultra-expanded;
+padding: 5px;
+border-radius: 10px;
+}
+  
+  .popup > div:hover {
+    background-color: var(--chip-background-hover);
+  }
 .comments-area .comment-list:last-child {
   padding-bottom: 0px;
 }
@@ -624,6 +644,9 @@ But Please note that unofficial instances can add the same lock icon, so please 
 <p id="fetch-count">
                   
                   </p>
+        
+      
+        
           <div class="icon-button dropdown" style="margin-right: 4.5px;">
 			<input type="checkbox" id="loggedout-dropdown" autocomplete="off">
 			<label for="loggedout-dropdown">
@@ -704,13 +727,7 @@ But Please note that unofficial instances can add the same lock icon, so please 
 Upload
         </a>
         
- 
-         <!--
- 						<a href="/embed/<%=inv_vid.videoId%>?type=copy_code" style="text-decoration: none;" class="dropdown__item">
-                            <i  class="fa-light fa-code"></i>
-      View embed code
-        </a>
-           --->
+  
                                                                                        
         <hr style="clear: both;display: block;border: none;border-bottom: 0.5px solid #1a1111;width: 16.5em;height: 0;">
         
@@ -733,7 +750,66 @@ About
  <div class="watch-page">
 
  	<div class="primary">
+      <div id="popupMenu" class="popup">
+        <div >
+          <a href="/download?v=<%=inv_vid.videoId%>" style="color: #fff;">
+          Save Video</a>
+              </div>
+                <div>
 
+                  
+                   <% if (isvidious) { %>
+                   <% if (!qua) { %>          
+                                                 <a href="<%=u%>/latest_version?id=<%=inv_vid.videoId%>&itag=22&local=true" style="color: #fff;" target="_blank">
+            Open video in new tab
+</a>
+
+                                                                             <% } %>                
+
+      <% if (qua === "medium") { %>  
+
+                        <a href="<%=u%>/latest_version?id=<%=inv_vid.videoId%>&itag=18&local=true" target="_blank" style="color: #fff;">
+            Open video in new tab
+</a>
+        
+                                                                           <% } %>                
+                                                                                                       <% } %>                     
+
+              <% if (!isvidious) { %>
+                
+                   <% if (!qua) { %>                       
+ <a href="https://tube.kuylar.dev/proxy/media/<%=inv_vid.videoId%>/22 " target="_blank" style="color: #fff;">
+            Open video in new tab
+</a>
+
+
+                                                                             <% } %>                
+
+      <% if (qua === "medium") { %>  
+
+                 <a href="https://tube.kuylar.dev/proxy/media/<%=inv_vid.videoId%>/18 " target="_blank" style="color: #fff;">
+            Open video in new tab
+</a>
+
+
+                                                                           <% } %>                
+                                                                                                       <% } %>                     
+              </div>
+                <div id="loopOption"> 
+        Loop Video
+              </div>
+                       <div id="speedOption"> 
+Speed: 1x
+                                                                             </div>                        
+                                                                             <hr style="clear: both;display: block;border: none;border-bottom: 0.5px solid #1a1111;/*! width: 4.5em; */height: 0;">
+<div >
+          <a href="https://codeberg.org/Ashley/poketube/issues/new" style="color: #fff;">
+          Report broken proxy/video</a>
+              </div>
+                                                                        
+    </div>
+    
+    
 		<div id="<%=sha384(inv_vid.videoId)%>" class="video-player-container">
  
  
@@ -1301,8 +1377,11 @@ display: block; !important;" autoplay controls
 
                                                                         <% }) %>   
 
-
+                  <center>
+                  <a href="#top">Go To Top</a>
+                    </center>
           </div>
+
          </div>
 
 
@@ -1543,6 +1622,9 @@ if (/[?&]autoplay=/.test(location.search)) {
     location.href = "/watch?v=<%- k.Video.Recommendations.Video[0].id%>&autoplay=<%-btoa("1f739d935676111cfff4b4693e3816e664797050" + k.Video.Recommendations.Video[0].id ) %>";
   }
 }
+  
+
+  
 </script><!-- bundled app.js --><script src="/static/app.js?ver=<%-btoa("1f739d935676111cfff4b4693e3816e664797050" + k.Video.Recommendations.Video[0].id ) %>">
 </script> <!-- themes --> <script src="/static/custom-css.js"> </script><!-- twemoji --><script src="/static/emojis.js"></script><style> img.emoji {height: 1em;width: 1em;margin: 0 .05em 0 .1em;vertical-align: -0.1em;}</style>
 <script>twemoji.parse(document.body,{ base: 'https://cdn.zptr.cc/twemoji/' })</script><script>

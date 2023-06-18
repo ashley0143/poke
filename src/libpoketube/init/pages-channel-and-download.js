@@ -68,9 +68,9 @@ module.exports = function (app, config, renderTemplate) {
 
     const poketube_universe_value = "poketube_smart_search";
 
-    if (query.includes("youtube.com")) {
+    if (query?.includes("youtube.com")) {
       try {
-        var videoid = query.split("v=");
+        var videoid = query?.split("v=");
 
         res.redirect("/watch?v=" + videoid[1]);
       } catch {

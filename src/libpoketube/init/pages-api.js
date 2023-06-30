@@ -67,7 +67,7 @@ module.exports = function (app, config, renderTemplate) {
     const id = req.query.v;
     const l = req.query.h;
 
-    let url = `https://inner-api.poketube.fun/proxy/caption/${id}/${l}/`;
+    let url = `https://invid-api.poketube.fun/api/v1/captions/${id}?label=${l}`;
 
     let f = await modules.fetch(url);
     const body = await f.text();

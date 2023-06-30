@@ -255,7 +255,7 @@ body {
 }
 .new-button {
  background:#0009;
- border-radius:2em;
+ border-radius:0.5em;
  padding-right:1em;
  display:flex;
  justify-content:center;

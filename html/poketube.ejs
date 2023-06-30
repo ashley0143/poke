@@ -850,23 +850,21 @@ display: block; !important;" autoplay controls
 
                                       
                         
-    <% if (  video?.Subtitles?.Subtitle) { %>  
-      
-     <%  if (Array.isArray( video.Subtitles.Subtitle)) { %> 
-   <% video?.Subtitles?.Subtitle?.forEach(x => { %>
-     <track src="/api/subtitles?v=<%=inv_vid.videoId%>&h=<%= x.language %>" label="<%= x.language.replace("United States","Simplified - USA") %>" kind="subtitles">      
+       
+     <%  if (Array.isArray( inv_vid.captions)) { %> 
+   <% inv_vid.captions?.forEach(x => { %>
+     <track src="/api/subtitles?v=<%=inv_vid.videoId%>&h=<%= x.label %>" label="<%= x.label.replace("United States","Simplified - USA") %>" kind="subtitles">      
      
-        <img src="https://t.poketube.fun/t/rep.gif?v=<%=btoa(inv_vid.videoId)%>&h=<%= x.language %>" id="subtitle_usage_rate" style="border:0;width: 0;visibility: hidden;"> 
+        <img src="https://t.poketube.fun/t/rep.gif?v=<%=btoa(inv_vid.videoId)%>&h=<%= x.label %>" id="subtitle_usage_rate" style="border:0;width: 0;visibility: hidden;"> 
          <% }) %>   
                                                                                                        <% } %>                     
-     <%  if (!Array.isArray( video.Subtitles.Subtitle)) { %> 
-     <track src="/api/subtitles?v=<%=inv_vid.videoId%>&h=<%=  video.Subtitles.Subtitle.language %>" label="<%=  video.Subtitles.Subtitle.language.replace("United States","Simplified - USA") %>" kind="subtitles">      
+     <%  if (!Array.isArray( inv_vid.captions)) { %> 
+     <track src="/api/subtitles?v=<%=inv_vid.videoId%>&h=<%=   %>" label="<%=  video.Subtitles.Subtitle.language.replace("United States","Simplified - USA") %>" kind="subtitles">      
      
         <img loading="lazy" src="https://t.poketube.fun/t/rep.gif?v=<%=btoa(inv_vid.videoId)%>&h=<%= video.Subtitles.Subtitle.language %>" id="subtitle_usage_rate" style="border:0;width: 0;visibility: hidden;"> 
             
                                                            <% } %>         
-                                                           <% } %>         
-                                                                          
+                                                                           
                                                              </video>
                                                              
                                                              <img loading="lazy" src="https://t.poketube.fun/t/rep.gif?video=<%=btoa(inv_vid.videoId)%>" style="border:0;width: 0;visibility: hidden;" id="video">
@@ -1830,7 +1828,7 @@ a {
                                                  
  		</div>
 <div class="video-info" >
-        <div style="background-image: linear-gradient( 135deg, #F97794 10%, #623AA2 100%, #8e6f7e 100%);border-radius: 10px;margin-bottom: 10px;padding-bottom: 1em;padding-top: 0.3em;">
+        <div style="linear-gradient(135deg,#f97794 10%,#623aa2 100%,#8e6f7e 100%);border-radius: 10px;margin-bottom: 10px;padding-bottom: 1em;padding-top: 0.3em;">
           
                                         <div style="display: flex;justify-content: center;align-items: center;flex-direction: row; column-gap: 3px;" align="center">
                                 

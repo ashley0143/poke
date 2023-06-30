@@ -8,7 +8,7 @@
     it under the terms of the GNU General Public License as published by
     the Free Software Foundation, either version 3 of the License, or
     (at your option) any later version.
-
+    
     This program is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -34,7 +34,14 @@
   const config = require("./config.json");
   const u = await media_proxy();
   initlog("Loading...");
-  initlog("[Welcome] Welcome To PokeTube :3 " +"Running " +`Node ${process.version} - V8 v${process.versions.v8} -  ${process.platform.replace("linux", "GNU/Linux")} ${process.arch} Server - libpt ${version}`
+  initlog(
+    "[Welcome] Welcome To PokeTube :3 " +
+      "Running " +
+      `Node ${process.version} - V8 v${
+        process.versions.v8
+      } -  ${process.platform.replace("linux", "GNU/Linux")} ${
+        process.arch
+      } Server - libpt ${version}`
   );
 
   const {
@@ -54,7 +61,93 @@
   );
 
   const sha384 = modules.hash;
+  
+ var http = require("https");
+  var ping = require("ping");
 
+  if (process.env.STATUSPAGE_API) {
+    // The following 4 are the actual values that pertain to your account and this specific metric.
+    var apiKey = process.env.STATUSPAGE_API;
+    var pageId =  process.env.STATUSPAGE_PAGEID;
+    var metricId = process.env.STATUSPAGE_METRICID
+    var apiBase = "https://api.statuspage.io/v1";
+
+    var url =
+      apiBase + "/pages/" + pageId + "/metrics/" + metricId + "/data.json";
+    var authHeader = { Authorization: "OAuth " + apiKey };
+    var options = { method: "POST", headers: authHeader };
+
+    // Need at least 1 data point for every 5 minutes.
+    // Submit random data for the whole day.
+    var totalPoints = (60 / 5) * 24;
+    var epochInSeconds = Math.floor(new Date() / 1000);
+
+    // This function gets called every second.
+    function submit(count) {
+      count = count + 1;
+
+      if (count > totalPoints) return;
+
+      var currentTimestamp = epochInSeconds - (count - 1) * 5 * 60;
+
+      // Measure server ping here
+      var host = "poketube.fun"; // Replace with the server you want to ping
+
+      ping.promise
+        .probe(host)
+        .then((result) => {
+          var ping = result.time !== "unknown" ? parseInt(result.time) : -1;
+
+       ping = Math.min(Math.max(ping, 20), 250);
+
+          var data = {
+            timestamp: currentTimestamp,
+            value: ping,
+          };
+
+          var request = http.request(url, options, function (res) {
+            if (res.statusMessage === "Unauthorized") {
+              const genericError =
+                "Error encountered. Please ensure that your page code and authorization key are correct.";
+              return console.error(genericError);
+            }
+            res.on("data", function () {
+              console.log("Submitted point " + count + " of " + totalPoints);
+            });
+            res.on("end", function () {
+              setTimeout(function () {
+                submit(count);
+              }, 1000);
+            });
+            res.on("error", (error) => {
+              console.error(`Error caught: ${error.message}`);
+            });
+          });
+
+          request.end(JSON.stringify({ data: data }));
+        })
+        .catch((error) => {
+          console.error("Ping failed:", error);
+          // Submit a default value if the ping fails
+          var data = {
+            timestamp: currentTimestamp,
+            value: -1, // Use -1 to indicate ping failure
+          };
+
+          var request = http.request(url, options, function (res) {
+            // Handle response
+          });
+
+          request.end(JSON.stringify({ data: data }));
+        });
+    }
+
+  
+  // Initial call to start submitting data immediately.
+  submit(0);
+ 
+  }
+  
   var app = modules.express();
   initlog("Loaded express.js");
   app.engine("html", require("ejs").renderFile);
@@ -64,9 +157,12 @@
   app.enable("trust proxy");
 
   const renderTemplate = async (res, req, template, data = {}) => {
-    res.render(modules.path.resolve(`${templateDir}${modules.path.sep}${template}`),Object.assign(data));
+    res.render(
+      modules.path.resolve(`${templateDir}${modules.path.sep}${template}`),
+      Object.assign(data)
+    );
   };
-
+ 
   const random_words = [
     "banana pie",
     "how to buy an atom bomb",
@@ -80,68 +176,77 @@
     "monke",
   ];
 
-  const initPokeTube = function() {
-  sinit(app, config, renderTemplate);
-  initlog("inited super init")
-  init(app);    
-  initlog("inited app")
-  }
-  
+  const initPokeTube = function () {
+    sinit(app, config, renderTemplate);
+    initlog("inited super init");
+    init(app);
+    initlog("inited app");
+  };
+
   try {
-  app.use(function (req, res, next) {
-    res.header("Access-Control-Allow-Origin", "*");
-    if (req.secure) {
-      res.header(
-        "Strict-Transport-Security",
-        "max-age=31536000; includeSubDomains; preload"
-      );
-    }
-    res.header("secure-poketube-instance", "1");
-
-    next();
-  });
-
-  app.use(function (request, response, next) {
-    if (config.enablealwayshttps && !request.secure) {
-      if (!/^https:/i.test(request.headers["x-forwarded-proto"] || request.protocol)) {
-        return response.redirect("https://" + request.headers.host + request.url);
+    app.use(function (req, res, next) {
+      res.header("Access-Control-Allow-Origin", "*");
+      if (req.secure) {
+        res.header(
+          "Strict-Transport-Security",
+          "max-age=31536000; includeSubDomains; preload"
+        );
       }
-    }
+      res.header("secure-poketube-instance", "1");
 
-    next();
-  });
+      next();
+    });
 
-  app.use(function (req, res, next) {
-    res.header("X-PokeTube-Youtube-Client-Name", "1");
-    res.header("X-PokeTube-Youtube-Client-Version", "2.20210721.00.00");
-    res.header("X-PokeTube-Speeder", "6 seconds no cache, 780ms w/cache");
-    if (req.url.match(/^\/(css|js|img|font)\/.+/)) {
-      res.setHeader("Cache-Control","public, max-age=" + config.cacher_max_age); // cache header
-      res.setHeader("poketube-cacher", "STATIC_FILES");
-    }
+    app.use(function (request, response, next) {
+      if (config.enablealwayshttps && !request.secure) {
+        if (
+          !/^https:/i.test(
+            request.headers["x-forwarded-proto"] || request.protocol
+          )
+        ) {
+          return response.redirect(
+            "https://" + request.headers.host + request.url
+          );
+        }
+      }
 
-    const a = 890;
-    if (!req.url.match(/^\/(css|js|img|font)\/.+/)) {
-      res.setHeader("Cache-Control", "public, max-age=" + a); // cache header
-      res.setHeader("poketube-cacher", "PAGE");
-    }
-    next();
-  });
+      next();
+    });
 
-  initlog("[OK] Load headers");
+    app.use(function (req, res, next) {
+      res.header("X-PokeTube-Youtube-Client-Name", "1");
+      res.header("X-PokeTube-Youtube-Client-Version", "2.20210721.00.00");
+      res.header("X-PokeTube-Speeder", "6 seconds no cache, 780ms w/cache");
+      if (req.url.match(/^\/(css|js|img|font)\/.+/)) {
+        res.setHeader(
+          "Cache-Control",
+          "public, max-age=" + config.cacher_max_age
+        ); // cache header
+        res.setHeader("poketube-cacher", "STATIC_FILES");
+      }
+
+      const a = 890;
+      if (!req.url.match(/^\/(css|js|img|font)\/.+/)) {
+        res.setHeader("Cache-Control", "public, max-age=" + a); // cache header
+        res.setHeader("poketube-cacher", "PAGE");
+      }
+      next();
+    });
+
+    initlog("[OK] Load headers");
   } catch {
-  initlog("[FAILED] load headers")
+    initlog("[FAILED] load headers");
   }
-  
+
   try {
-  app.get("/robots.txt", (req, res) => {
-    res.sendFile(__dirname + "/robots.txt");
-  });
-   
-  initlog("[OK] Load robots.txt");
+    app.get("/robots.txt", (req, res) => {
+      res.sendFile(__dirname + "/robots.txt");
+    });
+
+    initlog("[OK] Load robots.txt");
   } catch {
-    initlog("[FAILED] load robots.txt")
+    initlog("[FAILED] load robots.txt");
   }
-  
-  initPokeTube()
+
+  initPokeTube();
 })();

@@ -150,7 +150,7 @@ module.exports = function (app, config, renderTemplate) {
 core.video(v).then((data) => {
       try {
         const k = data?.video;
-        const json = data.json;
+        const json = data?.json;
         const engagement = data.engagement;
         const inv_comments = data.comments || "Disabled";
         const inv_vid = data.vid;

@@ -99,18 +99,6 @@ class PokeTubeCore {
     }
 
     if (this.checkUnexistingObject(vid)) {
-      let a;
-
-      try {
-        a = await fetch(`${this.config.tubeApi}channel?id=${vid.authorId}&tab=about`)
-          .then((res) => res.text())
-          .then((xml) => this.getJson(toJson(xml)));
-      } catch (error) {
-        this.initError("Error getting channel info", error);
-        a = "";
-      }
-
-      desc = a.Channel?.Contents?.ItemSection?.About?.Description;
       const fe = await fetcher(v);
 
       try {
@@ -137,7 +125,7 @@ class PokeTubeCore {
             comments,
             engagement: fe.engagement,
             wiki: summary,
-            desc: desc,
+            desc: "",
             color: await getColors(
               `https://i.ytimg.com/vi/${v}/hqdefault.jpg?sqp=${this.sqp}`
             ).then((colors) => colors[0].hex()),

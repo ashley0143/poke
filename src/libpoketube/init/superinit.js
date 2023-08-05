@@ -77,11 +77,11 @@ function init(app, config, rendertemplate) {
             }
           })();
         }, 1580000); /* setInterval */
-      }, 600000);
+      }, 300000);
     } catch (err) {
       initlog("[FAILED] Load pages \n" + err);
     }
-  }, 600000);
+  }, 300000);
 }
 
 module.exports = {

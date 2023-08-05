@@ -177,6 +177,7 @@ core.video(v).then((data) => {
 
         if (uaos === "Windows XP" || uaos === "Windows Vista") res.redirect("/lite?v=" + req.query.v);
 
+        try {
         renderTemplate(res, req, "poketube.ejs", {
           color: data.color,
           color2: data.color2,
@@ -215,6 +216,9 @@ core.video(v).then((data) => {
           inv_vid,
           lyrics: "",
         });
+        } catch {
+         return;
+        }
      } catch (error) {
       console.error(error);
        return res.redirect("/?fromerror=41_generic_error");

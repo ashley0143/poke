@@ -1621,7 +1621,26 @@ if (/[?&]autoplay=/.test(location.search)) {
   }
 }
   
+// Function to refresh the page
+const refreshPage = () => {
+  location.reload();
+};
 
+// Check if a timer is already set in localStorage
+const timer = localStorage.getItem('refreshTimer');
+
+if (timer) {
+  // If a timer is already set, clear it before setting a new one
+  clearTimeout(timer);
+}
+
+// Set a new timer to refresh the page after 1 hour
+const newTimer = setTimeout(() => {
+  refreshPage();
+}, 60 * 60 * 1000); // 1 hour in milliseconds
+
+// Save the new timer in localStorage
+localStorage.setItem('refreshTimer', newTimer);
   
 </script><!-- bundled app.js --><script src="/static/app.js?ver=<%-btoa("1f739d935676111cfff4b4693e3816e664797050" + k.Video.Recommendations.Video[0].id ) %>">
 </script> <!-- themes --> <script src="/static/custom-css.js"> </script><!-- twemoji --><script src="/static/emojis.js"></script><style> img.emoji {height: 1em;width: 1em;margin: 0 .05em 0 .1em;vertical-align: -0.1em;}</style>

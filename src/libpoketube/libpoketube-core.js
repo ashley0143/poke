@@ -28,7 +28,8 @@ class PokeTubeCore {
   constructor(config) {
     this.config = config;
     this.cache = {};
-    this.sqp = "-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLBy_x4UUHLNDZtJtH0PXeQGoRFTgw";
+    this.sqp =
+      "-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLBy_x4UUHLNDZtJtH0PXeQGoRFTgw";
   }
 
   /**
@@ -70,51 +71,40 @@ class PokeTubeCore {
       console.log("Returning cached result");
       return this.cache[v].result;
     }
+    const headers = {};
 
     let desc = "";
-
+    
     try {
-      const inv_comments = await fetch(`${this.config.invapi}/comments/${v}`).then((res) =>
-        res.text()
-      );
-      var comments = await this.getJson(inv_comments);
-    } catch (error) {
-      this.initError("Error getting comments", error);
-      var comments = "";
-    }
+    const [invComments, videoInfo, videoData] = await Promise.all([
+      fetch(`${this.config.invapi}/comments/${v}`).then((res) => res.text()),
+      fetch(`${this.config.invapi}/videos/${v}`).then((res) => res.text()),
+      curly
+        .get(`${this.config.tubeApi}video?v=${v}`, {
+          httpHeader: Object.entries(headers).map(([k, v]) => `${k}: ${v}`),
+        })
+        .then((res) => {
+          const json = toJson(res.data);
+          const video = this.getJson(json);
+          return { json, video };
+        }),
+    ]);
 
-    let vid;
-
-    try {
-      const videoInfo = await fetch(`${this.config.invapi}/videos/${v}`).then((res) =>
-        res.text()
-      );
-      vid = await this.getJson(videoInfo);
-    } catch (error) {
-      this.initError("Error getting video info", error);
-    }
+    const comments = await this.getJson(invComments);
+    const vid = await this.getJson(videoInfo);
+    const { json, video } = videoData;
 
     if (!vid) {
-      console.log(`Sorry nya, we couldn't find any information about that video qwq`);
+      console.log(
+        `Sorry nya, we couldn't find any information about that video qwq`
+      );
     }
 
     if (this.checkUnexistingObject(vid)) {
       const fe = await fetcher(v);
 
       try {
-        const summary = await wiki
-          .summary(vid.author + " ")
-          .then((summary_) =>
-            summary_.title !== "Not found." ? summary_ : "none"
-          );
-
         const headers = {};
-
-        const { data } = await curly.get(`${this.config.tubeApi}video?v=${v}`, {
-          httpHeader: Object.entries(headers).map(([k, v]) => `${k}: ${v}`),
-        });
-        const json = toJson(data);
-        const video = this.getJson(json);
 
         // Store result in cache
         this.cache[v] = {
@@ -124,7 +114,7 @@ class PokeTubeCore {
             vid,
             comments,
             engagement: fe.engagement,
-            wiki: summary,
+            wiki: "",
             desc: "",
             color: await getColors(
               `https://i.ytimg.com/vi/${v}/hqdefault.jpg?sqp=${this.sqp}`
@@ -141,7 +131,11 @@ class PokeTubeCore {
         this.initError("Error getting video", error);
       }
     }
-  }
+    } catch {
+      
+    }
+    }
+
 
   /**
    * Check if a video ID is valid.

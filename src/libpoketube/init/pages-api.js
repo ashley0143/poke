@@ -67,12 +67,18 @@ module.exports = function (app, config, renderTemplate) {
     const id = req.query.v;
     const l = req.query.h;
 
+        try {
+
     let url = `https://invid-api.poketube.fun/api/v1/captions/${id}?label=${l}`;
 
     let f = await modules.fetch(url);
     const body = await f.text();
 
     res.send(body);
+          
+        } catch {
+          
+        }
   });
 
   app.get("/feeds/videos.xml", async (req, res) => {

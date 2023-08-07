@@ -1625,7 +1625,7 @@ if (/[?&]autoplay=/.test(location.search)) {
 const refreshPage = () => {
   location.reload();
 };
-
+  
 // Check if a timer is already set in localStorage
 const timer = localStorage.getItem('refreshTimer');
 
@@ -1634,13 +1634,21 @@ if (timer) {
   clearTimeout(timer);
 }
 
-// Set a new timer to refresh the page after 1 hour
+// Check if it's the first time the user visits the page
+const isFirstLoad = localStorage.getItem(userlocalStorageKey) === null;
+
+// Set a new timer to refresh the page after 1 hour or on the first visit
 const newTimer = setTimeout(() => {
   refreshPage();
-}, 60 * 60 * 1000); // 1 hour in milliseconds
+}, isFirstLoad ? 0 : 60 * 60 * 1000); // 1 hour in milliseconds
 
 // Save the new timer in localStorage
 localStorage.setItem('refreshTimer', newTimer);
+
+// Save the first load flag in localStorage if it's the first visit
+if (isFirstLoad) {
+  localStorage.setItem(userlocalStorageKey, 'visited');
+}
   
 </script><!-- bundled app.js --><script src="/static/app.js?ver=<%-btoa("1f739d935676111cfff4b4693e3816e664797050" + k.Video.Recommendations.Video[0].id ) %>">
 </script> <!-- themes --> <script src="/static/custom-css.js"> </script><!-- twemoji --><script src="/static/emojis.js"></script><style> img.emoji {height: 1em;width: 1em;margin: 0 .05em 0 .1em;vertical-align: -0.1em;}</style>

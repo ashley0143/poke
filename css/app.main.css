@@ -1184,7 +1184,7 @@ nav .middle .search-bar {
 nav .middle button {
   display: flex;
   transform: translate(22em, -1.25em);
-  background: #454545;
+  background: none !important;
   color: #999;
   padding: 10px 10px;
   border: 1px;
@@ -1274,7 +1274,7 @@ nav .right img {
 }
 
 nav .middle .search-bar {
-  border-radius: 2em !important;
+  border-radius: 8px !important;
   font-family: "poketube flex", sans-serif !important;
   font-weight: 850 !important;
   font-stretch: extra-expanded !important;

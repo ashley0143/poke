@@ -591,7 +591,7 @@ white-space: nowrap;text-decoration: none;" href="/feeds/videos.xml?channel_id=<
 
       <% } %>
 
-                           <%  if (Array.isArray(c.comments)) { %> 
+                           <%  if (Array.isArray(c?.comments)) { %> 
 
   <%  if (c.comments.length != "0") { %> 
 
@@ -869,7 +869,7 @@ width: fit-content;
     	<div class="video-grid" >
             
    
-             <%  if (Array.isArray( tj.videos)) { %> 
+             <%  if (Array.isArray( tj?.videos)) { %> 
 
    <% tj.videos.forEach (x =>  { %>
 			<a href="/watch?v=<%- x.videoId %>" class="video">
@@ -889,7 +889,7 @@ width: fit-content;
                        
                        </div>
                   
-            <% if (tj.continuation) { %>
+            <% if (tj?.continuation) { %>
 	<div class="pagination-buttons" style="border-top: none;justify-content: center">
     <a style="color:#fff" href="/channel?id=<%=ID%>&continuation=<%=tj.continuation%>">Next Page</a>
  	</div>

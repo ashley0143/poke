@@ -144,7 +144,7 @@ module.exports = function (app, config, renderTemplate) {
 
     const rendermainpage = () => {
       if (req.useragent.isMobile) {
-        return res.redirect("/discover");
+        return res.redirect("/app?tab=search");
       }
 
       return renderTemplate(res, req, "landing.ejs", {

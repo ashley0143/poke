@@ -78,6 +78,11 @@ module.exports = function (app, config, renderTemplate) {
       }
     }
 
+    if (query && query.startsWith('!')) {
+     res.redirect("https://duckduckgo.com/?q=" + query)
+  } 
+
+
     if (!query) {
       return res.redirect("/");
     }
@@ -154,7 +159,6 @@ module.exports = function (app, config, renderTemplate) {
             .then((res) => res.text())
             .then((txt) => getJson(txt));
         } catch (error) {
-          console.error("Failed to fetch channel data from API:", error);
           return null;
         }
       };
@@ -190,11 +194,8 @@ module.exports = function (app, config, renderTemplate) {
       if (cache[ID] && Date.now() - cache[ID].timestamp < 3600000) {
         var { tj, shorts, stream, c, boutJson } = cache[ID].result;
       }
-
-      const summary = await wiki.summary(boutJson?.Channel?.Metadata.Name);
-      const wikiSummary = summary.title !== "Not found." ? summary : "none";
-
-      const subscribers = boutJson.Channel.Metadata.Subscribers;
+ 
+      const subscribers = boutJson.Channel?.Metadata.Subscribers;
       const about = boutJson.Channel.Contents.ItemSection.About;
       const description = about.Description.toString().replace(/\n/g, " <br> ");
       const dnoreplace = about.Description.toString();
@@ -212,7 +213,7 @@ module.exports = function (app, config, renderTemplate) {
         turntomins,
         dnoreplace,
         continuation,
-        wiki: wikiSummary,
+        wiki: "",
         getFirstLine,
         isMobile: req.useragent.isMobile,
         about,

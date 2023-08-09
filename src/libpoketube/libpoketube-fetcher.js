@@ -56,7 +56,7 @@ class PokeTubeAPI {
    */
   async _getEngagementData() {
     const apiUrl = `${DISLIKE_API}${this.videoId}`;
-    const fallbackUrl = `https://p.poketube.fun/${apiUrl}`;
+    const fallbackUrl = `https://returnyoutubedislikeapi.com/votes?videoId=${this.videoId}`;
 
     try {
       const engagement = await fetch(apiUrl).then((res) => res.json());

@@ -72,15 +72,13 @@ module.exports = async function (video_id) {
       .replace("invidious.sethforprivacy.com", "y.com.sb")
   }
 
-  if(url == "https://tube.kuylar.dev") {
-   var isInvidiousURL = false
-  } else {
-    isInvidiousURL = true;
-  }
+  const isInvidiousURL = url === "https://tube.kuylar.dev" ? false : true;
   
   const videoProxyObject = {
     isInvidiousURL,
-    url
+    cacheBuster:"d0550b6e28c8f93533a569c314d5b4e2",
+    InvidiousPoketube:"AIzaSyAO_FJ2SlqU8Q4STEHLGCilw_Y9_11qcW8",
+    url:"https://vid.theedgeofrage.com" // set for now : see  https://github.com/iv-org/invidious/issues/4045
   }
   
   return videoProxyObject;

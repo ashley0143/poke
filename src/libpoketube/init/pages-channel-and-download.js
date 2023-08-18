@@ -172,6 +172,9 @@ module.exports = function (app, config, renderTemplate) {
       var streamPromise = getChannelData(
         `https://invid-api.poketube.fun/api/v1/channels/${ID}/streams?sort_by=${sort_by}${continuationl}`
       );
+      var ChannelINVPromise = getChannelData(
+        `https://invid-api.poketube.fun/api/v1/channels/${ID}/`
+      );
       var cPromise = getChannelData(
         `https://invid-api.poketube.fun/api/v1/channels/community/${ID}/`
       );
@@ -179,13 +182,15 @@ module.exports = function (app, config, renderTemplate) {
       var shorts = await shortsPromise;
       var stream = await streamPromise;
       var c = await cPromise;
-
+      var cinv = await ChannelINVPromise;
+      
       cache[ID] = {
         result: {
           tj,
           shorts,
           stream,
           c,
+          cinv,
           boutJson,
         },
         timestamp: Date.now(),
@@ -209,6 +214,7 @@ module.exports = function (app, config, renderTemplate) {
         stream,
         tj,
         c,
+        cinv,
         convert,
         turntomins,
         dnoreplace,

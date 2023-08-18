@@ -551,11 +551,45 @@ margin-right: -79px;
 			<a href="/channel?id=<%=ID%>" class="avatar">
 				<img src="https://p.poketube.fun/<%=j.Channel.Metadata.Avatars.Thumbnail.$t%>" alt="Channel Avatar">
 			</a>
-			<div class="name">
-				<p style="font-family:PokeTube Flex,sans-serif;font-weight:1000;font-stretch: ultra-expanded;"><%=j.Channel.Metadata.Name%>
-           </p>
-                    <p class="subs"><%=subs%> subscribers</p>
+      
+              <% if (cinv.authorVerified) { %>
+                <style>
 
+                              .name {
+              border:solid 2.1px #df80ff;
+                }  
+                
+                </style>
+
+                
+                                               <% } %>
+
+			<div class="name" style="background: #333;border-radius: 12px;padding: 9px;">
+				<p style="font-family:PokeTube Flex,sans-serif;font-weight:1000;font-stretch: ultra-expanded;margin-top: 16px;margin-bottom: 15px;"><%=j.Channel.Metadata.Name%>
+          
+<span style="background: #0005;padding: 3px;padding-top:  2.5px !important;display: inline-flex;border-radius: 3px;">
+                <% if (cinv.authorVerified) { %>
+                                  <% if (cinv.isFamilyFriendly) { %>
+
+ <i class="fa-solid fa-badge-check" style="width: 18px;margin-right:7px" title="Verified Channel"></i>
+                                                                 <% } %>
+                                  <% if (!cinv.isFamilyFriendly) { %>
+ <i class="fa-solid fa-badge-check" style="width: 18px" title="Verified Channel"></i>
+
+                                                                                                                                    <% } %>
+
+                                                                 <% } %>
+                <% if (cinv.isFamilyFriendly) { %>
+
+<img src="https://cdn.glitch.global/d68d17bb-f2c0-4bc3-993f-50902734f652/bbf42a35-8976-43a5-a7a2-72a81d9da7ce.image.png?v=1692301199470" style="width: 18px;" title="In Youtube kids" >
+                                                                                   <% } %>
+
+</span>           </p>
+                    <p style="margin-bottom: -11px;" class="subs"><%=subs%> subscribers</p>
+<p style="padding:0;font-weight:bold;max-inline-size: 37em;display: -webkit-box;-webkit-line-clamp: 3;-webkit-box-orient: vertical;"> 
+   <%-getFirstLine(desc).slice(0, 77)%> <a href="/channel?id=<%=ID%>&tab=about">
+<i class="fa-thin fa-angle-right"></i></a>
+        </p>
  			</div>
  
   <button class="subscribe-button " style="text-decoration: none;">    <a style="color: black;
@@ -1148,7 +1182,55 @@ margin-left: 8em;" >
    <% } %>
 
 <script src="/css/custom-css.js"> </script>
-  
+  <script>
+     
+// Fetch URLs and handle progress saving
+const urls = document.querySelectorAll('a[href*="/watch?v="]');
+const spinner = document.createElement('div');
+spinner.id = 'fetch-spinner';
+spinner.classList.add('hide');
+document.body.appendChild(spinner);
+const text = document.createElement('div');
+text.id = 'fetch-text';
+text.classList.add('hide');
+document.body.appendChild(text);
+document.body.classList.add('blur');
+
+let fetchedCount = 0;
+
+urls.forEach(link => {
+  const url = new URL(link.href);
+  if (url.host !== 'www.youtube.com' && url.host !== 'youtube.com' && url.host !== "redirect.poketube.fun") {
+    console.log(`Fetching ${url.origin}`);
+    spinner.classList.remove('hide');
+    text.classList.remove('hide');
+
+    fetch(url.href)
+      .then(response => {
+        if (response.status === 500) {
+          // do nothing
+        }
+        console.log(`Fetched ${url.origin}`);
+        fetchedCount++;
+        console.clear()
+        if (fetchedCount === urls.length) {
+          spinner.classList.add('hide');
+          text.classList.add('hide');
+          document.body.classList.remove('blur');
+        }
+      })
+      .catch(error => {
+        spinner.classList.add('hide');
+        text.classList.add('hide');
+        console.clear()
+        if (!(error instanceof TypeError && error.message.includes('Failed to fetch'))) {
+          console.error(`Error fetching ${url.origin}: ${error}`);
+        }
+      });
+  }
+});
+
+     </script>
                </body>
  
    

@@ -931,7 +931,7 @@ display: block; !important;" autoplay controls
 
        Proxy : tube.kuylar.dev - refresh the page to change the proxy location<br>
                           <% } %>   
-       Date : <%- Date.now() %>  <br>
+       Date : <%- Date.now() %> - <%- useragent.os %> on <%- useragent.browser %> <br>
                                                   <% if (isvidious) { %>
 
        Mystery text :  <%=btoa(inv_vid.videoId + " i " + " lov " + " u " + u.replace("https://","") ) %> <br>
@@ -1872,7 +1872,7 @@ a {
 <div class="video-info" >
         <div style="linear-gradient(135deg,#f97794 10%,#623aa2 100%,#8e6f7e 100%);border-radius: 10px;margin-bottom: 10px;padding-bottom: 1em;padding-top: 0.3em;">
           
-                                        <div style="display: flex;justify-content: center;align-items: center;flex-direction: row; column-gap: 3px;" align="center">
+                                        <div style="display: flex;justify-content: center;align-items: center;flex-direction: row; column-gap: 3px;margin-top: -14px;" align="center">
                                 
   <% if (!qua) { %> 
 
@@ -1884,8 +1884,7 @@ a {
                                                                       <% } %>               
 
        </div>            
-                  <div class="video-title" style="font-family:'Inter';;white-space:yes;padding: 10px;
-"><%=inv_vid.title%><br>    
+                  <div class="video-title" style="font-family:'Inter';;white-space:yes;padding: 10px;background: #0009;margin-bottom: 6px;margin-left: 6px;margin-right: 12px;border-radius: 15px;margin-top: 4px;"><%=inv_vid.title%><br>    
                     <a id="language-button" href="#desc-container" style="color: pink;
 margin: 0;
 font-size: 13px;margin:0;padding:0;white-space: nowrap;

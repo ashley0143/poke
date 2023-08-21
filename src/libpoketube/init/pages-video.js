@@ -193,6 +193,7 @@ core.video(v).then((data) => {
           a,
           k,
           dm,
+          useragent:req.useragent,
           verify,
           secure,
           process,

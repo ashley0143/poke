@@ -6,7 +6,6 @@
  * Please don't remove this comment while sharing this code.
  */
 
-const fetch = require("node-fetch");
 const { toJson } = require("xml2json");
 const { curly } = require("node-libcurl");
 const fetcher = require("../libpoketube/libpoketube-fetcher.js");
@@ -64,6 +63,9 @@ class PokeTubeCore {
    * @returns {Promise<object>} Promise resolving to the video information.
    */
   async video(v) {
+    
+    const { fetch } = await import("undici");
+    
     if (v == null) return "Gib ID";
 
     // Check if result is already cached

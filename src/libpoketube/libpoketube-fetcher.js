@@ -8,8 +8,7 @@
 
 const { curly } = require("node-libcurl");
 const { toJson } = require("xml2json");
-const fetch = require("node-fetch");
-
+ 
 const YOUTUBE_URL = "https://www.youtube.com/watch?v=";
 const DISLIKE_API = "https://p.poketube.fun/api?v=";
 const NEW_API_URL = "https://inner-api.poketube.fun/api/player";
@@ -57,7 +56,10 @@ class PokeTubeAPI {
   async _getEngagementData() {
     const apiUrl = `${DISLIKE_API}${this.videoId}`;
     const fallbackUrl = `https://returnyoutubedislikeapi.com/votes?videoId=${this.videoId}`;
+  
+    const { fetch } = await import("undici");
 
+    
     try {
       const engagement = await fetch(apiUrl).then((res) => res.json());
       return engagement.data;

@@ -8,6 +8,8 @@ const {
   initlog,
   init,
 } = require("../libpoketube-initsys.js");
+const { curly } = require("node-libcurl");
+
 const {
   IsJsonString,
   convert,
@@ -90,12 +92,16 @@ module.exports = function (app, config, renderTemplate) {
     let continuation = req.query.continuation || "";
 
     try {
+       const headers = {};
+
       const searchUrl = `https://inner-api.poketube.fun/api/search?query=${encodeURIComponent(
         query
       )}&continuation=${encodeURIComponent(continuation)}`;
-      const searchResponse = await modules.fetch(searchUrl);
-      const searchText = await searchResponse.text();
-      const searchJson = JSON.parse(modules.toJson(searchText));
+      const { data } = await curly.get(searchUrl, {
+        httpHeader: Object.entries(headers).map(([k, v]) => `${k}: ${v}`),
+      });
+      const searchText = modules.toJson(data);
+      const searchJson = getJson(searchText);
 
       let didYouMean;
       if (
@@ -104,19 +110,13 @@ module.exports = function (app, config, renderTemplate) {
         didYouMean = JSON.parse(searchJson.Search.Results.DynamicItem.Title);
       }
 
-      const summary = await wiki
-        .summary(query + " ")
-        .then((summary_) =>
-          summary_.title !== "Not found." ? summary_ : "none"
-        );
-
       renderTemplate(res, req, "search.ejs", {
         j: searchJson,
         IsOldWindows,
         h: didYouMean,
         continuation,
         q: query,
-        summary,
+        summary:"",
       });
     } catch (error) {
       console.error(`Error while searching for '${query}':`, error);

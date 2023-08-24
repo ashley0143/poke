@@ -28,7 +28,8 @@
     "node-libcurl": "^2.3.3",
     "uglify-js": "^3.17.4",
     "ping": "^0.4.4",
-    "undici": "^5.23.0"
+    "undici": "^5.23.0",
+    "express-rate-limit": "^6.9.0"
   },
   "engines": {
     "node": "16.x"

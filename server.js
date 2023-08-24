@@ -61,9 +61,16 @@
   );
 
   const sha384 = modules.hash;
-   
+  const rateLimit = require("express-rate-limit");
+
+
+   const limiter = rateLimit({
+     windowMs: 30 * 1000, // 30 Seconds
+     max: 870, // limit each IP to 870 requests per windowMs
+   });
    
   var app = modules.express();
+  app.use(limiter);
   initlog("Loaded express.js");
   app.engine("html", require("ejs").renderFile);
   app.use(modules.express.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded

@@ -45,8 +45,14 @@ module.exports = function (app, config, renderTemplate) {
     if (number_easteregg == "143") {
       renderTemplate(res, req, "143.ejs");
     }
+    
+    if (req.query.number == "143") {
+            renderTemplate(res, req, "143.ejs");
+
+    } 
+    
     if (number_easteregg != "143") {
-      return res.redirect("/");
+      return res.redirect("/" + "?number=" + number_easteregg);
     }
   });
 

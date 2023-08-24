@@ -125,6 +125,7 @@ module.exports = function (app, config, renderTemplate) {
   });
 
   app.get("/channel/", async (req, res) => {
+    const { fetch } = await import("undici");
     try {
       const ID = req.query.id;
       const tab = req.query.tab;
@@ -132,7 +133,7 @@ module.exports = function (app, config, renderTemplate) {
 
       try {
         // about
-        const bout = await modules.fetch(
+        const bout = await fetch(
           config.tubeApi + `channel?id=${ID}&tab=about`
         );
         const h = await bout.text();
@@ -154,8 +155,7 @@ module.exports = function (app, config, renderTemplate) {
 
       const getChannelData = async (url) => {
         try {
-          return await modules
-            .fetch(url)
+          return await fetch(url)
             .then((res) => res.text())
             .then((txt) => getJson(txt));
         } catch (error) {
@@ -176,7 +176,7 @@ module.exports = function (app, config, renderTemplate) {
         `https://invid-api.poketube.fun/api/v1/channels/${ID}/`
       );
       var cPromise = getChannelData(
-        `https://invid-api.poketube.fun/api/v1/channels/community/${ID}/`
+        `https://invid-api.poketube.fun/api/v1/channels/community/${ID}/?hl=en-US`
       );
       var tj = await tjPromise;
       var shorts = await shortsPromise;

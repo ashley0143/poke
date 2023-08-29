@@ -127,6 +127,14 @@ module.exports = function (app, config, renderTemplate) {
      
   });
 
+    app.get("/old", function (req, res) {
+    const v = req.query.v;
+
+    renderTemplate(res, req, "poketube-old.ejs", {
+      v,
+    });
+  });
+  
   app.get("/watch", async (req, res) => {
     const { dm, v, e, r, f, m, quality: q, a, universe } = req.query;
 

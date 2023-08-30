@@ -958,7 +958,7 @@ display: block; !important;" autoplay controls
                <% } %> 
             > <%-k.Video.Title.replace(/\/channel\//g, "/channel?id=").replace(/https:\/\/youtube.com/g, ""); %> </div>
           
-          <a  style="font-weight: bolder;font-family: sans-serif;color: var(--text-color);font-size: small;">content source : youtube.com </a>
+          <a href="#connections" style="font-weight: bolder;font-family: sans-serif;color: var(--text-color);font-size: small;"> Jump to Connections </a>
          
                <div class="video-chnl-info-pill"  name="chnl">
   <a name="chnl"></a>
@@ -1102,13 +1102,12 @@ display: block; !important;" autoplay controls
 
                			</div>
 
-                             
 <div class="video-sub-info description">
 
 		
                   <details open="true" class="description-new">
          	<summary style="color:#fff;">
-                                <%=engagement.viewCount.toLocaleString()%> Views  •  <%=date%> • Click to toggle off description                                             </summary>
+                                <%=engagement.viewCount.toLocaleString()%> Views  •  <%=date%> • Click to toggle off description</summary>
    
           <% if (String(inv_vid.descriptionHtml) != "undefined")  { %>
          <% if (String(inv_vid.descriptionHtml) != " ")  { %>
@@ -1203,6 +1202,59 @@ display: block; !important;" autoplay controls
 
 
 
+
+                            
+   <div style="padding: 19px;background: #1f1f1f;border-radius: inherit;border: solid var(--div-border-color);margin-top: 13px;display: flex;flex-direction: row;">
+      <a id="connections"></a>
+<div class="video-title loaded" style="color:var(--text-color);font-family:var(--text-font-primary);;font-weight:var(--text-header-weight);font-stretch: extra-expanded;margin-top: -15px;margin-bottom: 10px;">Connections</div>
+     
+               <%  if (!twitter) { %> 
+                                <%  if (!discord) { %> 
+                                <%  if (!reddit) { %> 
+   <%  if (!twitch) { %> 
+<span>No connections</span>
+                               <% } %>  
+                                                                <% } %>  
+                               <% } %>  
+
+                               <% } %>  
+
+                                 <div style="display: flex;margin-left: -134px;gap: 3px;margin-top: 8px;">
+          <%  if (twitter) { %> 
+  <div style="background: #0009;width: fit-content;padding: 5px;border-radius: 6px;margin-bottom: -15px;">
+<img src="https://p.poketube.fun/https://cdn.glitch.global/d68d17bb-f2c0-4bc3-993f-50902734f652/8473b88f-36a4-437f-8c14-fb9e38a623d9.image.png?v=1693424579898" class="loaded" style="width: 22px;height: 23px;vertical-align: -7px;"><a  style="margin: 1px;" href="https://x.com/<%- twitter.name %>"> @<%- twitter.name %></a>
+              </div>
+    
+              <% } %>  
+                
+       <%  if (discord) { %> 
+  <div style="background: #0009;width: fit-content;padding: 5px;border-radius: 6px;margin-bottom: -15px;">
+<img src="https://p.poketube.fun/https://cdn.glitch.global/d68d17bb-f2c0-4bc3-993f-50902734f652/34e2accb-41ec-4b10-a1e8-a0d647ea6e76.image.png" class="loaded" style="width: 22px;height: 23px;vertical-align: -7px;"><a  style="margin: 1px;" href="https://discord.gg/<%- discord.name %>"> /<%- discord.name %></a>
+              </div>
+              <% } %>  
+                
+                                
+       <%  if (twitch) { %> 
+  <div style="background: #0009;width: fit-content;padding: 5px;border-radius: 6px;margin-bottom: -15px;">
+<img src="https://p.poketube.fun/https://cdn.glitch.global/d68d17bb-f2c0-4bc3-993f-50902734f652/d277ed96-59cd-44fe-a75a-56b3170fa634.image.png?v=1693429282139" class="loaded" style="width: 22px;height: 23px;vertical-align: -7px;"><a  style="margin: 1px;" href="https://twitch.tv/<%- twitch.name %>"> /<%- twitch.name %></a>
+              </div>
+              <% } %>  
+                
+                                            
+       <%  if (reddit) { %> 
+  <div style="background: #0009;width: fit-content;padding: 5px;border-radius: 6px;margin-bottom: -15px;">
+<img src="https://p.poketube.fun/https://cdn.glitch.global/d68d17bb-f2c0-4bc3-993f-50902734f652/3bea1171-8723-4719-b0ee-d98d1abbd174.image.png?v=1693429333706" class="loaded" style="width: 22px;height: 23px;vertical-align: -7px;"><a  style="margin: 1px;" href="https://reddit.com/r/<%- reddit.name %>"> r/<%- reddit.name %></a>
+              </div>
+              <% } %>  
+                
+                       <%  if (instagram) { %> 
+  <div style="background: #0009;width: fit-content;padding: 5px;border-radius: 6px;margin-bottom: -15px;">
+<img src="https://p.poketube.fun/https://cdn.glitch.global/d68d17bb-f2c0-4bc3-993f-50902734f652/52704940-684c-41e8-b0de-cca642fa39f8.image.png?v=1693429793193" class="loaded" style="width: 22px;height: 23px;vertical-align: -7px;"><a  style="margin: 1px;" href="https://instagram.com/<%- instagram.name %>"> <%- instagram.name %></a>
+              </div>
+              <% } %>  
+   </div>
+
+   </div>    
 
                        </p>
                    

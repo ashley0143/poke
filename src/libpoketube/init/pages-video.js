@@ -1,18 +1,40 @@
-const { fetcher, core, wiki, musicInfo, modules, version, initlog, init, } = require("../libpoketube-initsys.js");
-const { IsJsonString, convert, getFirstLine, capitalizeFirstLetter, turntomins, getRandomInt, getRandomArbitrary} = require("../ptutils/libpt-coreutils.js");
+const {
+  fetcher,
+  core,
+  wiki,
+  musicInfo,
+  modules,
+  version,
+  initlog,
+  init,
+} = require("../libpoketube-initsys.js");
+const {
+  IsJsonString,
+  convert,
+  getFirstLine,
+  capitalizeFirstLetter,
+  turntomins,
+  getRandomInt,
+  getRandomArbitrary,
+} = require("../ptutils/libpt-coreutils.js");
 const media_proxy = require("../libpoketube-video.js");
 const atmos = require("../../../pokeatmosurls.json");
 
-
 function linkify(text) {
-    // regular expression to match URLs
-    const urlRegex = /(https?:\/\/[^\s]+)/g;
-  
-    return text.replace(urlRegex, (url) => {
+  // regular expression to match URLs
+  const urlRegex = /(https?:\/\/[^\s]+)/g;
+
+  return text.replace(urlRegex, (url) => {
     // wrap the URL in an <a> tag with the URL as the href attribute
-    return `<a href="/api/redirect?u=${btoa(url.replace(/twitter\.com/g, "nitter.net").replace(/reddit\.com/g, "teddit.net").replace("https://youtube.com", "").replace("https://youtu.be", ""))}" target="_blank">${url}</a>`;
-   });
- }
+    return `<a href="/api/redirect?u=${btoa(
+      url
+        .replace(/twitter\.com/g, "nitter.net")
+        .replace(/reddit\.com/g, "teddit.net")
+        .replace("https://youtube.com", "")
+        .replace("https://youtu.be", "")
+    )}" target="_blank">${url}</a>`;
+  });
+}
 
 const sha384 = modules.hash;
 const fetch = modules.fetch;
@@ -118,23 +140,29 @@ function getJson(str) {
   }
 }
 
+/* support button */
 const PATREON_REGEX = /https:\/\/www.patreon.com\/(?<name>[\w\d_-]+)/;
+
+/* connections */
+const X_REGEX = /https:\/\/twitter.com\/(?<name>[\w\d_-]+)/;
+const CORD_REGEX = /https:\/\/discord.gg\/(?<name>[\w\d_-]+)/;
+const TWITCH_REGEX = /https:\/\/twitch.tv\/(?<name>[\w\d_-]+)/;
+const REDDIT_REGEX = /https:\/\/reddit\.com\/r\/(?<name>[\w\d_-]+)/;
+const INSTAGRAM_REGEX = /https:\/\/www.instagram.com\/(?<name>[\w\d_-]+)/;
 
 module.exports = function (app, config, renderTemplate) {
   app.get("/encryption", async function (req, res) {
-     
-      res.json("error in parsing");
-     
+    res.json("error in parsing");
   });
 
-    app.get("/old", function (req, res) {
+  app.get("/old", function (req, res) {
     const v = req.query.v;
 
     renderTemplate(res, req, "poketube-old.ejs", {
       v,
     });
   });
-  
+
   app.get("/watch", async (req, res) => {
     const { dm, v, e, r, f, m, quality: q, a, universe } = req.query;
 
@@ -149,13 +177,10 @@ module.exports = function (app, config, renderTemplate) {
 
     const u = await media_proxy(v);
 
-    const secure = [
-      "poketube.fun"
-    ].includes(req.hostname);
+    const secure = ["poketube.fun"].includes(req.hostname);
     const verify = req.hostname === "pt.zzls.xyz";
 
-     
-core.video(v).then((data) => {
+    core.video(v).then((data) => {
       try {
         const k = data?.video;
         const json = data?.json;
@@ -169,81 +194,113 @@ core.video(v).then((data) => {
           d = desc.toString().replace(/\n/g, " <br> ");
         }
 
-       const support = (String(inv_vid.description) !== "[object Object]") ? (PATREON_REGEX.exec(inv_vid.description) ?? {}).groups : undefined;
+        const descriptionString = String(inv_vid.description);
+
+        function extractInfo(regex) {
+          return descriptionString !== "[object Object]"
+            ? (regex.exec(descriptionString) ?? {}).groups
+            : undefined;
+        }
+
+        const support = extractInfo(PATREON_REGEX);
+        const twitter = extractInfo(X_REGEX);
+        const discord = extractInfo(CORD_REGEX);
+        const twitch = extractInfo(TWITCH_REGEX);
+        const reddit = extractInfo(REDDIT_REGEX);
+        const instagram = extractInfo(INSTAGRAM_REGEX);
 
         let badges = "";
         let comments = "";
         let nnn = "";
-    
-        if (inv_vid?.error === "The uploader has not made this video available in your country" || inv_vid?.error === "This video is not available") {
-  res.send("error: " + inv_vid.error + " please refresh the page please qt");
-}
-  
-        var uaos = req.useragent.os
-        const browser = req.useragent.browser;
-        const IsOldWindows = (uaos === "Windows 7" || uaos === "Windows 8") && browser === "Firefox";
 
-        if (uaos === "Windows XP" || uaos === "Windows Vista") res.redirect("/lite?v=" + req.query.v);
+        if (
+          inv_vid?.error ===
+            "The uploader has not made this video available in your country" ||
+          inv_vid?.error === "This video is not available"
+        ) {
+          res.send(
+            "error: " + inv_vid.error + " please refresh the page please qt"
+          );
+        }
+
+        var uaos = req.useragent.os;
+        const browser = req.useragent.browser;
+        const IsOldWindows =
+          (uaos === "Windows 7" || uaos === "Windows 8") &&
+          browser === "Firefox";
+
+        if (uaos === "Windows XP" || uaos === "Windows Vista")
+          res.redirect("/lite?v=" + req.query.v);
 
         try {
-        renderTemplate(res, req, "poketube.ejs", {
-          color: data.color,
-          color2: data.color2,
-          linkify,
-          engagement,
-          IsOldWindows,
-          support,
-          u:u.url,
-          isvidious:u.isInvidiousURL,
-          video: json,
-          date: k.Video.uploadDate,
-          e,
-          a,
-          k,
-          dm,
-          useragent:req.useragent,
-          verify,
-          secure,
-          process,
-          sha384,
-          lightOrDark,
-          isMobile: req.useragent.isMobile,
-          tj: data.channel,
-          r,
-          qua: q,
-          inv: inv_comments,
-          convert,
-          universe,
-          wiki: data.wiki,
-          f,
-          t: config.t_url,
-          optout: m,
-          badges,
-          desc,
-          comments,
-          n: nnn,
-          inv_vid,
-          lyrics: "",
-        });
+          renderTemplate(res, req, "poketube.ejs", {
+            color: data.color,
+            color2: data.color2,
+            linkify,
+            engagement,
+            IsOldWindows,
+            support,
+            u: u.url,
+            isvidious: u.isInvidiousURL,
+            video: json,
+            date: k.Video.uploadDate,
+            e,
+            a,
+            twitter,
+            k,
+            dm,
+            instagram,
+            useragent: req.useragent,
+            verify,
+            discord,
+            twitch,
+            reddit,
+            secure,
+            process,
+            sha384,
+            lightOrDark,
+            isMobile: req.useragent.isMobile,
+            tj: data.channel,
+            r,
+            qua: q,
+            inv: inv_comments,
+            convert,
+            universe,
+            wiki: data.wiki,
+            f,
+            t: config.t_url,
+            optout: m,
+            badges,
+            desc,
+            comments,
+            n: nnn,
+            inv_vid,
+            lyrics: "",
+          });
         } catch {
-         return;
+          return;
         }
-     } catch (error) {
-      console.error(error);
-       return res.redirect("/?fromerror=41_generic_error");
+      } catch (error) {
+        console.error(error);
+        return res.redirect("/?fromerror=41_generic_error");
       }
-     });
+    });
   });
 
   app.get("/lite", async function (req, res) {
     const { v, e, r, f, t, quality: q } = req.query;
 
     try {
-      
       const info = await modules.fetch("http://ip-api.com/json/");
       const ip = await info.json();
 
-      const {video: k,json,engagement,comments: inv_comments,vid: inv_vid,} = await core.video(v);
+      const {
+        video: k,
+        json,
+        engagement,
+        comments: inv_comments,
+        vid: inv_vid,
+      } = await core.video(v);
 
       const data = await core.video(v);
       const color = data.color;
@@ -260,7 +317,7 @@ core.video(v).then((data) => {
         color,
         color2,
         engagement,
-        u:u.url,
+        u: u.url,
         video: json,
         date: k.Video.uploadDate,
         e,
@@ -272,7 +329,7 @@ core.video(v).then((data) => {
         tj,
         r,
         qua: q,
-        isvidious:u.isInvidiousURL,
+        isvidious: u.isInvidiousURL,
         inv: comments,
         ip,
         convert,

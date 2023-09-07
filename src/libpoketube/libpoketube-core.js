@@ -12,9 +12,6 @@ const fetcher = require("../libpoketube/libpoketube-fetcher.js");
 const getColors = require("get-image-colors");
 const wiki = require("wikipedia");
 
-const language = "hl=en-US"
-const region = "region=US"
-
 /**
  * Class representing PokeTube's core functionality.
  */
@@ -30,8 +27,9 @@ class PokeTubeCore {
   constructor(config) {
     this.config = config;
     this.cache = {};
-    this.sqp =
-      "-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLBy_x4UUHLNDZtJtH0PXeQGoRFTgw";
+    this.language = "hl=en-US";
+    this.region = "region=US";
+    this.sqp = "-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLBy_x4UUHLNDZtJtH0PXeQGoRFTgw";
   }
 
   /**
@@ -82,7 +80,7 @@ class PokeTubeCore {
     
     try {
     const [invComments, videoInfo, videoData] = await Promise.all([
-      fetch(`${this.config.invapi}/comments/${v}?${language}`).then((res) => res.text()),
+      fetch(`${this.config.invapi}/comments/${v}?${this.language}`).then((res) => res.text()),
       fetch(`${this.config.invapi}/videos/${v}`).then((res) => res.text()),
       curly
         .get(`${this.config.tubeApi}video?v=${v}`, {

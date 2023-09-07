@@ -80,10 +80,9 @@ module.exports = function (app, config, renderTemplate) {
       }
     }
 
-    if (query && query.startsWith('!')) {
-     res.redirect("https://duckduckgo.com/?q=" + query)
-  } 
-
+    if (query && query.startsWith("!")) {
+      res.redirect("https://duckduckgo.com/?q=" + query);
+    }
 
     if (!query) {
       return res.redirect("/");
@@ -92,7 +91,7 @@ module.exports = function (app, config, renderTemplate) {
     let continuation = req.query.continuation || "";
 
     try {
-       const headers = {};
+      const headers = {};
 
       const searchUrl = `https://inner-api.poketube.fun/api/search?query=${encodeURIComponent(
         query
@@ -116,7 +115,7 @@ module.exports = function (app, config, renderTemplate) {
         h: didYouMean,
         continuation,
         q: query,
-        summary:"",
+        summary: "",
       });
     } catch (error) {
       console.error(`Error while searching for '${query}':`, error);
@@ -133,9 +132,7 @@ module.exports = function (app, config, renderTemplate) {
 
       try {
         // about
-        const bout = await fetch(
-          config.tubeApi + `channel?id=${ID}&tab=about`
-        );
+        const bout = await fetch(config.tubeApi + `channel?id=${ID}&tab=about`);
         const h = await bout.text();
         var boutJson = JSON.parse(modules.toJson(h));
       } catch {
@@ -163,27 +160,21 @@ module.exports = function (app, config, renderTemplate) {
         }
       };
 
-      var tjPromise = getChannelData(
-        `https://invid-api.poketube.fun/api/v1/channels/videos/${ID}/?sort_by=${sort_by}${continuation}`
-      );
-      var shortsPromise = getChannelData(
-        `https://invid-api.poketube.fun/api/v1/channels/${ID}/shorts?sort_by=${sort_by}${continuations}`
-      );
-      var streamPromise = getChannelData(
-        `https://invid-api.poketube.fun/api/v1/channels/${ID}/streams?sort_by=${sort_by}${continuationl}`
-      );
-      var ChannelINVPromise = getChannelData(
-        `https://invid-api.poketube.fun/api/v1/channels/${ID}/`
-      );
-      var cPromise = getChannelData(
-        `https://invid-api.poketube.fun/api/v1/channels/community/${ID}/?hl=en-US`
-      );
-      var tj = await tjPromise;
-      var shorts = await shortsPromise;
-      var stream = await streamPromise;
-      var c = await cPromise;
-      var cinv = await ChannelINVPromise;
-      
+      const apiUrl = "https://invid-api.poketube.fun/api/v1/channels/";
+      const channelUrl = `${apiUrl}videos/${ID}/?sort_by=${sort_by}${continuation}`;
+      const shortsUrl = `${apiUrl}${ID}/shorts?sort_by=${sort_by}${continuations}`;
+      const streamUrl = `${apiUrl}${ID}/streams?sort_by=${sort_by}${continuationl}`;
+      const channelINVUrl = `${apiUrl}${ID}/`;
+      const communityUrl = `${apiUrl}community/${ID}/?hl=en-US`;
+
+      var [tj, shorts, stream, c, cinv] = await Promise.all([
+        getChannelData(channelUrl),
+        getChannelData(shortsUrl),
+        getChannelData(streamUrl),
+        getChannelData(communityUrl),
+        getChannelData(channelINVUrl),
+      ]);
+
       cache[ID] = {
         result: {
           tj,
@@ -199,7 +190,7 @@ module.exports = function (app, config, renderTemplate) {
       if (cache[ID] && Date.now() - cache[ID].timestamp < 3600000) {
         var { tj, shorts, stream, c, boutJson } = cache[ID].result;
       }
- 
+
       const subscribers = boutJson.Channel?.Metadata.Subscribers;
       const about = boutJson.Channel.Contents.ItemSection.About;
       const description = about.Description.toString().replace(/\n/g, " <br> ");

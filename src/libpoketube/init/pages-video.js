@@ -141,7 +141,7 @@ function getJson(str) {
 }
 
 /* support button */
-const PATREON_REGEX = /https:\/\/www.patreon.com\/(?<name>[\w\d_-]+)/;
+const PATREON_REGEX = /https:\/\/(?:www\.)?patreon.com\/(?<name>[\w\d_-]+)/;
 
 /* connections */
 const X_REGEX = /https:\/\/twitter.com\/(?<name>[\w\d_-]+)/;

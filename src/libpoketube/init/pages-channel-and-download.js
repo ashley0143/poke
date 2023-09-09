@@ -30,6 +30,13 @@ function getJson(str) {
   }
 }
 
+const ChannelTabs = {
+        community: "Y29tbXVuaXR5",
+        shorts:"c2hvcnRz",
+        videos:"dmlkZW9z",
+        streams:"c3RyZWFtcw=="
+  }
+
 module.exports = function (app, config, renderTemplate) {
   app.get("/download", async function (req, res) {
     try {
@@ -70,7 +77,7 @@ module.exports = function (app, config, renderTemplate) {
 
     const poketube_universe_value = "poketube_smart_search";
 
-    if (query?.includes("youtube.com")) {
+    if (query?.includes("youtube.com/watch?v=")) {
       try {
         var videoid = query?.split("v=");
 
@@ -80,8 +87,8 @@ module.exports = function (app, config, renderTemplate) {
       }
     }
 
-    if (query && query.startsWith("!")) {
-      res.redirect("https://duckduckgo.com/?q=" + query);
+    if (query && query.startsWith("!") && query.length > 2) {
+      res.redirect("https://lite.duckduckgo.com/lite/?q=" + query);
     }
 
     if (!query) {
@@ -103,10 +110,7 @@ module.exports = function (app, config, renderTemplate) {
       const searchJson = getJson(searchText);
 
       let didYouMean;
-      if (
-        searchJson.Search?.Results?.DynamicItem?.id === "didYouMeanRenderer"
-      ) {
-        didYouMean = JSON.parse(searchJson.Search.Results.DynamicItem.Title);
+      if ( searchJson.Search?.Results?.DynamicItem?.id === "didYouMeanRenderer"  ) {    didYouMean = JSON.parse(searchJson.Search.Results.DynamicItem.Title);
       }
 
       renderTemplate(res, req, "search.ejs", {
@@ -159,13 +163,15 @@ module.exports = function (app, config, renderTemplate) {
           return null;
         }
       };
-
+      
+   
       const apiUrl = "https://invid-api.poketube.fun/api/v1/channels/";
-      const channelUrl = `${apiUrl}videos/${ID}/?sort_by=${sort_by}${continuation}`;
-      const shortsUrl = `${apiUrl}${ID}/shorts?sort_by=${sort_by}${continuations}`;
-      const streamUrl = `${apiUrl}${ID}/streams?sort_by=${sort_by}${continuationl}`;
+      const channelUrl = `${apiUrl}${atob(ChannelTabs.videos)}/${ID}/?sort_by=${sort_by}${continuation}`;
+      const shortsUrl = `${apiUrl}${ID}/${atob(ChannelTabs.shorts)}?sort_by=${sort_by}${continuations}`;
+      const streamUrl = `${apiUrl}${ID}/${atob(ChannelTabs.streams)}?sort_by=${sort_by}${continuationl}`;
+      const communityUrl = `${apiUrl}${atob(ChannelTabs.community)}/${ID}/?hl=en-US`;
+      
       const channelINVUrl = `${apiUrl}${ID}/`;
-      const communityUrl = `${apiUrl}community/${ID}/?hl=en-US`;
 
       var [tj, shorts, stream, c, cinv] = await Promise.all([
         getChannelData(channelUrl),

@@ -12,7 +12,7 @@
     
 */
 
-const fetcher = require("../libpoketube/libpoketube-fetcher.js");
+const fetcher = require("../libpoketube/libpoketube-dislikes.js");
 const core = require("../libpoketube/libpoketube-core.js");
 const musicInfo = require("music-info");
 const wiki = require("wikipedia");

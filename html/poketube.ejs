@@ -1723,8 +1723,12 @@ if (isFirstLoad) {
   localStorage.setItem(userlocalStorageKey, 'visited');
 }
   
-</script><!-- bundled app.js --><script src="/static/app.js?ver=<%-btoa("1f739d935676111cfff4b4693e3816e664797050" + k.Video.Recommendations.Video[0].id ) %>">
-</script> <!-- themes --> <script src="/static/custom-css.js"> </script><!-- twemoji --><script src="/static/emojis.js"></script><style> img.emoji {height: 1em;width: 1em;margin: 0 .05em 0 .1em;vertical-align: -0.1em;}</style>
+</script>
+    
+<!-- app.js -->
+<script src="/static/app.bundle.js?ver=<%-btoa("1f739d93" + k.Video.Recommendations.Video[0].id ) %>"></script>
+       
+<style> img.emoji {height: 1em;width: 1em;margin: 0 .05em 0 .1em;vertical-align: -0.1em;}</style>
 <script>twemoji.parse(document.body,{ base: 'https://cdn.zptr.cc/twemoji/' })</script><script>
   window.GLOBAL_ENV = {
    API_ENDPOINT_INVID:"https://invid-api.poketube.fun/api/v1",

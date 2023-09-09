@@ -8,7 +8,7 @@
 
 const { toJson } = require("xml2json");
 const { curly } = require("node-libcurl");
-const fetcher = require("../libpoketube/libpoketube-fetcher.js");
+const getdislikes = require("../libpoketube/libpoketube-dislikes.js");
 const getColors = require("get-image-colors");
 const wiki = require("wikipedia");
 
@@ -104,7 +104,7 @@ class PokeTubeCore {
     }
 
     if (this.checkUnexistingObject(vid)) {
-      const fe = await fetcher(v);
+      const fe = await getdislikes(v);
 
       try {
         const headers = {};

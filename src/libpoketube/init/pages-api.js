@@ -27,15 +27,15 @@ function getJson(str) {
 }
 
 const pkg = require("../../../package.json");
-const ver = "v23.0206-aStfl-MAJOR-stable-nonLTS-git-MTY4MzU2MzMxNQ==";
+const ver = "v23.0909-aStfl-MAJOR-stable-nonLTS-git-MTY4MzU2MzMxNQ==";
 const branch = "master";
-const codename = "astolfo-2";
-const versionnumber = "244";
+const codename = "astolfo-3";
+const versionnumber = "245";
 const relaseunixdate = "MTY4NTcxNzAzOQ==";
 
 module.exports = function (app, config, renderTemplate) {
-  app.get("/embed/:v", async function (req, res) { 
-    res.send("Disabled until further notice")
+  app.get("/embed/:v", async function (req, res) {
+    res.send("Disabled until further notice");
   });
 
   app.get("/api/search", async (req, res) => {
@@ -57,7 +57,7 @@ module.exports = function (app, config, renderTemplate) {
     if (req.query.f) {
       var format = "mp3";
     }
- 
+
     const url = `https://tube.kuylar.dev/proxy/media/${v}/${q}`;
 
     res.redirect(url);
@@ -67,18 +67,14 @@ module.exports = function (app, config, renderTemplate) {
     const id = req.query.v;
     const l = req.query.h;
 
-        try {
+    try {
+      let url = `https://invid-api.poketube.fun/api/v1/captions/${id}?label=${l}`;
 
-    let url = `https://invid-api.poketube.fun/api/v1/captions/${id}?label=${l}`;
+      let f = await modules.fetch(url);
+      const body = await f.text();
 
-    let f = await modules.fetch(url);
-    const body = await f.text();
-
-    res.send(body);
-          
-        } catch {
-          
-        }
+      res.send(body);
+    } catch {}
   });
 
   app.get("/feeds/videos.xml", async (req, res) => {
@@ -101,6 +97,14 @@ module.exports = function (app, config, renderTemplate) {
     }
 
     res.redirect(red_url + "?f=" + req.query.u);
+  });
+
+  app.get("/api", async (req, res) => {
+    res.redirect("/api/version.json");
+  });
+
+  app.get("/api/v1", async (req, res) => {
+    res.redirect("https://invid-api.poketube.fun/api/v1/stats");
   });
 
   app.get("/api/version.json", async (req, res) => {
@@ -129,7 +133,7 @@ module.exports = function (app, config, renderTemplate) {
       piwik: "master",
       process: process.versions,
       dependencies: pkg.dependencies,
-      poketubeapicode: btoa(Date.now() + invidious.software.version)
+      poketubeapicode: btoa(Date.now() + invidious.software.version),
     };
 
     res.json(response);

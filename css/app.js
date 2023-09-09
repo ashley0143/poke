@@ -105,51 +105,7 @@ timeLinks.forEach(link => {
   }
 });
 
-// Fetch URLs and handle progress saving
-const urls = document.querySelectorAll('a[href*="/watch?v="]');
-const spinner = document.createElement('div');
-spinner.id = 'fetch-spinner';
-spinner.classList.add('hide');
-document.body.appendChild(spinner);
-const text = document.createElement('div');
-text.id = 'fetch-text';
-text.classList.add('hide');
-document.body.appendChild(text);
-document.body.classList.add('blur');
-
-let fetchedCount = 0;
-
-urls.forEach(link => {
-  const url = new URL(link.href);
-  if (url.host !== 'www.youtube.com' && url.host !== 'youtube.com' && url.host !== "redirect.poketube.fun") {
-    console.log(`Fetching ${url.origin}`);
-    spinner.classList.remove('hide');
-    text.classList.remove('hide');
-
-    fetch(url.href)
-      .then(response => {
-        if (response.status === 500) {
-          // do nothing
-        }
-        console.log(`Fetched ${url.origin}`);
-        fetchedCount++;
-        console.clear()
-        if (fetchedCount === urls.length) {
-          spinner.classList.add('hide');
-          text.classList.add('hide');
-          document.body.classList.remove('blur');
-        }
-      })
-      .catch(error => {
-        spinner.classList.add('hide');
-        text.classList.add('hide');
-        console.clear()
-        if (!(error instanceof TypeError && error.message.includes('Failed to fetch'))) {
-          console.error(`Error fetching ${url.origin}: ${error}`);
-        }
-      });
-  }
-});
+  
 
 // Save and resume video progress
 const videoId = new URLSearchParams(window.location.search).get('v');
@@ -190,57 +146,46 @@ videoElement.addEventListener("fullscreenchange", () => {
   videoElement.style.borderRadius = document.fullscreenElement === videoElement ? "0em" : "16px";
 });
 
+function fetchUrls(urls) {
+  let fetchedCount = 0;
+
+  urls.forEach(link => {
+    const url = new URL(link.href);
+    if (url.host !== 'www.youtube.com' && url.host !== 'youtube.com' && url.host !== "redirect.poketube.fun") {
+      console.log(`Fetching ${url.origin}`);
+      fetch(url.href)
+        .then(response => {
+          if (response.status === 500) {
+            // do nothing
+          }
+          console.log(`Fetched ${url.origin}`);
+          fetchedCount++;
+          console.clear();
+          if (fetchedCount === urls.length) {
+            document.body.classList.remove('blur');
+          }
+        })
+        .catch(error => {
+          console.clear();
+          if (!(error instanceof TypeError && error.message.includes('Failed to fetch'))) {
+            console.error(`Error fetching ${url.origin}: ${error}`);
+          }
+        });
+    }
+  });
+}
+
 // Fetch channel URLs
 const channelUrls = document.querySelectorAll('a[href*="/channel?id="]');
-let fetchedCountChannel = 0;
-
-channelUrls.forEach(link => {
-  const url = new URL(link.href);
-  if (url.host !== 'www.youtube.com' && url.host !== 'youtube.com' && url.host !== "redirect.poketube.fun") {
-    console.log(`Fetching ${url.origin}`);
-    fetch(url.href)
-      .then(response => {
-        if (response.status === 500) {
-          // do nothing
-        }
-        console.log(`Fetched ${url.origin}`);
-        fetchedCountChannel++;
-        console.clear()
-        if (fetchedCountChannel === channelUrls.length) {
-          document.body.classList.remove('blur');
-        }
-      })
-      .catch(error => {
-        console.clear()
-        if (!(error instanceof TypeError && error.message.includes('Failed to fetch'))) {
-          console.error(`Error fetching ${url.origin}: ${error}`);
-        }
-      });
-  }
-});
+fetchUrls(channelUrls);
 
 // Fetch download URLs
 const downloadUrls = document.querySelectorAll('a[href*="/download?v="]');
-downloadUrls.forEach(link => {
-  const url = new URL(link.href);
-  if (url.host !== 'www.youtube.com' && url.host !== 'youtube.com' && url.host !== "redirect.poketube.fun") {
-    console.log(`Fetching ${url.origin}`);
-    fetch(url.href)
-      .then(response => {
-        if (response.status === 500) {
-          // do nothing
-        }
-        console.log(`Fetched ${url.origin}`);
-        console.clear()
-      })
-      .catch(error => {
-        console.clear()
-        if (!(error instanceof TypeError && error.message.includes('Failed to fetch'))) {
-          console.error(`Error fetching ${url.origin}: ${error}`);
-        }
-      });
-  }
-});
+fetchUrls(downloadUrls);
+
+// fetch videos urls
+const urls = document.querySelectorAll('a[href*="/watch?v="]');
+fetchUrls(urls);
 
  var popupMenu = document.getElementById("popupMenu");
         var loopOption = document.getElementById("loopOption");

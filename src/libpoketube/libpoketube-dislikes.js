@@ -28,12 +28,6 @@ class PokeTubeAPI {
     this.headers = {};
   }
 
-  /**
-   * @deprecated This method is deprecated. Please use the `video()` function defined in `libpoketube-core` to retrieve video data.
-   */
-  async _getInnerTubeData() {
-    return;
-  }
 
   /**
    * Parses a JSON string and returns the resulting object.
@@ -48,6 +42,7 @@ class PokeTubeAPI {
       return null;
     }
   }
+  
   /**
    * Retrieves engagement data for the YouTube video.
    * @returns {Promise<object|null>} A Promise that resolves with the engagement data, or null if an error occurs.
@@ -78,11 +73,9 @@ class PokeTubeAPI {
    * @returns {Promise<object>} A Promise that resolves with an object containing video and engagement data.
    */
   async getData() {
-    this.videoData = await this._getInnerTubeData();
     this.engagement = await this._getEngagementData();
 
     return {
-      video: this.videoData,
       engagement: this.engagement,
       videoUrlYoutube: `${YOUTUBE_URL}${this.videoId}`,
     };
@@ -103,7 +96,7 @@ Returns basic data about a given YouTube video using PokeTubeAPI.
 @async
 @function
 @param {string} videoId - The YouTube video ID to get data for.
-@returns {Promise<Object>} An object containing the video data and engagement data, as well as the YouTube URL for the video.
+@returns {Promise<Object>} An object containing the  engagement data, as well as the YouTube URL for the video.
 @throws {Error} If the video ID is invalid or the request fails.
 */
 

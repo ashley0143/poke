@@ -28,7 +28,7 @@
 
 -->
 <!DOCTYPE html>
-<html class="poketube_desktop_player event" invidproxy="<%u%>" universe="2" vid_id="<%=inv_vid.videoId%>" t="<%=btoa(Date.now())%>" version="browser_web">
+<html class="poketube_desktop_player event" invidproxy="<%=u %>" universe="2" vid_id="<%=inv_vid.videoId%>" t="<%=btoa(Date.now())%>" version="browser_web">
   <head>
   
     <% if (e === false) { %>  
@@ -42,11 +42,10 @@
 <meta content=@youtube name=twitter:site>
 <meta content="https://poketube.fun/watch?v=<%=inv_vid.videoId%>" name=twitter:url>
 <meta content="<%=inv_vid.title%> | PokeTube" name=twitter:title>
-<meta content="Watch this video from <%=video?.Channel?.Name%> On PokeTube! The Libre YouTube Front end!1!" property=twitter:description>
+<meta content="Watch this video from <%=k.Video.Channel.Name%> On PokeTube! The Libre YouTube Front end!1!" property=twitter:description>
 <meta content="https://i.ytimg.com/vi/<%=inv_vid.videoId%>/maxresdefault.jpg" property=og:image>
 <meta content=summary_large_image name=twitter:card>
 <link href="https://poketube.fun/watch?v=<%=inv_vid.videoId%>" itemprop=url>
-<link href="http://www.youtube.com/channel/<%=video?.Channel?.id%>" itemprop=url>
  <% } %> <!-- close the } -->
 <link href="/css/yt-ukraine.svg?v=3" rel=icon>
 <link href=/css/snow.css rel=stylesheet> 
@@ -1154,6 +1153,9 @@ display: block; !important;" autoplay controls
                  
                      </p>
                      <% } %> 
+                       
+
+              
                        <a id="metadata"></a>
                            <div class="video-title" style="color:var(--text-color);font-family:var(--text-font-primary);;font-weight:var(--text-header-weight);font-stretch: extra-expanded;margin-top: 10px;margin-bottom: 10px;">Metadata And Engagement</div>
  <hr style="clear: both;display: block;border: none;border-bottom: 0.5px solid #2f2f2f;/*! width: 4.5em; */height: 0;">
@@ -1188,7 +1190,7 @@ display: block; !important;" autoplay controls
    <%=x %>
      </a>
    </div>
-   
+
          <% }) %>  
            </div>
    

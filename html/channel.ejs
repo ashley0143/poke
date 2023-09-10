@@ -928,6 +928,76 @@ width: fit-content;
                                        </div>
  <% } %>
 
+    <% if (isMobile) { %>  
+   
+      <details style="color:#fff;background:#0f0f0f">
+                        <summary style="color:#fff;text-align: left;margin-left: 5px;">Sort by</summary>
+
+            <div class="tags rec" style="background:#0f0f0f;margin-left: auto;">
+                <% if (sort == "newest") { %>  
+
+              <a class="tag" style="background:var(--chip-background-hover)">
+                Recently Uploaded
+              </a>
+                    
+                  
+                                <a href="/channel?id=<%=ID%>&sort_by=popular" style="color:#fff;text-decoration:none;
+" class="tag c">
+           Popular
+              </a>
+                  
+                       <a href="/channel?id=<%=ID%>&sort_by=oldest" style="color:#fff;text-decoration:none;
+" class="tag c">
+           Oldest
+              </a>
+                  
+                   <% } %>
+                          <% if (sort) { %>  
+
+                          <% if (sort === "popular") { %>  
+
+            <a  href="/channel?id=<%=ID%>" style="color:#fff;text-decoration:none;
+" class="tag c" >
+                Recently Uploaded
+              </a>
+                  
+                                <a  style="background:var(--chip-background-hover)" class="tag">
+           Popular
+              </a>
+                            
+                                                   <a href="/channel?id=<%=ID%>&sort_by=oldest" style="color:#fff;text-decoration:none;
+" class="tag c">
+           Oldest
+              </a>
+                   <% } %>
+                     
+                     
+                          <% if (sort === "oldest") { %>  
+
+            <a  href="/channel?id=<%=ID%>" style="color:#fff;text-decoration:none;
+" class="tag c" >
+                Recently Uploaded
+              </a>
+                  
+                                <a    href="/channel?id=<%=ID%>&sort_by=popular" style="color:#fff;text-decoration:none;
+" class="tag">
+           Popular
+              </a>
+                            
+                                                   <a   style="background:var(--chip-background-hover)
+" class="tag c">
+           Oldest
+              </a>
+                   <% } %>
+                     
+                   <% } %>
+
+              
+                                                          </details>
+
+                                       </div>
+ <% } %>
+
  
     	<div class="video-grid" >
             

@@ -1,5 +1,21 @@
-const { fetcher, core, wiki, musicInfo, modules, version, initlog } = require("../libpoketube-initsys.js");
-const { IsJsonString, convert, getFirstLine, capitalizeFirstLetter, turntomins, getRandomInt, getRandomArbitrary } = require("../ptutils/libpt-coreutils.js");
+const {
+  fetcher,
+  core,
+  wiki,
+  musicInfo,
+  modules,
+  version,
+  initlog,
+} = require("../libpoketube-initsys.js");
+const {
+  IsJsonString,
+  convert,
+  getFirstLine,
+  capitalizeFirstLetter,
+  turntomins,
+  getRandomInt,
+  getRandomArbitrary,
+} = require("../ptutils/libpt-coreutils.js");
 const { api } = require("../init/pages-api.js");
 
 function init(app, config, rendertemplate) {
@@ -8,9 +24,9 @@ function init(app, config, rendertemplate) {
   initlog("wait a few mins... pt on timeout rn");
 
   app.get("/*", function (req, res, next) {
-     if (didstart) return next();
+    if (didstart) return next();
 
-    return rendertemplate(res, req, "timeout.ejs");    
+    return rendertemplate(res, req, "timeout.ejs");
   });
 
   setTimeout(function () {
@@ -25,36 +41,24 @@ function init(app, config, rendertemplate) {
     }
 
     try {
-      initlog("Loading video pages ");
-      require("../init/pages-video.js")(app, config, rendertemplate);
+      const modulesToLoad = [
+        { name: "video pages", path: "../init/pages-video.js" },
+        { name: "redirects/old pages", path: "../init/pages-redir.js" },
+        { name: "Download and channel pages", path: "../init/pages-channel-and-download.js",},
+        { name: "api pages", path: "../init/pages-api.js" },
+        { name: "static pages", path: "../init/pages-static.js" },
+        { name: "main pages", path: "../init/pages-404-and-main.js" },
+      ];
 
-      initlog("Loaded video pages ");
-      initlog("Loading redirects/old pages ");
-      require("../init/pages-redir.js")(app, config, rendertemplate);
-      initlog("Loaded redirects/old pages ");
-
-      initlog("Loading Download and channel pages");
-      require("../init/pages-channel-and-download.js")(
-        app,
-        config,
-        rendertemplate
-      );
-
-      initlog("Loaded Download and channel pages");
-      initlog("Loading api pages");
-      require("../init/pages-api.js")(app, config, rendertemplate);
-      initlog("Loaded api pages");
-
-      initlog("Loading static pages");
-      require("../init/pages-static.js")(app, config, rendertemplate);
-      initlog("Loaded static pages");
-      initlog("Loading main pages");
-      require("../init/pages-404-and-main.js")(app, config, rendertemplate);
-      initlog("Loaded main pages");
+      for (const moduleInfo of modulesToLoad) {
+        initlog(`Loading ${moduleInfo.name}`);
+        require(moduleInfo.path)(app, config, rendertemplate);
+        initlog(`Loaded ${moduleInfo.name}`);
+      }
 
       initlog("[OK] Load pages");
-
       initlog("Loaded pages - initing poketube finnished :3");
+
       setTimeout(function () {
         setInterval(function () {
           /* PokeTube Update daemon - checks for updates in poketube */
@@ -80,7 +84,7 @@ function init(app, config, rendertemplate) {
       }, 30000);
     } catch (err) {
       initlog("[FAILED] Load pages \n" + err);
-      console.error(err)
+      console.error(err);
     }
   }, 30000);
 }

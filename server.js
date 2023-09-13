@@ -77,6 +77,7 @@
   app.use(modules.useragent.express());
   app.use(modules.express.json()); // for parsing application/json
   app.enable("trust proxy");
+  var toobusy = require('toobusy-js')
 
   const renderTemplate = async (res, req, template, data = {}) => {
     res.render(
@@ -84,7 +85,26 @@
       Object.assign(data)
     );
   };
- 
+  
+ // Set check interval to a faster value. This will catch more latency spikes
+// but may cause the check to be too sensitive.
+toobusy.interval(110);
+
+toobusy.maxLag(2500);
+  
+  app.use(function(req, res, next) {
+  if (toobusy()) {
+    res.send(503, "I'm busy right now, sorry.");
+  } else {
+    next();
+  }
+});
+  
+  toobusy.onLag(function(currentLag) {
+  console.log("Event loop lag detected! Latency: " + currentLag + "ms");
+});
+  
+
   const random_words = [
     "banana pie",
     "how to buy an atom bomb",

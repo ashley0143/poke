@@ -931,7 +931,7 @@ display: block; !important;" autoplay controls
 
        Proxy : tube.kuylar.dev - refresh the page to change the proxy location<br>
                           <% } %>   
-       Date : <%- Date.now() %> - <%- useragent.os %> on <%- useragent.browser %> <br>
+       Date : <%- Date.now() %> - <%- useragent.os.replace("Linux", "GNU/Linux") %> on <%- useragent.browser %> <br>
                                                   <% if (isvidious) { %>
 
        Mystery text :  <%=btoa(inv_vid.videoId + " i " + " lov " + " u " + u.replace("https://","") ) %> <br>
@@ -1115,7 +1115,7 @@ display: block; !important;" autoplay controls
            <div style="margin-top:1em;">
              
         
-              <%-String(inv_vid.descriptionHtml).replace(/\n/g, " <br> ").replace(/twitter\.com/g, "nitter.net").replace(/reddit\.com/g, "teddit.net") %>
+              <%-String(channelurlfixer(inv_vid.descriptionHtml)).replace(/\n/g, " <br> ").replace(/twitter\.com/g, "nitter.net").replace(/reddit\.com/g, "teddit.net") %>
                    </div> 
                           <% } %>                          <% } %>                                  <% } %>          
                              
@@ -1573,7 +1573,25 @@ Recommended Videos
                                                                       <% } %>
 
                                         <% } %>                                      </details>
-    <div style="font-family:Inter,sans-serif;;white-space:yes;" align="center">
+                                                                        
+   
+
+            	           <% if (lyrics && !r) { %>
+                                             <div style="font-family:Inter,sans-serif;;white-space:yes;" align="center">
+
+      <% if (optout) { %> 
+     <a href="/watch?v=<%=inv_vid.videoId%>&r=f">Lyrics (Wow)</a>
+
+
+  <% } %> 
+         <% if (!optout) { %> 
+                       <a href="/watch?v=<%=inv_vid.videoId%>&r=f">Lyrics (Wow)</a>
+ <% } %>
+                    </div>
+                           <% } %>
+                             		     <hr style="clear: both;display: block;border: none;border-bottom: 0.5px solid #2f2f2f;margin: 0 0;/*! width: 4.5em; */height: 0;">
+                             
+              <div style="font-family:Inter,sans-serif;;white-space:yes;" align="center">
                                  <hr style="clear: both;display: block;border: none;border-bottom: 0.5px solid #2f2f2f;margin: 0 0;/*! width: 4.5em; */height: 0;">
 <br>
        <a href="https://youtube.com/watch?v=<%=inv_vid.videoId%>">Open On YouTube</a> • <a href="/privacy">Privacy</a> • <a href="https://github.com/iamashley0/poketube/">Git</a> 
@@ -1594,24 +1612,8 @@ Recommended Videos
    </div>
      <% } %>
             
-
-            	           <% if (lyrics && !r) { %>
-                                             <div style="font-family:Inter,sans-serif;;white-space:yes;" align="center">
-
-      <% if (optout) { %> 
-     <a href="/watch?v=<%=inv_vid.videoId%>&r=f">Lyrics (Wow)</a>
-
-
-  <% } %> 
-         <% if (!optout) { %> 
-                       <a href="/watch?v=<%=inv_vid.videoId%>&r=f">Lyrics (Wow)</a>
- <% } %>
-                    </div>
-                           <% } %>
-                             		     <hr style="clear: both;display: block;border: none;border-bottom: 0.5px solid #2f2f2f;margin: 0 0;/*! width: 4.5em; */height: 0;">
-                             
-             
                      </div>
+           
  
 	</div>  
  

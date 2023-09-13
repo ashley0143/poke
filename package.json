@@ -8,11 +8,11 @@
   },
   "dependencies": {
     "express": "^4.18.2",
-    "ejs": "^3.1.8",
+    "ejs": "^3.1.9",
     "path": "^0.12.7",
     "html-to-text": "^8.2.1",
     "encoding": "^0.1.13",
-    "node-fetch": "^2.6.7",
+    "node-fetch": "^2.7.0",
     "xml-js": "^1.6.11",
     "request": "^2.88.2",
     "xml2json": "^0.12.0",
@@ -28,8 +28,9 @@
     "node-libcurl": "^2.3.3",
     "uglify-js": "^3.17.4",
     "ping": "^0.4.4",
-    "undici": "^5.23.0",
-    "express-rate-limit": "^6.9.0"
+    "undici": "^5.24.0",
+    "express-rate-limit": "^6.9.0",
+    "toobusy-js": "^0.5.1"
   },
   "engines": {
     "node": "16.x"

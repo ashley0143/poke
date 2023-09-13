@@ -2172,55 +2172,60 @@ font-size: 13px;margin:0;padding:0;white-space: nowrap;
 <p style="margin-top: 10px;margin-bottom: 10px;">
           </p>	
               
-       <%-String(linkify(inv_vid.description)).replace(/\n/g, " <br> ").replace(/twitter\.com/g, "nitter.net").replace(/reddit\.com/g, "teddit.net") %>
+              <%-String(channelurlfixer(inv_vid.descriptionHtml)).replace(/\n/g, " <br> ").replace(/twitter\.com/g, "nitter.net").replace(/reddit\.com/g, "teddit.net") %>
 
-  
                             
   <div style="margin: 10px;">
                     <div style="justify-content: center;display: flex;padding: 11px;font-family: Ginto nord;gap: 3px;background: #1f1f1f;border-top-left-radius: 10px;border-top-right-radius: 10px;">
-More info about the video
+Connections
     </div>  
  
                               
 
                               
                                                             <div style="background:#181818;" class="fromtheweb-outer">
-                          <div class="fromtheweb-inner">
-                             
-                   <% if (wiki.extract_html) { %> 
-<div class="video-title" style="color:#fff;font-family:Ginto Nord,sans-serif;font-weight:700;margin-top: 10px;margin-bottom: 10px;text-aligin:left;">From da web</div>
-                     
-<hr style="clear: both;display: block;border: none;border-bottom: 0.5px solid #2f2f2f;/*! width: 4.5em; */height: 0;">
-
-  <b><%-wiki.extract_html%>
-   
-<p style="margin-bottom: 10px;">
-
-  <a href=" <%-wiki.content_urls.desktop.page%>
- ">From wikipedia </a> under CC-BY-SA 3.0
-    </p></b>
- 
-                 
-                      <% } %>  
-                                 <% if (!wiki.extract_html) { %> 
-                                                                    <% if (desc) { %> 
-
-<div class="video-title" style="color:#fff;font-family:Ginto Nord,sans-serif;font-weight:700;margin-top: 10px;margin-bottom: 10px;text-aligin:left;">About This Channel</div>
-                     
-<hr style="clear: both;display: block;border: none;border-bottom: 0.5px solid #2f2f2f;/*! width: 4.5em; */height: 0;">
-
-<p><b><%-desc%></b></p>
- 
-                 
-                      <% } %>                        <% } %>  
+<div class="fromtheweb-inner" style="height: 2em;">
+                                 <div style="display: flex;gap: 3px;">
+          <%  if (twitter) { %> 
+  <div style="background: #0009;width: fit-content;padding: 5px;border-radius: 6px;margin-bottom: -15px;">
+<img src="https://p.poketube.fun/https://cdn.glitch.global/d68d17bb-f2c0-4bc3-993f-50902734f652/8473b88f-36a4-437f-8c14-fb9e38a623d9.image.png?v=1693424579898" class="loaded" style="width: 22px;height: 23px;vertical-align: -7px;"><a  style="margin: 1px;" href="https://x.com/<%- twitter.name %>"> @<%- twitter.name %></a>
+              </div>
+    
+              <% } %>  
+                
+       <%  if (discord) { %> 
+  <div style="background: #0009;width: fit-content;padding: 5px;border-radius: 6px;margin-bottom: -15px;">
+<img src="https://p.poketube.fun/https://cdn.glitch.global/d68d17bb-f2c0-4bc3-993f-50902734f652/34e2accb-41ec-4b10-a1e8-a0d647ea6e76.image.png" class="loaded" style="width: 22px;height: 23px;vertical-align: -7px;"><a  style="margin: 1px;" href="https://discord.gg/<%- discord.name %>"> /<%- discord.name %></a>
+              </div>
+              <% } %>  
+                
+                                
+       <%  if (twitch) { %> 
+  <div style="background: #0009;width: fit-content;padding: 5px;border-radius: 6px;margin-bottom: -15px;">
+<img src="https://p.poketube.fun/https://cdn.glitch.global/d68d17bb-f2c0-4bc3-993f-50902734f652/d277ed96-59cd-44fe-a75a-56b3170fa634.image.png?v=1693429282139" class="loaded" style="width: 22px;height: 23px;vertical-align: -7px;"><a  style="margin: 1px;" href="https://twitch.tv/<%- twitch.name %>"> /<%- twitch.name %></a>
+              </div>
+              <% } %>  
+                
+                                            
+       <%  if (reddit) { %> 
+  <div style="background: #0009;width: fit-content;padding: 5px;border-radius: 6px;margin-bottom: -15px;">
+<img src="https://p.poketube.fun/https://cdn.glitch.global/d68d17bb-f2c0-4bc3-993f-50902734f652/3bea1171-8723-4719-b0ee-d98d1abbd174.image.png?v=1693429333706" class="loaded" style="width: 22px;height: 23px;vertical-align: -7px;"><a  style="margin: 1px;" href="https://reddit.com/r/<%- reddit.name %>"> r/<%- reddit.name %></a>
+              </div>
+              <% } %>  
+                
+                       <%  if (instagram) { %> 
+  <div style="background: #0009;width: fit-content;padding: 5px;border-radius: 6px;margin-bottom: -15px;">
+<img src="https://p.poketube.fun/https://cdn.glitch.global/d68d17bb-f2c0-4bc3-993f-50902734f652/52704940-684c-41e8-b0de-cca642fa39f8.image.png?v=1693429793193" class="loaded" style="width: 22px;height: 23px;vertical-align: -7px;"><a  style="margin: 1px;" href="https://instagram.com/<%- instagram.name %>"> <%- instagram.name %></a>
+              </div>
+              <% } %>  
+   </div>
 
                         
                           </div>
                    
  			</div>
   
-                                                   <hr style="clear: both;display: block;border: none;border-bottom: 0.5px solid #2f2f2f;/*! width: 4.5em; */height: 0;">
-     <%  if (Array.isArray(video?.Tags?.Tag)) { %> 
+ <%  if (Array.isArray(video?.Tags?.Tag)) { %> 
 
                             <div class="video-title" style="color:var(--text-color);font-family:var(--text-font-primary);;font-weight:var(--text-header-weight);font-stretch: extra-expanded;margin-top: 10px;margin-bottom: 10px;">Tags</div>
                       <div class="tags">

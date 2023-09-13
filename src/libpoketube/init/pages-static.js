@@ -113,43 +113,48 @@ module.exports = function (app, config, renderTemplate) {
   });
 
 app.get("/static/:id", (req, res) => {
-  if (req.params.id.endsWith(".css")) {
-    res.redirect("/css/" + req.params.id);
-  } else if (req.params.id.endsWith(".js")) {
-    if (req.params.id.endsWith(".bundle.js")) {
-      // Define the paths to the three input JavaScript files
-      const file1Path = path.join(html_location, 'app.js');
-      const file2Path = path.join(html_location, 'custom-css.js');
-      const file3Path = path.join(html_location, 'emojis.js');
+  const id = req.params.id;
 
-      // Read the contents of the three input files
-      const file1Content = fs.readFileSync(file1Path, 'utf-8');
-      const file2Content = fs.readFileSync(file2Path, 'utf-8');
-      const file3Content = fs.readFileSync(file3Path, 'utf-8');
+  if (id.endsWith(".css")) {
+    res.redirect("/css/" + id);
+  } else if (id.endsWith(".js")) {
+    if (id.endsWith(".bundle.js")) {
+      const jsFiles = ['app.js', 'custom-css.js', 'emojis.js'];
+      const combinedContent = jsFiles
+        .map((fileName) => {
+          const filePath = path.join(html_location, fileName);
+          return fs.existsSync(filePath) ? fs.readFileSync(filePath, 'utf-8') : '';
+        })
+        .join('\n');
 
-      // Combine the contents of the three files
-      const combinedContent = `${file1Content}\n${file2Content}\n${file3Content}`;
+      const minimizedJs = require("uglify-js").minify(combinedContent).code;
 
-      // Serve the combined content as JavaScript
-      res.header("Content-Type", "text/javascript");
-       const minimizedJs = require("uglify-js").minify(combinedContent).code;
-      res.send("// @license magnet:?xt=urn:btih:1f739d935676111cfff4b4693e3816e664797050&dn=gpl-3.0.txt GPL-3.0-or-later" + `\n` + `// Includes app.js, emojis.js and custom-css.js. source code can be found for these 3 files in https://codeberg.org/Ashley/poketube/src/branch/main/css/` +
-`\n` + minimizedJs + `\n` +"// @license-end");
-    } else {
-      const filePath = path.join(html_location, req.params.id);
-      if (!fs.existsSync(filePath)) {
-        res.status(404).send("File not found");
-        return;
-      }
-      // Minimize the JavaScript file
-      const js = fs.readFileSync(filePath, "utf8");
-      const minimizedJs = require("uglify-js").minify(js).code;
-      // Serve the minimized JavaScript file
       res.header("Content-Type", "text/javascript");
       res.send(
         "// @license magnet:?xt=urn:btih:1f739d935676111cfff4b4693e3816e664797050&dn=gpl-3.0.txt GPL-3.0-or-later" +
           `\n` +
-          `// Source code can be found in: https://codeberg.org/Ashley/poketube/src/branch/main/css/${req.params.id}` +
+          `// Includes app.js, emojis.js, and custom-css.js. Source code can be found for these 3 files in https://codeberg.org/Ashley/poketube/src/branch/main/css/` +
+          `\n` +
+          minimizedJs +
+          `\n` +
+          "// @license-end"
+      );
+    } else {
+      const filePath = path.join(html_location, id);
+
+      if (!fs.existsSync(filePath)) {
+        res.status(404).send("File not found");
+        return;
+      }
+
+      const js = fs.readFileSync(filePath, "utf8");
+      const minimizedJs = require("uglify-js").minify(js).code;
+
+      res.header("Content-Type", "text/javascript");
+      res.send(
+        "// @license magnet:?xt=urn:btih:1f739d935676111cfff4b4693e3816e664797050&dn=gpl-3.0.txt GPL-3.0-or-later" +
+          `\n` +
+          `// Source code can be found in: https://codeberg.org/Ashley/poketube/src/branch/main/css/${id}` +
           `\n` +
           minimizedJs +
           `\n` +
@@ -157,8 +162,9 @@ app.get("/static/:id", (req, res) => {
       );
     }
   } else {
-    res.sendFile(req.params.id, { root: html_location });
+    res.sendFile(id, { root: html_location });
   }
 });
+
 
 };

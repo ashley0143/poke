@@ -198,9 +198,9 @@ module.exports = function (app, config, renderTemplate) {
       }
 
       const subscribers = boutJson.Channel?.Metadata.Subscribers;
-      const about = boutJson.Channel.Contents.ItemSection.About;
-      const description = about.Description.toString().replace(/\n/g, " <br> ");
-      const dnoreplace = about.Description.toString();
+      const about = boutJson?.Channel?.Contents?.ItemSection.About;
+      const description = about?.Description.toString().replace(/\n/g, " <br> ");
+      const dnoreplace = about?.Description.toString();
 
       renderTemplate(res, req, "channel.ejs", {
         ID,

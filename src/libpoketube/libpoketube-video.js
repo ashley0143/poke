@@ -45,26 +45,18 @@ function toObject(arr) {
 
 // Gets Invidious instances
 const invInstanceList = [
-  { uri: "https://invidious.projectsegfau.lt" },
-  { uri: "https://iv.ggtyler.dev" },
-  { uri: "https://invidious.protokolla.fi" },
-  { uri: "https://inv.zzls.xyz" },
-  { uri: "https://invidious.fdn.fr" },
-  { uri: "https://anontube.lvkaszus.pl" },
-  { uri: "https://iv.datura.network" },
-  { uri: "https://yt.drgnz.club" },
-  { uri: "https://invidious.private.coffee" },
-  { uri: "https://inv.tux.pizza" },
-  { uri: "https://invidious.lunar.icu" },
-  { uri: "https://yt.artemislena.eu" },
+  "https://inv.zzls.xyz",
+  "https://iv.datura.network",
+  "https://vid.theedgeofrage.com"
 ];
 
 // Gets a random instance from the list
-const instance = invInstanceList[Math.floor(Math.random() * invInstanceList.length)];
+const instance =
+  invInstanceList[Math.floor(Math.random() * invInstanceList.length)];
 
 let url;
-if (instance.uri.startsWith("https://")) {
-  url = instance.uri;
+if (instance.startsWith("https://")) {
+  url = instance;
 } else {
   url = "https://tube.kuylar.dev";
 }

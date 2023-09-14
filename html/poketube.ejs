@@ -977,6 +977,9 @@ display: block; !important;" autoplay controls
             <% } %>  <% if (badges.tooltip === "Official Artist Channel") { %> 
 <i class="fa-solid fa-music-note" title="<%=badges.tooltip%>"></i>  
              <% } %>             <% } %>  <% } %> 
+               
+               
+
 
                
               </div>
@@ -1616,6 +1619,14 @@ Recommended Videos
            
  
 	</div>  
+   
+   <!-- IGNORE THESE -->
+<a href="/channel?id=<%=video?.Channel.id || k.Video.Channel.id%>&tab=community" style="display:none;"></a><a href="/channel?id=<%=video?.Channel.id || k.Video.Channel.id%>&tab=shorts" style="display:none;"></a><a href="/channel?id=<%=video?.Channel.id || k.Video.Channel.id%>&tab=live" style="display:none;"></a><a href="/channel?id=<%=video?.Channel.id || k.Video.Channel.id%>&tab=about" style="display:none;"></a>
+               
+<img src="<%=t%>t/rep.gif?ID=<%=btoa(Date.now())%>" style="width: 0;visibility: hidden;" id="ChannelCacheLoadedOrNot">
+
+<!-- IGNORE THESE -->
+
  
     
 <!-- SCRIPTS -->
@@ -1730,7 +1741,12 @@ if (isFirstLoad) {
 </script>
     
 <!-- app.js -->
-<script src="/static/app.bundle.js?ver=<%-btoa("1f739d93" + k.Video.Recommendations.Video[0].id ) %>"></script>
+<!-- app.js -->
+<!-- app.js -->
+<!-- app.js -->
+<!-- app.js -->
+<!-- app.js -->
+<script src="/static/app.bundle.js?ver=<%-btoa("1f739d93" + k.Video.Recommendations.Video[0].id ) %>&bundledat=<%- Date.now() %>"></script>
        
 <style> img.emoji {height: 1em;width: 1em;margin: 0 .05em 0 .1em;vertical-align: -0.1em;}</style>
 <script>twemoji.parse(document.body,{ base: 'https://cdn.zptr.cc/twemoji/' })</script><script>

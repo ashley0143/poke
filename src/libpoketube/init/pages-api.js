@@ -140,11 +140,12 @@ module.exports = function (app, config, renderTemplate) {
   });
 
   app.get("/api/instances.json", async (req, res) => {
+    const { fetch } = await import("undici");
+
     try {
       const url = `https://codeberg.org/Ashley/poketube/raw/branch/main/instances.json`;
 
-      let f = await modules
-        .fetch(url)
+      let f = await fetch(url)
         .then((res) => res.text())
         .then((json) => JSON.parse(json));
 

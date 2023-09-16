@@ -46,7 +46,6 @@ function toObject(arr) {
 // Gets Invidious instances
 const invInstanceList = [
   "https://inv.zzls.xyz",
-  "https://iv.datura.network",
   "https://vid.theedgeofrage.com"
 ];
 

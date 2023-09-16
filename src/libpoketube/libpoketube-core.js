@@ -71,7 +71,6 @@ class PokeTubeCore {
 
     // Check if result is already cached
     if (this.cache[v] && Date.now() - this.cache[v].timestamp < 3600000) {
-      console.log("Returning cached result");
       return this.cache[v].result;
     }
     const headers = {};

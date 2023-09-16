@@ -20,10 +20,10 @@
     <% if (ID === "UCFAiFyGs6oDiF1Nf-rRJpZA") { %> 
     <title>Technoblade Never Dies! - PokeTube</title>
  <% } %>
-    <title><%=j.Channel.Metadata.Name%> - PokeTube</title>
+    <title><%=j.Channel?.Metadata.Name%> - PokeTube</title>
    <link href=css/yt-ukraine.svg rel=icon>
     <meta content=website property=og:type>
-    <meta content="<%=j.Channel.Metadata.Name%> - PokeTube" property=og:title>
+    <meta content="<%=j.Channel?.Metadata.Name%> - PokeTube" property=og:title>
        <link href=/css/yt-ukraine.svg?v=6 rel=icon>
        <% if (dnoreplace) { %>
 
@@ -552,7 +552,7 @@ margin-right: -79px;
 				<img src="https://p.poketube.fun/<%=j.Channel.Metadata.Avatars.Thumbnail.$t%>" alt="Channel Avatar">
 			</a>
       
-              <% if (cinv.authorVerified) { %>
+              <% if (cinv?.authorVerified) { %>
                 <style>
 
                               .name {

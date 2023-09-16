@@ -15,5 +15,20 @@
         "branch": "dev"
       }
     }
+  ],
+  [
+    "poketube.sudovanilla.com",
+    {
+      "uri": "https://poketube.sudovanilla.com",
+      "CLOUDFLARE": true,
+      "piwik": false,
+      "region": "🇺🇸",
+      "software": {
+        "name": "poketube",
+        "version": "lastest",
+        "branch": "dev"
+      }
+    }
   ]
 ]
+

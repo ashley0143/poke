@@ -1493,7 +1493,7 @@ Recommended Videos
                                 
                                 
                                 <% if (!f) { %> 
-     <% k.Video.Recommendations.Video.forEach(x => { %>       
+     <% k.Video.Recommendations?.Video?.forEach(x => { %>       
  						<div class="video fade-in"  >
                     <% if (!optout) { %> 
 
@@ -1643,13 +1643,16 @@ Recommended Videos
   }
 }
 
+            
+      <% if (k.Video.Recommendations.Video) { %> 
+        
 let checkbox = document.getElementById("continue");
 
 checkbox.addEventListener('change', function(e) {
   if (checkbox.checked) {
     console.log("[AUTOPLAY] enabled");
     document.getElementById('video').addEventListener('ended', autoplaynextvideo, false);
-    let url = window.location.hostname + "/watch?v=<%- k.Video.Recommendations.Video[0].id%>";
+    let url = window.location.hostname + "/watch?v=<%- k?.Video?.Recommendations?.Video[0]?.id%>";
    
     function autoplaynextvideo(e) {
       location.href = "/watch?v=<%- k.Video.Recommendations.Video[0].id%>&autoplay=<%-btoa("1f739d935676111cfff4b4693e3816e664797050" + k.Video.Recommendations.Video[0].id ) %>";
@@ -1663,7 +1666,7 @@ checkbox.addEventListener('change', function(e) {
   
   if (/[?&]autoplay=/.test(location.search)) {
     if (checkbox.checked) {
-        fetch("https://" + window.location.hostname + "/watch?v=<%- k.Video.Recommendations.Video[0].id%>").then(() => {})
+        fetch("https://" + window.location.hostname + "/watch?v=<%- k.Video.Recommendations?.Video[0].id%>").then(() => {})
       }    
   }
 });
@@ -1671,7 +1674,7 @@ checkbox.addEventListener('change', function(e) {
 if (/[?&]autoplay=/.test(location.search)) {
   checkbox.checked = true;
   console.log("[AUTOPLAY] enabled");
-  let url = window.location.hostname + "/watch?v=<%- k.Video.Recommendations.Video[0].id%>";
+  let url = window.location.hostname + "/watch?v=<%- k.Video.Recommendations?.Video[0].id%>";
   document.body.style.cursor = "wait"; // set cursor to "wait" before the fetch request starts
   fetch(url)
     .then(response => response.json())
@@ -1686,13 +1689,14 @@ if (/[?&]autoplay=/.test(location.search)) {
   document.getElementById('video').addEventListener('ended', autoplaynextvideo, false);
   if (/[?&]autoplay=/.test(location.search)) {
     if (checkbox.checked) {
-        fetch("https://" + window.location.hostname + "/watch?v=<%- k.Video.Recommendations.Video[0].id%>").then(() => {})
+        fetch("https://" + window.location.hostname + "/watch?v=<%- k.Video.Recommendations?.Video[0].id%>").then(() => {})
       }    
   }
   function autoplaynextvideo(e) {
-    location.href = "/watch?v=<%- k.Video.Recommendations.Video[0].id%>&autoplay=<%-btoa("1f739d935676111cfff4b4693e3816e664797050" + k.Video.Recommendations.Video[0].id ) %>";
+    location.href = "/watch?v=<%- k.Video.Recommendations?.Video[0].id%>&autoplay=<%-btoa("1f739d935676111cfff4b4693e3816e664797050" + k.Video.Recommendations.Video[0].id ) %>";
   }
 }
+ <% } %>
   
 const lazyElements = document.querySelectorAll('*');
 
@@ -1746,7 +1750,8 @@ if (isFirstLoad) {
 <!-- app.js -->
 <!-- app.js -->
 <!-- app.js -->
-<script src="/static/app.bundle.js?ver=<%-btoa("1f739d93" + k.Video.Recommendations.Video[0].id ) %>&bundledat=<%- Date.now() %>"></script>
+   
+<script src="/static/app.bundle.js?ver=<%-btoa("1f739d93") %>&bundledat=<%- Date.now() %>"></script>
        
 <style> img.emoji {height: 1em;width: 1em;margin: 0 .05em 0 .1em;vertical-align: -0.1em;}</style>
 <script>twemoji.parse(document.body,{ base: 'https://cdn.zptr.cc/twemoji/' })</script><script>
@@ -2498,7 +2503,7 @@ More Epic options owo~
                               
                               
                               <% if (!f) { %> 
-     <% k.Video.Recommendations.Video.forEach(x => { %>       
+     <% k?.Video.Recommendations.Video.forEach(x => { %>       
  						<div class="video">
                     <% if (!optout) { %> 
 

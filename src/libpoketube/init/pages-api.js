@@ -64,13 +64,15 @@ module.exports = function (app, config, renderTemplate) {
   });
 
   app.get("/api/subtitles", async (req, res) => {
+    const { fetch } = await import("undici");
+    
     const id = req.query.v;
     const l = req.query.h;
 
     try {
       let url = `https://invid-api.poketube.fun/api/v1/captions/${id}?label=${l}`;
 
-      let f = await modules.fetch(url);
+      let f = await fetch(url);
       const body = await f.text();
 
       res.send(body);

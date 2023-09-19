@@ -55,11 +55,9 @@ summary:hover{
     color:white;
 }
 </style>
-  <!-- WIGGLE WIGGLE WIGGLE -->
-  <style>
+   <style>
     body{
-        overflow: hidden; /* Hide scrollbar */
-
+ 
         color:#111111
     }
     
@@ -363,7 +361,20 @@ line-height: 24px;
 z-index: 10; /* Was 2 */"
    }
    
-   
+         #container {
+            position: relative; /* Make the container a positioning context */
+                       display: none;
+            height: 60vh; /* Set the container's height to 100% of the viewport height */
+        }
+
+        /* Style the span */
+        #bottomSpan {
+            position: absolute; /* Position the span absolutely within the container */
+            bottom: 0; /* Align the span to the bottom of the container */
+            text-align:center;
+            left:0;
+          right:0;
+        }
       </style>
                                                                              
    <style>
@@ -371,7 +382,42 @@ z-index: 10; /* Was 2 */"
               background-image:linear-gradient(to bottom right, #9666F7, #B37C6B) !important;
     }
   </style>
+<script>
+        let middleMousePressed = false;
 
+        // Function to change the URL
+        function changeURL() {
+            window.location.href = 'https://poketube.fun/app'; // Replace with the URL of the new site
+        }
+
+       
+        // Detect middle mouse button click
+        window.addEventListener('mousedown', function(event) {
+            if (event.button === 1) { // Middle mouse button is clicked
+                middleMousePressed = true;
+            }
+        });
+
+        // Detect scroll event and change URL if middle mouse is pressed and scrolled down at the bottom of the page
+        window.addEventListener('wheel', function(event) {
+            const scrollHeight = document.documentElement.scrollHeight;
+            const scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+            const windowHeight = window.innerHeight;
+            const atBottom = scrollHeight - scrollTop === windowHeight;
+
+            if (middleMousePressed && event.deltaY > 0 && atBottom) {
+                changeURL();
+            }
+        });
+
+        // Reset middleMousePressed when mouse button is released
+        window.addEventListener('mouseup', function(event) {
+            if (event.button === 1) { // Middle mouse button is released
+                middleMousePressed = false;
+            }
+        });
+    </script>
+              
        <div class="app" style='height:100vh;background-repeat: no-repeat;background-size: cover;'>      
         
      <nav>
@@ -392,10 +438,7 @@ z-index: 10; /* Was 2 */"
       </div>
        </div>
             <div class="right">
-                   <div class="wttr">
-                     <a  title="have feedback? go to https://codeberg.org/Ashley/poketube/issues/new. to disable go to /wtrdsble " style="visibility: visible;" href="https://wttr.in?r=poketube">
-<img style="border-top-left-radius: 1px;pointer-events:none;margin-bottom: -4em;width: 232px;height: 126px;margin-left: -65px;border-top-right-radius: 0em;border-bottom-right-radius: 0em;border-bottom-left-radius: 11px;margin-top: -2px;" src="https://wttr.in/_0pq_transparency=200_lang=en.png">          </div></a>
-              
+    
               <a aria-label="domains" href="/domains"><i style="display: block;margin-left: auto;margin-right: auto;" class="fa-light fa-server"></i>  </a>
               <a aria-label="privacy policy" href="/privacy"><i class="fa-light fa-shield"></i></a>
               <a aria-label="upload video" href="/video/upload?from="><i class="fa-light fa-video"></i></a> 
@@ -418,18 +461,25 @@ z-index: 10; /* Was 2 */"
         <h1 class="heading">Be Anonymous...</h1>
     <div style="text-align: center;color: #fff;margin-top: 8px;width: 45em;">
       ...while watching epic videos, searching thingys on the interwebs and listening to music on poketube - the free yt front end thats focused on ur privacy!!</div>
+<a href="/discover" class="btn-explore" style="visibility: collapse;">Discover PokeTube</a>
+  <noscript>
         <a href="/discover" class="btn-explore">Discover PokeTube</a>
+ </noscript>
        </div>
       
     </div>
-   
-     
+       <div id="container">
+        <!-- This is your span element -->
+        <span id="bottomSpan" > <span style="color:lightgreen">[NEW] :3</span> Click and scroll down with your middle button to discover!!!</span>
+    </div>
          
     <div class="wave" style="display:none;">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="#0069af" fill-opacity="1" d="M0,64L26.7,69.3C53.3,75,107,85,160,101.3C213.3,117,267,139,320,128C373.3,117,427,75,480,58.7C533.3,43,587,53,640,85.3C693.3,117,747,171,800,186.7C853.3,203,907,181,960,165.3C1013.3,149,1067,139,1120,117.3C1173.3,96,1227,64,1280,53.3C1333.3,43,1387,53,1413,58.7L1440,64L1440,320L1413.3,320C1386.7,320,1333,320,1280,320C1226.7,320,1173,320,1120,320C1066.7,320,1013,320,960,320C906.7,320,853,320,800,320C746.7,320,693,320,640,320C586.7,320,533,320,480,320C426.7,320,373,320,320,320C266.7,320,213,320,160,320C106.7,320,53,320,27,320L0,320Z"></path></svg>
          </div>
          
 </div>
+         
+ 
        <script>
 if(localStorage.getItem("wttrdsbl") === "true") {
 var k = ".wttr {display:flex !important; }; nav .right a { visibility: hidden }"
@@ -466,7 +516,10 @@ if (style.styleSheet){
   style.appendChild(document.createTextNode(k));
 }
 }
-        
+         document.addEventListener('DOMContentLoaded', function () {
+            const container = document.getElementById('container');
+            container.style.display = 'block';
+        });
        </script>
  <script src="/css/custom-css.js"> </script>
  </body>

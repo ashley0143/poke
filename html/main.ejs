@@ -766,55 +766,38 @@ summary:hover{
 	 width: 100%;
 	 overflow-x: auto;
 }
- .tabs {
-	 display: table;
-   font-family:inter;
-	 border-collapse: separate;
-	 table-layout: auto;
+    
+.tabs.rec {
+  font-weight: 600;
+  font-stretch: expanded;
+  overflow:hidden;
+  width: auto;
+  max-width: fit-content;
+  margin-right: auto;
+  padding-left: 1.5em;
+  margin-top: 7px;
+  display: flex;
+  gap: 3px;
 }
- .tabs.tabs-center {
-	 margin: auto;
+
+.tags.rec:hover{
+  overflow-x:auto;
 }
- .tabs.tabs-justify {
-	 width: 100%;
-	 table-layout: fixed;
+
+.tags.rec > .tag {
+  border-radius: 8px;
 }
- .tabs a.tab {
-	 position: relative;
-	 display: table-cell;
-	 transition: all ease 0.3s;
-	 padding: 1em 1.6em;
-	 transform: translate3d(0, 0, 0);
-	 color: #fff;
-	 white-space: nowrap;
-	 cursor: pointer;
+
+.tabs {
+  background: #333;
+  padding: 5px;
+  border-radius: 4px;
+    border-radius: 8px;
+  word-break: break-all;
+  white-space: nowrap;
+  font-family: ubuntu, sans-serif;
 }
- .tabs a.tab:hover {
-	 color: #3cb4fa;
-}
- .tabs a.tab:after {
-	 transition: all 0.3s cubic-bezier(1, 0, 0, 1);
-	 will-change: transform, box-shadow, opacity;
-	 position: absolute;
-	 content: '';
-	 height: 3px;
-	 bottom: 0px;
-	 left: 0px;
-	 right: 0px;
-	 border-radius: 3px 3px 0px 0px;
-	 background: #9fdafd;
-	 box-shadow: 0px 4px 10px 3px rgba(60, 180, 250, .15);
-	 opacity: 0;
-	 transform: scale(0, 1);
-}
- .tabs a.tab.active {
-	 color: #fff;
-}
- .tabs a.tab.active:after {
-	 opacity: 1;
-	 transform: scale(1, 1);
-}                 
-                     </style>
+           </style>
                      
   
  <style> 

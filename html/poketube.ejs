@@ -1750,8 +1750,9 @@ if (isFirstLoad) {
 const languageCode = localStorage.getItem("Language");
 const regionCode = localStorage.getItem("Region");
 const currentURL = location.href;
+const urlParams = new URLSearchParams(window.location.search);
 
-if (languageCode && regionCode) {
+if (!urlParams.has('hl') && !urlParams.has('region') && languageCode && regionCode) {
   location.href = currentURL + `&region=${regionCode}&hl=${languageCode}`;
 }
 

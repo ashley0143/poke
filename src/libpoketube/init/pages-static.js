@@ -77,7 +77,11 @@ module.exports = function (app, config, renderTemplate) {
   app.get("/credits", function (req, res) {
     renderTemplate(res, req, "want-you-gone.ejs");
   });
-
+  
+  app.get("/settings", function (req, res) {
+    renderTemplate(res, req, "content-settings.ejs");
+  });
+  
   app.get("/customize", function (req, res) {
     const tab = req.query.tab;
 

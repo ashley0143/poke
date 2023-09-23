@@ -660,7 +660,10 @@ But Please note that unofficial instances can add the same lock icon, so please 
         </a>
     
 
-        
+          				<a href="/settings" style="text-decoration: none;" class="dropdown__item">
+                            <i  class="fa-light fa-globe"></i>
+Region settings        </a>
+    
                           <% if (!a) { %>  
 
         		<a href="/watch?v=<%=inv_vid.videoId%>&a=false" title="Ambient mode uses a lighting effect to make watching videos more immersive by casting gentle colors from the video into your screen’s background! owo" style="text-decoration: none;" class="dropdown__item">
@@ -1743,7 +1746,16 @@ if (isFirstLoad) {
 }
   
 </script>
-    
+     <script>
+const languageCode = localStorage.getItem("Language");
+const regionCode = localStorage.getItem("Region");
+const currentURL = location.href;
+
+if (languageCode && regionCode) {
+  location.href = currentURL + `&region=${regionCode}&hl=${languageCode}`;
+}
+
+    </script>
 <!-- app.js -->
 <!-- app.js -->
 <!-- app.js -->

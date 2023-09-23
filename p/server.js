@@ -24,8 +24,6 @@ const URL_WHITELIST = [
   "unpkg.com",
   "youtube.com",
   "returnyoutubedislikeapi.com",
-  "invidious.sethforprivacy.com",
-  "invidious.weblibre.org",
   "inv.vern.cc",
   "invidious.privacydev.net",
   "inv.zzls.xyz",
@@ -91,10 +89,18 @@ const listener = (req, res) => {
   proxy(req, res);
 };
 
-app.get("/", (req, res) =>
-  res.redirect(`https://poketube.fun/watch?v=l3eww1dnd0k`)
-);
-
+app.get("/", (req, res) => {
+        
+  var json = {
+    status:"200",
+    version:"1.0.0",
+    URL_WHITELIST,
+    cache:"max-age-1848",
+  }
+        
+  res.json(json)
+});
+        
 const apiUrl = "https://returnyoutubedislikeapi.com/votes?videoId=";
 
 // Define a cache object

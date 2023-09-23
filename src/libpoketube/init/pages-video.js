@@ -177,11 +177,14 @@ module.exports = function (app, config, renderTemplate) {
   });
 
   app.get("/watch", async (req, res) => {
-    const { dm, v, e, r, f, m, quality: q, a, universe } = req.query;
+    const { dm, region, hl, v, e, r, f, m, quality: q, a, universe } = req.query;
 
     if (!v) {
       return res.redirect("/");
     }
+     
+   var contentlang = hl || "en-US";
+   var contentregion = region || "US";
 
     const isVideoValid = await core.isvalidvideo(v);
     if (!isVideoValid) {
@@ -193,7 +196,7 @@ module.exports = function (app, config, renderTemplate) {
     const secure = ["poketube.fun"].includes(req.hostname);
     const verify = req.hostname === "pt.zzls.xyz";
 
-    core.video(v).then((data) => {
+    core.video(v, contentlang, contentregion).then((data) => {
       try {
         const k = data?.video;
         const json = data?.json;

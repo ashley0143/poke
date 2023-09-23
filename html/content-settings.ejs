@@ -1,0 +1,434 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <link href="https://codeberg.org/Ashley/poketube/raw/branch/main/css/yt-ukraine.svg" rel=icon>
+    <title> Content Settings | PokeTube :3 </title>
+    <style>
+
+      :root {
+           --text-primary: #fff;
+        --text-secondary: #aaaaaa;
+        --text-link: #3ea6ff;
+
+        --top-bar-background: #0f0f0f;
+        --guide-background: #0f0f0f;
+        --border-color: #272727;
+
+        --button-hover-background: #272727;
+        --button-active-background: #3d3d3d;
+
+        --item-hover-background: #0000;
+        --item-active-background: #3d3d3d;
+
+        --app-background: #0f0f0f;
+
+        --context-menu-background: #282828;
+
+        --thumbnail-background: #252525;
+
+        --search-bar-background: #ffffff03;
+
+        --nojs-color-switcher: #f5d562;
+
+        /* Button colors */
+        --btn-hover-color-blue: #263850;
+
+        --chip-background: #272727;
+        --chip-background-hover: #3f3f3f;
+        --chip-background-active: #535353;
+
+        --subscribe-button: #c00;
+        --subscribe-button-hover: #c00;
+        --subscribe-button-subscribed: #272727;
+        --subscribe-button-subscribed-hover: #3f3f3f;
+
+        --playlist-header-background: #202020;
+        --playlist-background: #181818;
+
+        /* Playlist gradient */
+        --playlist-gradient-start: #3338;
+        --playlist-gradient-end: #0000;
+      }
+
+      * {
+        font-family:sans-serif;
+      }
+      body {
+      display: flex;
+      height: 100vh;
+      background:linear-gradient(135deg, #820622 10%, #4e2e82 100%, #725965 100%);
+       overflow: hidden;
+      }
+      @font-face {
+  font-family: "PokeTube Flex";
+  src: url("https://p.poketube.fun/https://cdn.glitch.global/43b6691a-c8db-41d4-921c-8cf6aa0d9108/robotoflex.ttf?v=1668343428681");
+  font-style: normal;
+  font-stretch: 1% 800%;
+  font-display: swap;
+}
+
+
+      .cnt {
+      margin: auto;
+      display: flex;
+      flex-flow: column;
+      align-self: center;
+      background: #0006;
+      color: #fff;
+      padding: 1em;
+      border-radius: 31px;
+      min-height: 26em;
+      min-width: 35em;
+        margin-top: 5em;
+       }
+      a {
+        color:#0ab7f0;
+        text-decoration: none;
+      }
+      a.class:hover {
+  text-decoration: underline;
+  font-weight: bold;
+}
+      @media screen and (max-height: 	643px) {
+  .wave {
+  margin-bottom: -7em;
+  
+}
+}
+
+      .head {
+        font-family:"Poketube flex";
+        font-weight: 1000;
+        font-style: italic;
+        text-transform: uppercase;
+        font-stretch: extra-expanded;
+      }
+@media screen and (min-height: 768px) {
+  .wave {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  margin-bottom: -7em;
+  display: block;
+}
+}
+     
+p {
+  text-align: center;
+  font-family: "Poketube Flex";
+  font-weight: 600;
+  font-stretch: expanded;
+}
+      
+button {
+  width: 10em;
+  margin-left: auto;
+  margin-right: auto;
+  height: 59px;
+  font-size: 18px;
+  border-radius: 11px;
+  background: #333;
+  color: white;
+  border: none;
+  margin-top: 25px;
+}
+      .ily{
+        text-align: center;
+      }
+     
+     select {
+    padding: 8px;
+    background: var(--chip-background);
+    border: var(--border-color);
+    border-radius: 50px;
+    color: #fff;
+}
+
+select:hover {
+    background-color: var(--chip-background-hover);
+}
+      
+button:hover {
+    background-color: var(--chip-background-hover);
+    cursor:pointer;
+}
+
+select:active {
+    background-color: var(--chip-background-active);
+}
+     </style>
+   </head>
+  
+  <body>
+         
+         <script type="text/javascript">
+<!--//--><![CDATA[//><!--
+/**
+ * @licstart The following is the entire license notice for the JavaScript
+ * code in this page.
+ *
+ *  Copyright (C) 2021-2023 POKETUBE (https://github.com/iamashley0/poketube)
+ *
+ * The JavaScript code in this page is free software: you can redistribute
+ * it and/or modify it under the terms of the GNU General Public License
+ * (GNU GPL) as published by the Free Software Foundation, either version 3
+ * of the License, or (at your option) any later version.  The code is
+ * distributed WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU GPL
+ * for more details.
+ *
+ * As additional permission under GNU GPL version 3 section 7, you may
+ * distribute non-source (e.g., minimized or compacted) forms of that code
+ * without the copy of the GNU GPL normally required by section 4, provided
+ * you include this license notice and a URL through which recipients can
+ * access the Corresponding Source.
+ *
+ * @licend The above is the entire license notice for the JavaScript code
+ * in this page.
+ */
+
+//--><!]]>
+</script>  
+    <div class="cnt"> 
+    <center>
+    <h1 class="head">
+ settings
+      </h1>  
+    </center>
+      
+<div>
+  
+      <p>
+  <h1 style="margin: 0px;">
+ Region 
+      </h1>
+Change the contents region!! :3
+      </p>    
+    </div>
+
+ <select id="gl" style="width: 14em;" class="subscription-dropdown">
+					<option value="DZ">Algeria</option>
+					<option value="AR">Argentina</option>
+					<option value="AU">Australia</option>
+					<option value="AT">Austria</option>
+					<option value="AZ">Azerbaijan</option>
+					<option value="BH">Bahrain</option>
+					<option value="BD">Bangladesh</option>
+					<option value="BY">Belarus</option>
+					<option value="BE">Belgium</option>
+					<option value="BO">Bolivia</option>
+					<option value="BA">Bosnia and Herzegovina</option>
+					<option value="BR">Brazil</option>
+					<option value="BG">Bulgaria</option>
+					<option value="KH">Cambodia</option>
+					<option value="CA">Canada</option>
+					<option value="CL">Chile</option>
+					<option value="CO">Colombia</option>
+					<option value="CR">Costa Rica</option>
+					<option value="HR">Croatia</option>
+					<option value="CY">Cyprus</option>
+					<option value="CZ">Czechia</option>
+					<option value="DK">Denmark</option>
+					<option value="DO">Dominican Republic</option>
+					<option value="EC">Ecuador</option>
+					<option value="EG">Egypt</option>
+					<option value="SV">El Salvador</option>
+					<option value="EE">Estonia</option>
+					<option value="FI">Finland</option>
+					<option value="FR">France</option>
+					<option value="GE">Georgia</option>
+					<option value="DE">Germany</option>
+					<option value="GH">Ghana</option>
+					<option value="GR">Greece</option>
+					<option value="GT">Guatemala</option>
+					<option value="HN">Honduras</option>
+					<option value="HK">Hong Kong</option>
+					<option value="HU">Hungary</option>
+					<option value="IS">Iceland</option>
+					<option value="IN">India</option>
+					<option value="ID">Indonesia</option>
+					<option value="IQ">Iraq</option>
+					<option value="IE">Ireland</option>
+					<option value="IL">Israel</option>
+					<option value="IT">Italy</option>
+					<option value="JM">Jamaica</option>
+					<option value="JP">Japan</option>
+					<option value="JO">Jordan</option>
+					<option value="KZ">Kazakhstan</option>
+					<option value="KE">Kenya</option>
+					<option value="KW">Kuwait</option>
+					<option value="LA">Laos</option>
+					<option value="LV">Latvia</option>
+					<option value="LB">Lebanon</option>
+					<option value="LY">Libya</option>
+					<option value="LI">Liechtenstein</option>
+					<option value="LT">Lithuania</option>
+					<option value="LU">Luxembourg</option>
+					<option value="MY">Malaysia</option>
+					<option value="MT">Malta</option>
+					<option value="MX">Mexico</option>
+					<option value="ME">Montenegro</option>
+					<option value="MA">Morocco</option>
+					<option value="NP">Nepal</option>
+					<option value="NL">Netherlands</option>
+					<option value="NZ">New Zealand</option>
+					<option value="NI">Nicaragua</option>
+					<option value="NG">Nigeria</option>
+					<option value="MK">North Macedonia</option>
+					<option value="NO">Norway</option>
+					<option value="OM">Oman</option>
+					<option value="PK">Pakistan</option>
+					<option value="PA">Panama</option>
+					<option value="PG">Papua New Guinea</option>
+					<option value="PY">Paraguay</option>
+					<option value="PE">Peru</option>
+					<option value="PH">Philippines</option>
+					<option value="PL">Poland</option>
+					<option value="PT">Portugal</option>
+					<option value="PR">Puerto Rico</option>
+					<option value="QA">Qatar</option>
+					<option value="RO">Romania</option>
+					<option value="RU">Russia</option>
+					<option value="SA">Saudi Arabia</option>
+					<option value="SN">Senegal</option>
+					<option value="RS">Serbia</option>
+					<option value="SG">Singapore</option>
+					<option value="SK">Slovakia</option>
+					<option value="SI">Slovenia</option>
+					<option value="ZA">South Africa</option>
+					<option value="KR">South Korea</option>
+					<option value="ES">Spain</option>
+					<option value="LK">Sri Lanka</option>
+					<option value="SE">Sweden</option>
+					<option value="CH">Switzerland</option>
+					<option value="TW">Taiwan</option>
+					<option value="TZ">Tanzania</option>
+					<option value="TH">Thailand</option>
+					<option value="TN">Tunisia</option>
+					<option value="TR">Turkey</option>
+					<option value="UG">Uganda</option>
+					<option value="UA">Ukraine</option>
+					<option value="AE">United Arab Emirates</option>
+					<option value="GB">United Kingdom</option>
+					<option value="US" selected>United States</option>
+					<option value="UY">Uruguay</option>
+					<option value="VE">Venezuela</option>
+					<option value="VN">Vietnam</option>
+					<option value="YE">Yemen</option>
+					<option value="ZW">Zimbabwe</option>
+		</select>
+<hr style="visibility: hidden;">    <div>
+      
+       <h1 style="margin: 0px;">
+Language 
+    </h1>
+Change the title and desc language!! 
+    </p>    
+    </div>
+
+ <select id="hl" style="width: 14em;" class="subscription-dropdown">
+					<option value="af">Afrikaans</option>
+					<option value="az">Az&#x259;rbaycan</option>
+					<option value="id">Bahasa Indonesia</option>
+					<option value="ms">Bahasa Malaysia</option>
+					<option value="bs">Bosanski</option>
+					<option value="ca">Catal&#xE0;</option>
+					<option value="cs">&#x10C;e&#x161;tina</option>
+					<option value="da">Dansk</option>
+					<option value="de">Deutsch</option>
+					<option value="et">Eesti</option>
+					<option value="en-IN">English (India)</option>
+					<option value="en-GB">English (UK)</option>
+					<option value="en" selected>English (US)</option>
+					<option value="es">Espa&#xF1;ol (Espa&#xF1;a)</option>
+					<option value="es-419">Espa&#xF1;ol (Latinoam&#xE9;rica)</option>
+					<option value="es-US">Espa&#xF1;ol (US)</option>
+					<option value="eu">Euskara</option>
+					<option value="fil">Filipino</option>
+					<option value="fr">Fran&#xE7;ais</option>
+					<option value="fr-CA">Fran&#xE7;ais (Canada)</option>
+					<option value="gl">Galego</option>
+					<option value="hr">Hrvatski</option>
+					<option value="zu">IsiZulu</option>
+					<option value="is">&#xCD;slenska</option>
+					<option value="it">Italiano</option>
+					<option value="sw">Kiswahili</option>
+					<option value="lv">Latvie&#x161;u valoda</option>
+					<option value="lt">Lietuvi&#x173;</option>
+					<option value="hu">Magyar</option>
+					<option value="nl">Nederlands</option>
+					<option value="no">Norsk</option>
+					<option value="uz">O&#x2018;zbek</option>
+					<option value="pl">Polski</option>
+					<option value="pt-PT">Portugu&#xEA;s</option>
+					<option value="pt">Portugu&#xEA;s (Brasil)</option>
+					<option value="ro">Rom&#xE2;n&#x103;</option>
+					<option value="sq">Shqip</option>
+					<option value="sk">Sloven&#x10D;ina</option>
+					<option value="sl">Sloven&#x161;&#x10D;ina</option>
+					<option value="sr-Latn">Srpski</option>
+					<option value="fi">Suomi</option>
+					<option value="sv">Svenska</option>
+					<option value="vi">Ti&#x1EBF;ng Vi&#x1EC7;t</option>
+					<option value="tr">T&#xFC;rk&#xE7;e</option>
+					<option value="be">&#x411;&#x435;&#x43B;&#x430;&#x440;&#x443;&#x441;&#x43A;&#x430;&#x44F;</option>
+					<option value="bg">&#x411;&#x44A;&#x43B;&#x433;&#x430;&#x440;&#x441;&#x43A;&#x438;</option>
+					<option value="ky">&#x41A;&#x44B;&#x440;&#x433;&#x44B;&#x437;&#x447;&#x430;</option>
+					<option value="kk">&#x49A;&#x430;&#x437;&#x430;&#x49B; &#x422;&#x456;&#x43B;&#x456;</option>
+					<option value="mk">&#x41C;&#x430;&#x43A;&#x435;&#x434;&#x43E;&#x43D;&#x441;&#x43A;&#x438;</option>
+					<option value="mn">&#x41C;&#x43E;&#x43D;&#x433;&#x43E;&#x43B;</option>
+					<option value="ru">&#x420;&#x443;&#x441;&#x441;&#x43A;&#x438;&#x439;</option>
+					<option value="sr">&#x421;&#x440;&#x43F;&#x441;&#x43A;&#x438;</option>
+					<option value="uk">&#x423;&#x43A;&#x440;&#x430;&#x457;&#x43D;&#x441;&#x44C;&#x43A;&#x430;</option>
+					<option value="el">&#x395;&#x3BB;&#x3BB;&#x3B7;&#x3BD;&#x3B9;&#x3BA;&#x3AC;</option>
+					<option value="hy">&#x540;&#x561;&#x575;&#x565;&#x580;&#x565;&#x576;</option>
+					<option value="iw">&#x5E2;&#x5D1;&#x5E8;&#x5D9;&#x5EA;</option>
+					<option value="ur">&#x627;&#x631;&#x62F;&#x648;</option>
+					<option value="ar">&#x627;&#x644;&#x639;&#x631;&#x628;&#x64A;&#x629;</option>
+					<option value="fa">&#x641;&#x627;&#x631;&#x633;&#x6CC;</option>
+					<option value="ne">&#x928;&#x947;&#x92A;&#x93E;&#x932;&#x940;</option>
+					<option value="mr">&#x92E;&#x930;&#x93E;&#x920;&#x940;</option>
+					<option value="hi">&#x939;&#x93F;&#x928;&#x94D;&#x926;&#x940;</option>
+					<option value="as">&#x985;&#x9B8;&#x9AE;&#x9C0;&#x9AF;&#x9BC;&#x9BE;</option>
+					<option value="bn">&#x9AC;&#x9BE;&#x982;&#x9B2;&#x9BE;</option>
+					<option value="pa">&#xA2A;&#xA70;&#xA1C;&#xA3E;&#xA2C;&#xA40;</option>
+					<option value="gu">&#xA97;&#xAC1;&#xA9C;&#xAB0;&#xABE;&#xAA4;&#xAC0;</option>
+					<option value="or">&#xB13;&#xB21;&#xB3C;&#xB3F;&#xB06;</option>
+					<option value="ta">&#xBA4;&#xBAE;&#xBBF;&#xBB4;&#xBCD;</option>
+					<option value="te">&#xC24;&#xC46;&#xC32;&#xC41;&#xC17;&#xC41;</option>
+					<option value="kn">&#xC95;&#xCA8;&#xCCD;&#xCA8;&#xCA1;</option>
+					<option value="ml">&#xD2E;&#xD32;&#xD2F;&#xD3E;&#xD33;&#xD02;</option>
+					<option value="si">&#xDC3;&#xDD2;&#xD82;&#xDC4;&#xDBD;</option>
+					<option value="th">&#xE20;&#xE32;&#xE29;&#xE32;&#xE44;&#xE17;&#xE22;</option>
+					<option value="lo">&#xEA5;&#xEB2;&#xEA7;</option>
+					<option value="my">&#x1017;&#x1019;&#x102C;</option>
+					<option value="ka">&#x10E5;&#x10D0;&#x10E0;&#x10D7;&#x10E3;&#x10DA;&#x10D8;</option>
+					<option value="am">&#x12A0;&#x121B;&#x122D;&#x129B;</option>
+					<option value="km">&#x1781;&#x17D2;&#x1798;&#x17C2;&#x179A;</option>
+					<option value="zh-CN">&#x4E2D;&#x6587; (&#x7B80;&#x4F53;)</option>
+					<option value="zh-TW">&#x4E2D;&#x6587; (&#x7E41;&#x9AD4;)</option>
+					<option value="zh-HK">&#x4E2D;&#x6587; (&#x9999;&#x6E2F;)</option>
+					<option value="ja">&#x65E5;&#x672C;&#x8A9E;</option>
+					<option value="ko">&#xD55C;&#xAD6D;&#xC5B4;</option>
+		</select>
+  <br>
+  <button onclick="saveToLocalStorage()">
+  Save
+  </button>
+  
+    <script>
+        function saveToLocalStorage() {
+            const selectedRegion = document.getElementById("gl").value;
+            const selectedLanguage = document.getElementById("hl").value;
+
+            localStorage.setItem("Region", selectedRegion);
+            localStorage.setItem("Language", selectedLanguage);
+
+            alert("saved!");
+        }
+    </script>
+    </div>
+ 
+  </body>
+</html>

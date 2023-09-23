@@ -76,7 +76,7 @@ const proxy = async (req, res) => {
 
     console.log(`==> Proxying request`);
 
-    let f = await fetch(url, {
+    let f = await fetch(url + `?cachefixer=${btoa(Date.now())}`, {
       method: req.method,
     });
 
@@ -101,6 +101,8 @@ const apiUrl = "https://returnyoutubedislikeapi.com/votes?videoId=";
 const cache = {};
 
 app.get('/api', async (req, res) => {
+  
+try {
   const cacheKey = req.query.v;
 
   // Check if the result is already cached
@@ -121,6 +123,10 @@ app.get('/api', async (req, res) => {
   };
 
   res.json({ data: engagement, cachedDate: new Date() });
+  
+} catch {
+  
+}
 });
 
 

@@ -1,4 +1,6 @@
- <!--
+<% try { %>
+
+<!--
     This Source Code Form is subject to the terms of the GNU General Public License:
 
     Copyright (C) 2021-2023 POKETUBE (https://github.com/iamashley0/poketube)
@@ -29,9 +31,9 @@
 
     <meta content="<%-dnoreplace%>" property=twitter:description>
           <% } %>
-       <% if (j.Channel.Metadata.Banners.Thumbnail) { %>
+       <% if (j.Channel?.Metadata.Banners.Thumbnail) { %>
 
-    <meta content="<%=j.Channel.Metadata.Banners.Thumbnail[2].$t%>" property=og:image>
+    <meta content="<%=j.Channel?.Metadata?.Banners.Thumbnail[2].$t%>" property=og:image>
                    <% } %>
 
     <meta content=summary_large_image name=twitter:card>
@@ -520,7 +522,7 @@ margin-right: -79px;
   <i onclick="window.history.back()" style="color:#fff;padding: 10px;" class="fa-solid fa-chevron-left"></i>
          
         
-        <p style="font-family:Ginto Nord,sans-serif;font-weight:900;white-space:yes;"><%=j.Channel.Metadata.Name%></p>
+        <p style="font-family:Ginto Nord,sans-serif;font-weight:900;white-space:yes;"><%=j.Channel?.Metadata.Name%></p>
 
         </div>                                    
      
@@ -544,13 +546,13 @@ margin-right: -79px;
           <% if (!isMobile) { %>  
             <div class="channel-info-container" style="text-align: center;">
 
-        <% if (j.Channel.Metadata.Banners.Thumbnail) { %>
+        <% if (j?.Channel?.Metadata?.Banners.Thumbnail) { %>
 
-          <img src="https://p.poketube.fun/<%=j.Channel.Metadata.Banners.Thumbnail[2].$t%>">
+          <img src="https://p.poketube.fun/<%=j.Channel?.Metadata.Banners.Thumbnail[2].$t%>">
                                <% } %>
 		<div class="channel-info" >
-			<a href="https://p.poketube.fun/<%=j.Channel.Metadata.Avatars.Thumbnail.$t%>" class="avatar">
-				<img src="https://p.poketube.fun/<%=j.Channel.Metadata.Avatars.Thumbnail.$t%>" alt="Channel Avatar">
+			<a href="https://p.poketube.fun/<%=j.Channel?.Metadata.Avatars.Thumbnail?.$t%>" class="avatar">
+				<img src="https://p.poketube.fun/<%=j.Channel?.Metadata.Avatars.Thumbnail?.$t%>" alt="Channel Avatar">
 			</a>
       
               <% if (cinv?.authorVerified) { %>
@@ -566,11 +568,11 @@ margin-right: -79px;
                                                <% } %>
 
 			<div class="name" style="background: #333;border-radius: 12px;padding: 9px;">
-				<p style="font-family:PokeTube Flex,sans-serif;font-weight:1000;font-stretch: ultra-expanded;margin-top: 16px;margin-bottom: 15px;"><%=j.Channel.Metadata.Name%>
+				<p style="font-family:PokeTube Flex,sans-serif;font-weight:1000;font-stretch: ultra-expanded;margin-top: 16px;margin-bottom: 15px;"><%=j.Channel?.Metadata.Name%>
           
 <span style="background: #0005;padding: 3px;padding-top:  2.5px !important;display: inline-flex;border-radius: 3px;">
-                <% if (cinv.authorVerified) { %>
-                                  <% if (cinv.isFamilyFriendly) { %>
+                <% if (cinv?.authorVerified) { %>
+                                  <% if (cinv?.isFamilyFriendly) { %>
 
  <i class="fa-solid fa-badge-check" style="width: 18px;margin-right:7px" title="Verified Channel"></i>
                                                                  <% } %>
@@ -580,7 +582,7 @@ margin-right: -79px;
                                                                                                                                     <% } %>
 
                                                                  <% } %>
-                <% if (cinv.isFamilyFriendly) { %>
+                <% if (cinv?.isFamilyFriendly) { %>
 
 <img src="https://cdn.glitch.global/d68d17bb-f2c0-4bc3-993f-50902734f652/bbf42a35-8976-43a5-a7a2-72a81d9da7ce.image.png?v=1692301199470" style="width: 18px;" title="In Youtube kids" >
                                                                                    <% } %>
@@ -588,8 +590,16 @@ margin-right: -79px;
 </span>           </p>
                     <p style="margin-bottom: -11px;" class="subs"><%=subs%> subscribers</p>
 <p style="padding:0;font-weight:bold;max-inline-size: 37em;display: -webkit-box;-webkit-line-clamp: 3;-webkit-box-orient: vertical;"> 
-   <%-getFirstLine(desc).slice(0, 60)%> <a href="/channel?id=<%=ID%>&tab=about">
-<i class="fa-thin fa-angle-right"></i></a>
+ 
+<% try { %>
+  <%- getFirstLine(desc).slice(0, 60) %>
+  <a href="/channel?id=<%= ID %>&tab=about">
+<% } catch (error) { %>
+  <!-- Handle the error here, if it occurs -->
+  <p>Error: <%= error.message %></p>
+<% } %>
+
+  <i class="fa-thin fa-angle-right"></i></a>
         </p>
  			</div>
  
@@ -650,9 +660,9 @@ white-space: nowrap;text-decoration: none;" href="/feeds/videos.xml?channel_id=<
 
       <% } %>
 
- <%  if (Array.isArray(stream.videos)) { %> 
-<%  if (stream.videos[0]) { %> 
-<%  if (turntomins(stream.videos[0].lengthSeconds)  != "aN:aN" ) { %> 
+ <%  if (Array?.isArray(stream?.videos)) { %> 
+<%  if (stream?.videos[0]) { %> 
+<%  if (turntomins(stream?.videos[0]?.lengthSeconds)  != "aN:aN" ) { %> 
   
 
                    <a href="/channel?id=<%=ID%>&tab=live" class="tab" style="color:#d9ead3;">Live</a>
@@ -660,9 +670,9 @@ white-space: nowrap;text-decoration: none;" href="/feeds/videos.xml?channel_id=<
       <% } %>
         <% } %>
         
-  <%  if (Array.isArray(c.comments)) { %> 
+  <%  if (Array?.isArray(c?.comments)) { %> 
 
-  <%  if (c.comments.length != "0") { %> 
+  <%  if (c?.comments?.length != "0") { %> 
 
      <a  href="/channel?id=<%=ID%>&tab=community"  class="tab" style="color:pink">Community</a>
                                                                              <% } %>
@@ -675,17 +685,17 @@ white-space: nowrap;text-decoration: none;" href="/feeds/videos.xml?channel_id=<
                                                                       <% if (tab === "community") { %>
 
                 <a href="/channel?id=<%=ID%>" class="tab"  style="color:#cfe2f3;">Videos</a>
-                       <%  if (Array.isArray(shorts.videos)) { %> 
-<%  if (turntomins(shorts.videos[0].lengthSeconds)  != "aN:aN" ) { %> 
+                       <%  if (Array?.isArray(shorts?.videos)) { %> 
+<%  if (turntomins(shorts?.videos[0]?.lengthSeconds)  != "aN:aN" ) { %> 
 
                    <a href="/channel?id=<%=ID%>&tab=shorts" class="tab shr">Shorts</a>
   <% } %>
       <% } %>
     
- <%  if (Array.isArray(stream.videos)) { %> 
-   <%  if (stream.videos[0]) { %> 
+ <%  if (Array?.isArray(stream?.videos)) { %> 
+   <%  if (stream?.videos[0]) { %> 
 
-<%  if (turntomins(stream.videos[0].lengthSeconds)  != "aN:aN" ) { %> 
+<%  if (turntomins(stream?.videos[0]?.lengthSeconds)  != "aN:aN" ) { %> 
 
                    <a href="/channel?id=<%=ID%>&tab=live" class="tab" style="color:#d9ead3;">Live</a>
   <% } %>
@@ -701,13 +711,13 @@ white-space: nowrap;text-decoration: none;" href="/feeds/videos.xml?channel_id=<
                                                                                      <% if (tab === "shorts") { %>
 
                 <a href="/channel?id=<%=ID%>" class="tab" style="color:#cfe2f3;">Videos</a>
-<%  if (Array.isArray(shorts?.videos)) { %> 
+<%  if (Array?.isArray(shorts?.videos)) { %> 
 
                    <a href="/channel?id=<%=ID%>&tab=shorts" class="tab active shr">Shorts</a>
   <% } %>
- <%  if (Array.isArray(stream?.videos)) { %> 
-   <%  if (stream.videos[0]) { %> 
-<%  if (turntomins(stream.videos[0].lengthSeconds)  != "aN:aN" ) { %> 
+ <%  if (Array?.isArray(stream?.videos)) { %> 
+   <%  if (stream?.videos[0]) { %> 
+<%  if (turntomins(stream?.videos[0]?.lengthSeconds)  != "aN:aN" ) { %> 
 
                    <a href="/channel?id=<%=ID%>&tab=live" class="tab" style="color:#d9ead3;">Live</a>
   <% } %>
@@ -715,9 +725,9 @@ white-space: nowrap;text-decoration: none;" href="/feeds/videos.xml?channel_id=<
 
       <% } %>
         
-  <%  if (Array.isArray(c.comments)) { %> 
+  <%  if (Array?.isArray(c?.comments)) { %> 
 
-  <%  if (c.comments.length != "0") { %> 
+  <%  if (c?.comments?.length != "0") { %> 
 
      <a  href="/channel?id=<%=ID%>&tab=community"  class="tab" style="color:pink">Community</a>
                                                                          <% } %>
@@ -729,22 +739,22 @@ white-space: nowrap;text-decoration: none;" href="/feeds/videos.xml?channel_id=<
                                                                                                  <% if (tab === "live") { %>
 
                 <a href="/channel?id=<%=ID%>" class="tab"  style="color:#cfe2f3;">Videos</a>
-<%  if (Array.isArray(shorts?.videos)) { %> 
+<%  if (Array?.isArray(shorts?.videos)) { %> 
   
-<%  if (turntomins(shorts.videos[0].lengthSeconds)  != "aN:aN" ) { %> 
+<%  if (turntomins(shorts?.videos[0]?.lengthSeconds)  != "aN:aN" ) { %> 
 
                    <a href="/channel?id=<%=ID%>&tab=shorts" class="tab shr">Shorts</a>
   <% } %>
       <% } %>
         
-     <%  if (Array.isArray(stream?.videos)) { %> 
+     <%  if (Array?.isArray(stream?.videos)) { %> 
 
                    <a href="/channel?id=<%=ID%>&tab=live" class="tab active" style="color:#d9ead3;">Live</a>
   <% } %>
     
-  <%  if (Array.isArray(c.comments)) { %> 
+  <%  if (Array?.isArray(c?.comments)) { %> 
 
-  <%  if (c.comments.length != "0") { %> 
+  <%  if (c?.comments?.length != "0") { %> 
 
      <a  href="/channel?id=<%=ID%>&tab=community"  class="tab" style="color:pink">Community</a>
                                                                          <% } %>
@@ -764,9 +774,9 @@ white-space: nowrap;text-decoration: none;" href="/feeds/videos.xml?channel_id=<
                                                <% if (isMobile) { %>  
                    <div class="channel-info-container" style="text-align: center;">
 
-                                      <% if (j.Channel.Metadata.Banners.Thumbnail) { %>
+                                      <% if (j.Channel?.Metadata.Banners.Thumbnail) { %>
 
-          <img src="https://p.poketube.fun/<%=j.Channel.Metadata.Banners.Thumbnail[3].$t%>">
+          <img src="https://p.poketube.fun/<%=j.Channel?.Metadata.Banners.Thumbnail[3].$t%>">
                                <% } %>
                                  
  
@@ -786,10 +796,10 @@ align-content: center;
 margin: auto;
 width: fit-content;
 ">
-				<img src="https://p.poketube.fun/<%=j.Channel.Metadata.Avatars.Thumbnail.$t%>" alt="Channel Avatar">
+				<img src="https://p.poketube.fun/<%=j.Channel?.Metadata.Avatars.Thumbnail.$t%>" alt="Channel Avatar">
 			</a>
 			<div class="name">
-				<p style="font-family:PokeTube Flex,sans-serif;font-weight:1000;font-stretch: ultra-expanded;white-space:yes;"><%=j.Channel.Metadata.Name%>  </p>
+				<p style="font-family:PokeTube Flex,sans-serif;font-weight:1000;font-stretch: ultra-expanded;white-space:yes;"><%=j.Channel?.Metadata.Name%>  </p>
           <p style="margin: -9px;">
             			<%=subs%> subscribers  
 
@@ -1050,7 +1060,7 @@ width: fit-content;
 margin-left: 8em;" >
             
    
-             <%  if (Array.isArray( shorts.videos)) { %> 
+             <%  if (Array?.isArray( shorts.videos)) { %> 
 
    <% shorts.videos.forEach (x =>  { %>
      
@@ -1072,7 +1082,7 @@ margin-left: 8em;" >
                        
                        </div>
                   
-            <% if (shorts.continuation) { %>
+            <% if (shorts?.continuation) { %>
 	<div class="pagination-buttons" style="border-top: none;justify-content: center">
     <a style="color:#fff" href="/channel?id=<%=ID%>&tab=shorts&continuations=<%=shorts.continuation%>">Next Page</a>
  	</div>
@@ -1146,9 +1156,9 @@ margin-left: 8em;" >
                        
                        </div>
                   
-            <% if (stream.continuation) { %>
+            <% if (stream?.continuation) { %>
 	<div class="pagination-buttons" style="border-top: none;justify-content: center">
-    <a style="color:#fff" href="/channel?id=<%=ID%>&tab=live&continuationl=<%=stream.continuation%>">Next Page</a>
+    <a style="color:#fff" href="/channel?id=<%=ID%>&tab=live&continuationl=<%=stream?.continuation%>">Next Page</a>
  	</div>
                            
                        <% } %>
@@ -1158,23 +1168,23 @@ margin-left: 8em;" >
             
             
     <% if (tab === "community") { %>
-    <%  if (Array.isArray( c.comments)) { %> 
+    <%  if (Array?.isArray( c?.comments)) { %> 
 <div class="community">
   
-   <% c.comments.forEach (x =>  { %>
+   <% c?.comments?.forEach (x =>  { %>
      <div class="community-content">
     
 
                      <h5 style="display: flex;margin-top: -1em;padding-top: 10px;margin-bottom:10px"><div class="thumb">
 				<a href="/channel?id=UC0n83khlA76NRfDfm7BNtkQ" class="avatar" style="width: 40px;height: 40px;">
-					<img src="https://p.poketube.fun/<%=j.Channel.Metadata.Avatars.Thumbnail.$t%>">
+					<img src="https://p.poketube.fun/<%=j.Channel?.Metadata.Avatars.Thumbnail.$t%>">
 				</a>
                        
             </div>
                                                            
 
                 <p class="comments-author">
-                  				<a href="" style="color: var(--text-color);text-decoration: none;"><%=j.Channel.Metadata.Name%> 
+                  				<a href="" style="color: var(--text-color);text-decoration: none;"><%=j.Channel?.Metadata.Name%> 
 
                                                                                                   </a>
                             
@@ -1337,3 +1347,5 @@ urls.forEach(link => {
  
 </html>
 
+<% } catch (error) { %>
+ <% } %>

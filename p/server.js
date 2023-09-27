@@ -30,7 +30,7 @@ const URL_WHITELIST = [
   "vid.puffyan.us",
   "invidious.lidarshield.cloud",
   "invidious.epicsite.xyz",
-  "invidious.esmailelbob.xyz"
+  "invidious.esmailelbob.xyz",
 ];
 
 const app = express();
@@ -90,52 +90,51 @@ const listener = (req, res) => {
 };
 
 app.get("/", (req, res) => {
-        
   var json = {
-    status:"200",
-    version:"1.0.0",
+    status: "200",
+    version: "1.0.0",
     URL_WHITELIST,
-    cache:"max-age-1848",
-  }
-        
-  res.json(json)
+    cache: "max-age-1848",
+  };
+
+  res.json(json);
 });
-        
+
 const apiUrl = "https://returnyoutubedislikeapi.com/votes?videoId=";
 
 // Define a cache object
 const cache = {};
 
-app.get('/api', async (req, res) => {
-  
-try {
-  const cacheKey = req.query.v;
+app.get("/api", async (req, res) => {
+  if (req.query.hash && req.query.hash === "d0550b6e28c8f93533a569c314d5b4e2") {
+    try {
+      const cacheKey = req.query.v;
 
-  // Check if the result is already cached
-  if (cache[cacheKey] && Date.now() - cache[cacheKey].timestamp < 3600000) {
-    // If the cached result is less than 1 hour old, return it
-    const cachedData = cache[cacheKey].data;
-    const cachedDate = new Date(cache[cacheKey].timestamp);
-    return res.json({ data: cachedData, cachedDate });
+      // Check if the result is already cached
+      if (cache[cacheKey] && Date.now() - cache[cacheKey].timestamp < 3600000) {
+        // If the cached result is less than 1 hour old, return it
+        const cachedData = cache[cacheKey].data;
+        const cachedDate = new Date(cache[cacheKey].timestamp);
+        return res.json({ data: cachedData, cachedDate });
+      }
+
+      // If the result is not cached or is older than 1 hour, fetch it from the API
+      const engagement = await fetch(apiUrl + req.query.v).then((res) =>
+        res.json()
+      );
+
+      // Cache the result for future requests
+      cache[cacheKey] = {
+        data: engagement,
+        timestamp: Date.now(),
+      };
+
+      res.json({ data: engagement, cachedDate: new Date() });
+    } catch {}
+  } else {
+    return res.send("no hash query found");
   }
-
-  // If the result is not cached or is older than 1 hour, fetch it from the API
-  const engagement = await fetch(apiUrl + req.query.v).then((res) => res.json());
-
-  // Cache the result for future requests
-  cache[cacheKey] = {
-    data: engagement,
-    timestamp: Date.now()
-  };
-
-  res.json({ data: engagement, cachedDate: new Date() });
-  
-} catch {
-  
-}
 });
-
-
 
 app.all("/*", listener);
 

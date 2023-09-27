@@ -65,8 +65,8 @@
 
 
    const limiter = rateLimit({
-     windowMs: 30 * 1000, // 30 Seconds
-     max: 870, // limit each IP to 870 requests per windowMs
+     windowMs:45 * 1000, // 30 Seconds
+     max: 886, // limit each IP to 870 requests per windowMs
    });
    
   var app = modules.express();
@@ -90,7 +90,7 @@
 // but may cause the check to be too sensitive.
 toobusy.interval(110);
 
-toobusy.maxLag(2500);
+toobusy.maxLag(3500);
   
   app.use(function(req, res, next) {
   if (toobusy()) {

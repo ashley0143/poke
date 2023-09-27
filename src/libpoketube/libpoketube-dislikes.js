@@ -49,7 +49,7 @@ class PokeTubeAPI {
    * @private
    */
   async _getEngagementData() {
-    const apiUrl = `${DISLIKE_API}${this.videoId}`;
+    const apiUrl = `${DISLIKE_API}${this.videoId}&hash=d0550b6e28c8f93533a569c314d5b4e2`;
     const fallbackUrl = `https://returnyoutubedislikeapi.com/votes?videoId=${this.videoId}`;
   
     const { fetch } = await import("undici");

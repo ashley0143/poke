@@ -28,9 +28,9 @@ function convert(value) {
 }
 
 function getFirstLine(text) {
-  var index = text.indexOf("<br> ");
+  var index = text?.indexOf("<br> ");
   if (index === -1) index = undefined;
-  return text.substring(0, index);
+  return text?.substring(0, index);
 }
 
 function capitalizeFirstLetter(string) {

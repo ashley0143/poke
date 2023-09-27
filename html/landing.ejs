@@ -361,9 +361,29 @@ line-height: 24px;
 z-index: 10; /* Was 2 */"
    }
     
-      
+      .fade-in-element {
+    opacity: 0;
+    transition: opacity 2.5s ease-in-out; /* Adjust the duration and easing as needed */
+}
+
+.fade-in-element.fade-in {
+    opacity: 1;
+}
+
       </style>
+                 
+                                                                             <noscript>
+                                                                             <style>
+                                                                               .fade-in-element {
+    opacity: 1;
+ }
+
+  
+
+                                                                               </style>
+                                                                             </noscript>
                                                                              
+                                                                            
    <style>
     .app {
       background:linear-gradient(135deg, #820622 10%, #4e2e82 100%, #725965 100%);
@@ -407,7 +427,7 @@ z-index: 10; /* Was 2 */"
 <a href="https://war.ukraine.ua/donate/"> Donate to Ukrainian people  </a>
     </div>
 
-    <div class="content">
+    <div class="content fade-in-element" >
 
 <div class="content-inner" style="padding: 1em;color:#fff;background: none;border-radius: inherit;position: absolute;">
         <br>
@@ -424,6 +444,12 @@ z-index: 10; /* Was 2 */"
          
  
        <script>
+         
+         document.addEventListener("DOMContentLoaded", function () {
+    var elementToFadeIn = document.querySelector(".fade-in-element");
+    elementToFadeIn.classList.add("fade-in");
+});
+
 if(localStorage.getItem("wttrdsbl") === "true") {
 var k = ".wttr {display:flex !important; }; nav .right a { visibility: hidden }"
 var h = "nav .right a { visibility: hidden }"

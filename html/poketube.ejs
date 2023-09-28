@@ -1,3 +1,4 @@
+<% try { %>
 <!-- PTHTML START -->
 <% if (!isMobile) { %> 
 <!--
@@ -1756,6 +1757,10 @@ if (!urlParams.has('hl') && !urlParams.has('region') && languageCode && regionCo
   location.href = currentURL + `&region=${regionCode}&hl=${languageCode}`;
 }
 
+// Now, all the selected video links should have the parameters added to their href attributes
+
+// Now, all the selected links should have the parameters appended
+
     </script>
 <!-- app.js -->
 <!-- app.js -->
@@ -1767,7 +1772,7 @@ if (!urlParams.has('hl') && !urlParams.has('region') && languageCode && regionCo
 <script src="/static/app.bundle.js?ver=<%-btoa("1f739d93") %>&bundledat=<%- Date.now() %>"></script>
        
 <style> img.emoji {height: 1em;width: 1em;margin: 0 .05em 0 .1em;vertical-align: -0.1em;}</style>
-<script>twemoji.parse(document.body,{ base: 'https://cdn.zptr.cc/twemoji/' })</script><script>
+<script>twemoji.parse(document.body,{ base: 'https://p.poketube.fun/https://cdn.zptr.cc/twemoji/' })</script><script>
   window.GLOBAL_ENV = {
    API_ENDPOINT_INVID:"https://invid-api.poketube.fun/api/v1",
    API_ENDPOINT_INNER:"https://inner-api.poketube.fun/api/",
@@ -2711,3 +2716,6 @@ if (/[?&]autoplay=/.test(location.search)) {
   <% } %>
 
   <% } %>
+
+<% } catch (error) { %>
+ <% } %>

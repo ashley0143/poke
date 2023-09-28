@@ -24,6 +24,7 @@ const URL_WHITELIST = [
   "unpkg.com",
   "youtube.com",
   "returnyoutubedislikeapi.com",
+  "cdn.zptr.cc",
   "inv.vern.cc",
   "invidious.privacydev.net",
   "inv.zzls.xyz",

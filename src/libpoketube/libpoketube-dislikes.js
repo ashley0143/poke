@@ -8,7 +8,7 @@
 
 const { curly } = require("node-libcurl");
 const { toJson } = require("xml2json");
- 
+
 const YOUTUBE_URL = "https://www.youtube.com/watch?v=";
 const DISLIKE_API = "https://p.poketube.fun/api?v=";
 const NEW_API_URL = "https://inner-api.poketube.fun/api/player";
@@ -28,7 +28,6 @@ class PokeTubeAPI {
     this.headers = {};
   }
 
-
   /**
    * Parses a JSON string and returns the resulting object.
    * @param {string} str - The JSON string to parse.
@@ -42,29 +41,27 @@ class PokeTubeAPI {
       return null;
     }
   }
-  
+
   /**
    * Retrieves engagement data for the YouTube video.
    * @returns {Promise<object|null>} A Promise that resolves with the engagement data, or null if an error occurs.
    * @private
    */
-  async _getEngagementData() {
-    const apiUrl = `${DISLIKE_API}${this.videoId}&hash=d0550b6e28c8f93533a569c314d5b4e2`;
-    const fallbackUrl = `https://returnyoutubedislikeapi.com/votes?videoId=${this.videoId}`;
-  
-    const { fetch } = await import("undici");
+  async _getEngagementData(videoId) {
+    const apiUrl = `https://returnyoutubedislikeapi.com/votes?videoId=${videoId}`;
 
-    
     try {
-      const engagement = await fetch(apiUrl).then((res) => res.json());
-      return engagement.data;
-    } catch {
-      try {
-        const engagement = await fetch(fallbackUrl).then((res) => res.json());
-        return engagement;
-      } catch {
-        return null;
+      const response = await fetch(apiUrl);
+
+      if (!response.ok) {
+        throw new Error(`Failed to fetch data from ${apiUrl}`);
       }
+
+      const engagement = await response.json();
+      return engagement;
+    } catch (error) {
+      console.error(error); // You might want to handle the error more gracefully
+      return null; // Return null or another appropriate value in case of an error
     }
   }
 

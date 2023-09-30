@@ -1,0 +1,191 @@
+ html {
+  min-height: 100%;
+}
+body {
+  color: #fff;
+  font-family: Arial, Helvetica, sans-serif;
+  margin: auto;
+  max-width: 1920px;
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
+  justify-content: flex-start;
+  background-image: radial-gradient(circle, #231638, #2b160e, #09250e, #0f132b);
+  animation: gradient 64s ease infinite;
+  background-size: 400% 400%;
+}
+@keyframes gradient {
+  0% {
+    background-position: 0 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0 50%;
+  }
+}
+@font-face {
+  font-family: "PokeTube Flex";
+  src: url("https://p.poketube.fun/https://cdn.glitch.global/43b6691a-c8db-41d4-921c-8cf6aa0d9108/robotoflex.ttf?v=16683434286881");
+  font-style: normal;
+  font-stretch: 1% 800%;
+  font-display: swap;
+}
+blockquote {
+  background: #f2dda8;
+  margin: 0;
+  padding: 6px 12px;
+  border-radius: 4px;
+  color: #000;
+  position: sticky;
+  top: 12px;
+  z-index: 5;
+}
+.header-content {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  height: 100px;
+}
+.header-content-start img {
+  width: 140px;
+}
+.header-content-end a {
+  color: #fff;
+  padding: 10px 12px;
+  border-radius: 50px;
+}
+.header-content-end a:hover {
+  background: #ffffff2e;
+}
+#fname {
+  background: #331a22;
+  border: 2px #612153 solid;
+  padding: 8px 16px;
+  border-radius: 24px;
+  color: #fff;
+  margin-right: 6px;
+}
+#fname:focus {
+  outline: 0;
+}
+button[type="submit"] {
+  color: #fff;
+  background: #331a22;
+  border: 2px #612153 solid;
+  border-radius: 24px;
+  padding: 8px 10px;
+  cursor: pointer;
+}
+button[type="submit"]:hover {
+  background: #ffffff2e;
+}
+.footer {
+  border-top: 1px #ffffff1f solid;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  height: 100px;
+  margin-top: auto;
+}
+.footer a {
+  color: #fff;
+  margin-left: 12px;
+  text-decoration: none;
+}
+@media only screen and (max-width: 1328px) {
+  body {
+    padding: 0 48px !important;
+  }
+}
+@media only screen and (max-width: 1980px) {
+  body {
+    max-width: calc(100% - 48px);
+  }
+}
+@media only screen and (max-width: 700px) {
+  body {
+    padding: 0 !important;
+  }
+  blockquote {
+    margin: 0 !important;
+    border-radius: 0 !important;
+  }
+  .header-content {
+    padding: 0 24px;
+  }
+}
+@media only screen and (max-width: 560px) {
+  .header-content-start img {
+    width: 24px;
+    object-fit: cover;
+    height: 24px;
+    object-position: left;
+  }
+  #fname {
+    width: calc(100% - 100px);
+  }
+}
+ .landing {
+  text-align: center;
+  margin: auto;
+}
+.landing h1 {
+  font-size: xxx-large;
+  font-family: "PokeTube flex";
+  font-stretch: ultra-expanded;
+  font-weight: 1000;
+  text-align: center;
+}
+.landing img {
+  width: 100%;
+  margin-top: 48px;
+  height: 700px;
+  object-fit: cover;
+  object-position: top;
+  mask-image: linear-gradient(black, #0000);
+}
+.landing-actions a {
+  background: #fff;
+  color: #000;
+  text-decoration: none;
+  border-radius: 50px;
+  padding: 12px 24px;
+}
+.features {
+  display: flex;
+  justify-content: center;
+}
+.features p {
+  border-radius: 48px;
+  padding: 16px 32px;
+  border: 2px #612153 solid;
+  background: #61215359;
+  margin: 12px 6px;
+}
+.features p i {
+  font-size: 18px;
+  background: #612153;
+  padding: 10px;
+  border-radius: 24px;
+  margin: -10px 10px -10px -24px;
+}
+@media only screen and (max-width: 1420px) {
+  .landing {
+    width: calc(100% - 24px);
+  }
+}
+@media only screen and (max-width: 740px) {
+  .landing img {
+    height: 500px;
+  }
+  .features {
+    flex-direction: column;
+    text-align: left;
+    width: max-content;
+    margin: auto;
+  }
+}

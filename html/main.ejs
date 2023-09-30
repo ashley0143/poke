@@ -30,6 +30,8 @@
      <meta content=summary_large_image name=twitter:card>
     <meta content=@PoketaleBot name=twitter:site>
     <meta content=@PoketaleBot name=twitter:creator>
+      <link rel="manifest" href="/manifest.json">
+
     <link href=/css/app-cdn.min.css rel=stylesheet>
   <link href=/css/app-cdn.min.css rel=stylesheet>
 <link href=/css/app.main.css rel=stylesheet>
@@ -544,6 +546,8 @@ window.addEventListener("load", () => {
     <meta content="PokeTube - Privacy Is Your Right" property=og:title>
     <meta content="Privacy Is Your Right - Poketube is a libre front end for YouTube Thats focused on your privacy! your personal data should be nobody's business" property=twitter:description>
     <meta content="https://cdn.glitch.global/5d35aeaf-2df2-4f2f-a4b7-b486694c329b/0d71ef53-9fc2-4ddd-8814-fcf00ba69155.image.png?v=1664301040809" property=og:image>
+      <link rel="manifest" href="/manifest.json">
+
      <meta content=summary_large_image name=twitter:card>
     <meta content=@PoketaleBot name=twitter:site>
     <meta content=@PoketaleBot name=twitter:creator>
@@ -919,22 +923,7 @@ padding: 3px;
    #more-buttons span { display: block; }
    #more-buttons span a { display: inline-block; }
 </style>                
-<script type="application/manifest+json">
-      {
-        "name": "PokeTube Mobile TWA",
-        "short_name": "PokeTube",
-        "start_url": "/",
-        "display": "standalone",
-        "background_color": "#ffffff",
-        "icons": [
-          {
-            "src": "/css/yt-ukraine.svg",
-            "sizes": "215x215",
-             "type": "image/svg+xml"
-        }
-        ]
-      }
-</script>
+ 
   <body>
 
  <div class="app" >
@@ -962,76 +951,7 @@ padding: 3px;
   
     <img src="https://t.poketube.fun/t/rep.gif" style="width: 0;visibility: hidden;display:none;" id="discover_main">
 
- 
-        <% if (!tab) { %> 
-                                                <% if (!mobilesearch) { %> 
-
-     <div class="tabs tabs-center">
-            
-                <a href="" class="tab active">Videos</a>
-                                    
-                <a href="?tab=music"class="tab">Music</a>
-
-                      <% if (!isMobile) { %> 
-
-                 <a href="?tab=movies" class="tab">Movies</a>
-
-           		 	               <% } %>   
-
-            </div>    
-           		 	               <% } %>   
-                                 
-  <% if (tab === "music") { %> 
-
-     <div class="tabs tabs-center">
-            
-              
-                <a href="/" class="tab">Videos</a>
-                                    
-                <a href="" class="tab active ">Music</a>
-
-                       <% if (!isMobile) { %> 
-
-                 <a href="?tab=movies" class="tab">Movies</a>
-
-           		 	               <% } %> 
-
-                       
-
-            </div>    
-           		 	               <% } %>   
-                    
-                                            		 	               <% } %>
-
-                                                                                 <% if (tab === "search") { %> 
- 
-     <div class="tabs tabs-center">
-            
-              
-                <a href="/" class="tab">Videos</a>
-                                    
-                <a href="?tab=music" class="tab">Music</a>
-
-
-                       
-
-            </div>    
-           		 	               <% } %>
-                                 
-                                                <% if (mobilesearch) { %> 
- 
-     <div class="tabs tabs-center">
-            
-              
-                <a href="/" class="tab">Videos</a>
-                                    
-                <a href="?tab=music" class="tab">Music</a>
-
-
-                       
-
-            </div>    
-           		 	               <% } %>  
+  
                                             		 	               <% } %>   
 
  

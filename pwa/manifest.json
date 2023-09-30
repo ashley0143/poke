@@ -1,0 +1,30 @@
+{
+    "name": "PokeTube",
+    "short_name": "PokeTube",
+    "description": "Watch Videos - Anonymously",
+    "start_url": "/",
+    "display": "standalone",
+    "background_color": "#080808",
+    "theme_color": "#612153",
+    "icons": [
+      {
+        "src": "/css/pt.png",
+        "sizes": "512x512",
+        "type": "image/png"
+      }
+    ],
+    "screenshots": [
+      {
+        "src": "/css/pwa-desktop.png",
+        "type": "image/png",
+        "sizes": "1695x1445",
+        "form_factor": "wide"
+      },
+      {
+        "src": "/css/pwa-mobile.jpg",
+        "type": "image/jpg",
+        "sizes": "1080x2412",
+        "form_factor": "narrow"
+      }
+    ]
+  }

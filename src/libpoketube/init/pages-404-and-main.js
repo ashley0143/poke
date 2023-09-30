@@ -33,6 +33,8 @@ function getJson(str) {
 
 module.exports = function (app, config, renderTemplate) {
   app.get("/app", async function (req, res) {
+   const { fetch } = await import("undici");
+
     let tab = "";
     if (req.query.tab) {
       tab = `/?type=${capitalizeFirstLetter(req.query.tab)}`;
@@ -47,7 +49,7 @@ module.exports = function (app, config, renderTemplate) {
     if (req.query.mobilesearch) {
       const query = req.query.mobilesearch;
       const continuation = req.query.continuation || "";
-      const search = await modules.fetch(
+      const search = await fetch(
         `https://inner-api.poketube.fun/api/search?query=${query}&continuation=${continuation}`
       );
       const text = await search.text();

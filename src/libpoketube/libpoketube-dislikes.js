@@ -6,13 +6,6 @@
  * Please don't remove this comment while sharing this code.
  */
 
-const { curly } = require("node-libcurl");
-const { toJson } = require("xml2json");
-
-const YOUTUBE_URL = "https://www.youtube.com/watch?v=";
-const DISLIKE_API = "https://p.poketube.fun/api?v=";
-const NEW_API_URL = "https://inner-api.poketube.fun/api/player";
-
 /**
  * A class representing a PokeTube API instance for a specific video.
  */
@@ -47,24 +40,13 @@ class PokeTubeAPI {
    * @returns {Promise<object|null>} A Promise that resolves with the engagement data, or null if an error occurs.
    * @private
    */
-  async _getEngagementData(videoId) {
-    const { fetch } = await import("undici");
+  async _getEngagementData() {
+  const fallbackUrl = `https://returnyoutubedislikeapi.com/votes?videoId=${this.videoId}`;
+  
+   const { fetch } = await import("undici");
     
-    const apiUrl = `https://returnyoutubedislikeapi.com/votes?videoId=${videoId}`;
-
-    try {
-      const response = await fetch(apiUrl);
-
-      if (!response.ok) {
-        throw new Error(`Failed to fetch data from ${apiUrl}`);
-      }
-
-      const engagement = await response.json();
-      return engagement;
-    } catch (error) {
-      console.error(error); // You might want to handle the error more gracefully
-      return null; // Return null or another appropriate value in case of an error
-    }
+   const engagement = await fetch(fallbackUrl).then((res) => res.json());
+  return engagement;
   }
 
   /**
@@ -76,8 +58,7 @@ class PokeTubeAPI {
 
     return {
       engagement: this.engagement,
-      videoUrlYoutube: `${YOUTUBE_URL}${this.videoId}`,
-    };
+     };
   }
 
   /**
@@ -86,7 +67,7 @@ class PokeTubeAPI {
    * @private
    */
   _handleError(args) {
-    console.error(`[LIBPT FETCHER ERROR] ${args}`);
+    console.error(`[LIBPT DISLIKES ERROR] ${args}`);
   }
 }
 

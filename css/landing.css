@@ -695,7 +695,7 @@ body {
   font-family: ubuntu, sans-serif;
   margin: auto;
   max-width: 1920px;
-    font-size: 16px;
+  font-size: 16px;
   display: flex;
   min-height: 100vh;
   flex-direction: column;
@@ -704,6 +704,8 @@ body {
   animation: gradient 64s ease infinite;
   background-size: 400% 400%;
 }
+body {cursor: url('/static/cursor.ico'), default}
+a {cursor: url('/static/cursor-pointer.ico'), pointer}
 @keyframes gradient {
   0% {
     background-position: 0 50%;

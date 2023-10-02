@@ -742,6 +742,10 @@ body {
   background-color: #909098;
 }
 
+
+body {cursor: url('/static/cursor.ico'), default}
+a {cursor: url('/static/cursor-pointer.ico'), pointer}
+
 p {
   color: #fff;
 }

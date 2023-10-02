@@ -33,10 +33,7 @@
     "toobusy-js": "^0.5.1"
   },
   "engines": {
-    "node": ">=18.0.0",
-    "yarn": ">=1.22.0",
-    "pnpm": "Please use NPM or Yarn instead",
-    "bun": "Please use NPM or Yarn instead"
+    "node": "16.x"
   },
   "repository": {
     "url": "https://github.com/ashpotter/poketube"

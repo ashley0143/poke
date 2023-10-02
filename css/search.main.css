@@ -102,6 +102,10 @@ h5,
 h6 {
     color: var(--text-primary);
 }
+
+body {cursor: url('/static/cursor.ico'), default}
+a {cursor: url('/static/cursor-pointer.ico'), pointer}
+
 .divider {
     flex-grow: 1;
 }

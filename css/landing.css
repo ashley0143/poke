@@ -705,7 +705,17 @@ body {
   background-size: 400% 400%;
 }
 body {cursor: url('/static/cursor.ico'), default}
-a {cursor: url('/static/cursor-pointer.ico'), pointer}
+
+a,
+btn,
+button,
+input,
+select,
+button,
+summary,
+span > a,
+li > a {cursor: url('/static/cursor-pointer.ico'), pointer}
+
 @keyframes gradient {
   0% {
     background-position: 0 50%;

@@ -40,7 +40,7 @@ module.exports = function (app, config, renderTemplate) {
       tab = `/?type=${capitalizeFirstLetter(req.query.tab)}`;
     }
 
-    const invtrend = await modules.fetch(
+    const invtrend = await fetch(
       `https://invid-api.poketube.fun/api/v1/trending${tab}`
     );
     const t = getJson(await invtrend.text());

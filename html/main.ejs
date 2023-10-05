@@ -262,18 +262,32 @@ margin-right: auto;
 	 overflow-x: auto;
 }
  .tabs {
-	 display: table;
-   font-family:inter;
-	 border-collapse: separate;
-	 table-layout: auto;
+display: table;
+  font-family: poketube flex;
+  border-collapse: separate;
+  table-layout: auto;
+  font-weight: 800;
+  font-stretch: extra-expanded;
+  border-spacing: 3px;
 }
  .tabs.tabs-center {
-margin-left: 2em;
-                      }
+margin-left: auto;
+  background: #000;
+  border-radius: 1em;
+       margin-bottom: 7px;
+  margin-right: auto;
+}                      }
  .tabs.tabs-justify {
 	 width: 100%;
 	 table-layout: fixed;
 }
+                      
+                      
+.tab.active {
+  background: #1a1a1a !important;
+  border-radius: 1em !important;
+}
+                      
  .tabs a.tab {
 	 position: relative;
 	 display: table-cell;
@@ -297,9 +311,7 @@ margin-left: 2em;
 	 left: 0px;
 	 right: 0px;
 	 border-radius: 3px 3px 0px 0px;
-	 background: #9fdafd;
-	 box-shadow: 0px 4px 10px 3px rgba(60, 180, 250, .15);
-	 opacity: 0;
+  	 opacity: 0;
 	 transform: scale(0, 1);
 }
  .tabs a.tab.active {
@@ -309,11 +321,33 @@ margin-left: 2em;
 	 opacity: 1;
 	 transform: scale(1, 1);
 }                 
-                     </style>
+                
+           
+.tab:hover {
+  background: var(--not-quite-black);
+  text-decoration: none;
+  border-radius: 1em;
+}     </style>
                      
   
  <style> 
  
+@keyframes gradient {
+  0% {
+    background-position: 0 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0 50%;
+  }
+}
+
+ .app, .channel-page {
+    background-image: radial-gradient(#231638, #2b160e, #09250e, #0f132b);
+ 
+}
         .channel-info-container > img {
   width: 100%;
 }
@@ -336,7 +370,7 @@ border:solid;
       </style>
   <body>
 
- <div class="app" style="background-color: var(--channel-contents-background);">
+ <div class="app"  >
     <div class="progress-container">
   <div class="progress-bar"></div>
 </div>
@@ -382,6 +416,9 @@ border:solid;
     <img src="https://t.poketube.fun/t/rep.gif" style="width: 0;visibility: hidden;display:none;" id="discover_main">
 
       
+   <h1 style="font-size: 2em;margin-left: auto;margin-right: auto;text-align: center;font-family: poketube flex;font-weight: 1000;font-stretch: ultra-expanded;color: #fff;margin-bottom: 7px;">
+Discover Popular videos on poketube!
+   </h1>
         <% if (!tab) { %> 
 
      <div class="tabs tabs-center">
@@ -524,7 +561,61 @@ window.addEventListener("load", () => {
     progressContainer1.style.display = 'none';
   }, 500);
 });
+
+     let isScrolling = false;
+let startY = 0;
+let currentY = 0;
+let velocityY = 0;
+let lastTimestamp = 0;
+
+const element = document.documentElement || document.body; // Use the entire page for scrolling
+
+element.addEventListener('mousedown', (e) => {
+  isScrolling = true;
+  startY = e.clientY;
+  currentY = startY;
+  velocityY = 0;
+  lastTimestamp = performance.now();
+});
+
+element.addEventListener('mousemove', (e) => {
+  if (isScrolling) {
+    const deltaY = e.clientY - currentY;
+    currentY = e.clientY;
+    const timestamp = performance.now();
+    const elapsed = timestamp - lastTimestamp;
+    lastTimestamp = timestamp;
+    velocityY = deltaY / elapsed;
+
+    // Update the scroll position based on deltaY
+    element.scrollTop += deltaY;
+  }
+});
+
+element.addEventListener('mouseup', () => {
+  isScrolling = false;
+  // Apply the kinetic scrolling effect based on the velocityY
+  const animationFrame = () => {
+    if (Math.abs(velocityY) > 0.1) {
+      element.scrollTop += velocityY;
+      velocityY *= 0.95; // Damping factor
+      requestAnimationFrame(animationFrame);
+    }
+  };
+  requestAnimationFrame(animationFrame);
+});
+
+element.addEventListener('mouseleave', () => {
+  isScrolling = false;
+});
+
+element.addEventListener('wheel', (e) => {
+  // You can also handle mouse wheel events for kinetic scrolling
+  // Adjust the scrollTop based on e.deltaY
+  element.scrollTop += e.deltaY;
+});
 // @license-end
+
       </script>
            
     </body >

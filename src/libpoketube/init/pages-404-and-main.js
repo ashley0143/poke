@@ -56,7 +56,7 @@ module.exports = function (app, config, renderTemplate) {
       j = getJson(modules.toJson(text));
     }
 
-    renderTemplate(res, req, "main.ejs", {
+    renderTemplate(res, req, "discover.ejs", {
       tab: req.query.tab,
       isMobile: req.useragent.isMobile,
       mobilesearch: req.query.mobilesearch,
@@ -70,8 +70,7 @@ module.exports = function (app, config, renderTemplate) {
   app.get("/:v*?", async function (req, res) {
     const uaos = req.useragent.os;
     const browser = req.useragent.browser;
-    const isOldWindows =
-      (uaos === "Windows 7" || uaos === "Windows 8") && browser === "Firefox";
+    const isOldWindows = (uaos === "Windows 7" || uaos === "Windows 8") && browser === "Firefox";
 
     const rendermainpage = () => {
       if (req.useragent.isMobile) {

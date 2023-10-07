@@ -3,7 +3,6 @@
    <img src="https://poketube.fun/css/logo.svg" width="400"> 
    </a>
 </h1>
-
 <div align="center">
 
 [Welcome!](#welcome)&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;[No None-free codec needed](#no-non-free-codec-needed-3)&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;[Hosting Poketube~](#hosting-poketube)&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;[PokeTube community!](#poketube-community)&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;[The Legal Stuff (boring tbh)](#the-legal-stuff-boring-tbh)
@@ -81,3 +80,9 @@ Join the community on [revolt](https://rvlt.gg/poketube) :3
 TL;DR: we dont collect or share your personal info, that's it lol.
 
 We additionally use the GNU Coding Standard, see [this link.](https://www.gnu.org/prep/standards)
+
+
+<h3> poketube.fun is produdly hosted on glitch.com since <i>2020</i> </h3>
+ <a href="https://glitch.com/"><img src="https://cdn.glitch.global/d68d17bb-f2c0-4bc3-993f-50902734f652/glitch-fastly-lock-up.svg?v=1696671148266"><br></a>
+
+

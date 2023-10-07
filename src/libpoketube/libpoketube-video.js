@@ -45,7 +45,6 @@ function toObject(arr) {
 
 // Gets Invidious instances
 const invInstanceList = [
-  "https://vid.theedgeofrage.com",
   "https://video-proxy.poketube.fun"
 ];
 

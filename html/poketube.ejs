@@ -661,7 +661,11 @@ But Please note that unofficial instances can add the same lock icon, so please 
                       Customize PokeTube
         </a>
     
-
+		<a href="/account-create" style="text-decoration: none;" class="dropdown__item">
+                            <i  class="fa-light fa-user"></i>
+Account
+        </a>
+    
           				<a href="/settings" style="text-decoration: none;" class="dropdown__item">
                             <i  class="fa-light fa-globe"></i>
 Region settings        </a>
@@ -997,7 +1001,7 @@ display: block; !important;" autoplay controls
 
 				</div>
 	 
-				<button class="subscribe-button"><a href="https://www.youtube.com/channel/<%=video?.Channel.id || k.Video.Channel.id%>?view_as=subscriber?sub_confirmation=1">Suscribe</a></button>
+				<button class="subscribe-button"><a id="sub">Suscribe</a></button>
 			</div>
                
                      <div>
@@ -1756,6 +1760,20 @@ const urlParams = new URLSearchParams(window.location.search);
 
 if (!urlParams.has('hl') && !urlParams.has('region') && languageCode && regionCode) {
   location.href = currentURL + `&region=${regionCode}&hl=${languageCode}`;
+}
+
+var anchor = document.getElementById("sub");
+
+// Check if there's a user ID in localStorage
+var userID = localStorage.getItem("UserID");
+
+if (userID) {
+    // If user ID exists in localStorage, set the href attribute
+    anchor.href = `/api/set-channel-subs?ID=${userID}&channelName=<%=k.Video.Channel.Name%>&avatar=https://p.poketube.fun/<%= k.Video.Channel.Avatar[1].$t %>&channelID=<%=video?.Channel.id || k.Video.Channel.id %>`;
+} else {
+    // If user ID doesn't exist in localStorage, you can handle it as needed
+    console.log("User ID not found in localStorage");
+    // Optionally, you can set a default href or display an error message.
 }
 
 // Now, all the selected video links should have the parameters added to their href attributes

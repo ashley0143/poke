@@ -1,0 +1,67 @@
+<!DOCTYPE html><html>
+  <head>
+    <style>
+
+        /* Define the grid container */
+.grid-container {
+    display: grid;
+  grid-template-columns: repeat(2, 0.2fr);
+  gap: 2px; /* Set the gap between grid items */
+    margin-left: auto;
+    margin-right: auto;
+    max-width: 15em;
+}
+
+/* Style for grid items */
+.grid-item {
+    background-color: #333;
+    padding: 20px;
+   max-width:5em;
+  text-align: center;
+    border-radius: 1em;
+}
+
+      body{
+        font-family:sans-serif;
+         color:#fff;
+         background:#000
+      }
+      
+      
+a {
+  background: #111;
+  padding: 5px;
+  color: #fff;
+  text-decoration: none;
+  border-radius: 5px;
+}
+    </style>
+  </head>
+  <body>
+    User: <%- userid %><br>
+    Very work in progress!
+    <br>
+    
+     <center>
+    <h1>
+      My subscriptions
+       </h1>
+    </center>
+              <div class="grid-container">
+      
+ <% for (const channelID in userSubs) { %>
+            <div class="grid-item">
+                              <img style="width:5em" src="<%= userSubs[channelID].avatar %>" alt="Avatar"><br >
+<br>
+               <%= userSubs[channelID].channelName %><br>
+                 <div style="gap: 1px;display: flex;margin-left: -12px;">
+              <a href="/api/remove-channel-sub?ID=<%- userid %>&channelID=<%= channelID %>" style="margin-bottom:1px">unsub </a> <a href="/channel?id=<%= channelID %>">view</a>
+            </div>            </div>
+
+        <% } %>
+		 
+          </div>
+ 
+    </div>
+   </body>
+</html>

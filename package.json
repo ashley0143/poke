@@ -30,7 +30,8 @@
     "ping": "^0.4.4",
     "undici": "^5.25.2",
     "express-rate-limit": "^7.0.2",
-    "toobusy-js": "^0.5.1"
+    "toobusy-js": "^0.5.1",
+    "quick.db": "^7.1.3"
   },
   "engines": {
     "node": "16.x"

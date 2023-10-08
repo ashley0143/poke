@@ -57,6 +57,7 @@
 </ptd-event-chunks>
 <title> <%=inv_vid.title%> | PokeTube </title>  
 <style>
+  
        <% if (!a) { %>  
 
      <% if (lightOrDark(color) == "light") { %>  
@@ -69,6 +70,7 @@
      <% if (lightOrDark(color) == "dark") { %>  
      .player.video-ambient-container  { 
          box-shadow: 0 0 2.4em <%=color2%>; 
+       
         }
         
                                                                                      <% } %>     
@@ -1933,7 +1935,7 @@ a {
     
   </div>
             <div class="right">
-          
+               
        <a href="/app?tab=search" style="position: absolute;right: 0;margin: 2em;" ><i class="fa-light fa-search"></i></a> 
 
             </div>
@@ -2035,7 +2037,7 @@ font-size: 13px;margin:0;padding:0;white-space: nowrap;
 				</div>
                
  
-				<button class="subscribe-button" ><a style="color:#fff" href="https://www.youtube.com/channel/<%=k.Video.Channel.id%>?view_as=subscriber?sub_confirmation=1">Suscribe</a></button>
+				<button class="subscribe-button" ><a style="color:#fff" id="sub">Suscribe</a></button>
                
 			</div>
             
@@ -2076,8 +2078,33 @@ font-size: 13px;margin:0;padding:0;white-space: nowrap;
             Download
             </div>
 					</a>
+
+   <% if (!video?.Channel.Name.endsWith(' - Topic')) { %> 
+    <% if (!inv_vid.title.endsWith('Audio)')) { %> 
+   <% if (support != undefined) { %> 
+
+ 					<a class="new-button"  title="Support the Creator of the video!"  style="color:#fff;text-decoration: none;margin-right: 0; " href="https://www.patreon.com/join/<%- support.name %>">
+                                        <div class="pill-button">
+
+               <i class="fa-light fa-badge-dollar"></i>
+                Support
+            </div>
+            
  
-  
+
+   </a>
+      
+                                     <% }%>                                                                              <% }%>      
+                         <% }%>   
+ 
+  					<a class="new-button" title="Download this Video :3" style="color:#fff;text-decoration: none;margin-right: 0; " href="/account-create">
+                            <div class="pill-button">
+
+            <i class="fa-light fa-user"></i>
+           My Account
+            </div>
+					</a>
+ 
               <a class="new-button" style="color:#fff" onclick="share()">   
                                             <div class="pill-button">
 
@@ -2654,6 +2681,29 @@ More Epic options owo~
              
 <script>
 // @license magnet:?xt=urn:btih:1f739d935676111cfff4b4693e3816e664797050&dn=gpl-3.0.txt GPL-3.0-or-later  
+  
+// Function to check and toggle visibility of elements
+function checkAndToggleRecommended() {
+  const descContainerPresent = window.location.href.includes("#desc-container");
+  const recommendedElements = document.querySelectorAll(".recommended-list");
+  
+  if (descContainerPresent) {
+    recommendedElements.forEach((element) => {
+      element.style.display = "none";
+    });
+  } else {
+    recommendedElements.forEach((element) => {
+      element.style.display = "flex"; // or any other desired display value
+    });
+  }
+}
+
+// Call the function initially
+checkAndToggleRecommended();
+
+// Set up an interval to check every second
+setInterval(checkAndToggleRecommended, 1000);
+
 function removeParam(paramName) {
   
   let searchParams = new URLSearchParams(window.location.search);
@@ -2698,7 +2748,56 @@ if (/[?&]autoplay=/.test(location.search)) {
     function autoplaynextvideo(e) {
         location.href = "/watch?v=<%- k.Video.Recommendations.Video[0].id%>&autoplay=<%-btoa("1f739d935676111cfff4b4693e3816e664797050" + k.Video.Recommendations.Video[0].id ) %>"
     }
+}var anchor = document.getElementById("sub");
+
+// Check if there's a user ID in localStorage
+var userID = localStorage.getItem("UserID");
+
+if (userID) {
+    // If user ID exists in localStorage, set the href attribute
+    anchor.href = `/api/set-channel-subs?ID=${userID}&channelName=<%=k.Video.Channel.Name%>&avatar=https://p.poketube.fun/<%= k.Video.Channel.Avatar[1].$t %>&channelID=<%=video?.Channel.id || k.Video.Channel.id %>`;
+} else {
+    // If user ID doesn't exist in localStorage, you can handle it as needed
+    console.log("User ID not found in localStorage");
+    // Optionally, you can set a default href or display an error message.
 }
+  
+  
+
+// Save and resume video progress
+const videoId = new URLSearchParams(window.location.search).get('v');
+const localStorageKey = `progress-${videoId}`;
+
+function saveProgress() {
+  localStorage.setItem(localStorageKey, video.currentTime);
+}
+
+function removeProgress() {
+  localStorage.removeItem(localStorageKey);
+}
+
+function resumeProgress() {
+  const progress = localStorage.getItem(localStorageKey);
+  if (progress) {
+    video.currentTime = progress;
+  }
+}
+
+video.addEventListener('timeupdate', () => {
+  if (Math.floor(video.currentTime) % 1 === 0) {
+    saveProgress();
+  }
+});
+
+video.addEventListener('ended', () => {
+  removeProgress();
+});
+
+window.addEventListener('load', () => {
+  resumeProgress();
+});
+
+
 </script>
            
   <noscript>

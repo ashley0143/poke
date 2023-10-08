@@ -1,5 +1,8 @@
 <!DOCTYPE html><html>
   <head>
+          <title>PokeTube | Subscriptions </title>
+      <link href=/css/yt-ukraine.svg?v=6 rel=icon>
+       <link href=/css/app.main.css rel=stylesheet>
     <style>
 
         /* Define the grid container */
@@ -21,25 +24,48 @@
     border-radius: 1em;
 }
 
-      body{
-        font-family:sans-serif;
-         color:#fff;
-         background:#000
-      }
+body{
+font-family:sans-serif;
+color:#fff;
+background-image: radial-gradient(circle, #231638, #2b160e, #09250e, #0f132b);
+  animation: gradient 64s ease infinite;
+  background-size: 400% 400%;}
       
+      
+      h1 {
+        font-family:"poketube flex";
+        font-weight: 800;
+        font-stretch: extra-expanded;
+      }
       
 a {
   background: #111;
   padding: 5px;
   color: #fff;
-  text-decoration: none;
+  text-decoration: none !important;
   border-radius: 5px;
+}
+      
+
+@keyframes gradient {
+  0% {
+    background-position: 0 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0 50%;
+  }
 }
     </style>
   </head>
   <body>
     User: <%- userid %><br>
-    Very work in progress!
+    <i><b>do not share ur user id with anyone</b></i><br><br>
+     <div>
+        <a style="margin-top:-59px; float: right" href="/api/get-channel-subs?ID=<%- userid %>">view json</a>
+    </div>
     <br>
     
      <center>
@@ -48,10 +74,10 @@ a {
        </h1>
     </center>
               <div class="grid-container">
-      
+          <% if (userSubs) { %>
  <% for (const channelID in userSubs) { %>
             <div class="grid-item">
-                              <img style="width:5em" src="<%= userSubs[channelID].avatar %>" alt="Avatar"><br >
+                              <img style="width:5em;border-radius:5px" src="<%= userSubs[channelID].avatar %>" alt="Avatar"><br >
 <br>
                <%= userSubs[channelID].channelName %><br>
                  <div style="gap: 1px;display: flex;margin-left: -12px;">
@@ -59,7 +85,8 @@ a {
             </div>            </div>
 
         <% } %>
-		 
+		         <% } %>
+
           </div>
  
     </div>

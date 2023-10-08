@@ -58,31 +58,7 @@
 <title> <%=inv_vid.title%> | PokeTube </title>  
 <style>
   
-       <% if (!a) { %>  
-
-     <% if (lightOrDark(color) == "light") { %>  
-     .player.video-ambient-container  { 
-         box-shadow: 0 0 2.4em <%=color%>; 
-         }
-        
-                                                                                     <% } %>          
-  
-     <% if (lightOrDark(color) == "dark") { %>  
-     .player.video-ambient-container  { 
-         box-shadow: 0 0 2.4em <%=color2%>; 
-       
-        }
-        
-                                                                                     <% } %>     
-                                                                                      <% } %>     
-       <% if (a) { %>  
-
-      .player.video-ambient-container  { 
-         box-shadow: 0 0 0em <%=color%>; 
-         }
-        
-                                                                                     <% } %>          
-    
+     
   .comments-area {
   background: #f1f9ff;
   padding: 50px 30px;
@@ -402,6 +378,27 @@ a[data-onclick="jump_to_time"] {
     .fade-in {
         opacity: 1  !important;
     }
+                 <% if (lightOrDark(color) == "light") { %>  
+     .player.video-ambient-container  { 
+         box-shadow: 0 -8px 5.9em <%=color%>; 
+         }
+        
+                                                                                     <% } %>          
+  
+     <% if (lightOrDark(color) == "dark") { %>  
+     .player.video-ambient-container  { 
+         box-shadow: 0 -8px 5.9em <%=color2%>; 
+        }
+        
+                                                                                     <% } %>     
+        <% if (a) { %>  
+
+      .player.video-ambient-container  { 
+         box-shadow: 0 0 0em <%=color%>; 
+         }
+        
+                                                                                     <% } %>     
+    
   </style>
   </noscript>
                     <% if (inv_vid.videoId == "QrGrOK8oZG8") { %> 
@@ -478,26 +475,7 @@ text-shadow: 1px 1px #000,1px 1px 0.1px #000;!important;
    background:#0A0608 
    
 }
-        <% if (lightOrDark(color) == "light") { %>  
-     .player.video-ambient-container  { 
-         box-shadow: 0 -8px 5.9em <%=color%>; 
-         }
-        
-                                                                                     <% } %>          
-  
-     <% if (lightOrDark(color) == "dark") { %>  
-     .player.video-ambient-container  { 
-         box-shadow: 0 -8px 5.9em <%=color2%>; 
-        }
-        
-                                                                                     <% } %>     
-        <% if (a) { %>  
-
-      .player.video-ambient-container  { 
-         box-shadow: 0 0 0em <%=color%>; 
-         }
-        
-                                                                                     <% } %>     
+   
 </style>
              <% if(dm) { %>
              <style>
@@ -877,7 +855,11 @@ display: block; !important;" autoplay controls
                                                            <% } %>         
                                                                            
                                                              </video>
-                                                             
+               <% if (!a) { %>  
+
+                                                             <canvas width="150" height="150" id="ambient-canvas"></canvas>
+                                                                            <% } %>         
+
                                                              <img loading="lazy" src="https://t.poketube.fun/t/rep.gif?video=<%=btoa(inv_vid.videoId)%>" style="border:0;width: 0;visibility: hidden;" id="video">
 <div class="pwp" style="display: flex;justify-content: center;align-items: center;flex-direction: row; column-gap: 3px;margin-top: -1em;max-height: 16px;" align="center">
                                 
@@ -1790,6 +1772,77 @@ if (userID) {
 <!-- app.js -->
 <!-- app.js -->
    
+<!-- Ambient Mode, for PokeTube -->
+<script>
+let requestId;
+
+const loopStart = () => {
+  requestId = window.requestAnimationFrame(loopStart)
+}
+
+const loopCancel = () => {
+  window.cancelAnimationFrame(requestId)
+  requestId = undefined
+}
+
+const AMvideo = document.getElementById("video")
+const canvas = document.getElementById("ambient-canvas")
+const ctx = canvas.getContext("2d")
+    
+let step
+
+const draw = () => {
+  ctx.drawImage(video, 0, 0, canvas.width, canvas.height)
+}
+
+
+const drawLoop = () => {
+  draw()
+  step = window.requestAnimationFrame(drawLoop)
+}
+
+const drawPause = () => {
+  window.cancelAnimationFrame(step)
+  step = undefined
+}
+
+const init = () => {
+  AMvideo.addEventListener("loadeddata", draw, false)
+  AMvideo.addEventListener("seeked", draw, false)
+  AMvideo.addEventListener("play", drawLoop, false)
+  AMvideo.addEventListener("pause", drawPause, false)
+  AMvideo.addEventListener("ended", drawPause, false)
+}
+
+const cleanup = () => {
+  AMvideo.removeEventListener("loadeddata", draw)
+  AMvideo.removeEventListener("seeked", draw)
+  AMvideo.removeEventListener("play", drawLoop)
+  AMvideo.removeEventListener("pause", drawPause)
+  AMvideo.removeEventListener("ended", drawPause)
+}
+
+window.addEventListener("load", init)
+window.addEventListener("unload", cleanup)
+</script>
+<style>
+.video-player-container, #video {
+  position: relative;
+  z-index: 0;
+}
+.popup {z-index: 1}
+#ambient-canvas {
+  width: 100%;
+  height: calc(100% - 18px);
+  position: absolute;
+  top: 0px;
+  border-radius: 18px;
+  filter: blur(20px);
+  transform: scale(1.1);
+  opacity: 0.3;
+  z-index: -1;
+}
+</style>
 <script src="/static/app.bundle.js?ver=<%-btoa("1f739d93") %>&bundledat=<%- Date.now() %>"></script>
        
 <style> img.emoji {height: 1em;width: 1em;margin: 0 .05em 0 .1em;vertical-align: -0.1em;}</style>

@@ -432,7 +432,32 @@ text-shadow: 1px 1px #000,1px 1px 0.1px #000;!important;
                 
                 .video-sub-info.description {
                     font-family:ubuntu !important;
+                } 
+               
+                canvas {
+                  display:none;
                 }
+                
+                   <% if (lightOrDark(color) == "light") { %>  
+     .player.video-ambient-container  { 
+         box-shadow: 0 -8px 5.9em <%=color%>; 
+         }
+        
+                                                                                     <% } %>          
+  
+     <% if (lightOrDark(color) == "dark") { %>  
+     .player.video-ambient-container  { 
+         box-shadow: 0 -8px 5.9em <%=color2%>; 
+        }
+        
+                                                                                     <% } %>     
+        <% if (a) { %>  
+
+      .player.video-ambient-container  { 
+         box-shadow: 0 0 0em <%=color%>; 
+         }
+        
+                                                                                     <% } %>    
               </style>
               
                                                       		 	               <% } %>   

@@ -715,6 +715,7 @@ button,
 summary,
 span > a,
 li > a {cursor: url('/static/cursor-pointer.ico'), pointer}
+.btn {cursor: url('/static/cursor-pointer.ico'), pointer !important}
 
 @keyframes gradient {
   0% {

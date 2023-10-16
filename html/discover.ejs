@@ -1014,6 +1014,7 @@ padding: 3px;
    }
    #more-buttons span { display: block; }
    #more-buttons span a { display: inline-block; }
+  
 </style>                
  
   <body>
@@ -1029,8 +1030,7 @@ padding: 3px;
      
             <div class=right>
           
-      <a href="?tab=search"><i class="fa-light fa-search"></i></a> 
-
+ 
             </div>
      
       </nav>
@@ -1039,7 +1039,7 @@ padding: 3px;
      
 
                            </div>
- <div class="channel-page" style="background-color: var(--channel-contents-background);">   
+ <div class="channel-page" ">   
   
     <img src="https://t.poketube.fun/t/rep.gif" style="width: 0;visibility: hidden;display:none;" id="discover_main">
 
@@ -1152,9 +1152,11 @@ Privacy
  
       </div>
                                    </div>
-                                 
-              	<div class="video-grid" style="background-color: var(--app-background);">
-
+          
+              	<div class="video-grid" style="background-color: var(--app-background);margin-top: -4em;">
+                     <span style="margin-bottom: -8em;margin-top: 8px;">
+                         <%=j.Search.estimatedResults.toLocaleString()%> Results (estimated)
+ </span>
        <% j.Search.Results.Video.forEach(x => { %>
 
      		<a href="/watch?v=<%- x.id %>"  class="video">

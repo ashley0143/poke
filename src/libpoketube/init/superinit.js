@@ -63,8 +63,8 @@ function init(app, config, rendertemplate) {
       initlog("Loaded pages - initing poketube finnished :3");
 
       setTimeout(function () {
-        setInterval(function () {
-          /* PokeTube Update daemon - checks for updates in poketube */
+        /*   setInterval(function () {
+        PokeTube Update daemon - checks for updates in poketube
           (async () => {
             const url = `https://poketube.fun/api/version.json?v=3`;
 
@@ -83,13 +83,14 @@ function init(app, config, rendertemplate) {
               );
             }
           })();
-        }, 99999); /* setInterval */
-      }, 10000);
+        }, 999999999999999999999999999999); /* setInterval */
+          
+      }, 1000);
     } catch (err) {
       initlog("[FAILED] Load pages \n" + err);
       console.error(err);
     }
-  }, 10000);
+  }, 1000);
 }
 
 module.exports = {

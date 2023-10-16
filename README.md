@@ -5,7 +5,7 @@
 </h1>
 <div align="center">
 
-[Welcome!](#welcome)&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;[No None-free codec needed](#no-non-free-codec-needed-3)&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;[Hosting Poketube~](#hosting-poketube)&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;[PokeTube community!](#poketube-community)&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;[The Legal Stuff (boring tbh)](#the-legal-stuff-boring-tbh)
+[Welcome!](#welcome)&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;[No non-free codec needed](#no-non-free-codec-needed-3)&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;[Hosting Poketube~](#hosting-poketube)&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;[PokeTube community!](#poketube-community)&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;[The Legal Stuff (boring tbh)](#the-legal-stuff-boring-tbh)
 
 <a href="https://tosdr.org/en/service/7114">
    <img src="https://shields.tosdr.org/en_7114.svg"/>

@@ -873,7 +873,7 @@ display: block; !important;" autoplay controls
          <% }) %>   
                                                                                                        <% } %>                     
      <%  if (!Array.isArray( inv_vid.captions)) { %> 
-     <track src="/api/subtitles?v=<%=inv_vid.videoId%>&h=<%=   %>" label="<%=  video.Subtitles.Subtitle.language.replace("United States","Simplified - USA") %>" kind="subtitles">      
+     <track src="/api/subtitles?v=<%=inv_vid.videoId%>&h=<%= %>" label="<%=  video.Subtitles.Subtitle.language.replace("United States","Simplified - USA") %>" kind="subtitles">      
      
         <img loading="lazy" src="https://t.poketube.fun/t/rep.gif?v=<%=btoa(inv_vid.videoId)%>&h=<%= video.Subtitles.Subtitle.language %>" id="subtitle_usage_rate" style="border:0;width: 0;visibility: hidden;"> 
             
@@ -1951,14 +1951,20 @@ window.addEventListener("unload", cleanup)
  <% } %> <!-- close the } -->
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <link href=/css/yt-ukraine.svg?v=6 rel=icon>
-<title> <%=inv_vid.title%> - PokeTube Mobile</title>
+<title> <%=inv_vid.title%> | PokeTube Mobile</title>
  <link href="/css/mobile.css?v=<%=btoa(Date.now())%>" rel=stylesheet>
  <link href="/css/app.main.css?v=<%=btoa(Date.now())%>" rel=stylesheet>
     <link href=https://p.poketube.fun/https://unpkg.com/ionicons@4.5.10-0/dist/css/ionicons.css rel=stylesheet>
-  <link href="https://fonts.poketube.fun/css/fonts.css" rel=stylesheet>
 
     <link href=https://p.poketube.fun/https://site-assets.fontawesome.com/releases/v6.1.1/css/all.css rel=stylesheet>
 <style>
+  
+  a[data-onclick="jump_to_time"] {
+  background: linear-gradient(to right, #8a2387, #e94057, #f27121);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+  
    a.class:hover {
     text-decoration:underline;
     font-weight:bold
@@ -2061,15 +2067,20 @@ a {
 
             
                 
-            
-               <%  if (Array.isArray( video?.Subtitles?.Subtitle)) { %> 
-
-    <% if (  video?.Subtitles?.Subtitle) { %>  
-
-   <% video.Subtitles?.Subtitle?.forEach(x => { %><track src="/api/subtitles?v=<%=inv_vid.videoId%>&h=<%= x.language %>" label="<%= x.language %>" kind="subtitles">                                                             
+               <%  if (Array.isArray( inv_vid.captions)) { %> 
+   <% inv_vid.captions?.forEach(x => { %>
+     <track src="/api/subtitles?v=<%=inv_vid.videoId%>&h=<%= x.label %>" label="<%= x.label.replace("United States","Simplified - USA") %>" kind="subtitles">      
+     
+        <img src="https://t.poketube.fun/t/rep.gif?v=<%=btoa(inv_vid.videoId)%>&h=<%= x.label %>" id="subtitle_usage_rate" style="border:0;width: 0;visibility: hidden;"> 
          <% }) %>   
-                                                                                                       <% } %>               
-                                                           <% } %>                
+                                                                                                       <% } %>                     
+     <%  if (!Array.isArray( inv_vid.captions)) { %> 
+     <track src="/api/subtitles?v=<%=inv_vid.videoId%>&h=<%=   %>" label="<%=  video.Subtitles.Subtitle.language.replace("United States","Simplified - USA") %>" kind="subtitles">      
+     
+        <img loading="lazy" src="https://t.poketube.fun/t/rep.gif?v=<%=btoa(inv_vid.videoId)%>&h=<%= video.Subtitles.Subtitle.language %>" id="subtitle_usage_rate" style="border:0;width: 0;visibility: hidden;"> 
+            
+                                                           <% } %>         
+                                                     
  					</video>
                                                  
  		</div>
@@ -2760,6 +2771,38 @@ More Epic options owo~
 <script>
 // @license magnet:?xt=urn:btih:1f739d935676111cfff4b4693e3816e664797050&dn=gpl-3.0.txt GPL-3.0-or-later  
   
+function jumpToTime(e) {
+  e.preventDefault();
+  
+  const link = e.target;
+  const video = document.getElementById('video');
+  const time = link.dataset.jumpTime;
+  
+  video.currentTime = time;
+
+  window.location.hash = 'top'; // Add #video to the URL
+
+  setTimeout(() => {
+    history.replaceState(null, null, ' '); // Remove #video after 1 second
+  }, 250);
+}
+
+
+// Handle click events for time-based links
+const timeLinks = document.querySelectorAll('a[data-onclick="jump_to_time"]');
+timeLinks.forEach(link => {
+  const href = link.getAttribute('href');
+  if (link.dataset.jumpTime && href && href.includes('&t=')) {
+    const params = new URLSearchParams(href.split('?')[1]);
+    const time = params.get('t');
+    if (time) {
+      link.dataset.jumpTime = time;
+      link.addEventListener('click', jumpToTime);
+      link.removeAttribute('href');
+    }
+  }
+});
+
 // Function to check and toggle visibility of elements
 function checkAndToggleRecommended() {
   const descContainerPresent = window.location.href.includes("#desc-container");

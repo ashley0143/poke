@@ -23,11 +23,13 @@ function init(app, config, rendertemplate) {
 
   initlog("wait a few mins... pt on timeout rn");
 
+ 
   app.get("/*", function (req, res, next) {
     if (didstart) return next();
 
     return rendertemplate(res, req, "timeout.ejs");
   });
+
 
   setTimeout(function () {
     didstart = true;
@@ -81,13 +83,13 @@ function init(app, config, rendertemplate) {
               );
             }
           })();
-        }, 1580000); /* setInterval */
-      }, 30000);
+        }, 99999); /* setInterval */
+      }, 10000);
     } catch (err) {
       initlog("[FAILED] Load pages \n" + err);
       console.error(err);
     }
-  }, 30000);
+  }, 10000);
 }
 
 module.exports = {

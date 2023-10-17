@@ -63,7 +63,11 @@ module.exports = function (app, config, renderTemplate) {
 
   app.get("/search", async (req, res) => {
     const query = req.query.query;
-
+    const tab = req.query.tab
+    
+    const search = require('google-it')
+     
+    
     var uaos = req.useragent.os;
     var IsOldWindows;
 
@@ -112,15 +116,22 @@ module.exports = function (app, config, renderTemplate) {
       let didYouMean;
       if ( searchJson.Search?.Results?.DynamicItem?.id === "didYouMeanRenderer"  ) {    didYouMean = JSON.parse(searchJson.Search.Results.DynamicItem.Title);
       }
-
-      renderTemplate(res, req, "search.ejs", {
+      
+  search({'query': `${req.query.query}`}).then(results => {
+     renderTemplate(res, req, "search.ejs", {
         j: searchJson,
         IsOldWindows,
         h: didYouMean,
+        tab,
         continuation,
+        results:results,
         q: query,
         summary: "",
       });
+     }).catch(e => {
+  console.log(e)
+})
+     
     } catch (error) {
       console.error(`Error while searching for '${query}':`, error);
       res.redirect("/");

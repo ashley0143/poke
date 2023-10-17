@@ -192,6 +192,12 @@ text-rendering: auto;
 .video:hover{
 border:solid;
 }                  
+ .tabs {
+	 display: table;
+   font-family:inter;
+	 border-collapse: separate;
+	 table-layout: auto;
+}
  .tabs.tabs-center {
 	 margin: auto;
 }
@@ -212,8 +218,6 @@ border:solid;
  .tabs a.tab:hover {
 	 color: #3cb4fa;
 }
- 
-
  .tabs a.tab:after {
 	 transition: all 0.3s cubic-bezier(1, 0, 0, 1);
 	 will-change: transform, box-shadow, opacity;
@@ -236,20 +240,7 @@ border:solid;
 	 opacity: 1;
 	 transform: scale(1, 1);
 }                 
-         
-  .loading {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.7);
-  z-index: 9999;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
+       
 .loading .spinner {
   display: inline-block;
   border: 5px solid rgba(255, 255, 255, 0.2);
@@ -376,9 +367,24 @@ video[counter].classList.add("shake");
     
        </div>
   <div class="channel-page"   style="background-color: var(--channel-contents-background);">   
-  
-         
-  
+          
+       <div class="tabs  tabs-center">
+                         <%  if (tab) { %> 
+<a href="/search?query=<%=q%>" class="tab">Videos</a>
+
+<a class="tab active">Web</a>
+                                                                       <% } %>        
+                                                                                                  <%  if (!tab) { %> 
+<a class="tab active">Videos</a>
+
+<a href="/search?query=<%=q%>&tab=web" class="tab">Web</a>
+                                                                       <% } %>        
+                                                                         
+                                                                         
+
+    </div>
+                <%  if (!tab) { %> 
+
             <%  if (Array.isArray( j.Search.Results.Video)) { %> 
                    <center>
                           <% if (j.Search.Results.DynamicItem) { %> 
@@ -548,7 +554,22 @@ font-weight: 1000;
                                    <% } %>   
                                                       </center>
 
+                                                <% } %>  
 
+                                                              <%  if (tab === "web") { %>
+                                                                         <div class="video-list" >
+
+     <% results.forEach(x => { %>
+                                                                       <div class="video" style="height: 6em;">
+
+        <a style="min-width: 81em;" href="<%= x.link %>"><%= x.title %></a><br>
+        <p style="color:gray;display: flex;flex-direction: column;width: 48em;margin-top: -8em;"><%= x.link %><br>
+         <span style="color:white;width: 48em;display: flex;"><%= x.snippet %></span>
+          </p>
+              </div>
+
+             <% }) %>
+                                                <% } %>  
 
         </a>
         </div>

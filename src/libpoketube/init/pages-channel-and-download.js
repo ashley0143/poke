@@ -31,11 +31,11 @@ function getJson(str) {
 }
 
 const ChannelTabs = {
-        community: "Y29tbXVuaXR5",
-        shorts:"c2hvcnRz",
-        videos:"dmlkZW9z",
-        streams:"c3RyZWFtcw=="
-  }
+  community: "Y29tbXVuaXR5",
+  shorts: "c2hvcnRz",
+  videos: "dmlkZW9z",
+  streams: "c3RyZWFtcw==",
+};
 
 module.exports = function (app, config, renderTemplate) {
   app.get("/download", async function (req, res) {
@@ -63,11 +63,10 @@ module.exports = function (app, config, renderTemplate) {
 
   app.get("/search", async (req, res) => {
     const query = req.query.query;
-    const tab = req.query.tab
-    
-    const search = require('google-it')
-     
-    
+    const tab = req.query.tab;
+
+    const search = require("google-it");
+
     var uaos = req.useragent.os;
     var IsOldWindows;
 
@@ -114,24 +113,41 @@ module.exports = function (app, config, renderTemplate) {
       const searchJson = getJson(searchText);
 
       let didYouMean;
-      if ( searchJson.Search?.Results?.DynamicItem?.id === "didYouMeanRenderer"  ) {    didYouMean = JSON.parse(searchJson.Search.Results.DynamicItem.Title);
+      if (
+        searchJson.Search?.Results?.DynamicItem?.id === "didYouMeanRenderer"
+      ) {
+        didYouMean = JSON.parse(searchJson.Search.Results.DynamicItem.Title);
       }
-      
-  search({'query': `${req.query.query}`}).then(results => {
-     renderTemplate(res, req, "search.ejs", {
-        j: searchJson,
-        IsOldWindows,
-        h: didYouMean,
-        tab,
-        continuation,
-        results:results,
-        q: query,
-        summary: "",
-      });
-     }).catch(e => {
-  console.log(e)
-})
-     
+
+      if (tab) {
+        search({ query: `${req.query.query}` })
+          .then((results) => {
+            renderTemplate(res, req, "search.ejs", {
+              j: searchJson,
+              IsOldWindows,
+              h: didYouMean,
+              tab,
+              continuation,
+              results: results,
+              q: query,
+              summary: "",
+            });
+          })
+          .catch((e) => {
+            console.log(e);
+          });
+      } else {
+        renderTemplate(res, req, "search.ejs", {
+          j: searchJson,
+          IsOldWindows,
+          h: didYouMean,
+          tab,
+          continuation,
+          results: "",
+          q: query,
+          summary: "",
+        });
+      }
     } catch (error) {
       console.error(`Error while searching for '${query}':`, error);
       res.redirect("/");
@@ -174,14 +190,21 @@ module.exports = function (app, config, renderTemplate) {
           return null;
         }
       };
-      
-   
+
       const apiUrl = "https://invid-api.poketube.fun/api/v1/channels/";
-      const channelUrl = `${apiUrl}${atob(ChannelTabs.videos)}/${ID}/?sort_by=${sort_by}${continuation}`;
-      const shortsUrl = `${apiUrl}${ID}/${atob(ChannelTabs.shorts)}?sort_by=${sort_by}${continuations}`;
-      const streamUrl = `${apiUrl}${ID}/${atob(ChannelTabs.streams)}?sort_by=${sort_by}${continuationl}`;
-      const communityUrl = `${apiUrl}${atob(ChannelTabs.community)}/${ID}/?hl=en-US`;
-      
+      const channelUrl = `${apiUrl}${atob(
+        ChannelTabs.videos
+      )}/${ID}/?sort_by=${sort_by}${continuation}`;
+      const shortsUrl = `${apiUrl}${ID}/${atob(
+        ChannelTabs.shorts
+      )}?sort_by=${sort_by}${continuations}`;
+      const streamUrl = `${apiUrl}${ID}/${atob(
+        ChannelTabs.streams
+      )}?sort_by=${sort_by}${continuationl}`;
+      const communityUrl = `${apiUrl}${atob(
+        ChannelTabs.community
+      )}/${ID}/?hl=en-US`;
+
       const channelINVUrl = `${apiUrl}${ID}/`;
 
       var [tj, shorts, stream, c, cinv] = await Promise.all([
@@ -210,7 +233,10 @@ module.exports = function (app, config, renderTemplate) {
 
       const subscribers = boutJson.Channel?.Metadata.Subscribers;
       const about = boutJson?.Channel?.Contents?.ItemSection?.About;
-      const description = about?.Description.toString().replace(/\n/g, " <br> ");
+      const description = about?.Description.toString().replace(
+        /\n/g,
+        " <br> "
+      );
       const dnoreplace = about?.Description.toString();
 
       renderTemplate(res, req, "channel.ejs", {

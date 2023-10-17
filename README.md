@@ -11,6 +11,7 @@
    <img src="https://shields.tosdr.org/en_7114.svg"/>
 </a>
 <img src="https://raw.githubusercontent.com/vshymanskyy/StandWithUkraine/main/badges/StandWithUkraine.svg">
+
 <a href="./LICENSE"><img src="https://img.shields.io/badge/License-GPL--3-FF6666" alt="License - GPL-3"></a>
 
 </div>
@@ -86,6 +87,8 @@ TL;DR: we dont collect or share your personal info, that's it lol.
 We additionally use the GNU Coding Standard, see [this link.](https://www.gnu.org/prep/standards)
 
 <div>
-<h3> poketube.fun is proudly hosted on glitch.com since <i>2020</i> </h3>
- <a href="https://glitch.com/"><img src="https://cdn.glitch.global/d68d17bb-f2c0-4bc3-993f-50902734f652/glitch-fastly-lock-up.svg?v=1696671148266"></a>
+<h3>some parts of poketube.fun is proudly hosted on glitch.com since <i>2020</i> </h3>
+ <a href="https://glitch.com/"><img src="https://cdn.glitch.global/d68d17bb-f2c0-4bc3-993f-50902734f652/glitch-fastly-lock-up.svg?v=1696671148266"></a><br><hr>
+<a href="https://gnu.org/not-open-source"><img width="200" src="https://autumn.revolt.chat/attachments/eNpfwV2C1_wudONe43YCvWr-4vbvLpG78HbuXgOYfO"></a>
 </div>
+

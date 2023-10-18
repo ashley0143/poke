@@ -119,35 +119,74 @@ module.exports = function (app, config, renderTemplate) {
         didYouMean = JSON.parse(searchJson.Search.Results.DynamicItem.Title);
       }
 
-      if (tab) {
-        search({ query: `${req.query.query}` })
-          .then((results) => {
-            renderTemplate(res, req, "search.ejs", {
-              j: searchJson,
-              IsOldWindows,
-              h: didYouMean,
-              tab,
-              continuation,
-              results: results,
-              q: query,
-              summary: "",
-            });
-          })
-          .catch((e) => {
-            console.log(e);
-          });
-      } else {
-        renderTemplate(res, req, "search.ejs", {
-          j: searchJson,
+      renderTemplate(res, req, "search.ejs", {
+        j: searchJson,
+        IsOldWindows,
+        h: didYouMean,
+        tab,
+        continuation,
+        results: "",
+        q: query,
+        summary: "",
+      });
+    } catch (error) {
+      console.error(`Error while searching for '${query}':`, error);
+      res.redirect("/");
+    }
+  });
+
+  app.get("/web", async (req, res) => {
+    const query = req.query.query;
+    const tab = req.query.tab;
+
+    const search = require("google-it");
+
+    var uaos = req.useragent.os;
+    var IsOldWindows;
+
+    if (uaos == "Windows 7" && req.useragent.browser == "Firefox") {
+      IsOldWindows = true;
+    } else if (uaos == "Windows 8" && req.useragent.browser == "Firefox") {
+      IsOldWindows = true;
+    } else {
+      IsOldWindows = false;
+    }
+
+    const poketube_universe_value = "poketube_smart_search";
+
+    if (query?.includes("youtube.com/watch?v=")) {
+      try {
+        var videoid = query?.split("v=");
+
+        res.redirect("/watch?v=" + videoid[1]);
+      } catch {
+        return;
+      }
+    }
+
+    if (query && query.startsWith("!") && query.length > 2) {
+      res.redirect("https://lite.duckduckgo.com/lite/?q=" + query);
+    }
+
+    if (!query) {
+      return res.redirect("/");
+    }
+
+    let continuation = req.query.continuation || "";
+
+    try {
+      search({ query: `${req.query.query}` }).then((results) => {
+        renderTemplate(res, req, "search-web.ejs", {
+          j: "",
           IsOldWindows,
-          h: didYouMean,
+          h: "",
           tab,
           continuation,
-          results: "",
+          results: results,
           q: query,
           summary: "",
         });
-      }
+      });
     } catch (error) {
       console.error(`Error while searching for '${query}':`, error);
       res.redirect("/");

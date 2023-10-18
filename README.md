@@ -29,7 +29,7 @@ This is the source code of PokeTube, the privacy-friendly youtube front-end buil
 
 ## Written by humans - not gpt
 poketube is made by hard-working hoomans - not gpt :3<br>
-<a href="https://notbyai.fyi"><img src="https://cdn.glitch.global/d68d17bb-f2c0-4bc3-993f-50902734f652/Written-By-Human-Not-By-AI-Badge-white.svg?v=1696672202901" alt="Written by Human, Not by AI"></a>
+<a href="https://notbyai.fyi"><img src="https://cdn.glitch.global/d68d17bb-f2c0-4bc3-993f-50902734f652/Written-By-Human-Not-By-AI-Badge-white.svg?v=1696672202901" alt="Written by Humanss, Not by AI"></a>
 
 ## No Non-free codec needed :3
 

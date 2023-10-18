@@ -1,0 +1,398 @@
+ <!--
+    This Source Code Form is subject to the terms of the GNU General Public License:
+
+    Copyright (C) 2021-2023 POKETUBE (https://codeberg.org/Ashley/poketube)
+    
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program. If not, see https://www.gnu.org/licenses/.
+-->
+<!DOCTYPE html>
+<head>
+<head>
+<title>Searching <%=q%> - PokeTube</title>
+<link rel="manifest" href="/manifest.json">
+  <link href=/css/yt-ukraine.svg?v=6 rel=icon>
+   <link href="https://fonts.poketube.fun/css/fonts.css" rel=stylesheet>
+<link href=/css/app-cdn.min.css rel=stylesheet>
+<link href=/css/app.main.css rel=stylesheet>
+<link href=/css/search.main.css rel=stylesheet> 
+ <link href=/css/watch.main.css rel=stylesheet>
+<link rel="search" type="application/opensearchdescription+xml" title="PokeTube" href="https://poketube.fun/api/opensearch" />
+  <meta content="Searching <%=q%> - PokeTube" property=og:title>
+       <% if (q == "do the harlem shake") { %>  
+             <meta content="DO THE HARLEM SHAKE" property=twitter:description>
+   <% } %> 
+          <meta content="Ur Searching <%=q%> on PokeTube!" property=twitter:description>
+    
+
+
+    <meta content="https://cdn.glitch.global/43b6691a-c8db-41d4-921c-8cf6aa0d9108/17a7fa1d-cdf9-4b73-9686-21e62c7fb285.image.png?v=1667739586452" property=og:image>
+ <meta content=summary_large_image name=twitter:card>
+     <meta content="#1a1a1a" name="theme-color">
+<style>
+   a.class:hover {
+    text-decoration:underline;
+    font-weight:bold
+}
+  summary{
+    color:blue;
+}
+summary:hover{
+    color:red;
+}
+  * {
+    color:#fff;
+   }
+      nav {
+        background:#111111
+    }
+  
+  
+ 
+</style>    
+
+  <link href=https://p.poketube.fun/https://site-assets.fontawesome.com/releases/v6.1.1/css/all.css rel=stylesheet>
+
+  <style>
+    
+    .info > div {
+      font-family:Ubuntu, sans-serif;
+    }
+       #fetch-spinner {
+  position: fixed;
+  top: 10px;
+  right: 10px;
+ z-index: 9999; 
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border-top: 2px solid #fff;
+  border-right: 2px solid #fff;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+#fetch-text {
+  position: fixed;
+  top: 10px;
+  right: 40px;
+  color: #fff;
+  font-weight: bold;
+  text-transform: uppercase;
+   z-index: 9999; 
+
+}
+
+.hide {
+  display: none;
+}
+
+   .app{
+    /* background-image:url("/css/head.svg"); */
+    background-size: cover;
+  background-repeat: no-repeat;
+   }
+      .shake  {
+  animation: linear infinite alternate;
+  animation-name: DOTHESHAKE;
+  animation-duration: 1.5s;
+}
+
+@-webkit-keyframes DOTHESHAKE {
+    0% {
+      left: 0;
+      transform: translateX(0);
+    }
+    100% {
+      left: 900%;
+      transform: translateX(-90%);
+    }
+}
+         
+   /* nice classname am i rigth */
+   .discover-some-bitches{
+     text-align: center;
+     width: 673px;
+     margin: auto;
+   }
+    
+    .shelf {
+          max-width: 51em;
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  row-gap: 16px;
+  padding: 16px;
+background: #111111;
+border: #333333 solid;
+border-radius: 19px;
+margin-top: 1em;
+    }
+    
+        @font-face {
+        font-family: 'Ginto Nord';
+        font-weight: 800;
+        src:url('https://p.poketube.fun/https://cdn.statically.io/gh/brecert/discord-quote-generator/main/Ginto-Nord-800.woff') format("woff");
+      }
+    
+.video-list > .video {
+  background: #111;
+  padding: 10px;
+  border-radius: 10px;
+  border: #333 solid;
+}
+  </style>
+                 <style>section p {
+ font-family:Whitney, Helvetica Neue, Helvetica, Arial, sans-serif;
+ font-weight:400;
+ color:#fff;
+ font-size:16px;
+ line-height:24px;
+ margin-top:12px
+}
+                   
+                   .wiki > p {
+  margin-top: -2em;
+}
+                   * {
+text-rendering: auto;
+                   }
+    
+.sticky-top {
+	 position: sticky;
+	 top: 0px;
+	 z-index: 999;
+}
+ .responsive {
+	 width: 100%;
+	 overflow-x: auto;
+}
+ .tabs {
+	 display: table;
+   font-family:inter;
+	 border-collapse: separate;
+	 table-layout: auto;
+}
+.video:hover{
+border:solid;
+}                  
+ .tabs {
+	 display: table;
+   font-family:inter;
+	 border-collapse: separate;
+	 table-layout: auto;
+}
+ .tabs.tabs-center {
+	 margin: auto;
+}
+ .tabs.tabs-justify {
+	 width: 100%;
+	 table-layout: fixed;
+}
+ .tabs a.tab {
+	 position: relative;
+	 display: table-cell;
+	 transition: all ease 0.3s;
+	 padding: 1em 1.6em;
+	 transform: translate3d(0, 0, 0);
+	 color: #fff;
+	 white-space: nowrap;
+	 cursor: pointer;
+}
+ .tabs a.tab:hover {
+	 color: #3cb4fa;
+}
+ .tabs a.tab:after {
+	 transition: all 0.3s cubic-bezier(1, 0, 0, 1);
+	 will-change: transform, box-shadow, opacity;
+	 position: absolute;
+	 content: '';
+	 height: 3px;
+	 bottom: 0px;
+	 left: 0px;
+	 right: 0px;
+	 border-radius: 3px 3px 0px 0px;
+	 background: #9fdafd;
+	 box-shadow: 0px 4px 10px 3px rgba(60, 180, 250, .15);
+	 opacity: 0;
+	 transform: scale(0, 1);
+}
+ .tabs a.tab.active {
+	 color: #fff;
+}
+ .tabs a.tab.active:after {
+	 opacity: 1;
+	 transform: scale(1, 1);
+}                 
+       
+.loading .spinner {
+  display: inline-block;
+  border: 5px solid rgba(255, 255, 255, 0.2);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: spin 1s ease-in-out infinite;
+  width: 50px;
+  height: 50px;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+                   .a {
+                     display:none;
+                   }
+                     </style>
+ </head>
+     
+                 <% if(IsOldWindows) { %>
+              <style>
+                .title.max-lines-2 {
+                  font-family:"Inter " !important;
+                }
+              </style>
+              
+                                                      		 	               <% } %>   
+
+
+  <body>
+  
+ 
+        <div class="app">
+   
+    <nav>
+             <div class=left>
+
+  <% if (q == "do the harlem shake") { %>  
+              <a class="shake" href="/143" style=font-family:Inter,sans-serif;color:#fff>  <img style="transform: scale(1.3);width:8.5em;display: block;margin-left: auto;margin-right: auto;" src="/css/logo.svg?v=5"></a>
+               <audio class="player" autoplay loop controls src="https://p.poketube.fun/https://tube.kuylar.dev/proxy/media/8vJiSSAMNWw/18?e=ca0ac04022e782540e1f2fe4d6c2994949f33184ccc07568b4b1d7c93dfebd28119cb7b9e8b5db12039ba553ed861736ca0ac04022e782540e1f2fe4d6c2994949f33184ccc07568b4b1d7c93dfebd28119cb7b9e8b5db12039ba553ed861736Piwikd74c7f459daf669799074a22bcf7d79bb66e03dbd9899a2089e0bee8ed383f0c3b928c4477a42208cbd69a77549e3451
+" style="display:none;"> 
+        <script>
+             // @license magnet:?xt=urn:btih:1f739d935676111cfff4b4693e3816e664797050&dn=gpl-3.0.txt GPL-3.0-or-later
+                   setTimeout(function () {
+                      const video = document.getElementsByClassName("video")
+                      for(var counter = 0; counter < video.length; counter++){
+video[counter].classList.add("shake");
+}
+                   }, 13700)
+               // @license-end
+                                     </script>
+   <% } %> 
+
+     <% if (q != "do the harlem shake") { %>  
+       
+               <% if (q != "want you gone") { %>  <% if (q != "portal 2 ending") { %>   <% if (q != "credits") { %>  <% if (q != "glados") { %>  
+
+     <% if (q != "something") { %>  
+
+              <a class="class" href="/143" style=font-family:Inter,sans-serif;color:#fff>  <img style="transform: scale(1.3);width:8.5em;display: block;margin-left: auto;margin-right: auto;" src="/css/logo.svg?v=5"></a>
+       
+       
+       
+     
+   <% } %> 
+        <% } %>     
+          <% } %> 
+
+   <% } %> 
+   <% } %> 
+
+        <% if (q == "want you gone" || q == "portal 2 ending" ||  q == "credits" || q == "glados ") { %>  
+            
+              <a class="class" href="/credits" style=font-family:Inter,sans-serif;color:#fff>  <img style="transform: scale(1.3);width:8.5em;display: block;margin-left: auto;margin-right: auto;" src="/css/logo-orng.svg?v=5"></a>
+          
+   <% } %> 
+     
+     
+          <% if (q == "something") { %>  
+              <a class="class" href="/143?something=143" style=font-family:Inter,sans-serif;color:#fff>  <img style="transform: scale(1.3);width:8.5em;display: block;margin-left: auto;margin-right: auto;" src="/css/logo.svg?v=5"></a>
+
+                    <% } %> 
+
+        <% } %> 
+
+     
+     
+            </div>          
+
+  
+        <div class="middle">
+<div class="search">
+  
+        <form action=/search><input class=search-bar autocomplete="on"  value="<%=q%>" id=fname name=query style="color:#fff;font-family:Inter,sans-serif;border-radius: 8px;">
+          <button class="btn btn-success" type=submit><i class="fa-light fa-search"></i></button>
+             
+         </form>
+          <img src="https://search-metrics.poketube.fun/t/rep.gif"  style="border:0;width: 0;visibility: hidden;"> 
+
+      </div>          </div>
+
+
+            <div class=right>
+              
+<button title="Play/Pause Ambient music" class="a" id="audioButton" onclick="toggleAudio()">
+  <i id="audioIcon" class="fas fa-pause"></i>
+</button>
+
+              <a href="/domains"><i  style="display: block;margin-left: auto;margin-right: auto;" class="fa-light fa-server"></i>  </a>
+              <a href="/privacy"><i class="fa-light fa-shield"></i></a>
+              <a href="/video/upload?from="><i class="fa-light fa-video"></i></a> 
+              <a href="https://codeberg.org/Ashley/poketube/issues"><i class="fa-light fa-bug"></i></a>
+            </div>
+     
+      </nav>
+  
+  
+   </div>
+      
+
+    
+       </div>
+  <div class="channel-page"   style="background-color: var(--channel-contents-background);">   
+          
+       <div class="tabs  tabs-center">
+ 
+         <a href="/search?query=<%=q%>" class="tab">Videos</a>
+
+<a class="tab active">Web</a>
+                                                                   
+
+    </div>
+                                                                          <div class="video-list" >
+
+     <% results.forEach(x => { %>
+                                                                       <div class="video" style="height: 6em;">
+
+        <a style="min-width: 81em;" href="<%= x.link %>"><%= x.title %></a><br>
+        <p style="color:gray;display: flex;flex-direction: column;width: 48em;margin-top: -8em;"><%= x.link %><br>
+         <span style="color:white;width: 48em;display: flex;"><%= x.snippet %></span>
+          </p>
+              </div>
+
+             <% }) %>
+ 
+        </a>
+        </div>
+                                    
+                 <script src="/css/custom-css.js"> </script>
+ 
+                                    </body>
+                              
+ 

@@ -346,9 +346,9 @@ background: none !important;
        </div>
        </div>
                                                             <br>
-<div class="video-info" >           
+<div class="video-info" style="border-radius:0em !important;">           
         	<div class="video-info-panel" style="border-radius:0em !important;">  
-            <div class="video-title" style="font-family:Inter;font-weight:bold;line-break: auto;max-width: max-content;margin: 0;margin-bottom: 0;padding: 0;" title="<%=inv_vid.title%>"><%=inv_vid.title%> </div>
+            <div class="video-title" style="font-family:Inter;font-weight:bold;line-break: auto;max-width: max-content;margin: 0;margin-bottom: 0;padding: 0;border-radius: 0px !important;" title="<%=inv_vid.title%>"><%=inv_vid.title%> </div>
           
           <a style="font-weight: bolder;font-family: sans-serif;color: #fff;font-size: small;"> <%=convert(engagement.viewCount)%> Views - By <%=k.Video.Channel.Name%></a>
    
@@ -402,7 +402,9 @@ background: none !important;
 
   <div class="video-title" style="color:#fff;font-family:'PokeTube Flex';font-weight:1000;font-stretch: extra-expanded;margin-top: 3px;margin-bottom: 10px;">Description</div>
  <hr style="clear: both;display: block;border: none;border-bottom: 0.5px solid #2f2f2f;/*! width: 4.5em; */height: 0;">
-  
+  <%=engagement.viewCount.toLocaleString()%> views - <%=date%> <br>
+    
+    
           <% if (String(inv_vid.descriptionHtml) != "undefined")  { %>
          <% if (String(inv_vid.descriptionHtml) != " ")  { %>
 
@@ -462,10 +464,7 @@ background: none !important;
           </div>
 					<div title="<%=engagement.dislikes.toLocaleString()%> Dislikes">
 <i class="fa-light fa-thumbs-down"></i> <%=convert(engagement.dislikes)%>
-					</div>
-
-         
-            <div>
+					</div>            <div>
 
 					<a title="Download this Video :3" style="color:#fff;text-decoration: none; " href="/download?v=<%=inv_vid.videoId%>">
             <i class="fa-light fa-download"></i>

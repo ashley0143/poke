@@ -2341,10 +2341,9 @@ font-size: 13px;margin:0;padding:0;white-space: nowrap;
   </div>
     </div>
 
-   
-              <div style="background:#272727;padding: 5px;border-radius: 11px;">
+                
+ <div style="background:#272727;padding: 5px;border-radius: 11px;">
               <%-String(channelurlfixer(inv_vid.descriptionHtml)).replace(/\n/g, " <br> ").replace(/twitter\.com/g, "nitter.net").replace(/reddit\.com/g, "teddit.net") %>
-</div>
                             
   <div style="margin: 10px;">
                     <div style="justify-content: center;display: flex;padding: 11px;font-family: Ginto nord;gap: 3px;background: #1f1f1f;border-top-left-radius: 10px;border-top-right-radius: 10px;">
@@ -2395,6 +2394,9 @@ Connections
                           </div>
                    
  			</div>
+  
+                </div>
+                  
   
  <%  if (Array.isArray(video?.Tags?.Tag)) { %> 
 

@@ -42,14 +42,14 @@ class PokeTubeDislikesAPIManager {
    */
 async _getEngagementData() {
   const apiUrl = `https://p.poketube.fun/api?v=${this.videoId}&hash=d0550b6e28c8f93533a569c314d5b4e2`;
-const fallbackUrl = `https://returnyoutubedislikeapi.com/votes?videoId=${this.videoId}`;
+const  fallbackUrl = `https://returnyoutubedislikeapi.com/votes?videoId=${this.videoId}`;
   
 const { fetch } = await import("undici");
 
 try {
   // Set a timeout of 2 seconds.
   const timeoutMilliseconds = 2000; // 2 seconds
-  var engagementP = await fetch(apiUrl, { timeout: timeoutMilliseconds })
+  var engagementP = await fetch(fallbackUrl, { timeout: timeoutMilliseconds })
     .then((res) => {
       if (res.statusCode === 504) {
         throw new Error("Request timed out.");
@@ -64,7 +64,7 @@ try {
   }
 } catch (error) {
   console.error(error);
-  var engagement = await fetch(fallbackUrl).then((res) => res.json());
+  var engagement = await fetch(apiUrl).then((res) => res.json());
   return engagement;
 }
 

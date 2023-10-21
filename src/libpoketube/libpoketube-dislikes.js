@@ -9,7 +9,7 @@
 /**
  * A class representing a PokeTube API instance for a specific video.
  */
-class PokeTubeDislikesAPIManager {
+class PokeTubeDislikesAPIManager  {
   /**
    * Creates a new PokeTube API instance for the given video ID.
    * @param {string} videoId - The ID of the YouTube video.
@@ -40,16 +40,17 @@ class PokeTubeDislikesAPIManager {
    * @returns {Promise<object|null>} A Promise that resolves with the engagement data, or null if an error occurs.
    * @private
    */
-async _getEngagementData() {
- const apiUrl = `https://returnyoutubedislikesapi.com/votes?v=${this.videoId}&hash=d0550b6e28c8f93533a569c314d5b4e2`;
-   
-const { fetch } = await import("undici");
-var engagementp = await fetch(apiUrl)
+  async _getEngagementData() {
+  var url = [`https://p.poketube.fun/api?v=${this.videoId}&hash=d0550b6e28c8f93533a569c314d5b4e2`, `https://returnyoutubedislikeapi.com/votes?videoId=${this.videoId}`]
+  const dislikes  =
+  url[Math.floor(Math.random() * url.length)];
 
-var engagement = await engagementp.json();
-    return engagement;
-}
-
+  
+   const { fetch } = await import("undici");
+    
+   const engagement = await fetch(dislikes).then((res) => res.json());
+  return engagement;
+  }
 
   /**
    * Retrieves data about the YouTube video and its engagement.
@@ -74,7 +75,7 @@ var engagement = await engagementp.json();
 }
 
 /*
-Returns basic data about a given YouTube video using PokeTubeDislikesAPIManager.
+Returns basic data about a given YouTube video using PokeTubeAPI.
 @async
 @function
 @param {string} videoId - The YouTube video ID to get data for.
@@ -84,7 +85,7 @@ Returns basic data about a given YouTube video using PokeTubeDislikesAPIManager.
 
 const getDislikesData = async (videoId) => {
   const pokeTubeAPI = new PokeTubeDislikesAPIManager(videoId);
-  return await PokeTubeDislikesAPIManager.getData();
+  return await pokeTubeAPI.getData();
 };
 
 module.exports = getDislikesData;

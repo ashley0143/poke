@@ -41,15 +41,13 @@ class PokeTubeDislikesAPIManager {
    * @private
    */
 async _getEngagementData() {
-  const apiUrl = `https://p.poketube.fun/api?v=${this.videoId}&hash=d0550b6e28c8f93533a569c314d5b4e2`;
-const  fallbackUrl = `https://returnyoutubedislikeapi.com/votes?videoId=${this.videoId}`;
+ const apiUrl = `https://p.poketube.fun/api?v=${this.videoId}&hash=d0550b6e28c8f93533a569c314d5b4e2`;
+const fallbackUrl = `https://returnyoutubedislikeapi.com/votes?videoId=${this.videoId}`;
   
 const { fetch } = await import("undici");
 
 try {
-  // Set a timeout of 2 seconds.
-  const timeoutMilliseconds = 2000; // 2 seconds
-  var engagementP = await fetch(fallbackUrl, { timeout: timeoutMilliseconds })
+  var engagementP = await fetch(apiUrl)
     .then((res) => {
       if (res.statusCode === 504) {
         throw new Error("Request timed out.");
@@ -60,12 +58,21 @@ try {
   if (typeof engagementP.dislikes === 'number') {
     return engagementP;
   } else {
-    throw new Error("API response doesn't contain valid dislikes count. Using fallback URL.");
+    throw new Error("API response doesn't contain valid dislikes count.");
   }
 } catch (error) {
   console.error(error);
-  var engagement = await fetch(apiUrl).then((res) => res.json());
-  return engagement;
+  
+  // Check the status of the fallback URL response.
+  var fallbackResponse = await fetch(fallbackUrl);
+  
+  if (fallbackResponse.statusCode === 200) {
+    var engagement = await fallbackResponse.json();
+    return engagement;
+  } else {
+    console.error("Fallback URL also failed. Returning error.");
+    throw new Error("Both API and fallback URL requests failed.");
+  }
 }
 
 

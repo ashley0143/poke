@@ -51,9 +51,6 @@ var engagement = await engagementp.json();
 }
 
 
-}
-
-
   /**
    * Retrieves data about the YouTube video and its engagement.
    * @returns {Promise<object>} A Promise that resolves with an object containing video and engagement data.

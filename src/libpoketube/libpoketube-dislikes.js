@@ -41,14 +41,11 @@ class PokeTubeDislikesAPIManager  {
    * @private
    */
   async _getEngagementData() {
-  var url = [`https://p.poketube.fun/api?v=${this.videoId}&hash=d0550b6e28c8f93533a569c314d5b4e2`, `https://returnyoutubedislikeapi.com/votes?videoId=${this.videoId}`]
-  const dislikes  =
-  url[Math.floor(Math.random() * url.length)];
-
+  const fallbackUrl = `https://returnyoutubedislikeapi.com/votes?videoId=${this.videoId}`;
   
    const { fetch } = await import("undici");
     
-   const engagement = await fetch(dislikes).then((res) => res.json());
+   const engagement = await fetch(fallbackUrl).then((res) => res.json());
   return engagement;
   }
 

@@ -170,7 +170,7 @@ a.icon-button > img {
 }
 .app {
   grid-area: app;
-  background-color: var(--app-background);
+  background-color: "#000";
 }
 .noguide > .guide {
   display: none;

@@ -46,18 +46,14 @@ async _getEngagementData() {
   
     const { fetch } = await import("undici");
 
-    
-    try {
-      const engagement = await fetch(apiUrl).then((res) => res.json());
-      return engagement;
-    } catch {
-      try {
-        const engagement = await fetch(fallbackUrl).then((res) => res.json());
+      var engagementP = await fetch(apiUrl).then((res) => res.json());
+
+      if(!engagementP.dislikes) {
+         var engagement = await fetch(fallbackUrl).then((res) => res.json());
         return engagement;
-      } catch {
-        return null;
+      } else {
+       return engagementP;
       }
-    }
   }
 
 

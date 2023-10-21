@@ -41,7 +41,7 @@ class PokeTubeDislikesAPIManager {
    * @private
    */
 async _getEngagementData() {
- const apiUrl = `https://ipv6-t.poketube.fun/api?v=${this.videoId}&hash=d0550b6e28c8f93533a569c314d5b4e2`;
+ const apiUrl = `https://returnyoutubedislikesapi.com/votes?v=${this.videoId}&hash=d0550b6e28c8f93533a569c314d5b4e2`;
    
 const { fetch } = await import("undici");
 var engagementp = await fetch(apiUrl)

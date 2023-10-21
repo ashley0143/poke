@@ -41,13 +41,21 @@ class PokeTubeDislikesAPIManager {
    * @private
    */
 async _getEngagementData() {
- const apiUrl = `https://p.poketube.fun/api?v=${this.videoId}&hash=d0550b6e28c8f93533a569c314d5b4e2`;
+  const apiUrl = `https://p.poketube.fun/api?v=${this.videoId}&hash=d0550b6e28c8f93533a569c314d5b4e2`;
 const fallbackUrl = `https://returnyoutubedislikeapi.com/votes?videoId=${this.videoId}`;
   
 const { fetch } = await import("undici");
 
 try {
-  var engagementP = await fetch(apiUrl).then((res) => res.json());
+  // Set a timeout of 2 seconds.
+  const timeoutMilliseconds = 2000; // 2 seconds
+  var engagementP = await fetch(apiUrl, { timeout: timeoutMilliseconds })
+    .then((res) => {
+      if (res.statusCode === 504) {
+        throw new Error("Request timed out.");
+      }
+      return res.json();
+    });
 
   if (typeof engagementP.dislikes === 'number') {
     return engagementP;
@@ -55,9 +63,11 @@ try {
     throw new Error("API response doesn't contain valid dislikes count. Using fallback URL.");
   }
 } catch (error) {
-   var engagement = await fetch(fallbackUrl).then((res) => res.json());
+  console.error(error);
+  var engagement = await fetch(fallbackUrl).then((res) => res.json());
   return engagement;
 }
+
 
 }
 

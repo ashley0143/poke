@@ -175,6 +175,7 @@ function fetchUrls(urls) {
   });
 }
 
+/*
 // Fetch channel URLs
 const channelUrls = document.querySelectorAll('a[href*="/channel?id="]');
 fetchUrls(channelUrls);
@@ -186,7 +187,7 @@ fetchUrls(downloadUrls);
 // fetch videos urls
 const urls = document.querySelectorAll('a[href*="/watch?v="]');
 fetchUrls(urls);
-
+*/ 
  var popupMenu = document.getElementById("popupMenu");
         var loopOption = document.getElementById("loopOption");
         var speedOption = document.getElementById("speedOption");

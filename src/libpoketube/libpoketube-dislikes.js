@@ -41,7 +41,7 @@ class PokeTubeDislikesAPIManager  {
    * @private
    */
   async _getEngagementData() {
-  const fallbackUrl = `https://p.poketube.fun/?api=${this.videoId}`;
+  const fallbackUrl = `https://p.poketube.fun/api?v=${this.videoId}`;
   
    const { fetch } = await import("undici");
     

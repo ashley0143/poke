@@ -47,12 +47,13 @@ module.exports = function (app, config, renderTemplate) {
         color: await modules
           .getColors(`https://i.ytimg.com/vi/${v}/maxresdefault.jpg`)
           .then((colors) => colors[0].hex()),
+           isMobile: req.useragent.isMobile,
       });
     } catch {
       res.redirect("/");
     }
   });
-
+  
   app.get("/old/watch", async function (req, res) {
     var v = req.query.v;
     var e = req.query.e;

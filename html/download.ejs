@@ -22,6 +22,8 @@
     <link href=/css/yt-ukraine.svg?v=6 rel=icon>
     <link rel="manifest" href="/manifest.json">
     <meta content=website property=og:type>
+      <meta name="viewport" content="width=device-1200px, initial-scale=1.0, shrink-to-fit=yes, viewport-fit=cover">
+
     <meta content="PokeTube - Video Downloader" property=og:title>
     <meta content="You wouldn't download a car... Right? welp i would - Download this video on PokeTube! for the price of 0$!" property=twitter:description>
     <meta content="https://i.ytimg.com/vi/<%=v%>/maxresdefault.jpg" property=og:image>
@@ -179,7 +181,8 @@ font-family:Ubuntu
  </head>
  
 <body>
- 
+   <% if (!isMobile) { %>
+
        <div class="app" style="background:linear-gradient(135deg, #820622 10%, #4e2e82 100%, #725965 100%);height: 67em;">      
 	   <nav>
        <div class=left><a class="class" href="/143" style=font-family:Inter,sans-serif;color:#fff><img style="transform: scale(1.3);padding-left:0.9em;width: 8.5em;display: block;margin-left: auto;margin-right: auto;" src="/css/logo.svg?v=5">  </a>                                                                                               </div>               
@@ -193,6 +196,8 @@ font-family:Ubuntu
       </div>
             <div class=right><a href="/privacy"><i class="fa-light fa-shield"></i></a><a href="/video/upload?from="><i class="fa-light fa-video"></i></a> <a href="https://codeberg.org/Ashley/poketube/"><i class="fab fa-git-alt"></i></a><a href="https://codeberg.org/Ashley/poketube/issues"><i class="fa-light fa-bug"></i></a></a></div>
         </nav>
+                                                                                          <% } %>          
+
 	   
  
       
@@ -203,8 +208,16 @@ font-family:Ubuntu
 <hr>
 
        <div>
-        <img src="https://i.ytimg.com/vi/<%=v%>/maxresdefault.jpg" style="height: 15em;border-radius: 1em;box-shadow: 0 0 4.4em <%=color%>;">
-        <div>
+       <% if (!isMobile) { %>
+  
+         <img src="https://i.ytimg.com/vi/<%=v%>/maxresdefault.jpg" style="height: 15em;border-radius: 1em;box-shadow: 0 0 4.4em <%=color%>;">
+                                                                                             <% } %>          
+       <% if (isMobile) { %>
+
+         <img src="https://i.ytimg.com/vi/<%=v%>/maxresdefault.jpg" style="height: 11.9em;border-radius: 1em;box-shadow: 0 0 4.4em <%=color%>;">
+                                                                                                     <% } %>          
+
+         <div>
          
 
           </div>
@@ -216,8 +229,15 @@ font-family:Ubuntu
         </p>
       	 <h2>Muxed formats</h2>
        
+           <% if (!isMobile) { %>
+
       <div class="download-format" style="background: black;margin: 6px;width: 25em;border-radius: 14px;/*! text-align: center; */"><div style="font-family:&quot;PokeTube flex&quot;;font-stretch: ultra-expanded;font-weight: 700;"> 
-            3GPP 
+                                                                                                 <% } %>          
+      <% if (isMobile) { %>
+
+      <div class="download-format" style="background: black;margin: 6px;border-radius: 14px;/*! text-align: center; */"><div style="font-family:&quot;PokeTube flex&quot;;font-stretch: ultra-expanded;font-weight: 700;"> 
+                                                                                                 <% } %> 
+        3GPP 
           </div>
 					<a style="color:#fff;font-family:Ubuntu" href="/api/video/download?v=<%=v%>&q=17">
             <i class="fa-light fa-download"></i>
@@ -247,7 +267,7 @@ font-family:Ubuntu
         
               <!-- ignore this -->
         <p style="visibility: hidden;">
-             we dont see the videos that you are downloading :P 
+ gfhefdhgrdfhdfshfgddfsfdgdfsds gfhefdhgrdfhdfshfgddfsfdgdfsds
           </p>
 		</div>
 	 

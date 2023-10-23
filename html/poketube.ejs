@@ -1986,7 +1986,10 @@ summary:hover{
 a {
   color: var(--text-link) 
 }
- 
+
+ .comment-mini:hover {
+       background:#3f3f3f !important;
+  }
 </style>
   
              <%  if (Array.isArray( !inv.comments)) { %> 
@@ -2235,17 +2238,17 @@ font-size: 13px;margin:0;padding:0;white-space: nowrap;
 
 -->
 				</div>
-       <%  if (Array.isArray( inv.comments)) { %> 
-<div style="padding: 0em;background: #0009;border-radius: 16px;align-self: center;align-items: center;margin-left: 8px;margin-right: 12px;padding-bottom: 0;padding-top:1em">
-            <div class="video-title" style="font-family:'PokeTube flex';font-weight:1000;white-space:yes;margin-top: -0.5em;margin-left: 0.4em;">Comments - <%- convert(inv.commentCount) %>
-                    <a id="language-button" href="#comments-container" style="float: right;margin-right: 0.5em;" class="switch">
-<i class="fa-thin fa-chevron-down"></i>
-</a> 
-                                                       </div> 
+      <%  if (Array.isArray( inv.comments)) { %> 
+
+<div class="comment-mini" style="padding: 0em;background: #0009;border-radius: 16px;align-self: center;align-items: center;margin-left: 8px;margin-right: 12px;padding-bottom: 0;padding-top:1em">
+                                <a id="language-button" href="#comments-container" style="" class="switch">
+
+  <div class="video-title" style="font-family:'PokeTube flex';font-weight:1000;white-space:yes;margin-top: -0.5em;margin-left: 0.8em;">Comments - <%- convert(inv.commentCount) %>
+                                                        </div> 
            <div class="" style="padding: 0em !important;margin-left: 0.3em;">
 
 <div class="desc" style="display: flex;font-size: small;padding: 0;margin: -10px;margin-left: -0.5em">
-                   <h5 style="display: flex;margin-top: 7px;padding-top: 10px;">
+                   <h5 style="display: flex;margin-top: 7px;padding-top: 10px;margin-left: 12px;">
                      <div class="thumb">
                      
                      <div class="thumb">
@@ -2257,18 +2260,20 @@ font-size: 13px;margin:0;padding:0;white-space: nowrap;
                            
 
               </h5>
-              <p class="comment" style="font-weight: bold;color: #fff; word-wrap: break-word; overflow: hidden; text-overflow: ellipsis; display: -webkit-box;  -webkit-line-clamp: 2; line-clamp: 2; -webkit-box-orient: vertical; text-overflow: ellipsis;  max-width: 50em;align-self:center;">
+              <p class="comment" style="font-weight: bold;color: #fff; word-wrap: break-word; overflow: hidden; text-overflow: ellipsis; display: -webkit-box;  -webkit-line-clamp: 2; line-clamp: 2; -webkit-box-orient: vertical; text-overflow: ellipsis;  max-width: 19em;align-self:center;">
                 <%-  inv.comments[0].contentHtml %>  
                </p>
             </div>
     
       </div>
-                          
+            </a> 
+               
           </div>
 
  
- 
+
                                                                                                <% } %>   
+       
        
           </div>
 

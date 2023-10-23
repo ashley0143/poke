@@ -863,36 +863,7 @@ summary:hover{
 	 overflow-x: auto;
 }
     
-.tabs.rec {
-  font-weight: 600;
-  font-stretch: expanded;
-  overflow:hidden;
-  width: auto;
-  max-width: fit-content;
-  margin-right: auto;
-  padding-left: 1.5em;
-  margin-top: 7px;
-  display: flex;
-  gap: 3px;
-}
-
-.tags.rec:hover{
-  overflow-x:auto;
-}
-
-.tags.rec > .tag {
-  border-radius: 8px;
-}
-
-.tabs {
-  background: #333;
-  padding: 5px;
-  border-radius: 4px;
-    border-radius: 8px;
-  word-break: break-all;
-  white-space: nowrap;
-  font-family: ubuntu, sans-serif;
-}
+ 
            </style>
                      
   
@@ -1014,14 +985,80 @@ padding: 3px;
    }
    #more-buttons span { display: block; }
    #more-buttons span a { display: inline-block; }
-  
+   .tabs {
+display: table;
+  font-family: poketube flex;
+  border-collapse: separate;
+  table-layout: auto;
+  font-weight: 800;
+  font-stretch: extra-expanded;
+  border-spacing: 3px;
+}
+ .tabs.tabs-center {
+margin-left: auto;
+  background: #000;
+  border-radius: 1em;
+  margin-bottom: 45px;
+  margin-right: auto;
+}                 
+                     
+ .tabs.tabs-justify {
+	 width: 100%;
+	 table-layout: fixed;
+}
+                      
+                      
+.tab.active {
+  background: #1a1a1a !important;
+  border-radius: 1em !important;
+}
+                      
+ .tabs a.tab {
+	 position: relative;
+	 display: table-cell;
+	 transition: all ease 0.3s;
+	 padding: 1em 1.6em;
+	 transform: translate3d(0, 0, 0);
+	 color: #fff;
+	 white-space: nowrap;
+	 cursor: pointer;
+}
+ .tabs a.tab:hover {
+	 color: #3cb4fa;
+}
+ .tabs a.tab:after {
+	 transition: all 0.3s cubic-bezier(1, 0, 0, 1);
+	 will-change: transform, box-shadow, opacity;
+	 position: absolute;
+	 content: '';
+	 height: 3px;
+	 bottom: 0px;
+	 left: 0px;
+	 right: 0px;
+	 border-radius: 3px 3px 0px 0px;
+  	 opacity: 0;
+	 transform: scale(0, 1);
+}
+ .tabs a.tab.active {
+	 color: #fff;
+}
+ .tabs a.tab.active:after {
+	 opacity: 1;
+	 transform: scale(1, 1);
+}                 
+                
+           
+.tab:hover {
+  background: var(--not-quite-black);
+  text-decoration: none;
+  border-radius: 1em;
+}  
 </style>                
  
   <body>
 
  <div class="app" >
-    <div class="app">
-       <nav>
+        <nav>
  
       <div class=left><a class="class" href="/" style=font-family:Inter,sans-serif;color:#fff> <img style="width: 8.5em;display: block;margin-left: auto;margin-right: auto;" src="/css/logo-mobile.svg">      </a>
              </div>
@@ -1029,8 +1066,7 @@ padding: 3px;
   
      
             <div class=right>
-          
- 
+                <a href="?tab=search"><i class="fa-light fa-search"></i></a> 
             </div>
      
       </nav>
@@ -1039,7 +1075,7 @@ padding: 3px;
      
 
                            </div>
- <div class="channel-page" ">   
+ <div class="channel-page" style="background: #0f0f0f;">   
   
     <img src="https://t.poketube.fun/t/rep.gif" style="width: 0;visibility: hidden;display:none;" id="discover_main">
 
@@ -1049,11 +1085,34 @@ padding: 3px;
  
           <hr style="clear: both;display: block;border: none;border-bottom: 0.5px solid #2f2f2f;margin: 0 0;/*! width: 4.5em; */height: 0;">      
  
- 
-                                                                   <% if (!tab || tab == "music"   ) { %>
-                                                                   <% if (!mobilesearch) { %>
+                                                                    <% if (!mobilesearch) { %>
 
     	<div class="video-grid">
+        
+        
+   <% if (!tab) { %> 
+
+<div class="tabs tabs-center" style="margin: 0px;">
+            
+                <a href="?tab=popular" class="tab">Popular</a>
+                                    
+                <a class="tab active">Trends</a>
+ 
+
+            </div>    
+           		 	               <% } %>   
+  <% if (tab === "popular") { %> 
+
+<div class="tabs tabs-center" style="margin: 0px;">
+            
+              
+                <a class="tab active">Popular</a>
+                                    
+                <a href="/app" class="tab Activw">Trends</a>
+    </div>
+                                                      		 	               <% } %>   
+                                <% if (!tab) { %> 
+                                               
    <% inv.forEach(x =>  { %>
 			<a href="/watch?v=<%- x.videoId %>"  class="video">
 				<div class="thumbnail" style="background-image: url('https://p.poketube.fun/https://i.ytimg.com/vi/<%= x.videoId %>/hqdefault.jpg?sqp=-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLBy_x4UUHLNDZtJtH0PXeQGoRFTgw');border-top-left-radius: 16px;border-top-right-radius: 16px;"><span class="video-length"><%- turntomins(x.lengthSeconds) %></span></div>
@@ -1064,7 +1123,22 @@ padding: 3px;
              </div>
 
  			</a>	 		 	               <% }) %>   
+                                                      		 	               <% } %>   
+ <% if (tab === "popular") { %> 
+                                               
+   <% p.forEach(x =>  { %>
+			<a href="/watch?v=<%- x.videoId %>"  class="video">
+				<div class="thumbnail" style="background-image: url('https://p.poketube.fun/https://i.ytimg.com/vi/<%= x.videoId %>/hqdefault.jpg?sqp=-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLBy_x4UUHLNDZtJtH0PXeQGoRFTgw');border-top-left-radius: 16px;border-top-right-radius: 16px;"><span class="video-length"><%- turntomins(x.lengthSeconds) %></span></div>
+				<div class="info">
+					<span class="title max-lines-2" title="<%- x.title %>" style="font-family:Inter,sans-serif;"><%- x.title %></span>
+            					<span class="title max-lines-2" title="Video By <%- x.author %>" style="margin-top:1px">By <%- x.author %></span>
 
+             </div>
+
+ 			</a>	 		 	               <% }) %>   
+                                                      		 	               <% } %>   
+
+        
                            <div id="more-button-container">
   
  <div class="backtotop">
@@ -1113,12 +1187,12 @@ Privacy
                                         </div>
 
            		 	               <% } %>   
-                                                 		 	               <% } %>   
+                                                                        </div>
 
-
-                                   </div>
-                     		 	                                         <% if (tab == "search") { %> 
-
+                                  
+                                          
+                      		 	                                         <% if (tab == "search") { %> 
+ <a href="/app"><-- </a><br>
                                                                      <span>
  Search morbillion amount of videos from poketube !! 
                                                                      </span>

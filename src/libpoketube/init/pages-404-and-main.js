@@ -45,6 +45,11 @@ module.exports = function (app, config, renderTemplate) {
     );
     const t = getJson(await invtrend.text());
 
+    const invpopular = await fetch(
+      `https://invid-api.poketube.fun/api/v1/popular`
+    );
+    const p = getJson(await invpopular.text());
+
     let j = null;
     if (req.query.mobilesearch) {
       const query = req.query.mobilesearch;
@@ -59,6 +64,7 @@ module.exports = function (app, config, renderTemplate) {
     renderTemplate(res, req, "discover.ejs", {
       tab: req.query.tab,
       isMobile: req.useragent.isMobile,
+      p,
       mobilesearch: req.query.mobilesearch,
       inv: t,
       turntomins,
@@ -74,7 +80,7 @@ module.exports = function (app, config, renderTemplate) {
 
     const rendermainpage = () => {
       if (req.useragent.isMobile) {
-        return res.redirect("/app?tab=search");
+        return res.redirect("/app");
       }
 
       return renderTemplate(res, req, "landing.ejs", {

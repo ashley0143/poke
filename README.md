@@ -18,14 +18,28 @@
 
 ## Welcome!
 
-This is the source code of PokeTube, the privacy-friendly youtube front-end built with the InnerTube API ([Docs](https://docs.poketube.fun)) that's packed with some pretty cool stuff including:
+This is the source code of PokeTube, the privacy-friendly youtube front-end built with the InnerTube API!
 
-- ZERO ads
-- Lyrics to songs
-- A clean and modern UI
-- A Javascript-free frontend
-- No cookies or data collection
-- And built-in dislike counts Thaks to the [Return YouTube Dislike Api](https://www.returnyoutubedislike.com/)!
+
+<h1>Features</h1>
+ <h3>Return Youtube Dislikes Built-in  </h3>
+<img src="https://autumn.revolt.chat/attachments/0JlGwlnJdMcQwc6qzoo2qpmMAOWbrYMZ9vDX50l80r/resim.png">
+<p>See the dislikes from returnyoutubedislike!</p>
+
+<h3>Customize</h3>
+Customize Poketube However you want :3
+
+<h3>PWA</h3>
+Install PokeTube as a pwa on your mobile device :3
+
+<h3>Accounts </h3>
+Suscribe (yes Suscribe hehe sussy baka) to whaever channel you want!
+
+<h3>Web Search </h3>
+Search the web privatly on poketube :3
+
+And more!!!!!
+
 
 ## Written by humans - not gpt
 poketube is made by hard-working hoomans - not gpt :3<br>

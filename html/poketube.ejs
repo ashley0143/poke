@@ -2113,7 +2113,9 @@ margin: 0;
 font-size: 13px;margin:0;padding:0;white-space: nowrap;
 " class="switch"><%=engagement.viewCount.toLocaleString()%> views <%=date%> <ptd-custom-more>...more</ptd-custom-more>
                     </a>
-                    
+                      <% if (inv_vid.genre === "Music") { %> 
+	            <div style="float: right;font-size: 13px;font-family: ubuntu;margin-top: -17px;left: 22em;position: absolute;">     <i title="hq audio" class="fa-light fa-waveform-lines"></i>&nbsp;Lossless </div>
+	                                  		 	               <% } %>
                     </div>
                     
 					<div class="channel-info" style="border: none;padding: 10px;background: #0009;border-radius: 15px;margin-left: 6px;margin-right: 12px;" name="chnl">

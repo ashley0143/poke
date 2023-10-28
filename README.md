@@ -2,17 +2,19 @@
   <a href="https://poketube.fun/watch?v=9sJUDx7iEJw&quality=medium&=sjohgteojgytrueugtye4jhtytjrjnyıı">
    <img src="https://poketube.fun/css/logo.svg" width="400"> 
    </a>
-</h1>
+   <p>Watch Videos - Anonymously</p>
+   </h1>
 <div align="center">
 
-[Welcome!](#welcome)&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;[No non-free codec needed](#no-non-free-codec-needed-3)&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;[Hosting Poketube~](#hosting-poketube)&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;[PokeTube community!](#poketube-community)&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;[The Legal Stuff (boring tbh)](#the-legal-stuff-boring-tbh)
+   <span> Be Anonymous watching epic videos, searching thingys on the interwebs and listening to music on poketube - the free yt front end thats focused on ur privacy!!</span></div>
+<div align="center">
+
+[Welcome!](#welcome)&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;[Features](#features)&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;[No non-free codec needed](#no-non-free-codec-needed-3)&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;[Hosting Poketube~](#hosting-poketube)&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;[PokeTube community!](#poketube-community)&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;[The Legal Stuff (boring tbh)](#the-legal-stuff-boring-tbh)
 
 <a href="https://tosdr.org/en/service/7114">
    <img src="https://shields.tosdr.org/en_7114.svg"/>
 </a>
-<img src="https://raw.githubusercontent.com/vshymanskyy/StandWithUkraine/main/badges/StandWithUkraine.svg">
-
-<a href="./LICENSE"><img src="https://img.shields.io/badge/License-GPL--3-FF6666" alt="License - GPL-3"></a>
+<img src="https://raw.githubusercontent.com/vshymanskyy/StandWithUkraine/main/badges/StandWithUkraine.svg"> <a href="./LICENSE"><img src="https://img.shields.io/badge/License-GPL--3-FF6666" alt="License - GPL-3"></a>
 
 </div>
 
@@ -38,8 +40,11 @@ Suscribe (yes Suscribe hehe sussy baka) to whaever channel you want!
 <h3>Web Search </h3>
 Search the web privatly on poketube :3
 
-And more!!!!!
-
+<br>
+<h3>And... </h3>
+<p>
+Ambient mode, HQ audio And Even more!!!!!
+ </p>
 
 ## Written by humans - not gpt
 poketube is made by hard-working hoomans - not gpt :3<br>

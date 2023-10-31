@@ -170,8 +170,8 @@ module.exports = function (app, config, renderTemplate) {
     }
 
     if (!query) {
-      return res.redirect("/");
-    }
+         return renderTemplate(res, req, "search-web-main.ejs");
+     }
 
     let continuation = req.query.continuation || "";
 

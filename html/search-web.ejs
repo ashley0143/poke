@@ -97,6 +97,42 @@ summary:hover{
    z-index: 9999; 
 
 }
+    
+
+ .tags.rec {
+  font-weight: 600;
+  font-stretch: expanded;
+  overflow:hidden;
+  width: auto;
+  max-width: fit-content;
+  margin-right: auto;
+  padding-left: 1.5em;
+  margin-top: 7px;
+  display: flex;
+  gap: 3px;
+  margin-inline: auto;
+  margin-left: 8em;
+ }
+
+    
+.tags.rec:hover{
+  overflow-x:auto;
+}
+
+.tags.rec > .tag {
+  border-radius: 8px;
+  background:var(--chip-background-hover);
+
+}
+
+.tag {
+  padding: 5px;
+  border-radius: 4px;
+  word-break: break-all;
+  white-space: nowrap;
+  font-family: ubuntu, sans-serif;
+} 
+   
 
 .hide {
   display: none;
@@ -367,12 +403,22 @@ video[counter].classList.add("shake");
        </div>
   <div class="channel-page"   style="background-color: var(--channel-contents-background);">   
           
-       <div class="tabs  tabs-center">
- 
-         <a href="/search?query=<%=q%>" class="tab">Videos</a>
+             <div class="tags rec">
 
-<a class="tab active">Web</a>
-                                                                   
+               <a href="/search?query=<%=q%>" style="color:#fff;text-decoration:none;
+" class="tag c"> 
+                      Videos
+              </a>
+                  
+                                             
+                  
+                                <a style=" background: #111;" class="tag">
+Web
+               </a>
+                  
+                     </div> 
+
+                                                                    
 
     </div>
                                                                           <div class="video-list" >

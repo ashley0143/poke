@@ -9,10 +9,52 @@
   <link rel="manifest" href="/manifest.json">
   <link href=/css/yt-ukraine.svg?v=6 rel=icon>
     <link href=https://p.poketube.fun/https://site-assets.fontawesome.com/releases/v6.1.1/css/all.css rel=stylesheet>
-    <link rel="stylesheet" href="/css/search-web.main.css">
+    <link rel="stylesheet" href="/css/search-web.main.css?v=4">
+   <style>.downnav {
+  position: fixed;
+  padding:10px;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  margin: auto;
+  overflow: hidden;
+  z-index: 1;
+  color:#fff;
+  background-color: #0f0f0f;
+}</style>
+  <script>
+<!--//--><![CDATA[//><!--
+/**
+ * @licstart The following is the entire license notice for the JavaScript
+ * code in this page.
+ *
+ *  Copyright (C) 2021-2023 PokeTube Project (https://codeberg.org/Ashley/poketube)
+ *
+ * The JavaScript code in this page is free software: you can redistribute
+ * it and/or modify it under the terms of the GNU General Public License
+ * (GNU GPL) as published by the Free Software Foundation, either version 3
+ * of the License, or (at your option) any later version.  The code is
+ * distributed WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU GPL
+ * for more details.
+ *
+ * As additional permission under GNU GPL version 3 section 7, you may
+ * distribute non-source (e.g., minimized or compacted) forms of that code
+ * without the copy of the GNU GPL normally required by section 4, provided
+ * you include this license notice and a URL through which recipients can
+ * access the Corresponding Source.
+ *
+ * @licend The above is the entire license notice for the JavaScript code
+ * in this page.
+ */
+
+//--><!]]>
+</script>
  </head>
 
 <body class="body--home body--html">
+
+
   <div class="header-wrap--home"></div>
   <div id="content_wrapper_homepage" class="content-wrap--home">
   <div id="content_homepage" class="content--home">
@@ -22,20 +64,87 @@
     <div class="search-wrap--home">
         <form name="x" id="search_form_homepage" class="search" action="/web" method="get">
 
-          <input name="query" autocomplete="off" id="search_form_input_homepage" class="search__input" type="text" autofocus />
+          <input placeholder="Search the web" name="query" autocomplete="off" id="search_form_input_homepage" class="search__input" type="text" autofocus />
            
        <span style="color: #fff;text-align: center;margin-left: 8em;margin-right: auto;">
-        You can also use duckduckgo <a href="https://duckduckgo.com/bangs">bangs</a> if you want
       </span>
           
-  <button class="btn btn-success" type="submit" style="margin-top: 1em;margin-left: auto;margin-right: 8em;align-self: center;text-align: center;display: flex;flex-direction: column;height: 5em;background: #fff;color: #000;border: none;width: 7em;"><p style="margin-top: auto;margin-bottom: auto;font-weight: 1000;margin-left: 3px;font-stretch: ultra-expanded;font-family:;Poketube flex;">Search Poke</p></button> 
+<button class="btn btn-success" type="submit" style="margin-top: -1em;margin-left: auto;margin-right: 8em;align-self: center;text-align: center;display: flex;flex-direction: column;height: 5em;background: #fff;color: #000;border: none;width: 7em;"><p style="margin-top: auto;margin-bottom: auto;font-weight: 1000;margin-left: 3px;font-stretch: ultra-expanded;font-family:&quot;poketube flex&quot;;Poketube flex;">Search Poke</p></button>
+          
+<div class="downnav">
+  <a style="color:#fff" href="/privacy">Privacy</a> -   <a style="color:#fff" href="https://codeberg.org/ashley/poketube">Git</a>
+<div style="text-align: center;margin: -22px;">
+          You can also use duckduckgo <a href="https://duckduckgo.com/bangs">bangs</a> if you want
 
-
+  </div>
+<div style="float: right;">
+<a style="color:#fff" id="osInfo"></a> <a style="color:#fff;margin-right: 1em;" href="/license">License</a>
+  </div>
+          </div>
 
 
 
         </form>
-  
+  <script>
+  const userAgent = navigator.userAgent.toLowerCase();
+
+let osName = "";
+
+if (userAgent.includes("windows")) {
+  osName = "Windows";
+} else if (userAgent.includes("mac") || userAgent.includes("macintosh")) {
+  osName = "MacOS";
+} else if (userAgent.includes("linux")) {
+  osName = "GNU/Linux";
+} else if (userAgent.includes("android")) {
+  osName = "Android";
+} else if (userAgent.includes("ios") || userAgent.includes("iphone") || userAgent.includes("ipad")) {
+  osName = "iOS";
+}
+
+const osInfoElement = document.getElementById("osInfo");
+osInfoElement.textContent = `${osName} - `;
+  </script>  <script>  
+const css = localStorage.getItem("poke-custom-css");
+
+var head = document.head 
+var style = document.createElement('style');
+
+head.appendChild(style);
+
+style.type = 'text/css';
+
+if (style.styleSheet){
+  // This is required for IE8 and below.
+  style.styleSheet.cssText = css;
+} else {
+  style.appendChild(document.createTextNode(css));
+}
+
+var script_tag = document.createElement('script');
+
+
+script_tag.type = 'text/javascript';
+
+script_tag.text = localStorage.getItem("poke-custom-script");
+
+document.head.appendChild(script_tag);
+      
+var config = {}
+config.plausible_enabled = false
+
+if (window.location.hostname === "poketube.fun" && config.plausible_enabled == true) {
+  const plausble_main = "https://telemetry.poketube.fun/js/p.js";
+  const script = document.createElement("script");
+  const isTrackingEnabled = localStorage.getItem("plausible-enabled") !== "false";
+  if (isTrackingEnabled) {
+    script.defer = true;
+    script.src = plausble_main;
+    script.dataset.domain = "poketube.fun";
+    document.head.appendChild(script);
+  }
+}
+</script>
     </div>
  
  

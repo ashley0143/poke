@@ -47,13 +47,13 @@ module.exports = function (app, config, renderTemplate) {
         color: await modules
           .getColors(`https://i.ytimg.com/vi/${v}/maxresdefault.jpg`)
           .then((colors) => colors[0].hex()),
-           isMobile: req.useragent.isMobile,
+        isMobile: req.useragent.isMobile,
       });
     } catch {
       res.redirect("/");
     }
   });
-  
+
   app.get("/old/watch", async function (req, res) {
     var v = req.query.v;
     var e = req.query.e;
@@ -65,6 +65,7 @@ module.exports = function (app, config, renderTemplate) {
   app.get("/search", async (req, res) => {
     const query = req.query.query;
     const tab = req.query.tab;
+    const { fetch } = await import("undici");
 
     const search = require("google-it");
 
@@ -107,11 +108,9 @@ module.exports = function (app, config, renderTemplate) {
       const searchUrl = `https://inner-api.poketube.fun/api/search?query=${encodeURIComponent(
         query
       )}&continuation=${encodeURIComponent(continuation)}`;
-      const { data } = await curly.get(searchUrl, {
-        httpHeader: Object.entries(headers).map(([k, v]) => `${k}: ${v}`),
-      });
-      const searchText = modules.toJson(data);
-      const searchJson = getJson(searchText);
+      const player = await fetch(searchUrl);
+      const xmlData = await player.text();
+      const searchJson = JSON.parse(modules.toJson(xmlData));
 
       let didYouMean;
       if (
@@ -170,8 +169,8 @@ module.exports = function (app, config, renderTemplate) {
     }
 
     if (!query) {
-         return renderTemplate(res, req, "search-web-main.ejs");
-     }
+      return renderTemplate(res, req, "search-web-main.ejs");
+    }
 
     let continuation = req.query.continuation || "";
 

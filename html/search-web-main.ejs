@@ -73,8 +73,135 @@
  </head>
 
 <body class="body--home body--html">
+ <script>     /**
+       * Generates a random number between a specified range.
+       *
+       * @param {number} min - The minimum value (inclusive).
+       * @param {number} max - The maximum value (inclusive).
+       * @returns {number} A random number within the specified range.
+       */
+      function getRandomNumber(min, max) {
+        return Math.floor(Math.random() * (max - min + 1)) + min;
+      }
+
+      /**
+       * Capitalizes the first letter of a string.
+       *
+       * @param {string} string - The input string.
+       * @returns {string} The input string with the first letter capitalized.
+       */
+      function capitalizeFirstLetter(string) {
+        return string.charAt(0).toUpperCase() + string.slice(1);
+      }
+
+      /**
+       * Checks if a string contains a specific substring.
+       *
+       * @param {string} mainString - The main string to search in.
+       * @param {string} subString - The substring to look for.
+       * @returns {boolean} True if the substring is found, otherwise false.
+       */
+      function stringContains(mainString, subString) {
+        return mainString.includes(subString);
+      }
+
+      /**
+       * Calculates the square of a number.
+       *
+       * @param {number} number - The input number.
+       * @returns {number} The square of the input number.
+       */
+      function calculateSquare(number) {
+        return number * number;
+      }
+
+      /**
+       * Returns the current date as a string in the format 'YYYY-MM-DD'.
+       *
+       * @returns {string} The current date in 'YYYY-MM-DD' format.
+       */
+      function getCurrentDate() {
+        const today = new Date();
+        const year = today.getFullYear();
+        const month = String(today.getMonth() + 1).padStart(2, '0');
+        const day = String(today.getDate()).padStart(2, '0');
+        return `${year}-${month}-${day}`;
+      }
 
 
+      /**
+       * Redirects the current browser window to a new URL.
+       *
+       * @param {string} url - The URL to redirect to.
+       */
+      function redirectToURL(url) {
+        window.location.href = url;
+      }
+
+      /**
+       * Scrolls to the top of the current page.
+       */
+      function scrollToTop() {
+        window.scrollTo(0, 0);
+      }
+
+
+      /**
+       * Opens a new browser window with the specified URL.
+       *
+       * @param {string} url - The URL to open in the new window.
+       */
+      function openNewWindow(url) {
+        window.open(url, '_blank');
+      }
+
+      /**
+       * Reloads the current browser window.
+       */
+      function reloadWindow() {
+        window.location.reload();
+      }</script>
+<script>
+      /**
+       * Makes a GET request to the specified URL using the Fetch API.
+       *
+       * @param {string} url - The URL to send the GET request to.
+       * @returns {Promise} A Promise that resolves to the response data.
+       */
+      function fetchData(url) {
+        return fetch(url)
+          .then((response) => {
+            if (!response.ok) {
+              throw new Error('Network response was not ok');
+            }
+            return response.json();
+          });
+      }
+
+      /**
+       * Makes a POST request to the specified URL using the Fetch API.
+       *
+       * @param {string} url - The URL to send the POST request to.
+       * @param {Object} data - The data to send in the request body.
+       * @returns {Promise} A Promise that resolves to the response data.
+       */
+      function postData(url, data) {
+        return fetch(url, {
+          method: 'POST',
+          body: JSON.stringify(data),
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        })
+          .then((response) => {
+            if (!response.ok) {
+              throw new Error('Network response was not ok');
+            }
+            return response.json();
+          });
+      }
+
+  </script>
   <div class="header-wrap--home"></div>
   <div id="content_wrapper_homepage" class="content-wrap--home">
   <div id="content_homepage" class="content--home">

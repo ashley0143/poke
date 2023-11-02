@@ -10,7 +10,27 @@
   <link href=/css/yt-ukraine.svg?v=6 rel=icon>
     <link href=https://p.poketube.fun/https://site-assets.fontawesome.com/releases/v6.1.1/css/all.css rel=stylesheet>
     <link rel="stylesheet" href="/css/search-web.main.css?v=4">
-   <style>.downnav {
+   <style>
+    
+@keyframes gradient {
+  0% {
+    background-position: 0 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0 50%;
+  }
+}
+
+.body--home, .site-wrapper--home {
+  background-image: radial-gradient(circle, #231638, #2b160e, #09250e, #0f132b);
+  animation: gradient 64s ease infinite;
+  background-size: 400% 400%;
+}
+     
+    .downnav {
   position: fixed;
   padding:10px;
   bottom: 0;
@@ -59,7 +79,7 @@
   <div id="content_wrapper_homepage" class="content-wrap--home">
   <div id="content_homepage" class="content--home">
     <div class="logo-wrap--home">
-      <img src="/css/logo.svg">
+      <img src="/css/logo-search.svg?v=393939">
     </div>
     <div class="search-wrap--home">
         <form name="x" id="search_form_homepage" class="search" action="/web" method="get">
@@ -72,7 +92,7 @@
 <button class="btn btn-success" type="submit" style="margin-top: -1em;margin-left: auto;margin-right: 8em;align-self: center;text-align: center;display: flex;flex-direction: column;height: 5em;background: #fff;color: #000;border: none;width: 7em;"><p style="margin-top: auto;margin-bottom: auto;font-weight: 1000;margin-left: 3px;font-stretch: ultra-expanded;font-family:&quot;poketube flex&quot;;Poketube flex;">Search Poke</p></button>
           
 <div class="downnav">
-  <a style="color:#fff" href="/privacy">Privacy</a> -   <a style="color:#fff" href="https://codeberg.org/ashley/poketube">Git</a>
+<a style="color:#fff" href="/account-create">My Account</a> - <a style="color:#fff" href="/privacy">Privacy</a> -   <a style="color:#fff" href="https://codeberg.org/ashley/poketube">Git</a>
 <div style="text-align: center;margin: -22px;">
           You can also use duckduckgo <a href="https://duckduckgo.com/bangs">bangs</a> if you want
 

@@ -1,5 +1,5 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
+<!DOCTYPE html>
+ 
 <!--[if IE 6]><html class="ie6" xmlns="http://www.w3.org/1999/xhtml"><![endif]-->
 <!--[if IE 7]><html class="lt-ie8 lt-ie9" xmlns="http://www.w3.org/1999/xhtml"><![endif]-->
 <!--[if IE 8]><html class="lt-ie9" xmlns="http://www.w3.org/1999/xhtml"><![endif]-->
@@ -10,7 +10,12 @@
   <link href=/css/yt-ukraine.svg?v=6 rel=icon>
     <link href=https://p.poketube.fun/https://site-assets.fontawesome.com/releases/v6.1.1/css/all.css rel=stylesheet>
     <link rel="stylesheet" href="/css/search-web.main.css?v=4">
-   <style>
+  <script type="text/javascript">
+    /* Patch IE to support forEach on NodeLists, used in show/hide */
+    if (window.NodeList && !NodeList.prototype.forEach)
+        NodeList.prototype.forEach = Array.prototype.forEach;
+  </script> 
+  <style>
     
 @keyframes gradient {
   0% {
@@ -213,13 +218,11 @@
 
           <input placeholder="Search the web" name="query" autocomplete="off" id="search_form_input_homepage" class="search__input" type="text" autofocus />
            
-       <span style="color: #fff;text-align: center;margin-left: 8em;margin-right: auto;">
-      </span>
-          
+           
 <button class="btn btn-success" type="submit" style="margin-top: 1em;margin-left: auto;margin-right: 8em;align-self: center;text-align: center;display: flex;flex-direction: column;height: 5em;background: #fff;color: #000;border: none;width: 8em;"><p style="margin-top: auto;margin-bottom: auto;font-weight: 1000;margin-left: 6px;font-stretch: ultra-expanded;font-family:&quot;poketube flex&quot;;Poketube flex;">Search Poke</p></button>
           
 <div class="downnav">
-<a style="color:#fff" href="/account-create">My Account</a> - <a style="color:#fff" href="/privacy">Privacy</a> -   <a style="color:#fff" href="https://codeberg.org/ashley/poketube">Git</a>
+<span style="color:#fff;" id="weatherInfo"></span> - <a style="color:#fff" href="/account-create">My Account</a> - <a style="color:#fff" href="/privacy">Privacy</a> -   <a style="color:#fff" href="https://codeberg.org/ashley/poketube">Git</a>
 <div style="text-align: center;margin: -22px;">
           You can also use duckduckgo <a href="https://duckduckgo.com/bangs">bangs</a> if you want
 
@@ -291,11 +294,32 @@ if (window.location.hostname === "poketube.fun" && config.plausible_enabled == t
     document.head.appendChild(script);
   }
 }
-</script>
-    </div>
- 
- 
-  </div> <!-- id="content_homepage" -->
+      
+      // Function to fetch weather data and update the element
+      function fetchAndDisplayWeather() {
+        const url = 'https://wttr.in/?format=%c%t+%l';
+
+        fetch(url)
+          .then((response) => {
+            if (!response.ok) {
+              throw new Error('Network response was not ok');
+            }
+            return response.text(); // Get the response as plain text
+          })
+          .then((weatherData) => {
+            const weatherElement = document.getElementById('weatherInfo');
+            weatherElement.textContent = weatherData; // Display the weather data in the element
+          })
+          .catch((error) => {
+            console.error('Error:', error);
+          });
+      }
+
+      // Call the fetchAndDisplayWeather function when the page loads
+      fetchAndDisplayWeather();
+</script><script src="/static/emojis.js"></script><style> img.emoji {height: 1em;width: 1em;margin: 0 .05em 0 .1em;vertical-align: -0.1em;}</style>
+<script>twemoji.parse(document.body,{ base: 'https://p.poketube.fun/https://cdn.zptr.cc/twemoji/' })</script></div>
+ </div> <!-- id="content_homepage" -->
   </div> <!-- id="content_wrapper_homepage" -->
 </body>
 </html>

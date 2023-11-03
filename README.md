@@ -1,8 +1,8 @@
 <h1 align="center">
   <a href="https://poketube.fun/watch?v=9sJUDx7iEJw&quality=medium&=sjohgteojgytrueugtye4jhtytjrjnyıı">
-   <img src="https://poketube.fun/css/logo.svg" width="400"> 
+   <img src="https://poketube.fun/css/logo-poke.svg" width="400"> 
    </a>
-   <p>Watch Videos - Anonymously</p>
+   <p>The Ultimate Privacy App</p>
    </h1>
 <div align="center">
 

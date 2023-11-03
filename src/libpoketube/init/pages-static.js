@@ -75,6 +75,10 @@ module.exports = function (app, config, renderTemplate) {
     renderTemplate(res, req, "license.ejs");
   });
 
+   app.get("/map", function (req, res) {
+    renderTemplate(res, req, "map.ejs");
+  });
+  
   app.get("/credits", function (req, res) {
     renderTemplate(res, req, "want-you-gone.ejs");
   });

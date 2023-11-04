@@ -182,6 +182,7 @@ module.exports = function (app, config, renderTemplate) {
           h: "",
           tab,
           continuation,
+          isMobile: req.useragent.isMobile,
           results: results,
           q: query,
           summary: "",

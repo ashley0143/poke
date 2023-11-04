@@ -192,9 +192,9 @@ module.exports = function (app, config, renderTemplate) {
     }
 
     const u = await media_proxy(v);
-
+    
     const secure = ["poketube.fun"].includes(req.hostname);
-    const verify = req.hostname === "pt.zzls.xyz";
+    const verify = req.hostname === "poketube.sudovanilla.com";
 
     core.video(v, contentlang, contentregion).then((data) => {
       try {
@@ -204,7 +204,7 @@ module.exports = function (app, config, renderTemplate) {
         const inv_comments = data?.comments || "Disabled";
         const inv_vid = data?.vid;
         const desc = data?.desc || "";
-
+      
         let d = false;
         if (desc !== "[object Object]") {
           d = desc.toString().replace(/\n/g, " <br> ");
@@ -224,6 +224,12 @@ module.exports = function (app, config, renderTemplate) {
         const twitch = extractInfo(TWITCH_REGEX);
         const reddit = extractInfo(REDDIT_REGEX);
         const instagram = extractInfo(INSTAGRAM_REGEX);
+
+        var vidurl = u.url
+        
+        if(inv_vid.genre === "Music") {
+          var vidurl = u.losslessurl
+        }
 
         let badges = "";
         let comments = "";
@@ -258,7 +264,7 @@ module.exports = function (app, config, renderTemplate) {
             IsOldWindows,
             channelurlfixer,
             support,
-            u: u.url,
+            u: vidurl,
             isvidious: u.isInvidiousURL,
             video: json,
             date: k.Video.uploadDate,

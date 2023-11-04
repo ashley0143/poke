@@ -316,6 +316,7 @@ border:solid;
    
     <nav>
              <div class=left>
+<% if (!isMobile) { %> 
 
   <% if (q == "do the harlem shake") { %>  
               <a class="shake" href="/143" style=font-family:Inter,sans-serif;color:#fff>  <img style="transform: scale(1.3);width:8.5em;display: block;margin-left: auto;margin-right: auto;" src="/css/logo.svg?v=5"></a>
@@ -367,10 +368,13 @@ video[counter].classList.add("shake");
 
      
      
-            </div>          
+            </div>         <% } %>     
+         
 
   
         <div class="middle">
+           <% if (isMobile) { %> 
+
 <div class="search">
   
         <form action=/web><input class=search-bar autocomplete="on"  value="<%=q%>" id=fname name=query style="color:#fff;font-family:Inter,sans-serif;border-radius: 8px;">
@@ -379,8 +383,23 @@ video[counter].classList.add("shake");
          </form>
           <img src="https://search-metrics.poketube.fun/t/rep.gif"  style="border:0;width: 0;visibility: hidden;"> 
 
-      </div>          </div>
+      </div>     
+                       <% } %> 
+<% if (!isMobile) { %> 
 
+<div class="search">
+  
+        <form action=/web><input class=search-bar autocomplete="on"  value="<%=q%>" id=fname name=query style="color:#fff;font-family:Inter,sans-serif;border-radius: 8px;">
+          <button class="btn btn-success" type=submit><i class="fa-light fa-search"></i></button>
+             
+         </form>
+          <img src="https://search-metrics.poketube.fun/t/rep.gif"  style="border:0;width: 0;visibility: hidden;"> 
+
+      </div>     
+                       <% } %> 
+             </div>
+
+<% if (!isMobile) { %> 
 
             <div class=right>
               
@@ -395,7 +414,8 @@ video[counter].classList.add("shake");
             </div>
      
       </nav>
-  
+          <% } %> 
+
   
    </div>
       
@@ -429,7 +449,14 @@ Web
 
         <a style="min-width: 81em;" href="<%= x.link %>"><%= x.title %></a><br>
         <p style="color:gray;display: flex;flex-direction: column;width: 48em;margin-top: -8em;"><%= x.link %><br>
+          <% if (!isMobile) { %> 
+
          <span style="color:white;width: 48em;display: flex;"><%= x.snippet %></span>
+                     <% } %> 
+ <% if (isMobile) { %> 
+
+         <span style="color:white;max-width: 15em;display: flex;"><%= x.snippet %></span>
+                     <% } %> 
           </p>
               </div>
 

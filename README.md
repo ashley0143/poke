@@ -11,6 +11,13 @@
 
 [Welcome!](#welcome)&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;[Features](#features)&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;[No non-free codec needed](#no-non-free-codec-needed-3)&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;[Hosting Poketube~](#hosting-poketube)&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;[PokeTube community!](#poketube-community)&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;[The Legal Stuff (boring tbh)](#the-legal-stuff-boring-tbh)
 
+<a href="https://status.poketube.fun" target="_blank">
+  <img 
+    width="170"
+    src="https://api.netweak.com/status-badges/K2LY9"
+    alt="Netweak status badge"
+  />
+</a>
 <a href="https://tosdr.org/en/service/7114">
    <img src="https://shields.tosdr.org/en_7114.svg"/>
 </a>

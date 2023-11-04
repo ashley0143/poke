@@ -65,7 +65,8 @@ const videoProxyObject = {
   isInvidiousURL,
   cacheBuster: "d0550b6e28c8f93533a569c314d5b4e2",
   InvidiousPoketube: "AIzaSyAO_FJ2SlqU8Q4STEHLGCilw_Y9_11qcW8",
-  url: url, // set for now: see https://github.com/iv-org/invidious/issues/4045
+  url: url,  
+  losslessurl: "https://lossless-proxy.poketube.fun"
 };
 
 module.exports = async function (video_id) {

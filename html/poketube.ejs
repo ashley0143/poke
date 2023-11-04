@@ -2780,7 +2780,7 @@ More Epic options owo~
   navigator.share({
     title: document.title,
     text: "",
-    url: "https://" + window.location.hostname + "/<%=inv_vid.videoId%>"
+    url: "https://" + window.location.hostname + "/<%=inv_vid.videoId%>?piwik_si=mobile_share"
   })
   .then(() => console.log('Successful share'))
   .catch(error => console.log('Error sharing:', error));

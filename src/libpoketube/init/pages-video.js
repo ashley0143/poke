@@ -231,7 +231,7 @@ module.exports = function (app, config, renderTemplate) {
           var vidurl = u.losslessurl
         } 
         
-         if(req.useragent.source.includes("Pardus"){
+         if(req.useragent.source.includes("Pardus")){
            var vidurl = "https://yt.sudovanilla.com"
         }
 

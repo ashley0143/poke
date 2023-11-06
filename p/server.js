@@ -22,6 +22,7 @@ const URL_WHITELIST = [
   "is3-ssl.mzstatic.com",
   "twemoji.maxcdn.com",
   "unpkg.com",
+  "lite.duckduckgo.com",
   "youtube.com",
   "returnyoutubedislikeapi.com",
   "cdn.zptr.cc",
@@ -93,7 +94,7 @@ const listener = (req, res) => {
 app.get("/", (req, res) => {
   var json = {
     status: "200",
-    version: "1.0.0",
+    version: "1.1.0",
     URL_WHITELIST,
     cache: "max-age-1848",
   };
@@ -101,40 +102,64 @@ app.get("/", (req, res) => {
   res.json(json);
 });
 
-const apiUrl = "https://returnyoutubedislikeapi.com/votes?videoId=";
+const apiUrls = [
+  "https://returnyoutubedislikeapi.com/votes?videoId=",
+  "https://ipv6-t.poketube.fun/api?v=",
+];
 
 // Define a cache object
 const cache = {};
 
 app.get("/api", async (req, res) => {
-  if (req.query.hash && req.query.hash === "d0550b6e28c8f93533a569c314d5b4e2") {
-    try {
-      const cacheKey = req.query.v;
+  try {
+    const cacheKey = req.query.v;
 
-      // Check if the result is already cached
-      if (cache[cacheKey] && Date.now() - cache[cacheKey].timestamp < 3600000) {
-        // If the cached result is less than 1 hour old, return it
-        const cachedData = cache[cacheKey].data;
-        const cachedDate = new Date(cache[cacheKey].timestamp);
-        return res.json({ data: cachedData, cachedDate });
+    // Check if the result is already cached
+    if (cache[cacheKey] && Date.now() - cache[cacheKey].timestamp < 3600000) {
+      // If the cached result is less than 1 hour old, return it
+      const cachedData = cache[cacheKey].data;
+      const cachedDate = new Date(cache[cacheKey].timestamp);
+      return res.json(cachedData);
+    }
+
+    // Initialize an array to store errors when trying different URLs
+    const errors = [];
+
+    for (const apiUrl of apiUrls) {
+      try {
+        // Fetch data from the current URL
+        const engagement = await fetch(apiUrl + req.query.v).then((res) => res.json());
+
+        // Cache the result for future requests
+        cache[cacheKey] = {
+          data: engagement,
+          timestamp: Date.now(),
+        };
+
+        res.json(engagement);
+        return; // Exit the loop if successful
+      } catch (err) {
+        // Log the error for this URL and continue to the next URL
+        console.log(`Error fetching data from ${apiUrl}: ${err.message}`);
+        errors.push(err.message);
       }
+    }
 
-      // If the result is not cached or is older than 1 hour, fetch it from the API
-      const engagement = await fetch(apiUrl + req.query.v).then((res) =>
-        res.json()
-      );
-
-      // Cache the result for future requests
-      cache[cacheKey] = {
-        data: engagement,
-        timestamp: Date.now(),
-      };
-
-      res.json({ data: engagement, cachedDate: new Date() });
-    } catch {}
-  } else {
-    return res.send("no hash query found");
+    // If all URLs fail, return an error response
+    res.status(500).json({ error: "All API endpoints failed", errors });
+  } catch (err) {
+    console.log(err);
   }
+});
+
+app.get("/bangs", async (req, res) => {
+ 
+    let f = await fetch("https://lite.duckduckgo.com/lite/?q=" + req.query.q, {
+      method: req.method,
+    });
+
+    res.redirect(f);
+  
 });
 
 app.all("/*", listener);

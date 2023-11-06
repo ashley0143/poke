@@ -29,7 +29,7 @@
 
 -->
 <!DOCTYPE html>
-<html class="poketube_desktop_player event" invidproxy="<%=u %>" universe="2" vid_id="<%=inv_vid.videoId%>" t="<%=btoa(Date.now())%>" version="browser_web">
+<html class="poketube_desktop_player js event" invidproxy="<%=u%>" universe="2" vid_id="<%=inv_vid.videoId%>" t="<%=btoa(Date.now())%>" version="browser_web_<%=Date.now()%>">
   <head>
   
     <% if (e === false) { %>  
@@ -40,7 +40,6 @@
 <meta content="<%=inv_vid.title%>" name=title>
 <meta content="<%=color%>" name="theme-color">
 <meta content="<%=k.Video.Channel.Name%>" name=twitter:author>
-<meta content=@youtube name=twitter:site>
 <meta content="https://poketube.fun/watch?v=<%=inv_vid.videoId%>" name=twitter:url>
 <meta content="<%=inv_vid.title%> | PokeTube" name=twitter:title>
 <meta content="Watch this video from <%=k.Video.Channel.Name%> On PokeTube! The Libre YouTube Front end!1!" property=twitter:description>
@@ -51,9 +50,11 @@
  <% } %> <!-- close the } -->
 <link href="/css/yt-ukraine.svg?v=3" rel=icon>
 <link href=/css/snow.css rel=stylesheet> 
+
 <ptd-event-chunks>
   poketube.eventloader = this.eventloader
   load()
+
 </ptd-event-chunks>
 <title> <%=inv_vid.title%> | PokeTube </title>  
 <style>
@@ -474,6 +475,60 @@ text-shadow: 1px 1px #000,1px 1px 0.1px #000;!important;
    background: linear-gradient(to bottom, #1c1c1c, #101);
    }  
    
+.account:hover {
+  background-color: #263850 !important;
+}
+
+
+.account > i {
+  margin-right: -3px;
+}
+ 
+   
+   .account {
+height: 36px;
+display: flex;
+flex-direction: row;
+gap: 8px;
+color:#fff !important;
+border: 1px solid var(--border-color);
+justify-content: center;
+align-items: center;
+transition: background-color linear 100ms;
+padding: 0 8px !important;
+text-decoration: none;
+user-select: none;
+-moz-user-select: none;
+-ms-user-select: none;
+-webkit-user-select: none;
+border-radius: 18px;
+width: fit-content;
+background-color: #0000;
+margin-right: -1em;
+   }
+
+   .settings-icon{
+     margin-right: 5.5px;
+height: 36px;
+display: flex;
+flex-direction: row;
+gap: 8px;
+color: #fff !important;
+border: 1px solid var(--border-color);
+justify-content: center;
+align-items: center;
+transition: background-color linear 100ms;
+padding: 0 8px !important;
+text-decoration: none;
+user-select: none;
+-moz-user-select: none;
+-ms-user-select: none;
+-webkit-user-select: none;
+border-radius: 18px;
+width: 1.5em;
+background-color: #0000;
+   }
+   
    .new-button {
      border: 2.1px solid;
      border-color: #cba6f7;
@@ -644,17 +699,15 @@ But Please note that unofficial instances can add the same lock icon, so please 
 
       </div>
       <div class="right">
-                <a><i  style="display: block;margin-left: auto;margin-right: auto;visibility: collapse;" class="fa-light fa-server"></i>  </a>
-              <a ><i class="fa-light fa-shield" style="visibility: collapse;margin-right: 1.5em;"></i></a>
-              <a href="/old?v=<%=inv_vid.videoId%>" ><i class="fa-light fa-clock-rotate-left" style="margin-right: 1.5em;"></i></a>
-        
+   
 <p id="fetch-count">
                   
                   </p>
         
-      
+      <a class="settings-icon" href="/customize"><i  class="fa-light fa-brush"></i>
+</a>
         
-          <div class="icon-button dropdown" style="margin-right: 4.5px;">
+          <div class="icon-button dropdown settings-icon">
 			<input type="checkbox" id="loggedout-dropdown" autocomplete="off">
 			<label for="loggedout-dropdown">
                   <i style="display: block;margin-left: auto;margin-right: auto;" class="fa-light  fa-gear"></i>
@@ -756,6 +809,7 @@ About
         </a>    
 			</div>
 		</div>
+        <a href="/account-create" class="account"><i  class="fa-light fa-user"></i>Account</a>
 
       </div>
     </nav>
@@ -1740,36 +1794,7 @@ const observer = new IntersectionObserver((entries, observer) => {
 lazyElements.forEach(element => {
   observer.observe(element);
 });
-  
-// Function to refresh the page
-const refreshPage = () => {
-  location.reload();
-};
-  
-// Check if a timer is already set in localStorage
-const timer = localStorage.getItem('refreshTimer');
 
-if (timer) {
-  // If a timer is already set, clear it before setting a new one
-  clearTimeout(timer);
-}
-
-// Check if it's the first time the user visits the page
-const isFirstLoad = localStorage.getItem(userlocalStorageKey) === null;
-
-// Set a new timer to refresh the page after 1 hour or on the first visit
-const newTimer = setTimeout(() => {
-  refreshPage();
-}, isFirstLoad ? 0 : 60 * 60 * 1000); // 1 hour in milliseconds
-
-// Save the new timer in localStorage
-localStorage.setItem('refreshTimer', newTimer);
-
-// Save the first load flag in localStorage if it's the first visit
-if (isFirstLoad) {
-  localStorage.setItem(userlocalStorageKey, 'visited');
-}
-  
 </script>
      <script>
 const languageCode = localStorage.getItem("Language");

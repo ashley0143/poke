@@ -62,7 +62,7 @@ const proxy = async (req, res) => {
     let url;
 
     try {
-      url = new URL("https://" + req.originalUrl.slice(10));
+      url = new URL("https://" + req.originalUrl.slice(8));
     } catch (e) {
       console.log("==> Cannot parse URL: " + e);
       return res.status(400).send("Malformed URL");
@@ -105,6 +105,7 @@ app.get("/", (req, res) => {
 const apiUrls = [
   "https://returnyoutubedislikeapi.com/votes?videoId=",
   "https://ipv6-t.poketube.fun/api?v=",
+  "https://prod-poketube.testing.poketube.fun/api?v="
 ];
 
 // Define a cache object
@@ -142,6 +143,7 @@ app.get("/api", async (req, res) => {
         // Log the error for this URL and continue to the next URL
         console.log(`Error fetching data from ${apiUrl}: ${err.message}`);
         errors.push(err.message);
+        return "";
       }
     }
 

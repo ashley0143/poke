@@ -37,7 +37,18 @@ module.exports = function (app, config, renderTemplate) {
   app.get("/embed/:v", async function (req, res) {
     res.send("Disabled until further notice");
   });
+  
+  app.get("/vi/:v/:t", async function (req, res) {
+    var url = `https://i.ytimg.com/vi/${req.params.v}/${req.params.t}`
+    
+       let f = await modules.fetch(url + `?cachefixer=${btoa(Date.now())}`, {
+      method: req.method,
+    });
 
+    f.body.pipe(res);
+
+  });
+  
   app.get("/api/search", async (req, res) => {
     const query = req.query.query;
 

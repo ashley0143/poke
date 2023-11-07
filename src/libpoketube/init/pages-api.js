@@ -48,6 +48,18 @@ module.exports = function (app, config, renderTemplate) {
     f.body.pipe(res);
 
   });
+
+      app.get("/avatars/:v", async function (req, res) {
+    var url = `https://yt3.ggpht.com/${req.params.v}`
+    
+       let f = await modules.fetch(url + `?cachefixer=${btoa(Date.now())}`, {
+      method: req.method,
+    });
+
+    f.body.pipe(res);
+
+  });
+  
   
   app.get("/api/search", async (req, res) => {
     const query = req.query.query;

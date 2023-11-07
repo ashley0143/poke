@@ -103,7 +103,7 @@ app.get("/", (req, res) => {
 });
 
 const apiUrls = [
-  "https://ipv6-t.poketube.fun/api?v=",
+  "https://returnyoutubedislikeapi.com/votes?videoId=",
   "https://prod-poketube.testing.poketube.fun/api?v="
 ];
 

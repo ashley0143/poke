@@ -43,7 +43,7 @@ function initlog(args) {
  * @param {string} [port="3000"] - The port to listen on
  */
 function init(app, port) {
-  if (!port) port = "3000";
+  if (!port) port = "6003";
   try {
     app.listen(port, () => {
       initlog("Loading Poketube: success!" + " on port " + port);

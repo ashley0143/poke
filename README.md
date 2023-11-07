@@ -96,7 +96,7 @@ Once everythings installed, start your server with the following command:
 node server.js
 ```
 
-Congrats, Poketube should now be running on `localhost:3000`!
+Congrats, Poketube should now be running on `localhost:6003`!
 
 ## PokeTube community!
 

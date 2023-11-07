@@ -166,4 +166,4 @@ app.get("/bangs", async (req, res) => {
 
 app.all("/*", listener);
 
-app.listen(3000, () => console.log("Listening on 0.0.0.0:3000"));
+app.listen(6014, () => console.log("Listening on 0.0.0.0:6014"));

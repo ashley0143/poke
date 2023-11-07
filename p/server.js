@@ -103,7 +103,6 @@ app.get("/", (req, res) => {
 });
 
 const apiUrls = [
-  "https://returnyoutubedislikeapi.com/votes?videoId=",
   "https://ipv6-t.poketube.fun/api?v=",
   "https://prod-poketube.testing.poketube.fun/api?v="
 ];
@@ -112,6 +111,8 @@ const apiUrls = [
 const cache = {};
 
 app.get("/api", async (req, res) => {
+const { fetch } = await import("undici")
+
   try {
     const cacheKey = req.query.v;
 

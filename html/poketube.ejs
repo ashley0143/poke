@@ -1451,7 +1451,7 @@ display: block; !important;" autoplay controls
             <div class="desc">
                    <h5 style="display: flex;margin-top: 7px;padding-top: 10px;"><div class="thumb">
 				<a href="/channel?id=<%- x.authorId%>" class="avatar" style="width: 40px;height: 40px;">
-					<img loading="lazy" src="https://p.poketube.fun/<%= x.authorThumbnails[1].url %>">
+					<img loading="lazy" src="/avatars/<%= x.authorThumbnails[1].url.replace("https://yt3.ggpht.com/", "") %>">
 				</a>
             </div>
                                                           <%  if (!x.authorIsChannelOwner) { %> 
@@ -1579,11 +1579,11 @@ Recommended Videos
  						<div class="video fade-in"  >
                     <% if (!optout) { %> 
 
-      <a  href="/watch?v=<%= x.id %>"  alt="<%= x.Title %>" class="thumbnail " style="background-image: url('https://p.poketube.fun/https://i.ytimg.com/vi/<%= x.id %>/hqdefault.jpg?sqp=-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLBy_x4UUHLNDZtJtH0PXeQGoRFTgw');border-radius: 9.5px;"  >								<span class="video-length"><%- x.duration || "LIVE"%></span>
+      <a  href="/watch?v=<%= x.id %>"  alt="<%= x.Title %>" class="thumbnail " style="background-image: url('/vi/<%= x.id %>/hqdefault.jpg?sqp=-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLBy_x4UUHLNDZtJtH0PXeQGoRFTgw');border-radius: 9.5px;"  >								<span class="video-length"><%- x.duration || "LIVE"%></span>
                            <% } %>
    <% if (optout) { %> 
 
-      <a  href="/watch?v=<%= x.id %>&m=f"  alt="<%= x.Title %>" class="thumbnail" style="background-image: url('https://p.poketube.fun/https://i.ytimg.com/vi/<%= x.id %>/hqdefault.jpg?sqp=-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLBy_x4UUHLNDZtJtH0PXeQGoRFTgw');border-radius: 9.5px;"  >								<span class="video-length"><%- x.duration || "LIVE"%></span>
+      <a  href="/watch?v=<%= x.id %>&m=f"  alt="<%= x.Title %>" class="thumbnail" style="background-image: url('/vi/<%= x.id %>/hqdefault.jpg?sqp=-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLBy_x4UUHLNDZtJtH0PXeQGoRFTgw');border-radius: 9.5px;"  >								<span class="video-length"><%- x.duration || "LIVE"%></span>
                            <% } %>
 							</a>
 							<div class="info">

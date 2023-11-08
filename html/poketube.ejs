@@ -1045,7 +1045,7 @@ display: block; !important;" autoplay controls
   <a name="chnl"></a>
 
 				<a href="/channel?id=<%=video?.Channel.id || k.Video.Channel.id%>" class="avatar">
-					<img loading="lazy" src="https://p.poketube.fun/<%= k.Video.Channel.Avatar[1].$t %>">
+					<img loading="lazy" src="/avatars/<%= k.Video.Channel.Avatar[1].$t.replace("https://yt3.ggpht.com/", "") %>" %>">
 				</a>
 				<div class="name" >
          <div>

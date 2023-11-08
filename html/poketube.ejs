@@ -2290,7 +2290,7 @@ font-size: 13px;margin:0;padding:0;white-space: nowrap;
                      
                      <div class="thumb">
 				<a href="/channel?id=<%-  inv.comments[0].authorId%>" class="avatar" style="width: 40px;height: 40px;margin: 4px;">
-					<img src="https://p.poketube.fun/<%=  inv.comments[0].authorThumbnails[1].url %>" style="width: 24px;height: 24px;margin-right: inherit;"  >
+					<img src="/avatars/<%=  inv.comments[0].authorThumbnails[1].url.replace("https://yt3.ggpht.com/", "")  %>" style="width: 24px;height: 24px;margin-right: inherit;"  >
                      </a>
             </div>
                       
@@ -2599,8 +2599,8 @@ More Epic options owo~
             <div class="desc">
                    <h5 style="display: flex;margin-top: 7px;padding-top: 10px;"><div class="thumb">
 				<a href="/channel?id=<%- x.authorId%>" class="avatar" style="width: 40px;height: 40px;">
-					<img src="https://p.poketube.fun/<%= x.authorThumbnails[1].url %>" style="width: 40px;height: 40px;">
-                     </a>
+					<img loading="lazy" src="/avatars/<%= x.authorThumbnails[1].url.replace("https://yt3.ggpht.com/", "") %>">
+                               </a>
             </div>
                                                           <%  if (!x.authorIsChannelOwner) { %> 
 
@@ -2707,11 +2707,11 @@ More Epic options owo~
  						<div class="video">
                     <% if (!optout) { %> 
 
-      <a  href="/watch?v=<%= x.id %>" class="thumbnail" style="background-image: url('https://p.poketube.fun/https://i.ytimg.com/vi/<%= x.id %>/hqdefault.jpg?sqp=-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLBy_x4UUHLNDZtJtH0PXeQGoRFTgw');border-radius: 9.5px;border: 2px solid white;"  >								<span class="video-length"><%=x.duration %></span>
+      <a  href="/watch?v=<%= x.id %>" class="thumbnail" style="background-image: url('/vi/<%= x.id %>/hqdefault.jpg?sqp=-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLBy_x4UUHLNDZtJtH0PXeQGoRFTgw');border-radius: 9.5px;border: 2px solid white;"  >								<span class="video-length"><%=x.duration %></span>
                            <% } %>
    <% if (optout) { %> 
 
-      <a  href="/watch?v=<%= x.id %>&m=f" class="thumbnail" style="background-image: url('https://p.poketube.fun/https://i.ytimg.com/vi/<%= x.id %>/hqdefault.jpg?sqp=-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLBy_x4UUHLNDZtJtH0PXeQGoRFTgw');border-radius: 9.5px;border: 2px solid white;"  >								<span class="video-length"><%=x.duration %></span>
+      <a  href="/watch?v=<%= x.id %>&m=f" class="thumbnail" style="background-image: url('/vi/<%= x.id %>/hqdefault.jpg?sqp=-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLBy_x4UUHLNDZtJtH0PXeQGoRFTgw');border-radius: 9.5px;border: 2px solid white;"  >								<span class="video-length"><%=x.duration %></span>
                            <% } %>
 							</a>
 							<div class="info">

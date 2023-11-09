@@ -141,9 +141,9 @@ const { fetch } = await import("undici")
         return; // Exit the loop if successful
       } catch (err) {
         // Log the error for this URL and continue to the next URL
-        console.log(`Error fetching data from ${apiUrl}: ${err.message}`);
+        res.json(`Error fetching data from ${apiUrl}: ${err.message}`);
         errors.push(err.message);
-        return "";
+        
       }
     }
 

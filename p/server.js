@@ -111,7 +111,7 @@ const apiUrls = [
 // Define a cache object
 const cache = {};
 
-app.get("/ryd", async (req, res) => {
+app.get("/api", async (req, res) => {
 const { fetch } = await import("undici")
 
   try {

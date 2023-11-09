@@ -104,6 +104,7 @@ app.get("/", (req, res) => {
 
 const apiUrls = [
   "https://returnyoutubedislikeapi.com/votes?videoId=",
+  "https://prod-poketube.testing.poketube.fun/api?v=",
 ];
 
 // Define a cache object
@@ -141,9 +142,9 @@ const { fetch } = await import("undici")
         return; // Exit the loop if successful
       } catch (err) {
         // Log the error for this URL and continue to the next URL
-        res.json(`Error fetching data from ${apiUrl}: ${err.message}`);
+        console.log(`Error fetching data from ${apiUrl}: ${err.message}`);
         errors.push(err.message);
-        
+        return "";
       }
     }
 

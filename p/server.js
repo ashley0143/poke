@@ -104,7 +104,6 @@ app.get("/", (req, res) => {
 
 const apiUrls = [
   "https://returnyoutubedislikeapi.com/votes?videoId=",
-  "https://ipv6-t.poketube.fun/api?v="
 ];
 
 // Define a cache object

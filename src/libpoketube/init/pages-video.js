@@ -229,6 +229,10 @@ module.exports = function (app, config, renderTemplate) {
         
         if(inv_vid.genre === "Music") {
           var vidurl = u.losslessurl
+        } 
+        
+         if(req.useragent.source.includes("Pardus")){
+           var vidurl = "https://yt.sudovanilla.com"
         }
 
         let badges = "";

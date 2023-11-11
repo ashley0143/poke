@@ -62,6 +62,7 @@ module.exports = function (app, config, renderTemplate) {
     res.redirect(`/watch?v=${v}`);
   });
 
+
   app.get("/search", async (req, res) => {
     const query = req.query.query;
     const tab = req.query.tab;
@@ -101,28 +102,28 @@ module.exports = function (app, config, renderTemplate) {
     }
 
     let continuation = req.query.continuation || "";
-
+    let date = req.query.date || "";
+    let type = req.query.type || "";
+    let duration = req.query.duration || "";
+    let sort = req.query.sort || "";
+ 
     try {
       const headers = {};
 
-      const searchUrl = `https://inner-api.poketube.fun/api/search?query=${encodeURIComponent(
+    const xmlData = await  fetch(`https://invid-api.poketube.fun/api/v1/search?q=${encodeURIComponent(
         query
-      )}&continuation=${encodeURIComponent(continuation)}`;
-      const player = await fetch(searchUrl);
-      const xmlData = await player.text();
-      const searchJson = JSON.parse(modules.toJson(xmlData));
-
-      let didYouMean;
-      if (
-        searchJson.Search?.Results?.DynamicItem?.id === "didYouMeanRenderer"
-      ) {
-        didYouMean = JSON.parse(searchJson.Search.Results.DynamicItem.Title);
-      }
-
+      )}&page=${encodeURIComponent(continuation)}&date=${date}&type=${type}&duration=${duration}&sort=${sort}&hl=en+gb`)
+            .then((res) => res.text())
+            .then((txt) => getJson(txt));
+  
       renderTemplate(res, req, "search.ejs", {
-        j: searchJson,
+        invresults: xmlData,
+       turntomins,
+        date,
+        type,
+        duration,
+        sort,
         IsOldWindows,
-        h: didYouMean,
         tab,
         continuation,
         results: "",

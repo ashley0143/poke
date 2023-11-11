@@ -9,7 +9,7 @@
 /**
  * A class representing a PokeTube API instance for a specific video.
  */
-class PokeTubeDislikesAPIManager  {
+class PokeTubeDislikesAPIManager {
   /**
    * Creates a new PokeTube API instance for the given video ID.
    * @param {string} videoId - The ID of the YouTube video.
@@ -41,12 +41,31 @@ class PokeTubeDislikesAPIManager  {
    * @private
    */
   async _getEngagementData() {
-  const fallbackUrl = `https://returnyoutubedislikeapi.com/votes?videoId=${this.videoId}`;
-  
-   const { fetch } = await import("undici");
-    
-   const engagement = await fetch(fallbackUrl).then((res) => res.json());
-  return engagement;
+    const apiUrls = [
+      "https://returnyoutubedislikeapi.com/votes?videoId=",
+      "https://prod-poketube.testing.poketube.fun/api?v=",
+    ];
+
+    const { fetch } = await import("undici");
+
+    // Initialize an array to store errors when trying different URLs
+    const errors = [];
+
+    for (const apiUrl of apiUrls) {
+      try {
+        // Fetch data from the current URL
+        const engagement = await fetch(apiUrl + this.videoId).then((res) =>
+          res.json()
+        );
+
+        return engagement; // Exit the loop if successful
+      } catch (err) {
+        // Log the error for this URL and continue to the next URL
+        console.log(`Error fetching data from ${apiUrl}: ${err.message}`);
+        errors.push(err.message);
+        return "";
+      }
+    }
   }
 
   /**
@@ -58,7 +77,7 @@ class PokeTubeDislikesAPIManager  {
 
     return {
       engagement: this.engagement,
-     };
+    };
   }
 
   /**

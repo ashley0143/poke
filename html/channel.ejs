@@ -28,11 +28,10 @@
     <meta content=website property=og:type>
     <meta content="<%=j.Channel?.Metadata.Name%> - PokeTube" property=og:title>
        <link href=/css/yt-ukraine.svg?v=6 rel=icon>
-       <% if (dnoreplace) { %>
+       
 
-    <meta content="<%-dnoreplace%>" property=twitter:description>
-          <% } %>
-       <% if (j.Channel?.Metadata.Banners.Thumbnail) { %>
+    <meta content="<%- cinv.description %>" property=twitter:description>
+        <% if (j.Channel?.Metadata.Banners.Thumbnail) { %>
 
     <meta content="<%=j.Channel?.Metadata?.Banners.Thumbnail[2].$t%>" property=og:image>
                    <% } %>
@@ -1255,7 +1254,7 @@ margin-left: 8em;" >
      <h3 style="color:#fff;font-family:Ginto Nord,sans-serif;font-weight:900;padding: 0px;margin: 0;margin-top: 7px;margin-left: 10px;">About</h3>
 
 
-     <% if (desc) { %>
+     <% if (cinv.descriptionHtml) { %>
 
  <p style="color:#fff;margin-left: 10px;font-weight: bold;"><%-cinv.descriptionHtml%></p>
   <% } %>

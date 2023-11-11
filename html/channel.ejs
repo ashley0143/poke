@@ -332,17 +332,7 @@ text-transform:uppercase;
 color:#ea9999 !important;
 }
 
-      .s{
-width: 23em;
-margin: auto;
-margin-left: -3.5em;
-display: flex;
-flex-direction: column-reverse;
-margin-right: -79px;
-      }
-        .shorts-title{
-    font-family:PokeTube flex,sans-serif;font-weight: 1000;font-stretch: ultra-expanded;position: absolute;margin-bottom: 0.3em;background: #0009;white-space: -moz-pre-wrap !important;white-space: -pre-wrap;white-space: -o-pre-wrap;white-space: pre-wrap;word-wrap: break-word;white-space: -webkit-pre-wrap;word-break: break-all;white-space: normal;width: 12.87em;margin-left: 145px;
-  } 
+
       .channel-page .video-grid {
   background-color: black;
 }
@@ -1056,42 +1046,76 @@ width: fit-content;
                                        </div>
  <% } %>
 
- 
-    	<div class="video-grid" style="max-inline-size: 92em !important;
-margin-left: 8em;" >
-            
-   
-             <%  if (Array?.isArray( shorts.videos)) { %> 
 
-   <% shorts.videos.forEach (x =>  { %>
-     
-			<a href="/shorts/<%- x.videoId %>" class="s" >
-				<img load="lazy" src='/vi/<%= x.videoId %>/hqdefault.jpg?sqp=-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLBy_x4UUHLNDZtJtH0PXeQGoRFTgw' style="border-radius: 10px;width: 31em;object-fit: cover;aspect-ratio: 19/9;height: 20em;object-position: 101% 51%;clip-path: inset(2px 139px);">
-          
-          
-          
- 					<span class="title max-lines-2 shorts-title"><%- x.title %></span>
-			 
-  			</a>	
- 		 	               <% }) %>   
- <% } %>
 
-                                             
- 
-         
- 
-                       
-                       </div>
-                  
-            <% if (shorts?.continuation) { %>
-	<div class="pagination-buttons" style="border-top: none;justify-content: center">
-    <a style="color:#fff" href="/channel?id=<%=ID%>&tab=shorts&continuations=<%=shorts.continuation%>">Next Page</a>
- 	</div>
-                           
-                       <% } %>
 
- 
-          <% } %>
+
+
+
+
+
+
+
+
+
+
+
+<div class="shorts-video-grid">
+  <%  if (Array?.isArray( shorts.videos)) { %> 
+    <% shorts.videos.forEach (x =>  { %>
+      <a href="/shorts/<%- x.videoId %>" class="shorts-video" >
+        <img load="lazy" src='/vi/<%= x.videoId %>/hqdefault.jpg?sqp=-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLBy_x4UUHLNDZtJtH0PXeQGoRFTgw'>
+        <span class="shorts-title"><%- x.title %></span>
+      </a>
+    <% }) %>   
+  <% } %>
+</div>
+
+<% if (shorts?.continuation) { %>
+<div class="pagination-buttons">
+  <a style="color:#fff" href="/channel?id=<%=ID%>&tab=shorts&continuations=<%=shorts.continuation%>">Next Page</a>
+</div>
+<% } %>
+
+<style>
+.shorts-video-grid {
+  max-width: 1200px;
+  margin: auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fit,minmax(200px,1fr));
+  grid-gap: 24px;
+  margin-top: 24px;
+}
+.shorts-video img {
+  width: 100%;
+  aspect-ratio: 9/16;
+  object-fit: cover;
+  border-radius: 10px;
+}
+.shorts-video {
+  display: block;
+}
+</style>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<% } %>
             
               <% if (tab === "live") { %>  
                                                

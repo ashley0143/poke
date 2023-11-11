@@ -33,7 +33,7 @@
              <meta content="DO THE HARLEM SHAKE" property=twitter:description>
    <% } %> 
    <% if (q != "do the harlem shake") { %>  
-         <meta content="Ur Searching <%=q%> on PokeTube! it has total of <%=j.Search.estimatedResults.toLocaleString()%> Results holy crap thats alot" property=twitter:description>
+         <meta content="Ur Searching <%=q%> on PokeTube!" property=twitter:description>
    <% } %> 
 
 
@@ -403,7 +403,58 @@ video[counter].classList.add("shake");
     
        </div>
   <div class="channel-page"   style="background-color: var(--channel-contents-background);">   
-                 <div class="tags rec">
+    <div id="filters">
+	<details id="filters-collapse" open="">		<summary>Filters</summary>
+    <div id="filters-box"><form action="/search" method="get">
+			<input type="hidden" name="query" value="<%- q %>">
+			<input type="hidden" name="continuation" value="<%- continuation %>">
+			<div id="filters-flex" style="display: flex;gap: 18px;background: #111;border-radius: 1em;padding: 6px;width: fit-content;margin-left: auto;margin-right: auto;">				<div class="filter-column"><fieldset>
+					<legend><div class="filter-name underlined">Upload date</div></legend>
+					<div class="filter-options">
+<% const selectedDate = date || "none"; %>
+
+<% ['none', 'hour', 'today', 'week', 'month', 'year'].forEach(option => { %>
+  <div>
+    <input type="radio" name="date" id="filter-date-<%= option %>" value="<%= option %>" <%= selectedDate === option ? 'checked' : '' %>>
+    <label for="filter-date-<%= option %>"><%= option === 'none' ? 'Any date' : option === 'hour' ? 'Last Hour' : option === 'today' ? 'Today' : option === 'week' ? 'This week' : option === 'month' ? 'This month' : 'This year' %></label>
+  </div>
+<% }) %>					</div>				</fieldset></div>
+ 				<div class="filter-column"><fieldset>
+					<legend><div class="filter-name underlined">Duration</div></legend>
+					<div class="filter-options">
+ <% const selectedDuration = duration || "none"; %>
+
+<% ['none', 'short', 'long', 'medium'].forEach(option => { %>
+  <div>
+    <input type="radio" name="duration" id="filter-duration-<%= option %>" value="<%= option %>" <%= selectedDuration === option ? 'checked' : '' %>>
+    <label for="filter-duration-<%= option %>">
+      <%= option === 'none' ? 'Any duration' : option === 'short' ? 'Short (< 4 minutes)' : option === 'long' ? 'Long (> 20 minutes)' : 'Medium (4 - 20 minutes)' %>
+    </label>
+  </div>
+<% }) %>
+
+          </div>				</fieldset></div>
+				 
+				<div class="filter-column"><fieldset>
+					<legend><div class="filter-name underlined">Sort By</div></legend>
+					<div class="filter-options">
+ <% const selectedSort = sort || "relevance"; %>
+
+<% ['relevance', 'rating', 'date', 'views'].forEach(option => { %>
+  <div>
+    <input type="radio" name="sort" id="filter-sort-<%= option %>" value="<%= option %>" <%= selectedSort === option ? 'checked' : '' %>>
+    <label for="filter-sort-<%= option %>">
+      <%= option === 'relevance' ? 'Relevance' : option === 'rating' ? 'Rating' : option === 'date' ? 'Upload Date' : 'View count' %>
+    </label>
+  </div>
+<% }) %>
+
+          </div>				</fieldset></div>
+  <br> 			<div id="filters-apply"> <button type="submit" style="color:#fff;background:#333;padding:3px;border-radius:11px;margin-top: 6em;">Apply!</button></div>
+
+			</div>
+            </form></div>   </details></div>    
+    <div class="tags rec">
                   
                                 <a style=" background: #111;" class="tag">
 Videos
@@ -416,107 +467,24 @@ Web              </a>
                      </div>   
       
                  <%  if (!tab) { %> 
-
-            <%  if (Array.isArray( j.Search.Results.Video)) { %> 
-                   <center>
-                          <% if (j.Search.Results.DynamicItem) { %> 
-
-            <% if (j.Search.Results.DynamicItem.id == "didYouMeanRenderer") { %> 
-                                                                    <% if (h) { %> 
-
-                                                      <% if (h.correctedQueryEndpoint) { %> 
-
-                                        <% if (h.correctedQueryEndpoint.searchEndpoint) { %> 
-
-<div style="text-align: left;margin-left: 14.5em;">
-  <p>
-     Did you mean: <a href="/search?query=<%= h.correctedQueryEndpoint.searchEndpoint.query  %>"><i><%= h.correctedQueryEndpoint.searchEndpoint.query  %></i></a> :3
-  </p>
-                     </div>
  
-                                            <% } %>                                            <% } %>
-                                                                                          <% } %>                                                                                        <% } %>
-                                                                                          <% } %>                                                                                     
-
-                     </center>
-                                                      <% if (!j.Search.Results.DynamicItem) { %> 
-
-                                                                     <%  if (!continuation) { %>
-
-                      <% if (summary.extract_html) { %> 
-<div class="shelf wiki" style="white-space: -moz-pre-wrap !important;white-space: -pre-wrap;white-space: -o-pre-wrap;white-space: pre-wrap;word-wrap: break-word;white-space: -webkit-pre-wrap;word-break: break-all;white-space: normal;background: #1c1c1c;padding: 10px;margin-top: 10px;max-width: 51.8em;width: max-content;">
-                                     
-<div class="video-title" style="color:#fff;font-family:PokeTube Flex;font-weight:700;margin-top: 0em;font-weight: 1000;font-stretch: ultra-expanded;font-size: large;">From da web <span style="font-size: small;font-family: sans-serif;"> <a href=" <%-summary.content_urls.desktop.page%>
- ">From wikipedia </a> under CC-BY-SA 3.0
-                     </span></div>
-  
-<hr style="clear: both;display: block;border: none;border-bottom: 0.5px solid #2f2f2f;/*! width: 4.5em; */height: 0;">
-
-  <%-summary.extract_html%>
-   
-<span style="margin-bottom: -3em;">
-
-  
- 
-                 
-                     </p>
-                                                                        </div>
-
-                     <% } %>                       <% } %>  
-                     <% } %>                 
-
-                           <% if (j.Search.Results.CardList) { %> 
-
-                                               <% if (j.Search.Results.CardList.title == "People also search for") { %> 
-         
-            
-                                    <div class="shelf" style="color:#fff;text-align: left;font-weight: 1000;">
-                                      
-     <h2 style="font-family: 'PokeTube Flex';font-weight: 1000;font-size: large;text-align: left;font-stretch: extra-expanded;">People also search for</h2>
-                                      
-             
-    <div class="card-list " style="overflow-y: hidden;">
-                                      <% j.Search.Results.CardList.Card.forEach (x => { %>
-
-        <a  style="background: #333;" class="card" href="/search?query=<%= x.title %> ">
-          
-                                      <% if (!x.Thumbnail.$t.endsWith("mqdefault.jpg")) { %> 
-
-          <img src="https://p.poketube.fun/<%= x.Thumbnail.$t%>" onerror="">
-                               <% } %>       
-                                 
-          <% if (x.Thumbnail.$t.endsWith("mqdefault.jpg")) { %> 
-
-          <img src="https://p.poketube.fun/<%= x.Thumbnail.$t.replace("//","https://")%>" onerror="">
-                               <% } %>         
-          <span><%= x.title %></span></a>
-                                                  <% }) %>  
-       
-    </div>
-
- </div>                    
-            <hr style="clear: both;display: block;border: none;border-bottom: 0.5px solid #2f2f2f;margin: 0 16em;/*! width: 4.5em; */height: 0;margin-top: 1em;">
-
-                     <% } %>                       <% } %>  
- 
-
-       <% j.Search.Results.Video.forEach(x => { %>
+       <% invresults.forEach (x => { %>
          <div class="video-list" >
            
     <div class="video">
       <a
-        href="/watch?v=<%= x.id %>"
+        href="/watch?v=<%= x.videoId %>"
         class="thumbnail"
-        style="background-image: url('/vi/<%= x.id %>/hqdefault.jpg?sqp=-oaymwEXCNAFEJQDSFryq4qpAwkIARUAAIhCGAE=&amp;rs=AOn4CLBmAOZV7CM3NdDKlEFxGX7PpI5UWQ');border-radius: 10px;"
-         ><span class="video-length"><%=x.duration %></span></a>
+        style="background-image: url('/vi/<%= x.videoId %>/hqdefault.jpg?sqp=-oaymwEXCNAFEJQDSFryq4qpAwkIARUAAIhCGAE=&amp;rs=AOn4CLBmAOZV7CM3NdDKlEFxGX7PpI5UWQ');border-radius: 10px;"
+         ><span class="video-length"><%=turntomins(x.lengthSeconds) %></span></a>
 <div class="info" style="color:#fff;text-align: left;font-weight: 1000;">
         <a style="font-family: 'PokeTube Flex';font-size: large;text-align: left;font-stretch: extra-expanded;
 font-weight: 1000;
-           " href="/watch?v=<%= x.id %>" class="title max-lines-2"
-          ><%= x.Title %></a>
+           " href="/watch?v=<%= x.videoId %>" class="title max-lines-2"
+          ><%= x.title %></a>
         <div style="display: flex; flex-direction: column; row-gap: 8px;font-weight:bold">
-          <a href="/watch?v=<%= x.id %>"><span><%= x.views %> views</span> <span>•</span> <span><%= x.uploadedAt %></span></a>
-          <a href="/channel?id=<%= x.Channel.id %>">By <%=x.Channel.Name %></a>
+          <a href="/watch?v=<%= x.videoId %>"><span><%= x.viewCountText %></span> <span>•</span> <span><%= x.publishedText %></span></a>
+          <a href="/channel?id=<%= x.authorId %>">By <%=x.author %></a>
         </div>
       </div>
     </div>
@@ -527,32 +495,31 @@ font-weight: 1000;
         
 
                 <% }) %>  
-                  
-<p style="font-family: Inter;text-align: left;margin-left: 16em;">
-  <%=j.Search.estimatedResults.toLocaleString()%> Results (estimated)
-    </p>
+ 
 
   
         <audio id="audio" style="display:none;" loop autoplay></audio>
   
                   
-                  
+             
                   
                   <center> <hr style="clear: both;display: block;border: none;border-bottom: 0.5px solid #2f2f2f;margin: 0 16em;/*! width: 4.5em; */height: 0;margin-top: 1em;">
 
 <div style="border-top: 1px solid var(--border-color);width: 100%;display: flex;gap: 43em;padding: 0;margin: 0;">
           
-            <%  if (continuation) { %>
+            <%  if (continuation !== "1") { %>
               
 <p style="text-align: left;margin-left: 16em;color: var(--text-secondary);text-decoration: none;">
     <a  href="/search?query=<%=q%>">First Page</a>              </p>
-              <p style="text-align: left;;color: var(--text-secondary);text-decoration: none;">
-    <a  href="/search?query=<%=q%>&continuation=<%=j.Search.continuation%>">Next Page</a>     
-              </p>
+<p style="text-align: left; color: var(--text-secondary); text-decoration: none;">
+  <a href="/search?query=<%= q %>&continuation=<%- Number(continuation) + 1 %><% if (date) { %>&date=<%= date %><% } %><% if (duration) { %>&duration=<%= duration %><% } %><% if (sort) { %>&sort=<%= sort %><% } %>  ">Next Page</a>
+</p>
+
                                                 <% } %>  
-                            <%  if (!continuation) { %>
+                            <%  if (continuation == "1" || !continuation) { %>
                <p style="text-align: left;margin-left: 16em;;color: var(--text-secondary);text-decoration: none;">
-    <a  href="/search?query=<%=q%>&continuation=<%=j.Search.continuation%>">Next Page</a>      
+    <a  href="/search?query=<%=q%>&continuation=2<% if (date) { %>&date=<%= date %><% } %><% if (duration) { %>&duration=<%= duration %><% } %><% if (sort) { %>&sort=<%= sort %><% } %>
+              ">Next Page</a>      
                                </p>
 
                                                 <% } %>  
@@ -561,8 +528,7 @@ font-weight: 1000;
 
                   </center>
       
-                                  <% } %>   
-            <%  if (!Array.isArray( j.Search.Results.Video)) { %>
+             <%  if (!Array.isArray(invresults)) { %>
               <br>
               <center>
              <h1 style="font-family:'Ginto nord';font-weight:900;white-space:yes;">

@@ -28,11 +28,10 @@
     <meta content=website property=og:type>
     <meta content="<%=j.Channel?.Metadata.Name%> - PokeTube" property=og:title>
        <link href=/css/yt-ukraine.svg?v=6 rel=icon>
-       <% if (dnoreplace) { %>
+       
 
-    <meta content="<%-dnoreplace%>" property=twitter:description>
-          <% } %>
-       <% if (j.Channel?.Metadata.Banners.Thumbnail) { %>
+    <meta content="<%- cinv.description %>" property=twitter:description>
+        <% if (j.Channel?.Metadata.Banners.Thumbnail) { %>
 
     <meta content="<%=j.Channel?.Metadata?.Banners.Thumbnail[2].$t%>" property=og:image>
                    <% } %>
@@ -544,7 +543,7 @@ color:#ea9999 !important;
                                <% } %>
 		<div class="channel-info" >
 			<a href="/avatars/<%=j.Channel?.Metadata.Avatars.Thumbnail?.$t.replace("https://yt3.googleusercontent.com/", "")%>" class="avatar">
-				<img src="/avatars/<%=j.Channel?.Metadata.Avatars.Thumbnail?.$t.replace("https://yt3.googleusercontent.com", "")%>" alt="Channel Avatar">
+				<img src="/avatars/<%=j.Channel?.Metadata.Avatars.Thumbnail?.$t.replace("https://yt3.googleusercontent.com/", "")%>" alt="Channel Avatar">
 			</a>
       
               <% if (cinv?.authorVerified) { %>
@@ -1279,7 +1278,7 @@ width: fit-content;
      <h3 style="color:#fff;font-family:Ginto Nord,sans-serif;font-weight:900;padding: 0px;margin: 0;margin-top: 7px;margin-left: 10px;">About</h3>
 
 
-     <% if (desc) { %>
+     <% if (cinv.descriptionHtml) { %>
 
  <p style="color:#fff;margin-left: 10px;font-weight: bold;"><%-cinv.descriptionHtml%></p>
   <% } %>

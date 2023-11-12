@@ -310,7 +310,7 @@ module.exports = function (app, config, renderTemplate) {
         }
       } catch (error) {
         console.error(error);
-    return res.redirect(`/watch?v=${req.query.v}&fx=1`); 
+    return res.redirect(`/watch?v=${req.query.v}&fx=1&err=${btoa(error)}`); 
       }
     });
   });

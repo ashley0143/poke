@@ -35,19 +35,20 @@ class PokeTubeDislikesAPIManager  {
     }
   }
 
-  /**
+   /**
    * Retrieves engagement data for the YouTube video.
    * @returns {Promise<object|null>} A Promise that resolves with the engagement data, or null if an error occurs.
    * @private
    */
   async _getEngagementData() {
-  const fallbackUrl = `https://returnyoutubedislikeapi.com/votes?videoId=${this.videoId}&cachefixer=${btoa(Date.now())}`;
+  const fallbackUrl = `https://prod-poketube.testing.poketube.fun/api?v=${this.videoId}`;
   
    const { fetch } = await import("undici");
     
    const engagement = await fetch(fallbackUrl).then((res) => res.json());
   return engagement;
   }
+
 
   /**
    * Retrieves data about the YouTube video and its engagement.

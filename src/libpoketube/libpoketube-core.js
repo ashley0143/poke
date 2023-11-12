@@ -82,7 +82,7 @@ class PokeTubeCore {
       fetch(`${this.config.invapi}/comments/${v}?hl=${contentlang}&region=${contentregion}&h=${btoa(Date.now())}`).then((res) => res.text()),
       fetch(`${this.config.invapi}/videos/${v}?hl=${contentlang}&region=${contentregion}&h=${btoa(Date.now())}`).then((res) => res.text()),
       curly
-        .get(`${this.config.tubeApi}video?v=${v}&h=${btoa(Date.now())}`, {
+        .get(`${this.config.tubeApi}video?v=${v}`, {
           httpHeader: Object.entries(headers).map(([k, v]) => `${k}: ${v}`),
         })
         .then((res) => {

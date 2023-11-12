@@ -9,7 +9,7 @@
 /**
  * A class representing a PokeTube API instance for a specific video.
  */
-class PokeTubeDislikesAPIManager  {
+class PokeTubeDislikesAPIManager {
   /**
    * Creates a new PokeTube API instance for the given video ID.
    * @param {string} videoId - The ID of the YouTube video.
@@ -41,12 +41,24 @@ class PokeTubeDislikesAPIManager  {
    * @private
    */
   async _getEngagementData() {
-  const fallbackUrl = `https://returnyoutubedislikeapi.com/votes?videoId=${this.videoId}`;
-  
-   const { fetch } = await import("undici");
-    
-   const engagement = await fetch(fallbackUrl).then((res) => res.json());
-  return engagement;
+    const fallbackUrl = `https://returnyoutubedislikeapi.com/votes?videoId=${this.videoId}`;
+
+    const { fetch } = await import("undici");
+
+    // why RYD? why... do i have to this lol?
+    for (let i = 0; i < 2; i++) {
+      try {
+        const engagement = await fetch(fallbackUrl).then((res) => res.json());
+        return engagement;
+      } catch (err) {
+        if (err.status === 503) {
+          // retry after a bit
+          await new Promise((resolve) => setTimeout(resolve, 1000));
+        } else {
+          throw err;
+        }
+      }
+    }
   }
 
   /**
@@ -58,7 +70,7 @@ class PokeTubeDislikesAPIManager  {
 
     return {
       engagement: this.engagement,
-     };
+    };
   }
 
   /**

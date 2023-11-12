@@ -561,7 +561,7 @@ color:#ea9999 !important;
                 
                                                <% } %>
 
-			<div class="name" style="background: #333;border-radius: 12px;padding: 9px;">
+			<div class="name" style="background: #333;border-radius: 12px;padding: 9px;height: 6em;">
 				<p style="font-family:PokeTube Flex,sans-serif;font-weight:1000;font-stretch: ultra-expanded;margin-top: 16px;margin-bottom: 15px;"><%=j.Channel?.Metadata.Name%>
           
 <span style="background: #0005;padding: 3px;padding-top:  2.5px !important;display: inline-flex;border-radius: 3px;">
@@ -593,18 +593,20 @@ color:#ea9999 !important;
   <p>Error: <%= error.message %></p>
 <% } %>
 
-  <i class="fa-thin fa-angle-right"></i></a>
-        </p>
- 			</div>
- 
-  <button class="subscribe-button " style="text-decoration: none;">    <a style="color: black;
+  <i class="fa-thin fa-angle-right"></i></a><br><button class="subscribe-button " style="text-decoration: none;margin-right:3px !important;">    <a style="color: black;
+white-space: nowrap;text-decoration: none;" id="sub">Suscribe</a></button><button class="subscribe-button " style="text-decoration: none;">    <a style="color: black;
 white-space: nowrap;text-decoration: none;" href="/feeds/videos.xml?channel_id=<%=ID%>">Rss feed </a></button>
+      
+        </p>
+  
+ 			</div>
+  
       
 		</div>
                                     <% if (!isMobile) { %>  
    
-     <div class="tabs  tabs-center">
-            <% if (!tab) { %>
+<div class="tabs  tabs-center" style="margin-top: 26px;">
+                        <% if (!tab) { %>
 
                 <a href="/channel?id=<%=ID%>" class="tab active" style="color:#cfe2f3;">Videos</a>
               
@@ -1316,7 +1318,20 @@ width: fit-content;
 <script src="/css/custom-css.js"> </script>
   <script>
       
+var anchor = document.getElementById("sub");
 
+// Check if there's a user ID in localStorage
+var userID = localStorage.getItem("UserID");
+
+if (userID) {
+    // If user ID exists in localStorage, set the href attribute
+    anchor.href = `/api/set-channel-subs?ID=${userID}&channelName=<%=j.Channel?.Metadata.Name%>&avatar=https://p.poketube.fun/<%- j.Channel?.Metadata.Avatars.Thumbnail?.$t %>&channelID=<%= ID %>`;
+} else {
+    // If user ID doesn't exist in localStorage, you can handle it as needed
+    console.log("User ID not found in localStorage");
+    // Optionally, you can set a default href or display an error message.
+}
+    
      </script>
                </body>
  

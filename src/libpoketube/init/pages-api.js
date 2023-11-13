@@ -27,15 +27,23 @@ function getJson(str) {
 }
 
 const pkg = require("../../../package.json");
-const ver = "v23.2809-aRi-MAJOR-stable-nonLTS-git-MTY5NTkxODIyMg==";
-const branch = "master";
-const codename = "ari";
-const versionnumber = "269";
-const relaseunixdate = "MTY5NTkxODIyMg==";
+const cnf = require("../../../config.json");
+
+const ver = "v23.1311-aMy-MAJOR-stable-nonLTS-git-MTY5OTg5NDg3Mw==";
+const branch = "dev";
+const codename = "amy";
+const versionnumber = "270";
+const relaseunixdate = "MTY5OTg5NDg3Mw==";
 
 module.exports = function (app, config, renderTemplate) {
   app.get("/embed/:v", async function (req, res) {
-    res.send("Disabled until further notice");
+    res.send("Disabled until Q1 2024");
+  });
+
+  app.get("/admin", async function (req, res) {
+     if(req.hostname === "poketube.fun") {
+      res.redirect("https://console.sudovanilla.com/?from=pt_admin")
+     }
   });
   
   app.get("/vi/:v/:t", async function (req, res) {
@@ -153,6 +161,7 @@ app.get("/avatars/:v", async function (req, res) {
       relaseunixdate,
       vernum: versionnumber,
       codename,
+      config:cnf,
       packages: {
         libpt: version,
         node: process.version,

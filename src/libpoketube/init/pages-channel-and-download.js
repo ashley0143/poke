@@ -103,7 +103,7 @@ module.exports = function (app, config, renderTemplate) {
 
     let continuation = req.query.continuation || "";
     let date = req.query.date || "";
-    let type = req.query.type || "";
+    let type = "video";
     let duration = req.query.duration || "";
     let sort = req.query.sort || "";
  

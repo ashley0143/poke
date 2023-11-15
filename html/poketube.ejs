@@ -2364,13 +2364,20 @@ font-size: 13px;margin:0;padding:0;white-space: nowrap;
   </h3>
 <hr style="clear: both;display: block;border: none;border-bottom: 0.5px solid #2f2f2f;/*! width: 4.5em; */height: 0;">
 
- <div> <div>
+ <div> <div style="
+    display: flex;
+    flex-flow: column;
+    background: #272727;
+    padding: 5px;
+    height: 10em;
+    border-radius: 11px;
+">
 
     
          <div class="video-title" style="font-family: 'PokeTube Flex';margin-bottom: 8px;text-align:center;font-stretch: extra-expanded;font-weight: 1000;" ><%=inv_vid.title%></div>
           
            <% if (inv_vid.genre === "Music") { %> 
-             <span style="font-size: 13px;font-family: ubuntu;width:0em;text-align:center;"><i title="hq audio" class="fa-light fa-waveform-lines"></i>&nbsp;Lossless Audio </span>
+             <span style="font-size: 13px;font-family: ubuntu;width:auto;text-align:center;"><i title="hq audio" class="fa-light fa-waveform-lines"></i>&nbsp;Lossless Audio </span>
 	                                  		 	               <% } %>
                                      </div>
                                          <!--
@@ -2388,7 +2395,7 @@ font-size: 13px;margin:0;padding:0;white-space: nowrap;
  			</div>
 -->
                  
-<div style="display: flex;justify-content: center;gap: 3em;">
+<div style="display: flex;justify-content: center;margin-top: -5em;gap: 3em;">
     
  <div style="text-align: center;font-size: x-large;margin: 9px;">
     	<p>
@@ -2421,7 +2428,7 @@ font-size: 13px;margin:0;padding:0;white-space: nowrap;
  <div>
 
                 
- <div style="background:#272727;padding: 5px;border-radius: 11px;font-family: 'PokeTube Flex';font-stretch: extra-expanded;font-weight: 700;">
+ <div style="background:#272727;padding: 5px;margin-top: 12px;border-radius: 11px;font-family: 'PokeTube Flex';font-stretch: extra-expanded;font-weight: 700;">
               <%-String(channelurlfixer(inv_vid.descriptionHtml)).replace(/\n/g, " <br> ").replace(/twitter\.com/g, "nitter.net").replace(/reddit\.com/g, "teddit.net") %>
                             
   <div style="margin: 10px;">

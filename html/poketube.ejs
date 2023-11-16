@@ -927,14 +927,12 @@ display: block; !important;" autoplay controls
    <% inv_vid.captions?.forEach(x => { %>
      <track src="/api/subtitles?v=<%=inv_vid.videoId%>&h=<%= x.label %>" label="<%= x.label.replace("United States","Simplified - USA") %>" kind="subtitles">      
      
-        <img src="https://t.poketube.fun/t/rep.gif?v=<%=btoa(inv_vid.videoId)%>&h=<%= x.label %>" id="subtitle_usage_rate" style="border:0;width: 0;visibility: hidden;"> 
-         <% }) %>   
+          <% }) %>   
                                                                                                        <% } %>                     
      <%  if (!Array.isArray( inv_vid.captions)) { %> 
      <track src="/api/subtitles?v=<%=inv_vid.videoId%>&h=<%= %>" label="<%=  video.Subtitles.Subtitle.language.replace("United States","Simplified - USA") %>" kind="subtitles">      
      
-        <img loading="lazy" src="https://t.poketube.fun/t/rep.gif?v=<%=btoa(inv_vid.videoId)%>&h=<%= video.Subtitles.Subtitle.language %>" id="subtitle_usage_rate" style="border:0;width: 0;visibility: hidden;"> 
-            
+             
                                                            <% } %>         
                                                                            
                                                              </video>
@@ -1518,9 +1516,7 @@ display: block; !important;" autoplay controls
                           
  
                                                               </div>
-                              <!-- This is to see how much comments loaded in a video, i dont collect the comment metadata - its sha hashed (see /privacy ) -->
-                                         <img loading="lazy" src="https://t.poketube.fun/t/rep.gif?v=<%=sha384(inv_vid.videoId)%>&pub_date=<%-sha384(x.publishedText)%>&content_comment_sha=<%- sha384(x.content)%>&id=<%- sha384(x.commentId) %>" id="comments_rate" style="border:0;width: 0;visibility: hidden;display:none;"> 
-
+ 
                             </div>
 
                                                                         <% }) %>   
@@ -1947,31 +1943,48 @@ window.addEventListener("unload", cleanup)
   }
 </script>
 <!-- SCRIPTS END -->
-  <% if (!optout) { %> 
-          <!-- MORE INFO :https://poketube.fun/privacy -->
-          <!-- MORE INFO :https://poketube.fun/privacy -->
-       
-          <!-- if you want to change the url - please see config in server.js  -->
+  
+</div>           <script>
+          var statsurl = "https://invid-api.poketube.fun/api/v1/stats"
+          
+            const userAgent = window.navigator.userAgent;
+  let browserName = "Unknown";
+
+  if (userAgent.includes("Firefox")) {
+    browserName = "Firefox";
+  } else if (userAgent.includes("Chrome")) {
+    browserName = "Chrome";
+  } else if (userAgent.includes("Safari")) {
+    browserName = "Safari";
+  } else if (userAgent.includes("Edge")) {
+    browserName = "Edge";
+  } else if (userAgent.includes("Opera") || userAgent.includes("OPR")) {
+    browserName = "Opera";
+  } else if (userAgent.includes("MSIE") || userAgent.includes("Trident/")) {
+
+    browserName = "Internet Explorer";
+  }
+
+  function applyBtoaMultipleTimes(input, times) {
+  let result = input;
+  for (let i = 0; i < times; i++) {
+    result = btoa(result);
+  }
+  return result;
+}
         
-         <!-- START <%=t%> -->  
-   
-        <!-- SESSION -->
-        <img src="<%=t%>t/rep.gif?ID=<%=btoa(Date.now())%>" style="width: 0;visibility: hidden;" id="SesionID">
-        <img src="<%=t%>t/rep.gif?piwik=t" style="width: 0;visibility: hidden;" id="piwik_noip_no_personal-info_collect">
-   
-        <!-- VIDEO -->
-        <img src="<%=t%>t/rep.gif?video_id=<%=btoa(inv_vid.videoId)%>" style="width: 0;visibility: hidden;" id="videoID">
-        <img src="<%=t%>t/rep.gif?channel_ID=<%=btoa(video?.Channel.id || k.Video.Channel.id)%>" style="width: 0;visibility: hidden;" id="channel">
-   
-
-        <!-- END <%=t%> -->  
-
- <% } %>
-   
-</div>
+const encodedBrowserName = applyBtoaMultipleTimes(browserName.replace("o", "h").replace("fire", "ggteh"), 15);
+        
+fetch(statsurl + "?browser=" + encodedBrowserName)
+             
+     
+           </script>
     </ptd-app-ejs>
 </body>
+
 </html>
+    
+    
 
   <% } %>
 

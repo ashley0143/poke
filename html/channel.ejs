@@ -1,4 +1,5 @@
 <% try { %>
+
 <!--
     This Source Code Form is subject to the terms of the GNU General Public License:
 
@@ -814,10 +815,11 @@ width: fit-content;
  
    <div style="text-align: center;padding: 3px;margin-top: 0px;">
      
-     <div class="tabs tabs-center">
-            <% if (!tab) { %>
+     <div class="tabs tabs-center" style="overflow: scroll;width: 7em;font-size: 10px;margin-left: -1px;font-family: poketube flex !important;font-weight: 800 !important;font-stretch: ultra-expanded;">
 
-                <a href="/channel?id=<%=ID%>" class="tab active">Home</a>
+       <% if (!tab) { %>
+
+                <a href="/channel?id=<%=ID%>" class="tab active">Videos</a>
               <%  if (Array.isArray(c.comments)) { %> 
 
   <%  if (c.comments.length != "0") { %> 
@@ -825,22 +827,54 @@ width: fit-content;
      <a  href="/channel?id=<%=ID%>&tab=community"  class="tab">Community</a>
                                                                          <% } %>
                                                                          <% } %>
+                                                                                                                                                                     <%  if (Array?.isArray(shorts?.videos)) { %> 
+  
+<%  if (turntomins(shorts?.videos[0]?.lengthSeconds)  != "aN:aN" ) { %> 
+
+                   <a href="/channel?id=<%=ID%>&tab=shorts" class="tab">Shorts</a>
+  <% } %>
+      <% } %>                             
                 <a  href="/channel?id=<%=ID%>&tab=about"  class="tab">About</a>
                                                                <% } %>
                                                                              <% if (tab ==="about") { %>
+                                                                                                                       <%  if (Array?.isArray(shorts?.videos)) { %> 
+  
+<%  if (turntomins(shorts?.videos[0]?.lengthSeconds)  != "aN:aN" ) { %> 
 
-                <a href="/channel?id=<%=ID%>" class="tab">Home</a>
+                   <a href="/channel?id=<%=ID%>&tab=shorts" class="tab">Shorts</a>
+  <% } %>
+      <% } %>
+                <a href="/channel?id=<%=ID%>" class="tab">Videos</a>
                 <a href="/channel?id=<%=ID%>&tab=community"  class="tab">Community</a>
                 <a  href="/channel?id=<%=ID%>&tab=about" class="tab active">About</a>
                                                                <% } %>
                                                                  
                                                                      <% if (tab ==="community") { %>
 
-                <a href="/channel?id=<%=ID%>" class="tab">Home</a>
+                <a href="/channel?id=<%=ID%>" class="tab">Videos</a>
+                                                                                                                                                                                              <%  if (Array?.isArray(shorts?.videos)) { %> 
+  
+<%  if (turntomins(shorts?.videos[0]?.lengthSeconds)  != "aN:aN" ) { %> 
+
+                   <a href="/channel?id=<%=ID%>&tab=shorts" class="tab">Shorts</a>
+  <% } %>
+      <% } %>
                 <a href="/channel?id=<%=ID%>&tab=community"  class="tab active">Community</a>
                 <a  href="/channel?id=<%=ID%>&tab=about" class="tab">About</a>
                                                                <% } %>
+        <% if (tab ==="shorts") { %>
 
+                <a href="/channel?id=<%=ID%>" class="tab">Videos</a>
+                                                                                                                                                                                              <%  if (Array?.isArray(shorts?.videos)) { %> 
+  
+<%  if (turntomins(shorts?.videos[0]?.lengthSeconds)  != "aN:aN" ) { %> 
+
+                   <a href="/channel?id=<%=ID%>&tab=shorts" class="tab active">Shorts</a>
+  <% } %>
+      <% } %>
+                <a href="/channel?id=<%=ID%>&tab=community"  class="tab">Community</a>
+                <a  href="/channel?id=<%=ID%>&tab=about" class="tab">About</a>
+                                                               <% } %>
             </div>
      
      

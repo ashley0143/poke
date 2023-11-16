@@ -22,6 +22,11 @@ const {
 
 const sha384 = modules.hash;
 
+/**
+ * Parses a string to JSON, returns null if parsing fails.
+ * @param {string} str - The input string to be parsed as JSON.
+ * @returns {Object|null} - The parsed JSON object or null if parsing fails.
+ */
 function getJson(str) {
   try {
     return JSON.parse(str);
@@ -30,11 +35,24 @@ function getJson(str) {
   }
 }
 
+/**
+ * Object representing base64-encoded protobuf values for channel tabs.
+ * @typedef {Object} ChannelTabs
+ * @property {string} community - Base64-encoded value for the community tab.
+ * @property {string} shorts - Base64-encoded value for the shorts tab.
+ * @property {string} videos - Base64-encoded value for the videos tab.
+ * @property {string} streams - Base64-encoded value for the streams tab.
+ */
+
+// see https://developers.google.com/youtube/v3/docs/channels/ 
 const ChannelTabs = {
   community: "Y29tbXVuaXR5",
   shorts: "c2hvcnRz",
   videos: "dmlkZW9z",
-  streams: "c3RyZWFtcw==",
+  streams: "c3RyZWFtcw==", // or "live"
+  channels:"Y2hhbm5lbHM=",
+  store:"c3RvcmU=",
+  released:"cmVsZWFzZWQ="
 };
 
 module.exports = function (app, config, renderTemplate) {
@@ -60,6 +78,10 @@ module.exports = function (app, config, renderTemplate) {
     if (!v) res.redirect("/");
 
     res.redirect(`/watch?v=${v}`);
+  });
+
+   app.get("/api/getchanneltabs", async function (req, res) {
+    res.json(ChannelTabs);
   });
 
 

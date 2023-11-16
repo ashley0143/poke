@@ -244,6 +244,27 @@ background: none !important;
     word-break: break-all;
     white-space: normal;
   } 
+
+   <% if (lightOrDark(color) == "light") { %>  
+	     .player.video-ambient-container  { 
+	         box-shadow: 0 -8px 5.9em <%=color%>; 
+	         }
+	        
+	                                                                                     <% } %>          
+	  
+	     <% if (lightOrDark(color) == "dark") { %>  
+	     .player.video-ambient-container  { 
+	         box-shadow: 0 -8px 5.9em <%=color2%>; 
+	        }
+	        
+	                                                                                     <% } %>     
+	        <% if (a) { %>  
+	
+	      .player.video-ambient-container  { 
+	         box-shadow: 0 0 0em <%=color%>; 
+	         }
+	        
+	                                                                                     <% } %>     
    </style>
  
   <link href=/css/app-cdn.min.css rel=stylesheet>
@@ -301,7 +322,7 @@ background: none !important;
 
  	<div class="primary">
        
-		<div class="video-player-container">
+		<div class="video-player-container video-ambient-container">
 
 <video class="player" id="<%=sha384(inv_vid.videoId)%>" style="border-radius: 7px;margin-left: -5.5px;" autoplay controls   
        

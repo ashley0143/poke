@@ -254,21 +254,24 @@ body {
  height:66px
 }
 .new-button {
- background:#0009;
- border-radius:0.5em;
- padding-right:1em;
- display:flex;
- justify-content:center;
- align-items:center;
- align-content:center;
- width:max-content;
- margin-top:4px;
- margin-left:3px;
- margin-right:0
+  background: #0009;
+  border-radius: 1.5em;
+  padding-right: 1em;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  align-content: center;
+  width: max-content;
+  margin-top: 4px;
+  margin-left: 3px;
+  margin-right: 0;
+  border: solid 0.5px #333;
 }
 .pill-button {
- margin-left:1em;
- font-family:ubuntu,sans-serif
+    margin-left: 1em;
+    font-family: 'PokeTube Flex';
+    font-stretch: ultra-expanded;
+    font-weight: 800;
 }
 .vertical {
  border-left:1px solid gray;
@@ -1742,7 +1745,7 @@ a.icon-link>i {
  background:#fff;
  border-radius:2em;
  text-transform:initial;
- font-weight:900;
+ font-weight:1000;
  padding:10px 16px;
  border:none;
  margin-left:.5em;
@@ -1768,11 +1771,13 @@ h3 {
 ptd-custom-more {
  color:#fff
 }
+
 @media screen and (orientation:landscape) {
  .ptnewbuttons {
   margin-left:auto;
   width:fit-content;
   width:-moz-fit-content;
+  overflow:scroll;
   max-width:150em!important;
   margin-right: auto !important;
  }

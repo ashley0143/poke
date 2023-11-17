@@ -2092,7 +2092,7 @@ a {
   <body>
 <div class="app" style="color:#fff;margin-top: 0;">
 <nav>
-       <div class="left"><a class="class" href="/" style="font-family:Inter,sans-serif;color:#fff"> <img style="width: 8.5em;display: block;margin-left: -1.5em;margin-right: auto;" src="/css/logo-mobile.svg">      </a>
+       <div class="left"><a class="class" href="/" style="font-family:Inter,sans-serif;color:#fff"> <img style="width: 8.5em;display: block;margin-left: -1.5em;margin-right: auto;" src="/css/logo-poke.svg">      </a>
              </div>
            
   <div class="middle">
@@ -2240,6 +2240,15 @@ font-size: 13px;margin:0;padding:0;white-space: nowrap;
 
 
       </div>
+     <%  if (Array.isArray( inv.comments)) { %> 
+      		<a class="new-button" title="Comments " style="color:#fff;text-decoration: none;margin-right: 0; " href="#comments-container">
+                            <div class="pill-button">
+
+            <i class="fa-light fa-comments"></i>
+           Comments
+            </div>
+					</a>
+                                                                                                             <% }%>      
 
   					<a class="new-button" title="Download this Video :3" style="color:#fff;text-decoration: none;margin-right: 0; " href="/download?v=<%=inv_vid.videoId%>">
                             <div class="pill-button">
@@ -2248,16 +2257,7 @@ font-size: 13px;margin:0;padding:0;white-space: nowrap;
             Download
             </div>
 					</a>
-      <%  if (Array.isArray( inv.comments)) { %> 
-      		<a class="new-button" title="Comments " style="color:#fff;text-decoration: none;margin-right: 0; " href="#comments-container">
-                            <div class="pill-button">
-
-            <i class="fa-light fa-comments"></i>
-            View Comments
-            </div>
-					</a>
-                                                                                                             <% }%>      
-
+ 
    <% if (!video?.Channel.Name.endsWith(' - Topic')) { %> 
     <% if (!inv_vid.title.endsWith('Audio)')) { %> 
    <% if (support != undefined) { %> 
@@ -2328,10 +2328,11 @@ font-size: 13px;margin:0;padding:0;white-space: nowrap;
 
 -->
 				</div>
+   <% let randomNumber = Math.floor(Math.random() * 2) + 1; %>
+
       <%  if (Array.isArray( inv.comments)) { %> 
 
-<div class="comment-mini" style="padding: 0em;background: #0009;border-radius: 16px;align-self: center;align-items: center;margin-left: 8px;margin-right: 12px;padding-bottom: 0;padding-top:1em">
-                                <a id="language-button" href="#comments-container" style="" class="switch">
+    <div class="comment-mini" style="padding: 0em;background: #0009;border-radius: 16px;align-self: center;align-items: center;margin-left: 8px;margin-right: 12px;padding-bottom: 0;padding-top:1em;<%= randomNumber === 2 ? 'visibility: collapse;' : '' %>">                                <a id="language-button" href="#comments-container" style="" class="switch">
 
   <div class="video-title" style="font-family:'PokeTube flex';font-weight:1000;white-space:yes;margin-top: -0.5em;margin-left: 0.8em;">Comments - <%- convert(inv.commentCount) %>
                                                         </div> 
@@ -2911,26 +2912,7 @@ timeLinks.forEach(link => {
     }
   }
 });
-
-// Function to check and toggle visibility of elements
-function checkAndToggleRecommended() {
-  const descContainerPresent = window.location.href.includes("#desc-container");
-  const recommendedElements = document.querySelectorAll(".recommended-list");
-  
-  if (descContainerPresent) {
-    recommendedElements.forEach((element) => {
-      element.style.display = "none";
-    });
-  } else {
-    recommendedElements.forEach((element) => {
-      element.style.display = "flex"; // or any other desired display value
-    });
-  }
-}
-
-// Call the function initially
-checkAndToggleRecommended();
-
+ 
 // Set up an interval to check every second
 setInterval(checkAndToggleRecommended, 1000);
 

@@ -257,8 +257,14 @@ padding-bottom: 32px;
 	 table-layout: auto;
 	 border-spacing: 4px 0;
 }
- .tabs.tabs-center {
-	 margin: auto;
+.tabs.tabs-center {
+    margin-left: 2em;
+    margin-top: 3em !important;
+    font-size: 12px;
+    font-family: ubuntu;
+    border-top-right-radius: 11px;
+    border-top-left-radius: 11px;
+    background: #333;
 }
  .tabs.tabs-justify {
 	 width: 100%;
@@ -641,8 +647,7 @@ white-space: nowrap;text-decoration: none;" href="/feeds/videos.xml?channel_id=<
                                                                          <% } %>
 
  
-                 <a  href="/channel?id=<%=ID%>&tab=about"  class="tab" style="color:gold">About</a>
-                                                               <% } %>
+                                                                <% } %>
                                                                              <% if (tab === "about") { %>
 
                 <a href="/channel?id=<%=ID%>" class="tab" style="color:#cfe2f3;">Videos</a>
@@ -675,8 +680,7 @@ white-space: nowrap;text-decoration: none;" href="/feeds/videos.xml?channel_id=<
                                              
                                                                           <% } %>
 
-                 <a  href="/channel?id=<%=ID%>&tab=about" class="tab active" style="color:gold">About</a>
-                                                               <% } %>
+                                                                <% } %>
                                                                  
                                                                       <% if (tab === "community") { %>
 
@@ -701,8 +705,7 @@ white-space: nowrap;text-decoration: none;" href="/feeds/videos.xml?channel_id=<
 
      <a  href="/channel?id=<%=ID%>&tab=community"  class="tab active" style="color:pink">Community</a>
  
-                 <a  href="/channel?id=<%=ID%>&tab=about" class="tab" style="color:gold">About</a>
-                                                               <% } %>
+                                                                <% } %>
 
                                                                                      <% if (tab === "shorts") { %>
 
@@ -729,8 +732,7 @@ white-space: nowrap;text-decoration: none;" href="/feeds/videos.xml?channel_id=<
                                                                          <% } %>
                                                                          <% } %>
 
-                 <a  href="/channel?id=<%=ID%>&tab=about" class="tab" style="color:gold">About</a>
-                                                               <% } %>
+                                                                <% } %>
                                                                  
                                                                                                  <% if (tab === "live") { %>
 
@@ -756,8 +758,7 @@ white-space: nowrap;text-decoration: none;" href="/feeds/videos.xml?channel_id=<
                                                                          <% } %>
                                                                          <% } %>
 
-                 <a  href="/channel?id=<%=ID%>&tab=about" class="tab" style="color:gold">About</a>
-                                                               <% } %>
+                                                                <% } %>
             </div>
      
                                                                            
@@ -834,8 +835,7 @@ width: fit-content;
                    <a href="/channel?id=<%=ID%>&tab=shorts" class="tab">Shorts</a>
   <% } %>
       <% } %>                             
-                <a  href="/channel?id=<%=ID%>&tab=about"  class="tab">About</a>
-                                                               <% } %>
+                                                                <% } %>
                                                                              <% if (tab ==="about") { %>
                                                                                                                        <%  if (Array?.isArray(shorts?.videos)) { %> 
   
@@ -846,8 +846,7 @@ width: fit-content;
       <% } %>
                 <a href="/channel?id=<%=ID%>" class="tab">Videos</a>
                 <a href="/channel?id=<%=ID%>&tab=community"  class="tab">Community</a>
-                <a  href="/channel?id=<%=ID%>&tab=about" class="tab active">About</a>
-                                                               <% } %>
+                                                                <% } %>
                                                                  
                                                                      <% if (tab ==="community") { %>
 
@@ -860,8 +859,7 @@ width: fit-content;
   <% } %>
       <% } %>
                 <a href="/channel?id=<%=ID%>&tab=community"  class="tab active">Community</a>
-                <a  href="/channel?id=<%=ID%>&tab=about" class="tab">About</a>
-                                                               <% } %>
+                                                                <% } %>
         <% if (tab ==="shorts") { %>
 
                 <a href="/channel?id=<%=ID%>" class="tab">Videos</a>
@@ -873,8 +871,7 @@ width: fit-content;
   <% } %>
       <% } %>
                 <a href="/channel?id=<%=ID%>&tab=community"  class="tab">Community</a>
-                <a  href="/channel?id=<%=ID%>&tab=about" class="tab">About</a>
-                                                               <% } %>
+                                                                <% } %>
             </div>
      
      

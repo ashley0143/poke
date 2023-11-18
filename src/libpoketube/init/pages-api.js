@@ -34,7 +34,7 @@ const versmol = "v23.1311-JeSsIcA"
 const branch = "dev/master";
 const codename = "jessica";
 const versionnumber = "272";
-const relaseunixdate = "MTcwMDI5ODc4OQ==
+const relaseunixdate = "MTcwMDI5ODc4OQ=="
 const updatequote = "Empty your cup so that it may be filled; become devoid to gain totality. - Bruce Lee"
 
 
@@ -161,8 +161,10 @@ app.get("/avatars/:v", async function (req, res) {
       .then((txt) => getJson(txt));
 
     const response = {
-      pt_version: versmol,
-      pt_version_full: verfull,
+      pt_version: {
+       version:versmol,
+       version_full:verfull
+      },
       branch,
       updatequote,
       relaseunixdate,

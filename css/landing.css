@@ -849,7 +849,11 @@ button[type="submit"]:hover {
   height: 700px;
   object-fit: cover;
   object-position: top;
-  mask-image: linear-gradient(black, #0000);
+  mask-image: linear-gradient(#5315ff,#0000);
+  border-top-left-radius: 1em;
+  border-top-right-radius: 1em;
+  pointer-events: none;
+  --webkit-mask-image: linear-gradient(#5315ff,#0000);
 }
 .landing-actions a {
   background: #fff;

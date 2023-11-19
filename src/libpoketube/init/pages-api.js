@@ -52,7 +52,7 @@ module.exports = function (app, config, renderTemplate) {
   });
   
   app.get("/vi/:v/:t", async function (req, res) {
-    var url = `https://inv.vern.cc/vi/${req.params.v}/${req.params.t}`
+    var url = `https://invid-api.poketube.fun/vi/${req.params.v}/${req.params.t}`
     
        let f = await modules.fetch(url + `?cachefixer=${btoa(Date.now())}`, {
       method: req.method,
@@ -63,7 +63,7 @@ module.exports = function (app, config, renderTemplate) {
   });
 
 app.get("/avatars/:v", async function (req, res) {
-    var url = `https://inv.vern.cc/ggpht/${req.params.v}`;
+    var url = `https://invid-api.poketube.fun/ggpht/${req.params.v}`;
 
     let f = await modules.fetch(url + `?cachefixer=${btoa(Date.now())}`, {
       method: req.method,
@@ -73,7 +73,7 @@ app.get("/avatars/:v", async function (req, res) {
   });
 
   app.get("/avatars/ytc/:v", async function (req, res) {
-    var url = `https://inv.vern.cc/ggpht/ytc/${req.params.v.replace("ytc", "")}`;
+    var url = `https://invid-api.poketube.fun/ggpht/ytc/${req.params.v.replace("ytc", "")}`;
 
     let f = await modules.fetch(url + `?cachefixer=${btoa(Date.now())}`, {
       method: req.method,

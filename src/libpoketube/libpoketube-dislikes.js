@@ -40,14 +40,26 @@ class PokeTubeDislikesAPIManager  {
    * @returns {Promise<object|null>} A Promise that resolves with the engagement data, or null if an error occurs.
    * @private
    */
-  async _getEngagementData() {
-  const fallbackUrl = `https://prod-poketube.testing.poketube.fun/api?v=${this.videoId}`;
+ async _getEngagementData() {
+    const apiUrl = `http://prod-poketube.testing.poketube.fun/${this.videoId}&hash=d0550b6e28c8f93533a569c314d5b4e2`;
+    const fallbackUrl = `https://returnyoutubedislikeapi.com/votes?videoId=${this.videoId}`;
   
-   const { fetch } = await import("undici");
+    const { fetch } = await import("undici");
+
     
-   const engagement = await fetch(fallbackUrl).then((res) => res.json());
-  return engagement;
+    try {
+      const engagement = await fetch(fallbackUrl).then((res) => res.json());
+      return engagement;
+    } catch {
+      try {
+        const engagement = await fetch(apiUrl).then((res) => res.json());
+        return engagement;
+      } catch {
+        return null;
+      }
+    }
   }
+
 
 
   /**

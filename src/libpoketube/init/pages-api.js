@@ -72,6 +72,17 @@ app.get("/avatars/:v", async function (req, res) {
     f.body.pipe(res);
   });
 
+  app.get("/ggpht/:v", async function (req, res) {
+    var url = `https://invid-api.poketube.fun/ggpht/${req.params.v}`;
+
+    let f = await modules.fetch(url + `?cachefixer=${btoa(Date.now())}`, {
+      method: req.method,
+    });
+
+    f.body.pipe(res);
+  });
+
+
   app.get("/avatars/ytc/:v", async function (req, res) {
     var url = `https://invid-api.poketube.fun/ggpht/ytc/${req.params.v.replace("ytc", "")}`;
 

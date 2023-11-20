@@ -45,7 +45,7 @@ function toObject(arr) {
 
 // Gets Invidious instances
 const invInstanceList = [
-  "https://vid.theedgeofrage.com"
+  "https://video-proxy.poketube.fun"
 ];
 
 // Gets a random instance from the list
@@ -66,7 +66,7 @@ const videoProxyObject = {
   cacheBuster: "d0550b6e28c8f93533a569c314d5b4e2",
   InvidiousPoketube: "AIzaSyAO_FJ2SlqU8Q4STEHLGCilw_Y9_11qcW8",
   url: url,  
-  losslessurl: "https://vid.theedgeofrage.com"
+  losslessurl: "https://lossless-proxy.poketube.fun"
 };
 
 module.exports = async function (video_id) {

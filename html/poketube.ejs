@@ -696,8 +696,7 @@ But Please note that unofficial instances can add the same lock icon, so please 
 <button class="btn btn-success" type="submit" style="transform: translate(21em, -1.25em);"><i class="fa-light fa-search"></i></button>             
          </form>
              
-           <img src="https://t.poketube.fun/t/rep.gif"  style="border:0;width: 0;visibility: hidden;"> 
-
+ 
       </div>
       <div class="right">
    
@@ -939,10 +938,10 @@ display: block; !important;" autoplay controls
                <% if (!a) { %>  
 
                                                              <canvas width="150" height="150" id="ambient-canvas"></canvas>
-                                                                            <% } %>         
+                        
+                 <% } %>         
 
-                                                             <img loading="lazy" src="https://t.poketube.fun/t/rep.gif?video=<%=btoa(inv_vid.videoId)%>" style="border:0;width: 0;visibility: hidden;" id="video">
-<div class="pwp" style="display: flex;justify-content: center;align-items: center;flex-direction: row; column-gap: 3px;margin-top: -1em;max-height: 16px;" align="center">
+ <div class="pwp" style="display: flex;justify-content: center;align-items: center;flex-direction: row; column-gap: 3px;margin-top: -1em;max-height: 16px;" align="center">
                                 
   <% if (!qua) { %> 
 
@@ -973,22 +972,7 @@ display: block; !important;" autoplay controls
                                                                         
                                                                    <a href="#video"  class="maxi"  id="maximize">  <i style="display: block;"  title="Maximise!" class="fa-light fa-maximize"></i> </a> 
                                                                            
-                                                                       <!-- comments -->
-                                                                                                                                                                                                                                                                                            <%  if (inv.comments) { %> 
-
-                                                                          <%  if (inv.comments.length > 8 ) { %> 
-
-                                                                             <div class="flying_cmnt">
-                                                                                         <% inv.comments.slice(-8).forEach(x =>{ %>
- <marquee loop="INFINITY">
-                 <%- x.contentHtml %>
-                   </marquee>
-            
-                                                                        <% }) %>   
-                            </div>
-                                                                                                                       <% } %>                                                                         <% } %>   
-
-                                                                                                                         
+                                                     
 <!-- Stats for nerds -->
                                                                                                                          
            <div class="div_box">
@@ -1499,9 +1483,7 @@ Recommended Videos
 </div>   
                                 
                                 
-                                <% if (!f) { %> 
-<% k.Video.Recommendations?.Video?.forEach(x => { %> <div class="fade-in video"> <% if (!optout) { %> <a class=thumbnail href="/watch?v=<%= x.id %>"style="background-image:url('/vi/<%= x.id %>/hqdefault.jpg?sqp=-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLBy_x4UUHLNDZtJtH0PXeQGoRFTgw');border-radius:9.5px"alt="<%= x.Title %>"><span class=video-length><%- x.duration || "LIVE"%></span> <% } %> <% if (optout) { %> <a class=thumbnail href="/watch?v=<%= x.id %>&m=f"style="background-image:url('/vi/<%= x.id %>/hqdefault.jpg?sqp=-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLBy_x4UUHLNDZtJtH0PXeQGoRFTgw');border-radius:9.5px"alt="<%= x.Title %>"><span class=video-length><%- x.duration || "LIVE"%></span> <% } %> </a><div class=info> <% if (!optout) { %> <a class="max-lines-2 title"href="/watch?v=<%= x.id %>"style=font-stretch:100%;font-weight:800 title="<%= x.Title %>"><%= x.Title %></a> <% } %> <% if (optout) { %> <a class="max-lines-2 title"href="/watch?v=<%= x.id %>&m=f"style=font-stretch:100%;font-weight:800 title="<%= x.Title %>"><%= x.Title %></a> <% } %> <div><a class=max-lines-2 href="/channel?id=<%= x.Channel.id %>"style=-webkit-line-clamp:1;width:12em;word-wrap:break-word><%=x.Channel.Name %></a><div class=video-views> <%= x.uploadedAt.replace("Streamed", "Live") %> • <%= convert(x.views) %> views</div></div></div></div> <% }) %>
-                            <% } %>
+<% if (!f) { %> <% k.Video.Recommendations?.Video?.forEach(x => { %> <div class="fade-in video"> <% if (!optout) { %> <a class=thumbnail href="/watch?v=<%= x.id %>"style="background-image:url('/vi/<%= x.id %>/hqdefault.jpg?sqp=-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLBy_x4UUHLNDZtJtH0PXeQGoRFTgw');border-radius:9.5px"alt="<%= x.Title %>"><span class=video-length><%- x.duration || "LIVE"%></span> <% } %> <% if (optout) { %> <a class=thumbnail href="/watch?v=<%= x.id %>&m=f"style="background-image:url('/vi/<%= x.id %>/hqdefault.jpg?sqp=-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLBy_x4UUHLNDZtJtH0PXeQGoRFTgw');border-radius:9.5px"alt="<%= x.Title %>"><span class=video-length><%- x.duration || "LIVE"%></span> <% } %> </a><div class=info> <% if (!optout) { %> <a class="max-lines-2 title"href="/watch?v=<%= x.id %>"style=font-stretch:100%;font-weight:800 title="<%= x.Title %>"><%= x.Title %></a> <% } %> <% if (optout) { %> <a class="max-lines-2 title"href="/watch?v=<%= x.id %>&m=f"style=font-stretch:100%;font-weight:800 title="<%= x.Title %>"><%= x.Title %></a> <% } %> <div><a class=max-lines-2 href="/channel?id=<%= x.Channel.id %>"style=-webkit-line-clamp:1;width:12em;word-wrap:break-word><%=x.Channel.Name %></a><div class=video-views> <%= x.uploadedAt.replace("Streamed", "Live") %> • <%= convert(x.views) %> views</div></div></div></div> <% }) %><% } %>
  
      <% if (f) { %> 
 
@@ -1600,14 +1582,7 @@ Recommended Videos
            
  
 	</div>  
-   
-   <!-- IGNORE THESE -->
-<a href="/channel?id=<%=video?.Channel.id || k.Video.Channel.id%>&tab=community" style="display:none;"></a><a href="/channel?id=<%=video?.Channel.id || k.Video.Channel.id%>&tab=shorts" style="display:none;"></a><a href="/channel?id=<%=video?.Channel.id || k.Video.Channel.id%>&tab=live" style="display:none;"></a><a href="/channel?id=<%=video?.Channel.id || k.Video.Channel.id%>&tab=about" style="display:none;"></a>
-               
-<img src="<%=t%>t/rep.gif?ID=<%=btoa(Date.now())%>" style="width: 0;visibility: hidden;" id="ChannelCacheLoadedOrNot">
-
-<!-- IGNORE THESE -->
-
+ 
  
     
 <!-- SCRIPTS -->
@@ -1704,6 +1679,7 @@ const urlParams = new URLSearchParams(window.location.search);
 if (!urlParams.has('hl') && !urlParams.has('region') && languageCode && regionCode) {
   location.href = currentURL + `&region=${regionCode}&hl=${languageCode}`;
 }
+       
 let isMiddleButtonPressed = false;
 
 // Function to change video speed
@@ -1741,8 +1717,8 @@ if (userID) {
     anchor.href = `/api/set-channel-subs?ID=${userID}&channelName=<%=k.Video.Channel.Name%>&avatar=https://p.poketube.fun/<%= k.Video.Channel.Avatar[1].$t %>&channelID=<%=video?.Channel.id || k.Video.Channel.id %>`;
 } else {
     // If user ID doesn't exist in localStorage, you can handle it as needed
-    console.log("User ID not found in localStorage");
-    // Optionally, you can set a default href or display an error message.
+    anchor.href = "/account-create"
+  // Optionally, you can set a default href or display an error message.
 }
 
 // Now, all the selected video links should have the parameters added to their href attributes
@@ -1756,7 +1732,14 @@ if (userID) {
 <!-- app.js -->
 <!-- app.js -->
    
-<!-- Ambient Mode, for PokeTube -->
+<!-- Ambient Mode, for PokeTube --><% if(!IsOldWindows) { %>
+   <script>
+     console.error("[AMBIENT MODE] error_device_not_supported")
+   </script>
+   <% } %>
+
+               <% if(!IsOldWindows) { %>
+
 <script>
 let requestId;
 
@@ -1827,9 +1810,10 @@ window.addEventListener("unload", cleanup)
   z-index: -1;
 }
 </style>
+                 <% } %>
 <script src="/static/app.bundle.js?ver=<%-btoa("1f739d93") %>&bundledat=<%- Date.now() %>"></script>
 <style> img.emoji {height: 1em;width: 1em;margin: 0 .05em 0 .1em;vertical-align: -0.1em;}</style>
-<script>twemoji.parse(document.body,{ base: 'https://p.poketube.fun/https://cdn.zptr.cc/twemoji/' })</script><script>
+<script>twemoji.parse(document.body,{ base: 'https://cdn.zptr.cc/twemoji/' })</script><script>
   window.GLOBAL_ENV = {
    API_ENDPOINT_INVID:"https://invid-api.poketube.fun/api/v1",
    API_ENDPOINT_INNER:"https://inner-api.poketube.fun/api/",
@@ -2077,7 +2061,7 @@ a {
                                                                       <% } %>               
 
        </div>            
-   <div class="video-title" style="font-family:'Inter';;white-space:yes;padding: 10px;background: #0009;margin-bottom: 6px;margin-left: 6px;margin-right: 12px;border-radius: 15px;margin-top: 4px;">
+   <div class="video-title" style="font-family:'Inter';white-space:yes;padding: 10px;background: #0009;margin-bottom: 6px;margin-left: 6px;margin-right: 12px;border-radius: 15px;margin-top: 4px;">
                     
                     <%=inv_vid.title%> 
                                                                              <a id="language-button" href="#desc-container" style="color: pink;
@@ -2133,8 +2117,6 @@ font-size: 13px;margin:0;padding:0;white-space: nowrap;
                 <div class="pill-button">
 <i class="fa-light fa-thumbs-down"></i>  <%=convert(engagement.dislikes)%> 
 					</div>					</div>
-			
-            
 
 
       </div>
@@ -2192,9 +2174,8 @@ font-size: 13px;margin:0;padding:0;white-space: nowrap;
  
                <a class="new-button" style="color:#fff"  href="https://redirect.poketube.fun/watch?v=<%=inv_vid.videoId%>">   
                                             <div class="pill-button">
-
             <i class="fa-light fa-rocket"></i>
-            Switch Instance
+            Redirect
                 </div>
                 </a>
   
@@ -2303,21 +2284,8 @@ font-size: 13px;margin:0;padding:0;white-space: nowrap;
              <span style="font-size: 13px;font-family: ubuntu;width:auto;text-align:center;"><i title="hq audio" class="fa-light fa-waveform-lines"></i>&nbsp;Lossless Audio </span>
 	                                  		 	               <% } %>
                                      </div>
-                                         <!--
+                                          
 
-<div class="channel-info" name="chnl" style="padding: 0;border: none;">
-  <a href="/channel?id=<%=video?.Channel.id || k.Video.Channel.id%>" class="avatar">
-					<img src=" <%= k.Video.Channel.Avatar[1].$t %>">
-				</a>
-				<div class="name" style="font-family:var(--text-font-primary);font-weight:var(--text-header-weight);">
-		  <div>
-						<a style="color:#fff" href="/channel?id=<%=k.Video.Channel.id%>" >  <%=k.Video.Channel.Name%></a>   
-                          </div>
-				</div>
-		 
- 			</div>
--->
-                 
 <div style="display: flex;justify-content: center;margin-top: -5em;gap: 3em;">
     
  <div style="text-align: center;font-size: x-large;margin: 9px;">
@@ -2358,7 +2326,9 @@ font-size: 13px;margin:0;padding:0;white-space: nowrap;
                     <div style="justify-content: center;display: flex;padding: 11px;font-family: Ginto nord;gap: 3px;background: #1f1f1f;border-top-left-radius: 10px;border-top-right-radius: 10px;">
 Connections
     </div>  
- 
+ <p style="background: #1f1f1f;text-align:center;margin-bottom:1px">
+the channels social media accounts! 
+    </p>
                               
 
                               
@@ -2423,17 +2393,43 @@ Connections
            
            </div>
    
-   
+                      
            <hr style="clear: both;display: block;border: none;border-bottom: 0.5px solid #2f2f2f;/*! width: 4.5em; */height: 0;">
             <% } %>  
-
+     
 
                       
  
                           </div>
+   <div style="padding:10px;background: #272727;margin-top:10px;border-radius: 11px;">
+       <div class="video-title" style="color:var(--text-color);font-family:var(--text-font-primary);;font-weight:var(--text-header-weight);font-stretch: extra-expanded;margin-top: 10px;margin-bottom: 10px;">Uploader</div>
+
+<div class="channel-info" name="chnl" style="padding: 0;border: none;margin-bottom:8px">
+  <a href="/channel?id=<%=video?.Channel.id || k.Video.Channel.id%>" class="avatar">
+					<img src=" <%= k.Video.Channel.Avatar[1].$t %>">
+				</a>
+				<div class="name" style="font-family:var(--text-font-primary);font-weight:var(--text-header-weight);">
+		  <div>
+						<a style="color:#fff" href="/channel?id=<%=k.Video.Channel.id%>" >  <%=k.Video.Channel.Name%></a>   
+                          </div>
+				</div>
+		 
+ 			</div>
+    <div style="background: #0009;width: fit-content;padding: 5px;border-radius: 6px;">
+  <a href="/channel?id=<%=video?.Channel.id || k.Video.Channel.id%>" >
+    View Channel
+ 				</a>  </div>
+  
+    
+     </div>
+     
 </div>
+
  </div>
+
 </div>
+                        
+                      
  
                             </div> 
                          <div id="more-button-container">
@@ -2868,7 +2864,7 @@ if (userID) {
     anchor.href = `/api/set-channel-subs?ID=${userID}&channelName=<%=k.Video.Channel.Name%>&avatar=https://p.poketube.fun/<%= k.Video.Channel.Avatar[1].$t %>&channelID=<%=video?.Channel.id || k.Video.Channel.id %>`;
 } else {
     // If user ID doesn't exist in localStorage, you can handle it as needed
-    console.log("User ID not found in localStorage");
+    anchor.href = "/account-create"
     // Optionally, you can set a default href or display an error message.
 }
   
@@ -2946,4 +2942,5 @@ window.addEventListener('load', () => {
   <% } %>
 
 <% } catch (error) { %>
+  <%- error %>
  <% } %>

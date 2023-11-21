@@ -1,7 +1,7 @@
 {
-    "name": "PokeTube",
-    "short_name": "PokeTube",
-    "description": "Watch Videos - Anonymously",
+    "name": "Poke",
+    "short_name": "Poke",
+    "description": "The Ultimate Privacy App!",
     "start_url": "/",
     "display": "standalone",
     "background_color": "#080808",
@@ -13,7 +13,7 @@
         "type": "image/png"
       }
     ],
-    "screenshots": [
+     "screenshots": [
       {
         "src": "/css/pwa-desktop.png",
         "type": "image/png",

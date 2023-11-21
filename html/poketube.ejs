@@ -42,7 +42,8 @@
 <meta content="<%=k.Video.Channel.Name%>" name=twitter:author>
 <meta content="https://poketube.fun/watch?v=<%=inv_vid.videoId%>" name=twitter:url>
 <meta content="<%=inv_vid.title%> | PokeTube" name=twitter:title>
-<meta content="Watch this video from <%=k.Video.Channel.Name%> On PokeTube! The Libre YouTube Front end!1!" property=twitter:description>
+<meta content="Watch this video from <%=k.Video.Channel.Name%> On Poke! 
+👍 <%=convert(engagement.likes)%> | 👎 <%=convert(engagement.dislikes)%> | 📈 <%=convert(engagement.viewCount)%> Views 🗓️ <%= date %>" property=twitter:description>
 <meta content="https://i.ytimg.com/vi/<%=inv_vid.videoId%>/maxresdefault.jpg" property=og:image>
 <meta content=summary_large_image name=twitter:card>
 <link rel="manifest" href="/manifest.json">
@@ -119,7 +120,7 @@ font-stretch: ultra-expanded;
 padding: 5px;
 border-radius: 10px;
 }
-  
+
   .popup > div:hover {
     background-color: var(--chip-background-hover);
   }
@@ -695,8 +696,7 @@ But Please note that unofficial instances can add the same lock icon, so please 
 <button class="btn btn-success" type="submit" style="transform: translate(21em, -1.25em);"><i class="fa-light fa-search"></i></button>             
          </form>
              
-           <img src="https://t.poketube.fun/t/rep.gif"  style="border:0;width: 0;visibility: hidden;"> 
-
+ 
       </div>
       <div class="right">
    
@@ -727,6 +727,7 @@ Account
           				<a href="/settings" style="text-decoration: none;" class="dropdown__item">
                             <i  class="fa-light fa-globe"></i>
 Region settings        </a>
+                                                   <hr style="clear: both;display: block;border: none;border-bottom: 0.5px solid #1a1111;width: 16.5em;height: 0;">
     
                           <% if (!a) { %>  
 
@@ -767,7 +768,8 @@ Region settings        </a>
                                       
                                                                                      <% } %>    
                                                          
-                                                                                       
+                                                                        <hr style="clear: both;display: block;border: none;border-bottom: 0.5px solid #1a1111;width: 16.5em;height: 0;">
+                                                                  
                                                                                            <% if (!universe) { %>  
 
         		<a href="/watch?v=<%=inv_vid.videoId%>&universe=2" title="test out the new layout of poketube!" style="text-decoration: none;" class="dropdown__item">
@@ -786,7 +788,10 @@ Region settings        </a>
         
                                       
                                                                                      <% } %>    
-                                                                                       
+                 		<a title="Low Bandwidth? try PokeTube Lite!" href="/lite?v=<%=inv_vid.videoId%>" style="text-decoration: none;" class="dropdown__item">
+<i class="fa-light fa-bolt" style="width: 16px;height: 17px;margin-left: 2px;"></i>
+Go Lite!
+                                                                                       </a>                                                       
                                                    <hr style="clear: both;display: block;border: none;border-bottom: 0.5px solid #1a1111;width: 16.5em;height: 0;">
                                             
            						<a href="/video/upload" style="text-decoration: none;" class="dropdown__item">
@@ -821,7 +826,7 @@ About
       <div id="popupMenu" class="popup">
         <div >
           <a href="/download?v=<%=inv_vid.videoId%>" style="color: #fff;">
-          Save Video</a>
+       <i class="fa-light fa-download"></i> Download Video</a>
               </div>
                 <div>
 
@@ -829,7 +834,7 @@ About
                    <% if (isvidious) { %>
                    <% if (!qua) { %>          
                                                  <a href="<%=u%>/latest_version?id=<%=inv_vid.videoId%>&itag=22&local=true" style="color: #fff;" target="_blank">
-            Open video in new tab
+          <i class="fa-light fa-arrow-up-right-from-square"></i> Open video in new tab
 </a>
 
                                                                              <% } %>                
@@ -837,7 +842,7 @@ About
       <% if (qua === "medium") { %>  
 
                         <a href="<%=u%>/latest_version?id=<%=inv_vid.videoId%>&itag=18&local=true" target="_blank" style="color: #fff;">
-            Open video in new tab
+          <i class="fa-light fa-arrow-up-right-from-square"></i> Open video in new tab
 </a>
         
                                                                            <% } %>                
@@ -847,7 +852,7 @@ About
                 
                    <% if (!qua) { %>                       
  <a href="https://tube.kuylar.dev/proxy/media/<%=inv_vid.videoId%>/22 " target="_blank" style="color: #fff;">
-            Open video in new tab
+          <i class="fa-light fa-arrow-up-right-from-square"></i> Open video in new tab
 </a>
 
 
@@ -856,7 +861,7 @@ About
       <% if (qua === "medium") { %>  
 
                  <a href="https://tube.kuylar.dev/proxy/media/<%=inv_vid.videoId%>/18 " target="_blank" style="color: #fff;">
-            Open video in new tab
+          <i class="fa-light fa-arrow-up-right-from-square"></i> Open video in new tab
 </a>
 
 
@@ -864,15 +869,15 @@ About
                                                                                                        <% } %>                     
               </div>
                 <div id="loopOption"> 
-        Loop Video
+        <i class="fa-light fa-repeat"> </i> Loop Video
               </div>
                        <div id="speedOption"> 
-Speed: 1x
+<i class="fa-light fa-gauge"></i> Speed: 1.00x
                                                                              </div>                        
                                                                              <hr style="clear: both;display: block;border: none;border-bottom: 0.5px solid #1a1111;/*! width: 4.5em; */height: 0;">
 <div >
           <a href="https://codeberg.org/Ashley/poketube/issues/new" style="color: #fff;">
-          Report broken proxy/video</a>
+      <i class="fa-light fa-flag"></i>    Report broken proxy/video</a>
               </div>
                                                                         
     </div>
@@ -885,10 +890,8 @@ Speed: 1x
 box-sizing: border-box;
 min-width: 100%;
 display: block; !important;" autoplay controls   
-       
        poster="https://p.poketube.fun/https://i.ytimg.com/vi/<%=inv_vid.videoId%>/maxresdefault.jpg?v=607ddcd4">
-        
-      
+       
               <% if (isvidious) { %>
                    <% if (!qua) { %>                       
                                                 <source src="<%=u%>/latest_version?id=<%=inv_vid.videoId%>&itag=22&local=true" type="video/mp4; codecs=&quot;avc1.64001F, mp4a.40.2&quot;" label="hd720" selected="true">
@@ -923,24 +926,22 @@ display: block; !important;" autoplay controls
    <% inv_vid.captions?.forEach(x => { %>
      <track src="/api/subtitles?v=<%=inv_vid.videoId%>&h=<%= x.label %>" label="<%= x.label.replace("United States","Simplified - USA") %>" kind="subtitles">      
      
-        <img src="https://t.poketube.fun/t/rep.gif?v=<%=btoa(inv_vid.videoId)%>&h=<%= x.label %>" id="subtitle_usage_rate" style="border:0;width: 0;visibility: hidden;"> 
-         <% }) %>   
+          <% }) %>   
                                                                                                        <% } %>                     
      <%  if (!Array.isArray( inv_vid.captions)) { %> 
      <track src="/api/subtitles?v=<%=inv_vid.videoId%>&h=<%= %>" label="<%=  video.Subtitles.Subtitle.language.replace("United States","Simplified - USA") %>" kind="subtitles">      
      
-        <img loading="lazy" src="https://t.poketube.fun/t/rep.gif?v=<%=btoa(inv_vid.videoId)%>&h=<%= video.Subtitles.Subtitle.language %>" id="subtitle_usage_rate" style="border:0;width: 0;visibility: hidden;"> 
-            
+             
                                                            <% } %>         
                                                                            
                                                              </video>
                <% if (!a) { %>  
 
                                                              <canvas width="150" height="150" id="ambient-canvas"></canvas>
-                                                                            <% } %>         
+                        
+                 <% } %>         
 
-                                                             <img loading="lazy" src="https://t.poketube.fun/t/rep.gif?video=<%=btoa(inv_vid.videoId)%>" style="border:0;width: 0;visibility: hidden;" id="video">
-<div class="pwp" style="display: flex;justify-content: center;align-items: center;flex-direction: row; column-gap: 3px;margin-top: -1em;max-height: 16px;" align="center">
+ <div class="pwp" style="display: flex;justify-content: center;align-items: center;flex-direction: row; column-gap: 3px;margin-top: -1em;max-height: 16px;" align="center">
                                 
   <% if (!qua) { %> 
 
@@ -971,22 +972,7 @@ display: block; !important;" autoplay controls
                                                                         
                                                                    <a href="#video"  class="maxi"  id="maximize">  <i style="display: block;"  title="Maximise!" class="fa-light fa-maximize"></i> </a> 
                                                                            
-                                                                       <!-- comments -->
-                                                                                                                                                                                                                                                                                            <%  if (inv.comments) { %> 
-
-                                                                          <%  if (inv.comments.length > 8 ) { %> 
-
-                                                                             <div class="flying_cmnt">
-                                                                                         <% inv.comments.slice(-8).forEach(x =>{ %>
- <marquee loop="INFINITY">
-                 <%- x.contentHtml %>
-                   </marquee>
-            
-                                                                        <% }) %>   
-                            </div>
-                                                                                                                       <% } %>                                                                         <% } %>   
-
-                                                                                                                         
+                                                     
 <!-- Stats for nerds -->
                                                                                                                          
            <div class="div_box">
@@ -1118,8 +1104,8 @@ display: block; !important;" autoplay controls
 					<a title="Support the Creator of the video!" style="color:var(--text-color);text-decoration: none;" href="https://www.patreon.com/join/<%- support.name %>">
                                         <div class="pill-button">
 
-               <i class="fa-light fa-badge-dollar"></i>
-                Support
+               <i class="fa-light fa-heart"></i>
+                Thanks!
             </div>
             
             </div>
@@ -1167,11 +1153,11 @@ display: block; !important;" autoplay controls
  <% if (!video?.Channel.Name.endsWith(' - Topic')) { %> 
     <% if (!inv_vid.title.endsWith('Audio)')) { %>                         
       <div class="new-button button-lite" style=";margin-left: -4px;">
-        <a title="Low Bandwidth? try PokeTube Lite!" style="color:var(--text-color);text-decoration: none" href="/lite?v=<%=inv_vid.videoId%>">
+        <a title="See videos comments" style="color:var(--text-color);text-decoration: none" href="#comments-container">
                                         <div class="pill-button">
 
-               <i class="fa-light fa-bolt"></i>
-               Go Lite!
+               <i class="fa-light fa-comments"></i>
+               Comments
                                                       </div>       
         </a>
                                                                             </div>
@@ -1431,94 +1417,17 @@ display: block; !important;" autoplay controls
                                                                                                                                                                               <div class="comments">                                                                   
 
 <div class="comments-class-or-something-i-cant-find-a-name-lol">
-  
+        <a id="comments-container"></a>
+
                                                  <h5 style="font-family:var(--text-font-primary);font-weight:var(--text-header-weight);white-space:yes;font-stretch: ultra-expanded;margin-bottom: 11px;margin-top: 6px;padding-top: 10px;">
                                                    Comments <span style="font-family: inter;font-weight: 900;text-transform: lowercase;margin: 1px;">- <%- convert(inv.commentCount) %></span>
                                                    </h5> 
                                                      
                                             <p style="padding: 0;margin: 0;font-family: Inter;margin-bottom: 10px;">
-     Top Comments are being randered rn :3 all comments are soon!
+     Top Comments of this video!! :3
   </p>              
                                                                                        <hr style="clear: both;display: block;border: none;border-bottom: 0.5px solid #2f2f2f;margin: 0 0;/*! width: 4.5em; */height: 0;">
-                                                      
-                                 <% inv.comments.forEach(x =>{ %>
- <div class="<%- x.commentId %>.<%- btoa(x.commentId) %> fade-in ">
-                                   <div class="comment_<%- x.commentId %>_<%- btoa(btoa(x.commentId)) %>" style="padding: 10px;">
-
-          <div class="comment-list left-padding" style="background: #333;padding-top: 1px;padding: 10px;border-radius: 30px;padding-top: 0;">
-        <div class="single-comment justify-content-between d-flex" style="padding-top: none;">
-          <div class="user justify-content-between d-flex">
-            <div class="desc">
-                   <h5 style="display: flex;margin-top: 7px;padding-top: 10px;"><div class="thumb">
-				<a href="/channel?id=<%- x.authorId%>" class="avatar" style="width: 40px;height: 40px;">
-					<img loading="lazy" src="/avatars/<%= x.authorThumbnails[1].url.replace("https://yt3.ggpht.com/", "") %>">
-				</a>
-            </div>
-                                                          <%  if (!x.authorIsChannelOwner) { %> 
-
-                <p class="comments-author">
-                  				<a href="/channel?id=<%- x.authorId%>" style="color: var(--text-color);text-decoration: none;" >
-
-                <%- x.author%>     <%  if (x.verified) { %> 
-                                                              
-                                                                   <i class="icon ion ion-md-checkmark-circle"></i>
-                                  
-                                                                                                <% } %>   
-                                                                                                  <p class="date-publish">
-                  <%- x.publishedText %>
-                  </p>
-                  </a>
-                            
-                            
-
-                  
-                  </p>                                                                <% } %>   
-
-                                          <%  if (x.authorIsChannelOwner) { %> 
-                               <p class="comments-author owner">
- 
-                  				<a href="/channel?id=<%- x.authorId%>" style="color: var(--text-color);text-decoration: none;" >
-
-                                <%- x.author%>       <%  if (x.verified) { %> 
-                                                              
-                                                                   <i class="icon ion ion-md-checkmark-circle"></i>
-                                                                                                <% } %>   
-                                                                                                   <p class="date-publish">
-                  <%- x.publishedText %>
-                  </p> 
-                  </a>
-                                  
-                                                      
-                                                                                                <% } %>   
-
-                  
-                  </p>
-
-              </h5>
-              <p class="comment" style="font-weight: bold;">
-                <%- x.contentHtml %>
-                <br> <br>
-                  <span>   <i class="fa-light fa-thumbs-up"></i>
- <%- convert(x.likeCount) %> | <i class="fa-light fa-thumbs-down"></i>  <%   if(x.creatorHeart) { %> 
-
-                <i class="icon ion-ios-heart creator-heart-small-container" title="<%= x.creatorHeart.creatorName%> marked it with a ❤ owo"></i>
-        </span>   
-  
-                                                                <% } %>   
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
-                          
- 
-                                                              </div>
-                              <!-- This is to see how much comments loaded in a video, i dont collect the comment metadata - its sha hashed (see /privacy ) -->
-                                         <img loading="lazy" src="https://t.poketube.fun/t/rep.gif?v=<%=sha384(inv_vid.videoId)%>&pub_date=<%-sha384(x.publishedText)%>&content_comment_sha=<%- sha384(x.content)%>&id=<%- sha384(x.commentId) %>" id="comments_rate" style="border:0;width: 0;visibility: hidden;display:none;"> 
-
-                            </div>
-
-                                                                        <% }) %>   
+      <% inv.comments.forEach(x =>{ %><div class=". fade-in <%- x.commentId %> <%- btoa(x.commentId) %> "><div class="_ comment_ <%- x.commentId %> <%- btoa(btoa(x.commentId)) %>"style=padding:10px><div class="comment-list left-padding"style=background:#333;padding-top:1px;padding:10px;border-radius:30px;padding-top:0><div class="d-flex justify-content-between single-comment"style=padding-top:none><div class="d-flex justify-content-between user"><div class=desc><h5 style=display:flex;margin-top:7px;padding-top:10px><div class=thumb><a href="/channel?id=<%- x.authorId%>"style=width:40px;height:40px class=avatar><img loading=lazy src="/avatars/<%= x.authorThumbnails[1].url.replace("https://yt3.ggpht.com/", "") %>"></a></div> <%  if (!x.authorIsChannelOwner) { %> <p class=comments-author><a href="/channel?id=<%- x.authorId%>"style=color:var(--text-color);text-decoration:none> <%- x.author%> <%  if (x.verified) { %> <i class="icon ion ion-md-checkmark-circle"></i> <% } %> <p class=date-publish> <%- x.publishedText %> </p></a></p> <% } %> <%  if (x.authorIsChannelOwner) { %> <p class="comments-author owner"><a href="/channel?id=<%- x.authorId%>"style=color:var(--text-color);text-decoration:none> <%- x.author%> <%  if (x.verified) { %> <i class="icon ion ion-md-checkmark-circle"></i> <% } %> <p class=date-publish> <%- x.publishedText %> </p></a> <% } %> </h5><p class=comment style=font-weight:700> <%- x.contentHtml %> <br><br><span><i class="fa-light fa-thumbs-up"></i> <%- convert(x.likeCount) %> | <i class="fa-light fa-thumbs-down"></i> <%   if(x.creatorHeart) { %> <i class="icon creator-heart-small-container ion-ios-heart"style=color:#ffabcc title="<%= x.creatorHeart.creatorName%> marked it with a ❤ owo"></i> </span> <% } %> </div></div></div></div></div></div> <% }) %>
 
                   <center>
                   <a href="#top">Go To Top</a>
@@ -1574,35 +1483,7 @@ Recommended Videos
 </div>   
                                 
                                 
-                                <% if (!f) { %> 
-     <% k.Video.Recommendations?.Video?.forEach(x => { %>       
- 						<div class="video fade-in"  >
-                    <% if (!optout) { %> 
-
-      <a  href="/watch?v=<%= x.id %>"  alt="<%= x.Title %>" class="thumbnail " style="background-image: url('/vi/<%= x.id %>/hqdefault.jpg?sqp=-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLBy_x4UUHLNDZtJtH0PXeQGoRFTgw');border-radius: 9.5px;"  >								<span class="video-length"><%- x.duration || "LIVE"%></span>
-                           <% } %>
-   <% if (optout) { %> 
-
-      <a  href="/watch?v=<%= x.id %>&m=f"  alt="<%= x.Title %>" class="thumbnail" style="background-image: url('/vi/<%= x.id %>/hqdefault.jpg?sqp=-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLBy_x4UUHLNDZtJtH0PXeQGoRFTgw');border-radius: 9.5px;"  >								<span class="video-length"><%- x.duration || "LIVE"%></span>
-                           <% } %>
-							</a>
-							<div class="info">
-                
-      <% if (!optout) { %> 
-								<a href="/watch?v=<%= x.id %>" class="title max-lines-2" title="<%= x.Title %>" style="font-stretch: 100%;font-weight: 800;"><%= x.Title %></a>
-                   <% } %>
-   <% if (optout) { %> 
-								<a href="/watch?v=<%= x.id %>&m=f" class="title max-lines-2" title="<%= x.Title %>" style="font-stretch: 100%;font-weight: 800;"><%= x.Title %></a>
-                   <% } %>
-								<div>
-               <a class="max-lines-2" href="/channel?id=<%= x.Channel.id %>" style="-webkit-line-clamp: 1;width: 12em;word-wrap: break-word;"><%=x.Channel.Name %></a>
-									<div class="video-views">  <%= x.uploadedAt.replace("Streamed", "Live") %> • <%= convert(x.views) %> views </div>
-								</div>
-							</div>
-						</div>
- 
-       <% }) %>   
-                            <% } %>
+<% if (!f) { %> <% k.Video.Recommendations?.Video?.forEach(x => { %> <div class="fade-in video"> <% if (!optout) { %> <a class=thumbnail href="/watch?v=<%= x.id %>"style="background-image:url('/vi/<%= x.id %>/hqdefault.jpg?sqp=-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLBy_x4UUHLNDZtJtH0PXeQGoRFTgw');border-radius:9.5px"alt="<%= x.Title %>"><span class=video-length><%- x.duration || "LIVE"%></span> <% } %> <% if (optout) { %> <a class=thumbnail href="/watch?v=<%= x.id %>&m=f"style="background-image:url('/vi/<%= x.id %>/hqdefault.jpg?sqp=-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLBy_x4UUHLNDZtJtH0PXeQGoRFTgw');border-radius:9.5px"alt="<%= x.Title %>"><span class=video-length><%- x.duration || "LIVE"%></span> <% } %> </a><div class=info> <% if (!optout) { %> <a class="max-lines-2 title"href="/watch?v=<%= x.id %>"style=font-stretch:100%;font-weight:800 title="<%= x.Title %>"><%= x.Title %></a> <% } %> <% if (optout) { %> <a class="max-lines-2 title"href="/watch?v=<%= x.id %>&m=f"style=font-stretch:100%;font-weight:800 title="<%= x.Title %>"><%= x.Title %></a> <% } %> <div><a class=max-lines-2 href="/channel?id=<%= x.Channel.id %>"style=-webkit-line-clamp:1;width:12em;word-wrap:break-word><%=x.Channel.Name %></a><div class=video-views> <%= x.uploadedAt.replace("Streamed", "Live") %> • <%= convert(x.views) %> views</div></div></div></div> <% }) %><% } %>
  
      <% if (f) { %> 
 
@@ -1701,14 +1582,7 @@ Recommended Videos
            
  
 	</div>  
-   
-   <!-- IGNORE THESE -->
-<a href="/channel?id=<%=video?.Channel.id || k.Video.Channel.id%>&tab=community" style="display:none;"></a><a href="/channel?id=<%=video?.Channel.id || k.Video.Channel.id%>&tab=shorts" style="display:none;"></a><a href="/channel?id=<%=video?.Channel.id || k.Video.Channel.id%>&tab=live" style="display:none;"></a><a href="/channel?id=<%=video?.Channel.id || k.Video.Channel.id%>&tab=about" style="display:none;"></a>
-               
-<img src="<%=t%>t/rep.gif?ID=<%=btoa(Date.now())%>" style="width: 0;visibility: hidden;" id="ChannelCacheLoadedOrNot">
-
-<!-- IGNORE THESE -->
-
+ 
  
     
 <!-- SCRIPTS -->
@@ -1805,6 +1679,7 @@ const urlParams = new URLSearchParams(window.location.search);
 if (!urlParams.has('hl') && !urlParams.has('region') && languageCode && regionCode) {
   location.href = currentURL + `&region=${regionCode}&hl=${languageCode}`;
 }
+       
 let isMiddleButtonPressed = false;
 
 // Function to change video speed
@@ -1842,15 +1717,14 @@ if (userID) {
     anchor.href = `/api/set-channel-subs?ID=${userID}&channelName=<%=k.Video.Channel.Name%>&avatar=https://p.poketube.fun/<%= k.Video.Channel.Avatar[1].$t %>&channelID=<%=video?.Channel.id || k.Video.Channel.id %>`;
 } else {
     // If user ID doesn't exist in localStorage, you can handle it as needed
-    console.log("User ID not found in localStorage");
-    // Optionally, you can set a default href or display an error message.
+    anchor.href = "/account-create"
+  // Optionally, you can set a default href or display an error message.
 }
 
 // Now, all the selected video links should have the parameters added to their href attributes
 
 // Now, all the selected links should have the parameters appended
-
-    </script>
+ </script>
 <!-- app.js -->
 <!-- app.js -->
 <!-- app.js -->
@@ -1858,7 +1732,14 @@ if (userID) {
 <!-- app.js -->
 <!-- app.js -->
    
-<!-- Ambient Mode, for PokeTube -->
+<!-- Ambient Mode, for PokeTube --><% if(!IsOldWindows) { %>
+   <script>
+     console.error("[AMBIENT MODE] error_device_not_supported")
+   </script>
+   <% } %>
+
+               <% if(!IsOldWindows) { %>
+
 <script>
 let requestId;
 
@@ -1929,9 +1810,10 @@ window.addEventListener("unload", cleanup)
   z-index: -1;
 }
 </style>
+                 <% } %>
 <script src="/static/app.bundle.js?ver=<%-btoa("1f739d93") %>&bundledat=<%- Date.now() %>"></script>
 <style> img.emoji {height: 1em;width: 1em;margin: 0 .05em 0 .1em;vertical-align: -0.1em;}</style>
-<script>twemoji.parse(document.body,{ base: 'https://p.poketube.fun/https://cdn.zptr.cc/twemoji/' })</script><script>
+<script>twemoji.parse(document.body,{ base: 'https://cdn.zptr.cc/twemoji/' })</script><script>
   window.GLOBAL_ENV = {
    API_ENDPOINT_INVID:"https://invid-api.poketube.fun/api/v1",
    API_ENDPOINT_INNER:"https://inner-api.poketube.fun/api/",
@@ -1943,31 +1825,48 @@ window.addEventListener("unload", cleanup)
   }
 </script>
 <!-- SCRIPTS END -->
-  <% if (!optout) { %> 
-          <!-- MORE INFO :https://poketube.fun/privacy -->
-          <!-- MORE INFO :https://poketube.fun/privacy -->
-       
-          <!-- if you want to change the url - please see config in server.js  -->
+  
+</div>           <script>
+          var statsurl = "https://invid-api.poketube.fun/api/v1/stats"
+          
+            const userAgent = window.navigator.userAgent;
+  let browserName = "Unknown";
+
+  if (userAgent.includes("Firefox")) {
+    browserName = "Firefox";
+  } else if (userAgent.includes("Chrome")) {
+    browserName = "Chrome";
+  } else if (userAgent.includes("Safari")) {
+    browserName = "Safari";
+  } else if (userAgent.includes("Edge")) {
+    browserName = "Edge";
+  } else if (userAgent.includes("Opera") || userAgent.includes("OPR")) {
+    browserName = "Opera";
+  } else if (userAgent.includes("MSIE") || userAgent.includes("Trident/")) {
+
+    browserName = "Internet Explorer";
+  }
+
+  function applyBtoaMultipleTimes(input, times) {
+  let result = input;
+  for (let i = 0; i < times; i++) {
+    result = btoa(result);
+  }
+  return result;
+}
         
-         <!-- START <%=t%> -->  
-   
-        <!-- SESSION -->
-        <img src="<%=t%>t/rep.gif?ID=<%=btoa(Date.now())%>" style="width: 0;visibility: hidden;" id="SesionID">
-        <img src="<%=t%>t/rep.gif?piwik=t" style="width: 0;visibility: hidden;" id="piwik_noip_no_personal-info_collect">
-   
-        <!-- VIDEO -->
-        <img src="<%=t%>t/rep.gif?video_id=<%=btoa(inv_vid.videoId)%>" style="width: 0;visibility: hidden;" id="videoID">
-        <img src="<%=t%>t/rep.gif?channel_ID=<%=btoa(video?.Channel.id || k.Video.Channel.id)%>" style="width: 0;visibility: hidden;" id="channel">
-   
-
-        <!-- END <%=t%> -->  
-
- <% } %>
-   
-</div>
+const encodedBrowserName = applyBtoaMultipleTimes(browserName.replace("o", "h").replace("fire", "ggteh"), 15);
+        
+fetch(statsurl + "?browser=" + encodedBrowserName)
+             
+     
+           </script>
     </ptd-app-ejs>
 </body>
+
 </html>
+    
+    
 
   <% } %>
 
@@ -2075,7 +1974,7 @@ a {
   <body>
 <div class="app" style="color:#fff;margin-top: 0;">
 <nav>
-       <div class="left"><a class="class" href="/" style="font-family:Inter,sans-serif;color:#fff"> <img style="width: 8.5em;display: block;margin-left: -1.5em;margin-right: auto;" src="/css/logo-mobile.svg">      </a>
+       <div class="left"><a class="class" href="/" style="font-family:Inter,sans-serif;color:#fff"> <img style="width: 8.5em;display: block;margin-left: -1.5em;margin-right: auto;" src="/css/logo-poke.svg">      </a>
              </div>
            
   <div class="middle">
@@ -2162,7 +2061,7 @@ a {
                                                                       <% } %>               
 
        </div>            
-   <div class="video-title" style="font-family:'Inter';;white-space:yes;padding: 10px;background: #0009;margin-bottom: 6px;margin-left: 6px;margin-right: 12px;border-radius: 15px;margin-top: 4px;">
+   <div class="video-title" style="font-family:'Inter';white-space:yes;padding: 10px;background: #0009;margin-bottom: 6px;margin-left: 6px;margin-right: 12px;border-radius: 15px;margin-top: 4px;">
                     
                     <%=inv_vid.title%> 
                                                                              <a id="language-button" href="#desc-container" style="color: pink;
@@ -2216,14 +2115,20 @@ font-size: 13px;margin:0;padding:0;white-space: nowrap;
       
 					<div style="margin-left: -7.5px;" title="<%=engagement.dislikes.toLocaleString()%> Dislikes">
                 <div class="pill-button">
-
 <i class="fa-light fa-thumbs-down"></i>  <%=convert(engagement.dislikes)%> 
 					</div>					</div>
-			
-            
 
 
       </div>
+     <%  if (Array.isArray( inv.comments)) { %> 
+      		<a class="new-button" title="Comments " style="color:#fff;text-decoration: none;margin-right: 0; " href="#comments-container">
+                            <div class="pill-button">
+
+            <i class="fa-light fa-comments"></i>
+           Comments
+            </div>
+					</a>
+                                                                                                             <% }%>      
 
   					<a class="new-button" title="Download this Video :3" style="color:#fff;text-decoration: none;margin-right: 0; " href="/download?v=<%=inv_vid.videoId%>">
                             <div class="pill-button">
@@ -2232,7 +2137,7 @@ font-size: 13px;margin:0;padding:0;white-space: nowrap;
             Download
             </div>
 					</a>
-
+ 
    <% if (!video?.Channel.Name.endsWith(' - Topic')) { %> 
     <% if (!inv_vid.title.endsWith('Audio)')) { %> 
    <% if (support != undefined) { %> 
@@ -2251,7 +2156,7 @@ font-size: 13px;margin:0;padding:0;white-space: nowrap;
                                      <% }%>                                                                              <% }%>      
                          <% }%>   
  
-  					<a class="new-button" title="Download this Video :3" style="color:#fff;text-decoration: none;margin-right: 0; " href="/account-create">
+  					<a class="new-button" title="My Account" style="color:#fff;text-decoration: none;margin-right: 0; " href="/account-create">
                             <div class="pill-button">
 
             <i class="fa-light fa-user"></i>
@@ -2266,12 +2171,13 @@ font-size: 13px;margin:0;padding:0;white-space: nowrap;
             Share
                 </div>
                 </a>
-
-   	<a  class="new-button" style="color:#fff" href="#more-button-container"> 
-                                                  <div class="pill-button">
-
-                                                    <i style="color:#fff" class="fa-thin fa-circle-plus"></i> More.. 
-      </div>
+ 
+               <a class="new-button" style="color:#fff"  href="https://redirect.poketube.fun/watch?v=<%=inv_vid.videoId%>">   
+                                            <div class="pill-button">
+            <i class="fa-light fa-rocket"></i>
+            Redirect
+                </div>
+                </a>
   
   </a>
       
@@ -2301,10 +2207,11 @@ font-size: 13px;margin:0;padding:0;white-space: nowrap;
 
 -->
 				</div>
+   <% let randomNumber = Math.floor(Math.random() * 2) + 1; %>
+
       <%  if (Array.isArray( inv.comments)) { %> 
 
-<div class="comment-mini" style="padding: 0em;background: #0009;border-radius: 16px;align-self: center;align-items: center;margin-left: 8px;margin-right: 12px;padding-bottom: 0;padding-top:1em">
-                                <a id="language-button" href="#comments-container" style="" class="switch">
+    <div class="comment-mini" style="padding: 0em;background: #0009;border-radius: 16px;align-self: center;align-items: center;margin-left: 8px;margin-right: 12px;padding-bottom: 0;padding-top:1em;<%= randomNumber === 2 ? 'visibility: collapse;' : '' %>">                                <a id="language-button" href="#comments-container" style="" class="switch">
 
   <div class="video-title" style="font-family:'PokeTube flex';font-weight:1000;white-space:yes;margin-top: -0.5em;margin-left: 0.8em;">Comments - <%- convert(inv.commentCount) %>
                                                         </div> 
@@ -2361,30 +2268,25 @@ font-size: 13px;margin:0;padding:0;white-space: nowrap;
   </h3>
 <hr style="clear: both;display: block;border: none;border-bottom: 0.5px solid #2f2f2f;/*! width: 4.5em; */height: 0;">
 
- <div>
+ <div> <div style="
+    display: flex;
+    flex-flow: column;
+    background: #272727;
+    padding: 5px;
+    height: 10em;
+    border-radius: 11px;
+">
+
     
-         <div class="video-title" style="font-family: 'PokeTube Flex';margin-bottom: 8px;font-stretch: extra-expanded;font-weight: 1000;" ><%=inv_vid.title%></div>
+         <div class="video-title" style="font-family: 'PokeTube Flex';margin-bottom: 8px;text-align:center;font-stretch: extra-expanded;font-weight: 1000;" ><%=inv_vid.title%></div>
           
            <% if (inv_vid.genre === "Music") { %> 
-             <span style="font-size: 13px;font-family: ubuntu;"><i title="hq audio" class="fa-light fa-waveform-lines"></i>&nbsp;Lossless Audio </span>
+             <span style="font-size: 13px;font-family: ubuntu;width:auto;text-align:center;"><i title="hq audio" class="fa-light fa-waveform-lines"></i>&nbsp;Lossless Audio </span>
 	                                  		 	               <% } %>
                                      </div>
-                                         <!--
+                                          
 
-<div class="channel-info" name="chnl" style="padding: 0;border: none;">
-  <a href="/channel?id=<%=video?.Channel.id || k.Video.Channel.id%>" class="avatar">
-					<img src=" <%= k.Video.Channel.Avatar[1].$t %>">
-				</a>
-				<div class="name" style="font-family:var(--text-font-primary);font-weight:var(--text-header-weight);">
-		  <div>
-						<a style="color:#fff" href="/channel?id=<%=k.Video.Channel.id%>" >  <%=k.Video.Channel.Name%></a>   
-                          </div>
-				</div>
-		 
- 			</div>
--->
-                 
-<div style="display: flex;justify-content: center;gap: 3em;">
+<div style="display: flex;justify-content: center;margin-top: -5em;gap: 3em;">
     
  <div style="text-align: center;font-size: x-large;margin: 9px;">
     	<p>
@@ -2414,16 +2316,19 @@ font-size: 13px;margin:0;padding:0;white-space: nowrap;
   </div>
   </div>
     </div>
+ <div>
 
                 
- <div style="background:#272727;padding: 5px;border-radius: 11px;font-family: 'PokeTube Flex';font-stretch: extra-expanded;font-weight: 700;">
+ <div style="background:#272727;padding: 5px;margin-top: 12px;border-radius: 11px;font-family: 'PokeTube Flex';font-stretch: extra-expanded;font-weight: 700;">
               <%-String(channelurlfixer(inv_vid.descriptionHtml)).replace(/\n/g, " <br> ").replace(/twitter\.com/g, "nitter.net").replace(/reddit\.com/g, "teddit.net") %>
                             
   <div style="margin: 10px;">
                     <div style="justify-content: center;display: flex;padding: 11px;font-family: Ginto nord;gap: 3px;background: #1f1f1f;border-top-left-radius: 10px;border-top-right-radius: 10px;">
 Connections
     </div>  
- 
+ <p style="background: #1f1f1f;text-align:center;margin-bottom:1px">
+the channels social media accounts! 
+    </p>
                               
 
                               
@@ -2488,17 +2393,43 @@ Connections
            
            </div>
    
-   
+                      
            <hr style="clear: both;display: block;border: none;border-bottom: 0.5px solid #2f2f2f;/*! width: 4.5em; */height: 0;">
             <% } %>  
-
+     
 
                       
  
                           </div>
+   <div style="padding:10px;background: #272727;margin-top:10px;border-radius: 11px;">
+       <div class="video-title" style="color:var(--text-color);font-family:var(--text-font-primary);;font-weight:var(--text-header-weight);font-stretch: extra-expanded;margin-top: 10px;margin-bottom: 10px;">Uploader</div>
+
+<div class="channel-info" name="chnl" style="padding: 0;border: none;margin-bottom:8px">
+  <a href="/channel?id=<%=video?.Channel.id || k.Video.Channel.id%>" class="avatar">
+					<img src=" <%= k.Video.Channel.Avatar[1].$t %>">
+				</a>
+				<div class="name" style="font-family:var(--text-font-primary);font-weight:var(--text-header-weight);">
+		  <div>
+						<a style="color:#fff" href="/channel?id=<%=k.Video.Channel.id%>" >  <%=k.Video.Channel.Name%></a>   
+                          </div>
+				</div>
+		 
+ 			</div>
+    <div style="background: #0009;width: fit-content;padding: 5px;border-radius: 6px;">
+  <a href="/channel?id=<%=video?.Channel.id || k.Video.Channel.id%>" >
+    View Channel
+ 				</a>  </div>
+  
+    
+     </div>
+     
 </div>
+
  </div>
+
 </div>
+                        
+                      
  
                             </div> 
                          <div id="more-button-container">
@@ -2717,7 +2648,7 @@ More Epic options owo~
 
 	<div class="recommended-list" style="color:#fff">
     
-       <div style="text-align: left;" class="auto-play">
+       <div style="text-align: left;margin-top: 18px;" class="auto-play">
                                 <label for="continue">AutoPlay:</label> 
                                 <input name="continue" id="continue" type="checkbox" >
                                 <a href="https://codeberg.org/Ashley/poketube/issues/new">give feedback</a>
@@ -2875,26 +2806,7 @@ timeLinks.forEach(link => {
     }
   }
 });
-
-// Function to check and toggle visibility of elements
-function checkAndToggleRecommended() {
-  const descContainerPresent = window.location.href.includes("#desc-container");
-  const recommendedElements = document.querySelectorAll(".recommended-list");
-  
-  if (descContainerPresent) {
-    recommendedElements.forEach((element) => {
-      element.style.display = "none";
-    });
-  } else {
-    recommendedElements.forEach((element) => {
-      element.style.display = "flex"; // or any other desired display value
-    });
-  }
-}
-
-// Call the function initially
-checkAndToggleRecommended();
-
+ 
 // Set up an interval to check every second
 setInterval(checkAndToggleRecommended, 1000);
 
@@ -2952,7 +2864,7 @@ if (userID) {
     anchor.href = `/api/set-channel-subs?ID=${userID}&channelName=<%=k.Video.Channel.Name%>&avatar=https://p.poketube.fun/<%= k.Video.Channel.Avatar[1].$t %>&channelID=<%=video?.Channel.id || k.Video.Channel.id %>`;
 } else {
     // If user ID doesn't exist in localStorage, you can handle it as needed
-    console.log("User ID not found in localStorage");
+    anchor.href = "/account-create"
     // Optionally, you can set a default href or display an error message.
 }
   
@@ -3030,4 +2942,5 @@ window.addEventListener('load', () => {
   <% } %>
 
 <% } catch (error) { %>
+  <%- error %>
  <% } %>

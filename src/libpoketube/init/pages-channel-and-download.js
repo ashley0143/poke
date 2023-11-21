@@ -22,6 +22,11 @@ const {
 
 const sha384 = modules.hash;
 
+/**
+ * Parses a string to JSON, returns null if parsing fails.
+ * @param {string} str - The input string to be parsed as JSON.
+ * @returns {Object|null} - The parsed JSON object or null if parsing fails.
+ */
 function getJson(str) {
   try {
     return JSON.parse(str);
@@ -30,11 +35,24 @@ function getJson(str) {
   }
 }
 
+/**
+ * Object representing base64-encoded protobuf values for channel tabs.
+ * @typedef {Object} ChannelTabs
+ * @property {string} community - Base64-encoded value for the community tab.
+ * @property {string} shorts - Base64-encoded value for the shorts tab.
+ * @property {string} videos - Base64-encoded value for the videos tab.
+ * @property {string} streams - Base64-encoded value for the streams tab.
+ */
+
+// see https://developers.google.com/youtube/v3/docs/channels/ 
 const ChannelTabs = {
   community: "Y29tbXVuaXR5",
   shorts: "c2hvcnRz",
   videos: "dmlkZW9z",
-  streams: "c3RyZWFtcw==",
+  streams: "c3RyZWFtcw==", // or "live"
+  channels:"Y2hhbm5lbHM=",
+  store:"c3RvcmU=",
+  released:"cmVsZWFzZWQ="
 };
 
 module.exports = function (app, config, renderTemplate) {
@@ -61,6 +79,11 @@ module.exports = function (app, config, renderTemplate) {
 
     res.redirect(`/watch?v=${v}`);
   });
+
+   app.get("/api/getchanneltabs", async function (req, res) {
+    res.json(ChannelTabs);
+  });
+
 
   app.get("/search", async (req, res) => {
     const query = req.query.query;
@@ -101,28 +124,28 @@ module.exports = function (app, config, renderTemplate) {
     }
 
     let continuation = req.query.continuation || "";
-
+    let date = req.query.date || "";
+    let type = "video";
+    let duration = req.query.duration || "";
+    let sort = req.query.sort || "";
+ 
     try {
       const headers = {};
 
-      const searchUrl = `https://inner-api.poketube.fun/api/search?query=${encodeURIComponent(
+    const xmlData = await  fetch(`https://invid-api.poketube.fun/api/v1/search?q=${encodeURIComponent(
         query
-      )}&continuation=${encodeURIComponent(continuation)}`;
-      const player = await fetch(searchUrl);
-      const xmlData = await player.text();
-      const searchJson = JSON.parse(modules.toJson(xmlData));
-
-      let didYouMean;
-      if (
-        searchJson.Search?.Results?.DynamicItem?.id === "didYouMeanRenderer"
-      ) {
-        didYouMean = JSON.parse(searchJson.Search.Results.DynamicItem.Title);
-      }
-
+      )}&page=${encodeURIComponent(continuation)}&date=${date}&type=${type}&duration=${duration}&sort=${sort}&hl=en+gb`)
+            .then((res) => res.text())
+            .then((txt) => getJson(txt));
+  
       renderTemplate(res, req, "search.ejs", {
-        j: searchJson,
+        invresults: xmlData,
+       turntomins,
+        date,
+        type,
+        duration,
+        sort,
         IsOldWindows,
-        h: didYouMean,
         tab,
         continuation,
         results: "",

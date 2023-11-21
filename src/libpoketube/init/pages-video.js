@@ -227,7 +227,7 @@ module.exports = function (app, config, renderTemplate) {
 
         var vidurl = u.url
         
-        if(inv_vid.genre === "Music") {
+        if(inv_vid?.genre === "Music") {
           var vidurl = u.losslessurl
         } 
         
@@ -310,7 +310,7 @@ module.exports = function (app, config, renderTemplate) {
         }
       } catch (error) {
         console.error(error);
-        return res.redirect("/?fromerror=41_generic_error");
+    return res.redirect(`/watch?v=${req.query.v}&fx=1&err=${error}`); 
       }
     });
   });
@@ -333,7 +333,7 @@ module.exports = function (app, config, renderTemplate) {
       const data = await core.video(v);
       const color = data.color;
       const color2 = data.color2;
-      const desc = data.desc;
+      const desc = data?.desc;
       const isMobile = req.useragent.isMobile;
       const wiki = data.wiki;
       const { channel: tj } = data;

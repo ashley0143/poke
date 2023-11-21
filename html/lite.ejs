@@ -20,7 +20,7 @@
 
 -->
 <!DOCTYPE html>
-<html class="poketube_desktop_player" version="browser_web_lite">
+<html class="poketube_desktop_player" version="browser_web_lite" style="background: #000;">
 <head>
     <% if (e === false) { %>  
     <!-- MetaTag disabled -->
@@ -31,15 +31,15 @@
 <meta content="<%=k.Video.Channel.Name%>" name=twitter:author>
 <meta content=@youtube name=twitter:site>
 <meta content="https://poketube.fun/lite?v=<%=inv_vid.videoId%>" name=twitter:url>
-<meta content="<%=inv_vid.title%> - PokeTube Lite " name=twitter:title>
-<meta content="Watch this video by <%=k.Video.Channel.Name%> On PokeTube Lite! Save Your Bandwidth while protecting your privacy!" property=twitter:description>
+<meta content="<%=inv_vid.title%> - Lite " name=twitter:title>
+<meta content="Watch this video by <%=k.Video.Channel.Name%> On Lite! Save Your Bandwidth while protecting your privacy!" property=twitter:description>
 <meta content="https://i.ytimg.com/vi/<%=inv_vid.videoId%>/maxresdefault.jpg" property=og:image>
 <meta content=summary_large_image name=twitter:card>
 <link href="https://poketube.fun/lite?v=<%=inv_vid.videoId%>" itemprop=url>
 <link href="http://www.youtube.com/channel/<%=k.Video.Channel.id%>" itemprop=url>
  <% } %> <!-- close the } -->
 <link href="/css/yt-ukraine.svg" rel=icon>
-<title> <%=inv_vid.title%> | PokeTube Lite </title>  
+<title> <%=inv_vid.title%> | Lite </title>  
 <style>
  
   .comments-area {
@@ -244,7 +244,21 @@ background: none !important;
     word-break: break-all;
     white-space: normal;
   } 
-   </style>
+
+   <% if (lightOrDark(color) == "light") { %>  
+	     .player.video-ambient-container  { 
+	         box-shadow: 0 -8px 5.9em <%=color%>; 
+	         }
+	        
+	                                                                                     <% } %>          
+	  
+	     <% if (lightOrDark(color) == "dark") { %>  
+	     .player.video-ambient-container  { 
+	         box-shadow: 0 -8px 5.9em <%=color2%>; 
+	        }
+	        
+	                                                                                     <% } %>     
+    </style>
  
   <link href=/css/app-cdn.min.css rel=stylesheet>
   <link href=/css/app.main.css rel=stylesheet>
@@ -267,17 +281,12 @@ background: none !important;
 <div class="app" style="color:#fff;border-radius: 0em !important;">
     
             
-    <nav>
+    <nav style="position: sticky;">
                   <div class=left>
 
-                  <% if (inv_vid.genre != "Music") { %> 
-
-              <a class="class" href="/143" style=font-family:Inter,sans-serif;color:#fff>  <img style="transform: scale(1.3);padding-left:0.9em;width: 8.5em;display: block;margin-left: auto;margin-right: auto;" src="/css/logo.svg?v=5"></a>
-                      		 	               <% } %>   
-     <% if (inv_vid.genre === "Music") { %> 
-
-              <a class="class" href="/143" style=font-family:Inter,sans-serif;color:#fff>  <img style="transform: scale(1.3);padding-left:0.9em;width: 7.5em;display: block;margin-left: auto;margin-right: auto;" src="/css/music.svg?v=5"></a>
-                      		 	               <% } %>   
+ 
+              <a class="class" href="/143" style=font-family:Inter,sans-serif;color:#fff>  <img style="transform: scale(1.0);padding-left:0;width: 7.5em;display: block;margin-left: auto;margin-right: auto;" src="/css/logo-poke.svg?v=5"></a>
+   
             </div>               
        <div class="middle">
         <form action="/search"><input class="search-bar" autocomplete="on" id="fname" name="query" style="color:#fff;font-family:Inter,sans-serif;border-radius: 2em;" data-ddg-inputtype="identities.firstName">
@@ -303,7 +312,7 @@ background: none !important;
        
 		<div class="video-player-container">
 
-<video class="player" id="<%=sha384(inv_vid.videoId)%>" style="border-radius: 7px;margin-left: -5.5px;" autoplay controls   
+<video class="player video-ambient-container" id="<%=sha384(inv_vid.videoId)%>" style="border-radius: 7px;margin-left: -5.5px;" autoplay controls   
        
        poster="https://p.poketube.fun/https://i.ytimg.com/vi/<%=inv_vid.videoId%>/maxresdefault.jpg?v=607ddcd4">
                

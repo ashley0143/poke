@@ -2064,7 +2064,7 @@ a {
        </div>            
    <div class="video-title" style="font-family:'Inter';white-space:yes;padding: 10px;background: #0009;margin-bottom: 6px;margin-left: 6px;margin-right: 12px;border-radius: 15px;margin-top: 4px;">
                     
-                    <%=inv_vid.title%> 
+                    <%=inv_vid.title%> <br>
                                                                              <a id="language-button" href="#desc-container" style="color: pink;
 margin: 0;
 font-size: 13px;margin:0;padding:0;white-space: nowrap;
@@ -2085,7 +2085,7 @@ font-size: 13px;margin:0;padding:0;white-space: nowrap;
                <%=k.Video.Channel.Name%></a>   
          
 		<div class="subscriber-count" style="write-space:nowraap">
-          <%= k.Video.Channel.subscriberCount %>
+          <%= k.Video.Channel.subscriberCount.replace("subscribers", "Subs") %>
  				</div>
               </div>
 				</div>
@@ -2320,7 +2320,7 @@ font-size: 13px;margin:0;padding:0;white-space: nowrap;
  <div>
 
                 
- <div style="background:#272727;padding: 5px;margin-top: 12px;border-radius: 11px;font-family: 'PokeTube Flex';font-stretch: extra-expanded;font-weight: 700;">
+ <div class="nerddd" style="background:#272727;padding: 5px;margin-top: 12px;border-radius: 11px;font-family: 'PokeTube Flex';font-stretch: extra-expanded;font-weight: 700;">
               <%-String(channelurlfixer(inv_vid.descriptionHtml)).replace(/\n/g, " <br> ").replace(/twitter\.com/g, "nitter.net").replace(/reddit\.com/g, "teddit.net") %>
                             
   <div style="margin: 10px;">
@@ -2368,6 +2368,21 @@ the channels social media accounts!
 <img src="https://p.poketube.fun/https://cdn.glitch.global/d68d17bb-f2c0-4bc3-993f-50902734f652/52704940-684c-41e8-b0de-cca642fa39f8.image.png?v=1693429793193" class="loaded" style="width: 22px;height: 23px;vertical-align: -7px;"><a  style="margin: 1px;" href="https://instagram.com/<%- instagram.name %>"> <%- instagram.name %></a>
               </div>
               <% } %>  
+                
+                        <%  if (!twitter) { %> 
+                                <%  if (!discord) { %> 
+                                <%  if (!reddit) { %> 
+   <%  if (!twitch) { %> 
+                     
+     <%  if (!instagram) { %> 
+       <div style="margin-top: 10px;">
+ Nyo connections found ;_;
+       </div>
+         <% } %>  
+                                                                <% } %>  
+                               <% } %>  
+
+                               <% } %>                                 <% } %>  
    </div>
 
                         
@@ -2416,14 +2431,54 @@ the channels social media accounts!
 				</div>
 		 
  			</div>
-    <div style="background: #0009;width: fit-content;padding: 5px;border-radius: 6px;">
+    <div style="color:#fff;border:solid 0.5px gray;background: #0009;width: fit-content;padding: 5px;border-radius: 4px;height:2em">
   <a href="/channel?id=<%=video?.Channel.id || k.Video.Channel.id%>" >
     View Channel
  				</a>  </div>
   
     
      </div>
-     
+     <style>
+       .nerddd {
+               white-space: -moz-pre-wrap !important;  /* Mozilla, since 1999 */
+    white-space: -pre-wrap;      /* Opera 4-6 */
+    white-space: -o-pre-wrap;    /* Opera 7 */
+    white-space: pre-wrap;       /* css-3 */
+    word-wrap: break-word;       /* Internet Explorer 5.5+ */
+    white-space: -webkit-pre-wrap; /* Newer versions of Chrome/Safari*/
+    word-break: break-all;
+    white-space: normal;
+       }
+     </style>
+        <div class="nerddd" style="padding:10px;background: #272727;margin-top:10px;border-radius: 11px;">
+       <div class="video-title" style="color:var(--text-color);font-family:var(--text-font-primary);;font-weight:var(--text-header-weight);font-stretch: extra-expanded;margin-top: 10px;margin-bottom: 10px;">Stats for 🤓 </div>
+
+           Video id : <%=inv_vid.videoId%> <br>
+       ImmersiveAmbientModecolor: <% if (lightOrDark(color) == "light") { %><%=color%> (color 1)<% } %><% if (lightOrDark(color) == "dark") { %> <%=color2%> (color 2) <% } %> <br>  
+        Video Format :<% if (!qua) { %>  22 (720p) openh264 ( https://github.com/cisco/openh264) mp4a.40.2  | 44100Hz  <% } %>
+      <% if (qua === "medium") { %>  18 (320p)  openh264 (https://github.com/cisco/openh264) mp4a.40.2 | 44100Hz  <% } %>       <br> 
+       PokeTubeEncryptID: <%=sha384(inv_vid.videoId)%> <br>
+                      <% if (isvidious) { %>
+
+       Proxy : <%= u.replace("https://","") %> - refresh the page to change the proxy location<br>
+                          <% } %>
+                             <% if (!isvidious) { %>
+
+       Proxy : tube.kuylar.dev - refresh the page to change the proxy location<br>
+                          <% } %>   
+       Date : <%- Date.now() %> - <%- useragent.os.replace("Linux", "GNU/Linux") %> on <%- useragent.browser %> <br>
+                                                  <% if (isvidious) { %>
+
+       Mystery text :  <%=btoa(inv_vid.videoId + " i " + " lov " + " u " + "mobile "+ u.replace("https://","") ) %> <br>
+                                                                              <% } %>  
+                                                                                                                                  <% if (!isvidious) { %>
+
+       Mystery text :  <%=btoa(inv_vid.videoId + " i " + " lov " + " u " + "tube.kuylar.dev" ) %> <br>
+                                                                              <% } %>   
+
+       143 : true <br>
+                                                                                     </div>
+
 </div>
 
  </div>
@@ -2807,10 +2862,7 @@ timeLinks.forEach(link => {
     }
   }
 });
- 
-// Set up an interval to check every second
-setInterval(checkAndToggleRecommended, 1000);
-
+  
 function removeParam(paramName) {
   
   let searchParams = new URLSearchParams(window.location.search);
@@ -2855,7 +2907,8 @@ if (/[?&]autoplay=/.test(location.search)) {
     function autoplaynextvideo(e) {
         location.href = "/watch?v=<%- k.Video.Recommendations.Video[0].id%>&autoplay=<%-btoa("1f739d935676111cfff4b4693e3816e664797050" + k.Video.Recommendations.Video[0].id ) %>"
     }
-}var anchor = document.getElementById("sub");
+}
+  var anchor = document.getElementById("sub");
 
 // Check if there's a user ID in localStorage
 var userID = localStorage.getItem("UserID");

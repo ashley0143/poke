@@ -941,7 +941,7 @@ display: block; !important;" autoplay controls
                         
                  <% } %>         
 
- <div class="pwp" style="display: flex;justify-content: center;align-items: center;flex-direction: row; column-gap: 3px;margin-top: -1em;max-height: 16px;" align="center">
+ <div class="pwp" style="display: flex;justify-content: center;align-items: center;flex-direction: row; column-gap: 3px;margin-top: auto;max-height: 16px;" align="center">
                                 
   <% if (!qua) { %> 
 
@@ -1732,7 +1732,8 @@ if (userID) {
 <!-- app.js -->
 <!-- app.js -->
    
-<!-- Ambient Mode, for PokeTube --><% if(!IsOldWindows) { %>
+<!-- Ambient Mode, for PokeTube -->
+<% if(IsOldWindows) { %>
    <script>
      console.error("[AMBIENT MODE] error_device_not_supported")
    </script>

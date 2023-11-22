@@ -1,0 +1,8 @@
+.yarn
+.pnp*
+.git
+.gitignore
+node_modules
+invidious-source
+json.sqlite
+*.md

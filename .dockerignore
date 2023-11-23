@@ -6,3 +6,5 @@ node_modules
 invidious-source
 json.sqlite
 *.md
+docker-compose.yml
+Dockerfile

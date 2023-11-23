@@ -100,7 +100,7 @@ module.exports = function (app, config, renderTemplate) {
 
       return renderTemplate(res, req, "landing.ejs", {
         isOldWindows,
-        splash
+        random
       });
     };
 

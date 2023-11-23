@@ -1,17 +1,9 @@
+version: "3"
 services:
-  proxy:
-    build:
-      context: .
-      dockerfile: p/Dockerfile
-      target: release-aio
-      # cache_to: 
-      # cache_from: 
+  poketube:
+    image: quay.io/sudovanilla/poketube
     restart: unless-stopped
+    volumes:
+      - ./config.json:/poketube/config.json
     ports:
-      - 80:80
-      - 443:443
-      # - 3000:3000
-    environment:
-      - HOSTNAME=example.com
-      - EMAIL=user@email.com    # required for https
-      - STAGING=true           # Set to "true" to use staging
+      - "6003:6003"

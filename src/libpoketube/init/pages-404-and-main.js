@@ -27,17 +27,30 @@ const sha384 = modules.hash;
 const splash = [
      "Woke!",
      "Gay gay homosexaul gay!",
-     "free palistine!",
+     "free Palestine!",
      "free software!",
+     "im... stuff!"
      "frick capitalism!",
      "still calling it twitter btw!",
     "boop!",
     "no way!",
-    "traaaa rightssss",
-    "XD",
+    "traaaa rightssss!",
+    "XD!",
     "nya!",
     "say gex!",
-    "also try invidious!"
+    "also try invidious!",
+    "rms <3!",
+    "du hast",
+    "can u belive no one bought this?",
+    "reee",
+    "1.000.000€!",
+    "pika!",
+    "fsf.org",
+    "ssfffssfssfffaassssfsdf!",
+    "100+ stars on gh!",
+    "now even gayer!",
+    "poketube!!!",
+    "rvlt.gg/poke!"
 ]
 
 

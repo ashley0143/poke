@@ -16,6 +16,7 @@ const fetcher = require("../libpoketube/libpoketube-dislikes.js");
 const core = require("../libpoketube/libpoketube-core.js");
 const musicInfo = require("music-info");
 const wiki = require("wikipedia");
+const config = require("../../config.json")
 
 const fetch = require("node-fetch");
 const toJson = require("xml2json").toJson;
@@ -40,10 +41,10 @@ function initlog(args) {
  * Initializes the application and starts listening on the specified port or something idk aaaaa help me
  *
  * @param {object} app - The express application
- * @param {string} [port="3000"] - The port to listen on
+ * @param {string} [port=config.server_port] - The port to listen on
  */
 function init(app, port) {
-  if (!port) port = "6003";
+  if (!port) port = config.server_port;
   try {
     app.listen(port, () => {
       initlog("Loading Poketube: success!" + " on port " + port);

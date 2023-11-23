@@ -5,5 +5,6 @@
     "invchannel": "https://invid-api.poketube.fun/api/v1",
     "cacher_max_age": "1800",
     "enablealwayshttps": false,
-    "t_url": "https://t.poketube.fun/" 
+    "t_url": "https://t.poketube.fun/",
+    "server_port": "6003"
   }

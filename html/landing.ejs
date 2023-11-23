@@ -43,13 +43,34 @@
   h1 {
     font-family:"Ginto Nord" !important;
   }
-</style> <% } %>   
+</style> <% } %>  
+
+<style>
+
+
+#subtitle
+	text-align: center
+	color: #FFFF00
+	text-shadow: 1px 1px 0px #000
+	position: relative
+	left: 200px
+	bottom: 50px
+	animation: subtitle .25s
+	animation-direction: alternate
+	animation-iteration-count: infinite
+
+@-webkit-keyframes subtitle
+	0%
+		transform: scale(0.875) rotate(-20deg)
+	100% 
+		transform: scale(1) rotate(-20deg)
+</style
   </head>
   <body>
     <div class="header">
       <div class="header-content">
         <div class="header-content-start">
-          <a href="/"><img style="width: 130px;" src="/css/logo-poke.svg?v=?v=<%=btoa(Date.now())%>"/></a>
+          <a href="/"><img style="width: 130px;" src="/css/logo-poke.svg?v=?v=<%=btoa(Date.now())%>"/><p id="subtitle"> <%- random %></p></a>
         </div>
         <div class="header-content-center" style="margin-left: -30px;">
           <form action=/search><input class=search-bar autocomplete="on" id=fname name=query><button class="btn btn-success" type=submit><i class="fa-light fa-search"></i></button></form>

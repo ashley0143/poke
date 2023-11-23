@@ -1,6 +1,7 @@
 const express = require("express");
 const fetch = require("node-fetch");
 const { URL } = require("url");
+const { Readable } = require("node:stream");
 
 // Array of hostnames that will be proxied
 const URL_WHITELIST = [
@@ -58,6 +59,8 @@ app.use(function (req, res, next) {
  * @param {express.Response} res
  */
 const proxy = async (req, res) => {
+    const { fetch } = await import("undici")
+
   try {
     let url;
 
@@ -80,7 +83,7 @@ const proxy = async (req, res) => {
       method: req.method,
     });
 
-    f.body.pipe(res);
+Readable.fromWeb(f.body).pipe(res);
   } catch (e) {
     console.log(`==> Error: ${e}`);
     res.status(500).send("Internal server error");

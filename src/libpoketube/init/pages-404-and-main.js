@@ -23,6 +23,21 @@ var ping = require("ping");
 
 const sha384 = modules.hash;
 
+
+const splash = [
+     "Woke!",
+     "Gay gay homosexaul gay!",
+     "free palistine!",
+     "free software!",
+     "frick capitalism!",
+     "still calling it twitter btw!",
+    "boop!"
+]
+
+const random =
+  splash[Math.floor(Math.random() * splash.length)];
+
+
 function getJson(str) {
   try {
     return JSON.parse(str);
@@ -85,6 +100,7 @@ module.exports = function (app, config, renderTemplate) {
 
       return renderTemplate(res, req, "landing.ejs", {
         isOldWindows,
+        splash
       });
     };
 

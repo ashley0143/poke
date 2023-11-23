@@ -50,7 +50,12 @@ const splash = [
     "100+ stars on gh!",
     "now even gayer!",
     "poketube!!!",
-    "rvlt.gg/poke!"
+    "rvlt.gg/poke!",
+    "women are pretty!",
+    "men are handsome!",
+    "enbys are cute!",
+    "you are cute :3",
+    "stallmansupport.org!!!"
 ]
 
 

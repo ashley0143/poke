@@ -31,7 +31,13 @@ const splash = [
      "free software!",
      "frick capitalism!",
      "still calling it twitter btw!",
-    "boop!"
+    "boop!",
+    "no way!",
+    "traaaa rightssss",
+    "XD",
+    "nya!",
+    "say gex!",
+    "also try invidious!"
 ]
 
 const random =

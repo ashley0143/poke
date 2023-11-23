@@ -66,7 +66,7 @@ you can view the source code of the openh264 codec in this repo :3 --> https://g
 PLEASE NOTE THAT THIS SOFTWARE MAY INCULUDE CODECS THAT IN CERTAIN COUNTRIES MAY BE COVERED BY PATENTS OR HAVE LEGAL ISSUES. PATENT AND COPYRIGHT LAWS OPERATE DIFFERENTLY DEPENDING ON WHICH COUNTRY YOU ARE IN. PLEASE OBTAIN LEGAL ADVICE IF YOU ARE UNSURE WHETHER A PARTICULAR PATENT OR RESTRICTION APPLIES TO A CODEC YOU WISH TO USE IN YOUR COUNTRY.
 
 ## Hosting Poketube~
-
+### With NodeJS
 - To self host your own Poketube instance, you'll need the following:
 
   - [Node.js](https://nodejs.org/en/download/)
@@ -97,6 +97,26 @@ node server.js
 ```
 
 Congrats, Poketube should now be running on `localhost:6003`!
+
+### With Docker
+Create a new directory for PokeTube:
+```
+mkdir poketube && cd poketube
+```
+
+Download the docker compose and config file:
+```
+curl -O https://codeberg.org/Ashley/poketube/raw/branch/main/docker-compose.yml
+```
+
+Run PokeTube:
+```
+docker compose up -d
+```
+
+PokeTube should be running on `http://localhost:6003`.
+
+The port can be changed with the config file you downloaded, just change the `server_port` option. 
 
 ## PokeTube community!
 

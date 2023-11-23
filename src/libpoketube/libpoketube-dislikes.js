@@ -48,11 +48,11 @@ class PokeTubeDislikesAPIManager  {
 
     
     try {
-      const engagement = await fetch(fallbackUrl).then((res) => res.json());
+      const engagement = await fetch(apiUrl).then((res) => res.json());
       return engagement;
     } catch {
       try {
-        const engagement = await fetch(apiUrl).then((res) => res.json());
+        const engagement = await fetch(fallbackUrl).then((res) => res.json());
         return engagement;
       } catch {
         return null;

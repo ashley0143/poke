@@ -29,7 +29,7 @@ const splash = [
      "Gay gay homosexaul gay!",
      "free Palestine!",
      "free software!",
-     "im... stuff!"
+     "im... stuff!",
      "frick capitalism!",
      "still calling it twitter btw!",
     "boop!",

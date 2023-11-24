@@ -551,7 +551,7 @@ color:#ea9999 !important;
           <img src="https://p.poketube.fun/<%=j.Channel?.Metadata.Banners.Thumbnail[2].$t%>">
                                <% } %>
 		<div class="channel-info" >
-			<a href="/avatars/<%=j.Channel?.Metadata.Avatars.Thumbnail?.$t.replace("https://yt3.googleusercontent.com/", "")%>" class="avatar">
+		<a href="/avatars/<%=j.Channel?.Metadata.Avatars.Thumbnail?.$t.replace("https://yt3.googleusercontent.com/", "")%>" class="avatar">
 				<img src="/avatars/<%=j.Channel?.Metadata.Avatars.Thumbnail?.$t.replace("https://yt3.googleusercontent.com/", "")%>" alt="Channel Avatar">
 			</a>
       
@@ -610,8 +610,9 @@ white-space: nowrap;text-decoration: none;" href="/feeds/videos.xml?channel_id=<
       
 		</div>
                                     <% if (!isMobile) { %>  
-   
-<div class="tabs  tabs-center" style="margin-top: 26px;">
+                                      <div style="display: flex;
+  flex-direction: row;">
+                                      <div class="tabs  tabs-center" style="margin-top: 26px;">
                         <% if (!tab) { %>
 
                 <a href="/channel?id=<%=ID%>" class="tab active" style="color:#cfe2f3;">Videos</a>
@@ -761,7 +762,7 @@ white-space: nowrap;text-decoration: none;" href="/feeds/videos.xml?channel_id=<
                                                                 <% } %>
             </div>
      
-                                                                           
+<input type="text" id="search" placeholder="Search vids :3" style="margin-top: 2em;height: 1em;color: #fff;background: #111;border-radius: 1em;padding: 7px;margin-left: auto;margin-right: 1em;">                                                                           </div>
      
      
      <% } %>
@@ -809,6 +810,7 @@ width: fit-content;
          <a href="/feeds/videos.xml?channel_id=<%=ID%>"><button class="subscribe-button">Rss feed</button>
 </a> 
 
+    
         
   <% if (isMobile) { %>  
  
@@ -1347,7 +1349,8 @@ width: fit-content;
 
 <script src="/css/custom-css.js"> </script>
   <script>
-      
+      // @license magnet:?xt=urn:btih:1f739d935676111cfff4b4693e3816e664797050&dn=gpl-3.0.txt GPL-3.0-or-later  
+
 var anchor = document.getElementById("sub");
 
 // Check if there's a user ID in localStorage
@@ -1362,6 +1365,22 @@ if (userID) {
     // Optionally, you can set a default href or display an error message.
 }
     
+document.getElementById('search').addEventListener('keyup', function () {
+      var value = this.value.toLowerCase();
+      var videos = document.querySelectorAll('.video');
+      
+      videos.forEach(function (video) {
+        var text = video.textContent.toLowerCase();
+        if (text.indexOf(value) > -1) {
+          video.style.visibility = 'visible';
+          video.style.display = 'grid';
+        } else {
+          video.style.visibility = 'hidden';
+          video.style.display = 'none';
+        }
+      });
+    });
+// @license-end
      </script>
                </body>
  

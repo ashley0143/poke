@@ -23,6 +23,44 @@ var ping = require("ping");
 
 const sha384 = modules.hash;
 
+
+const splash = [
+     "Woke!",
+     "Gay gay homosexaul gay!",
+     "free Palestine!",
+     "free software!",
+     "im... stuff!",
+     "frick capitalism!",
+     "still calling it twitter btw!",
+    "boop!",
+    "no way!",
+    "traaaa rightssss!",
+    "XD!",
+    "nya!",
+    "say gex!",
+    "also try invidious!",
+    "rms <3!",
+    "du hast",
+    "can u belive no one bought this?",
+    "reee",
+    "1.000.000€!",
+    "pika!",
+    "fsf.org",
+    "ssfffssfssfffaassssfsdf!",
+    "100+ stars on gh!",
+    "now even gayer!",
+    "poketube!!!",
+    "rvlt.gg/poke!",
+    "women are pretty!",
+    "men are handsome!",
+    "enbys are cute!",
+    "you are cute :3",
+    "stallmansupport.org!!!"
+]
+
+
+
+
 function getJson(str) {
   try {
     return JSON.parse(str);
@@ -75,6 +113,7 @@ module.exports = function (app, config, renderTemplate) {
 
   app.get("/:v*?", async function (req, res) {
     const uaos = req.useragent.os;
+    const random = splash[Math.floor(Math.random() * splash.length)];
     const browser = req.useragent.browser;
     const isOldWindows = (uaos === "Windows 7" || uaos === "Windows 8") && browser === "Firefox";
 
@@ -85,6 +124,7 @@ module.exports = function (app, config, renderTemplate) {
 
       return renderTemplate(res, req, "landing.ejs", {
         isOldWindows,
+        random
       });
     };
 

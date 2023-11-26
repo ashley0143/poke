@@ -1739,38 +1739,6 @@ if (userID) {
    </script>
    <% } %>
 
-<% if(secure) { %>
-  <!-- Matomo -->
-<script>
-  function anondocumenttitle(input, times) {
-  let result = input;
-  for (let i = 0; i < times; i++) {
-    result = btoa(result);
-  }
-  return result;
-  }
-</script>
-  
-<script>
-  var _paq = window._paq = window._paq || [];
-  /* tracker methods like "setCustomDimension" should be called before "trackPageView" */
-  _paq.push(["setDocumentTitle", anondocumenttitle(document.domain, 5) + "/" + anondocumenttitle(document.title, 5)]);
-  _paq.push(["setDoNotTrack", true]);
-  _paq.push(["disableCookies"]);
-  _paq.push(['trackPageView']);
-  _paq.push(['enableLinkTracking']);
-  (function() {
-    var u="//data.poketube.fun/";
-    _paq.push(['setTrackerUrl', u+'matomo.php']);
-    _paq.push(['setSiteId', '2']);
-    var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
-    g.async=true; g.src=u+'matomo.js'; s.parentNode.insertBefore(g,s);
-  })();
-</script>
-<noscript><p><img src="//data.poketube.fun/matomo.php?idsite=2&amp;rec=1" style="border:0;" alt="" /></p></noscript>
-<!-- End Matomo Code -->
-
-   <% } %>
                <% if(!IsOldWindows) { %>
 
 <script>
@@ -1845,6 +1813,37 @@ window.addEventListener("unload", cleanup)
 </style>
                  <% } %>
 <script src="/static/app.bundle.js?ver=<%-btoa("1f739d93") %>&bundledat=<%- Date.now() %>"></script>
+
+<% if(secure) { %>
+  <!-- Matomo -->
+<script>
+  function anondocumenttitle(message, times) {
+  var hash = CryptoJS.SHA256(message);
+  
+  return hash.toString(CryptoJS.enc.Hex);
+  }
+</script>
+  
+<script>
+  var _paq = window._paq = window._paq || [];
+  /* tracker methods like "setCustomDimension" should be called before "trackPageView" */
+  _paq.push(["setDocumentTitle", anondocumenttitle(document.domain, 5) + "/" + anondocumenttitle(document.title, 5)]);
+  _paq.push(["setDoNotTrack", true]);
+  _paq.push(["disableCookies"]);
+  _paq.push(['trackPageView']);
+  _paq.push(['enableLinkTracking']);
+  (function() {
+    var u="//data.poketube.fun/";
+    _paq.push(['setTrackerUrl', u+'matomo.php']);
+    _paq.push(['setSiteId', '2']);
+    var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
+    g.async=true; g.src=u+'matomo.js'; s.parentNode.insertBefore(g,s);
+  })();
+</script>
+<noscript><p><img src="//data.poketube.fun/matomo.php?idsite=2&amp;rec=1" style="border:0;" alt="" /></p></noscript>
+<!-- End Matomo Code -->
+
+   <% } %>
 <style> img.emoji {height: 1em;width: 1em;margin: 0 .05em 0 .1em;vertical-align: -0.1em;}</style>
 <script>twemoji.parse(document.body,{ base: 'https://cdn.zptr.cc/twemoji/' })</script><script>
   window.GLOBAL_ENV = {

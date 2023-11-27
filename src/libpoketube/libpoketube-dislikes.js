@@ -46,18 +46,9 @@ class PokeTubeDislikesAPIManager  {
   
     const { fetch } = await import("undici");
 
-    
-    try {
+  
       const engagement = await fetch(apiUrl).then((res) => res.json());
-      return engagement;
-    } catch {
-      try {
-        const engagement = await fetch(fallbackUrl).then((res) => res.json());
-        return engagement;
-      } catch {
-        return null;
-      }
-    }
+      return engagement
   }
 
 

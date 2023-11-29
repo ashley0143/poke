@@ -48,7 +48,7 @@ app.use(function (req, res, next) {
 
 app.use(function (req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
-  res.setHeader("Cache-Control", "public, max-age=1848"); // cache header
+  res.setHeader("Cache-Control", "public, max-age=232337763"); // cache header
   res.setHeader("poketube-cacher", "PROXY_FILES");
 
   next();

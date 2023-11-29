@@ -1,0 +1,14 @@
+[Unit]
+Description=Poke
+
+[Service]
+Type=simple
+ExecStart=node server.js
+WorkingDirectory=[YOUR DIR HERE]
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
+
+
+

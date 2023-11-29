@@ -88,12 +88,14 @@ module.exports = function (app, config, renderTemplate) {
   });
 
   app.get("/avatars/ytc/:v", async function (req, res) {
+const { fetch } = await import("undici");
+
     var url = `https://invid-api.poketube.fun/ggpht/ytc/${req.params.v.replace(
       "ytc",
       ""
     )}`;
 
-    let f = await modules.fetch(url + `?cachefixer=${btoa(Date.now())}`, {
+    let f = await fetch(url + `?cachefixer=${btoa(Date.now())}`, {
       method: req.method,
     });
 

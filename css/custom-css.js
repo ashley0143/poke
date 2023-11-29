@@ -60,7 +60,7 @@ replaceRecursively(document.body, new RegExp("poketube", "gi"), replaceText);
 
 function replaceTitle() {
      if (window.location.pathname === "/watch") {
-         document.title = document.title.replace(/PokeTube/g, " Watch");
+         document.title = document.title.replace(/Poke/g, " Watch");
     }
 }
 

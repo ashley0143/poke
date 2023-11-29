@@ -27,12 +27,14 @@ document.head.appendChild(script_tag);
 
 /* rebranding */
 function replaceRecursively(element, from, to) {
+        if (element.tagName !== 'STYLE') { // Ignore elements with the tag name "style"
     if (element.childNodes.length) {
         element.childNodes.forEach(child => replaceRecursively(child, from, to));
     } else {
         const cont = element.textContent;
         if (cont) element.textContent = cont.replace(from, to);
-    }
+    }    }
+
 }; 
 
 document.title = document.title.replace("PokeTube", "Poke") 

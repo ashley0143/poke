@@ -28,15 +28,15 @@ function getJson(str) {
 
 const pkg = require("../../../package.json");
 const cnf = require("../../../config.json");
-
+const { Readable } = require("node:stream");
 const verfull = "v23.1311-JeSsIcA-MAJOR-stable-dev-nonLTS-git-MTcwMDI5ODc4OQ==";
-const versmol = "v23.1311-JeSsIcA"
+const versmol = "v23.1311-JeSsIcA";
 const branch = "dev/master";
 const codename = "jessica";
 const versionnumber = "272";
-const relaseunixdate = "MTcwMDI5ODc4OQ=="
-const updatequote = "Empty your cup so that it may be filled; become devoid to gain totality. - Bruce Lee"
-
+const relaseunixdate = "MTcwMDI5ODc4OQ==";
+const updatequote =
+  "Empty your cup so that it may be filled; become devoid to gain totality. - Bruce Lee";
 
 module.exports = function (app, config, renderTemplate) {
   app.get("/embed/:v", async function (req, res) {
@@ -44,47 +44,54 @@ module.exports = function (app, config, renderTemplate) {
   });
 
   app.get("/admin", async function (req, res) {
-     if(req.hostname === "poketube.fun") {
-      res.redirect("https://console.sudovanilla.com/")
-     } else {
-      res.redirect("/sex")
-     }
+    if (req.hostname === "poketube.fun") {
+      res.redirect("https://console.sudovanilla.com/");
+    } else {
+      res.redirect("/sex");
+    }
   });
-  
+
   app.get("/vi/:v/:t", async function (req, res) {
-    var url = `https://invid-api.poketube.fun/vi/${req.params.v}/${req.params.t}`
-    
-       let f = await modules.fetch(url + `?cachefixer=${btoa(Date.now())}`, {
+    const { fetch } = await import("undici");
+
+    var url = `https://invid-api.poketube.fun/vi/${req.params.v}/${req.params.t}`;
+
+    let f = await fetch(url + `?cachefixer=${btoa(Date.now())}`, {
       method: req.method,
     });
 
-    f.body.pipe(res);
-
+    Readable.fromWeb(f.body).pipe(res);
   });
 
-app.get("/avatars/:v", async function (req, res) {
+  app.get("/avatars/:v", async function (req, res) {
+    const { fetch } = await import("undici");
+
     var url = `https://invid-api.poketube.fun/ggpht/${req.params.v}`;
 
-    let f = await modules.fetch(url + `?cachefixer=${btoa(Date.now())}`, {
+    let f = await fetch(url + `?cachefixer=${btoa(Date.now())}`, {
       method: req.method,
     });
 
-    f.body.pipe(res);
+    Readable.fromWeb(f.body).pipe(res);
   });
 
   app.get("/ggpht/:v", async function (req, res) {
+    const { fetch } = await import("undici");
+
     var url = `https://invid-api.poketube.fun/ggpht/${req.params.v}`;
 
-    let f = await modules.fetch(url + `?cachefixer=${btoa(Date.now())}`, {
+    let f = await fetch(url + `?cachefixer=${btoa(Date.now())}`, {
       method: req.method,
     });
 
-    f.body.pipe(res);
+    Readable.fromWeb(f.body).pipe(res);
   });
-
 
   app.get("/avatars/ytc/:v", async function (req, res) {
-    var url = `https://invid-api.poketube.fun/ggpht/ytc/${req.params.v.replace("ytc", "")}`;
+    var url = `https://invid-api.poketube.fun/ggpht/ytc/${req.params.v.replace(
+      "ytc",
+      ""
+    )}`;
 
     let f = await modules.fetch(url + `?cachefixer=${btoa(Date.now())}`, {
       method: req.method,
@@ -92,8 +99,7 @@ app.get("/avatars/:v", async function (req, res) {
 
     f.body.pipe(res);
   });
-  
-  
+
   app.get("/api/search", async (req, res) => {
     const query = req.query.query;
 
@@ -121,7 +127,7 @@ app.get("/avatars/:v", async function (req, res) {
 
   app.get("/api/subtitles", async (req, res) => {
     const { fetch } = await import("undici");
-    
+
     const id = req.query.v;
     const l = req.query.h;
 
@@ -173,15 +179,15 @@ app.get("/avatars/:v", async function (req, res) {
 
     const response = {
       pt_version: {
-       version:versmol,
-       version_full:verfull
+        version: versmol,
+        version_full: verfull,
       },
       branch,
       updatequote,
       relaseunixdate,
       vernum: versionnumber,
       codename,
-      config:cnf,
+      config: cnf,
       packages: {
         libpt: version,
         node: process.version,

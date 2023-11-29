@@ -25,6 +25,49 @@ script_tag.text = localStorage.getItem("poke-custom-script");
 
 document.head.appendChild(script_tag);
 
+/* rebranding */
+function replaceRecursively(element, from, to) {
+    if (element.childNodes.length) {
+        element.childNodes.forEach(child => replaceRecursively(child, from, to));
+    } else {
+        const cont = element.textContent;
+        if (cont) element.textContent = cont.replace(from, to);
+    }
+}; 
+
+document.title = document.title.replace("PokeTube", "Poke") 
+
+function replaceText(match) {
+    // Check if the first letter of the matched text is uppercase
+    if (match.charAt(0) === match.charAt(0).toUpperCase()) {
+        // If uppercase, check if the entire text is "Poketube.fun"
+        if (match.toLowerCase() === "poketube.fun") {
+            return "Poketube.fun"; // Keep the original case
+        } else {
+            return "Poke" // Replace with "Poke" + rest of the string
+        }
+    } else {
+        // If not uppercase, check if the entire text is "poketube.fun"
+        if (match.toLowerCase() === "poketube.fun") {
+            return "poketube.fun"; // Keep the original case
+        } else {
+            return "poke"; // Replace with "poke"
+        }
+    }
+}
+
+replaceRecursively(document.body, new RegExp("poketube", "gi"), replaceText);
+
+function replaceTitle() {
+     if (window.location.pathname === "/watch") {
+         document.title = document.title.replace(/PokeTube/g, " Watch");
+    }
+}
+
+// Call the function when the page loads
+replaceTitle();
+
+
 /*
  * This script adds the Plausible analytics telemetry code to the page for the
  * domain poketube.fun.

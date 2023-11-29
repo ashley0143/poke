@@ -88,7 +88,7 @@ module.exports = function (app, config, renderTemplate) {
   });
 
   app.get("/avatars/ytc/:v", async function (req, res) {
-const { fetch } = await import("undici");
+    const { fetch } = await import("undici");
 
     var url = `https://invid-api.poketube.fun/ggpht/ytc/${req.params.v.replace(
       "ytc",
@@ -99,7 +99,7 @@ const { fetch } = await import("undici");
       method: req.method,
     });
 
-    f.body.pipe(res);
+    Readable.fromWeb(f.body).pipe(res);
   });
 
   app.get("/api/search", async (req, res) => {

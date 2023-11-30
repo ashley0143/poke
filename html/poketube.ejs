@@ -51,12 +51,7 @@
  <% } %> <!-- close the } -->
 <link href="/css/yt-ukraine.svg?v=3" rel=icon>
 <link href=/css/snow.css rel=stylesheet> 
-
-<ptd-event-chunks>
-  poketube.eventloader = this.eventloader
-  load()
-
-</ptd-event-chunks>
+ 
 <title> <%=inv_vid.title%> | PokeTube </title>  
 <style>
   
@@ -1812,8 +1807,16 @@ window.addEventListener("unload", cleanup)
 }
 </style>
                  <% } %>
-<script src="/static/app.bundle.js?ver=<%-btoa("1f739d93") %>&bundledat=<%- Date.now() %>"></script>
+                   
+                   <script>
+  document.addEventListener('DOMContentLoaded', function() {
+    var script = document.createElement('script');
+    script.src = '/static/app.bundle.js?ver=<%-btoa("1f739d93") %>&bundledat=<%- Date.now() %>';
+    document.head.appendChild(script);
+  });
+</script>
 
+ 
 <% if(secure) { %>
   <!-- Matomo -->
 <script>

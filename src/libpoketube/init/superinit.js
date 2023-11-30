@@ -24,12 +24,25 @@ function init(app, config, rendertemplate) {
   initlog("wait a few mins... pt on timeout rn");
 
  
-  app.get("/*", function (req, res, next) {
-    if (didstart) return next();
+ function isChromeOS(userAgent) {
+  return userAgent.includes('CrOS');
+}
 
-    return rendertemplate(res, req, "timeout.ejs");
-  });
+// Middleware to handle the Chrome OS check
+function checkChromeOS(req, res, next) {
+  if (isChromeOS(req.headers['user-agent'])) {
+    res.status(403).send('Forbidden for Chrome OS');
+  } else {
+    next();
+  }
+}
 
+// Your existing route with the Chrome OS check
+app.get("/*", checkChromeOS, (req, res, next) => {
+  if (didstart) return next();
+
+  return rendertemplate(res, req, "timeout.ejs");
+});
 
   setTimeout(function () {
     didstart = true;

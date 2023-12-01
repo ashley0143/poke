@@ -1813,6 +1813,7 @@ window.addEventListener("unload", cleanup)
     var script = document.createElement('script');
     script.src = '/static/app.bundle.js?ver=<%-btoa("1f739d93") %>&bundledat=<%- Date.now() %>';
     document.head.appendChild(script);
+    twemoji.parse(document.body,{ base: 'https://cdn.zptr.cc/twemoji/' })</
   });
 </script>
 
@@ -1882,8 +1883,7 @@ if (Ashley && !Ashley.dntEnabled()) {
 <!-- End Matomo Code -->
 
    <% } %>
-<style> img.emoji {height: 1em;width: 1em;margin: 0 .05em 0 .1em;vertical-align: -0.1em;}</style>
-<script>twemoji.parse(document.body,{ base: 'https://cdn.zptr.cc/twemoji/' })</script><script>
+<style> img.emoji {height: 1em;width: 1em;margin: 0 .05em 0 .1em;vertical-align: -0.1em;}</style><script>
   window.GLOBAL_ENV = {
    API_ENDPOINT_INVID:"https://invid-api.poketube.fun/api/v1",
    API_ENDPOINT_INNER:"https://inner-api.poketube.fun/api/",

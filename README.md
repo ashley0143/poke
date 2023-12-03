@@ -6,10 +6,10 @@
    </h1>
 <div align="center">
 
-   <span> Be Anonymous watching epic videos, searching thingys on the interwebs and listening to music on poketube - the free yt front end thats focused on ur privacy!!</span></div>
+   <span> Be Anonymous watching epic videos, searching thingys on the interwebs and listening to music on poke - the free privacy front end!</span></div>
 <div align="center">
 
-[Welcome!](#welcome)&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;[Features](#features)&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;[No non-free codec needed](#no-non-free-codec-needed-3)&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;[Hosting Poketube~](#hosting-poketube)&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;[PokeTube community!](#poketube-community)&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;[The Legal Stuff (boring tbh)](#the-legal-stuff-boring-tbh)
+[Welcome!](#welcome)&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;[Features](#features)&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;[No non-free codec needed](#no-non-free-codec-needed-3)&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;[Hosting Poke~](#hosting-poketube)&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;[Poke community!](#poketube-community)&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;[The Legal Stuff (boring tbh)](#the-legal-stuff-boring-tbh)
 
 <a href="https://status.poketube.fun" target="_blank">
   <img 
@@ -54,20 +54,20 @@ Ambient mode, HQ audio And Even more!!!!!
  </p>
 
 ## Written by humans - not gpt
-poketube is made by hard-working hoomans - not gpt :3<br>
+poke is made by hard-working hoomans - not gpt :3<br>
 <a href="https://notbyai.fyi"><img src="https://cdn.glitch.global/d68d17bb-f2c0-4bc3-993f-50902734f652/Written-By-Human-Not-By-AI-Badge-white.svg?v=1696672202901" alt="Written by Humanss, Not by AI"></a>
 
 ## No Non-free codec needed :3
 
-PokeTube uses openh264 which is free software! poketube does not inculude non free stuff owowowoow!!!!
+Poke uses openh264 which is free software! poketube does not inculude non free stuff owowowoow!!!!
 
 you can view the source code of the openh264 codec in this repo :3 --> https://github.com/cisco/openh264.git
 
 PLEASE NOTE THAT THIS SOFTWARE MAY INCULUDE CODECS THAT IN CERTAIN COUNTRIES MAY BE COVERED BY PATENTS OR HAVE LEGAL ISSUES. PATENT AND COPYRIGHT LAWS OPERATE DIFFERENTLY DEPENDING ON WHICH COUNTRY YOU ARE IN. PLEASE OBTAIN LEGAL ADVICE IF YOU ARE UNSURE WHETHER A PARTICULAR PATENT OR RESTRICTION APPLIES TO A CODEC YOU WISH TO USE IN YOUR COUNTRY.
 
-## Hosting Poketube~
+## Hosting Poke~
 ### With NodeJS
-- To self host your own Poketube instance, you'll need the following:
+- To self host your own Poke instance, you'll need the following:
 
   - [Node.js](https://nodejs.org/en/download/)
   - [npm](http://npmjs.com) (Included with Node.js)
@@ -75,17 +75,23 @@ PLEASE NOTE THAT THIS SOFTWARE MAY INCULUDE CODECS THAT IN CERTAIN COUNTRIES MAY
 Once you have everything, clone our repo:
 
 ```
-git clone https://codeberg.org/ashley/poketube.git
+git clone https://codeberg.org/ashley/poke.git
 ```
 
 You can also clone using our Github mirror if you'd prefer:
 
 ```
-git clone https://github.com/ashley0143/poketube.git
+git clone https://github.com/ashley0143/poke.git
 ```
 
-Now, install the needed dependencies within the Poketube folder:
+Or you can use our forgejo instance:
 
+```
+git clone https://git.poketube.fun/ashley/poke.gitt
+```
+
+Now, install the needed dependencies within the Poke folder:
+( go to the folder by running cd pokee)
 ```
 npm install 
 ```

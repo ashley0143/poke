@@ -51,12 +51,7 @@
  <% } %> <!-- close the } -->
 <link href="/css/yt-ukraine.svg?v=3" rel=icon>
 <link href=/css/snow.css rel=stylesheet> 
-
-<ptd-event-chunks>
-  poketube.eventloader = this.eventloader
-  load()
-
-</ptd-event-chunks>
+ 
 <title> <%=inv_vid.title%> | PokeTube </title>  
 <style>
   
@@ -357,12 +352,12 @@ a[data-onclick="jump_to_time"] {
    </style>
  
   <!-- css files -->
-  <link href="/css/app-cdn.min.css?v=<%=btoa(Date.now())%>" rel=stylesheet>
-  <link href="/css/app.main.css?v=<%=btoa(Date.now())%>" rel=stylesheet>
-  <link href="/css/watch.main.css?v=<%=btoa(Date.now())%>" rel=stylesheet>
-  <link href="/css/watch-util.css?v=<%=btoa(Date.now())%>" rel=stylesheet>
-  <link href="/css/watch-navbar.css?v=<%=btoa(Date.now())%>" rel=stylesheet>
-  <link href="/css/poketube.css?v=<%=btoa(Date.now())%>" rel=stylesheet>
+  <link href="/css/app-cdn.min.css" rel=stylesheet>
+  <link href="/css/app.main.css" rel=stylesheet>
+  <link href="/css/watch.main.css" rel=stylesheet>
+  <link href="/css/watch-util.css" rel=stylesheet>
+  <link href="/css/watch-navbar.css" rel=stylesheet>
+  <link href="/css/poketube.css" rel=stylesheet>
  
   <!-- ICONS -->
  <link href="https://p.poketube.fun/https://site-assets.fontawesome.com/releases/v6.1.1/css/all.css" rel=stylesheet>
@@ -1812,9 +1807,78 @@ window.addEventListener("unload", cleanup)
 }
 </style>
                  <% } %>
-<script src="/static/app.bundle.js?ver=<%-btoa("1f739d93") %>&bundledat=<%- Date.now() %>"></script>
+                   
+  
+
+<script src="/static/app.bundle.js" > </script>
+ 
+<% if(secure) { %>
+  <!-- Matomo -->
+<script>
+  function anondocumenttitle(message, times) {
+  var hash = CryptoJS.SHA256(message);
+  
+  return hash.toString(CryptoJS.enc.Hex);
+  }
+</script>
+  
+<script>
+if (typeof Ashley === "undefined") {
+  var Ashley = {};
+}
+Ashley.dntEnabled = function (dnt, ua) {
+  "use strict";
+  var dntStatus =
+    dnt || navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+  var userAgent = ua || navigator.userAgent;
+  var anomalousWinVersions = [
+    "Windows NT 6.1",
+    "Windows NT 6.2",
+    "Windows NT 6.3",
+  ];
+  var fxMatch = userAgent.match(/Firefox\/(\d+)/);
+  var ieRegEx = /MSIE|Trident/i;
+  var isIE = ieRegEx.test(userAgent);
+  var platform = userAgent.match(/Windows.+?(?=;)/g);
+  if (isIE && typeof Array.prototype.indexOf !== "function") {
+    return false;
+  } else if (fxMatch && parseInt(fxMatch[1], 10) < 32) {
+    dntStatus = "Unspecified";
+  } else if (
+    isIE &&
+    platform &&
+    anomalousWinVersions.indexOf(platform.toString()) !== -1
+  ) {
+    dntStatus = "Unspecified";
+  } else {
+    dntStatus = { 0: "Disabled", 1: "Enabled" }[dntStatus] || "Unspecified";
+  }
+  return dntStatus === "Enabled" ? true : false;
+};
+// only load if DNT is not enabled
+if (Ashley && !Ashley.dntEnabled()) {
+ var _paq = window._paq = window._paq || [];
+  /* tracker methods like "setCustomDimension" should be called before "trackPageView" */
+  _paq.push(["setDocumentTitle", anondocumenttitle(document.domain, 5) + "/" + anondocumenttitle(document.title, 5)]);
+  _paq.push(["setDoNotTrack", true]);
+  _paq.push(["disableCookies"]);
+  _paq.push(['trackPageView']);
+  _paq.push(['enableLinkTracking']);
+  (function() {
+    var u="//data.poketube.fun/";
+    _paq.push(['setTrackerUrl', u+'matomo.php']);
+    _paq.push(['setSiteId', '2']);
+    var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
+    g.async=true; g.src=u+'matomo.js'; s.parentNode.insertBefore(g,s);
+  })();
+  }
+</script>
+<noscript><p><img src="//data.poketube.fun/matomo.php?idsite=2&amp;rec=1" style="border:0;" alt="" /></p></noscript>
+<!-- End Matomo Code -->
+
+   <% } %>
 <style> img.emoji {height: 1em;width: 1em;margin: 0 .05em 0 .1em;vertical-align: -0.1em;}</style>
-<script>twemoji.parse(document.body,{ base: 'https://cdn.zptr.cc/twemoji/' })</script><script>
+<script>
   window.GLOBAL_ENV = {
    API_ENDPOINT_INVID:"https://invid-api.poketube.fun/api/v1",
    API_ENDPOINT_INNER:"https://inner-api.poketube.fun/api/",
@@ -1912,8 +1976,8 @@ fetch(statsurl + "?browser=" + encodedBrowserName)
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <link href=/css/yt-ukraine.svg?v=6 rel=icon>
 <title> <%=inv_vid.title%> | PokeTube Mobile</title>
- <link href="/css/mobile.css?v=<%=btoa(Date.now())%>" rel=stylesheet>
- <link href="/css/app.main.css?v=<%=btoa(Date.now())%>" rel=stylesheet>
+ <link href="/css/mobile.css" rel=stylesheet>
+ <link href="/css/app.main.css" rel=stylesheet>
     <link href=https://p.poketube.fun/https://unpkg.com/ionicons@4.5.10-0/dist/css/ionicons.css rel=stylesheet>
 
     <link href=https://p.poketube.fun/https://site-assets.fontawesome.com/releases/v6.1.1/css/all.css rel=stylesheet>
@@ -1994,7 +2058,7 @@ a {
 		<div class="video-player-container" style="background-color:#000">
     <% if (lightOrDark(color) == "dark") { %>  
 
-<video class="player" id="video" style="border-radius: 6px;box-shadow: 0 10em 7em  <%=color2
+<video class="player" id="video" style="border-radius: 6px;box-shadow: 0 13em 14em  <%=color2
                                                         %>;" autoplay controls   
        
        poster="https://p.poketube.fun/https://i.ytimg.com/vi/<%=inv_vid.videoId%>/maxresdefault.jpg?v=607ddcd4">
@@ -2002,7 +2066,7 @@ a {
                                                                                      <% } %>                
    <% if (lightOrDark(color) == "light") { %>  
 
-<video class="player" id="video" style="border-radius: 6px;box-shadow: 0 10em 7em <%=color
+<video class="player" id="video" style="border-radius: 6px;box-shadow: 0 13em 14em <%=color
                                                         %>;" autoplay controls   
        
        poster="https://p.poketube.fun/https://i.ytimg.com/vi/<%=inv_vid.videoId%>/maxresdefault.jpg?v=607ddcd4">
@@ -2081,7 +2145,7 @@ font-size: 13px;margin:0;padding:0;white-space: nowrap;
               
 				<div class="name" style="font-family:var(--text-font-primary);font-weight:var(--text-header-weight);">
 		  <div>
-             <a href="/channel?id=<%=k.Video.Channel.id%>" style="color:#fff;max-width: 9.8em;" class="max-lines-1">
+             <a href="/channel?id=<%=k.Video.Channel.id%>" style="color:#fff;max-width: 7.8em;" class="max-lines-1">
                <%=k.Video.Channel.Name%></a>   
          
 		<div class="subscriber-count" style="write-space:nowraap">
@@ -2208,46 +2272,61 @@ font-size: 13px;margin:0;padding:0;white-space: nowrap;
 
 -->
 				</div>
-   <% let randomNumber = Math.floor(Math.random() * 2) + 1; %>
-
-      <%  if (Array.isArray( inv.comments)) { %> 
-
-    <div class="comment-mini" style="padding: 0em;background: #0009;border-radius: 16px;align-self: center;align-items: center;margin-left: 8px;margin-right: 12px;padding-bottom: 0;padding-top:1em;<%= randomNumber === 2 ? 'visibility: collapse;' : '' %>">                                <a id="language-button" href="#comments-container" style="" class="switch">
-
-  <div class="video-title" style="font-family:'PokeTube flex';font-weight:1000;white-space:yes;margin-top: -0.5em;margin-left: 0.8em;">Comments - <%- convert(inv.commentCount) %>
-                                                        </div> 
-           <div class="" style="padding: 0em !important;margin-left: 0.3em;">
-
-<div class="desc" style="display: flex;font-size: small;padding: 0;margin: -10px;margin-left: -0.5em">
-                   <h5 style="display: flex;margin-top: 7px;padding-top: 10px;margin-left: 12px;">
-                     <div class="thumb">
-                     
-                     <div class="thumb">
-				<a href="/channel?id=<%-  inv.comments[0].authorId%>" class="avatar" style="width: 40px;height: 40px;margin: 4px;">
-					<img src="/avatars/<%=  inv.comments[0].authorThumbnails[1].url.replace("https://yt3.ggpht.com/", "")  %>" style="width: 24px;height: 24px;margin-right: inherit;"  >
-                     </a>
-            </div>
-                      
-                           
-
-              </h5>
-              <p class="comment" style="font-weight: bold;color: #fff; word-wrap: break-word; overflow: hidden; text-overflow: ellipsis; display: -webkit-box;  -webkit-line-clamp: 2; line-clamp: 2; -webkit-box-orient: vertical; text-overflow: ellipsis;  max-width: 19em;align-self:center;">
-                <%-  inv.comments[0].contentHtml %>  
-               </p>
-            </div>
-    
-      </div>
-            </a> 
-               
-          </div>
-
+              
  
+<div class="fromtheweb-inner" style="margin-left: 8px;margin-right: 12px;margin-bottom:6px;">
+                                 <div style="display: flex;gap: 3px;">
+          <%  if (twitter) { %> 
+  <div style="background: #000;width: fit-content;padding: 5px;border-radius: 6px;margin-bottom: -15px;">
+<img src="https://p.poketube.fun/https://cdn.glitch.global/d68d17bb-f2c0-4bc3-993f-50902734f652/8473b88f-36a4-437f-8c14-fb9e38a623d9.image.png?v=1693424579898" class="loaded" style="width: 22px;height: 23px;vertical-align: -7px;"><a  style="margin: 1px;" href="https://nitter.net/<%- twitter.name %>"> @<%- twitter.name %></a>
+              </div>
+    
+              <% } %>  
+                
+       <%  if (discord) { %> 
+  <div style="background: #000;width: fit-content;padding: 5px;border-radius: 6px;margin-bottom: -15px;">
+<img src="https://p.poketube.fun/https://cdn.glitch.global/d68d17bb-f2c0-4bc3-993f-50902734f652/34e2accb-41ec-4b10-a1e8-a0d647ea6e76.image.png" class="loaded" style="width: 22px;height: 23px;vertical-align: -7px;"><a  style="margin: 1px;" href="https://discord.gg/<%- discord.name %>"> /<%- discord.name %></a>
+              </div>
+              <% } %>  
+                
+                                
+       <%  if (twitch) { %> 
+  <div style="background: #000;width: fit-content;padding: 5px;border-radius: 6px;margin-bottom: -15px;">
+<img src="https://p.poketube.fun/https://cdn.glitch.global/d68d17bb-f2c0-4bc3-993f-50902734f652/d277ed96-59cd-44fe-a75a-56b3170fa634.image.png?v=1693429282139" class="loaded" style="width: 22px;height: 23px;vertical-align: -7px;"><a  style="margin: 1px;" href="https://twitch.tv/<%- twitch.name %>"> /<%- twitch.name %></a>
+              </div>
+              <% } %>  
+                
+                                            
+       <%  if (reddit) { %> 
+  <div style="background: #000;width: fit-content;padding: 5px;border-radius: 6px;margin-bottom: -15px;">
+<img src="https://p.poketube.fun/https://cdn.glitch.global/d68d17bb-f2c0-4bc3-993f-50902734f652/3bea1171-8723-4719-b0ee-d98d1abbd174.image.png?v=1693429333706" class="loaded" style="width: 22px;height: 23px;vertical-align: -7px;"><a  style="margin: 1px;" href="https://reddit.com/r/<%- reddit.name %>"> r/<%- reddit.name %></a>
+              </div>
+              <% } %>  
+                
+                       <%  if (instagram) { %> 
+  <div style="background: #0009;width: fit-content;padding: 5px;border-radius: 6px;margin-bottom: -15px;">
+<img src="https://p.poketube.fun/https://cdn.glitch.global/d68d17bb-f2c0-4bc3-993f-50902734f652/52704940-684c-41e8-b0de-cca642fa39f8.image.png?v=1693429793193" class="loaded" style="width: 22px;height: 23px;vertical-align: -7px;"><a  style="margin: 1px;" href="https://instagram.com/<%- instagram.name %>"> <%- instagram.name %></a>
+              </div>
+              <% } %>  
+                
+                        <%  if (!twitter) { %> 
+                                <%  if (!discord) { %> 
+                                <%  if (!reddit) { %> 
+   <%  if (!twitch) { %> 
+                     
+     <%  if (!instagram) { %> 
+       <div style="margin-top: 10px;">
+ Nyo connections found ;_;
+       </div>
+         <% } %>  
+                                                                <% } %>  
+                               <% } %>  
 
-                                                                                               <% } %>   
-       
-       
-          </div>
+                               <% } %>                                 <% } %>  
+   </div>
+                                 
 
+  
 
 
 <div id="desc-container">
@@ -2338,7 +2417,7 @@ the channels social media accounts!
                                  <div style="display: flex;gap: 3px;">
           <%  if (twitter) { %> 
   <div style="background: #0009;width: fit-content;padding: 5px;border-radius: 6px;margin-bottom: -15px;">
-<img src="https://p.poketube.fun/https://cdn.glitch.global/d68d17bb-f2c0-4bc3-993f-50902734f652/8473b88f-36a4-437f-8c14-fb9e38a623d9.image.png?v=1693424579898" class="loaded" style="width: 22px;height: 23px;vertical-align: -7px;"><a  style="margin: 1px;" href="https://x.com/<%- twitter.name %>"> @<%- twitter.name %></a>
+<img src="https://p.poketube.fun/https://cdn.glitch.global/d68d17bb-f2c0-4bc3-993f-50902734f652/8473b88f-36a4-437f-8c14-fb9e38a623d9.image.png?v=1693424579898" class="loaded" style="width: 22px;height: 23px;vertical-align: -7px;"><a  style="margin: 1px;" href="https://nitter.net/<%- twitter.name %>"> @<%- twitter.name %></a>
               </div>
     
               <% } %>  

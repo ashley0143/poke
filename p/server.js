@@ -46,9 +46,9 @@ app.use(function (req, res, next) {
   next();
 });
 
-app.use(function (req, res, next) {
+app.use(function (_req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
-  res.setHeader("Cache-Control", "public, max-age=1848"); // cache header
+  res.setHeader("Cache-Control", "public, max-age=232337763"); // cache header
   res.setHeader("poketube-cacher", "PROXY_FILES");
 
   next();
@@ -60,6 +60,7 @@ app.use(function (req, res, next) {
  */
 const proxy = async (req, res) => {
     const { fetch } = await import("undici")
+  res.setHeader("Cache-Control", "public, max-age=232337763"); // cache header
 
   try {
     let url;
@@ -97,9 +98,9 @@ const listener = (req, res) => {
 app.get("/", (req, res) => {
   var json = {
     status: "200",
-    version: "1.1.0",
+    version: "1.2.0",
     URL_WHITELIST,
-    cache: "max-age-1848",
+    cache: "max-age-232337763",
   };
 
   res.json(json);

@@ -98,7 +98,7 @@ const listener = (req, res) => {
 app.get("/", (req, res) => {
   var json = {
     status: "200",
-    version: "1.1.0",
+    version: "1.2.0",
     URL_WHITELIST,
     cache: "max-age-232337763",
   };

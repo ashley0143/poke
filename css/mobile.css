@@ -1773,15 +1773,14 @@ ptd-custom-more {
 }
 
 @media screen and (orientation:landscape) {
- .ptnewbuttons {
-  margin-left:auto;
-  width:fit-content;
-  width:-moz-fit-content;
-  overflow:scroll;
-  max-width:150em!important;
-  margin-right: auto !important;
- }
+  .ptnewbuttons {
+    margin-left:auto;
+    width:auto;
+    max-width:150em!important;
+    margin-right:auto !important;
+  }
 }
+
 .new-button.engagement:hover {
  background-color:#0009
 }

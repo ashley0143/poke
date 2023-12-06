@@ -526,7 +526,12 @@ color:#ea9999 !important;
 
         </div>                                    
      
-    
+        <div class="right">
+               
+       <a href="/app?tab=search" style="position: absolute;right: 0;margin: 2em;" ><i class="fa-light fa-search"></i></a> 
+
+            </div>
+     
  
          <hr style="clear: both;display: block;border: none;border-bottom: 0.5px solid #2f2f2f;/*! width: 4.5em; */height: 0;">
 
@@ -823,6 +828,12 @@ width: fit-content;
        <% if (!tab) { %>
 
                 <a href="/channel?id=<%=ID%>" class="tab active">Videos</a>
+           
+<%  if (turntomins(shorts?.videos[0]?.lengthSeconds)  != "aN:aN" ) { %> 
+
+                   <a href="/channel?id=<%=ID%>&tab=shorts" class="tab">Shorts</a>
+  <% } %>
+    
               <%  if (Array.isArray(c.comments)) { %> 
 
   <%  if (c.comments.length != "0") { %> 
@@ -831,22 +842,20 @@ width: fit-content;
                                                                          <% } %>
                                                                          <% } %>
                                                                                                                                                                      <%  if (Array?.isArray(shorts?.videos)) { %> 
-  
-<%  if (turntomins(shorts?.videos[0]?.lengthSeconds)  != "aN:aN" ) { %> 
 
-                   <a href="/channel?id=<%=ID%>&tab=shorts" class="tab">Shorts</a>
-  <% } %>
       <% } %>                             
                                                                 <% } %>
                                                                              <% if (tab ==="about") { %>
-                                                                                                                       <%  if (Array?.isArray(shorts?.videos)) { %> 
+                                                                          
+                <a href="/channel?id=<%=ID%>" class="tab">Videos</a>
+
+<%  if (Array?.isArray(shorts?.videos)) { %> 
   
 <%  if (turntomins(shorts?.videos[0]?.lengthSeconds)  != "aN:aN" ) { %> 
 
                    <a href="/channel?id=<%=ID%>&tab=shorts" class="tab">Shorts</a>
   <% } %>
       <% } %>
-                <a href="/channel?id=<%=ID%>" class="tab">Videos</a>
                 <a href="/channel?id=<%=ID%>&tab=community"  class="tab">Community</a>
                                                                 <% } %>
                                                                  

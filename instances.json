@@ -29,6 +29,20 @@
         "branch": "dev"
       }
     }
+  ],
+  [
+    "poke.vern.cc",
+    {
+      "uri": "https://poke.vern.cc",
+      "CLOUDFLARE": false,
+      "piwik": false,
+      "region": "🇺🇸",
+      "software": {
+        "name": "poketube",
+        "version": "latest",
+        "branch": "dev"
+      }
+    }
   ]
 ]
 

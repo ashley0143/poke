@@ -1,7 +1,7 @@
-Internet : 1GBIT (recommended 5GBIT)
+Internet: 1GBIT (recommended 5GBIT)
 
-Ram : 2GB
+RAM: 2GB
 
-Cpu : Any recent one
+CPU: Any recent one
 
-OS: Microsoft Windows, macOs or GNU/LINUX (doesnt work on "musl" distros ) with systemd or any service manager
+OS: Microsoft Windows, macOS or GNU/LINUX (doesnt work on "musl" distros ) with systemd or any service manager

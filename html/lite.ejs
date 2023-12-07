@@ -264,8 +264,7 @@ background: none !important;
   <link href=/css/app.main.css rel=stylesheet>
   <link href="/css/watch.main.css?v=56" rel=stylesheet>
   <link href="/css/watch-util.css" rel=stylesheet>
-  <link href="https://fonts.poketube.fun/css/fonts.css" rel=stylesheet>
-  <link href="/css/watch-navbar.css?v=56" rel=stylesheet>
+   <link href="/css/watch-navbar.css?v=56" rel=stylesheet>
   <link href="/css/poketube.css?v=56" rel=stylesheet>
  
   <!-- ICONS -->
@@ -356,14 +355,12 @@ background: none !important;
    <% video.Subtitles.Subtitle.forEach(x => { %>
      <track src="/api/subtitles?v=<%=inv_vid.videoId%>&h=<%= x.language %>" label="<%= x.language.replace("United States","Simplified - USA") %>" kind="subtitles">      
      
-        <img src="https://t.poketube.fun/t/rep.gif?v=<%=btoa(inv_vid.videoId)%>&h=<%= x.language %>" id="subtitle_usage_rate" style="border:0;width: 0;visibility: hidden;"> 
-         <% }) %>   
+          <% }) %>   
                                                                                                        <% } %>                     
      <%  if (!Array.isArray( video.Subtitles.Subtitle)) { %> 
      <track src="/api/subtitles?v=<%=inv_vid.videoId%>&h=<%=  video.Subtitles.Subtitle.language %>" label="<%=  video.Subtitles.Subtitle.language.replace("United States","Simplified - USA") %>" kind="subtitles">      
      
-        <img src="https://t.poketube.fun/t/rep.gif?v=<%=btoa(inv_vid.videoId)%>&h=<%= video.Subtitles.Subtitle.language %>" id="subtitle_usage_rate" style="border:0;width: 0;visibility: hidden;"> 
-            
+             
                                                            <% } %>         
                                                            <% } %>         
                                                              
@@ -564,11 +561,11 @@ background: none !important;
  						<div class="video" >
                     <% if (!optout) { %> 
 
-      <a  href="/lite?v=<%= x.id %>" class="thumbnail" style="background-image: url('https://p.poketube.fun/https://i.ytimg.com/vi/<%= x.id %>/hqdefault.jpg?sqp=-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLBy_x4UUHLNDZtJtH0PXeQGoRFTgw');border-radius: 9.5px;"  >								<span class="video-length"><%=x.duration || "LIVE" %></span>
+      <a  href="/lite?v=<%= x.id %>" class="thumbnail" style="background-image: url('/vi/<%= x.id %>/hqdefault.jpg?sqp=-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLBy_x4UUHLNDZtJtH0PXeQGoRFTgw');border-radius: 9.5px;"  >								<span class="video-length"><%=x.duration || "LIVE" %></span>
                            <% } %>
    <% if (optout) { %> 
 
-      <a  href="/lite?v=<%= x.id %>&t=f" class="thumbnail" style="background-image: url('https://p.poketube.fun/https://i.ytimg.com/vi/<%= x.id %>/hqdefault.jpg?sqp=-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLBy_x4UUHLNDZtJtH0PXeQGoRFTgw');border-radius: 9.5px;"  >								<span class="video-length"><%- x.duration || "LIVE"%></span>
+      <a  href="/lite?v=<%= x.id %>&t=f" class="thumbnail" style="background-image: url('/vi/<%= x.id %>/hqdefault.jpg?sqp=-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLBy_x4UUHLNDZtJtH0PXeQGoRFTgw');border-radius: 9.5px;"  >								<span class="video-length"><%- x.duration || "LIVE"%></span>
                            <% } %>
 							</a>
 							<div class="info">

@@ -247,7 +247,7 @@ fetchUrls(urls);
             var currentSpeed = video.playbackRate;
             var newSpeed = getNextSpeed(currentSpeed);
             video.playbackRate = newSpeed;
-            speedOption.textContent = "Speed: " + newSpeed.toFixed(2) + "x";
+            speedOption.innerHTML = "<i class='fa-light fa-gauge'></i> Speed: " + newSpeed.toFixed(2) + "x";
         });
 
         function getNextSpeed(currentSpeed) {

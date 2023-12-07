@@ -29,7 +29,7 @@
 
 -->
 <!DOCTYPE html>
-<html class="poketube_desktop_player js event" invidproxy="<%=u%>" universe="2" vid_id="<%=inv_vid.videoId%>" t="<%=btoa(Date.now())%>" version="browser_web_<%=Date.now()%>">
+<html class="poketube_desktop_player js event" style="background: #000000;" invidproxy="<%=u%>" universe="2" vid_id="<%=inv_vid.videoId%>" t="<%=btoa(Date.now())%>" version="browser_web_<%=Date.now()%>">
   <head>
   
     <% if (e === false) { %>  
@@ -1810,7 +1810,7 @@ window.addEventListener("unload", cleanup)
                    
   
 
-<script src="/static/app.bundle.js" > </script>
+<script src="/static/app.bundle.js?v=07.12.2023" > </script>
  
 <% if(secure) { %>
   <!-- Matomo -->
@@ -1976,7 +1976,7 @@ fetch(statsurl + "?browser=" + encodedBrowserName)
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <link href=/css/yt-ukraine.svg?v=6 rel=icon>
 <title> <%=inv_vid.title%> | PokeTube Mobile</title>
- <link href="/css/mobile.css" rel=stylesheet>
+ <link href="/css/mobile.css?v=2" rel=stylesheet>
  <link href="/css/app.main.css" rel=stylesheet>
     <link href=https://p.poketube.fun/https://unpkg.com/ionicons@4.5.10-0/dist/css/ionicons.css rel=stylesheet>
 
@@ -2126,7 +2126,7 @@ a {
                                                                       <% } %>               
 
        </div>            
-   <div class="video-title" style="font-family:'Inter';white-space:yes;padding: 10px;background: #0009;margin-bottom: 6px;margin-left: 6px;margin-right: 12px;border-radius: 15px;margin-top: 4px;">
+   <div class="video-title" style="padding: 10px;background: #0009;margin-bottom: 6px;margin-left: 6px;margin-right: 12px;border-radius: 15px;margin-top: 4px;font-family: poketube flex;font-weight: 800;font-stretch: ultra-expanded;">
                     
                     <%=inv_vid.title%> <br>
                                                                              <a id="language-button" href="#desc-container" style="color: pink;

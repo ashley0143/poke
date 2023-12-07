@@ -258,6 +258,7 @@ module.exports = function (app, config, renderTemplate) {
         if (uaos === "Windows XP" || uaos === "Windows Vista")
           res.redirect("/lite?v=" + req.query.v);
 
+         if (req.query.from === "short") var shortsui = true
          
         try {
           renderTemplate(res, req, "poketube.ejs", {
@@ -268,6 +269,7 @@ module.exports = function (app, config, renderTemplate) {
             IsOldWindows,
             channelurlfixer,
             support,
+            shortsui,
             u: vidurl,
             isvidious: u.isInvidiousURL,
             video: json,

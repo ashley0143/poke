@@ -416,6 +416,7 @@ text-shadow: 1px 1px #000,1px 1px 0.1px #000;!important;
 </style>
                                             		 	               <% } %>   
 
+
                                                                    
             <% if(IsOldWindows) { %>
               <style>
@@ -553,7 +554,44 @@ background-color: #0000;
     top: 0;
 }
 </style>
+                               <% if(shortsui) { %>
+                                                       <script>
+        // Function to apply styles after DOM has loaded
+        function applyStyles() {
+            // Your existing styles
+            const styles = `
+                .player {
+                    width: fit-content;
+                    margin-left: auto;
+                    margin-right: auto;
+                    height: fit-content;
+                }
+
+                .video-player-container {
+                    max-width: fit-content;
+                    min-width: fit-content;
+                    margin-left: auto;
+                    margin-right: auto;
+                    aspect-ratio: var(--ptd-watch-width-ratio) / var(--ptd-watch-height-ratio);
+                }
+            `;
+
+            // Create a style element and set its content
+            const styleElement = document.createElement('style');
+            styleElement.innerHTML = styles;
+
+            // Append the style element to the document head
+            document.head.appendChild(styleElement);
+        }
+
+        // Event listener to call applyStyles after DOM has loaded
+        window.onload = applyStyles;
+                                 </script>
+                                                    <% } %>
+                                
              <% if(dm) { %>
+               
+               
              <style>
                :root {
                  --div-gradient: linear-gradient(to bottom right, #33078c, #7a4d3f) !important;
@@ -1478,7 +1516,7 @@ Recommended Videos
 </div>   
                                 
                                 
-<% if (!f) { %> <% k.Video.Recommendations?.Video?.forEach(x => { %> <div class="fade-in video"> <% if (!optout) { %> <a class=thumbnail href="/watch?v=<%= x.id %>"style="background-image:url('/vi/<%= x.id %>/hqdefault.jpg?sqp=-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLBy_x4UUHLNDZtJtH0PXeQGoRFTgw');border-radius:9.5px"alt="<%= x.Title %>"><span class=video-length><%- x.duration || "LIVE"%></span> <% } %> <% if (optout) { %> <a class=thumbnail href="/watch?v=<%= x.id %>&m=f"style="background-image:url('/vi/<%= x.id %>/hqdefault.jpg?sqp=-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLBy_x4UUHLNDZtJtH0PXeQGoRFTgw');border-radius:9.5px"alt="<%= x.Title %>"><span class=video-length><%- x.duration || "LIVE"%></span> <% } %> </a><div class=info> <% if (!optout) { %> <a class="max-lines-2 title"href="/watch?v=<%= x.id %>"style=font-stretch:100%;font-weight:800 title="<%= x.Title %>"><%= x.Title %></a> <% } %> <% if (optout) { %> <a class="max-lines-2 title"href="/watch?v=<%= x.id %>&m=f"style=font-stretch:100%;font-weight:800 title="<%= x.Title %>"><%= x.Title %></a> <% } %> <div><a class=max-lines-2 href="/channel?id=<%= x.Channel.id %>"style=-webkit-line-clamp:1;width:12em;word-wrap:break-word><%=x.Channel.Name %></a><div class=video-views> <%= x.uploadedAt.replace("Streamed", "Live") %> • <%= convert(x.views) %> views</div></div></div></div> <% }) %><% } %>
+<% if (!f) { %> <% k.Video.Recommendations?.Video?.forEach(x => { %> <div class="fade-in video"> <% if (!optout) { %> <a class=thumbnail href="/watch?v=<%= x.id %>"style="background-image:url('/vi/<%= x.id %>/hqdefault.jpg?sqp=-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLBy_x4UUHLNDZtJtH0PXeQGoRFTgw');border-radius:9.5px"alt="<%= x.Title %>"><span class=video-length><%- x.duration || "LIVE"%></span> <% } %> <% if (optout) { %> <a class=thumbnail href="/watch?v=<%= x.id %>&m=f"style="background-image:url('/vi/<%= x.id %>/hqdefault.jpg?sqp=-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLBy_x4UUHLNDZtJtH0PXeQGoRFTgw');border-radius:9.5px"alt="<%= x.Title %>"><span class=video-length><%- x.duration || "LIVE"%></span> <% } %> </a><div class=info> <% if (!optout) { %> <a class="max-lines-2 title"href="/watch?v=<%= x.id %>"style=font-stretch:ultra-expanded;font-weight:850 title="<%= x.Title %>"><%= x.Title %></a> <% } %> <% if (optout) { %> <a class="max-lines-2 title"href="/watch?v=<%= x.id %>&m=f"style=font-stretch:100%;font-weight:800 title="<%= x.Title %>"><%= x.Title %></a> <% } %> <div><a class=max-lines-2 href="/channel?id=<%= x.Channel.id %>"style=-webkit-line-clamp:1;width:12em;word-wrap:break-word><%=x.Channel.Name %></a><div class=video-views> <%= x.uploadedAt.replace("Streamed", "Live") %> • <%= convert(x.views) %> views</div></div></div></div> <% }) %><% } %>
  
      <% if (f) { %> 
 

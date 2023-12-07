@@ -17,20 +17,6 @@
     }
   ],
   [
-    "poketube.sudovanilla.com",
-    {
-      "uri": "https://poketube.sudovanilla.com",
-      "CLOUDFLARE": true,
-      "piwik": false,
-      "region": "🇺🇸",
-      "software": {
-        "name": "poketube",
-        "version": "lastest",
-        "branch": "dev"
-      }
-    }
-  ],
-  [
     "poke.vern.cc",
     {
       "uri": "https://poke.vern.cc",

@@ -1799,7 +1799,10 @@ const draw = () => {
 
 const drawLoop = () => {
   draw()
-  step = window.requestAnimationFrame(drawLoop)
+  
+ setTimeout(() => {
+    step = window.requestAnimationFrame(drawLoop);
+  }, 01);
 }
 
 const drawPause = () => {

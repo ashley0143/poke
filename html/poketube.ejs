@@ -1776,6 +1776,7 @@ if (userID) {
 
 <script>
 let requestId;
+let lastDraw;
 
 const loopStart = () => {
   requestId = window.requestAnimationFrame(loopStart)
@@ -1846,7 +1847,7 @@ window.addEventListener("unload", cleanup)
 <style>
 .video-player-container, #video {
   position: relative;
-  z-index: 0;
+   z-index: 0;
 }
 .popup {z-index: 1}
 #ambient-canvas {

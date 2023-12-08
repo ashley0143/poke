@@ -1806,9 +1806,9 @@ const frameRate = 4; // Set the desired frame rate in milliseconds
 const drawLoop = () => {
   draw()
   
- setTimeout(() => {
+ setInterval(() => {
     step = window.requestAnimationFrame(drawLoop);
-  }, 01);
+  }, 50);
 }
 
 const drawPause = () => {

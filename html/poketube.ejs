@@ -1801,16 +1801,7 @@ const draw = () => {
 // Adjust the frame rate by changing the interval
 const frameRate = 4; // Set the desired frame rate in milliseconds
 
-const drawLoopWithInterval = () => {
-  const now = performance.now();
-  
-  if (!lastDraw || now - lastDraw >= frameRate) {
-    draw();
-    lastDraw = now;
-  }
-
-  step = window.requestAnimationFrame(drawLoopWithInterval);
-};
+ 
 
 const drawLoop = () => {
   draw()
@@ -1828,7 +1819,9 @@ const drawPause = () => {
 const init = () => {
   AMvideo.addEventListener("loadeddata", drawLoop, false)
   AMvideo.addEventListener("seeked", draw, false)
-  AMvideo.addEventListener("play", drawLoopWithInterval, false);
+   setInterval(function() {
+  AMvideo.addEventListener("play", drawLoop, false);
+   }, 50);
    AMvideo.addEventListener("pause", drawPause, false)
   AMvideo.addEventListener("ended", drawPause, false)
 }

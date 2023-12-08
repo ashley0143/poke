@@ -1811,7 +1811,7 @@ const drawPause = () => {
 }
 
 const init = () => {
-  AMvideo.addEventListener("loadeddata", draw, false)
+  AMvideo.addEventListener("loadeddata", drawLoop, false)
   AMvideo.addEventListener("seeked", draw, false)
   AMvideo.addEventListener("play", drawLoop, false)
   AMvideo.addEventListener("pause", drawPause, false)

@@ -1790,12 +1790,13 @@ const AMvideo = document.getElementById("video")
 const canvas = document.getElementById("ambient-canvas")
 const ctx = canvas.getContext("2d")
     
-let step
+let step;
 
 const draw = () => {
-  ctx.drawImage(video, 0, 0, canvas.width, canvas.height)
-}
-
+  if (AMvideo.readyState >= 2) { // Check if video is playable (HAVE_CURRENT_DATA or greater)
+    ctx.drawImage(AMvideo, 0, 0, canvas.width, canvas.height);
+  }
+};
 
 const drawLoop = () => {
   draw()
@@ -1808,12 +1809,13 @@ const drawPause = () => {
 }
 
 const init = () => {
-  AMvideo.addEventListener("loadeddata", draw, false)
-  AMvideo.addEventListener("seeked", draw, false)
-  AMvideo.addEventListener("play", drawLoop, false)
-  AMvideo.addEventListener("pause", drawPause, false)
-  AMvideo.addEventListener("ended", drawPause, false)
-}
+  document.addEventListener("DOMContentLoaded", () => {
+    AMvideo.addEventListener("canplaythrough", draw, false);
+    AMvideo.addEventListener("play", drawLoop, false);
+    AMvideo.addEventListener("pause", drawPause, false);
+    AMvideo.addEventListener("ended", drawPause, false);
+  });
+};
 
 const cleanup = () => {
   AMvideo.removeEventListener("loadeddata", draw)

@@ -45,7 +45,7 @@ function toObject(arr) {
 
 // Gets Invidious instances
 const invInstanceList = [
-  "https://video-proxy.poketube.fun"
+  "https://tube.kuylar.dev"
 ];
 
 // Gets a random instance from the list

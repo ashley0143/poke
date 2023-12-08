@@ -1806,12 +1806,16 @@ const drawPause = () => {
   step = undefined
 }
 
+
 const init = () => {
-     AMvideo.addEventListener("canplaythrough", draw, false);
-    AMvideo.addEventListener("play", drawLoop, false);
-    AMvideo.addEventListener("pause", drawPause, false);
-    AMvideo.addEventListener("ended", drawPause, false);
- };
+  video.pause();video.play();
+  AMvideo.addEventListener("loadeddata", draw, false)
+  AMvideo.addEventListener("seeked", draw, false)
+  AMvideo.addEventListener("play", drawLoop, false)
+  AMvideo.addEventListener("pause", drawPause, false)
+  AMvideo.addEventListener("ended", drawPause, false)
+}
+
 
 const cleanup = () => {
   AMvideo.removeEventListener("loadeddata", draw)

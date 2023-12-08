@@ -1776,7 +1776,6 @@ if (userID) {
 
 <script>
 let requestId;
-let lastDraw;
 
 const loopStart = () => {
   requestId = window.requestAnimationFrame(loopStart)
@@ -1798,17 +1797,9 @@ const draw = () => {
 }
 
 
-// Adjust the frame rate by changing the interval
-const frameRate = 4; // Set the desired frame rate in milliseconds
-
- 
-
 const drawLoop = () => {
   draw()
-  
- setInterval(() => {
-    step = window.requestAnimationFrame(drawLoop);
-  }, 50);
+  step = window.requestAnimationFrame(drawLoop)
 }
 
 const drawPause = () => {
@@ -1817,12 +1808,10 @@ const drawPause = () => {
 }
 
 const init = () => {
-  AMvideo.addEventListener("loadeddata", drawLoop, false)
+  AMvideo.addEventListener("loadeddata", draw, false)
   AMvideo.addEventListener("seeked", draw, false)
-   setInterval(function() {
-  AMvideo.addEventListener("play", drawLoop, false);
-   }, 50);
-   AMvideo.addEventListener("pause", drawPause, false)
+  AMvideo.addEventListener("play", drawLoop, false)
+  AMvideo.addEventListener("pause", drawPause, false)
   AMvideo.addEventListener("ended", drawPause, false)
 }
 
@@ -1840,7 +1829,7 @@ window.addEventListener("unload", cleanup)
 <style>
 .video-player-container, #video {
   position: relative;
-   z-index: 0;
+  z-index: 0;
 }
 .popup {z-index: 1}
 #ambient-canvas {

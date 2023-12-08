@@ -1813,8 +1813,11 @@ const drawPause = () => {
 const init = () => {
   AMvideo.addEventListener("loadeddata", drawLoop, false)
   AMvideo.addEventListener("seeked", draw, false)
-  AMvideo.addEventListener("play", drawLoop, false)
-  AMvideo.addEventListener("pause", drawPause, false)
+  AMvideo.addEventListener("play", () => {
+    // Start the draw loop with a target frame rate of 250 frames per second (1 / 0.004)
+    step = window.requestAnimationFrame(drawLoop);
+  }, false); 
+   AMvideo.addEventListener("pause", drawPause, false)
   AMvideo.addEventListener("ended", drawPause, false)
 }
 

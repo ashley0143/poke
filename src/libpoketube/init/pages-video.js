@@ -19,6 +19,7 @@ const {
 } = require("../ptutils/libpt-coreutils.js");
 const media_proxy = require("../libpoketube-video.js");
 const atmos = require("../../../pokeatmosurls.json");
+const config = require("../../../config.json");
 
 function linkify(text) {
   // regular expression to match URLs
@@ -279,6 +280,7 @@ module.exports = function (app, config, renderTemplate) {
             twitter,
             k,
             dm,
+            media_proxy_url : config.media_proxy,
             instagram,
             useragent: req.useragent,
             verify,

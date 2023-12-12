@@ -246,7 +246,7 @@ module.exports = function (app, config, renderTemplate) {
         }
 
         if (inv_vid.author.endsWith(" - Topic")) {
-          var vidurl = u.losslessurl;
+          var vidurl = "https://vid.theedgeofrage.com/";
           var isvidious = true;
         }
 

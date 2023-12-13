@@ -767,7 +767,7 @@ white-space: nowrap;text-decoration: none;" href="/feeds/videos.xml?channel_id=<
                                                                 <% } %>
             </div>
      
-<input type="text" id="search" placeholder="Search vids :3" style="margin-top: 2em;height: 1em;color: #fff;background: #111;border-radius: 1em;padding: 7px;margin-left: auto;margin-right: 1em;">                                                                           </div>
+<input type="text" id="search" placeholder="Search :3" style="margin-top: 2em;height: 1em;color: #fff;background: #111;border-radius: 1em;padding: 7px;margin-left: auto;margin-right: 1em;">                                                                           </div>
      
      
      <% } %>
@@ -1375,21 +1375,39 @@ if (userID) {
 }
     
 document.getElementById('search').addEventListener('keyup', function () {
-      var value = this.value.toLowerCase();
-      var videos = document.querySelectorAll('.video');
+  var value = this.value.toLowerCase();
+  var videos = document.querySelectorAll('.video, .shorts-video'); 
       
-      videos.forEach(function (video) {
-        var text = video.textContent.toLowerCase();
-        if (text.indexOf(value) > -1) {
-          video.style.visibility = 'visible';
-          video.style.display = 'grid';
-        } else {
-          video.style.visibility = 'hidden';
-          video.style.display = 'none';
-        }
-      });
-    });
+  videos.forEach(function (video) {
+    var text = video.textContent.toLowerCase();
+    if (text.indexOf(value) > -1) {
+      video.style.visibility = 'visible';
+      video.style.display = 'grid';
+    } else {
+      video.style.visibility = 'hidden';
+      video.style.display = 'none';
+    }
+  });
+});
+    
+    document.getElementById('search').addEventListener('keyup', function () {
+  var value = this.value.toLowerCase();
+  var videos = document.querySelectorAll('.community-content'); 
+      
+  videos.forEach(function (video) {
+    var text = video.textContent.toLowerCase();
+    if (text.indexOf(value) > -1) {
+      video.style.visibility = 'visible';
+      video.style.display = 'block';
+    } else {
+      video.style.visibility = 'hidden';
+      video.style.display = 'none';
+    }
+  });
+});
+   
 // @license-end
+
      </script>
                </body>
  

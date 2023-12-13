@@ -1012,7 +1012,13 @@ display: block; !important;" autoplay controls>
        ImmersiveAmbientModecolor: <% if (lightOrDark(color) == "light") { %><%=color%> (color 1)<% } %><% if (lightOrDark(color) == "dark") { %> <%=color2%> (color 2) <% } %> <br>  
         Video Format :<% if (!qua) { %>  22 (720p) openh264 ( https://github.com/cisco/openh264) mp4a.40.2  | 44100Hz  <% } %>
       <% if (qua === "medium") { %>  18 (320p)  openh264 (https://github.com/cisco/openh264) mp4a.40.2 | 44100Hz  <% } %>       <br> 
-       PokeTubeEncryptID: <%=sha384(inv_vid.videoId)%> <br>
+        <% if (inv_vid.genre === "Music") { %> 
+        Audio Format: ALAC lossless (https://codeberg.org/Ashley/poke/src/branch/main/alac) Audio/ Flac<br>
+                                    <% } %>   
+    <% if (inv_vid.genre !== "Music") { %> 
+        Audio Format: Opus - Normalized audio<br>
+                                    <% } %>   
+        PokeTubeEncryptID: <%=sha384(inv_vid.videoId)%> <br>
                       <% if (isvidious) { %>
 
        Proxy : <%= u.replace("https://","") %> - refresh the page to change the proxy location<br>
@@ -1054,7 +1060,8 @@ display: block; !important;" autoplay controls>
 
             <div style="float: left;font-size: small;font-family: ubuntu;margin-bottom: 1em;">     <i title="hq audio" class="fa-light fa-waveform-lines"></i>&nbsp;Lossless </div>
                                   		 	               <% } %> 
-                                                              <% if (inv_vid.genre !== "Music") { %> 
+                                               
+                                                         <% if (inv_vid.genre !== "Music") { %> 
      
           <a href="#connections" style="font-weight: bolder;font-family: sans-serif;color: var(--text-color);font-size: small;"> Jump to Connections </a>
                                            		 	               <% } %> 
@@ -2576,6 +2583,12 @@ the channels social media accounts!
         Video Format :<% if (!qua) { %>  22 (720p) openh264 ( https://github.com/cisco/openh264) mp4a.40.2  | 44100Hz  <% } %>
       <% if (qua === "medium") { %>  18 (320p)  openh264 (https://github.com/cisco/openh264) mp4a.40.2 | 44100Hz  <% } %>       <br> 
        PokeTubeEncryptID: <%=sha384(inv_vid.videoId)%> <br>
+        <% if (inv_vid.genre === "Music") { %> 
+        Audio Format: ALAC lossless (https://codeberg.org/Ashley/poke/src/branch/main/alac) Audio/ Flac<br>
+                                    <% } %>   
+    <% if (inv_vid.genre !== "Music") { %> 
+        Audio Format: Opus - Normalized audio<br>
+                                    <% } %>   
                       <% if (isvidious) { %>
 
        Proxy : <%= u.replace("https://","") %> - refresh the page to change the proxy location<br>

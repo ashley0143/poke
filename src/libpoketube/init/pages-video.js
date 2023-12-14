@@ -246,7 +246,7 @@ module.exports = function (app, config, renderTemplate) {
         }
 
         if (inv_vid.author.endsWith(" - Topic")) {
-          var vidurl = "https://vid.theedgeofrage.com";
+          var vidurl = "https://eu-proxy.poketube.fun";
           var isvidious = true;
         }
 

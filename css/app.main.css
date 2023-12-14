@@ -743,7 +743,7 @@ body {
 }
 
 
-body, .loaded {cursor: url('/static/cursor.ico'), default !important}
+body, .loaded {cursor: url('/static/cursor.ico'), default}
 
 a,
 btn,

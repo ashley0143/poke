@@ -1417,3 +1417,8 @@ document.getElementById('search').addEventListener('keyup', function () {
 
 <% } catch (error) { %>
  <% } %>
+ <script>
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('service-worker.js');
+  }
+  </script>

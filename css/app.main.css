@@ -743,7 +743,7 @@ body {
 }
 
 
-body, .loaded {cursor: url('/static/cursor.ico'), default !important}
+body {cursor: url('/static/cursor.ico'), default}
 
 a,
 btn,
@@ -753,7 +753,7 @@ select,
 button,
 summary,
 span > a,
-li > a {cursor: url('/static/cursor-pointer.ico'), pointer}
+li > a {cursor: url('/static/cursor-pointer.ico'), pointer !important;}
 
 p {
   color: #fff;

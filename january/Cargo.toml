@@ -1,0 +1,26 @@
+[package]
+name = "january"
+version = "0.3.5"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+actix-web = "4.0"
+lazy_static = "1.4"
+imagesize = "0.8"
+reqwest = "0.11"
+scraper = "0.12"
+serde_json = "1.0"
+mime = "0.3"
+serde = { version = "1.0", features = ["derive"] }
+regex = "1.5"
+log = "0.4"
+env_logger = "0.8"
+dotenv = "0.15"
+tempfile = "3.2.0"
+ffprobe = "0.3.0"
+encoding_rs = "0.8"
+moka = { version = "0.10", features = ["future"]}
+
+validator = { version = "0.15.0", features = ["derive"] }

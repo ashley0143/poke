@@ -124,6 +124,11 @@ PokeTube should be running on `http://localhost:6003`.
 
 The port can be changed with the config file you downloaded, just change the `server_port` option. 
 
+## Hosting Image Proxy
+
+see [here](https://codeberg.org/Ashley/poke/src/branch/main/january) :3
+just uhh change the url in config.json to ur image proxy
+
 ## PokeTube community!
 
 Join the community on [revolt](https://rvlt.gg/poketube) :3

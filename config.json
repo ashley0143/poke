@@ -3,6 +3,7 @@
     "invapi": "https://invid-api.poketube.fun/api/v1",
     "dislikes": "https://returnyoutubedislikeapi.com/votes?videoId=",
     "invchannel": "https://invid-api.poketube.fun/api/v1",
+    "media_proxy": "https://image-proxy.poketube.fun",
     "cacher_max_age": "864000",
     "enablealwayshttps": false,
     "t_url": "https://t.poketube.fun/",

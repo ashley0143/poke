@@ -114,7 +114,7 @@ app.get("/avatars/:v", async function (req, res) {
       var format = "mp3";
     }
 
-    const url = `https://tube.kuylar.dev/proxy/media/${v}/${q}`;
+    const url = `https://tube-proxy.poketube.fun/proxy/media/${v}/${q}`;
 
     res.redirect(url);
   });

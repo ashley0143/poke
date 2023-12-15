@@ -23,7 +23,7 @@
 <link rel="manifest" href="/manifest.json">
   <link href=/css/yt-ukraine.svg?v=6 rel=icon>
  <link href=/css/app-cdn.min.css rel=stylesheet>
-<link href=/css/app.main.css rel=stylesheet>
+<link href=/css/app.main.css?v=25 rel=stylesheet>
 <link href=/css/search.main.css rel=stylesheet> 
  <link href=/css/watch.main.css rel=stylesheet>
 <link rel="search" type="application/opensearchdescription+xml" title="PokeTube" href="https://poketube.fun/api/opensearch" />
@@ -402,6 +402,8 @@ video[counter].classList.add("shake");
     
        </div>
   <div class="channel-page"   style="background-color: var(--channel-contents-background);">   
+    <div class="search-options">
+      
     <div id="filters">
 	<details id="filters-collapse">		<summary>Filters</summary>
     <div id="filters-box"><form action="/search" method="get">
@@ -464,7 +466,8 @@ Videos
 Web              </a>
                   
                      </div>   
-      
+          </div>
+
                  <%  if (!tab) { %> 
  
        <% invresults.forEach (x => { %>
@@ -474,7 +477,7 @@ Web              </a>
       <a
         href="/watch?v=<%= x.videoId %>"
         class="thumbnail"
-        style="background-image: url('/vi/<%= x.videoId %>/hqdefault.jpg?sqp=-oaymwEXCNAFEJQDSFryq4qpAwkIARUAAIhCGAE=&amp;rs=AOn4CLBmAOZV7CM3NdDKlEFxGX7PpI5UWQ');border-radius: 10px;"
+        style="background-image: url('<%- media_proxy_url %>/proxy?url=https://vid.puffyan.us/vi/<%= x.videoId %>/hqdefault.jpg?sqp=-oaymwEXCNAFEJQDSFryq4qpAwkIARUAAIhCGAE=&amp;rs=AOn4CLBmAOZV7CM3NdDKlEFxGX7PpI5UWQ');border-radius: 10px;"
          ><span class="video-length"><%=turntomins(x.lengthSeconds) %></span></a>
 <div class="info" style="color:#fff;text-align: left;font-weight: 1000;">
         <a style="font-family: 'PokeTube Flex';font-size: large;text-align: left;font-stretch: extra-expanded;

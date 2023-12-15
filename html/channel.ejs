@@ -219,7 +219,7 @@ padding-bottom: 32px;
    </style>
   
   <link href=/css/app-cdn.min.css rel=stylesheet>
-  <link href=/css/app.main.css rel=stylesheet>
+  <link href=/css/app.main.css?v=44599 rel=stylesheet>
   <link href="/css/watch.main.css?v=56" rel=stylesheet>
    <link href="/css/watch-util.css" rel=stylesheet>
 
@@ -767,7 +767,7 @@ white-space: nowrap;text-decoration: none;" href="/feeds/videos.xml?channel_id=<
                                                                 <% } %>
             </div>
      
-<input type="text" id="search" placeholder="Search vids :3" style="margin-top: 2em;height: 1em;color: #fff;background: #111;border-radius: 1em;padding: 7px;margin-left: auto;margin-right: 1em;">                                                                           </div>
+<input type="text" id="search" placeholder="Search :3" style="margin-top: 2em;height: 1em;color: #fff;background: #111;border-radius: 1em;padding: 7px;margin-left: auto;margin-right: 1em;">                                                                           </div>
      
      
      <% } %>
@@ -1054,7 +1054,7 @@ width: fit-content;
 
    <% tj.videos.forEach (x =>  { %>
 			<a href="/watch?v=<%- x.videoId %>" class="video">
-				<div class="thumbnail" style="background-image: url('/vi/<%= x.videoId %>/hqdefault.jpg?sqp=-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLBy_x4UUHLNDZtJtH0PXeQGoRFTgw');border-radius: 10px;"><span class="video-length"><%- turntomins(x.lengthSeconds) %></span></div>
+				<div class="thumbnail" style="background-image: url('<%- media_proxy_url %>/proxy?url=https://vid.puffyan.us/vi/<%= x.videoId %>/hqdefault.jpg?sqp=-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLBy_x4UUHLNDZtJtH0PXeQGoRFTgw');border-radius: 10px;"><span class="video-length"><%- turntomins(x.lengthSeconds) %></span></div>
 				<div class="info">
 					<span class="title max-lines-2" style="font-family:PokeTube flex,sans-serif;font-weight: 1000;font-stretch: ultra-expanded;"><%- x.title %></span>
 			 
@@ -1110,7 +1110,7 @@ width: fit-content;
   <%  if (Array?.isArray( shorts.videos)) { %> 
     <% shorts.videos.forEach (x =>  { %>
       <a href="/shorts/<%- x.videoId %>" class="shorts-video" >
-        <img load="lazy" src='/vi/<%= x.videoId %>/hqdefault.jpg?sqp=-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLBy_x4UUHLNDZtJtH0PXeQGoRFTgw'>
+        <img load="lazy" src='<%- media_proxy_url %>/proxy?url=https://vid.puffyan.us/vi/<%= x.videoId %>/hqdefault.jpg?sqp=-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLBy_x4UUHLNDZtJtH0PXeQGoRFTgw'>
         <span class="shorts-title"><%- x.title %></span>
       </a>
     <% }) %>   
@@ -1211,7 +1211,7 @@ width: fit-content;
 
    <% stream.videos.forEach (x =>  { %>
 			<a href="/watch?v=<%- x.videoId %>" class="video">
-				<div class="thumbnail" style="background-image: url('/vi/<%= x.videoId %>/hqdefault.jpg?sqp=-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLBy_x4UUHLNDZtJtH0PXeQGoRFTgw');border-radius: 10px;"><span class="video-length"><%- turntomins(x.lengthSeconds) %></span></div>
+				<div class="thumbnail" style="background-image: url('<%- media_proxy_url %>/proxy?url=https://vid.puffyan.us/vi/<%= x.videoId %>/hqdefault.jpg?sqp=-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLBy_x4UUHLNDZtJtH0PXeQGoRFTgw');border-radius: 10px;"><span class="video-length"><%- turntomins(x.lengthSeconds) %></span></div>
 				<div class="info">
 					<span class="title max-lines-2" style="font-family:PokeTube flex,sans-serif;font-weight: 1000;font-stretch: ultra-expanded;"><%- x.title %></span>
 			 
@@ -1287,7 +1287,7 @@ width: fit-content;
 <video class="player"  style="border-radius: 16px;
 "  controls   
        
-       poster="/vi/<%=x.attachment.videoId%>/maxresdefault.jpg?v=607ddcd4">
+       poster="<%- media_proxy_url %>/proxy?url=https://vid.puffyan.us/vi/<%=x.attachment.videoId%>/maxresdefault.jpg?v=607ddcd4">
         
                            
                                                 <source src="https://tube.kuylar.dev/proxy/media/<%=x.attachment.videoId%>/22" type="video/mp4; codecs=&quot;avc1.64001F, mp4a.40.2&quot;" label="hd720" selected="false">
@@ -1303,7 +1303,7 @@ width: fit-content;
                                                                                  <% if (x.attachment.imageThumbnails[4] ) { %>
  
                                                                                    <img style="  width: 100%;
-  border-radius: 26px;" src="https://p.poketube.fun/<%- x.attachment.imageThumbnails[4].url%>">
+  border-radius: 26px;" src="<%- media_proxy_url %>/proxy?url=<%- x.attachment.imageThumbnails[4].url%>">
                <% } %>               <% } %>
 
                  
@@ -1375,21 +1375,39 @@ if (userID) {
 }
     
 document.getElementById('search').addEventListener('keyup', function () {
-      var value = this.value.toLowerCase();
-      var videos = document.querySelectorAll('.video');
+  var value = this.value.toLowerCase();
+  var videos = document.querySelectorAll('.video, .shorts-video'); 
       
-      videos.forEach(function (video) {
-        var text = video.textContent.toLowerCase();
-        if (text.indexOf(value) > -1) {
-          video.style.visibility = 'visible';
-          video.style.display = 'grid';
-        } else {
-          video.style.visibility = 'hidden';
-          video.style.display = 'none';
-        }
-      });
-    });
+  videos.forEach(function (video) {
+    var text = video.textContent.toLowerCase();
+    if (text.indexOf(value) > -1) {
+      video.style.visibility = 'visible';
+      video.style.display = 'grid';
+    } else {
+      video.style.visibility = 'hidden';
+      video.style.display = 'none';
+    }
+  });
+});
+    
+    document.getElementById('search').addEventListener('keyup', function () {
+  var value = this.value.toLowerCase();
+  var videos = document.querySelectorAll('.community-content'); 
+      
+  videos.forEach(function (video) {
+    var text = video.textContent.toLowerCase();
+    if (text.indexOf(value) > -1) {
+      video.style.visibility = 'visible';
+      video.style.display = 'block';
+    } else {
+      video.style.visibility = 'hidden';
+      video.style.display = 'none';
+    }
+  });
+});
+   
 // @license-end
+
      </script>
                </body>
  

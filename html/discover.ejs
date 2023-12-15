@@ -34,7 +34,7 @@
 
     <link href=/css/app-cdn.min.css rel=stylesheet>
   <link href=/css/app-cdn.min.css rel=stylesheet>
-<link href=/css/app.main.css rel=stylesheet>
+<link href=/css/app.main.css?v=45 rel=stylesheet>
 <link href=/css/search.main.css rel=stylesheet> 
  <link href=/css/watch.main.css rel=stylesheet>
      <link href="https://fonts.poketube.fun/css/fonts.css" rel=stylesheet>
@@ -1115,7 +1115,7 @@ margin-left: auto;
                                                
    <% inv.forEach(x =>  { %>
 			<a href="/watch?v=<%- x.videoId %>"  class="video">
-				<div class="thumbnail" style="background-image: url('https://p.poketube.fun/https://i.ytimg.com/vi/<%= x.videoId %>/hqdefault.jpg?sqp=-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLBy_x4UUHLNDZtJtH0PXeQGoRFTgw');border-top-left-radius: 16px;border-top-right-radius: 16px;"><span class="video-length"><%- turntomins(x.lengthSeconds) %></span></div>
+				<div class="thumbnail" style="background-image: url('https://p.poketube.fun/https://i.ytimg.com/vi/<%= x.videoId %>/hqdefault.jpg?sqp=-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLBy_x4UUHLNDZtJtH0PXeQGoRFTgw');border-radius: 16px;"><span class="video-length"><%- turntomins(x.lengthSeconds) %></span></div>
 				<div class="info">
 					<span class="title max-lines-2" title="<%- x.title %>" style="font-family:Inter,sans-serif;"><%- x.title %></span>
             					<span class="title max-lines-2" title="Video By <%- x.author %>" style="margin-top:1px">By <%- x.author %></span>
@@ -1128,7 +1128,7 @@ margin-left: auto;
                                                
    <% p.forEach(x =>  { %>
 			<a href="/watch?v=<%- x.videoId %>"  class="video">
-				<div class="thumbnail" style="background-image: url('https://p.poketube.fun/https://i.ytimg.com/vi/<%= x.videoId %>/hqdefault.jpg?sqp=-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLBy_x4UUHLNDZtJtH0PXeQGoRFTgw');border-top-left-radius: 16px;border-top-right-radius: 16px;"><span class="video-length"><%- turntomins(x.lengthSeconds) %></span></div>
+				<div class="thumbnail" style="background-image: url('https://p.poketube.fun/https://i.ytimg.com/vi/<%= x.videoId %>/hqdefault.jpg?sqp=-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLBy_x4UUHLNDZtJtH0PXeQGoRFTgw');border-radius: 16px;"><span class="video-length"><%- turntomins(x.lengthSeconds) %></span></div>
 				<div class="info">
 					<span class="title max-lines-2" title="<%- x.title %>" style="font-family:Inter,sans-serif;"><%- x.title %></span>
             					<span class="title max-lines-2" title="Video By <%- x.author %>" style="margin-top:1px">By <%- x.author %></span>

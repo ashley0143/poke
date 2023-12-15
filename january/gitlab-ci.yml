@@ -1,0 +1,18 @@
+stages:
+  - build
+
+# Rocket does not currently compile on stable Rust.
+# Once it does, we can uncomment this, and instead
+# put `allow-failure: true` on the nightly build.
+#
+# rust-latest:
+#   stage: build
+#   image: rust:latest
+#   script:
+#     - cargo build --verbose
+
+rust-nightly:
+  stage: build
+  image: rustlang/rust:nightly
+  script:
+    - cargo build --verbose

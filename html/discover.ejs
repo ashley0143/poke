@@ -519,6 +519,10 @@ Discover Popular videos on poketube!
    <script>
         // @license magnet:?xt=urn:btih:1f739d935676111cfff4b4693e3816e664797050&dn=gpl-3.0.txt GPL-3.0-or-later  
 
+ if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('service-worker.js');
+  }
+
   document.addEventListener('DOMContentLoaded', function() {
   let bgs = document.querySelectorAll('[data-bg]');
   let bgCount = bgs.length;
@@ -1319,8 +1323,11 @@ links.forEach(link => {
 }</style>
                  		 	               <% } %>   
 
-                                  
- 
+                                  <script> // @license magnet:?xt=urn:btih:1f739d935676111cfff4b4693e3816e664797050&dn=gpl-3.0.txt GPL-3.0-or-later  
+if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('service-worker.js');
+  } </script>
+ // @license-end
     </body >
 
 </html>                 		 	               <% } %>   

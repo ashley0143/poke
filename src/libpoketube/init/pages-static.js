@@ -87,8 +87,16 @@ module.exports = function (app, config, renderTemplate) {
     renderTemplate(res, req, "content-settings.ejs");
   });
   
-   app.get("/manifest.json", function (req, res) {
-      res.sendFile("manifest.json", { root: location_pwa });
+  app.get("/offline", function (req, res) {
+    res.sendFile("offline.html", { root: location_pwa });
+  });
+  
+  app.get("/manifest.json", function (req, res) {
+    res.sendFile("manifest.json", { root: location_pwa });
+  });
+  
+  app.get("/service-worker.js", function (req, res) {
+    res.sendFile("service-worker.js", { root: location_pwa });
   });
 
   

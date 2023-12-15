@@ -3131,3 +3131,9 @@ window.addEventListener('load', () => {
 <% } catch (error) { %>
   <%- error %>
  <% } %>
+
+ <script>
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('service-worker.js');
+  }
+  </script>

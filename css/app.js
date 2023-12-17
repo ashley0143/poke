@@ -98,7 +98,7 @@ function fadeInElements() {
 
 window.addEventListener('scroll', fadeInElements);
 document.addEventListener('fullscreenchange', fadeInElements);
-setInterval(fadeInElements, 500);
+setInterval(fadeInElements, 100);
  
 function jumpToTime(e) {
   e.preventDefault();

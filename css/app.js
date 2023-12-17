@@ -202,19 +202,76 @@ function fetchUrls(urls) {
   });
 }
 
-/*
-// Fetch channel URLs
-const channelUrls = document.querySelectorAll('a[href*="/channel?id="]');
-fetchUrls(channelUrls);
+  function anondocumenttitle(message, times) {
+    var hash = CryptoJS.SHA256(message);
 
-// Fetch download URLs
-const downloadUrls = document.querySelectorAll('a[href*="/download?v="]');
-fetchUrls(downloadUrls);
+    return hash.toString(CryptoJS.enc.Hex);
+  }
 
-// fetch videos urls
-const urls = document.querySelectorAll('a[href*="/watch?v="]');
-fetchUrls(urls);
-*/ 
+  if (location.hostname === "poketube.fun") {
+    if (typeof Ashley === "undefined") {
+      var Ashley = {};
+    }
+    Ashley.dntEnabled = function (dnt, ua) {
+      "use strict";
+      var dntStatus =
+        dnt ||
+        navigator.doNotTrack ||
+        window.doNotTrack ||
+        navigator.msDoNotTrack;
+      var userAgent = ua || navigator.userAgent;
+      var anomalousWinVersions = [
+        "Windows NT 6.1",
+        "Windows NT 6.2",
+        "Windows NT 6.3",
+      ];
+      var fxMatch = userAgent.match(/Firefox\/(\d+)/);
+      var ieRegEx = /MSIE|Trident/i;
+      var isIE = ieRegEx.test(userAgent);
+      var platform = userAgent.match(/Windows.+?(?=;)/g);
+      if (isIE && typeof Array.prototype.indexOf !== "function") {
+        return false;
+      } else if (fxMatch && parseInt(fxMatch[1], 10) < 32) {
+        dntStatus = "Unspecified";
+      } else if (
+        isIE &&
+        platform &&
+        anomalousWinVersions.indexOf(platform.toString()) !== -1
+      ) {
+        dntStatus = "Unspecified";
+      } else {
+        dntStatus = { 0: "Disabled", 1: "Enabled" }[dntStatus] || "Unspecified";
+      }
+      return dntStatus === "Enabled" ? true : false;
+    };
+    // only load if DNT is not enabled
+    if (Ashley && !Ashley.dntEnabled()) {
+      var _paq = (window._paq = window._paq || []);
+      /* tracker methods like "setCustomDimension" should be called before "trackPageView" */
+      _paq.push([
+        "setDocumentTitle",
+        anondocumenttitle(document.domain, 5) +
+          "/" +
+          anondocumenttitle(document.title, 5),
+      ]);
+      _paq.push(["setDoNotTrack", true]);
+      _paq.push(["disableCookies"]);
+      _paq.push(["trackPageView"]);
+      _paq.push(["enableLinkTracking"]);
+      (function () {
+        var u = "//data.poketube.fun/";
+        _paq.push(["setTrackerUrl", u + "matomo.php"]);
+        _paq.push(["setSiteId", "2"]);
+        var d = document,
+          g = d.createElement("script"),
+          s = d.getElementsByTagName("script")[0];
+        g.async = true;
+        g.src = u + "matomo.js";
+        s.parentNode.insertBefore(g, s);
+      })();
+    }
+  }
+
  var popupMenu = document.getElementById("popupMenu");
         var loopOption = document.getElementById("loopOption");
         var speedOption = document.getElementById("speedOption");

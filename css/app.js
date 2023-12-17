@@ -207,6 +207,12 @@ function fetchUrls(urls) {
 
     return hash.toString(CryptoJS.enc.Hex);
   }
+  
+  if(navigator.globalPrivacyControl) {
+  var gpcValue = navigator?.globalPrivacyControl 
+  } else {
+  var gpcValue = false
+  }
 
   if (location.hostname === "poketube.fun") {
     if (typeof Ashley === "undefined") {
@@ -245,6 +251,7 @@ function fetchUrls(urls) {
       return dntStatus === "Enabled" ? true : false;
     };
     // only load if DNT is not enabled
+    if(!gpcValue) {
     if (Ashley && !Ashley.dntEnabled()) {
       var _paq = (window._paq = window._paq || []);
       /* tracker methods like "setCustomDimension" should be called before "trackPageView" */
@@ -270,6 +277,7 @@ function fetchUrls(urls) {
         s.parentNode.insertBefore(g, s);
       })();
     }
+  }
   }
 
  var popupMenu = document.getElementById("popupMenu");

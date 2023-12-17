@@ -29,29 +29,29 @@
 
 -->
 <!DOCTYPE html>
+<% if(secure) { %><!-- HOTSTNAME_IS_POKETUBE.FUN --><% } %><% if(!secure) { %><!-- HOTSTNAME_IS_NOT_POKETUBE.FUN --><% } %>
+
 <html class="poketube_desktop_player js event" style="background: #000000;" invidproxy="<%=u%>" universe="2" vid_id="<%=inv_vid.videoId%>" t="<%=btoa(Date.now())%>" version="browser_web_<%=Date.now()%>">
   <head>
   
     <% if (e === false) { %>  
-    <!-- MetaTag disabled -->
+    <!-- MetaTags disabled by user-->
  <% } %>
   <% if (!e) { %>
-
 <meta content="<%=inv_vid.title%>" name=title>
 <meta content="<%=color%>" name="theme-color">
 <meta content="<%=k.Video.Channel.Name%>" name=twitter:author>
 <meta content="https://poketube.fun/watch?v=<%=inv_vid.videoId%>" name=twitter:url>
-<meta content="<%=inv_vid.title%> | PokeTube" name=twitter:title>
+<meta content="<%=inv_vid.title%> | Poke" name=twitter:title>
 <meta content="Watch this video from <%=k.Video.Channel.Name%> On Poke! 
 👍 <%=convert(engagement.likes)%> | 👎 <%=convert(engagement.dislikes)%> | 📈 <%=convert(engagement.viewCount)%> Views 🗓️ <%= date %>" property=twitter:description>
 <meta content="https://i.ytimg.com/vi/<%=inv_vid.videoId%>/maxresdefault.jpg" property=og:image>
 <meta content=summary_large_image name=twitter:card>
 <link rel="manifest" href="/manifest.json">
 <link href="https://poketube.fun/watch?v=<%=inv_vid.videoId%>" itemprop=url>
- <% } %> <!-- close the } -->
+ <% } %> <!-- closes the } -->
 <link href="/css/yt-ukraine.svg?v=3" rel=icon>
 <link href=/css/snow.css rel=stylesheet> 
- 
 <title> <%=inv_vid.title%> | PokeTube </title>  
 <style>
   
@@ -1857,7 +1857,7 @@ window.addEventListener("unload", cleanup)
 <!-- BUNDLE -->
 <!-- BUNDLE -->
 <!-- BUNDLE -->
-<!-- BUNDLE --><script src="/static/app.bundle.js?version=17.12.2023&bundledate=171220423_1311" > </script><!-- BUNDLE -->
+<!-- BUNDLE --><script src="/static/app.bundle.js?version=17.12.2023&bundledate=17122023_1538" > </script><!-- BUNDLE -->
 <!-- BUNDLE -->
 <!-- BUNDLE -->
 <!-- BUNDLE -->

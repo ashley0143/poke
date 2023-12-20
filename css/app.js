@@ -298,14 +298,24 @@ function fetchUrls(urls) {
                 popupMenu.style.display = "none";
             }
         });
-  
+
+    var loopedIndicator = document.getElementById("loopedIndicator");
+
+    loopedIndicator.style.display = "none"; // Initially hide the indicator
+
     loopOption.addEventListener("click", function() {
-            video.loop = !video.loop;
-            if (video.loop) {
-                alert("Looped!");
-            } else {
-              alert("unlooped!")
-            }
+             var looped = video.loop;
+            video.loop = !looped;
+
+            // Update the looped indicator popup
+            loopedIndicator.textContent = looped ? "Unlooped!" : "Looped!";
+            loopedIndicator.style.display = "block";
+
+            // Hide the indicator after 2 seconds
+            setTimeout(function() {
+                loopedIndicator.style.display = "none";
+            }, 2000);
+
         });
 
  speedOption.addEventListener("click", function() {

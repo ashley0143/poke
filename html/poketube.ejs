@@ -281,6 +281,25 @@ a[data-onclick="jump_to_time"] {
   font-size: 15px;
   color: #777;
 }
+  
+
+#loopedIndicator {
+            display: none;
+            position: fixed;
+            bottom: 10px;
+            left: 10px;
+            background-color: #fff;
+            color: #000;
+            padding: 14px;
+            border-radius: 14px;
+            opacity: 0.8;
+            z-index: 999;
+            width: 13em;
+            text-align: center;
+            font-family: var(--text-font-primary);
+            font-weight: 600;
+            font-stretch: ultra-expanded;
+}
 
 .comment-form :-moz-placeholder {
   /* Firefox 18- */
@@ -684,6 +703,7 @@ background-color: #0000;
 </ptd-app-iconfixer>
 <ptd-app-ejs>
 <div class="app" id="secret-theme" style="color:var(--text-color)">
+ <div id="loopedIndicator"></div>
  <div class="progress-container">
   <div class="progress-bar"></div>
 </div>

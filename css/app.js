@@ -323,7 +323,7 @@ function fetchUrls(urls) {
             // Hide the indicator after 2 seconds
             setTimeout(function() {
                 loopedIndicator.style.display = "none";
-            }, 1000);
+            }, 2000);
 
         });
 

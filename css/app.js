@@ -307,14 +307,23 @@ function fetchUrls(urls) {
              var looped = video.loop;
             video.loop = !looped;
 
+
             // Update the looped indicator popup
-            loopedIndicator.textContent = looped ? "Unlooped!" : "Looped!";
-            loopedIndicator.style.display = "block";
+            var displaySpecialText = Math.random() < 0.5;
+
+            // Update the looped indicator popup
+            if (displaySpecialText) {
+                var specialText = looped ? "Unlooped >.<" : "Looped~ :3 >~<";
+                loopedIndicator.textContent = specialText;
+            } else {
+                loopedIndicator.textContent = looped ? "Unlooped!" : "Looped!";
+            }
+             loopedIndicator.style.display = "block";
 
             // Hide the indicator after 2 seconds
             setTimeout(function() {
                 loopedIndicator.style.display = "none";
-            }, 2000);
+            }, 1000);
 
         });
 

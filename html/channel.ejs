@@ -1408,8 +1408,8 @@ if (userID) {
     anchor.href = `/api/set-channel-subs?ID=${userID}&channelName=<%=j.Channel?.Metadata.Name%>&avatar=https://p.poketube.fun/<%- j.Channel?.Metadata.Avatars.Thumbnail?.$t %>&channelID=<%= ID %>`;
 } else {
     // If user ID doesn't exist in localStorage, you can handle it as needed
-    console.log("User ID not found in localStorage");
-    // Optionally, you can set a default href or display an error message.
+     anchor.href = "/account-create"
+     // Optionally, you can set a default href or display an error message.
 }
     
 document.getElementById('search').addEventListener('keyup', function () {

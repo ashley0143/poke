@@ -1,4 +1,4 @@
-<% try { %>
+ <% try { %>
 
 <!--
     This Source Code Form is subject to the terms of the GNU General Public License:
@@ -593,7 +593,8 @@ color:#ea9999 !important;
 
           <img src="https://p.poketube.fun/<%=j.Channel?.Metadata.Banners.Thumbnail[2].$t%>">
                                <% } %>
-		<div class="channel-info" style="margin-bottom: 2em;">
+                               
+		<div class="channel-info" style="margin-bottom: 2em;margin-left:3em">
 		<a href="/avatars/<%=j.Channel?.Metadata.Avatars.Thumbnail?.$t.replace("https://yt3.googleusercontent.com/", "")%>" class="avatar">
 				<img src="/avatars/<%=j.Channel?.Metadata.Avatars.Thumbnail?.$t.replace("https://yt3.googleusercontent.com/", "")%>" alt="Channel Avatar">
 			</a>
@@ -615,24 +616,21 @@ color:#ea9999 !important;
 			<div class="name" style="background: #333;border-radius: 12px;padding: 17px;height: 7em;margin-left: 4em;margin-top: 7px;gap: 3px;">
 				<p style="font-family:PokeTube Flex,sans-serif;font-weight:1000;font-stretch: ultra-expanded;margin-top: 16px;margin-bottom: 15px;"><%=j.Channel?.Metadata.Name%>
           
-<span style="background: #0005;padding: 3px;padding-top:  2.5px !important;display: inline-flex;border-radius: 3px;">
-                <% if (cinv?.authorVerified) { %>
+                <% if (cinv?.authorVerified) { %><span style="background: #0005;padding: 3px;padding-top:  2.5px !important;display: inline-flex;border-radius: 3px;">
+
                                   <% if (cinv?.isFamilyFriendly) { %>
 
  <i class="fa-solid fa-badge-check" style="width: 18px;margin-right:7px" title="Verified Channel"></i>
-                                                                 <% } %>
+                                                                 
+                                    <% } %>
                                   <% if (!cinv.isFamilyFriendly) { %>
  <i class="fa-solid fa-badge-check" style="width: 18px" title="Verified Channel"></i>
 
                                                                                                                                     <% } %>
-
+</span> 
                                                                  <% } %>
-                <% if (cinv?.isFamilyFriendly) { %>
-
-<img src="https://cdn.glitch.global/d68d17bb-f2c0-4bc3-993f-50902734f652/bbf42a35-8976-43a5-a7a2-72a81d9da7ce.image.png?v=1692301199470" style="width: 18px;" title="In Youtube kids" >
-                                                                                   <% } %>
-
-</span>           </p>
+ 
+</p>           
                     <p style="margin-bottom: -17px;" class="subs"><%=subs%> subscribers</p>
 <p style="padding:0;font-weight:bold;max-inline-size: 37em;display: -webkit-box;-webkit-line-clamp: 3;-webkit-box-orient: vertical;"> 
  

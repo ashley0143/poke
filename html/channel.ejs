@@ -310,7 +310,37 @@ text-transform:uppercase;
                      </style>
                      
   <% if(!isMobile) { %>
+    <noscript>
     <style>
+    #search {
+  display: none;
+}
+      
+.subscribe-button.needs-js {
+  display: none;
+}      
+
+.subscribe-button {
+  margin-right: 6px !important;
+  margin-top: 10px !important;
+  margin-left: -4px !important;
+}
+    </style>
+    </noscript>
+    <style>
+      .channel-info > .avatar > img {
+  width: auto;
+  height: auto;
+  max-height: 150px;
+}
+      .subscribe-button:hover {
+  animation: animateBg 2s infinite linear;
+  background-color: #fff;
+  background-image: linear-gradient(90deg,#da3287,#ffde5e,#da3287,#ffde5e);
+  background-size: 300% 100%;
+  box-shadow: 0 3px 14px #000;
+  cursor: pointer;
+}
       .video:hover{
         border:solid;
       }
@@ -494,11 +524,9 @@ color:#ea9999 !important;
           <button class="btn btn-success" type="submit"><i class="fa-light fa-search"></i></button>
         
         </form>
-                               <img src="https://search-metrics.poketube.fun/t/rep.gif" style="border:0;width: 0;visibility: hidden;"> 
- 
+  
       </div>
-          <img src="https://search-metrics.poketube.fun/t/rep.gif"  style="border:0;width: 0;visibility: hidden;"> 
-
+ 
       </div>
       <div class="right">
       <a href="/privacy" style="text-decoration: none;" title="Privacy Policy">
@@ -555,24 +583,26 @@ color:#ea9999 !important;
 
           <img src="https://p.poketube.fun/<%=j.Channel?.Metadata.Banners.Thumbnail[2].$t%>">
                                <% } %>
-		<div class="channel-info" >
+		<div class="channel-info" style="margin-bottom: 2em;">
 		<a href="/avatars/<%=j.Channel?.Metadata.Avatars.Thumbnail?.$t.replace("https://yt3.googleusercontent.com/", "")%>" class="avatar">
 				<img src="/avatars/<%=j.Channel?.Metadata.Avatars.Thumbnail?.$t.replace("https://yt3.googleusercontent.com/", "")%>" alt="Channel Avatar">
 			</a>
       
+    
               <% if (cinv?.authorVerified) { %>
                 <style>
 
                               .name {
-              border:solid 2.1px #df80ff;
+              border:solid 1px #df80ff;
                 }  
                 
                 </style>
 
+        
                 
                                                <% } %>
 
-			<div class="name" style="background: #333;border-radius: 12px;padding: 9px;height: 6em;">
+			<div class="name" style="background: #333;border-radius: 12px;padding: 17px;height: 7em;margin-left: 4em;margin-top: 7px;gap: 3px;">
 				<p style="font-family:PokeTube Flex,sans-serif;font-weight:1000;font-stretch: ultra-expanded;margin-top: 16px;margin-bottom: 15px;"><%=j.Channel?.Metadata.Name%>
           
 <span style="background: #0005;padding: 3px;padding-top:  2.5px !important;display: inline-flex;border-radius: 3px;">
@@ -593,7 +623,7 @@ color:#ea9999 !important;
                                                                                    <% } %>
 
 </span>           </p>
-                    <p style="margin-bottom: -11px;" class="subs"><%=subs%> subscribers</p>
+                    <p style="margin-bottom: -17px;" class="subs"><%=subs%> subscribers</p>
 <p style="padding:0;font-weight:bold;max-inline-size: 37em;display: -webkit-box;-webkit-line-clamp: 3;-webkit-box-orient: vertical;"> 
  
 <% try { %>
@@ -604,7 +634,7 @@ color:#ea9999 !important;
   <p>Error: <%= error.message %></p>
 <% } %>
 
-  <i class="fa-thin fa-angle-right"></i></a><br><button class="subscribe-button " style="text-decoration: none;margin-right:3px !important;">    <a style="color: black;
+  <i class="fa-thin fa-angle-right"></i></a><br><button class="subscribe-button needs-js" style="text-decoration: none;margin-right:6px !important;margin-top: 10px !important;margin-left: -4px !important;">    <a style="color: black;
 white-space: nowrap;text-decoration: none;" id="sub">Suscribe</a></button><button class="subscribe-button " style="text-decoration: none;">    <a style="color: black;
 white-space: nowrap;text-decoration: none;" href="/feeds/videos.xml?channel_id=<%=ID%>">Rss feed </a></button>
       

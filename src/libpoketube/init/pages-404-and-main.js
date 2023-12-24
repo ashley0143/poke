@@ -130,8 +130,10 @@ module.exports = function (app, config, renderTemplate) {
 
     if (req.params.v && /[a-zA-Z0-9]+/.test(req.params.v)) {
       const isvld = await core.isvalidvideo(req.params.v);
-      if (isvld) {
+      if (isvld && req.params.v.length >= 10) {
         return res.redirect(`/watch?v=${req.params.v}`);
+      } else {
+          return res.redirect("/")
       }
     }
 

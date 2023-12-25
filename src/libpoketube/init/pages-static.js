@@ -67,6 +67,10 @@ module.exports = function (app, config, renderTemplate) {
     }
   });
 
+  app.get("/rewind", function (req, res) {
+    renderTemplate(res, req, "rewind.ejs");
+  });
+
   app.get("/domains", function (req, res) {
     renderTemplate(res, req, "domains.ejs");
   });

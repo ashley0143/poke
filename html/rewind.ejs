@@ -6,7 +6,7 @@
   <title>Poke Rewind</title>
   <link href="/css/yt-ukraine.svg?v=6" rel=icon>
   <meta content="website" property="og:type">
-  <meta content="Poke Rewind 2024" property="twitter:description">
+  <meta content="Poke Rewind 2023! - see the year 2023 in poke1" property="twitter:description">
   <meta content="Poke Rewind!" property="og:title">
   <meta content="https://cdn.glitch.global/d68d17bb-f2c0-4bc3-993f-50902734f652/aa70111e-5bcd-4379-8b23-332a33012b78.image.png?v=1701898829884" property="og:image"  />
   <meta content="summary_large_image" name="twitter:card">
@@ -49,32 +49,29 @@
   </div>
 
 <script>
-// Set the date we're counting down to
-const countDownDate = new Date("December 27, 2023 00:00:00 UTC").getTime();
+// @license magnet:?xt=urn:btih:1f739d935676111cfff4b4693e3816e664797050&dn=gpl-3.0.txt GPL-3.0-or-later  
 
-// Update the countdown every 1 second
+const countDownDate = new Date("December 28, 2023 00:00:00 UTC").getTime();
+
 const x = setInterval(function() {
-  // Get the current date and time
   const now = new Date().getTime();
 
-  // Calculate the remaining time in milliseconds
   const distance = countDownDate - now;
 
-  // Calculate days, hours, minutes, and seconds
   const days = Math.floor(distance / (1000 * 60 * 60 * 24));
   const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
   const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
   const seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
-  // Display the countdown in the "countdown" div
   document.getElementById("countdown").innerHTML = `${days}d ${hours}h ${minutes}m ${seconds}s`;
 
   // If the countdown is over, display a message
   if (distance < 0) {
     clearInterval(x);
-    document.getElementById("countdown").innerHTML = "EXPIRED";
+    document.getElementById("countdown").innerHTML = "poke~ Rewind";
   }
-}, 1000); // Update every 1000 milliseconds (1 second)
+}, 1000); // Update every 1000 milliseconds
+// @license-end
 </script>
 
 </body>

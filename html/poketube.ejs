@@ -1309,12 +1309,12 @@ display: block; !important;" autoplay controls>
 
                                                  <hr style="clear: both;display: block;border: none;border-bottom: 0.5px solid #2f2f2f;/*! width: 4.5em; */height: 0;">
         
-     <%  if (Array.isArray(video?.Tags.Tag)) { %> 
+     <%  if (Array.isArray(inv_vid?.keywords)) { %> 
 
                             <div class="video-title" style="color:var(--text-color);font-family:var(--text-font-primary);;font-weight:var(--text-header-weight);font-stretch: extra-expanded;margin-top: 10px;margin-bottom: 10px;">Tags</div>
                       <div class="tags">
         
- <% video?.Tags.Tag.forEach(x => { %>
+ <% inv_vid?.keywords.forEach(x => { %>
  <div class="tag">
    <a href="/hashtag/<%=x %>" style="color:var(--text-color)">
    <%=x %>
@@ -2489,12 +2489,12 @@ the channels social media accounts!
                 </div>
                   
   
- <%  if (Array.isArray(video?.Tags?.Tag)) { %> 
+ <%  if (Array.isArray(inv_vid?.keywords)) { %> 
 
                             <div class="video-title" style="color:var(--text-color);font-family:var(--text-font-primary);;font-weight:var(--text-header-weight);font-stretch: extra-expanded;margin-top: 10px;margin-bottom: 10px;">Tags</div>
                       <div class="tags">
         
- <% video.Tags.Tag.forEach(x => { %>
+ <% inv_vid.keywords.forEach(x => { %>
  <div class="tag">
    <a href="/hashtag/<%=x %>" style="color:var(--text-color)">
    <%=x %>
@@ -2502,6 +2502,7 @@ the channels social media accounts!
    </div>
    
          <% }) %>  
+
            
            </div>
    

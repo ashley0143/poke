@@ -162,10 +162,9 @@ module.exports = function (app, config, renderTemplate) {
     }
   });
 
-  app.get("/im-feeling-lucky", function (req, res) {
+  app.get("/web", async (req, res) => {
     const query = req.query.query;
-
-    const search = require("google-it");
+    const tab = req.query.tab;
 
     const getRandomLinkAndRedirect = (query, res) => {
       search({ query: `${query}` }).then((results) => {
@@ -189,18 +188,11 @@ module.exports = function (app, config, renderTemplate) {
       });
     };
 
-    getRandomLinkAndRedirect(query, res);
-  });
-
-  app.get("/web", async (req, res) => {
-    const query = req.query.query;
-    const tab = req.query.tab;
-
     const search = require("google-it");
 
-      if (req.query.lucky === 'true') {
-    res.redirect('/im-feeling-lucky?query=' + query)
-      }
+    if (req.query.lucky === "true") {
+      getRandomLinkAndRedirect(query, res);
+    }
     var uaos = req.useragent.os;
     var IsOldWindows;
 

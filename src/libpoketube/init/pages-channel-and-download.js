@@ -44,15 +44,15 @@ function getJson(str) {
  * @property {string} streams - Base64-encoded value for the streams tab.
  */
 
-// see https://developers.google.com/youtube/v3/docs/channels/ 
+// see https://developers.google.com/youtube/v3/docs/channels/
 const ChannelTabs = {
   community: "Y29tbXVuaXR5",
   shorts: "c2hvcnRz",
   videos: "dmlkZW9z",
   streams: "c3RyZWFtcw==", // or "live"
-  channels:"Y2hhbm5lbHM=",
-  store:"c3RvcmU=",
-  released:"cmVsZWFzZWQ="
+  channels: "Y2hhbm5lbHM=",
+  store: "c3RvcmU=",
+  released: "cmVsZWFzZWQ=",
 };
 
 module.exports = function (app, config, renderTemplate) {
@@ -80,10 +80,9 @@ module.exports = function (app, config, renderTemplate) {
     res.redirect(`/watch?v=${v}`);
   });
 
-   app.get("/api/getchanneltabs", async function (req, res) {
+  app.get("/api/getchanneltabs", async function (req, res) {
     res.json(ChannelTabs);
   });
-
 
   app.get("/search", async (req, res) => {
     const query = req.query.query;
@@ -128,19 +127,23 @@ module.exports = function (app, config, renderTemplate) {
     let type = "video";
     let duration = req.query.duration || "";
     let sort = req.query.sort || "";
- 
+
     try {
       const headers = {};
 
-    const xmlData = await  fetch(`https://invid-api.poketube.fun/api/v1/search?q=${encodeURIComponent(
-        query
-      )}&page=${encodeURIComponent(continuation)}&date=${date}&type=${type}&duration=${duration}&sort=${sort}&hl=en+gb`)
-            .then((res) => res.text())
-            .then((txt) => getJson(txt));
-  
+      const xmlData = await fetch(
+        `https://invid-api.poketube.fun/api/v1/search?q=${encodeURIComponent(
+          query
+        )}&page=${encodeURIComponent(
+          continuation
+        )}&date=${date}&type=${type}&duration=${duration}&sort=${sort}&hl=en+gb`
+      )
+        .then((res) => res.text())
+        .then((txt) => getJson(txt));
+
       renderTemplate(res, req, "search.ejs", {
         invresults: xmlData,
-       turntomins,
+        turntomins,
         date,
         type,
         duration,
@@ -159,12 +162,45 @@ module.exports = function (app, config, renderTemplate) {
     }
   });
 
+  app.get("/im-feeling-lucky", function (req, res) {
+    const query = req.query.query;
+
+    const search = require("google-it");
+
+    const getRandomLinkAndRedirect = (query, res) => {
+      search({ query: `${query}` }).then((results) => {
+        // Check if there are any results
+        if (results.length > 0) {
+          // Get a random index
+          const randomIndex = Math.floor(Math.random() * results.length);
+
+          // Get the random result object
+          const randomResult = results[randomIndex];
+
+          // Get the link from the random result
+          const randomLink = randomResult.link;
+
+          // Redirect to the random link
+          res.redirect(randomLink);
+        } else {
+          // Handle case when no results are found
+          res.send("No results found.");
+        }
+      });
+    };
+
+    getRandomLinkAndRedirect(query, res);
+  });
+
   app.get("/web", async (req, res) => {
     const query = req.query.query;
     const tab = req.query.tab;
 
     const search = require("google-it");
 
+      if (req.query.lucky === 'true') {
+    res.redirect('/im-feeling-lucky?query=' + query)
+      }
     var uaos = req.useragent.os;
     var IsOldWindows;
 
@@ -279,6 +315,18 @@ module.exports = function (app, config, renderTemplate) {
         getChannelData(channelINVUrl),
       ]);
 
+      function getThumbnailUrl(video) {
+        const maxresDefaultThumbnail = video.videoThumbnails.find(
+          (thumbnail) => thumbnail.quality === "maxresdefault"
+        );
+
+        if (maxresDefaultThumbnail) {
+          return `https://vid.puffyan.us/vi/${video.videoId}/maxresdefault.jpg`;
+        } else {
+          return `https://vid.puffyan.us/vi/${video.videoId}/hqdefault.jpg`;
+        }
+      }
+
       cache[ID] = {
         result: {
           tj,
@@ -317,6 +365,7 @@ module.exports = function (app, config, renderTemplate) {
         turntomins,
         media_proxy_url: config.media_proxy,
         dnoreplace,
+        getThumbnailUrl,
         continuation,
         wiki: "",
         getFirstLine,

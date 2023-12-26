@@ -133,7 +133,10 @@ module.exports = function (app, config, renderTemplate) {
       if (isvld && req.params.v.length >= 10) {
         return res.redirect(`/watch?v=${req.params.v}`);
       } else {
-          return res.redirect("/")
+          return renderTemplate(res, req, "404.ejs", {
+        isOldWindows,
+        random
+      });
       }
     }
 

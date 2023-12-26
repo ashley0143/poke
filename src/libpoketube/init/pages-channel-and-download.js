@@ -190,9 +190,10 @@ module.exports = function (app, config, renderTemplate) {
 
     const search = require("google-it");
 
-    if (req.query.lucky === "true") {
+    if (req.query.lk === "true") {
       getRandomLinkAndRedirect(query, res);
     }
+    
     var uaos = req.useragent.os;
     var IsOldWindows;
 

@@ -23,7 +23,7 @@
 <link rel="manifest" href="/manifest.json">
   <link href=/css/yt-ukraine.svg?v=6 rel=icon>
  <link href=/css/app-cdn.min.css rel=stylesheet>
-<link href=/css/app.main.css?v=25 rel=stylesheet>
+<link href=/css/app.main.css?v=333 rel=stylesheet>
 <link href=/css/search.main.css rel=stylesheet> 
  <link href=/css/watch.main.css rel=stylesheet>
 <link rel="search" type="application/opensearchdescription+xml" title="PokeTube" href="https://poketube.fun/api/opensearch" />
@@ -99,8 +99,20 @@ summary:hover{
   white-space: nowrap;
   font-family: ubuntu, sans-serif;
 } 
-   
     
+.container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+      background-color: #333;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      text-align:center;
+    }
+    .container > * {
+            text-align:center !important;
+
+    }
     .info > div {
       font-family:Ubuntu, sans-serif;
     }
@@ -467,6 +479,23 @@ Web              </a>
                   
                      </div>   
           </div>
+          
+               <% if (q.includes("suicide")) { %>  
+            
+<div class="container">          
+    <h2 style="font-family: 'PokeTube Flex';font-size: large;text-align: left;font-stretch: ultra-expanded;
+font-weight: 1000;">You are not alone</h2>
+  <p>
+    if you or somebody you know is having a bad time, talk to somebody today.
+  </p>
+  <p>
+    if you are from the US, call 988. if you arent <a href="https://www.psychologytoday.com/us/basics/suicide/suicide-prevention-hotlines-resources-worldwide"> see this url.</a>
+   <br>  <br> dont worry, ur not alone <3 and you are really important btw!
+  </p>
+  
+                 </div>
+   <% } %> 
+     
 
                  <%  if (!tab) { %> 
  
@@ -509,7 +538,7 @@ font-weight: 1000;
 
 <div style="border-top: 1px solid var(--border-color);width: 100%;display: flex;gap: 43em;padding: 0;margin: 0;">
           
-            <%  if (continuation !== "1") { %>
+            <%  if (Number(continuation) >= "2") { %>
               
 <p style="text-align: left;margin-left: 16em;color: var(--text-secondary);text-decoration: none;">
     <a  href="/search?query=<%=q%>">First Page</a>              </p>
@@ -518,7 +547,7 @@ font-weight: 1000;
 </p>
 
                                                 <% } %>  
-                            <%  if (continuation == "1" || !continuation) { %>
+                            <%  if (Number(continuation) <= "0" || !continuation) { %>
                <p style="text-align: left;margin-left: 16em;;color: var(--text-secondary);text-decoration: none;">
     <a  href="/search?query=<%=q%>&continuation=2<% if (date) { %>&date=<%= date %><% } %><% if (duration) { %>&duration=<%= duration %><% } %><% if (sort) { %>&sort=<%= sort %><% } %>
               ">Next Page</a>      
@@ -575,8 +604,7 @@ font-weight: 1000;
         </div>
                                     
                  <script src="/css/custom-css.js"> </script>
- 
-                                    <script>
+                                     <script>
                                     // @license magnet:?xt=urn:btih:1f739d935676111cfff4b4693e3816e664797050&dn=gpl-3.0.txt GPL-3.0-or-later
                                       if ('serviceWorker' in navigator) {
                                         navigator.serviceWorker.register('service-worker.js');
@@ -585,3 +613,4 @@ font-weight: 1000;
                                       </script>
                                     </body>
                               
+ 

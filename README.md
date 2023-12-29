@@ -1,3 +1,5 @@
+# see https://codeberg.org/Ashley/poke/issues/59 if you are having problems using poke
+
 <h1 align="center">
   <a href="https://poketube.fun/watch?v=9sJUDx7iEJw&quality=medium&=sjohgteojgytrueugtye4jhtytjrjnyıı">
    <img src="https://poketube.fun/css/logo-poke.svg" width="400"> 

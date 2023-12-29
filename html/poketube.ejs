@@ -1685,6 +1685,10 @@ checkbox.addEventListener('change', function(e) {
       }    
   }
 });
+
+var cacheVersion = 1;
+      
+caches.delete('offline-cache' + cacheVersion)
   
 if (/[?&]autoplay=/.test(location.search)) {
   checkbox.checked = true;
@@ -2948,6 +2952,9 @@ function jumpToTime(e) {
   }, 250);
 }
 
+      var cacheVersion = 1;
+      
+      caches.delete('offline-cache' + cacheVersion)
 
 // Handle click events for time-based links
 const timeLinks = document.querySelectorAll('a[data-onclick="jump_to_time"]');

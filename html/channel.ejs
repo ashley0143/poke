@@ -1361,39 +1361,38 @@ width: fit-content;
 
                                                                  
  <% if (tab === "about") { %>
-   <div style="text-align: left;">   
-     <h3 style="color:#fff;font-family:Ginto Nord,sans-serif;font-weight:900;padding: 0px;margin: 0;margin-top: 7px;margin-left: 10px;">About</h3>
+   
+   <% if (!isMobile) { %>  
+       
 
+               
+<div style="display: flex;flex-direction: row;">
+  
+ 
+  <div style="background: #333;display: flex;flex-direction: column;margin-top: 1em;margin-left: 1em;border-radius: 1em;margin-bottom: 1em;box-sizing: border-box;width: 100%;margin-right: 20px;min-height: 19em;">   
+     <h3 style="color:#fff;font-family:PokeTube flex,sans-serif;font-weight:1000;font-stretch:ultra-expanded:padding: 0px;margin: 0;margin-top: 7px;margin-left: 10px;">About</h3>
 
      <% if (cinv.descriptionHtml) { %>
 
  <p style="color:#fff;margin-left: 10px;font-weight: bold;"><%-cinv.descriptionHtml%></p>
   <% } %>
-          <% if (wiki.extract_html) { %> 
-                     <h3 style="color:#fff;font-family:Ginto Nord,sans-serif;font-weight:900;padding: 0px;margin: 0;margin-top: 7px;margin-left: 10px;">From the web</h3>
+         </div>
 
-            <div style="color:#fff;margin-left: 10px;">
-            <p style="color:#fff:font-weight: bold;"> 
+       <% } %>
+
+    <% if (isMobile) { %>  
+       
+
               
- <%-wiki.extract_html%>              </p>  
- 
-                           </div>
 
-               <div style="color:#fff;margin-left: 10px;">
+    <div style="text-align: left;">   
+     <h3 style="color:#fff;font-family:Ginto Nord,sans-serif;font-weight:900;padding: 0px;margin: 0;margin-top: 7px;margin-left: 10px;">About</h3>
 
-<p style="margin-bottom: 10px;">
+     <% if (cinv.descriptionHtml) { %>
 
-  <a href=" <%-wiki.content_urls.desktop.page%>
- ">From wikipedia </a> under CC-BY-SA 3.0
-                     </p>
-            </div>
-  
-                 
-                     </p>
-                     <% } %>   
-                       <div style="font-weight: bold;color:#fff;margin-left: 10px;">
-    YouTube removed the about tab ;_; fix for this soon lol
-  </div>
+ <p style="color:#fff;margin-left: 10px;font-weight: bold;"><%-cinv.descriptionHtml%></p>
+  <% } %>
+       <% } %>
                        </div>
    <% } %>
 

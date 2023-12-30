@@ -344,11 +344,22 @@ video[counter].classList.add("shake");
                                      </script>
    <% } %> 
 
-     <% if (q != "do the harlem shake") { %>  
-       
-               <% if (q != "want you gone") { %>  <% if (q != "portal 2 ending") { %>   <% if (q != "credits") { %>  <% if (q != "glados") { %>  
+  <% if (q == "do a barrel roll") { %>  
+          <style>
+    @keyframes barrelRoll {
+      to {
+        transform: rotate(360deg);
+      }
+    }
 
-     <% if (q != "something") { %>  
+    body {
+      animation: barrelRoll 2s alternate; /* Adjust the duration as needed */
+    }
+  </style>
+   
+   <% } %> 
+     
+     <% if (q != "do the harlem shake") { %>   <% if (q != "want you gone") { %>  <% if (q != "portal 2 ending") { %>   <% if (q != "credits") { %>  <% if (q != "glados") { %>  <% if (q != "something") { %>  
 
               <a class="class" href="/143" style=font-family:Inter,sans-serif;color:#fff>  <img style="transform: scale(1.3);width:8.5em;display: block;margin-left: auto;margin-right: auto;" src="/css/logo.svg?v=5"></a>
        
@@ -356,8 +367,8 @@ video[counter].classList.add("shake");
        
      
    <% } %> 
-        <% } %>     
-          <% } %> 
+        <% } %><% } %>     
+
 
    <% } %> 
    <% } %> 
@@ -604,7 +615,9 @@ font-weight: 1000;
         </div>
                                     
                  <script src="/css/custom-css.js"> </script>
-                              <script>     if ('serviceWorker' in navigator) {
+                              <script>    
+                    // @license magnet:?xt=urn:btih:1f739d935676111cfff4b4693e3816e664797050&dn=gpl-3.0.txt GPL-3.0-or-later            
+                      if ('serviceWorker' in navigator) {
   navigator.serviceWorker.getRegistrations().then(function(registrations) {
     for (let registration of registrations) {
       registration.unregister();
@@ -619,6 +632,7 @@ font-weight: 1000;
 }
 
 }
+                                // @license-end
 </script>
 
                                     </body>

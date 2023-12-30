@@ -131,11 +131,16 @@ The port can be changed with the config file you downloaded, just change the `se
 see [here](https://codeberg.org/Ashley/poke/src/branch/main/january) :3
 just uhh change the url in config.json to ur image proxy
 
-## PokeTube community!
+## Poke community!
 
-Join the community on [revolt](https://rvlt.gg/poketube) :3
+Join the community on [revolt](https://rvlt.gg/poketube) or [matrix](https://matrix.to/#/#poke:vern.cc) :3
 
 ## The Legal Stuff (boring tbh)
+the main parts of the project is Under GPL-3.0-OR-LATER :3
+
+see the each sections LICENSE tho!!
+Copyleft 2021-202x Poke Project
+
 
 [Code Of conduct](https://codeberg.org/Ashley/poketube/src/branch/main/CODE_OF_CONDUCT.md)
 

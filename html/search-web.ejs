@@ -467,6 +467,20 @@ Web
                 
                                 
                  <script src="/css/custom-css.js"> </script>
- 
+ <script>      if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.getRegistrations().then(function(registrations) {
+    for (let registration of registrations) {
+      registration.unregister();
+    }
+  });
+  if ('caches' in window) {
+  caches.keys().then(function(cacheNames) {
+    cacheNames.forEach(function(cacheName) {
+      caches.delete(cacheName);
+    });
+  });
+}
+
+}</script>
                                     </body>
                               

@@ -109,9 +109,22 @@ body {
       <style>@import url(https://ka-p.fontawesome.com/releases/v6.4.2/css/pro.min.css?token=fe06fc099b);@import url(https://ka-p.fontawesome.com/releases/v6.4.2/css/pro-v4-shims.min.css?token=fe06fc099b);@import url(https://ka-p.fontawesome.com/releases/v6.4.2/css/pro-v5-font-face.min.css?token=fe06fc099b);@import url(https://ka-p.fontawesome.com/releases/v6.4.2/css/pro-v4-font-face.min.css?token=fe06fc099b);@import url(https://ka-p.fontawesome.com/assets/fe06fc099b/108504408/custom-icons.css?token=fe06fc099b);</style>
       
       <script>
-      var cacheVersion = 1;
-      
-      caches.delete('offline-cache' + cacheVersion)
+      if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.getRegistrations().then(function(registrations) {
+    for (let registration of registrations) {
+      registration.unregister();
+    }
+  });
+  if ('caches' in window) {
+  caches.keys().then(function(cacheNames) {
+    cacheNames.forEach(function(cacheName) {
+      caches.delete(cacheName);
+    });
+  });
+}
+
+}
+
       </script>
     </div>
   </body>

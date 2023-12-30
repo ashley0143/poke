@@ -99,11 +99,6 @@ module.exports = function (app, config, renderTemplate) {
     res.sendFile("manifest.json", { root: location_pwa });
   });
   
-  app.get("/service-worker.js", function (req, res) {
-    res.sendFile("service-worker.js", { root: location_pwa });
-  });
-
-  
   app.get("/customize", function (req, res) {
     const tab = req.query.tab;
 

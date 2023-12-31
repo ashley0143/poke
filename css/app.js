@@ -215,6 +215,8 @@ function fetchUrls(urls) {
   }
 
   if (location.hostname === "poketube.fun") {
+     var img = document.createElement('img');img.src = 'https://data.poketube.fun/misc/user/logo-header.png?matomo'; img.style.display = 'none';document.body.appendChild(img);
+  
     if (typeof Ashley === "undefined") {
       var Ashley = {};
     }

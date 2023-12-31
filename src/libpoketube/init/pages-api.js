@@ -114,7 +114,7 @@ app.get("/avatars/:v", async function (req, res) {
       var format = "mp3";
     }
 
-    const url = `https://tube-proxy.poketube.fun/proxy/media/${v}/${q}`;
+    const url = `https://tube.kuylar.dev/proxy/media/${v}/${q}`;
 
     res.redirect(url);
   });
@@ -126,7 +126,7 @@ app.get("/avatars/:v", async function (req, res) {
     const l = req.query.h;
 
     try {
-      let url = `https://yt.sudovanilla.com/api/v1/captions/${id}?label=${l}`;
+      let url = `https://vid.puffyan.us/api/v1/captions/${id}?label=${l}`;
 
       let f = await fetch(url);
       const body = await f.text();

@@ -245,10 +245,10 @@ module.exports = function (app, config, renderTemplate) {
           var vidurl = u.losslessurl;
         }
 
- 
+        if (inv_vid.author.endsWith(" - Topic")) {
           var vidurl = "https://eu-proxy.poketube.fun";
           var isvidious = true;
-        
+        }
 
         if (req.useragent.source.includes("Pardus")) {
           var vidurl = "https://yt.sudovanilla.com";

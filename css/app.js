@@ -285,14 +285,21 @@ function fetchUrls(urls) {
  var popupMenu = document.getElementById("popupMenu");
         var loopOption = document.getElementById("loopOption");
         var speedOption = document.getElementById("speedOption");
+ 
 
-         video.addEventListener("contextmenu", function(event) {
-            event.preventDefault();  
+video.addEventListener("contextmenu", function(event) {
+    // Check if the video is in fullscreen mode
+    if (!document.fullscreenElement && !document.webkitFullscreenElement && !document.mozFullScreenElement && !document.msFullscreenElement) {
+        // The video is not in fullscreen mode, prevent the default behavior
+        event.preventDefault();
 
-             popupMenu.style.display = "block";
-            popupMenu.style.left = event.pageX + "px";
-            popupMenu.style.top = event.pageY + "px";
-        });
+        // Your additional context menu logic
+        popupMenu.style.display = "block";
+        popupMenu.style.left = event.pageX + "px";
+        popupMenu.style.top = event.pageY + "px";
+    }
+});
+
 
         // Hide the popup menu when clicking outside of it
         window.addEventListener("click", function(event) {

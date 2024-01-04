@@ -257,8 +257,13 @@ module.exports = function (app, config, renderTemplate) {
   app.get("/channel/", async (req, res) => {
     const { fetch } = await import("undici");
     try {
-      const ID = req.query.id;
-      const tab = req.query.tab;
+       
+      var ID = req.query.id;
+      
+      if (ID.endsWith('@youtube.com')) {
+      ID = ID.slice(0, -'@youtube.com'.length);
+      }
+            const tab = req.query.tab;
       const cache = {};
 
       try {

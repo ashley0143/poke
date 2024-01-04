@@ -1,7 +1,7 @@
 {
-  "name": "poketube",
-  "version": "20.23",
-  "description": "Libre youtube front-end",
+  "name": "poke",
+  "version": "20.24",
+  "description": "Libre youtube and google front-end",
   "main": "server.js",
   "scripts": {
     "start": "node server.js"
@@ -32,7 +32,8 @@
     "express-rate-limit": "^7.0.2",
     "toobusy-js": "^0.5.1",
     "quick.db": "^7.1.3",
-    "google-it": "^1.6.4"
+    "google-it": "^1.6.4",
+    "activitypub-express": "^4.4.1"
   },
   "engines": {
     "node": "16.x"

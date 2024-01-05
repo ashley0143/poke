@@ -27,7 +27,7 @@
 
 ## Welcome!
 
-This is the source code of PokeTube, the privacy-friendly youtube front-end built with the InnerTube API!
+This is the source code of Poke (formerly PokeTube), the privacy-friendly youtube front-end built with the InnerTube API!
 
 
 <h1>Features</h1>

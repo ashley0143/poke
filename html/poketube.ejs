@@ -1810,7 +1810,7 @@ var userID = localStorage.getItem("UserID");
 
 if (userID) {
     // If user ID exists in localStorage, set the href attribute
-    anchor.href = `/api/set-channel-subs?ID=${userID}&channelName=<%=k.Video.Channel.Name%>&avatar=<%- media_proxy_url %>?proxy=<%= k.Video.Channel.Avatar[1].$t %>&channelID=<%=video?.Channel.id || k.Video.Channel.id %>`;
+    anchor.href = `/api/set-channel-subs?ID=${userID}&channelName=<%=k.Video.Channel.Name%>&avatar=<%- media_proxy_url %>/proxy?url=<%= k.Video.Channel.Avatar[1].$t %>&channelID=<%=video?.Channel.id || k.Video.Channel.id %>`;
 } else {
      anchor.href = "/account-create"
  } 

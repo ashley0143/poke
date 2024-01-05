@@ -240,12 +240,14 @@ module.exports = function (app, config, renderTemplate) {
 
         var vidurl = u.url;
         var isvidious = u.isInvidiousURL;
+    
 
+      
         if (inv_vid?.genre === "Music") {
           var vidurl = u.losslessurl;
         }
 
-        if (inv_vid.author.endsWith(" - Topic")) {
+        if (!inv_vid.allowedRegions.includes("US")) {
           var vidurl = "https://eu-proxy.poketube.fun";
           var isvidious = true;
         }
@@ -254,7 +256,7 @@ module.exports = function (app, config, renderTemplate) {
           var vidurl = "https://yt.sudovanilla.com";
           var isvidious = true;
         }
-
+        
         let badges = "";
         let comments = "";
         let nnn = "";

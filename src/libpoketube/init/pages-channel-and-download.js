@@ -90,7 +90,11 @@ module.exports = function (app, config, renderTemplate) {
     const { fetch } = await import("undici");
 
     const search = require("google-it");
+    var media_proxy = config.media_proxy;
 
+    if (req.useragent.source.includes("Pardus")) {
+      var media_proxy = "https://media-proxy.ashley0143.xyz";
+    }
     var uaos = req.useragent.os;
     var IsOldWindows;
 
@@ -151,7 +155,7 @@ module.exports = function (app, config, renderTemplate) {
         IsOldWindows,
         tab,
         continuation,
-        media_proxy_url: config.media_proxy,
+        media_proxy_url: media_proxy,
         results: "",
         q: query,
         summary: "",
@@ -198,9 +202,9 @@ module.exports = function (app, config, renderTemplate) {
 
     const search = require("google-it");
 
-      if (req.query.lucky === 'true') {
-    res.redirect('/im-feeling-lucky?query=' + query)
-      }
+    if (req.query.lucky === "true") {
+      res.redirect("/im-feeling-lucky?query=" + query);
+    }
     var uaos = req.useragent.os;
     var IsOldWindows;
 
@@ -257,13 +261,22 @@ module.exports = function (app, config, renderTemplate) {
   app.get("/channel/", async (req, res) => {
     const { fetch } = await import("undici");
     try {
-       
-      var ID = req.query.id;
-      
-      if (ID.endsWith('@youtube.com')) {
-      ID = ID.slice(0, -'@youtube.com'.length);
+      var media_proxy = config.media_proxy;
+
+      if (req.useragent.source.includes("Pardus")) {
+        var media_proxy = "https://media-proxy.ashley0143.xyz";
       }
-            const tab = req.query.tab;
+
+      var ID = req.query.id;
+
+      if (ID.endsWith("@youtube.com")) {
+        ID = ID.slice(0, -"@youtube.com".length);
+      }
+
+      if (ID.endsWith("@poketube.fun")) {
+        ID = ID.slice(0, -"@poketube.fun".length);
+      }
+      const tab = req.query.tab;
       const cache = {};
 
       try {
@@ -368,7 +381,7 @@ module.exports = function (app, config, renderTemplate) {
         cinv,
         convert,
         turntomins,
-        media_proxy_url: config.media_proxy,
+        media_proxy_url: media_proxy,
         dnoreplace,
         getThumbnailUrl,
         continuation,

@@ -1810,23 +1810,14 @@ var userID = localStorage.getItem("UserID");
 
 if (userID) {
     // If user ID exists in localStorage, set the href attribute
-    anchor.href = `/api/set-channel-subs?ID=${userID}&channelName=<%=k.Video.Channel.Name%>&avatar=https://p.poketube.fun/<%= k.Video.Channel.Avatar[1].$t %>&channelID=<%=video?.Channel.id || k.Video.Channel.id %>`;
+    anchor.href = `/api/set-channel-subs?ID=${userID}&channelName=<%=k.Video.Channel.Name%>&avatar=<%- media_proxy_url %>/<%= k.Video.Channel.Avatar[1].$t %>&channelID=<%=video?.Channel.id || k.Video.Channel.id %>`;
 } else {
-    // If user ID doesn't exist in localStorage, you can handle it as needed
-    anchor.href = "/account-create"
-  // Optionally, you can set a default href or display an error message.
-}
-
-// Now, all the selected video links should have the parameters added to their href attributes
-
-// Now, all the selected links should have the parameters appended
+     anchor.href = "/account-create"
+ } 
  </script>
-<!-- app.js -->
-<!-- app.js -->
-<!-- app.js -->
-<!-- app.js -->
-<!-- app.js -->
-<!-- app.js -->
+ 
+<!-- comments json - not used rn but will in the future! -->   
+<script id="comments" type="application/json"><%- JSON.stringify(inv.comments) %></script>
    
 <!-- Ambient Mode, for PokeTube -->
 <% if(IsOldWindows) { %>

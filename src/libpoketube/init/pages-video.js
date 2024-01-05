@@ -240,9 +240,9 @@ module.exports = function (app, config, renderTemplate) {
 
         var vidurl = u.url;
         var isvidious = u.isInvidiousURL;
-    
+        var mediaproxy = config.media_proxy
 
-      
+                
         if (inv_vid?.genre === "Music") {
           var vidurl = u.losslessurl;
         }
@@ -253,8 +253,10 @@ module.exports = function (app, config, renderTemplate) {
         }
 
         if (req.useragent.source.includes("Pardus")) {
-          var vidurl = "https://yt.sudovanilla.com";
-          var isvidious = true;
+          var vidurl = "https://tube-proxy.ashley0143.xyz";
+          var mediaproxy = "https://media-proxy.ashley0143.xyz"
+          var isvidious = false;
+          var isSchoolProxy = true;
         }
         
         let badges = "";
@@ -301,7 +303,7 @@ module.exports = function (app, config, renderTemplate) {
             twitter,
             k,
             dm,
-            media_proxy_url: config.media_proxy,
+            media_proxy_url: mediaproxy,
             instagram,
             useragent: req.useragent,
             verify,
@@ -310,6 +312,7 @@ module.exports = function (app, config, renderTemplate) {
             reddit,
             secure,
             process,
+            isSchoolProxy,
             sha384,
             lightOrDark,
             isMobile: req.useragent.isMobile,

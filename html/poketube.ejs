@@ -963,6 +963,7 @@ display: block; !important;" autoplay controls>
         
                                                                            <% } %>                
                                                                                                        <% } %>                     
+              <% if (!isSchoolProxy) { %>
 
               <% if (!isvidious) { %>
                 
@@ -974,12 +975,25 @@ display: block; !important;" autoplay controls>
       <% if (qua === "medium") { %>  
 
                                                 <source src="https://tube-proxy.poketube.fun/proxy/media/<%=inv_vid.videoId%>/18" type="video/mp4; codecs=&quot;avc1.64001F, mp4a.40.2&quot;" label="sd360" selected="true">
+                                                                                   <% } %>                
+
         
                                                                            <% } %>                
                                                                                                        <% } %>                     
+              <% if (isSchoolProxy) { %>
+        <% if (!qua) { %>                       
+                                                <source src="https://tube-proxy.ashley0143.xyz/proxy/media/<%=inv_vid.videoId%>/22" type="video/mp4; codecs=&quot;avc1.64001F, mp4a.40.2&quot;" label="hd720" selected="true">
 
+                                                                             <% } %>                
+
+      <% if (qua === "medium") { %>  
+
+                                                <source src="https://tube-proxy.ashley0143.xyz/proxy/media/<%=inv_vid.videoId%>/18" type="video/mp4; codecs=&quot;avc1.64001F, mp4a.40.2&quot;" label="sd360" selected="true">
+        
+                                                                           <% } %>  
                                       
-                        
+                                                                                                   <% } %>                
+
        
      <%  if (Array.isArray( inv_vid.captions)) { %> 
    <% inv_vid.captions?.forEach(x => { %>

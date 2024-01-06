@@ -133,6 +133,13 @@ module.exports = function (app, config, renderTemplate) {
     }
   });
 
+app.get("/game-hub", function (req, res) {
+      
+    renderTemplate(res, req, "gamehub.ejs", {
+    game:req.query.game
+    }); 
+      
+  });
 app.get("/static/:id", (req, res) => {
   const id = req.params.id;
 

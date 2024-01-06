@@ -6,7 +6,6 @@
        <link href=/css/app.main.css?v=3449 rel=stylesheet>
     <style>
 
-
         /* Define the grid container */
 .grid-container {
     display: grid;
@@ -21,7 +20,7 @@
 .grid-item {
     background-color: #333;
     padding: 20px;
-   width:11em;
+   max-width:5em;
   text-align: center;
     border-radius: 1em;
 }
@@ -79,10 +78,10 @@ a {
           <% if (userSubs) { %>
  <% for (const channelID in userSubs) { %>
             <div class="grid-item">
-                              <img style="width:5em;border-radius:5px;margin-bottom: -23px;" src="<%= userSubs[channelID].avatar %>" alt="Avatar"><br >
+                              <img style="width:5em;border-radius:5px" src="<%= userSubs[channelID].avatar %>" alt="Avatar"><br >
 <br>
                <%= userSubs[channelID].channelName %><br>
-                 <div style="gap: 1px;display: flex;margin-left:2em;margin-top: 6px;">
+                 <div style="gap: 1px;display: flex;margin-left: -12px;">
               <a href="/api/remove-channel-sub?ID=<%- userid %>&channelID=<%= channelID %>" style="margin-bottom:1px">unsub </a> <a href="/channel?id=<%= channelID %>">view</a>
             </div>            </div>
 

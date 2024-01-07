@@ -8,7 +8,7 @@
   <link href="/css/yt-ukraine.svg?v=3" rel=icon>
   <link rel="manifest" href="/manifest.json">
   <meta content="▶▶ Poke Games" property=og:title>
-  <meta content="Play games on poke!" property=twitter:description>
+  <meta content="Do gaming on poke!" property=twitter:description>
  <meta content="https://cdn.glitch.global/d68d17bb-f2c0-4bc3-993f-50902734f652/aa70111e-5bcd-4379-8b23-332a33012b78.image.png?v=1701898829884" property="og:image"  />
   <meta content="summary_large_image" name="twitter:card" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -78,7 +78,7 @@
       cursor: pointer;
     }
   </style>
-  <title>Games Hub</title>
+  <title>Gaming Hub</title>
 </head>
 <body>
   <div class="container">
@@ -123,6 +123,7 @@
     html, body {
       height: 100%;
       margin: 0;
+      background: linear-gradient(135deg, #2c3e50, #34495e);
       overflow: hidden;
     }
     canvas {
@@ -131,7 +132,7 @@
       position: absolute;
     }
   </style>
-  <title>Snake</title>
+  <title>Snak</title>
 </head>
 <body>
   <canvas id="snakeCanvas" width="400" height="400"></canvas>
@@ -291,12 +292,14 @@ function resetGame() {
       align-items: center;
       justify-content: center;
       height: 100vh;
+      background: linear-gradient(135deg, #2c3e50, #34495e);
       margin: 0;
     }
     .container {
       text-align: left;
       margin-top: 20px;
       margin-left: 20px;
+      color:#fff;
     }
     .board {
       display: grid;
@@ -381,12 +384,12 @@ function resetGame() {
         renderBoard();
         const winner = checkWinner();
         if (winner) {
-          messageElement.textContent = `Player ${winner} wins!`;
+          messageElement.textContent = `Player ${winner} won!!!!!! woaah`;
         } else if (checkDraw()) {
-          messageElement.textContent = "It's a draw!";
+          messageElement.textContent = "It's a draw! oh welp >~<";
         } else {
           currentPlayer = currentPlayer === "X" ? "O" : "X";
-          messageElement.textContent = `Player ${currentPlayer}'s turn`;
+          messageElement.textContent = `Player ${currentPlayer}'s turn :3`;
           if (currentPlayer === "O") {
             setTimeout(makeComputerMove, 1000); // AI waits for 1 second
           }
@@ -410,12 +413,12 @@ function resetGame() {
         renderBoard();
         const winner = checkWinner();
         if (winner) {
-          messageElement.textContent = `Player ${winner} wins!`;
+          messageElement.textContent = `Player ${winner} won!!!!!! woaah`;
         } else if (checkDraw()) {
-          messageElement.textContent = "It's a draw!";
+          messageElement.textContent = "It's a draw! oh welp >~<";
         } else {
           currentPlayer = currentPlayer === "X" ? "O" : "X";
-          messageElement.textContent = `Player ${currentPlayer}'s turn`;
+          messageElement.textContent = `Player ${currentPlayer}'s turn :3`;
         }
       }
     }
@@ -434,7 +437,7 @@ function resetGame() {
     function resetGame() {
       currentPlayer = "X";
       board = ["", "", "", "", "", "", "", "", ""];
-      messageElement.textContent = `Player ${currentPlayer}'s turn`;
+      messageElement.textContent = `Player ${currentPlayer}'s turn :3`;
       renderBoard();
 
       // If AI is the starting player, make the first move
@@ -466,7 +469,7 @@ function resetGame() {
       align-items: center;
       justify-content: space-between;
       height: 100vh;
-      background: #000;
+      background: linear-gradient(135deg, #2c3e50, #34495e);
       color: #fff;
       font-family: 'Arial', sans-serif;
     }
@@ -491,9 +494,9 @@ function resetGame() {
   <canvas id="pongCanvas" width="800" height="400"></canvas>
   <div id="controls">
     <p>
-       Press space to start
+       U can press space to start owo
     </p>
-    <p>Left Paddle Controls: W (Up) and S (Down)</p>
+    <p>Left Paddle Controls : W (Up) and S (Down)</p>
     <p>Right Paddle Controls: Arrow Up (Up) and Arrow Down (Down)</p>
   </div>
   <script type="text/javascript">
@@ -705,7 +708,7 @@ function resetGame() {
 
                                              		 	               <% } %>   
 <% if (game === "sudoku") { %> 
-  <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -718,7 +721,7 @@ function resetGame() {
       justify-content: center;
       height: 100vh;
       margin: 0;
-      background-color: #f0f0f0;
+      background: linear-gradient(135deg, #2c3e50, #34495e);
       font-family: 'Arial', sans-serif;
     }
 
@@ -749,12 +752,52 @@ function resetGame() {
     .error {
       background-color: #ffbaba;
     }
+
+    #popup {
+      display: none;
+      border-radius: 1em;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      padding: 20px;
+      background-color: #fff;
+      border: 1px solid #ccc;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+      z-index: 999;
+    }
+
+    #popup > button {
+      border: none;
+      background: gray;
+      border-radius: 3px;
+      color: #fff;
+      height: 4em;
+      width: 9em;
+    }
+
+    #overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+      z-index: 998;
+    }
   </style>
   <title>Sudoku</title>
 </head>
 <body>
   <div id="sudoku-board"></div>
- <script type="text/javascript">
+  <div id="overlay"></div>
+  <div id="popup">
+    <h2>U did a incorrect move :sob:</h2>
+    <p>Please enter a valid number (1-9)</p>
+    <button onclick="closePopup()">Oki</button>
+  </div>
+  <script type="text/javascript">
 <!--//--><![CDATA[//><!--
 /**
  * @licstart The following is the entire license notice for the JavaScript
@@ -782,8 +825,18 @@ function resetGame() {
 
 //--><!]]>
 </script>
-  <script>
-    const board = [
+  <script type="text/javascript">
+    function closePopup() {
+      document.getElementById('popup').style.display = 'none';
+      document.getElementById('overlay').style.display = 'none';
+    }
+
+    function showAlertPopup() {
+      document.getElementById('popup').style.display = 'block';
+      document.getElementById('overlay').style.display = 'block';
+    }
+
+    const initialBoard = [
       [5, 3, 0, 0, 7, 0, 0, 0, 0],
       [6, 0, 0, 1, 9, 5, 0, 0, 0],
       [0, 9, 8, 0, 0, 0, 0, 6, 0],
@@ -795,8 +848,11 @@ function resetGame() {
       [0, 0, 0, 0, 8, 0, 0, 7, 9]
     ];
 
+    let board = JSON.parse(JSON.stringify(initialBoard)); // Deep copy to prevent mutation of the original board
+
     function initializeBoard() {
       const sudokuBoard = document.getElementById('sudoku-board');
+      board = generateRandomBoard(initialBoard);
 
       for (let i = 0; i < 9; i++) {
         for (let j = 0; j < 9; j++) {
@@ -816,6 +872,43 @@ function resetGame() {
       }
     }
 
+    function generateRandomBoard(baseBoard) {
+      // Randomly shuffle rows and columns
+      const shuffledRows = shuffleArray(baseBoard);
+      const shuffledCols = transposeMatrix(shuffleArray(transposeMatrix(baseBoard)));
+
+      // Randomly remove some numbers
+      const modifiedBoard = removeNumbers(shuffledRows);
+
+      return modifiedBoard;
+    }
+
+    function shuffleArray(array) {
+      const newArray = array.slice();
+      for (let i = newArray.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
+      }
+      return newArray;
+    }
+
+    function transposeMatrix(matrix) {
+      return matrix[0].map((_, colIndex) => matrix.map(row => row[colIndex]));
+    }
+
+    function removeNumbers(board) {
+      const modifiedBoard = board.map(row => row.slice());
+      const emptyCount = Math.floor(Math.random() * 10) + 20; // Randomly choose 20 to 30 cells to be empty
+
+      for (let i = 0; i < emptyCount; i++) {
+        const row = Math.floor(Math.random() * 9);
+        const col = Math.floor(Math.random() * 9);
+        modifiedBoard[row][col] = 0;
+      }
+
+      return modifiedBoard;
+    }
+
     function handleClick(row, col) {
       const cell = document.querySelector(`.cell[data-row="${row}"][data-col="${col}"]`);
 
@@ -831,6 +924,7 @@ function resetGame() {
             cell.classList.remove('error');
           } else {
             cell.classList.add('error');
+            showAlertPopup();
           }
         } else {
           alert('Invalid input. Please enter a number between 1 and 9.');

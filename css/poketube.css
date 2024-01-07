@@ -250,24 +250,30 @@ a.avatar {
 }
 
 .recommended-list {
-  background-color: var(--div-prim-bg);
-  border-radius: 1.5em;
-  margin: 10px;
-  margin-top: 0px;
-  margin-left: 0px;
-  height: -moz-fit-content;
-  height: fit-content;
-  justify-self: center;
-  margin-right: -0.9em;
-  /* width: min-content;*/
-  border: var(--div-border-color);
-  border-style: solid;
-  max-width: 371px;
-  width: max-content;
+	background-color: var(--div-prim-bg);
+	border-radius: 1.5em;
+	margin: 10px;
+	margin-top: 0;
+	margin-left: 0;
+	height: -moz-fit-content;
+	height: fit-content;
+	/* justify-self: center; */
+	margin-right: -.9em;
+	border: var(--div-border-color);
+	border-style: solid;
+	max-width: 371px;
+	width: 20.9em;
 }
 
 .video-views {
-  white-space: nowrap;
+   white-space: -moz-pre-wrap !important;  /* Mozilla, since 1999 */
+    white-space: -pre-wrap;      /* Opera 4-6 */
+    white-space: -o-pre-wrap;    /* Opera 7 */
+    white-space: pre-wrap;       /* css-3 */
+    word-wrap: break-word;       /* Internet Explorer 5.5+ */
+    white-space: -webkit-pre-wrap; /* Newer versions of Chrome/Safari*/
+    word-break: break-all;
+    white-space: normal;
 }
 
 .video-info-panel.gradient {

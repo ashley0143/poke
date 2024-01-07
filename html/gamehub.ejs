@@ -391,36 +391,76 @@ function resetGame() {
           currentPlayer = currentPlayer === "X" ? "O" : "X";
           messageElement.textContent = `Player ${currentPlayer}'s turn :3`;
           if (currentPlayer === "O") {
-            setTimeout(makeComputerMove, 1000); // AI waits for 1 second
+            setTimeout(makeComputerMove, 500); // AI waits for 0.5 second
           }
         }
       }
     }
 
     function makeComputerMove() {
-      // Simple AI: Randomly choose an empty cell for the computer's move
-      const emptyCells = board.reduce((acc, value, index) => {
-        if (value === "") {
-          acc.push(index);
-        }
-        return acc;
-      }, []);
+     // Look for a winning move, then look to block player, otherwise, choose a random move
+      const winningMove = findWinningMove();
+      const blockingMove = findBlockingMove();
 
-      if (emptyCells.length > 0) {
-        const randomIndex = Math.floor(Math.random() * emptyCells.length);
-        const computerMove = emptyCells[randomIndex];
-        board[computerMove] = currentPlayer;
-        renderBoard();
-        const winner = checkWinner();
-        if (winner) {
-          messageElement.textContent = `Player ${winner} won!!!!!! woaah`;
-        } else if (checkDraw()) {
-          messageElement.textContent = "It's a draw! oh welp >~<";
-        } else {
-          currentPlayer = currentPlayer === "X" ? "O" : "X";
-          messageElement.textContent = `Player ${currentPlayer}'s turn :3`;
+      if (winningMove !== null) {
+        board[winningMove] = currentPlayer;
+      } else if (blockingMove !== null) {
+        board[blockingMove] = currentPlayer;
+      } else {
+        // Randomly choose an empty cell for the computer's move
+        const emptyCells = board.reduce((acc, value, index) => {
+          if (value === "") {
+            acc.push(index);
+          }
+          return acc;
+        }, []);
+
+        if (emptyCells.length > 0) {
+          const randomIndex = Math.floor(Math.random() * emptyCells.length);
+          const computerMove = emptyCells[randomIndex];
+          board[computerMove] = currentPlayer;
         }
       }
+
+      renderBoard();
+      const winner = checkWinner();
+      if (winner) {
+        messageElement.textContent = `Player ${winner} won!!!!!! woaah`;
+      } else if (checkDraw()) {
+        messageElement.textContent = "It's a draw! oh welp >~<";
+      } else {
+        currentPlayer = currentPlayer === "X" ? "O" : "X";
+        messageElement.textContent = `Player ${currentPlayer}'s turn :3`;
+      }
+    }
+
+    function findWinningMove() {
+      for (let i = 0; i < board.length; i++) {
+        if (board[i] === "") {
+          board[i] = currentPlayer;
+          if (checkWinner() === currentPlayer) {
+            board[i] = ""; // Reset the move
+            return i;
+          }
+          board[i] = ""; // Reset the move
+        }
+      }
+      return null;
+    }
+
+    function findBlockingMove() {
+      const opponent = currentPlayer === "X" ? "O" : "X";
+      for (let i = 0; i < board.length; i++) {
+        if (board[i] === "") {
+          board[i] = opponent;
+          if (checkWinner() === opponent) {
+            board[i] = ""; // Reset the move
+            return i;
+          }
+          board[i] = ""; // Reset the move
+        }
+      }
+      return null;
     }
 
     function renderBoard() {
@@ -442,7 +482,7 @@ function resetGame() {
 
       // If AI is the starting player, make the first move
       if (currentPlayer === "O") {
-        setTimeout(makeComputerMove, 1000); // AI waits for 1 second
+        setTimeout(makeComputerMove, 500); // AI waits for 0.5 second
       }
     }
 

@@ -15,7 +15,7 @@
   <style>
     body {
       margin: 0;
-      font-family: 'Arial', sans-serif;
+      font-family: 'PokeTube flex', sans-serif;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -28,9 +28,14 @@
       text-align: center;
       padding: 20px;
     }
-
-    h1 {
+    
+      h1 {
       margin-top: 0;
+      font-weight: 1000;
+      font-stretch: ultra-expanded;
+      font-family: "Poketube flex";
+      font-style: italic;
+      color: #ffabcc;
     }
 
     .game-container {
@@ -39,6 +44,14 @@
       justify-content: center;
       flex-wrap: wrap;
     }
+
+    @font-face {
+    font-family: "PokeTube Flex";
+    src: url("https://p.poketube.fun/https://cdn.glitch.global/43b6691a-c8db-41d4-921c-8cf6aa0d9108/robotoflex.ttf?v=1668343428681");
+    font-style: normal;
+    font-stretch: 1% 800%;
+    font-display: swap;
+  }
 
     .game {
       flex: 0 0 300px;
@@ -270,6 +283,38 @@ function resetGame() {
       }
     });
 
+    // Set up touch controls
+    let touchStartX, touchStartY;
+
+    canvas.addEventListener("touchstart", function(event) {
+      touchStartX = event.touches[0].clientX;
+      touchStartY = event.touches[0].clientY;
+    });
+
+    canvas.addEventListener("touchmove", function(event) {
+      const touchEndX = event.touches[0].clientX;
+      const touchEndY = event.touches[0].clientY;
+
+      const dx = touchEndX - touchStartX;
+      const dy = touchEndY - touchStartY;
+
+      if (Math.abs(dx) > Math.abs(dy)) {
+        // Horizontal swipe
+        if (dx > 0 && direction !== "left") {
+          direction = "right";
+        } else if (dx < 0 && direction !== "right") {
+          direction = "left";
+        }
+      } else {
+        // Vertical swipe
+        if (dy > 0 && direction !== "up") {
+          direction = "down";
+        } else if (dy < 0 && direction !== "down") {
+          direction = "up";
+        }
+      }
+    });
+
     // Set up the game loop
     setInterval(gameLoop, 100);
   </script>
@@ -286,7 +331,7 @@ function resetGame() {
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
     body {
-      font-family: Arial, sans-serif;
+      font-family: "Poketube flex", sans-serif;
       text-align: center;
       display: flex;
       align-items: center;
@@ -314,6 +359,19 @@ function resetGame() {
       font-size: 2em;
       cursor: pointer;
     }
+    @font-face {
+    font-family: "PokeTube Flex";
+    src: url("https://p.poketube.fun/https://cdn.glitch.global/43b6691a-c8db-41d4-921c-8cf6aa0d9108/robotoflex.ttf?v=1668343428681");
+    font-style: normal;
+    font-stretch: 1% 800%;
+    font-display: swap;
+  }
+
+    .container > h1 {
+    font-weight: 1000;
+    font-stretch: ultra-expanded;
+    font-style: italic;
+  }
   </style>
   <title>Tic-Tac-Toe</title>
 </head>
@@ -568,7 +626,7 @@ function resetGame() {
 //--><!]]>
 </script>
   <script>
-    const canvas = document.getElementById("pongCanvas");
+ const canvas = document.getElementById("pongCanvas");
     const ctx = canvas.getContext("2d");
 
     const paddleWidth = 10;
@@ -710,7 +768,7 @@ function resetGame() {
         ballSpeedX = Math.random() > 0.5 ? 5 : -5;
         ballSpeedY = Math.random() > 0.5 ? 5 : -5;
         gameActive = true;
-      }, 1000);
+      }, 100);
     }
 
     function update() {
@@ -737,6 +795,23 @@ function resetGame() {
         ballSpeedX = Math.random() > 0.5 ? 5 : -5;
         ballSpeedY = Math.random() > 0.5 ? 5 : -5;
         gameActive = true;
+      }
+    });
+
+    // Touch controls
+    canvas.addEventListener("touchstart", function(event) {
+      if (!gameActive) {
+        resetGame();
+        ballSpeedX = Math.random() > 0.5 ? 5 : -5;
+        ballSpeedY = Math.random() > 0.5 ? 5 : -5;
+        gameActive = true;
+      }
+    });
+
+    canvas.addEventListener("touchmove", function(event) {
+      const touchY = event.touches[0].clientY - canvas.offsetTop;
+      if (touchY > leftPaddleY && touchY < leftPaddleY + paddleHeight) {
+        leftPaddleY = touchY - paddleHeight / 2;
       }
     });
 
@@ -1016,3 +1091,4 @@ function resetGame() {
 </html>
 
                                              		 	               <% } %>   
+                                               

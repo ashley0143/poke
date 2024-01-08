@@ -43,6 +43,20 @@
         "branch": "dev"
       }
     }
+  ],
+    [
+    "poke.ashley0143.xyz",
+    {
+      "uri": "https://poke.ashley0143.xyz",
+      "CLOUDFLARE": false,
+      "piwik": false,
+      "region": "🇺🇸",
+      "software": {
+        "name": "poketube",
+        "version": "latest",
+        "branch": "dev"
+      }
+    }
   ]
 ]
 

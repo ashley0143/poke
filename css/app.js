@@ -290,11 +290,9 @@ function fetchUrls(urls) {
 video.addEventListener("contextmenu", function(event) {
     // Check if the video is in fullscreen mode
     if (!document.fullscreenElement && !document.webkitFullscreenElement && !document.mozFullScreenElement && !document.msFullscreenElement) {
-        // The video is not in fullscreen mode, prevent the default behavior
-        event.preventDefault();
+         event.preventDefault();
 
-        // Your additional context menu logic
-        popupMenu.style.display = "block";
+         popupMenu.style.display = "block";
         popupMenu.style.left = event.pageX + "px";
         popupMenu.style.top = event.pageY + "px";
     }
@@ -356,4 +354,6 @@ video.addEventListener("contextmenu", function(event) {
                 return 2;
             }
         }
+
+const GoogleTranslateEndpoint = "https://translate.google.com/_/TranslateWebserverUi/data/batchexecute?rpcids=MkEWBc&rt=c"
 // @license-end

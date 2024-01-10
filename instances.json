@@ -48,7 +48,7 @@
     "poke.ashley0143.xyz",
     {
       "uri": "https://poke.ashley0143.xyz",
-      "CLOUDFLARE": false,
+      "CLOUDFLARE": true,
       "piwik": false,
       "region": "🇺🇸",
       "software": {

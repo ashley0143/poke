@@ -1241,7 +1241,7 @@ display: block; !important;" autoplay controls>
                                         <div class="pill-button">
 
                <i class="fa-light fa-comments"></i>
-               Comments
+              <%- convert(inv.commentCount) %> Comments
                                                       </div>       
         </a>
                                                                             </div>
@@ -1514,7 +1514,7 @@ display: block; !important;" autoplay controls>
         <a id="comments-container"></a>
 
                                                  <h5 style="font-family:var(--text-font-primary);font-weight:var(--text-header-weight);white-space:yes;font-stretch: ultra-expanded;margin-bottom: 11px;margin-top: 6px;padding-top: 10px;">
-                                                   Comments <span style="font-family: inter;font-weight: 900;text-transform: lowercase;margin: 1px;">- <%- convert(inv.commentCount) %></span>
+                                                   Comments <span style="font-family: inter;font-weight: 900;text-transform: lowercase;margin: 1px;">- <%- convert(inv.commentCount) %> </span>
                                                    </h5> 
                                                      
                                             <p style="padding: 0;margin: 0;font-family: Inter;margin-bottom: 10px;">
@@ -2245,7 +2245,7 @@ font-size: 13px;margin:0;padding:0;white-space: nowrap;
                             <div class="pill-button">
 
             <i class="fa-light fa-comments"></i>
-           Comments
+           <%- convert(inv.commentCount) %> Comments
             </div>
 					</a>
                                                                                                              <% }%>      

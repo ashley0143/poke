@@ -160,7 +160,7 @@ toobusy.maxLag(3500);
 
     app.use(function (req, res, next) {
       res.header("X-PokeTube-Youtube-Client-Name", "1");
-      res.header("Hey there", "Do u wanna help poke? contributons are welcome :3 https://codeberg.org/Ashley/poke")
+      res.header("Hey-there", "Do u wanna help poke? contributons are welcome :3 https://codeberg.org/Ashley/poke")
       res.header("X-PokeTube-Youtube-Client-Version", "2.20240111.00.00");
       res.header("X-PokeTube-Speeder", "3 seconds no cache, 280ms w/cache");
       if (req.url.match(/^\/(css|js|img|font)\/.+/)) {

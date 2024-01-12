@@ -2,7 +2,7 @@
 
     PokeTube is an Free/Libre youtube front-end. this is our main file.
   
-    Copyright (C) 2021-2023 POKETUBE (https://codeberg.org/Ashley/poketube)
+    Copyright (C) 2021-2024 POKETUBE (https://codeberg.org/Ashley/poketube)
     
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -35,7 +35,7 @@
   const u = await media_proxy();
   initlog("Loading...");
   initlog(
-    "[Welcome] Welcome To PokeTube :3 " +
+    "[Welcome] Welcome To Poke - The ultimate privacy app - :3 " +
       "Running " +
       `Node ${process.version} - V8 v${
         process.versions.v8
@@ -65,8 +65,8 @@
 
 
    const limiter = rateLimit({
-     windowMs:45 * 1000, // 30 Seconds
-     max: 886, // limit each IP to 870 requests per windowMs
+     windowMs:45 * 1000, // 45 Seconds
+     max: 886, // limit each IP to 866 requests per windowMs
    });
    
   var app = modules.express();
@@ -136,6 +136,9 @@ toobusy.maxLag(3500);
       }
       res.header("secure-poketube-instance", "1");
 
+      // opt out of googles "FLOC" bullcrap :p See https://spreadprivacy.com/block-floc-with-duckduckgo/
+      res.header("Permissions-Policy": "interest-cohort=()")
+      res.header("software-name": "poke")
       next();
     });
 
@@ -157,8 +160,9 @@ toobusy.maxLag(3500);
 
     app.use(function (req, res, next) {
       res.header("X-PokeTube-Youtube-Client-Name", "1");
-      res.header("X-PokeTube-Youtube-Client-Version", "2.20210721.00.00");
-      res.header("X-PokeTube-Speeder", "6 seconds no cache, 780ms w/cache");
+      res.header("Hey there": "Do u wanna help poke? contributons are welcome :3 https://codeberg.org/Ashley/poke")
+      res.header("X-PokeTube-Youtube-Client-Version", "2.20240111.00.00");
+      res.header("X-PokeTube-Speeder", "3 seconds no cache, 280ms w/cache");
       if (req.url.match(/^\/(css|js|img|font)\/.+/)) {
         res.setHeader(
           "Cache-Control",

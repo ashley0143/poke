@@ -1563,11 +1563,9 @@ display: block; !important;" autoplay controls>
       <div style="text-align: left;" class="auto-play">
                                 <label title="autoplay the next video" for="continue">AutoPlay:</label> 
                                 <input title="autoplay the next video" name="continue" id="continue" type="checkbox" >
-           
-
                              </div>
 
-<div style="text-align: right;margin-top: -2.2em;margin-right: 6px;" class="loaded">
+<div style="text-align: right;margin-top: -2.2em;width: 1em; margin-left: auto; margin-right: 5px;" >
 <a title="Upload content :3" href="/video/upload">
     <i class="fa-light fa-circle-plus"></i>
 
@@ -1581,7 +1579,7 @@ Recommended Videos
     </div>
                
              <a style="color:#fff" href="/channel?id=<%=video?.Channel.id || k.Video.Channel.id %>" class="tag">
-               From <%=k.Video.Channel.Name%> 
+               View <%=k.Video.Channel.Name%> 
                </a>
                
   </div>
@@ -1698,7 +1696,6 @@ Recommended Videos
  
     
 <!-- SCRIPTS -->
-    
 <!-- AUTOPLAY -->
 <script>
  function removeParam(paramName) {

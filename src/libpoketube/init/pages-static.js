@@ -101,6 +101,10 @@ module.exports = function (app, config, renderTemplate) {
     renderTemplate(res, req, "domains.ejs");
   });
 
+  app.get("/apps", function (req, res) {
+    renderTemplate(res, req, "apps.ejs");
+  });
+
   app.get("/license", function (req, res) {
     renderTemplate(res, req, "license.ejs");
   });

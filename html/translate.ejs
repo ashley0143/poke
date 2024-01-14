@@ -7,8 +7,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta content="PokeTranslate" property=og:title>
     <meta content="Translate text - Anonymously!" property=twitter:description>
-    <meta content="https://cdn.glitch.global/d68d17bb-f2c0-4bc3-993f-50902734f652/aa70111e-5bcd-4379-8b23-332a33012b78.image.png?v=1701898829884" property="og:image"  />
-     <meta content=summary_large_image name=twitter:card>
+    <meta content="https://cdn.glitch.global/d68d17bb-f2c0-4bc3-993f-50902734f652/aa70111e-5bcd-4379-8b23-332a33012b78.image.png?v=1701898829884" property="og:image"  /> 
+      <meta content=summary_large_image name=twitter:card>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta charset="UTF-8">
         <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline'">
@@ -99,7 +99,6 @@
 
         body {
             justify-content: center;
-            overflow:hidden;
             font-family: sans-serif;
         }
 
@@ -152,22 +151,21 @@
             grid-area: translations;
         }
 
-        @media screen and (prefers-color-scheme: dark) {
-            body {
+        body {
                 background-color: #212529;
                 color: #f8f9fa;
             }
 
-            #could_not_switch_languages_text {
+        #could_not_switch_languages_text {
                 color: #F13333;
             }
 
-            a:visited {
+        a:visited {
                 color: #9759f6;
                 text-decoration: none;
             }
 
-            a {
+        a {
                 color: #599bf6;
                 text-decoration: none;
             }
@@ -197,8 +195,24 @@
             .use_in_sentence {
                 color: yellow;
             }
-        }
+        
         </style>
+      
+        <% if (isMobile) { %>  
+<style>
+  body {
+  overflow: auto;
+  }
+</style>
+           <% } %> 
+
+        <% if (!isMobile) { %>  
+<style>
+  body {
+  overflow: hidden;
+  }
+</style>
+           <% } %> 
     </head>
 
     <body>

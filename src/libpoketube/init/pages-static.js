@@ -93,6 +93,7 @@ module.exports = function (app, config, renderTemplate) {
       text: req.query.input || "enter text here",
       from_language: req.query.from_language,
       to_language: req.query.to_language,
+      isMobile: req.useragent.isMobile,
     });
   });
 

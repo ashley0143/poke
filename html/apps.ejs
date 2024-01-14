@@ -1,0 +1,135 @@
+ <!--
+    This Source Code Form is subject to the terms of the GNU General Public License:
+
+    Copyright (C) 2021-2024 PokeTube (https://codeberg.org/Ashley/poketube)
+    
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program. If not, see https://www.gnu.org/licenses/.
+-->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Poke Apps</title>
+    <meta content="▶▶ Poke - The Ultimate privacy App!" property=og:title>
+    <meta content="Poke is more then a youtueb front end - see all the stuff in poke!! :3" property=twitter:description>
+    <meta content="https://cdn.glitch.global/d68d17bb-f2c0-4bc3-993f-50902734f652/aa70111e-5bcd-4379-8b23-332a33012b78.image.png?v=1701898829884" property="og:image"  />
+    <meta content="summary_large_image" name="twitter:card" />
+    <link rel="manifest" href="/manifest.json">
+    <link href="/css/yt-ukraine.svg?v=3" rel="icon" />
+    <link href="https://p.poketube.fun/https://site-assets.fontawesome.com/releases/v6.1.1/css/all.css" rel="stylesheet" />
+    <style>
+      @font-face {
+        font-family: "PokeTube Flex";
+        src: url("https://p.poketube.fun/https://cdn.glitch.global/43b6691a-c8db-41d4-921c-8cf6aa0d9108/robotoflex.ttf?v=1668343428681");
+        font-style: normal;
+        font-stretch: 1% 800%;
+        font-display: swap;
+      }
+      body {
+        font-family: "PokeTube flex", sans-serif;
+        margin: 0;
+        display: flex;
+        background-image: radial-gradient(
+          circle,
+          #231638,
+          #2b160e,
+          #09250e,
+          #0f132b
+        );
+        animation: gradient 64s ease infinite;
+        background-size: 400% 400%;
+        min-height: 100vh;
+        align-items: center;
+        justify-content: center;
+      }
+      h1 {
+        margin-top: 0;
+        font-weight: 1000;
+        font-stretch: ultra-expanded;
+        font-family: "Poketube flex";
+        color: #fff;
+      }
+      @keyframes gradient {
+        0% {
+          background-position: 0 50%;
+        }
+        50% {
+          background-position: 100% 50%;
+        }
+        100% {
+          background-position: 0 50%;
+        }
+      }
+      .poke-container {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 16px;
+        padding: 16px;
+        background: #1e1e1e;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      }
+      .poke-header {
+        text-align: center;
+        padding: 16px;
+        background: #212121;
+        color: #fff;
+        border-radius: 8px 8px 0 0;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        grid-column: span 4;
+      }
+      .subtext {
+        color: #b0b0b0;
+        margin-top: 8px;
+      }
+      .poke-app-btn {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+        background: #2c2c2c;
+        color: #fff;
+        text-decoration: none;
+        border-radius: 4px;
+        font-size: 14px;
+        transition: background 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
+      }
+      .poke-app-btn:hover {
+        background: #404040;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+      }
+      .poke-app-btn i {
+        margin-bottom: 8px;
+        font-size: 24px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="poke-container">
+      <div class="poke-header">
+        <h1>Moar from Poke</h1>
+        <p class="subtext">Poke is not just a youtube front end - its moar!!</p>
+      </div>
+
+      <a href="/game-hub" class="poke-app-btn"><i class="fa-light fa-gamepad"></i>Games</a>
+      <a href="/web" class="poke-app-btn"><i class="fa-light fa-search"></i>Web Search</a>
+      <a href="/translate" class="poke-app-btn"><i class="fa-light fa-language"></i>Translate</a>
+      <a href="/map" class="poke-app-btn"><i class="fa-light fa-map-marker-alt"></i>Maps</a>
+      <a href="/app" class="poke-app-btn"><i class="fa-light fa-play"></i>PokeTube</a>
+      <a href="/settings" class="poke-app-btn"><i class="fa-light fa-cogs"></i>Settings</a>
+    </div>
+  </body>
+</html>

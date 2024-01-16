@@ -247,7 +247,7 @@ module.exports = function (app, config, renderTemplate) {
           var vidurl = u.losslessurl;
         }
 
-        if (!inv_vid.allowedRegions.includes("US")) {
+        if (!inv_vid?.allowedRegions?.includes("US")) {
           var vidurl = "https://eu-proxy.poketube.fun";
           var isvidious = true;
         }
@@ -275,9 +275,7 @@ module.exports = function (app, config, renderTemplate) {
 
         var uaos = req.useragent.os;
         const browser = req.useragent.browser;
-        const IsOldWindows =
-          (uaos === "Windows 7" || uaos === "Windows 8") &&
-          browser === "Firefox";
+        const IsOldWindows = (uaos === "Windows 7" || uaos === "Windows 8") && browser === "Firefox";
 
         if (uaos === "Windows XP" || uaos === "Windows Vista")
           res.redirect("/lite?v=" + req.query.v);

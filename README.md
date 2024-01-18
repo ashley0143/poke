@@ -3,9 +3,14 @@
 <h1 align="center">
   <a href="https://poketube.fun/watch?v=9sJUDx7iEJw&quality=medium&=sjohgteojgytrueugtye4jhtytjrjnyıı">
    <img src="https://poketube.fun/css/logo-poke.svg" width="400"> 
+    <a href="http://www.defectivebydesign.org/drm-free">
+<img src="https://static.fsf.org/dbd/label/DRM-free%20label%20120.en.png" 
+alt="DefectiveByDesign.org"
+width="65" height="65" border="0" align="middle" /></a>
    </a>
    <p>The Ultimate Privacy App</p>
    </h1>
+  
 <div align="center">
 
    <span> Be Anonymous watching epic videos, searching thingys on the interwebs and listening to music on poke - the free privacy front end!</span>

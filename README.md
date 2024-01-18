@@ -8,7 +8,16 @@
    </h1>
 <div align="center">
 
-   <span> Be Anonymous watching epic videos, searching thingys on the interwebs and listening to music on poke - the free privacy front end!</span></div>
+   <span> Be Anonymous watching epic videos, searching thingys on the interwebs and listening to music on poke - the free privacy front end!</span>
+   
+   <span>"Since you work on poke, Are you in touch with its lead developer "Jose marchasi"? <br>
+-RMS 
+
+Stallman though poke was GNU poke lmaoooo
+   </span>
+   </div>
+
+
 <div align="center">
 
 [Welcome!](#welcome)&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;[Features](#features)&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;[No non-free codec needed](#no-non-free-codec-needed-3)&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;[Hosting Poke~](#hosting-poketube)&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;[Poke community!](#poketube-community)&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;[The Legal Stuff (boring tbh)](#the-legal-stuff-boring-tbh)

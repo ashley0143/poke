@@ -126,7 +126,7 @@ app.get("/avatars/:v", async function (req, res) {
     const l = req.query.h;
 
     try {
-      let url = `https://inv.zzls.xyz/api/v1/captions/${id}?label=${l}`;
+      let url = `https://inv.nadeko.net/api/v1/captions/${id}?label=${l}`;
 
       let f = await fetch(url);
       const body = await f.text();

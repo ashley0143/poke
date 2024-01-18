@@ -24,7 +24,7 @@ function display_help {
 }
 
 function display_version {
-echo "poke-cli version 1.0
+echo "poke-cli version 1.1
 
 Play videos from your terminal!
 https://codeberg.org/ashley/poke
@@ -60,7 +60,6 @@ function display_license {
 EOF
 }
 
-# Check for command-line options
 case $1 in
     --help)
         display_help
@@ -81,20 +80,21 @@ if [ $# -eq 0 ]; then
     exit 1
 fi
 
+# config
+poke_instance="https://poketube.fun"
+invid_api_url="https://invid-api.poketube.fun"
+
 search_query=$1
 
 player="mpv"
 
-if ! command -v $player &> /dev/null; then
-    player="vlc"
-fi
 
 if ! command -v jq &> /dev/null && ! command -v gojq &> /dev/null; then
     echo "Error: jq or gojq not found. Please install them to run the script."
     exit 1
 fi
 
-json_data=$(curl -s "https://invid-api.poketube.fun/api/v1/search?q=${search_query// /+}")
+json_data=$(curl -s "$invid_api_url/api/v1/search?q=${search_query// /+}")
 
 video_count=$(echo "$json_data" | jq -r '. | length')
 if [ $video_count -eq 0 ]; then
@@ -121,5 +121,7 @@ fi
 video_url=$(echo "$json_data" | jq -r ".[$(($selection - 1))].videoId")
 
 echo "Starting $player..."
+echo "please wait - this may take some time lol..."
 
-$player "https://poketube.fun/watch?v=$video_url"
+$player "$poke_instance/watch?v=$video_url"
+

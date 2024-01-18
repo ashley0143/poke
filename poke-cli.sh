@@ -24,7 +24,7 @@ function display_help {
 }
 
 function display_version {
-echo "poke-cli version 1.1
+echo "poke-cli version 1.2
 
 Play videos from your terminal!
 https://codeberg.org/ashley/poke
@@ -94,7 +94,7 @@ if ! command -v jq &> /dev/null && ! command -v gojq &> /dev/null; then
     exit 1
 fi
 
-json_data=$(curl -s "$invid_api_url/api/v1/search?q=${search_query// /+}")
+json_data=$(curl -s "$invid_api_url/api/v1/search?q=${search_query// /+}&type=video")
 
 video_count=$(echo "$json_data" | jq -r '. | length')
 if [ $video_count -eq 0 ]; then

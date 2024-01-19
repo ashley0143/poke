@@ -178,19 +178,7 @@ module.exports = function (app, config, renderTemplate) {
   });
 
   app.get("/watch", async (req, res) => {
-    const {
-      dm,
-      region,
-      hl,
-      v,
-      e,
-      r,
-      f,
-      m,
-      quality: q,
-      a,
-      universe,
-    } = req.query;
+    const { dm, region, hl, v, e, r, f, m, quality: q, a, universe, } = req.query;
 
     if (!v) {
       return res.redirect("/");
@@ -237,12 +225,12 @@ module.exports = function (app, config, renderTemplate) {
         const twitch = extractInfo(TWITCH_REGEX);
         const reddit = extractInfo(REDDIT_REGEX);
         const instagram = extractInfo(INSTAGRAM_REGEX);
-
+        
+        var proxyurl = config.p_url;
         var vidurl = u.url;
         var isvidious = u.isInvidiousURL;
         var mediaproxy = config.media_proxy
-
-                
+        
         if (inv_vid?.genre === "Music") {
           var vidurl = u.losslessurl;
         }
@@ -275,7 +263,9 @@ module.exports = function (app, config, renderTemplate) {
 
         var uaos = req.useragent.os;
         const browser = req.useragent.browser;
-        const IsOldWindows = (uaos === "Windows 7" || uaos === "Windows 8") && browser === "Firefox";
+        const IsOldWindows =
+          (uaos === "Windows 7" || uaos === "Windows 8") &&
+          browser === "Firefox";
 
         if (uaos === "Windows XP" || uaos === "Windows Vista")
           res.redirect("/lite?v=" + req.query.v);
@@ -301,6 +291,7 @@ module.exports = function (app, config, renderTemplate) {
             twitter,
             k,
             dm,
+            proxyurl,
             media_proxy_url: mediaproxy,
             instagram,
             useragent: req.useragent,

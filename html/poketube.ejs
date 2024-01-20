@@ -1049,7 +1049,7 @@ display: block; !important;" autoplay controls>
 
                                                                         </label>
                                                                         
-                                                                                                                                                                                                                    <%  if (inv.comments) { %> 
+<%  if (inv.comments) { %> 
                 <input type="checkbox" class="hj" id="j" style="display:none">
                                                                         <label class="hj" for="j">
                                                                           <div class="fnt">
@@ -1247,7 +1247,9 @@ display: block; !important;" autoplay controls>
     
                                                     
  <% if (!video?.Channel.Name.endsWith(' - Topic')) { %> 
-    <% if (!inv_vid.title.endsWith('Audio)')) { %>                         
+    <% if (!inv_vid.title.endsWith('Audio)')) { %>            
+      <%  if (inv.comments) { %> 
+
       <div class="new-button button-lite" style=";margin-left: -4px;">
         <a title="See videos comments" style="color:var(--text-color);text-decoration: none" href="#comments-container">
                                         <div class="pill-button">
@@ -1258,7 +1260,8 @@ display: block; !important;" autoplay controls>
         </a>
                                                                             </div>
  <% }%>                     
-                                                                          <% }%>      
+<% }%>      
+    <% }%>      
 
  
 				</div>

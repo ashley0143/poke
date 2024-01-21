@@ -26,7 +26,7 @@ pub struct Parameters {
 async fn proxy(url: String) -> Result<Bytes, Error> {
     let (mut resp, mime) = fetch(&url).await?;
 
- if matches!(mime.type_(), mime::IMAGE | mime::VIDEO | mime::CSS | mime::TEXT_CSS | mime::TEXT_CSS_UTF8 | mime::FONT | mime::FONT_WOFF | mime::FONT_WOFF2 | mime::WOFF | mime::WOFF2) {
+    if matches!(mime.type_(), mime::IMAGE | mime::VIDEO) {
         let bytes = get_bytes(&mut resp).await?;
         Ok(bytes)
     } else {

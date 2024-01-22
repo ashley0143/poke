@@ -2074,12 +2074,7 @@ a {
        background:#3f3f3f !important;
   }
   
-
-.avatar > img {
-  border-radius:50%;
-  width: 50px;
-  height: 50px;
-}
+ 
 
 </style>
   
@@ -2424,7 +2419,7 @@ font-size: 13px;margin:0;padding:0;white-space: nowrap;
 ">
 
     
-         <div class="video-title" style="font-family: 'PokeTube Flex';margin-bottom: 8px;text-align:center;font-stretch: extra-expanded;font-weight: 1000;" ><%=inv_vid.title%></div>
+         <div class="video-title" style="font-family: 'PokeTube Flex';margin-bottom: -5px;text-align:center;font-stretch: extra-expanded;font-weight: 1000;" ><%=inv_vid.title%></div>
           
            <% if (inv_vid.genre === "Music") { %> 
              <span style="font-size: 13px;font-family: ubuntu;width:auto;text-align:center;"><i title="hq audio" class="fa-light fa-waveform-lines"></i>&nbsp;Lossless Audio </span>
@@ -2764,7 +2759,7 @@ More Epic options owo~
             <div class="desc">
                    <h5 style="display: flex;margin-top: 7px;padding-top: 10px;"><div class="thumb">
 				<a href="/channel?id=<%- x.authorId%>" class="avatar" style="width: 40px;height: 40px;">
-					<img loading="lazy" src="/avatars/<%= x.authorThumbnails[1].url.replace("https://yt3.ggpht.com/", "") %>">
+					<img style="width: 50px;height: 50px;" loading="lazy" src="<%- media_proxy_url %>/proxy?url=<%= x.authorThumbnails[1].url.replace("https://yt3.ggpht.com/", "https://iv.ggtyler.dev/ggpht/") %>">
                                </a>
             </div>
                                                           <%  if (!x.authorIsChannelOwner) { %> 
@@ -2874,11 +2869,11 @@ More Epic options owo~
  						<div class="video">
                     <% if (!optout) { %> 
 
-      <a  href="/watch?v=<%= x.id %>" class="thumbnail" style="background-image: url('/vi/<%= x.id %>/hqdefault.jpg?sqp=-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLBy_x4UUHLNDZtJtH0PXeQGoRFTgw');border-radius: 9.5px;border: 2px solid white;"  >								<span class="video-length"><%=x.duration %></span>
+      <a  href="/watch?v=<%= x.id %>" class="thumbnail" style="background-image: url('<%- media_proxy_url %>/proxy?url=https://iv.ggtyler.dev/vi/<%= x.id %>/hqdefault.jpg?sqp=-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLBy_x4UUHLNDZtJtH0PXeQGoRFTgw');border-radius: 9.5px;border: 2px solid white;"  >								<span class="video-length"><%=x.duration %></span>
                            <% } %>
    <% if (optout) { %> 
 
-      <a  href="/watch?v=<%= x.id %>&m=f" class="thumbnail" style="background-image: url('/vi/<%= x.id %>/hqdefault.jpg?sqp=-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLBy_x4UUHLNDZtJtH0PXeQGoRFTgw');border-radius: 9.5px;border: 2px solid white;"  >								<span class="video-length"><%=x.duration %></span>
+      <a  href="/watch?v=<%= x.id %>&m=f" class="thumbnail" style="background-image: url('<%- media_proxy_url %>/proxy?url=https://iv.ggtyler.dev/vi/<%= x.id %>/hqdefault.jpg?sqp=-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLBy_x4UUHLNDZtJtH0PXeQGoRFTgw');border-radius: 9.5px;border: 2px solid white;"  >								<span class="video-length"><%=x.duration %></span>
                            <% } %>
 							</a>
 							<div class="info">

@@ -1481,17 +1481,28 @@ document.getElementById('search').addEventListener('keyup', function () {
     }
   });
 });
+        var isPopupOpen = false;
 
- document.getElementById('popup-trigger').addEventListener('click', function (event) {
-            event.preventDefault();
-            document.getElementById('popup-container').style.display = 'block';
-            document.body.style.overflow = 'hidden';
-        });
+        function togglePopup() {
+            if (isPopupOpen) {
+                closePopup();
+            } else {
+                document.getElementById('popup-container').style.display = 'block';
+                document.body.style.overflow = 'hidden';
+            }
+            isPopupOpen = !isPopupOpen;
+        }
 
         function closePopup() {
             document.getElementById('popup-container').style.display = 'none';
             document.body.style.overflow = 'auto';
+            isPopupOpen = false;
         }
+
+        document.getElementById('popup-trigger').addEventListener('click', function (event) {
+            event.preventDefault();
+            togglePopup();
+        }); 
 // @license-end
 
      </script>

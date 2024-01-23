@@ -586,7 +586,7 @@ color:#ea9999 !important;
  
                                                                                       <% } %>
  
-    <div id="popup-container">
+    <div onclick="closePopup()" id="popup-container">
         <div id="close-btn" onclick="closePopup()">X</div>
    
                             <% if (cinv.descriptionHtml) { %>  
@@ -673,7 +673,7 @@ color:#ea9999 !important;
  
 <% try { %>
   <%- getFirstLine(cinv.description).slice(0, 60) %>
-  <a href="/channel?id=<%=ID%>&tab=about" id="popup-trigger">
+  <a href="/channel?id=<%=ID%>&tab=about&legacy=true" id="popup-trigger">
 <% } catch (error) { %>
   <!-- Handle the error here, if it occurs -->
   <p>Error: <%= error.message %></p>

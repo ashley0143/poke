@@ -377,6 +377,28 @@ text-transform:uppercase;
         .subs {
     margin: 0.6em;text-align: left;margin-left: 0px;margin-top: -1em;font-family: "PokeTube flex";font-weight: 1000;font-stretch: ultra-expanded;
   }
+        #popup-container {
+  display: none;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #111;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+            padding: 20px;
+            border-radius: 8px;
+            z-index: 1;
+  width: 45em;
+  height: 24em;
+        }
+        #close-btn {
+            cursor: pointer;
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 18px;
+            color: #555;
+        }
           .video-grid {
   display: flex;
   flex-wrap: wrap;
@@ -453,6 +475,8 @@ color:#ea9999 !important;
   .channel-info{
     text-align:center;
   }
+  
+  
 .sticky-top {
 	 position: sticky;
 	 top: 0px;
@@ -561,6 +585,16 @@ color:#ea9999 !important;
 	   
  
                                                                                       <% } %>
+ 
+    <div id="popup-container">
+        <div id="close-btn" onclick="closePopup()">X</div>
+   
+                            <% if (cinv.descriptionHtml) { %>  
+
+
+ <p style="color:#fff;margin-left: 10px;font-weight: bold;"><%-cinv.descriptionHtml%></p>
+     </div>                                                                                     <% } %>
+
 
 	   
                          <% if (isMobile) { %>  
@@ -639,7 +673,7 @@ color:#ea9999 !important;
  
 <% try { %>
   <%- getFirstLine(cinv.description).slice(0, 60) %>
-  <a href="/channel?id=<%= ID %>&tab=about">
+  <a href="/channel?id=<%=ID%>&tab=about" id="popup-trigger">
 <% } catch (error) { %>
   <!-- Handle the error here, if it occurs -->
   <p>Error: <%= error.message %></p>
@@ -1445,7 +1479,17 @@ document.getElementById('search').addEventListener('keyup', function () {
     }
   });
 });
-   
+
+ document.getElementById('popup-trigger').addEventListener('click', function (event) {
+            event.preventDefault();
+            document.getElementById('popup-container').style.display = 'block';
+            document.body.style.overflow = 'hidden';
+        });
+
+        function closePopup() {
+            document.getElementById('popup-container').style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
 // @license-end
 
      </script>

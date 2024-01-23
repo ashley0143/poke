@@ -587,7 +587,8 @@ color:#ea9999 !important;
 	   
  
                                                                                       <% } %>
- 
+           <% if (!isMobile) { %>  
+
     <div onclick="closePopup()" id="popup-container">
         <div id="close-btn" onclick="closePopup()">X</div>
    
@@ -595,7 +596,10 @@ color:#ea9999 !important;
 
 
  <p style="color:#fff;margin-left: 10px;font-weight: bold;"><%-cinv.descriptionHtml%></p>
-     </div>                                                                                     <% } %>
+     </div>
+      
+      <% } %>
+      <% } %>
 
 
 	   
@@ -674,7 +678,7 @@ color:#ea9999 !important;
 <p style="padding:0;font-weight:bold;max-inline-size: 37em;display: -webkit-box;-webkit-line-clamp: 3;-webkit-box-orient: vertical;"> 
  
 <% try { %>
-  <%- getFirstLine(cinv.description).slice(0, 60) %>
+  <%- getFirstLine(cinv.description).slice(0, 60) || "More from this channel (soon)"%>
   <a href="/channel?id=<%=ID%>&tab=about&legacy=true" id="popup-trigger">
 <% } catch (error) { %>
   <!-- Handle the error here, if it occurs -->

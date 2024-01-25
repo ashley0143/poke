@@ -1130,10 +1130,9 @@ display: block; !important;" autoplay controls>
 					<img loading="lazy" src="/avatars/<%= k.Video.Channel.Avatar[1].$t.replace("https://yt3.ggpht.com/", "") %>" %>">
 				</a>
 				<div class="name" >
-<div style="display: flex;flex-direction: row;max-width: 94px;">
+<div style="display: flex;flex-direction: row;max-width: 119px;">
 						<a title="<%=k.Video.Channel.Name%> " class="video-info-pill-channelname">  <%=k.Video.Channel.Name%> 
-
-              </a>   
+               </a>   
                                        <% if (inv_vid?.authorVerified) { %> 
                    <div>
 <a href="https://support.google.com/youtube/answer/3046484?hl=en">
@@ -1249,8 +1248,8 @@ display: block; !important;" autoplay controls>
         <a title="See videos comments" style="color:var(--text-color);text-decoration: none" href="#comments-container">
                                         <div class="pill-button">
 
-               <i class="fa-light fa-comments"></i>
-              <%- convert(inv.commentCount) %> Comments
+               <i class="fa-light fa-message-lines"></i>
+              <%- inv.commentCount.toLocaleString() %>
                                                       </div>       
         </a>
                                                                             </div>
@@ -1916,7 +1915,7 @@ window.addEventListener("unload", cleanup)
 <!-- BUNDLE -->
 <!-- BUNDLE -->
 <!-- BUNDLE -->
-<!-- BUNDLE --><script src="/static/app.bundle.js?version=09.01.2024&bundledate=090124_2211" > </script><!-- BUNDLE -->
+<!-- BUNDLE --><script src="/static/app.bundle.js?version=25.01.2024&bundledate=250124_1120" > </script><!-- BUNDLE -->
 <!-- BUNDLE -->
 <!-- BUNDLE -->
 <!-- BUNDLE -->

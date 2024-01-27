@@ -36,8 +36,7 @@
     "activitypub-express": "^4.4.1"
   },
   "engines": {
-    "node": "16.x",
-    "bun": "Please use NPM or Yarn instead" 
+    "node": "16.x"
   },
   "repository": {
     "url": "https://codeberg.org/Ashley/poketube"

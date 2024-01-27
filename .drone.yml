@@ -15,4 +15,4 @@ steps:
       from_secret: QUAY_PASSWORD
   commands:
     - npm i
-    - docker login --username $QUAY_USERNAME --password-stdin $QUAY_PASSWORD
+    - echo $QUAY_PASSWORD | docker login --username $QUAY_USERNAME --password-stdin

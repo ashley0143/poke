@@ -1,0 +1,19 @@
+kind: pipeline
+type: exec
+name: Build and Push Docker Image (Quay)
+
+platform:
+  os: linux
+  arch: amd64
+
+steps:
+- name: Build
+  environment:
+    QUAY_USERNAME:
+      from_secret: QUAY_USERNAME
+    QUAY_PASSWORD:
+      from_secret: QUAY_PASSWORD
+  commands:
+    - echo $QUAY_PASSWORD | docker login quay.io --username $QUAY_USERNAME --password-stdin
+    - docker build -t quay.io/sudovanilla/poketube .
+    - docker push quay.io/sudovanilla/poketube

@@ -14,7 +14,6 @@ steps:
     QUAY_PASSWORD:
       from_secret: QUAY_PASSWORD
   commands:
-    - npm i
     - echo $QUAY_PASSWORD | docker login quay.io --username $QUAY_USERNAME --password-stdin
     - docker build -t quay.io/sudovanilla/poketube .
     - docker push quay.io/sudovanilla/poketube

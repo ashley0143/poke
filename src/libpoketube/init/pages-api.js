@@ -29,12 +29,12 @@ function getJson(str) {
 const pkg = require("../../../package.json");
 const cnf = require("../../../config.json");
 
-const verfull = "v23.1311-JeSsIcA-MAJOR-stable-dev-nonLTS-git-MTcwMDI5ODc4OQ==";
-const versmol = "v23.1311-JeSsIcA"
+const verfull = "v24.2801-JeSsIcA-MAJOR-stable-dev-nonLTS-git-MTcwNjQzMTc0OQ==";
+const versmol = "v24.2801-JeSsIcA"
 const branch = "dev/master";
 const codename = "jessica";
-const versionnumber = "272";
-const relaseunixdate = "MTcwMDI5ODc4OQ=="
+const versionnumber = "273";
+const relaseunixdate = "MTcwNjQzMTc0OQ=="
 const updatequote = "Empty your cup so that it may be filled; become devoid to gain totality. - Bruce Lee"
 
 

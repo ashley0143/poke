@@ -139,6 +139,10 @@ module.exports = function (app, config, renderTemplate) {
 
   const cssDir = "./css/";
 
+  app.get("/favicon.ico", function (req, res) {
+    res.sendFile("favicon.ico", { root: cssDir });
+  });
+
   app.get("/css/:id", (req, res) => {
     const filePath = path.join(cssDir, req.params.id);
     if (!fs.existsSync(filePath)) {
@@ -207,7 +211,7 @@ module.exports = function (app, config, renderTemplate) {
 
         const js = fs.readFileSync(filePath, "utf8");
         const minimizedJs = require("uglify-js").minify(js).code;
-
+          
         res.header("Content-Type", "text/javascript");
         res.send(
           "// @license magnet:?xt=urn:btih:1f739d935676111cfff4b4693e3816e664797050&dn=gpl-3.0.txt GPL-3.0-or-later" +

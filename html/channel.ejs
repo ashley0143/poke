@@ -31,6 +31,7 @@
     <link rel="alternate" type="application/rss+xml" href="/feeds/videos.xml?channel_id=<%=ID%>">
     <meta content="<%=j.Channel?.Metadata.Name%> - PokeTube" property=og:title>
     <meta content="<%- cinv.description %>" property=twitter:description>
+    <meta name="darkreader-lock"> <!-- tells dark reader that the site has a dark theme and to turn itself off -->
     <% if (j.Channel?.Metadata.Banners.Thumbnail) { %>
     <meta content="<%=j.Channel?.Metadata?.Banners.Thumbnail[2].$t%>" property=og:image>
                    <% } %>

@@ -47,10 +47,11 @@
 👍 <%=convert(engagement.likes)%> | 👎 <%=convert(engagement.dislikes)%> | 📈 <%=convert(engagement.viewCount)%> Views 🗓️ <%= date %>" property=twitter:description>
 <meta content="https://i.ytimg.com/vi/<%=inv_vid.videoId%>/maxresdefault.jpg" property=og:image>
 <meta content=summary_large_image name=twitter:card>
-<link rel="manifest" href="/manifest.json">
 <link href="https://poketube.fun/watch?v=<%=inv_vid.videoId%>" itemprop=url>
  <% } %> <!-- closes the } -->
+<meta name="darkreader-lock"> <!-- tells dark reader that the site has a dark theme and to turn itself off -->
 <link href="/css/yt-ukraine.svg?v=3" rel=icon>
+<link rel="manifest" href="/manifest.json">
 <link href=/css/snow.css rel=stylesheet> 
 <title> <%=inv_vid.title%> | PokeTube </title>  
 <style>
@@ -2026,7 +2027,8 @@ fetch(statsurl + "?browser=" + encodedBrowserName)
  <% } %> <!-- close the } -->
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <link href=/css/yt-ukraine.svg?v=6 rel=icon>
-<title> <%=inv_vid.title%> | PokeTube Mobile</title>
+<title> <%=inv_vid.title%> | Mobile</title>
+<meta name="darkreader-lock"> <!-- tells dark reader that the site has a dark theme and to turn itself off -->
  <link href="/css/mobile.css?v=2" rel=stylesheet>
  <link href="/css/app.main.css" rel=stylesheet>
     <link href=<%- proxyurl %>/https://unpkg.com/ionicons@4.5.10-0/dist/css/ionicons.css rel=stylesheet>

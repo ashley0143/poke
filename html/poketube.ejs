@@ -34,6 +34,7 @@
 <html class="poketube_desktop_player js event" style="background: #000000;" invidproxy="<%=u%>" universe="2" vid_id="<%=inv_vid.videoId%>" t="<%=btoa(Date.now())%>" version="browser_web_<%=Date.now()%>">
   <head>
   
+
     <% if (e === false) { %>  
     <!-- MetaTags disabled by user-->
  <% } %>
@@ -54,9 +55,7 @@
 <link rel="manifest" href="/manifest.json">
 <link href=/css/snow.css rel=stylesheet> 
 <title> <%=inv_vid.title%> | PokeTube </title>  
-<style>
-  
-     
+<style>     
   .comments-area {
   background: #f1f9ff;
   padding: 50px 30px;
@@ -385,7 +384,15 @@ a[data-onclick="jump_to_time"] {
   <link href="/css/watch-util.css" rel=stylesheet>
   <link href="/css/watch-navbar.css" rel=stylesheet>
   <link href="/css/poketube.css?v=9834" rel=stylesheet>
- 
+
+<% if (k.Video.Channel.Name == "7clouds") { %> 
+<style>
+ @font-face {
+  font-family: 'Edo SZ';
+  src: url('<%- proxyurl %>/https://cdn.glitch.global/d68d17bb-f2c0-4bc3-993f-50902734f652/edosz.ttf?v=1706644280493') format('truetype');
+}
+</style>
+                                            		 	               <% } %> 
   <!-- ICONS -->
  <link href="<%- proxyurl %>/https://site-assets.fontawesome.com/releases/v6.1.1/css/all.css" rel=stylesheet>
  <link href="<%- proxyurl %>/https://unpkg.com/ionicons@4.5.10-0/dist/css/ionicons.css" rel=stylesheet>
@@ -443,7 +450,7 @@ text-shadow: 1px 1px #000,1px 1px 0.1px #000;!important;
 </style>
                                             		 	               <% } %>   
 
-
+     
                                                                    
             <% if(IsOldWindows) { %>
               <style>
@@ -1104,8 +1111,13 @@ display: block; !important;" autoplay controls>
                                                             <br>
 <div class="video-info" >           
         	<div class="video-info-panel gradient">  
-            <div class="video-title t" style="font-family:Inter;font-weight:bold;line-break: auto;max-width: max-content;margin: 0;margin-bottom: 0;padding: 0;"
-                 
+            <% if (k.Video.Channel.Name == "7clouds") { %> 
+            <div class="video-title t" style="font-family: 'Edo SZ', sans-serif !important;font-weight:bold;line-break: auto;max-width: max-content;margin: 0;margin-bottom: 0;padding: 0;"
+                                                   		 	               <% } %> 
+<% if (k.Video.Channel.Name !== "7clouds") { %> 
+                          <div class="video-title t" style="font-family:inter;font-weight:bold;line-break: auto;max-width: max-content;margin: 0;margin-bottom: 0;padding: 0;"
+                                                   		 	               <% } %> 
+
                                 <% if (inv_vid?.title !== k.Video.Title) { %>
                  title="Non-Translated title : <%=inv_vid.title%>"
                <% } %> 
@@ -1778,54 +1790,55 @@ lazyElements.forEach(element => {
 
 </script>
      <script>
-const languageCode = localStorage.getItem("Language");
-const regionCode = localStorage.getItem("Region");
-const currentURL = location.href;
-const urlParams = new URLSearchParams(window.location.search);
+	const languageCode = localStorage.getItem("Language");
+	const regionCode = localStorage.getItem("Region");
+	const currentURL = location.href;
+	const urlParams = new URLSearchParams(window.location.search);
+	
+	if (!urlParams.has('hl') && !urlParams.has('region') && languageCode && regionCode) {
+	  location.href = currentURL + `&region=${regionCode}&hl=${languageCode}`;
+	}
+	       
+	let isMiddleButtonPressed = false;
+	
+	// Function to change video speed
+	function changeVideoSpeed() {
+	   if (isMiddleButtonPressed) {
+	    video.playbackRate = 2; // Set the video speed to 2x
+	  } else {
+	    video.playbackRate = 1; // Set the video speed to 1x
+	  }
+	}
+	
+	// Event listener for mouse button press
+	document.addEventListener('mousedown', function (event) {
+	  if (event.button === 1) {
+	    isMiddleButtonPressed = true;
+	    changeVideoSpeed();
+	  }
+	});
+	
+	// Event listener for mouse button release
+	document.addEventListener('mouseup', function (event) {
+	  if (event.button === 1) {
+	    isMiddleButtonPressed = false;
+	    changeVideoSpeed();
+	  }
+	});
+	
+	var anchor = document.getElementById("sub");
+	
+	// Check if there's a user ID in localStorage
+	var userID = localStorage.getItem("UserID");
+	
+	if (userID) {
+	    // If user ID exists in localStorage, set the href attribute
+	    anchor.href = `/api/set-channel-subs?ID=${userID}&channelName=<%=k.Video.Channel.Name%>&avatar=<%- media_proxy_url %>/proxy?url=<%= k.Video.Channel.Avatar[1].$t %>&channelID=<%=video?.Channel.id || k.Video.Channel.id %>`;
+	} else {
+	     anchor.href = "/account-create"
+	 } 
+	 </script>
 
-if (!urlParams.has('hl') && !urlParams.has('region') && languageCode && regionCode) {
-  location.href = currentURL + `&region=${regionCode}&hl=${languageCode}`;
-}
-       
-let isMiddleButtonPressed = false;
-
-// Function to change video speed
-function changeVideoSpeed() {
-   if (isMiddleButtonPressed) {
-    video.playbackRate = 2; // Set the video speed to 2x
-  } else {
-    video.playbackRate = 1; // Set the video speed to 1x
-  }
-}
-
-// Event listener for mouse button press
-document.addEventListener('mousedown', function (event) {
-  if (event.button === 1) {
-    isMiddleButtonPressed = true;
-    changeVideoSpeed();
-  }
-});
-
-// Event listener for mouse button release
-document.addEventListener('mouseup', function (event) {
-  if (event.button === 1) {
-    isMiddleButtonPressed = false;
-    changeVideoSpeed();
-  }
-});
-
-var anchor = document.getElementById("sub");
-
-// Check if there's a user ID in localStorage
-var userID = localStorage.getItem("UserID");
-
-if (userID) {
-    // If user ID exists in localStorage, set the href attribute
-    anchor.href = `/api/set-channel-subs?ID=${userID}&channelName=<%=k.Video.Channel.Name%>&avatar=<%- media_proxy_url %>/proxy?url=<%= k.Video.Channel.Avatar[1].$t %>&channelID=<%=video?.Channel.id || k.Video.Channel.id %>`;
-} else {
-     anchor.href = "/account-create"
- } 
- </script>
  
 <!-- comments json - not used rn but will in the future! -->   
 <script id="comments" type="application/json"><%- JSON.stringify(inv.comments) %></script>
@@ -2027,8 +2040,7 @@ fetch(statsurl + "?browser=" + encodedBrowserName)
  <% } %> <!-- close the } -->
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <link href=/css/yt-ukraine.svg?v=6 rel=icon>
-<title> <%=inv_vid.title%> | Mobile</title>
-<meta name="darkreader-lock"> <!-- tells dark reader that the site has a dark theme and to turn itself off -->
+<title> <%=inv_vid.title%> | PokeTube Mobile</title>
  <link href="/css/mobile.css?v=2" rel=stylesheet>
  <link href="/css/app.main.css" rel=stylesheet>
     <link href=<%- proxyurl %>/https://unpkg.com/ionicons@4.5.10-0/dist/css/ionicons.css rel=stylesheet>

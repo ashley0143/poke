@@ -96,6 +96,11 @@ class PokeTubeCore {
     const vid = await this.getJson(videoInfo);
     const { json, video } = videoData;
 
+    const channel_uploads = await fetch(
+      `${this.config.invapi}/channels/${vid.authorId}?hl=${contentlang}&region=${contentregion}`
+    );
+    const p = this.getJson(await channel_uploads.text());
+
     if (!vid) {
       console.log(
         `Sorry nya, we couldn't find any information about that video qwq`
@@ -115,6 +120,7 @@ class PokeTubeCore {
             video,
             vid,
             comments,
+            channel_uploads:p,
             engagement: fe.engagement,
             wiki: "",
             desc: "",

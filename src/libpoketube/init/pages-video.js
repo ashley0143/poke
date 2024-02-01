@@ -196,10 +196,11 @@ module.exports = function (app, config, renderTemplate) {
 
     const secure = ["poketube.fun"].includes(req.hostname);
     const verify = req.hostname === "poketube.sudovanilla.com";
-
+    
     core.video(v, contentlang, contentregion).then((data) => {
       try {
         const k = data?.video;
+        const channel_uploads = data?.channel_uploads
         const json = data?.json;
         const engagement = data?.engagement;
         const inv_comments = data?.comments || "Disabled";
@@ -210,6 +211,7 @@ module.exports = function (app, config, renderTemplate) {
         if (desc !== "[object Object]") {
           d = desc.toString().replace(/\n/g, " <br> ");
         }
+        
 
         const descriptionString = String(inv_vid?.description);
 
@@ -226,10 +228,12 @@ module.exports = function (app, config, renderTemplate) {
         const reddit = extractInfo(REDDIT_REGEX);
         const instagram = extractInfo(INSTAGRAM_REGEX);
         
+        
         var proxyurl = config.p_url;
         var vidurl = u.url;
         var isvidious = u.isInvidiousURL;
         var mediaproxy = config.media_proxy
+        
         
         if (inv_vid?.genre === "Music") {
           var vidurl = u.losslessurl;
@@ -298,6 +302,7 @@ module.exports = function (app, config, renderTemplate) {
             turntomins,
             twitch,
             reddit,
+            channel_uploads,
             secure,
             process,
             isSchoolProxy,

@@ -165,7 +165,7 @@ class PokeTubeCore {
 // Create an instance of PokeTubeCore with the provided config
 const pokeTubeApiCore = new PokeTubeCore({
   tubeApi: "https://inner-api.poketube.fun/api/",
-  invapi: "https://invid-api.poketube.fun/api/v1",
+  invapi: "https://iv.ggtyler.dev/api/v1",
   dislikes: "https://returnyoutubedislikeapi.com/votes?videoId=",
   t_url: "https://t.poketube.fun/",
 });

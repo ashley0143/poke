@@ -235,10 +235,8 @@ module.exports = function (app, config, renderTemplate) {
           var vidurl = u.losslessurl;
         }
 
-        if (!inv_vid?.allowedRegions?.includes("US")) {
-          var vidurl = "https://eu-proxy.poketube.fun";
-          var isvidious = true;
-        }
+        var vidurl = "https://eu-proxy.poketube.fun";
+        var isvidious = true;
 
         if (req.useragent.source.includes("Pardus")) {
           var vidurl = "https://tube-proxy.ashley0143.xyz";
@@ -297,6 +295,7 @@ module.exports = function (app, config, renderTemplate) {
             useragent: req.useragent,
             verify,
             discord,
+            turntomins,
             twitch,
             reddit,
             secure,

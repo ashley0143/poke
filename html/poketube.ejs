@@ -1579,8 +1579,10 @@ display: block; !important;" autoplay controls>
   </a>
   </div>
 
-   
+            <% if (inv_vid.recommendedVideos.length > 1) { %> 
+
   <div class="tags rec" >
+
         <div class="tag" style="background:var(--chip-background-hover)">
 Recommended Videos
     </div>
@@ -1589,18 +1591,27 @@ Recommended Videos
                Visit <%=k.Video.Channel.Name%>'s channel
                </a>
                
-  </div>
+
+  </div>               
+    
+    <% } %>
+
 
     
                               <% if (!r) { %> 
  
+            <% if (inv_vid.recommendedVideos.length > 1) { %> 
 
  <div>
    
 </div>   
-                                
+                 <% } %>
+                   
                                 
 <% if (!f) { %>
+  
+<% if (inv_vid.recommendedVideos) { %>
+
 <% inv_vid?.recommendedVideos.forEach(x => { %>
     <div class="fade-in video">
         <% if (!optout) { %><a class="thumbnail" href="/watch?v=<%= x.videoId %>" style="background-image:url(<%- media_proxy_url %>/proxy?url=https://vid.puffyan.us/vi/<%= x.videoId %>/hqdefault.jpg?sqp=-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLBy_x4UUHLNDZtJtH0PXeQGoRFTgw);border-radius:9.5px" alt="<%= x.Title %>"><span class="video-length"><%- turntomins(x.lengthSeconds) || "LIVE"%></span><% } %><% if (optout) { %><a class="thumbnail"href="/watch?v=<%= x.videoId %>&m=f"style="background-image:url(<%- media_proxy_url %>/proxy?url=https://vid.puffyan.us/vi/<%= x.videoId %>/hqdefault.jpg?sqp=-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLBy_x4UUHLNDZtJtH0PXeQGoRFTgw);border-radius:9.5px"alt="<%= x.Title %>"><span class="video-length"><%- x.duration || "LIVE"%></span><% } %></a>
@@ -1628,8 +1639,41 @@ Recommended Videos
             </div>
     </div>
     <% }) %>
+      
+      
         <% } %>
-          
+                  <% } %>
+
+            <% if (inv_vid.recommendedVideos.length < 1) { %> 
+ <% channel_uploads.latestVideos.forEach(x => { %>
+    <div class="fade-in video">
+        <% if (!optout) { %><a class="thumbnail" href="/watch?v=<%= x.videoId %>" style="background-image:url(<%- media_proxy_url %>/proxy?url=https://vid.puffyan.us/vi/<%= x.videoId %>/hqdefault.jpg?sqp=-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLBy_x4UUHLNDZtJtH0PXeQGoRFTgw);border-radius:9.5px" alt="<%= x.Title %>"><span class="video-length"><%- turntomins(x.lengthSeconds) || "LIVE"%></span><% } %><% if (optout) { %><a class="thumbnail"href="/watch?v=<%= x.videoId %>&m=f"style="background-image:url(<%- media_proxy_url %>/proxy?url=https://vid.puffyan.us/vi/<%= x.videoId %>/hqdefault.jpg?sqp=-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLBy_x4UUHLNDZtJtH0PXeQGoRFTgw);border-radius:9.5px"alt="<%= x.Title %>"><span class="video-length"><%- x.duration || "LIVE"%></span><% } %></a>
+            <div class="info">
+                <% if (!optout) { %>
+                    <a class="max-lines-2 title" href="/watch?v=<%= x.videoId %>" style="font-stretch:ultra-expanded;font-weight:850" title="<%= x.Title %>">
+                        <%= x.title %>
+                    </a>
+                    <% } %>
+                        <% if (optout) { %>
+                            <a class="max-lines-2 title" href="/watch?v=<%= x.videoId %>&m=f" style="font-stretch:100%;font-weight:800" title="<%= x.Title %>">
+                              <%= x.title %>
+                            </a>
+                            <% } %>
+                                <div>
+                                    <a class="max-lines-2" href="/channel?id=<%= x.authorId %>@youtube.com" style="-webkit-line-clamp:1;width:12em;word-wrap:break-word">
+                                        <%=x.author %>
+                                    </a>
+                                    <div class="video-views">
+                                          
+                                                <%= convert(x.viewCount) %> views
+ 
+                                    </div>
+                                </div>
+            </div>
+    </div>
+    <% }) %>
+              <% } %>
+
   <% if (f) { %> 
 
      <% tj.forEach(x => { %>       
@@ -1730,7 +1774,7 @@ Recommended Videos
 }
 
             
-      <% if (inv_vid?.recommendedVideos) { %> 
+      <% if (Array.isArray(inv_vid.recommendedVideos) && inv_vid.recommendedVideos.length > 1) { %> 
         
 let checkbox = document.getElementById("continue");
 
@@ -1738,10 +1782,10 @@ checkbox.addEventListener('change', function(e) {
   if (checkbox.checked) {
     console.log("[AUTOPLAY] enabled");
     document.getElementById('video').addEventListener('ended', autoplaynextvideo, false);
-    let url = window.location.hostname + "/watch?v=<%- inv_vid?.recommendedVideos[0].videoId %>";
+    let url = window.location.hostname + "/watch?v=<%- inv_vid?.recommendedVideos[0]?.videoId %>";
    
     function autoplaynextvideo(e) {
-      location.href = "/watch?v=<%- inv_vid?.recommendedVideos[0].videoId%>&autoplay=<%-btoa("1f739d935676111cfff4b4693e3816e664797050" + inv_vid?.recommendedVideos[0].videoId) %>";
+      location.href = "/watch?v=<%- inv_vid?.recommendedVideos[0]?.videoId%>&autoplay=<%-btoa("1f739d935676111cfff4b4693e3816e664797050" + inv_vid?.recommendedVideos[0].videoId) %>";
     }
   }
   if (/[?&]autoplay=/.test(location.search)) {

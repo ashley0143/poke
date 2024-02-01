@@ -3,7 +3,7 @@
 
     This Source Code Form is subject to the terms of the GNU General Public License:
 
-    Copyright (C) 2021-2023 POKETUBE (https://codeberg.org/Ashley/poketube)
+    Copyright (C) 2021-2024 POKETUBE (https://codeberg.org/Ashley/poketube)
     
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -557,34 +557,70 @@ background: none !important;
                                 </div>   
                                             
                               <% if (!f) { %> 
-     <% k.Video.Recommendations.Video.forEach(x => { %>       
- 						<div class="video" >
-                    <% if (!optout) { %> 
+    
+<% if (inv_vid.recommendedVideos) { %>
 
-      <a  href="/lite?v=<%= x.id %>" class="thumbnail" style="background-image: url('/vi/<%= x.id %>/hqdefault.jpg?sqp=-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLBy_x4UUHLNDZtJtH0PXeQGoRFTgw');border-radius: 9.5px;"  >								<span class="video-length"><%=x.duration || "LIVE" %></span>
-                           <% } %>
-   <% if (optout) { %> 
-
-      <a  href="/lite?v=<%= x.id %>&t=f" class="thumbnail" style="background-image: url('/vi/<%= x.id %>/hqdefault.jpg?sqp=-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLBy_x4UUHLNDZtJtH0PXeQGoRFTgw');border-radius: 9.5px;"  >								<span class="video-length"><%- x.duration || "LIVE"%></span>
-                           <% } %>
-							</a>
-							<div class="info">
-                
-      <% if (!optout) { %> 
-								<a href="/lite?v=<%= x.id %>" class="title max-lines-2" title="<%= x.Title %>" style="font-stretch: 100%;font-weight: 800;"><%= x.Title %></a>
-                   <% } %>
-   <% if (optout) { %> 
-								<a href="/lite?v=<%= x.id %>&t=f" class="title max-lines-2" title="<%= x.Title %>" style="font-stretch: 100%;font-weight: 800;"><%= x.Title %></a>
-                   <% } %>
-								<div>
-               <a class="max-lines-2" href="/channel?id=<%= x.Channel.id %>" style="-webkit-line-clamp: 1;width: 12em;word-wrap: break-word;"><%=x.Channel.Name %></a>
-									<div class="video-views">  <%= x.uploadedAt.replace("Streamed", "Live") %> • <%= convert(x.views) %> views </div>
-								</div>
-							</div>
-						</div>
- 
-       <% }) %>   
+<% inv_vid?.recommendedVideos.forEach(x => { %>
+    <div class="fade-in video">
+        <% if (!optout) { %><a class="thumbnail" href="/watch?v=<%= x.videoId %>" style="background-image:url(<%- media_proxy_url %>/proxy?url=https://vid.puffyan.us/vi/<%= x.videoId %>/hqdefault.jpg?sqp=-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLBy_x4UUHLNDZtJtH0PXeQGoRFTgw);border-radius:9.5px" alt="<%= x.Title %>"><span class="video-length"><%- turntomins(x.lengthSeconds) || "LIVE"%></span><% } %><% if (optout) { %><a class="thumbnail"href="/watch?v=<%= x.videoId %>&m=f"style="background-image:url(<%- media_proxy_url %>/proxy?url=https://vid.puffyan.us/vi/<%= x.videoId %>/hqdefault.jpg?sqp=-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLBy_x4UUHLNDZtJtH0PXeQGoRFTgw);border-radius:9.5px"alt="<%= x.Title %>"><span class="video-length"><%- x.duration || "LIVE"%></span><% } %></a>
+            <div class="info">
+                <% if (!optout) { %>
+                    <a class="max-lines-2 title" href="/watch?v=<%= x.videoId %>" style="font-stretch:ultra-expanded;font-weight:850" title="<%= x.Title %>">
+                        <%= x.title %>
+                    </a>
+                    <% } %>
+                        <% if (optout) { %>
+                            <a class="max-lines-2 title" href="/watch?v=<%= x.videoId %>&m=f" style="font-stretch:100%;font-weight:800" title="<%= x.Title %>">
+                              <%= x.title %>
+                            </a>
                             <% } %>
+                                <div>
+                                    <a class="max-lines-2" href="/channel?id=<%= x.authorId %>@youtube.com" style="-webkit-line-clamp:1;width:12em;word-wrap:break-word">
+                                        <%=x.author %>
+                                    </a>
+                                    <div class="video-views">
+                                          
+                                                <%= convert(x.viewCount) %> views
+ 
+                                    </div>
+                                </div>
+            </div>
+    </div>
+    <% }) %>
+      
+      
+        <% } %>
+                  <% } %>
+
+            <% if (inv_vid.recommendedVideos.length < 1) { %> 
+ <% channel_uploads.latestVideos.forEach(x => { %>
+    <div class="fade-in video">
+        <% if (!optout) { %><a class="thumbnail" href="/watch?v=<%= x.videoId %>" style="background-image:url(<%- media_proxy_url %>/proxy?url=https://vid.puffyan.us/vi/<%= x.videoId %>/hqdefault.jpg?sqp=-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLBy_x4UUHLNDZtJtH0PXeQGoRFTgw);border-radius:9.5px" alt="<%= x.Title %>"><span class="video-length"><%- turntomins(x.lengthSeconds) || "LIVE"%></span><% } %><% if (optout) { %><a class="thumbnail"href="/watch?v=<%= x.videoId %>&m=f"style="background-image:url(<%- media_proxy_url %>/proxy?url=https://vid.puffyan.us/vi/<%= x.videoId %>/hqdefault.jpg?sqp=-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLBy_x4UUHLNDZtJtH0PXeQGoRFTgw);border-radius:9.5px"alt="<%= x.Title %>"><span class="video-length"><%- x.duration || "LIVE"%></span><% } %></a>
+            <div class="info">
+                <% if (!optout) { %>
+                    <a class="max-lines-2 title" href="/watch?v=<%= x.videoId %>" style="font-stretch:ultra-expanded;font-weight:850" title="<%= x.Title %>">
+                        <%= x.title %>
+                    </a>
+                    <% } %>
+                        <% if (optout) { %>
+                            <a class="max-lines-2 title" href="/watch?v=<%= x.videoId %>&m=f" style="font-stretch:100%;font-weight:800" title="<%= x.Title %>">
+                              <%= x.title %>
+                            </a>
+                            <% } %>
+                                <div>
+                                    <a class="max-lines-2" href="/channel?id=<%= x.authorId %>@youtube.com" style="-webkit-line-clamp:1;width:12em;word-wrap:break-word">
+                                        <%=x.author %>
+                                    </a>
+                                    <div class="video-views">
+                                          
+                                                <%= convert(x.viewCount) %> views
+ 
+                                    </div>
+                                </div>
+            </div>
+    </div>
+    <% }) %>
+              <% } %>
   
                                                           <% } %>
 

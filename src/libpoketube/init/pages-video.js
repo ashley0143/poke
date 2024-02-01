@@ -340,8 +340,7 @@ module.exports = function (app, config, renderTemplate) {
     const { v, e, r, f, t, quality: q } = req.query;
 
     try {
-      const info = await modules.fetch("http://ip-api.com/json/");
-      const ip = await info.json();
+      var mediaproxy = config.media_proxy
 
       const {
         video: k,
@@ -361,11 +360,13 @@ module.exports = function (app, config, renderTemplate) {
       const u = await media_proxy(v);
       const d = desc.toString().replace(/\n/g, " <br> ");
       const comments = inv_comments || "Disabled";
-
+      const channel_uploads = data?.channel_uploads
+      
       const templateData = {
         color,
         color2,
         engagement,
+        channel_uploads,
         u: u.url,
         video: json,
         date: k.Video.uploadDate,
@@ -376,11 +377,12 @@ module.exports = function (app, config, renderTemplate) {
         lightOrDark,
         isMobile,
         tj,
+        media_proxy_url: mediaproxy,
         r,
         qua: q,
         isvidious: u.isInvidiousURL,
         inv: comments,
-        ip,
+        turntomins,
         convert,
         linkify,
         wiki,

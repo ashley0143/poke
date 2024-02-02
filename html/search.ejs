@@ -288,6 +288,16 @@ border:solid;
 	 transform: scale(1, 1);
 }                 
        
+.something-background-a {
+    background-image: url('<%- media_proxy_url %>/proxy?url=https://static.wikia.nocookie.net/omori/images/f/fc/Something_Bed_(2018_Demo).gif') !important;
+}
+.something-background-b {
+    background-image: url('<%- media_proxy_url %>/proxy?url=https://static.wikia.nocookie.net/omori/images/1/14/Hangman_%28Laptop%29.png') !important;
+}
+.something-background-c {
+    background-image: url('<%- media_proxy_url %>/proxy?url=https://static.wikia.nocookie.net/omori/images/6/67/Nanci_Before.png') !important;
+}
+
 .loading .spinner {
   display: inline-block;
   border: 5px solid rgba(255, 255, 255, 0.2);
@@ -617,22 +627,66 @@ font-weight: 1000;
                  <script src="/css/custom-css.js"> </script>
                               <script>    
                     // @license magnet:?xt=urn:btih:1f739d935676111cfff4b4693e3816e664797050&dn=gpl-3.0.txt GPL-3.0-or-later            
-                      if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.getRegistrations().then(function(registrations) {
-    for (let registration of registrations) {
-      registration.unregister();
-    }
-  });
-  if ('caches' in window) {
-  caches.keys().then(function(cacheNames) {
-    cacheNames.forEach(function(cacheName) {
-      caches.delete(cacheName);
-    });
-  });
-}
+                 if ('serviceWorker' in navigator) {
+                     navigator.serviceWorker.getRegistrations().then(function(registrations) {
+                         for (let registration of registrations) {
+                             registration.unregister();
+                         }
+                     });
+                     if ('caches' in window) {
+                         caches.keys().then(function(cacheNames) {
+                             cacheNames.forEach(function(cacheName) {
+                                 caches.delete(cacheName);
+                             });
+                         });
+                     }
 
-}
-                                // @license-end
+                 }
+
+                 document.addEventListener("DOMContentLoaded", function() {
+                     if (localStorage.getItem('liar.')) {
+                         var thumbnails = document.querySelectorAll('.thumbnail');
+
+                         function changeFavicon(newFaviconUrl) {
+                             var oldFavicon = document.querySelector('link[rel="icon"]');
+                             if (oldFavicon) {
+                                 oldFavicon.remove();
+                             }
+                             var link = document.createElement('link');
+                             link.rel = 'icon';
+                             link.href = newFaviconUrl;
+                             document.head.appendChild(link);
+                         }
+                         changeFavicon("<%- media_proxy_url %>/proxy?url=https://static.wikia.nocookie.net/omori/images/d/d8/Something_Float_%282018_Demo%29.gif")
+                         var textList = [
+                             "sunny... i love you",
+                             "SUNNY... I'm... sorry..."
+                         ];
+
+                         // Select four different text elements
+                         var textElements = document.querySelectorAll('.title');
+
+                         textElements.forEach(function(element, index) {
+                             element.textContent = textList[index % textList.length]; // Use modulo to cycle through textList
+                         });
+
+
+                         var backgroundClasses = ['something-background-a', 'something-background-b', 'something-background-c'];
+
+                         // Loop through each thumbnail element and assign a random background image class
+                         thumbnails.forEach(function(thumbnail) {
+                             var randomIndex = Math.floor(Math.random() * backgroundClasses.length);
+                             thumbnail.classList.add(backgroundClasses[randomIndex]);
+                         });
+
+                         document.title = "sunny..im..sorry"
+                         var audio = new Audio('https://p.poketube.fun/https://cdn.glitch.global/d68d17bb-f2c0-4bc3-993f-50902734f652/Lost_at_Sea.ogg?v=1706879048533');
+                         audio.loop = true;
+                         audio.autoplay = true;
+                     }
+                 });
+
+                 // @license-end
 </script>
 
                                     </body>

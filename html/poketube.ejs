@@ -1579,7 +1579,7 @@ display: block; !important;" autoplay controls>
   </a>
   </div>
 
-            <% if (inv_vid.recommendedVideos.length > 1) { %> 
+                               <% if (!f) { %> 
 
   <div class="tags rec" >
 
@@ -1587,15 +1587,30 @@ display: block; !important;" autoplay controls>
 Recommended Videos
     </div>
                
-             <a style="color:#fff" href="/channel?id=<%=video?.Channel.id || k.Video.Channel.id %>" class="tag">
-               Visit <%=k.Video.Channel.Name%>'s channel
+             <a style="color:#fff" href="/watch?v=<%= inv_vid.videoId %>&f=true" class="tag">
+              Uploaded by <%=k.Video.Channel.Name%>
                </a>
                
 
   </div>               
-    
-    <% } %>
+                     <% } %>
+                            <% if (f) { %> 
 
+  <div class="tags rec" >
+
+        <a style="color:#fff" class="tag"  href="/watch?v=<%= inv_vid.videoId %>">
+Recommended Videos
+    </a>
+               
+             <div style="background:var(--chip-background-hover)" class="tag">
+              Uploaded by <%=k.Video.Channel.Name%>
+               </div>
+               
+
+  </div>               
+                     <% } %>
+
+ 
 
     
                               <% if (!r) { %> 
@@ -1644,7 +1659,9 @@ Recommended Videos
         <% } %>
                   <% } %>
 
-            <% if (inv_vid.recommendedVideos.length < 1) { %> 
+ 
+
+  <% if (f) { %> 
  <% channel_uploads.latestVideos.forEach(x => { %>
     <div class="fade-in video">
         <% if (!optout) { %><a class="thumbnail" href="/watch?v=<%= x.videoId %>" style="background-image:url(<%- media_proxy_url %>/proxy?url=https://vid.puffyan.us/vi/<%= x.videoId %>/hqdefault.jpg?sqp=-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLBy_x4UUHLNDZtJtH0PXeQGoRFTgw);border-radius:9.5px" alt="<%= x.Title %>"><span class="video-length"><%- turntomins(x.lengthSeconds) || "LIVE"%></span><% } %><% if (optout) { %><a class="thumbnail"href="/watch?v=<%= x.videoId %>&m=f"style="background-image:url(<%- media_proxy_url %>/proxy?url=https://vid.puffyan.us/vi/<%= x.videoId %>/hqdefault.jpg?sqp=-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLBy_x4UUHLNDZtJtH0PXeQGoRFTgw);border-radius:9.5px"alt="<%= x.Title %>"><span class="video-length"><%- x.duration || "LIVE"%></span><% } %></a>
@@ -1671,38 +1688,7 @@ Recommended Videos
                                 </div>
             </div>
     </div>
-    <% }) %>
-              <% } %>
-
-  <% if (f) { %> 
-
-     <% tj.forEach(x => { %>       
- 						<div class="video">
-                    <% if (!optout) { %> 
-
-      <a  href="/watch?v=<%= x.id %>" class="thumbnail" style="background-image: url('<%- proxyurl %>/https://i.ytimg.com/vi/<%= x.id %>/hqdefault.jpg?sqp=-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLBy_x4UUHLNDZtJtH0PXeQGoRFTgw');border-radius: 9.5px;"  >								<span class="video-length"><%=x.duration %></span>
-                           <% } %>
-   <% if (optout) { %> 
-
-      <a  href="/watch?v=<%= x.id %>&m=f" class="thumbnail" style="background-image: url('<%- proxyurl %>/https://i.ytimg.com/vi/<%= x.id %>/hqdefault.jpg?sqp=-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLBy_x4UUHLNDZtJtH0PXeQGoRFTgw');border-radius: 9.5px;"  >								<span class="video-length"><%=x.duration %></span>
-                            <% } %>
-							</a>
-							<div class="info">
-       <% if (!optout) { %> 
-								<a href="/watch?v=<%= x.id %>" class="title max-lines-2" style="font-stretch: 100%;font-weight: 800;" title="<%= x.Title %>"><%= x.Title %></a>
-                   <% } %>
-   <% if (optout) { %> 
-								<a href="/watch?v=<%= x.id %>&m=f" class="title max-lines-2" title="<%= x.Title %>" style="font-stretch: 100%;font-weight: 800;"><%= x.Title %></a>
-                   <% } %>
-								<div>
-                                 <a class="max-lines-2" href="/channel?id=<%= video?.Channel?.Name || k.Video.Channel.Name %>" style="-webkit-line-clamp: 1;width: 12em;word-wrap: break-word;"><%= video?.Channel?.Name || k.Video.Channel.Name %></a>
-									<div class="video-views">  <%= x.uploadedAt %> • <%= convert(x.views) %> views </div>
-
-								</div>
-							</div>
-						</div>
- 
-       <% }) %>   
+    <% }) %>   
                             <% } %>
                                                           <% } %>
 

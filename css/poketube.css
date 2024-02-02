@@ -252,7 +252,8 @@ a.avatar {
 .recommended-list {
 	background-color: var(--div-prim-bg);
 	border-radius: 1.5em;
-	margin: 10px;
+  padding-right: 24px;
+  margin: 10px;
 	margin-top: 0;
 	margin-left: 0;
 	height: -moz-fit-content;
@@ -839,7 +840,6 @@ object-fit:none;
   font-stretch: expanded;
   overflow:hidden;
   font-family: var(--text-font-primary);
-  margin-left: auto;
   margin-right: auto;
   width: auto;
   max-width: 21em;

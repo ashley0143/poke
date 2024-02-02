@@ -252,7 +252,7 @@ a.avatar {
 .recommended-list {
 	background-color: var(--div-prim-bg);
 	border-radius: 1.5em;
-  padding-right: 24px;
+ 	/*  padding-right: 24px; */
   margin: 10px;
 	margin-top: 0;
 	margin-left: 0;
@@ -293,7 +293,6 @@ a.avatar {
   font-weight: 1000;
   font-stretch: ultra-expanded;
   overflow: hidden;
-  text-overflow: ellipsis;
   display: -webkit-box;
   -webkit-line-clamp: 3;
   line-clamp: 3;

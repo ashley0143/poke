@@ -27,6 +27,13 @@ const sha384 = modules.hash;
 const notice =
   "/* the code is Licensed in gpl-3.0-or-later. This program comes with ABSOLUTELY NO WARRANTY. This is free software, and you are welcome to redistribute it under certain conditions. See the GNU General Public License for more detailsYou should have received a copy of the GNU General Public Licensealong with this program.  If not, see <https://www.gnu.org/licenses/>. - add the param nomin to view source code. (eg poketube.fun/css/poketube.css?nomin=true) */";
 
+function getJson(str) {
+  try {
+    return JSON.parse(str);
+  } catch {
+    return null;
+  }
+}
 module.exports = function (app, config, renderTemplate) {
   var html_location = "./css/";
   var location_pwa = "./pwa/";
@@ -104,6 +111,23 @@ module.exports = function (app, config, renderTemplate) {
   app.get("/apps", function (req, res) {
     renderTemplate(res, req, "apps.ejs");
   });
+  app.get("/playlist", async function (req, res) {
+    const { fetch } = await import("undici");
+    if (!req.query.list) res.redirect("/");
+    if (req.useragent.isMobile) res.redirect("/");
+
+    const playlist = await fetch(
+      `https://invid-api.poketube.fun/api/v1/playlists/${req.query.list}?hl=en-us`
+    );
+
+    const p = getJson(await playlist.text());
+    var mediaproxy = config.media_proxy;
+
+    renderTemplate(res, req, "playlist.ejs", {
+      p,
+      mediaproxy,
+    });
+  });
 
   app.get("/license", function (req, res) {
     renderTemplate(res, req, "license.ejs");
@@ -156,7 +180,11 @@ module.exports = function (app, config, renderTemplate) {
       const minimizedCss = new CleanCSS().minify(css).styles;
       // Serve the minimized CSS file
       res.header("Content-Type", "text/css");
-      res.send(notice + " " + minimizedCss.replace("https://p.poketube.fun", config.p_url));
+      res.send(
+        notice +
+          " " +
+          minimizedCss.replace("https://p.poketube.fun", config.p_url)
+      );
     } else {
       // Serve the original file
       res.sendFile(req.params.id, { root: html_location });
@@ -211,7 +239,7 @@ module.exports = function (app, config, renderTemplate) {
 
         const js = fs.readFileSync(filePath, "utf8");
         const minimizedJs = require("uglify-js").minify(js).code;
-          
+
         res.header("Content-Type", "text/javascript");
         res.send(
           "// @license magnet:?xt=urn:btih:1f739d935676111cfff4b4693e3816e664797050&dn=gpl-3.0.txt GPL-3.0-or-later" +

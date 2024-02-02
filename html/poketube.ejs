@@ -29,14 +29,14 @@
 
 -->
 <!DOCTYPE html>
-<% if(secure) { %><!-- HOTSTNAME_IS_POKETUBE.FUN --><% } %><% if(!secure) { %><!-- HOTSTNAME_IS_NOT_POKETUBE.FUN --><% } %>
+<% if(secure) { %><!-- HOSTNAME_IS_POKETUBE.FUN --><% } %><% if(!secure) { %><!-- HOSTNAME_IS_NOT_POKETUBE.FUN --><% } %>
 
 <html class="poketube_desktop_player js event" style="background: #000000;" invidproxy="<%=u%>" universe="2" vid_id="<%=inv_vid.videoId%>" t="<%=btoa(Date.now())%>" version="browser_web_<%=Date.now()%>">
   <head>
   
 
     <% if (e === false) { %>  
-    <!-- MetaTags disabled by user-->
+    <!-- meta tags disabled by user -->
  <% } %>
   <% if (!e) { %>
 <meta content="<%=inv_vid.title%>" name=title>
@@ -49,7 +49,7 @@
 <meta content="https://i.ytimg.com/vi/<%=inv_vid.videoId%>/maxresdefault.jpg" property=og:image>
 <meta content=summary_large_image name=twitter:card>
 <link href="https://poketube.fun/watch?v=<%=inv_vid.videoId%>" itemprop=url>
- <% } %> <!-- closes the } -->
+<!-- closes the } --> <% } %> 
 <meta name="darkreader-lock"> <!-- tells dark reader that the site has a dark theme and to turn itself off -->
 <link href="/css/yt-ukraine.svg?v=3" rel=icon>
 <link rel="manifest" href="/manifest.json">
@@ -383,7 +383,7 @@ a[data-onclick="jump_to_time"] {
   <link href="/css/watch.main.css" rel=stylesheet>
   <link href="/css/watch-util.css" rel=stylesheet>
   <link href="/css/watch-navbar.css" rel=stylesheet>
-  <link href="/css/poketube.css?v=9834" rel=stylesheet>
+  <link href="/css/poketube.css?v=98934" rel=stylesheet>
 
 <% if (k.Video.Channel.Name == "7clouds") { %> 
 <style>
@@ -1642,7 +1642,7 @@ Recommended Videos
                             </a>
                             <% } %>
                                 <div>
-                                    <a class="max-lines-2" href="/channel?id=<%= x.authorId %>@youtube.com" style="-webkit-line-clamp:1;width:12em;word-wrap:break-word">
+                                    <a class="max-lines-2" href="/channel?id=<%= x.authorId %>@youtube.com" style="-webkit-line-clamp:1;width:173px;word-wrap:break-word">
                                         <%=x.author %>
                                     </a>
                                     <div class="video-views">

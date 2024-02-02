@@ -79,7 +79,7 @@ class PokeTubeCore {
     
     try {
     const [invComments, videoInfo, videoData] = await Promise.all([
-      fetch(`${this.config.invapi_alt}/comments/${v}?hl=${contentlang}&region=${contentregion}&h=${btoa(Date.now())}`).then((res) => res.text()),
+      fetch(`${this.config.invapi}/comments/${v}?hl=${contentlang}&region=${contentregion}&h=${btoa(Date.now())}`).then((res) => res.text()),
       fetch(`${this.config.invapi}/videos/${v}?hl=${contentlang}&region=${contentregion}&h=${btoa(Date.now())}`).then((res) => res.text()),
       curly
         .get(`${this.config.tubeApi}video?v=${v}`, {
@@ -171,8 +171,7 @@ class PokeTubeCore {
 // Create an instance of PokeTubeCore with the provided config
 const pokeTubeApiCore = new PokeTubeCore({
   tubeApi: "https://inner-api.poketube.fun/api/",
-  invapi: "https://iv.ggtyler.dev/api/v1",
-  invapi_alt: "https://invid-api.poketube.fun/api/v1",
+  invapi: "https://invid-api.poketube.fun/api/v1",
   dislikes: "https://returnyoutubedislikeapi.com/votes?videoId=",
   t_url: "https://t.poketube.fun/",
 });

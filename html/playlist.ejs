@@ -156,7 +156,13 @@ font-family:Ubuntu
 
 .playlist-video > .info > .title {
     border-radius:0em;
-    height: 1.9em;
+    max-height: 1.9em;
+}
+
+.playlist-info>.title {
+  font-family: "PokeTube flex";
+  font-stretch: ultra-expanded;
+  font-weight: 600;
 }
   </style>
  </head>
@@ -212,14 +218,14 @@ font-family:Ubuntu
            <%- x.index + 1 %>
        </a>
  				<a href="/watch?v=<%- x.videoId %>" class="thumbnail"
-				   style="background-image: url('<%- mediaproxy %>/proxy?url=https://vid.puffyan.us/vi/<%- x.videoId %>/hqdefault.jpg?sqp=-oaymwEjCNACELwBSFryq4qpAxUIARUAAAAAGAElAADIQj0AgKJDeAE=&amp;rs=AOn4CLBibY6d4Dg0K69NC-0b7NFsD7AH1w')">
+				   style="background-image: url('<%- mediaproxy %>/proxy?url=https://vid.puffyan.us/vi/<%- x.videoId %>/hqdefault.jpg?sqp=-oaymwEjCNACELwBSFryq4qpAxUIARUAAAAAGAElAADIQj0AgKJDeAE=&amp;rs=AOn4CLBibY6d4Dg0K69NC-0b7NFsD7AH1w');border-radius: 13px;border: 1px solid #ff0064">
  				</a>
 				<div class="info">
 					<a href="/watch?v=<%- x.videoId %>" class="title max-lines-2">
         <%- x.title %>
           </a>
 					<div>
-						<a href="/channel?id=<%- x.authorId %>"><%- x.author %></a>
+						<a href="/channel?id=<%- x.authorId %>" style="border-radius:0em"><%- x.author %></a>
 					</div>
 				</div>
 			</div>

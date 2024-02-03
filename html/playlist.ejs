@@ -164,6 +164,25 @@ font-family:Ubuntu
   font-stretch: ultra-expanded;
   font-weight: 600;
 }
+
+.playlist-info{
+  position: sticky
+}
+
+.playlist-info::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 14em;
+  height: 447px;
+  background-size: cover;
+  filter: blur(53px);
+  backdrop-filter: blur(157px);
+  z-index: -1;
+  background-image: url(<%- mediaproxy %>/proxy?url=<%- p.playlistThumbnail %>sqp=-oaymwEXCNACELwBSFryq4qpAwkIARUAAIhCGAE=&amp;rs=AOn4CLCLG7gzsIdtlp7ugZJH8YaAHX5bIw&amp;days_since_epoch=19755);
+  margin-left: 65px;
+}
   </style>
  </head>
  
@@ -197,7 +216,7 @@ font-family:Ubuntu
 <div class="playlist-info" style="max-height: 26em;border-radius: 1em;">
             <% if (!p.mixId) { %>  
 
-		<div class="thumbnail" style="background-image: url('<%- mediaproxy %>/proxy?url=<%- p.playlistThumbnail %>sqp=-oaymwEXCNACELwBSFryq4qpAwkIARUAAIhCGAE=&amp;rs=AOn4CLCLG7gzsIdtlp7ugZJH8YaAHX5bIw&amp;days_since_epoch=19755');border-radius: 13px;border: 1px solid #ff0064"">
+		<div class="thumbnail" style="background-image: url('<%- mediaproxy %>/proxy?url=<%- p.playlistThumbnail %>sqp=-oaymwEXCNACELwBSFryq4qpAwkIARUAAIhCGAE=&amp;rs=AOn4CLCLG7gzsIdtlp7ugZJH8YaAHX5bIw&amp;days_since_epoch=19755');border-radius: 13px;border: 1px solid #ff0064">
 		</div>	  <% } %>
 
 		<p class="title"><%- p.title %> </p>

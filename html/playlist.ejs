@@ -197,7 +197,7 @@ font-family:Ubuntu
 <div class="playlist-info" style="max-height: 26em;border-radius: 1em;">
             <% if (!p.mixId) { %>  
 
-		<div class="thumbnail" style="background-image: url('<%- mediaproxy %>/proxy?url=<%- p.playlistThumbnail %>sqp=-oaymwEXCNACELwBSFryq4qpAwkIARUAAIhCGAE=&amp;rs=AOn4CLCLG7gzsIdtlp7ugZJH8YaAHX5bIw&amp;days_since_epoch=19755')">
+		<div class="thumbnail" style="background-image: url('<%- mediaproxy %>/proxy?url=<%- p.playlistThumbnail %>sqp=-oaymwEXCNACELwBSFryq4qpAwkIARUAAIhCGAE=&amp;rs=AOn4CLCLG7gzsIdtlp7ugZJH8YaAHX5bIw&amp;days_since_epoch=19755');border-radius: 13px;border: 1px solid #ff0064"">
 		</div>	  <% } %>
 
 		<p class="title"><%- p.title %> </p>
@@ -218,7 +218,7 @@ font-family:Ubuntu
            <%- x.index + 1 %>
        </a>
  				<a href="/watch?v=<%- x.videoId %>" class="thumbnail"
-				   style="background-image: url('<%- mediaproxy %>/proxy?url=https://vid.puffyan.us/vi/<%- x.videoId %>/hqdefault.jpg?sqp=-oaymwEjCNACELwBSFryq4qpAxUIARUAAAAAGAElAADIQj0AgKJDeAE=&amp;rs=AOn4CLBibY6d4Dg0K69NC-0b7NFsD7AH1w');border-radius: 13px;border: 1px solid #ff0064">
+				   style="background-image: url('<%- mediaproxy %>/proxy?url=https://vid.puffyan.us/vi/<%- x.videoId %>/hqdefault.jpg?sqp=-oaymwEjCNACELwBSFryq4qpAxUIARUAAAAAGAElAADIQj0AgKJDeAE=&amp;rs=AOn4CLBibY6d4Dg0K69NC-0b7NFsD7AH1w');">
  				</a>
 				<div class="info">
 					<a href="/watch?v=<%- x.videoId %>" class="title max-lines-2">

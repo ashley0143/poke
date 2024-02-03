@@ -215,7 +215,7 @@ module.exports = function (app, config, renderTemplate) {
               ? fs.readFileSync(filePath, "utf-8")
               : "";
           })
-          .join("\n");
+          .join("\n" + "\n");
 
         const minimizedJs = require("uglify-js").minify(combinedContent).code;
 

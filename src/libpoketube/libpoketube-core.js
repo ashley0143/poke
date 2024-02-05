@@ -10,7 +10,6 @@ const { toJson } = require("xml2json");
 const { curly } = require("node-libcurl");
 const getdislikes = require("../libpoketube/libpoketube-dislikes.js");
 const getColors = require("get-image-colors");
-const wiki = require("wikipedia");
 
 /**
  * Class representing PokeTube's core functionality.
@@ -79,8 +78,8 @@ class PokeTubeCore {
     
     try {
     const [invComments, videoInfo, videoData] = await Promise.all([
-      fetch(`${this.config.invapi_alt}/comments/${v}?hl=${contentlang}&region=${contentregion}&h=${btoa(Date.now())}`).then((res) => res.text()),
-      fetch(`${this.config.invapi_alt}/videos/${v}?hl=${contentlang}&region=${contentregion}&h=${btoa(Date.now())}`).then((res) => res.text()),
+      fetch(`${this.config.invapi}/comments/${v}?hl=${contentlang}&region=${contentregion}&h=${btoa(Date.now())}`).then((res) => res.text()),
+      fetch(`${this.config.invapi}/videos/${v}?hl=${contentlang}&region=${contentregion}&h=${btoa(Date.now())}`).then((res) => res.text()),
       curly
         .get(`${this.config.tubeApi}video?v=${v}`, {
           httpHeader: Object.entries(headers).map(([k, v]) => `${k}: ${v}`),
@@ -97,7 +96,7 @@ class PokeTubeCore {
     const { json, video } = videoData;
 
     const channel_uploads = await fetch(
-      `${this.config.invapi_alt}/channels/${vid.authorId}?hl=${contentlang}&region=${contentregion}`
+      `${this.config.invapi}/channels/${vid.authorId}?hl=${contentlang}&region=${contentregion}`
     );
     const p = this.getJson(await channel_uploads.text());
 

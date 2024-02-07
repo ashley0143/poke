@@ -243,9 +243,9 @@ module.exports = function (app, config, renderTemplate) {
         var isvidious = true;
 
         if (req.useragent.source.includes("Pardus")) {
-          var vidurl = "https://tube-proxy.ashley0143.xyz";
+          var vidurl = "https://iv.ggtyler.dev";
           var mediaproxy = "https://media-proxy.ashley0143.xyz"
-          var isvidious = false;
+          var isvidious = true;
           var isSchoolProxy = true;
         }
         

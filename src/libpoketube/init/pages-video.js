@@ -246,7 +246,6 @@ module.exports = function (app, config, renderTemplate) {
           var vidurl = "https://iv.ggtyler.dev";
           var mediaproxy = "https://media-proxy.ashley0143.xyz"
           var isvidious = true;
-          var isSchoolProxy = true;
         }
         
         let badges = "";

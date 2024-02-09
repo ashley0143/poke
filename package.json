@@ -32,7 +32,7 @@
     "express-rate-limit": "^7.0.2",
     "toobusy-js": "^0.5.1",
     "quick.db": "^7.1.3",
-    "google-it": "^1.6.4",
+    "duckduckgo-search": "^1.0.7",
     "activitypub-express": "^4.4.1"
   },
   "engines": {

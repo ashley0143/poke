@@ -53,6 +53,7 @@ const ChannelTabs = {
   channels: "Y2hhbm5lbHM=",
   store: "c3RvcmU=",
   released: "cmVsZWFzZWQ=",
+  playlist:"cGxheWxpc3Rz"
 };
 
 module.exports = function (app, config, renderTemplate) {
@@ -89,6 +90,7 @@ module.exports = function (app, config, renderTemplate) {
     const tab = req.query.tab;
     const { fetch } = await import("undici");
 
+    const search = require("google-it");
     var media_proxy = config.media_proxy;
 
     if (req.useragent.source.includes("Pardus")) {
@@ -299,12 +301,16 @@ module.exports = function (app, config, renderTemplate) {
       const communityUrl = `${apiUrl}${atob(
         ChannelTabs.community
       )}/${ID}/?hl=en-US`;
-
+      const PlaylistUrl = `${apiUrl}${atob(
+        ChannelTabs.playlist
+      )}/${ID}/?hl=en-US`;
+      
       const channelINVUrl = `${apiUrl}${ID}/`;
 
-      var [tj, shorts, stream, c, cinv] = await Promise.all([
+      var [tj, shorts, playlist , stream, c, cinv] = await Promise.all([
         getChannelData(channelUrl),
         getChannelData(shortsUrl),
+        getChannelData(PlaylistUrl),
         getChannelData(streamUrl),
         getChannelData(communityUrl),
         getChannelData(channelINVUrl),
@@ -366,6 +372,7 @@ module.exports = function (app, config, renderTemplate) {
         getFirstLine,
         isMobile: req.useragent.isMobile,
         about,
+        playlist,
         subs:
           typeof subscribers === "string"
             ? subscribers.replace("subscribers", "")

@@ -139,6 +139,11 @@ function lightOrDark(color) {
   }
 }
 
+function isDntEnabled(req) {
+  const dntHeader = req.header('DNT');
+  return dntHeader && (dntHeader === '1' || dntHeader === 'true');
+}
+
 function IsInArray(array, id) {
   for (var i = 0; i < array.length; i++) {
     if (array[i].id === id) return true;
@@ -249,10 +254,13 @@ module.exports = function (app, config, renderTemplate) {
           var isSchoolProxy = "";
         }
         
+        // unused
         let badges = "";
         let comments = "";
         let nnn = "";
 
+        const dnt_val = isDntEnabled(req)
+        
         if (
           inv_vid?.error ===
             "The uploader has not made this video available in your country" ||
@@ -301,6 +309,7 @@ module.exports = function (app, config, renderTemplate) {
             discord,
             turntomins,
             twitch,
+            dnt_val,
             reddit,
             channel_uploads,
             secure,

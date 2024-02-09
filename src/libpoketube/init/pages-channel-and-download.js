@@ -89,7 +89,6 @@ module.exports = function (app, config, renderTemplate) {
     const tab = req.query.tab;
     const { fetch } = await import("undici");
 
-    const search = require("google-it");
     var media_proxy = config.media_proxy;
 
     if (req.useragent.source.includes("Pardus")) {

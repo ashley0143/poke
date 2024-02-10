@@ -53,7 +53,7 @@ const ChannelTabs = {
   channels: "Y2hhbm5lbHM=",
   store: "c3RvcmU=",
   released: "cmVsZWFzZWQ=",
-  playlist:"cGxheWxpc3Rz"
+  playlist: "cGxheWxpc3Rz",
 };
 
 module.exports = function (app, config, renderTemplate) {
@@ -167,14 +167,14 @@ module.exports = function (app, config, renderTemplate) {
   });
 
   app.get("/im-feeling-lucky", function (req, res) {
-    res.send("WIP")
+    res.send("WIP");
   });
 
   app.get("/web", async (req, res) => {
     const query = req.query.query;
     const tab = req.query.tab;
 
-    const search = require("duckduckgo-search");
+    const DDG = require("duck-duck-scrape");
 
     if (req.query.lucky === "true") {
       res.redirect("/im-feeling-lucky?query=" + query);
@@ -213,11 +213,11 @@ module.exports = function (app, config, renderTemplate) {
     let continuation = req.query.continuation || "";
 
     try {
-      const results = []; // Initialize an array to store search results
+      const searchResults = await DDG.search(query, {
+        safeSearch: DDG.SafeSearchType.OFF,
+      });
 
-      for await (const result of search.text(query)) {
-        results.push(result); // Push each result to the results array
-      }
+      const results = searchResults.results;
 
       renderTemplate(res, req, "search-web.ejs", {
         j: "",
@@ -303,10 +303,10 @@ module.exports = function (app, config, renderTemplate) {
       const PlaylistUrl = `${apiUrl}${atob(
         ChannelTabs.playlist
       )}/${ID}/?hl=en-US`;
-      
+
       const channelINVUrl = `${apiUrl}${ID}/`;
 
-      var [tj, shorts, playlist , stream, c, cinv] = await Promise.all([
+      var [tj, shorts, playlist, stream, c, cinv] = await Promise.all([
         getChannelData(channelUrl),
         getChannelData(shortsUrl),
         getChannelData(PlaylistUrl),

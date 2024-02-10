@@ -134,7 +134,19 @@ summary:hover{
   font-family: ubuntu, sans-serif;
 } 
    
-
+.search-result{
+      color: white;
+  width: 52em;
+  display: block;
+  white-space: -moz-pre-wrap !important;
+  white-space: -pre-wrap;
+  white-space: -o-pre-wrap;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  white-space: -webkit-pre-wrap;
+  word-break: break-all;
+  white-space: normal;
+    }
 .hide {
   display: none;
 }
@@ -445,17 +457,17 @@ Web
                                                                           <div class="video-list" >
 
      <% results.forEach(x => { %>
-                                                                       <div class="video" style="height: 6em;">
+                                                                       <div class="video" style="height: 7em;">
 
-        <a style="min-width: 81em;" href="<%= x.href %>"><%= x.title %></a><br>
-        <p style="color:gray;display: flex;flex-direction: column;width: 48em;margin-top: -8em;"><%= x.href %><br>
+        <a style="min-width: 81em;" href="<%= x.url %>"><%= x.title %></a><br>
+        <p style="color:gray;display: flex;flex-direction: column;width: 48em;margin-top: -8em;"><%= x.url %><br>
           <% if (!isMobile) { %> 
 
-         <span style="color:white;width: 48em;display: flex;"><%= x.body %></span>
+         <span class="search-result"><%- x.description %></span>
                      <% } %> 
  <% if (isMobile) { %> 
-
-         <span style="color:white;max-width: 15em;display: flex;"><%= x.body %></span>
+   
+         <span class="search-result"><%- x.description %></span>
                      <% } %> 
           </p>
               </div>

@@ -32,8 +32,8 @@
     "express-rate-limit": "^7.0.2",
     "toobusy-js": "^0.5.1",
     "quick.db": "^7.1.3",
-    "duckduckgo-search": "^1.0.7",
-    "activitypub-express": "^4.4.1"
+    "activitypub-express": "^4.4.1",
+    "duck-duck-scrape": "^2.2.5"
   },
   "engines": {
     "node": "16.x"
@@ -44,7 +44,7 @@
   "license": "GPL-3.0-or-later",
   "keywords": [
     "poketube",
-    "privite",
+    "private",
     "ytdl"
   ]
 }

@@ -171,6 +171,7 @@ module.exports = function (app, config, renderTemplate) {
   });
 
   app.get("/web", async (req, res) => {
+    /*
     const query = req.query.query;
     const tab = req.query.tab;
 
@@ -234,6 +235,9 @@ module.exports = function (app, config, renderTemplate) {
       console.error(`Error while searching for '${query}':`, error);
       res.redirect("/");
     }
+    */
+          res.redirect("/");
+
   });
 
   app.get("/channel/", async (req, res) => {

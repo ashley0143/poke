@@ -1992,11 +1992,14 @@ window.addEventListener("unload", cleanup)
 <!-- BUNDLE -->
  
 <% if(secure) { %>
+  <% if(!dnt_val) { %>
+
 <!-- matomo -->
 <noscript><p><img src="//data.poketube.fun/matomo.php?idsite=2&amp;rec=1" style="border:0;" alt="" /></p></noscript>
 <!-- End Matomo Code -->
 
-   <% } %>
+   <% } %>   <% } %>
+
 <style> img.emoji {height: 1em;width: 1em;margin: 0 .05em 0 .1em;vertical-align: -0.1em;}</style>
 <script>
   window.GLOBAL_ENV = {

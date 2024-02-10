@@ -171,11 +171,15 @@ module.exports = function (app, config, renderTemplate) {
   });
 
   app.get("/web", async (req, res) => {
-    /*
     const query = req.query.query;
     const tab = req.query.tab;
 
-    const DDG = require("duck-duck-scrape");
+    const { fetch } = await import("undici");
+
+    const search = await fetch(
+      `https://4get.sudovanilla.com/api/v1/web?s=${query}`
+    );
+    const web = getJson(await search.text());
 
     if (req.query.lucky === "true") {
       res.redirect("/im-feeling-lucky?query=" + query);
@@ -214,11 +218,7 @@ module.exports = function (app, config, renderTemplate) {
     let continuation = req.query.continuation || "";
 
     try {
-      const searchResults = await DDG.search(query, {
-        safeSearch: DDG.SafeSearchType.OFF,
-      });
-
-      const results = searchResults.results;
+      const results = web.web;
 
       renderTemplate(res, req, "search-web.ejs", {
         j: "",
@@ -235,9 +235,6 @@ module.exports = function (app, config, renderTemplate) {
       console.error(`Error while searching for '${query}':`, error);
       res.redirect("/");
     }
-    */
-          res.redirect("/");
-
   });
 
   app.get("/channel/", async (req, res) => {

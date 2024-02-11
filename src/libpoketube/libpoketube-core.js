@@ -124,10 +124,10 @@ class PokeTubeCore {
             wiki: "",
             desc: "",
             color: await getColors(
-              `https://i.ytimg.com/vi/${v}/hqdefault.jpg?sqp=${this.sqp}`
+              `https://vid.puffyan.us/vi/${v}/hqdefault.jpg?sqp=${this.sqp}`
             ).then((colors) => colors[0].hex()),
             color2: await getColors(
-              `https://i.ytimg.com/vi/${v}/hqdefault.jpg?sqp=${this.sqp}`
+              `https://vid.puffyan.us/vi/${v}/hqdefault.jpg?sqp=${this.sqp}`
             ).then((colors) => colors[1].hex()),
           },
           timestamp: Date.now(),

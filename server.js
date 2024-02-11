@@ -101,6 +101,7 @@ toobusy.maxLag(3500);
 });
   
   toobusy.onLag(function(currentLag) {
+  process.exit(1);
   console.log("Event loop lag detected! Latency: " + currentLag + "ms");
 });
   

@@ -20,115 +20,145 @@
 --->
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <title>Poke | The Ultimate Privacy App!</title>
-    <meta charset="UTF-8">
-    <meta name="theme-color" content="#414161">
-    <meta http-equiv="content-language" content="en-us">
-    <meta name="viewport" content="width=device-1200px, initial-scale=1.0, shrink-to-fit=yes, viewport-fit=cover">
-    <link rel="stylesheet" href="/css/landing.css">
-    <link rel="stylesheet" href="/css/snow.css">
-    <link href=/css/yt-ukraine.svg?v=6 rel=icon>
-    <link rel="manifest" href="/manifest.json">
-    <meta name="darkreader-lock"> <!-- tells dark reader that the site has a dark theme and to turn itself off -->
-    <meta content="▶▶ Poke - The Ultimate privacy App!" property=og:title>
-    <meta content="Watch Silly videos or search the interwebs while being anonymous on poke!" property=twitter:description>
-    <meta content="https://cdn.glitch.global/d68d17bb-f2c0-4bc3-993f-50902734f652/aa70111e-5bcd-4379-8b23-332a33012b78.image.png?v=1701898829884" property="og:image"  />
-    <meta content="summary_large_image" name="twitter:card" />
-     <% if(isOldWindows) { %>
-<style>
-            @font-face {
+
+<head>
+  <title>Poke | The Ultimate Privacy App!</title>
+  <meta charset="UTF-8">
+  <meta name="theme-color" content="#414161">
+  <meta http-equiv="content-language" content="en-us">
+  <meta name="viewport" content="width=device-1200px, initial-scale=1.0, shrink-to-fit=yes, viewport-fit=cover">
+  <link rel="stylesheet" href="/css/landing.css">
+  <link rel="stylesheet" href="/css/snow.css">
+  <link href=/css/yt-ukraine.svg?v=6 rel=icon>
+  <link rel="manifest" href="/manifest.json">
+  <meta name="darkreader-lock"> <!-- tells dark reader that the site has a dark theme and to turn itself off -->
+  <meta content="▶▶ Poke - The Ultimate privacy App!" property=og:title>
+  <meta content="Watch Silly videos or search the interwebs while being anonymous on poke!"
+    property=twitter:description>
+  <meta
+    content="https://cdn.glitch.global/d68d17bb-f2c0-4bc3-993f-50902734f652/aa70111e-5bcd-4379-8b23-332a33012b78.image.png?v=1701898829884"
+    property="og:image" />
+  <meta content="summary_large_image" name="twitter:card" />
+  <% if(isOldWindows) { %>
+    <style>
+      @font-face {
         font-family: 'Ginto Nord';
         font-weight: 800;
-        src:url('https://cdn.statically.io/gh/brecert/discord-quote-generator/main/Ginto-Nord-800.woff') format("woff");
+        src: url('https://cdn.statically.io/gh/brecert/discord-quote-generator/main/Ginto-Nord-800.woff') format("woff");
       }
 
-  h1 {
-    font-family:"Ginto Nord" !important;
-  }
-</style> <% } %>  
+      h1 {
+        font-family: "Ginto Nord" !important;
+      }
+    </style>
+    <% } %>
 
-<style>
-body {
-  overflow-x: hidden;
-}
-.subtitle {
-    text-align: center;
-    color: #FFFF00;
-    text-shadow: 1px 1px 0px #000;
-    position: relative;
-    left: 68px;
-    top: -35px;
-    bottom: 50px;
-    animation: subtitle .25s;
-    animation-direction: alternate;
-    animation-iteration-count: infinite;
-}
+      <style>
+        body {
+          overflow-x: hidden;
+        }
 
-@-webkit-keyframes subtitle {
-	0% {
-		transform: scale(0.875) rotate(-20deg)
-  }
-	100% {
-		transform: scale(1) rotate(-20deg)
-  }
-}
-</style>
-  </head>
-  <body>
-     <div class="header">
-      <div class="header-content">
-        <div class="header-content-start">
-          <a href="/" style="text-decoration:none;"><img style="width: 130px;" src="/css/logo-poke.svg"/><p class="subtitle"> <%- random %></p></a>
-        </div>
-        <div class="header-content-center" style="margin-left: -30px;">
-          <form action=/search><input class=search-bar autocomplete="on" id=fname name=query><button class="btn btn-success" type=submit><i class="fa-light fa-search"></i></button></form>
-        </div>
-        <div class="header-content-end">
-          <a href="https://codeberg.org/Ashley/poketube/src/branch/main/instances.json"><i class="fa-sharp fa-solid fa-server"></i></a>
-          <a href="/apps"><i class="fa-sharp fa-solid fa-grid-2"></i></a>
-          <a href="/game-hub"><i class="fa-sharp fa-solid fa-gamepad-modern"></i></a>
-        </div>
+        .subtitle {
+          text-align: center;
+          color: #FFFF00;
+          text-shadow: 1px 1px 0px #000;
+          position: relative;
+          left: 68px;
+          top: -35px;
+          bottom: 50px;
+          animation: subtitle .25s;
+          animation-direction: alternate;
+          animation-iteration-count: infinite;
+        }
+
+        @-webkit-keyframes subtitle {
+          0% {
+            transform: scale(0.875) rotate(-20deg)
+          }
+
+          100% {
+            transform: scale(1) rotate(-20deg)
+          }
+        }
+      </style>
+</head>
+
+<body>
+  <video id="HD-BG" playsinline autoplay muted loop><source src="/bg-full.webm" type="video/webm"/></video>
+  <video id="SD-BG" playsinline autoplay muted loop><source src="/bg-480.webm" type="video/webm"/></video>
+  <div class="header">
+    <div class="header-content">
+      <div class="header-content-start">
+        <a href="/" style="text-decoration:none;"><img style="width: 130px;" src="/css/logo-poke.svg" />
+          <p class="subtitle"> <%- random %></p>
+        </a>
+      </div>
+      <div class="header-content-center" style="margin-left: -30px;">
+        <form action=/search><input class=search-bar autocomplete="on" id=fname name=query><button
+            class="btn btn-success" type=submit><i class="fa-light fa-search"></i></button></form>
+      </div>
+      <div class="header-content-end">
+        <a href="https://codeberg.org/Ashley/poketube/src/branch/main/instances.json"><i
+            class="fa-sharp fa-solid fa-server"></i></a>
+        <a href="/apps"><i class="fa-sharp fa-solid fa-grid-2"></i></a>
+        <a href="/game-hub"><i class="fa-sharp fa-solid fa-gamepad-modern"></i></a>
       </div>
     </div>
+  </div>
+  <div class="features">
+    <a style="color: white; text-decoration: none;" href="https://war.ukraine.ua/donate/">
+      <p><i class="fa-duotone fa-handshake-angle"></i> Support Ukraine </p>
+    </a>
+    <a style="color: white; text-decoration: none;"
+      href="https://buildpalestine.com/2021/05/15/trusted-organizations-to-donate-to-palestine/">
+      <p><i class="fa-duotone fa-handshake-angle"></i> Support Palestine</p>
+    </a>
+  </div>
+  <div class="landing">
+    <h1>The Ultimate Privacy App</h1>
+    <p style="max-width: 800px; text-align: center; margin: 20px auto;"> Be Anonymous watching epic videos, searching
+      thingys on the interwebs and listening to music on poketube - the free yt front end thats focused on ur privacy!!
+    </p>
     <div class="features">
-      <a style="color: white; text-decoration: none;" href="https://war.ukraine.ua/donate/"><p><i class="fa-duotone fa-handshake-angle"></i> Support Ukraine </p></a>
-      <a style="color: white; text-decoration: none;" href="https://buildpalestine.com/2021/05/15/trusted-organizations-to-donate-to-palestine/"><p><i class="fa-duotone fa-handshake-angle"></i> Support Palestine</p></a>
-    </div>   
-    <div class="landing">
-      <h1>The Ultimate Privacy App</h1>
-      <p style="max-width: 800px; text-align: center; margin: 20px auto;"> Be Anonymous watching epic videos, searching thingys on the interwebs and listening to music on poketube - the free yt front end thats focused on ur privacy!!</p>
-      <div class="features">
-        <p><i class="fa-sharp fa-solid fa-eye-low-vision"></i> No Tracking & Ads</p>
-        <p><i class="fa-sharp fa-solid fa-rabbit-running"></i>Very Fast</p>
-        <p><i class="fa-sharp fa-solid fa-download"></i>Built-in video downloader</p>
-       <p><i class="fa-sharp fa-solid fa-search"></i>Web Search</p>
-      </div>
-
-<!-- source: https://picrew.me/share?cd=GD9wwCo5YY -->
-<img src="/static/poke-chan-outfit-a.png" style="height: 400px;width: 369px;mask-image: none;margin-top: -14em;margin-left: -2em;margin-bottom: -13em;z-index: 999;position: absolute;-webkit-transform: scaleX(-1);transform: scaleX(-1);border-radius: 0px;" title="Poke-chan sitting :3">      
-<img src="/static/poke-screnshot-a.png"/>
-       <style>@import url(https://ka-p.fontawesome.com/releases/v6.4.2/css/pro.min.css?token=fe06fc099b);@import url(https://ka-p.fontawesome.com/releases/v6.4.2/css/pro-v4-shims.min.css?token=fe06fc099b);@import url(https://ka-p.fontawesome.com/releases/v6.4.2/css/pro-v5-font-face.min.css?token=fe06fc099b);@import url(https://ka-p.fontawesome.com/releases/v6.4.2/css/pro-v4-font-face.min.css?token=fe06fc099b);@import url(https://ka-p.fontawesome.com/assets/fe06fc099b/108504408/custom-icons.css?token=fe06fc099b);</style>
-      
-      <script>
-            // @license magnet:?xt=urn:btih:1f739d935676111cfff4b4693e3816e664797050&dn=gpl-3.0.txt GPL-3.0-or-later 
-      if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.getRegistrations().then(function(registrations) {
-    for (let registration of registrations) {
-      registration.unregister();
-    }
-  });
-  if ('caches' in window) {
-  caches.keys().then(function(cacheNames) {
-    cacheNames.forEach(function(cacheName) {
-      caches.delete(cacheName);
-    });
-  });
-}
-
-}
-// @license-end 
-      </script>
+      <p><i class="fa-sharp fa-solid fa-eye-low-vision"></i> No Tracking & Ads</p>
+      <p><i class="fa-sharp fa-solid fa-rabbit-running"></i>Very Fast</p>
+      <p><i class="fa-sharp fa-solid fa-download"></i>Built-in video downloader</p>
+      <p><i class="fa-sharp fa-solid fa-search"></i>Web Search</p>
     </div>
-  </body>
+
+    <!-- source: https://picrew.me/share?cd=GD9wwCo5YY -->
+    <img src="/static/poke-chan-outfit-a.png"
+      style="height: 400px;width: 369px;mask-image: none;margin-top: -14em;margin-left: -2em;margin-bottom: -13em;z-index: 999;position: absolute;-webkit-transform: scaleX(-1);transform: scaleX(-1);border-radius: 0px;"
+      title="Poke-chan sitting :3">
+    <img src="/static/poke-screnshot-a.png" />
+    <style>
+      @import url(https://ka-p.fontawesome.com/releases/v6.4.2/css/pro.min.css?token=fe06fc099b);
+      @import url(https://ka-p.fontawesome.com/releases/v6.4.2/css/pro-v4-shims.min.css?token=fe06fc099b);
+      @import url(https://ka-p.fontawesome.com/releases/v6.4.2/css/pro-v5-font-face.min.css?token=fe06fc099b);
+      @import url(https://ka-p.fontawesome.com/releases/v6.4.2/css/pro-v4-font-face.min.css?token=fe06fc099b);
+      @import url(https://ka-p.fontawesome.com/assets/fe06fc099b/108504408/custom-icons.css?token=fe06fc099b);
+    </style>
+
+    <script>
+      // @license magnet:?xt=urn:btih:1f739d935676111cfff4b4693e3816e664797050&dn=gpl-3.0.txt GPL-3.0-or-later 
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.getRegistrations().then(function (registrations) {
+          for (let registration of registrations) {
+            registration.unregister();
+          }
+        });
+        if ('caches' in window) {
+          caches.keys().then(function (cacheNames) {
+            cacheNames.forEach(function (cacheName) {
+              caches.delete(cacheName);
+            });
+          });
+        }
+
+      }
+      // @license-end 
+    </script>
+  </div>
+</body>
+
 </html>

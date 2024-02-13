@@ -10,7 +10,6 @@ const { toJson } = require("xml2json");
 const { curly } = require("node-libcurl");
 const getdislikes = require("../libpoketube/libpoketube-dislikes.js");
 const getColors = require("get-image-colors");
-const wiki = require("wikipedia");
 
 /**
  * Class representing PokeTube's core functionality.
@@ -79,8 +78,8 @@ class PokeTubeCore {
     
     try {
     const [invComments, videoInfo, videoData] = await Promise.all([
-      fetch(`${this.config.invapi}/comments/${v}?hl=${contentlang}&region=${contentregion}&h=${btoa(Date.now())}`).then((res) => res.text()),
-      fetch(`${this.config.invapi}/videos/${v}?hl=${contentlang}&region=${contentregion}&h=${btoa(Date.now())}`).then((res) => res.text()),
+      fetch(`${this.config.invapi_alt}/comments/${v}?hl=${contentlang}&region=${contentregion}&h=${btoa(Date.now())}`).then((res) => res.text()),
+      fetch(`${this.config.invapi_alt}/videos/${v}?hl=${contentlang}&region=${contentregion}&h=${btoa(Date.now())}`).then((res) => res.text()),
       curly
         .get(`${this.config.tubeApi}video?v=${v}`, {
           httpHeader: Object.entries(headers).map(([k, v]) => `${k}: ${v}`),
@@ -95,6 +94,11 @@ class PokeTubeCore {
     const comments = await this.getJson(invComments);
     const vid = await this.getJson(videoInfo);
     const { json, video } = videoData;
+
+    const channel_uploads = await fetch(
+      `${this.config.invapi_alt}/channels/${vid.authorId}?hl=${contentlang}&region=${contentregion}`
+    );
+    const p = this.getJson(await channel_uploads.text());
 
     if (!vid) {
       console.log(
@@ -115,14 +119,15 @@ class PokeTubeCore {
             video,
             vid,
             comments,
+            channel_uploads:p,
             engagement: fe.engagement,
             wiki: "",
             desc: "",
             color: await getColors(
-              `https://i.ytimg.com/vi/${v}/hqdefault.jpg?sqp=${this.sqp}`
+              `https://vid.puffyan.us/vi/${v}/hqdefault.jpg?sqp=${this.sqp}`
             ).then((colors) => colors[0].hex()),
             color2: await getColors(
-              `https://i.ytimg.com/vi/${v}/hqdefault.jpg?sqp=${this.sqp}`
+              `https://vid.puffyan.us/vi/${v}/hqdefault.jpg?sqp=${this.sqp}`
             ).then((colors) => colors[1].hex()),
           },
           timestamp: Date.now(),
@@ -166,6 +171,7 @@ class PokeTubeCore {
 const pokeTubeApiCore = new PokeTubeCore({
   tubeApi: "https://inner-api.poketube.fun/api/",
   invapi: "https://invid-api.poketube.fun/api/v1",
+  invapi_alt: "https://iv.ggtyler.dev/api/v1",
   dislikes: "https://returnyoutubedislikeapi.com/votes?videoId=",
   t_url: "https://t.poketube.fun/",
 });

@@ -44,15 +44,16 @@ function getJson(str) {
  * @property {string} streams - Base64-encoded value for the streams tab.
  */
 
-// see https://developers.google.com/youtube/v3/docs/channels/ 
+// see https://developers.google.com/youtube/v3/docs/channels/
 const ChannelTabs = {
   community: "Y29tbXVuaXR5",
   shorts: "c2hvcnRz",
   videos: "dmlkZW9z",
   streams: "c3RyZWFtcw==", // or "live"
-  channels:"Y2hhbm5lbHM=",
-  store:"c3RvcmU=",
-  released:"cmVsZWFzZWQ="
+  channels: "Y2hhbm5lbHM=",
+  store: "c3RvcmU=",
+  released: "cmVsZWFzZWQ=",
+  playlist: "cGxheWxpc3Rz",
 };
 
 module.exports = function (app, config, renderTemplate) {
@@ -80,18 +81,20 @@ module.exports = function (app, config, renderTemplate) {
     res.redirect(`/watch?v=${v}`);
   });
 
-   app.get("/api/getchanneltabs", async function (req, res) {
+  app.get("/api/getchanneltabs", async function (req, res) {
     res.json(ChannelTabs);
   });
-
 
   app.get("/search", async (req, res) => {
     const query = req.query.query;
     const tab = req.query.tab;
     const { fetch } = await import("undici");
 
-    const search = require("google-it");
+    var media_proxy = config.media_proxy;
 
+    if (req.useragent.source.includes("Pardus")) {
+      var media_proxy = "https://media-proxy.ashley0143.xyz";
+    }
     var uaos = req.useragent.os;
     var IsOldWindows;
 
@@ -128,19 +131,23 @@ module.exports = function (app, config, renderTemplate) {
     let type = "video";
     let duration = req.query.duration || "";
     let sort = req.query.sort || "";
- 
+
     try {
       const headers = {};
 
-    const xmlData = await  fetch(`https://invid-api.poketube.fun/api/v1/search?q=${encodeURIComponent(
-        query
-      )}&page=${encodeURIComponent(continuation)}&date=${date}&type=${type}&duration=${duration}&sort=${sort}&hl=en+gb`)
-            .then((res) => res.text())
-            .then((txt) => getJson(txt));
-  
+      const xmlData = await fetch(
+        `https://invid-api.poketube.fun/api/v1/search?q=${encodeURIComponent(
+          query
+        )}&page=${encodeURIComponent(
+          continuation
+        )}&date=${date}&type=${type}&duration=${duration}&sort=${sort}&hl=en+gb`
+      )
+        .then((res) => res.text())
+        .then((txt) => getJson(txt));
+
       renderTemplate(res, req, "search.ejs", {
         invresults: xmlData,
-       turntomins,
+        turntomins,
         date,
         type,
         duration,
@@ -148,7 +155,7 @@ module.exports = function (app, config, renderTemplate) {
         IsOldWindows,
         tab,
         continuation,
-        media_proxy_url: config.media_proxy,
+        media_proxy_url: media_proxy,
         results: "",
         q: query,
         summary: "",
@@ -159,12 +166,24 @@ module.exports = function (app, config, renderTemplate) {
     }
   });
 
+  app.get("/im-feeling-lucky", function (req, res) {
+    res.send("WIP");
+  });
+
   app.get("/web", async (req, res) => {
     const query = req.query.query;
     const tab = req.query.tab;
 
-    const search = require("google-it");
+    const { fetch } = await import("undici");
 
+    const search = await fetch(
+      `https://4get.sudovanilla.com/api/v1/web?s=${query}`
+    );
+    const web = getJson(await search.text());
+
+    if (req.query.lucky === "true") {
+      res.redirect("/im-feeling-lucky?query=" + query);
+    }
     var uaos = req.useragent.os;
     var IsOldWindows;
 
@@ -199,18 +218,18 @@ module.exports = function (app, config, renderTemplate) {
     let continuation = req.query.continuation || "";
 
     try {
-      search({ query: `${req.query.query}` }).then((results) => {
-        renderTemplate(res, req, "search-web.ejs", {
-          j: "",
-          IsOldWindows,
-          h: "",
-          tab,
-          continuation,
-          isMobile: req.useragent.isMobile,
-          results: results,
-          q: query,
-          summary: "",
-        });
+      const results = web.web;
+
+      renderTemplate(res, req, "search-web.ejs", {
+        j: "",
+        IsOldWindows,
+        h: "",
+        tab,
+        continuation,
+        isMobile: req.useragent.isMobile,
+        results: results,
+        q: query,
+        summary: "",
       });
     } catch (error) {
       console.error(`Error while searching for '${query}':`, error);
@@ -221,7 +240,21 @@ module.exports = function (app, config, renderTemplate) {
   app.get("/channel/", async (req, res) => {
     const { fetch } = await import("undici");
     try {
-      const ID = req.query.id;
+      var media_proxy = config.media_proxy;
+
+      if (req.useragent.source.includes("Pardus")) {
+        var media_proxy = "https://media-proxy.ashley0143.xyz";
+      }
+
+      var ID = req.query.id;
+
+      if (ID.endsWith("@youtube.com")) {
+        ID = ID.slice(0, -"@youtube.com".length);
+      }
+
+      if (ID.endsWith("@poketube.fun")) {
+        ID = ID.slice(0, -"@poketube.fun".length);
+      }
       const tab = req.query.tab;
       const cache = {};
 
@@ -268,16 +301,32 @@ module.exports = function (app, config, renderTemplate) {
       const communityUrl = `${apiUrl}${atob(
         ChannelTabs.community
       )}/${ID}/?hl=en-US`;
+      const PlaylistUrl = `${apiUrl}${atob(
+        ChannelTabs.playlist
+      )}/${ID}/?hl=en-US`;
 
       const channelINVUrl = `${apiUrl}${ID}/`;
 
-      var [tj, shorts, stream, c, cinv] = await Promise.all([
+      var [tj, shorts, playlist, stream, c, cinv] = await Promise.all([
         getChannelData(channelUrl),
         getChannelData(shortsUrl),
+        getChannelData(PlaylistUrl),
         getChannelData(streamUrl),
         getChannelData(communityUrl),
         getChannelData(channelINVUrl),
       ]);
+
+      function getThumbnailUrl(video) {
+        const maxresDefaultThumbnail = video.videoThumbnails.find(
+          (thumbnail) => thumbnail.quality === "maxresdefault"
+        );
+
+        if (maxresDefaultThumbnail) {
+          return `https://vid.puffyan.us/vi/${video.videoId}/maxresdefault.jpg`;
+        } else {
+          return `https://vid.puffyan.us/vi/${video.videoId}/hqdefault.jpg`;
+        }
+      }
 
       cache[ID] = {
         result: {
@@ -315,13 +364,15 @@ module.exports = function (app, config, renderTemplate) {
         cinv,
         convert,
         turntomins,
-        media_proxy_url: config.media_proxy,
+        media_proxy_url: media_proxy,
         dnoreplace,
+        getThumbnailUrl,
         continuation,
         wiki: "",
         getFirstLine,
         isMobile: req.useragent.isMobile,
         about,
+        playlist,
         subs:
           typeof subscribers === "string"
             ? subscribers.replace("subscribers", "")

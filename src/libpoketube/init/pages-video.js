@@ -139,6 +139,11 @@ function lightOrDark(color) {
   }
 }
 
+function isDntEnabled(req) {
+  const dntHeader = req.header('DNT');
+  return dntHeader && (dntHeader === '1' || dntHeader === 'true');
+}
+
 function IsInArray(array, id) {
   for (var i = 0; i < array.length; i++) {
     if (array[i].id === id) return true;
@@ -178,19 +183,7 @@ module.exports = function (app, config, renderTemplate) {
   });
 
   app.get("/watch", async (req, res) => {
-    const {
-      dm,
-      region,
-      hl,
-      v,
-      e,
-      r,
-      f,
-      m,
-      quality: q,
-      a,
-      universe,
-    } = req.query;
+    const { dm, region, hl, v, e, r, f, m, quality: q, a, universe, } = req.query;
 
     if (!v) {
       return res.redirect("/");
@@ -208,10 +201,11 @@ module.exports = function (app, config, renderTemplate) {
 
     const secure = ["poketube.fun"].includes(req.hostname);
     const verify = req.hostname === "poketube.sudovanilla.com";
-
+    
     core.video(v, contentlang, contentregion).then((data) => {
       try {
         const k = data?.video;
+        const channel_uploads = data?.channel_uploads
         const json = data?.json;
         const engagement = data?.engagement;
         const inv_comments = data?.comments || "Disabled";
@@ -222,6 +216,7 @@ module.exports = function (app, config, renderTemplate) {
         if (desc !== "[object Object]") {
           d = desc.toString().replace(/\n/g, " <br> ");
         }
+        
 
         const descriptionString = String(inv_vid?.description);
 
@@ -237,28 +232,35 @@ module.exports = function (app, config, renderTemplate) {
         const twitch = extractInfo(TWITCH_REGEX);
         const reddit = extractInfo(REDDIT_REGEX);
         const instagram = extractInfo(INSTAGRAM_REGEX);
-
+        
+        
+        var proxyurl = config.p_url;
         var vidurl = u.url;
         var isvidious = u.isInvidiousURL;
-
+        var mediaproxy = config.media_proxy
+        
+        
         if (inv_vid?.genre === "Music") {
           var vidurl = u.losslessurl;
         }
 
-        if (inv_vid.author.endsWith(" - Topic")) {
-          var vidurl = "https://eu-proxy.poketube.fun";
-          var isvidious = true;
-        }
+        var vidurl = "https://eu-proxy.poketube.fun";
+        var isvidious = true;
 
         if (req.useragent.source.includes("Pardus")) {
-          var vidurl = "https://yt.sudovanilla.com";
+          var vidurl = "https://iv.ggtyler.dev";
+          var mediaproxy = "https://media-proxy.ashley0143.xyz"
           var isvidious = true;
+          var isSchoolProxy = "";
         }
-
+        
+        // unused
         let badges = "";
         let comments = "";
         let nnn = "";
 
+        const dnt_val = isDntEnabled(req)
+        
         if (
           inv_vid?.error ===
             "The uploader has not made this video available in your country" ||
@@ -299,15 +301,20 @@ module.exports = function (app, config, renderTemplate) {
             twitter,
             k,
             dm,
-            media_proxy_url: config.media_proxy,
+            proxyurl,
+            media_proxy_url: mediaproxy,
             instagram,
             useragent: req.useragent,
             verify,
             discord,
+            turntomins,
             twitch,
+            dnt_val,
             reddit,
+            channel_uploads,
             secure,
             process,
+            isSchoolProxy,
             sha384,
             lightOrDark,
             isMobile: req.useragent.isMobile,
@@ -342,8 +349,7 @@ module.exports = function (app, config, renderTemplate) {
     const { v, e, r, f, t, quality: q } = req.query;
 
     try {
-      const info = await modules.fetch("http://ip-api.com/json/");
-      const ip = await info.json();
+      var mediaproxy = config.media_proxy
 
       const {
         video: k,
@@ -363,11 +369,13 @@ module.exports = function (app, config, renderTemplate) {
       const u = await media_proxy(v);
       const d = desc.toString().replace(/\n/g, " <br> ");
       const comments = inv_comments || "Disabled";
-
+      const channel_uploads = data?.channel_uploads
+      
       const templateData = {
         color,
         color2,
         engagement,
+        channel_uploads,
         u: u.url,
         video: json,
         date: k.Video.uploadDate,
@@ -378,11 +386,12 @@ module.exports = function (app, config, renderTemplate) {
         lightOrDark,
         isMobile,
         tj,
+        media_proxy_url: mediaproxy,
         r,
         qua: q,
         isvidious: u.isInvidiousURL,
         inv: comments,
-        ip,
+        turntomins,
         convert,
         linkify,
         wiki,

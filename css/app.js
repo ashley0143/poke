@@ -98,7 +98,7 @@ function fadeInElements() {
 
 window.addEventListener('scroll', fadeInElements);
 document.addEventListener('fullscreenchange', fadeInElements);
-setInterval(fadeInElements, 500);
+setInterval(fadeInElements, 100);
  
 function jumpToTime(e) {
   e.preventDefault();
@@ -202,30 +202,100 @@ function fetchUrls(urls) {
   });
 }
 
-/*
-// Fetch channel URLs
-const channelUrls = document.querySelectorAll('a[href*="/channel?id="]');
-fetchUrls(channelUrls);
+  function anondocumenttitle(message, times) {
+    var hash = CryptoJS.SHA256(message);
 
-// Fetch download URLs
-const downloadUrls = document.querySelectorAll('a[href*="/download?v="]');
-fetchUrls(downloadUrls);
+    return hash.toString(CryptoJS.enc.Hex);
+  }
+  
+  if(navigator.globalPrivacyControl) {
+  var gpcValue = navigator?.globalPrivacyControl 
+  } else {
+  var gpcValue = false
+  }
 
-// fetch videos urls
-const urls = document.querySelectorAll('a[href*="/watch?v="]');
-fetchUrls(urls);
-*/ 
+  if (location.hostname === "poketube.fun") {  
+    if (typeof Ashley === "undefined") {
+      var Ashley = {};
+    }
+    Ashley.dntEnabled = function (dnt, ua) {
+      "use strict";
+      var dntStatus =
+        dnt ||
+        navigator.doNotTrack ||
+        window.doNotTrack ||
+        navigator.msDoNotTrack;
+      var userAgent = ua || navigator.userAgent;
+      var anomalousWinVersions = [
+        "Windows NT 6.1",
+        "Windows NT 6.2",
+        "Windows NT 6.3",
+      ];
+      var fxMatch = userAgent.match(/Firefox\/(\d+)/);
+      var ieRegEx = /MSIE|Trident/i;
+      var isIE = ieRegEx.test(userAgent);
+      var platform = userAgent.match(/Windows.+?(?=;)/g);
+      if (isIE && typeof Array.prototype.indexOf !== "function") {
+        return false;
+      } else if (fxMatch && parseInt(fxMatch[1], 10) < 32) {
+        dntStatus = "Unspecified";
+      } else if (
+        isIE &&
+        platform &&
+        anomalousWinVersions.indexOf(platform.toString()) !== -1
+      ) {
+        dntStatus = "Unspecified";
+      } else {
+        dntStatus = { 0: "Disabled", 1: "Enabled" }[dntStatus] || "Unspecified";
+      }
+      return dntStatus === "Enabled" ? true : false;
+    };
+    // only load if DNT is not enabled
+    if(!gpcValue) {
+    if (Ashley && !Ashley.dntEnabled()) {
+      var _paq = (window._paq = window._paq || []);
+      /* tracker methods like "setCustomDimension" should be called before "trackPageView" */
+      _paq.push([
+        "setDocumentTitle",
+        anondocumenttitle(document.domain, 5) +
+          "/" +
+          anondocumenttitle(document.title, 5),
+      ]);
+      _paq.push(["setDoNotTrack", true]);
+      _paq.push(["disableCookies"]);
+      _paq.push(["trackPageView"]);
+      _paq.push(["enableLinkTracking"]);
+      (function () {
+        var u = "//data.poketube.fun/";
+        _paq.push(["setTrackerUrl", u + "matomo.php"]);
+        _paq.push(["setSiteId", "2"]);
+        var d = document,
+          g = d.createElement("script"),
+          s = d.getElementsByTagName("script")[0];
+        g.async = true;
+        g.src = u + "matomo.js";
+        s.parentNode.insertBefore(g, s);
+      })();
+    }
+  }
+  }
+
  var popupMenu = document.getElementById("popupMenu");
         var loopOption = document.getElementById("loopOption");
         var speedOption = document.getElementById("speedOption");
+ 
 
-         video.addEventListener("contextmenu", function(event) {
-            event.preventDefault();  
+video.addEventListener("contextmenu", function(event) {
+    // Check if the video is in fullscreen mode
+    if (!document.fullscreenElement && !document.webkitFullscreenElement && !document.mozFullScreenElement && !document.msFullscreenElement) {
+         event.preventDefault();
 
-             popupMenu.style.display = "block";
-            popupMenu.style.left = event.pageX + "px";
-            popupMenu.style.top = event.pageY + "px";
-        });
+         popupMenu.style.display = "block";
+        popupMenu.style.left = event.pageX + "px";
+        popupMenu.style.top = event.pageY + "px";
+    }
+});
+
 
         // Hide the popup menu when clicking outside of it
         window.addEventListener("click", function(event) {
@@ -233,14 +303,33 @@ fetchUrls(urls);
                 popupMenu.style.display = "none";
             }
         });
-  
+
+    var loopedIndicator = document.getElementById("loopedIndicator");
+
+    loopedIndicator.style.display = "none"; // Initially hide the indicator
+
     loopOption.addEventListener("click", function() {
-            video.loop = !video.loop;
-            if (video.loop) {
-                alert("Looped!");
+             var looped = video.loop;
+            video.loop = !looped;
+
+
+            // Update the looped indicator popup
+            var displaySpecialText = Math.random() < 0.5;
+
+            // Update the looped indicator popup
+            if (displaySpecialText) {
+                var specialText = looped ? "Unlooped >.<" : "Looped~ :3 >~<";
+                loopedIndicator.textContent = specialText;
             } else {
-              alert("unlooped!")
+                loopedIndicator.textContent = looped ? "Unlooped!" : "Looped!";
             }
+             loopedIndicator.style.display = "block";
+
+            // Hide the indicator after 2 seconds
+            setTimeout(function() {
+                loopedIndicator.style.display = "none";
+            }, 2000);
+
         });
 
  speedOption.addEventListener("click", function() {
@@ -263,4 +352,6 @@ fetchUrls(urls);
                 return 2;
             }
         }
+
+const GoogleTranslateEndpoint = "https://translate.google.com/_/TranslateWebserverUi/data/batchexecute?rpcids=MkEWBc&rt=c"
 // @license-end

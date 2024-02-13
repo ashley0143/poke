@@ -1,12 +1,28 @@
+# see https://codeberg.org/Ashley/poke/issues/59 if you are having problems using poke
+
 <h1 align="center">
   <a href="https://poketube.fun/watch?v=9sJUDx7iEJw&quality=medium&=sjohgteojgytrueugtye4jhtytjrjnyıı">
    <img src="https://poketube.fun/css/logo-poke.svg" width="400"> 
+    <a href="http://www.defectivebydesign.org/drm-free">
+<img src="https://static.fsf.org/dbd/label/DRM-free%20label%20120.en.png" 
+alt="DefectiveByDesign.org"
+width="65" height="65" border="0" align="middle" /></a>
    </a>
    <p>The Ultimate Privacy App</p>
    </h1>
+  
 <div align="center">
 
-   <span> Be Anonymous watching epic videos, searching thingys on the interwebs and listening to music on poke - the free privacy front end!</span></div>
+   <span> Be Anonymous watching epic videos, searching thingys on the interwebs and listening to music on poke - the free privacy front end!</span>
+   
+   <span>"Since you work on poke, Are you in touch with its lead developer "Jose marchasi"? <br>
+-RMS 
+
+Stallman though poke was GNU poke lmaoooo
+   </span>
+   </div>
+
+
 <div align="center">
 
 [Welcome!](#welcome)&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;[Features](#features)&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;[No non-free codec needed](#no-non-free-codec-needed-3)&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;[Hosting Poke~](#hosting-poketube)&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;[Poke community!](#poketube-community)&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;[The Legal Stuff (boring tbh)](#the-legal-stuff-boring-tbh)
@@ -27,7 +43,7 @@
 
 ## Welcome!
 
-This is the source code of PokeTube, the privacy-friendly youtube front-end built with the InnerTube API!
+This is the source code of Poke (formerly PokeTube), the privacy-friendly youtube front-end built with the InnerTube API!
 
 
 <h1>Features</h1>
@@ -129,11 +145,16 @@ The port can be changed with the config file you downloaded, just change the `se
 see [here](https://codeberg.org/Ashley/poke/src/branch/main/january) :3
 just uhh change the url in config.json to ur image proxy
 
-## PokeTube community!
+## Poke community!
 
-Join the community on [revolt](https://rvlt.gg/poketube) :3
+Join the community on [revolt](https://rvlt.gg/poketube) or [matrix](https://matrix.to/#/#poke:vern.cc) :3
 
 ## The Legal Stuff (boring tbh)
+the main parts of the project is Under GPL-3.0-OR-LATER :3
+
+see the each sections LICENSE tho!!
+Copyleft 2021-202x Poke Project
+
 
 [Code Of conduct](https://codeberg.org/Ashley/poketube/src/branch/main/CODE_OF_CONDUCT.md)
 

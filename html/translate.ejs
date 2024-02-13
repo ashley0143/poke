@@ -1,0 +1,431 @@
+ <!--
+    This Source Code Form is subject to the terms of the GNU General Public License:
+
+    Copyright (C) 2021-2024 PokeTube (https://codeberg.org/Ashley/poketube)
+    
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program. If not, see https://www.gnu.org/licenses/.
+-->
+<!doctype html>
+
+<html lang="en">
+    <head>
+        <title>PokeTranslate</title>
+        <link rel="icon" href="/static/yt-ukraine.svg">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta content="PokeTranslate" property=og:title>
+        <meta content="Translate text - Anonymously!" property=twitter:description>
+        <meta content="https://cdn.glitch.global/d68d17bb-f2c0-4bc3-993f-50902734f652/aa70111e-5bcd-4379-8b23-332a33012b78.image.png?v=1701898829884" property="og:image"  /> 
+        <meta content=summary_large_image name=twitter:card>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta charset="UTF-8">
+        <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline'">
+         <meta name="referrer" content="no-referrer">
+        <link rel="manifest" href="/manifest.json">
+        <style>
+        .center {
+            text-align: center;
+        }
+
+        .wrap {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .wrap.languages {
+            flex-wrap: nowrap;
+            margin-bottom: 20px;
+        }
+
+        #could_not_switch_languages_text {
+            color: red;
+        }
+
+        .item {
+            width: 100%;
+            height: 150px;
+            border-radius:1em;
+        }
+
+        .item-wrapper {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            width: 450px;
+            margin: 5px 10px;
+        }
+
+
+        .language,
+        .switch_languages {
+            display: flex;
+        }
+
+        .language {
+            margin: 0px 10px;
+        }
+
+        .switch_languages {
+            margin: 0px 5px;
+        }
+
+        #switchbutton {
+            white-space: nowrap;
+        }
+
+        button {
+            font-size: 1rem;
+            padding: 4px 10px;
+            border: 2px solid #888888;
+        }
+
+        input,
+        select,
+        textarea {
+            width: 100%;
+            font-size: 1rem;
+            padding: 4px;
+            border: 2px solid #888888;
+        }
+
+        textarea {
+            resize: vertical;
+            height: 5rem;
+            font-family: sans-serif;
+            width: 100%;
+        }
+
+        input:focus,
+        select:focus,
+        textarea:focus,
+        button:focus {
+            border-color: #478061;
+            outline: 1px solid #478061;
+        }
+
+
+        body {
+            justify-content: center;
+            font-family: sans-serif;
+        }
+
+        #definitions_and_translations {
+            display: grid;
+            margin: auto;
+            width: 1100px;
+            gap: 10px;
+            grid-template-areas: "definitions translations";
+
+        }
+
+        .def_type {
+            color: #007979;
+            text-transform: capitalize;
+        }
+
+        .syn {
+            color: #804700;
+        }
+
+        .syn_type {
+            color: #007979;
+        }
+
+        .use_in_sentence {
+            color: #009902;
+        }
+
+        .definitions li:not(:last-child) {
+          margin-bottom: 1rem;
+        }
+
+        @media screen and (max-width: 1200px) {
+            #definitions_and_translations {
+                display: grid;
+                width: 90vw;
+                grid-template-areas:
+                    "definitions definitions"
+                    "translations translations";
+            }
+        }
+
+
+        div.definitions {
+            grid-area: definitions;
+        }
+
+        div.translations {
+            grid-area: translations;
+        }
+
+        body {
+                background-color: #212529;
+                color: #f8f9fa;
+            }
+
+        #could_not_switch_languages_text {
+                color: #F13333;
+            }
+
+        a:visited {
+                color: #9759f6;
+                text-decoration: none;
+            }
+
+        a {
+                color: #599bf6;
+                text-decoration: none;
+            }
+
+            input,
+            select,
+            button,
+            textarea {
+                background-color: #131618;
+                border-color: #495057;
+                color: #f8f9fa;
+            }
+
+            .def_type {
+                color: cyan;
+                text-transform: capitalize;
+            }
+
+            .syn {
+                color: burlywood;
+            }
+
+            .syn_type {
+                color: cyan;
+            }
+
+            .use_in_sentence {
+                color: yellow;
+            }
+        
+        </style>
+      
+        <% if (isMobile) { %>  
+<style>
+  body {
+  overflow: auto;
+  }
+</style>
+           <% } %> 
+
+        <% if (!isMobile) { %>  
+<style>
+  body {
+  overflow: hidden;
+  }
+</style>
+           <% } %> 
+    </head>
+
+    <body>
+<div style="border-radius: 3em;background: #1a1a1a;padding: 1em;display: flex;flex-direction: column;height: fit-content;align-self: center;margin-top: 6em;">
+        
+        <header class="center"><h1>PokeTranslate</h1></header>
+ 
+                <form action="/translate" method="GET" id="translation-form">
+
+            <!-- from and to language -->
+            <div class="wrap languages">
+                <div class="language">
+                    
+               <% const languageOptions = [
+  { code: 'autodetect', name: 'Autodetect' },
+  { code: 'af', name: 'Afrikaans' },
+  { code: 'sq', name: 'Albanian' },
+  { code: 'am', name: 'Amharic' },
+  { code: 'ar', name: 'Arabic' },
+  { code: 'hy', name: 'Armenian' },
+  { code: 'as', name: 'Assamese' },
+  { code: 'ay', name: 'Aymara' },
+  { code: 'az', name: 'Azerbaijani' },
+  { code: 'bm', name: 'Bambara' },
+  { code: 'eu', name: 'Basque' },
+  { code: 'be', name: 'Belarusian' },
+  { code: 'bn', name: 'Bengali' },
+  { code: 'bh', name: 'Bhojpuri' },
+  { code: 'bs', name: 'Bosnian' },
+  { code: 'bg', name: 'Bulgarian' },
+  { code: 'ca', name: 'Catalan' },
+  { code: 'ceb', name: 'Cebuano' },
+  { code: 'ny', name: 'Chichewa' },
+  { code: 'zh-cn', name: 'Chinese (Simplified)' },
+  { code: 'zh-tw', name: 'Chinese (Traditional)' },
+  { code: 'co', name: 'Corsican' },
+  { code: 'hr', name: 'Croatian' },
+  { code: 'cs', name: 'Czech' },
+  { code: 'da', name: 'Danish' },
+  { code: 'dv', name: 'Dhivehi' },
+  { code: 'doi', name: 'Dogri' },
+  { code: 'nl', name: 'Dutch' },
+  { code: 'en', name: 'English' },
+  { code: 'eo', name: 'Esperanto' },
+  { code: 'et', name: 'Estonian' },
+  { code: 'ee', name: 'Ewe' },
+  { code: 'tl', name: 'Filipino' },
+  { code: 'fi', name: 'Finnish' },
+  { code: 'fr', name: 'French' },
+  { code: 'fy', name: 'Frisian' },
+  { code: 'gl', name: 'Galician' },
+  { code: 'ka', name: 'Georgian' },
+  { code: 'de', name: 'German' },
+  { code: 'el', name: 'Greek' },
+  { code: 'gn', name: 'Guarani' },
+  { code: 'gu', name: 'Gujarati' },
+  { code: 'ht', name: 'Haitian Creole' },
+  { code: 'ha', name: 'Hausa' },
+  { code: 'haw', name: 'Hawaiian' },
+  { code: 'he', name: 'Hebrew' },
+  { code: 'hi', name: 'Hindi' },
+  { code: 'hmn', name: 'Hmong' },
+  { code: 'hu', name: 'Hungarian' },
+  { code: 'is', name: 'Icelandic' },
+  { code: 'ig', name: 'Igbo' },
+  { code: 'ilo', name: 'Ilocano' },
+  { code: 'id', name: 'Indonesian' },
+  { code: 'ga', name: 'Irish' },
+  { code: 'it', name: 'Italian' },
+  { code: 'ja', name: 'Japanese' },
+  { code: 'jv', name: 'Javanese' },
+  { code: 'kn', name: 'Kannada' },
+  { code: 'kk', name: 'Kazakh' },
+  { code: 'km', name: 'Khmer' },
+  { code: 'rw', name: 'Kinyarwanda' },
+  { code: 'kok', name: 'Konkani' },
+  { code: 'ko', name: 'Korean' },
+  { code: 'kri', name: 'Krio' },
+  { code: 'ku', name: 'Kurdish (Kurmanji)' },
+  { code: 'sd', name: 'Sindhi' },
+  { code: 'si', name: 'Sinhala' },
+  { code: 'sk', name: 'Slovak' },
+  { code: 'sl', name: 'Slovenian' },
+  { code: 'so', name: 'Somali' },
+  { code: 'es', name: 'Spanish' },
+  { code: 'su', name: 'Sundanese' },
+  { code: 'sw', name: 'Swahili' },
+  { code: 'sv', name: 'Swedish' },
+  { code: 'tg', name: 'Tajik' },
+  { code: 'ta', name: 'Tamil' },
+  { code: 'tt', name: 'Tatar' },
+  { code: 'te', name: 'Telugu' },
+  { code: 'th', name: 'Thai' },
+  { code: 'ti', name: 'Tigrinya' },
+  { code: 'ts', name: 'Tsonga' },
+  { code: 'tr', name: 'Turkish' },
+  { code: 'tk', name: 'Turkmen' },
+  { code: 'twi', name: 'Twi' },
+  { code: 'uk', name: 'Ukrainian' },
+  { code: 'ur', name: 'Urdu' },
+  { code: 'ug', name: 'Uyghur' },
+  { code: 'uz', name: 'Uzbek' },
+  { code: 'vi', name: 'Vietnamese' },
+  { code: 'cy', name: 'Welsh' },
+  { code: 'xh', name: 'Xhosa' },
+  { code: 'yi', name: 'Yiddish' },
+  { code: 'yo', name: 'Yoruba' },
+  { code: 'zu', name: 'Zulu' }
+]; %>
+
+
+<!-- Source language select -->
+<select name="from_language" id="from_language" style="margin-right: 1em;border-radius: 1em;padding: 7px;" aria-label="Source language">
+   <% languageOptions.forEach(language => { %>
+    <option value="<%= language.code %>" <%= language.code === (from_language || 'autodetect') ? 'selected' : '' %>><%= language.name %></option>
+  <% }); %>
+</select>
+
+
+<!-- Target language select -->
+<select name="to_language" id="to_language"  style="margin-right: 1em;border-radius: 1em;padding: 7px;" aria-label="Target language">
+  <% languageOptions.slice(1).forEach(language => { %>
+    <option value="<%= language.code %>" <%= language.code === to_language ? 'selected' : '' %>><%= language.name %></option>
+  <% }); %>
+</select>
+
+                    
+                </div>
+            </div>
+
+            
+
+            <!-- text boxes -->
+            <div class="wrap">
+                <div class="item-wrapper">
+                    <textarea autofocus class="item" id="input" name="input" dir="auto"  placeholder="<%- text %>"><%- text %>
+</textarea>
+                    </div>
+
+
+
+                <div class="item-wrapper">
+                    <textarea id="output" class="translation item" dir="auto" placeholder="Translation" readonly> <%- translation %> </textarea>
+              </div>
+            </div>
+
+            <br>
+
+            <div class="center">
+                <!-- translate button -->
+                <button type="submit" style="border-radius: 1em;padding: 7px;">Translate :3</button>
+            </div>
+
+            <br>
+
+           
+
+            <br>
+ 
+                
+
+                
+            </div>
+
+        </form>
+            </div>
+
+
+        <br>
+        <br>
+        <br>
+
+ 
+
+        <script>
+            // @license magnet:?xt=urn:btih:0b31508aeb0634b347b8270c7bee4d411b5d4109&dn=agpl-3.0.txt AGPL-3.0
+            // this code submits the translation form when pressing Ctrl/Meta+Enter while focussed on the input text field
+            document.getElementById("input").addEventListener("keydown", function(event) {
+                if (event.keyCode === 13 && (event.metaKey || event.ctrlKey)) {
+                    document.getElementById("translation-form").submit();
+                }
+            });
+
+            // Auto resize textarea to fit words inside it without need to scroll -- Thanks to: https://stackoverflow.com/a/25621277
+            var input = document.getElementById("input");
+            var output = document.getElementById("output");
+            input.setAttribute("style", "height:" + output.scrollHeight + "px;overflow-y:scroll;");
+            output.setAttribute("style", "height:" + output.scrollHeight + "px;overflow-y:scroll;");
+            input.addEventListener("input", function(e) {
+                this.style.height = 150 + "px";
+                this.style.height = this.scrollHeight + "px";
+            });
+            
+            // @license-end
+        </script>
+     <script src="/static/custom-css.js"></script>
+    </body>
+</html>

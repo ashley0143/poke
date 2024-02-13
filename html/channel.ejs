@@ -1,9 +1,9 @@
-<% try { %>
+ <% try { %>
 
 <!--
     This Source Code Form is subject to the terms of the GNU General Public License:
 
-    Copyright (C) 2021-2023 POKETUBE (https://codeberg.org/Ashley/poketube)
+    Copyright (C) 2021-2024 POKETUBE (https://codeberg.org/Ashley/poketube)
     
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -19,26 +19,24 @@
     along with this program. If not, see https://www.gnu.org/licenses/.
 -->
 <!DOCTYPE html><html><head>
+   <!-- 🐷 🎗️ -->
+   
     <% if (ID === "UCFAiFyGs6oDiF1Nf-rRJpZA") { %> 
     <title>Technoblade Never Dies! - PokeTube</title>
  <% } %>
     <title><%=j.Channel?.Metadata.Name%> - PokeTube</title>
     <link rel="manifest" href="/manifest.json">
-   <link href=css/yt-ukraine.svg rel=icon>
+    <link href="css/yt-ukraine.svg" rel=icon>
     <meta content=website property=og:type>
+    <link rel="alternate" type="application/rss+xml" href="/feeds/videos.xml?channel_id=<%=ID%>">
     <meta content="<%=j.Channel?.Metadata.Name%> - PokeTube" property=og:title>
-       <link href=/css/yt-ukraine.svg?v=6 rel=icon>
-       
-
     <meta content="<%- cinv.description %>" property=twitter:description>
-        <% if (j.Channel?.Metadata.Banners.Thumbnail) { %>
-
+    <meta name="darkreader-lock"> <!-- tells dark reader that the site has a dark theme and to turn itself off -->
+    <% if (j.Channel?.Metadata.Banners.Thumbnail) { %>
     <meta content="<%=j.Channel?.Metadata?.Banners.Thumbnail[2].$t%>" property=og:image>
                    <% } %>
-
     <meta content=summary_large_image name=twitter:card>
-     <meta name="viewport" content="width=device-width, initial-scale=1">
- 
+    <meta name="viewport" content="width=device-width, initial-scale=1"> 
   <style> 
     * {
       color:#fff
@@ -310,7 +308,56 @@ text-transform:uppercase;
                      </style>
                      
   <% if(!isMobile) { %>
+    <noscript>
     <style>
+    #search {
+  display: none;
+}
+      
+.subscribe-button.needs-js {
+  display: none;
+}      
+
+.subscribe-button {
+  margin-right: 6px !important;
+  margin-top: 10px !important;
+  margin-left: -4px !important;
+}
+    </style>
+    </noscript>
+    <style>
+      .channel-info > .avatar > img {
+  width: auto;
+  height: auto;
+  max-height: 150px;
+}
+      
+      @media screen and (max-width: 1230px) {
+      .channel-info > .avatar > img {
+     margin-left: 1em;
+}
+        .name {
+            margin-left: 5em !important;
+        }
+}
+
+      .subscribe-button:hover {
+  animation: animateBg 2s infinite linear;
+  background-color: #fff;
+  background-image: linear-gradient(90deg,#da3287,#ffde5e,#da3287,#ffde5e);
+  background-size: 300% 100%;
+  box-shadow: 0 3px 14px #000;
+  cursor: pointer;
+}
+
+@keyframes animateBg {
+  0% {
+    background-position:0 0
+  }
+  100% {
+    background-position:100% 0
+  }
+}
       .video:hover{
         border:solid;
       }
@@ -328,6 +375,30 @@ text-transform:uppercase;
         .subs {
     margin: 0.6em;text-align: left;margin-left: 0px;margin-top: -1em;font-family: "PokeTube flex";font-weight: 1000;font-stretch: ultra-expanded;
   }
+        #popup-container {
+  display: none;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #111;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+            padding: 20px;
+            border-radius: 8px;
+            z-index: 1;
+  width: 45em;
+  height: 24em;
+  overflow:auto;
+        }
+
+        #close-btn {
+            cursor: pointer;
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 18px;
+            color: #555;
+        }
           .video-grid {
   display: flex;
   flex-wrap: wrap;
@@ -404,6 +475,8 @@ color:#ea9999 !important;
   .channel-info{
     text-align:center;
   }
+  
+  
 .sticky-top {
 	 position: sticky;
 	 top: 0px;
@@ -494,11 +567,9 @@ color:#ea9999 !important;
           <button class="btn btn-success" type="submit"><i class="fa-light fa-search"></i></button>
         
         </form>
-                               <img src="https://search-metrics.poketube.fun/t/rep.gif" style="border:0;width: 0;visibility: hidden;"> 
- 
+  
       </div>
-          <img src="https://search-metrics.poketube.fun/t/rep.gif"  style="border:0;width: 0;visibility: hidden;"> 
-
+ 
       </div>
       <div class="right">
       <a href="/privacy" style="text-decoration: none;" title="Privacy Policy">
@@ -514,6 +585,20 @@ color:#ea9999 !important;
 	   
  
                                                                                       <% } %>
+           <% if (!isMobile) { %>  
+
+    <div onclick="closePopup()" id="popup-container">
+        <div id="close-btn" onclick="closePopup()">X</div>
+   
+                            <% if (cinv.descriptionHtml) { %>  
+
+
+ <p style="color:#fff;margin-left: 10px;font-weight: bold;"><%-cinv.descriptionHtml%></p>
+     </div>
+      
+      <% } %>
+      <% } %>
+
 
 	   
                          <% if (isMobile) { %>  
@@ -555,56 +640,50 @@ color:#ea9999 !important;
 
           <img src="https://p.poketube.fun/<%=j.Channel?.Metadata.Banners.Thumbnail[2].$t%>">
                                <% } %>
-		<div class="channel-info" >
+                               
+		<div class="channel-info" style="margin-bottom: 2em;margin-left:3em">
 		<a href="/avatars/<%=j.Channel?.Metadata.Avatars.Thumbnail?.$t.replace("https://yt3.googleusercontent.com/", "")%>" class="avatar">
 				<img src="/avatars/<%=j.Channel?.Metadata.Avatars.Thumbnail?.$t.replace("https://yt3.googleusercontent.com/", "")%>" alt="Channel Avatar">
 			</a>
       
+    
               <% if (cinv?.authorVerified) { %>
                 <style>
 
                               .name {
-              border:solid 2.1px #df80ff;
+              border:solid 1px #df80ff;
                 }  
                 
                 </style>
 
+        
                 
                                                <% } %>
 
-			<div class="name" style="background: #333;border-radius: 12px;padding: 9px;height: 6em;">
+			<div class="name" style="background: #333;border-radius: 12px;padding: 17px;height: 7em;margin-left: 4em;margin-top: 7px;gap: 3px;">
 				<p style="font-family:PokeTube Flex,sans-serif;font-weight:1000;font-stretch: ultra-expanded;margin-top: 16px;margin-bottom: 15px;"><%=j.Channel?.Metadata.Name%>
           
-<span style="background: #0005;padding: 3px;padding-top:  2.5px !important;display: inline-flex;border-radius: 3px;">
-                <% if (cinv?.authorVerified) { %>
-                                  <% if (cinv?.isFamilyFriendly) { %>
+                <% if (cinv?.authorVerified) { %><span style="background: #0005;padding: 3px;padding-top:  2.5px !important;display: inline-flex;border-radius: 3px;">
 
- <i class="fa-solid fa-badge-check" style="width: 18px;margin-right:7px" title="Verified Channel"></i>
+                                
+ <i class="fa-solid fa-badge-check" style="width: 18px;margin-right:1px" title="Verified Channel"></i>
+
+ </span> 
                                                                  <% } %>
-                                  <% if (!cinv.isFamilyFriendly) { %>
- <i class="fa-solid fa-badge-check" style="width: 18px" title="Verified Channel"></i>
-
-                                                                                                                                    <% } %>
-
-                                                                 <% } %>
-                <% if (cinv?.isFamilyFriendly) { %>
-
-<img src="https://cdn.glitch.global/d68d17bb-f2c0-4bc3-993f-50902734f652/bbf42a35-8976-43a5-a7a2-72a81d9da7ce.image.png?v=1692301199470" style="width: 18px;" title="In Youtube kids" >
-                                                                                   <% } %>
-
-</span>           </p>
-                    <p style="margin-bottom: -11px;" class="subs"><%=subs%> subscribers</p>
+ <span style="font-size: 10px;color: gray;">@<%- cinv.authorId %>@youtube.com</span>
+</p>           
+                    <p style="margin-bottom: -17px;" class="subs"><%=subs%> subscribers</p>
 <p style="padding:0;font-weight:bold;max-inline-size: 37em;display: -webkit-box;-webkit-line-clamp: 3;-webkit-box-orient: vertical;"> 
  
 <% try { %>
-  <%- getFirstLine(cinv.description).slice(0, 60) %>
-  <a href="/channel?id=<%= ID %>&tab=about">
+  <%- getFirstLine(cinv.description).slice(0, 60) || "More from this channel (soon)"%>
+  <a href="/channel?id=<%=ID%>&tab=about&legacy=true" id="popup-trigger">
 <% } catch (error) { %>
   <!-- Handle the error here, if it occurs -->
   <p>Error: <%= error.message %></p>
 <% } %>
 
-  <i class="fa-thin fa-angle-right"></i></a><br><button class="subscribe-button " style="text-decoration: none;margin-right:3px !important;">    <a style="color: black;
+  <i class="fa-thin fa-angle-right"></i></a><br><button class="subscribe-button needs-js" style="text-decoration: none;margin-right:6px !important;margin-top: 10px !important;margin-left: -4px !important;">    <a style="color: black;
 white-space: nowrap;text-decoration: none;" id="sub">Suscribe</a></button><button class="subscribe-button " style="text-decoration: none;">    <a style="color: black;
 white-space: nowrap;text-decoration: none;" href="/feeds/videos.xml?channel_id=<%=ID%>">Rss feed </a></button>
       
@@ -652,8 +731,62 @@ white-space: nowrap;text-decoration: none;" href="/feeds/videos.xml?channel_id=<
                                                                          <% } %>
                                                                          <% } %>
 
+<%  if (Array.isArray(playlist?.playlists)) { %> 
+
+  <%  if (playlist.playlists.length != "0") { %> 
+
+     <a  href="/channel?id=<%=ID%>&tab=playlist"  class="tab" style="color:pink">Playlists</a>
+                                                                         <% } %>
+                                                                         <% } %>
+
  
                                                                 <% } %>
+                                                                  
+<% if (tab === "playlist") { %>
+
+                <a href="/channel?id=<%=ID%>" class="tab" style="color:#cfe2f3;">Videos</a>
+              
+<%  if (Array.isArray(shorts?.videos)) { %> 
+    <%  if (shorts.videos[0]) { %> 
+<%  if (turntomins(shorts.videos[0].lengthSeconds)  != "aN:aN" ) { %> 
+
+
+                   <a href="/channel?id=<%=ID%>&tab=shorts" class="tab shr">Shorts</a>
+  <% } %>
+      <% } %>
+
+      <% } %>
+        
+                          <%  if (Array.isArray(stream?.videos)) { %> 
+                                <%  if (stream.videos[0]) { %> 
+
+<%  if (turntomins(stream.videos[0].lengthSeconds)  != "aN:aN" ) { %> 
+
+                   <a href="/channel?id=<%=ID%>&tab=live" class="tab" style="color:#d9ead3;">Live</a>
+  <% } %>
+      <% } %>
+
+      <% } %>
+
+                           <%  if (Array.isArray(c?.comments)) { %> 
+
+  <%  if (c.comments.length != "0") { %> 
+
+     <a  href="/channel?id=<%=ID%>&tab=community"  class="tab" style="color:pink">Community</a>
+                                                                         <% } %>
+                                                                         <% } %>
+
+<%  if (Array.isArray(playlist?.playlists)) { %> 
+
+  <%  if (playlist.playlists.length != "0") { %> 
+
+     <a  href="/channel?id=<%=ID%>&tab=playlist"  class="tab active" style="color:pink">Playlists</a>
+                                                                         <% } %>
+                                                                         <% } %>
+
+ 
+                                                                <% } %>
+                                                                  
                                                                              <% if (tab === "about") { %>
 
                 <a href="/channel?id=<%=ID%>" class="tab" style="color:#cfe2f3;">Videos</a>
@@ -711,6 +844,15 @@ white-space: nowrap;text-decoration: none;" href="/feeds/videos.xml?channel_id=<
 
      <a  href="/channel?id=<%=ID%>&tab=community"  class="tab active" style="color:pink">Community</a>
  
+  
+<%  if (Array.isArray(playlist?.playlists)) { %> 
+
+  <%  if (playlist.playlists.length != "0") { %> 
+
+     <a  href="/channel?id=<%=ID%>&tab=playlist"  class="tab" style="color:pink">Playlists</a>
+                                                                         <% } %>
+                                                                         <% } %>
+
                                                                 <% } %>
 
                                                                                      <% if (tab === "shorts") { %>
@@ -738,9 +880,18 @@ white-space: nowrap;text-decoration: none;" href="/feeds/videos.xml?channel_id=<
                                                                          <% } %>
                                                                          <% } %>
 
+                                                                           
+<%  if (Array.isArray(playlist?.playlists)) { %> 
+
+  <%  if (playlist.playlists.length != "0") { %> 
+
+     <a  href="/channel?id=<%=ID%>&tab=playlist"  class="tab" style="color:pink">Playlists</a>
+                                                                         <% } %>
+                                                                         <% } %>
+                                                                           
                                                                 <% } %>
                                                                  
-                                                                                                 <% if (tab === "live") { %>
+    <% if (tab === "live") { %>
 
                 <a href="/channel?id=<%=ID%>" class="tab"  style="color:#cfe2f3;">Videos</a>
 <%  if (Array?.isArray(shorts?.videos)) { %> 
@@ -765,6 +916,7 @@ white-space: nowrap;text-decoration: none;" href="/feeds/videos.xml?channel_id=<
                                                                          <% } %>
 
                                                                 <% } %>
+                                                                            
             </div>
      
 <input type="text" id="search" placeholder="Search :3" style="margin-top: 2em;height: 1em;color: #fff;background: #111;border-radius: 1em;padding: 7px;margin-left: auto;margin-right: 1em;">                                                                           </div>
@@ -1110,7 +1262,7 @@ width: fit-content;
   <%  if (Array?.isArray( shorts.videos)) { %> 
     <% shorts.videos.forEach (x =>  { %>
       <a href="/shorts/<%- x.videoId %>" class="shorts-video" >
-        <img load="lazy" src='<%- media_proxy_url %>/proxy?url=https://vid.puffyan.us/vi/<%= x.videoId %>/hqdefault.jpg?sqp=-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLBy_x4UUHLNDZtJtH0PXeQGoRFTgw'>
+        <img load="lazy" onerror="this.src=`<%- media_proxy_url %>/proxy?url=https://vid.puffyan.us/vi/<%= x.videoId %>/hqdefault.jpg?sqp=-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLBy_x4UUHLNDZtJtH0PXeQGoRFTgw`" src='<%- media_proxy_url %>/proxy?url=https://vid.puffyan.us/vi/<%= x.videoId %>/maxresdefault.jpg?sqp=-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLBy_x4UUHLNDZtJtH0PXeQGoRFTgw'>
         <span class="shorts-title"><%- x.title %></span>
       </a>
     <% }) %>   
@@ -1122,8 +1274,17 @@ width: fit-content;
   <a style="color:#fff" href="/channel?id=<%=ID%>&tab=shorts&continuations=<%=shorts.continuation%>">Next Page</a>
 </div>
 <% } %>
+  
+<!-- SHORTS-VIDEO --->
+<!-- SHORTS-VIDEO --->
+<!-- SHORTS-VIDEO --->
+<!-- SHORTS-VIDEO --->
+<!-- SHORTS-VIDEO --->
+<!-- SHORTS-VIDEO --->
+<!-- SHORTS-VIDEO --->
+<!-- SHORTS-VIDEO --->
 
-<style>
+<style nonce="IJD3y0awTwA2dd0pWOP+ZQ">
 .shorts-video-grid {
   max-width: 1200px;
   margin: auto;
@@ -1143,23 +1304,14 @@ width: fit-content;
 }
 </style>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+<!-- SHORTS-VIDEO --->
+<!-- SHORTS-VIDEO --->
+<!-- SHORTS-VIDEO --->
+<!-- SHORTS-VIDEO --->
+<!-- SHORTS-VIDEO --->
+<!-- SHORTS-VIDEO --->
+<!-- SHORTS-VIDEO --->
+<!-- SHORTS-VIDEO --->
 
 <% } %>
             
@@ -1237,7 +1389,41 @@ width: fit-content;
  
           <% } %>
             
+               <% if (tab === "playlist") { %>  
+                                               
+                             
+
+             <div align="center">
+   
+ 
+    	<div class="video-grid" >
             
+   
+             <%  if (Array.isArray(playlist.playlists)) { %> 
+
+   <% playlist.playlists.forEach (x =>  { %>
+			<a href="/playlist?list=<%- x.playlistId %>" class="video">
+				<div class="thumbnail" style="background-image: url('<%- media_proxy_url %>/proxy?url=<%- x.playlistThumbnail %>?sqp=-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLBy_x4UUHLNDZtJtH0PXeQGoRFTgw');border-radius: 10px;"><span class="video-length"><%- x.videoCount %> Videos </span></div>
+				<div class="info">
+					<span class="title max-lines-2" style="font-family:PokeTube flex,sans-serif;font-weight: 1000;font-stretch: ultra-expanded;"><%- x.title %></span>
+			 
+            </div>
+ 			</a>	
+ 		 	               <% }) %>   
+ <% } %>
+
+                                             
+ 
+         
+ 
+                       
+                       </div>
+          
+
+ 
+          <% } %>
+            
+                       
     <% if (tab === "community") { %>
     <%  if (Array?.isArray( c?.comments)) { %> 
 <div class="community">
@@ -1320,39 +1506,38 @@ width: fit-content;
 
                                                                  
  <% if (tab === "about") { %>
-   <div style="text-align: left;">   
-     <h3 style="color:#fff;font-family:Ginto Nord,sans-serif;font-weight:900;padding: 0px;margin: 0;margin-top: 7px;margin-left: 10px;">About</h3>
+   
+   <% if (!isMobile) { %>  
+       
 
+               
+<div style="display: flex;flex-direction: row;">
+  
+ 
+  <div style="background: #333;display: flex;flex-direction: column;margin-top: 1em;margin-left: 1em;border-radius: 1em;margin-bottom: 1em;box-sizing: border-box;width: 100%;margin-right: 20px;min-height: 19em;">   
+     <h3 style="color:#fff;font-family:PokeTube flex,sans-serif;font-weight:1000;font-stretch:ultra-expanded:padding: 0px;margin: 0;margin-top: 7px;margin-left: 10px;">About</h3>
 
      <% if (cinv.descriptionHtml) { %>
 
  <p style="color:#fff;margin-left: 10px;font-weight: bold;"><%-cinv.descriptionHtml%></p>
   <% } %>
-          <% if (wiki.extract_html) { %> 
-                     <h3 style="color:#fff;font-family:Ginto Nord,sans-serif;font-weight:900;padding: 0px;margin: 0;margin-top: 7px;margin-left: 10px;">From the web</h3>
+         </div>
 
-            <div style="color:#fff;margin-left: 10px;">
-            <p style="color:#fff:font-weight: bold;"> 
+       <% } %>
+
+    <% if (isMobile) { %>  
+       
+
               
- <%-wiki.extract_html%>              </p>  
- 
-                           </div>
 
-               <div style="color:#fff;margin-left: 10px;">
+    <div style="text-align: left;">   
+     <h3 style="color:#fff;font-family:Ginto Nord,sans-serif;font-weight:900;padding: 0px;margin: 0;margin-top: 7px;margin-left: 10px;">About</h3>
 
-<p style="margin-bottom: 10px;">
+     <% if (cinv.descriptionHtml) { %>
 
-  <a href=" <%-wiki.content_urls.desktop.page%>
- ">From wikipedia </a> under CC-BY-SA 3.0
-                     </p>
-            </div>
-  
-                 
-                     </p>
-                     <% } %>   
-                       <div style="font-weight: bold;color:#fff;margin-left: 10px;">
-    YouTube removed the about tab ;_; fix for this soon lol
-  </div>
+ <p style="color:#fff;margin-left: 10px;font-weight: bold;"><%-cinv.descriptionHtml%></p>
+  <% } %>
+       <% } %>
                        </div>
    <% } %>
 
@@ -1370,8 +1555,8 @@ if (userID) {
     anchor.href = `/api/set-channel-subs?ID=${userID}&channelName=<%=j.Channel?.Metadata.Name%>&avatar=https://p.poketube.fun/<%- j.Channel?.Metadata.Avatars.Thumbnail?.$t %>&channelID=<%= ID %>`;
 } else {
     // If user ID doesn't exist in localStorage, you can handle it as needed
-    console.log("User ID not found in localStorage");
-    // Optionally, you can set a default href or display an error message.
+     anchor.href = "/account-create"
+     // Optionally, you can set a default href or display an error message.
 }
     
 document.getElementById('search').addEventListener('keyup', function () {
@@ -1405,7 +1590,28 @@ document.getElementById('search').addEventListener('keyup', function () {
     }
   });
 });
-   
+        var isPopupOpen = false;
+
+        function togglePopup() {
+            if (isPopupOpen) {
+                closePopup();
+            } else {
+                document.getElementById('popup-container').style.display = 'block';
+                document.body.style.overflow = 'hidden';
+            }
+            isPopupOpen = !isPopupOpen;
+        }
+
+        function closePopup() {
+            document.getElementById('popup-container').style.display = 'none';
+            document.body.style.overflow = 'auto';
+            isPopupOpen = false;
+        }
+
+        document.getElementById('popup-trigger').addEventListener('click', function (event) {
+            event.preventDefault();
+            togglePopup();
+        }); 
 // @license-end
 
      </script>
@@ -1417,8 +1623,4 @@ document.getElementById('search').addEventListener('keyup', function () {
 
 <% } catch (error) { %>
  <% } %>
- <script>
-  if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('service-worker.js');
-  }
-  </script>
+ 

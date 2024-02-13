@@ -1,7 +1,7 @@
  <!--
     This Source Code Form is subject to the terms of the GNU General Public License:
 
-    Copyright (C) 2021-2023 POKETUBE (https://codeberg.org/Ashley/poketube)
+    Copyright (C) 2021-2024 POKETUBE (https://codeberg.org/Ashley/poketube)
     
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -134,7 +134,19 @@ summary:hover{
   font-family: ubuntu, sans-serif;
 } 
    
-
+.search-result{
+      color: white;
+  width: 52em;
+  display: block;
+  white-space: -moz-pre-wrap !important;
+  white-space: -pre-wrap;
+  white-space: -o-pre-wrap;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  white-space: -webkit-pre-wrap;
+  word-break: break-all;
+  white-space: normal;
+    }
 .hide {
   display: none;
 }
@@ -445,17 +457,17 @@ Web
                                                                           <div class="video-list" >
 
      <% results.forEach(x => { %>
-                                                                       <div class="video" style="height: 6em;">
+                                                                       <div class="video" style="height: 7em;">
 
-        <a style="min-width: 81em;" href="<%= x.link %>"><%= x.title %></a><br>
-        <p style="color:gray;display: flex;flex-direction: column;width: 48em;margin-top: -8em;"><%= x.link %><br>
+        <a style="min-width: 81em;" href="<%= x.url %>"><%= x.title %></a><br>
+        <p style="color:gray;display: flex;flex-direction: column;width: 48em;margin-top: -8em;"><%= x.url %><br>
           <% if (!isMobile) { %> 
 
-         <span style="color:white;width: 48em;display: flex;"><%= x.snippet %></span>
+         <span class="search-result"><%- x.description %></span>
                      <% } %> 
  <% if (isMobile) { %> 
-
-         <span style="color:white;max-width: 15em;display: flex;"><%= x.snippet %></span>
+   
+         <span class="search-result"><%- x.description %></span>
                      <% } %> 
           </p>
               </div>
@@ -464,13 +476,23 @@ Web
  
         </a>
         </div>
-                                    
+                
+                                
                  <script src="/css/custom-css.js"> </script>
- 
+ <script>      if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.getRegistrations().then(function(registrations) {
+    for (let registration of registrations) {
+      registration.unregister();
+    }
+  });
+  if ('caches' in window) {
+  caches.keys().then(function(cacheNames) {
+    cacheNames.forEach(function(cacheName) {
+      caches.delete(cacheName);
+    });
+  });
+}
+
+}</script>
                                     </body>
                               
-                                    <script>
-                                      if ('serviceWorker' in navigator) {
-                                        navigator.serviceWorker.register('service-worker.js');
-                                      }
-                                      </script>

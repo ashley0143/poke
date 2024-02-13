@@ -166,6 +166,15 @@ module.exports = function (app, config, renderTemplate) {
   app.get("/favicon.ico", function (req, res) {
     res.sendFile("favicon.ico", { root: cssDir });
   });
+  app.get("/bg-full.webm", function (req, res) {
+    res.sendFile("bg-full.webm", { root: cssDir });
+  });
+  app.get("/bg-720.webm", function (req, res) {
+    res.sendFile("bg-720.webm", { root: cssDir });
+  });
+  app.get("/bg-480.webm", function (req, res) {
+    res.sendFile("bg-480.webm", { root: cssDir });
+  });
 
   app.get("/css/:id", (req, res) => {
     const filePath = path.join(cssDir, req.params.id);

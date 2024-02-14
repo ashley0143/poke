@@ -1,5 +1,3 @@
-
- 
 /* cyrillic */
 @font-face {
   font-family: "Ubuntu";
@@ -691,6 +689,7 @@ html {
 } 
 
 body {
+  background-color: #250717;
   color: #fff;
   font-family: ubuntu, sans-serif;
   margin: auto;
@@ -700,9 +699,6 @@ body {
   min-height: 100vh;
   flex-direction: column;
   justify-content: flex-start;
-  background-image: radial-gradient(circle, #231638, #2b160e, #09250e, #0f132b);
-  animation: gradient 64s ease infinite;
-  background-size: 400% 400%;
 }
 body {cursor: url('/static/cursor.ico'), default}
 
@@ -717,17 +713,6 @@ span > a,
 li > a {cursor: url('/static/cursor-pointer.ico'), pointer}
 .btn {cursor: url('/static/cursor-pointer.ico'), pointer !important}
 
-@keyframes gradient {
-  0% {
-    background-position: 0 50%;
-  }
-  50% {
-    background-position: 100% 50%;
-  }
-  100% {
-    background-position: 0 50%;
-  }
-}
 @font-face {
   font-family: "PokeTube Flex";
   src: url("https://p.poketube.fun/https://cdn.glitch.global/43b6691a-c8db-41d4-921c-8cf6aa0d9108/robotoflex.ttf?v=16683434286881");
@@ -894,5 +879,30 @@ button[type="submit"]:hover {
     text-align: left;
     width: max-content;
     margin: auto;
+  }
+}
+
+video {
+  position: fixed;
+  top: 0px;
+  left: 0px;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: -1;
+  opacity: 0.2;
+  pointer-events: none;
+}
+
+
+@media screen and (max-width: 1919px) {
+  #HD-BG {
+      display: none;
+  }
+}
+  
+@media screen and (min-width: 1920px) {
+  #SD-BG {
+      display: none;
   }
 }

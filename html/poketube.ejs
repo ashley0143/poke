@@ -1239,13 +1239,11 @@ display: block; !important;" autoplay controls>
                                                                                                                    <% }%>                                                                                                                          <% if (video?.Channel.Name.endsWith(' - Topic') || inv_vid.title.endsWith('Audio)')) { %> 
                                                             
                             <% if (video?.Channel.Name.endsWith(' - Topic') || inv_vid.title.endsWith('Audio)'))  { %> 
-                                                 					<a  class="new-button" title="open this song in poketube music player :3" style="color:var(--text-color);text-decoration: none;" href="/music?v=<%=inv_vid.videoId%>">
+                                                 					<a  class="new-button" title="open this song in poketube music player :3" style="color:var(--text-color);text-decoration: none;" href="/">
                                                                                                     <div class="pill-button">
 
           <i class="fa-light fa-music"></i>
-                  Open In Music Player
-                                                            </div>
-                                                 </a>
+WIP!                                                 </a>
 
                                                                        <% }%>                     
                                                                           <% }%>      
@@ -2009,7 +2007,10 @@ window.addEventListener("unload", cleanup)
 </script>
 <!-- SCRIPTS END -->
   
-</div>           <script>
+</div>          
+     <% if(secure) { %>
+
+     <script>
           var statsurl = "https://invid-api.poketube.fun/api/v1/stats"
           
             const userAgent = window.navigator.userAgent;
@@ -2044,6 +2045,7 @@ fetch(statsurl + "?browser=" + encodedBrowserName)
              
      
            </script>
+          <% } %>   
 
  
     </ptd-app-ejs>

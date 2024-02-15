@@ -31,6 +31,8 @@
   } = require("./src/libpoketube/libpoketube-initsys.js");
   const media_proxy = require("./src/libpoketube/libpoketube-video.js");
   const { sinit } = require("./src/libpoketube/init/superinit.js");
+  const innertube = require("./src/libpoketube/libpoketube-youtubei-objects.json");
+  
   const config = require("./config.json");
   const u = await media_proxy();
   initlog("Loading...");
@@ -160,10 +162,12 @@ toobusy.maxLag(3500);
     });
 
     app.use(function (req, res, next) {
-      res.header("X-PokeTube-Youtube-Client-Name", "1");
+      res.header("X-PokeTube-Youtube-Client-Name", innertube.innertube.CONTEXT_CLIENT.INNERTUBE_CONTEXT_CLIENT_NAME);
       res.header("Hey-there", "Do u wanna help poke? contributons are welcome :3 https://codeberg.org/Ashley/poke")
-      res.header("X-PokeTube-Youtube-Client-Version", "2.20240111.00.00");
+      res.header("X-PokeTube-Youtube-Client-Version", innertube.innertube.CLIENT.clientVersion);
+      res.header("X-PokeTube-Client-name", innertube.innertube.CLIENT.projectClientName);
       res.header("X-PokeTube-Speeder", "3 seconds no cache, 280ms w/cache");
+      res.header("X-HOSTNAME", req.hostname);
       if (req.url.match(/^\/(css|js|img|font)\/.+/)) {
         res.setHeader(
           "Cache-Control",

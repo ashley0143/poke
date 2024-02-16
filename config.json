@@ -7,6 +7,7 @@
     "media_proxy": "https://image-proxy.poketube.fun",
     "cacher_max_age": "864000",
     "enablealwayshttps": false,
+    "proxylocation":"USA",
     "t_url": "https://t.poketube.fun/",
     "server_port": "6003"
   }

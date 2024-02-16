@@ -2,7 +2,7 @@
 
     PokeTube is a Free/Libre youtube front-end !
     
-    Copyright (C) 2021-2023 POKETUBE
+    Copyright (C) 2021-2024 POKETUBE
  
     This file is Licensed under LGPL-3.0-or-later. Poketube itself is GPL, Only this file is LGPL.
     
@@ -14,6 +14,7 @@
 
 const fetcher = require("../libpoketube/libpoketube-dislikes.js");
 const core = require("../libpoketube/libpoketube-core.js");
+const INNERTUBE = require("../libpoketube/libpoketube-core.js");
 const musicInfo = require("music-info");
 const wiki = require("wikipedia");
 const config = require("../../config.json")
@@ -68,6 +69,7 @@ module.exports = {
    * @type {object}
    */
   core,
+  INNERTUBE,
   
   /**
    * The musicInfo module

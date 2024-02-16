@@ -37,7 +37,7 @@
     "INNERTUBE_API_ENPOINTS": {
       "UPLOAD_ENPOINT": "https://upload.youtube.com",
       "LIVE_CHAT_BASE_TANGO_CONFIG": {
-        "apiKey": "AIzaSyDCU8hByM-4DrUqRUYnGn-3llEO78bcxq8",
+        "apiKey": "AIzaSyB-63vPrdThhKuerbB2N_l7Kwwcxj6yUAc",
         "channelUri": "https://client-channel.google.com/client-channel/client",
         "clientName": "yt-live-comments",
         "requiresAuthToken": false,

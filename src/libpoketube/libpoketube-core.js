@@ -20,6 +20,7 @@ class InnerTubePokeVidious {
    * @param {object} config - Configuration object for InnerTubePokeVidious.
    * @param {string} config.tubeApi - Tube API URL.
    * @param {string} config.invapi - Invid API URL.
+   * @param {string} config.invapi_alt - Invid API URL - ALT .
    * @param {string} config.dislikes - Dislikes API URL.
    * @param {string} config.t_url - Matomo URL.
    */
@@ -27,6 +28,8 @@ class InnerTubePokeVidious {
     this.config = config;
     this.cache = {};
     this.language = "hl=en-US";
+    this.apikey = "AIzaSyAO_FJ2SlqU8Q4STEHLGCilw_Y9_11qcW8"
+    this.INNERTUBE_CONTEXT_CLIENT_VERSION = "1"
     this.region = "region=US";
     this.sqp = "-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLBy_x4UUHLNDZtJtH0PXeQGoRFTgw";
   }
@@ -78,8 +81,8 @@ class InnerTubePokeVidious {
     
     try {
     const [invComments, videoInfo, videoData] = await Promise.all([
-      fetch(`${this.config.invapi}/comments/${v}?hl=${contentlang}&region=${contentregion}&h=${btoa(Date.now())}`).then((res) => res.text()),
-      fetch(`${this.config.invapi}/videos/${v}?hl=${contentlang}&region=${contentregion}&h=${btoa(Date.now())}`).then((res) => res.text()),
+      fetch(`${this.config.invapi_alt}/comments/${v}?hl=${contentlang}&region=${contentregion}&h=${btoa(Date.now())}`).then((res) => res.text()),
+      fetch(`${this.config.invapi_alt}/videos/${v}?hl=${contentlang}&region=${contentregion}&h=${btoa(Date.now())}`).then((res) => res.text()),
       curly
         .get(`${this.config.tubeApi}video?v=${v}`, {
           httpHeader: Object.entries(headers).map(([k, v]) => `${k}: ${v}`),

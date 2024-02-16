@@ -96,7 +96,7 @@ class InnerTubePokeVidious {
     const { json, video } = videoData;
 
     const channel_uploads = await fetch(
-      `${this.config.invapi}/channels/${vid.authorId}?hl=${contentlang}&region=${contentregion}`
+      `${this.config.invapi_alt}/channels/${vid.authorId}?hl=${contentlang}&region=${contentregion}`
     );
     const p = this.getJson(await channel_uploads.text());
 

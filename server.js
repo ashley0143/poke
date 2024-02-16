@@ -177,6 +177,7 @@ toobusy.maxLag(3500);
       }
 
       const a = 890;
+      
       if (!req.url.match(/^\/(css|js|img|font)\/.+/)) {
         res.setHeader("Cache-Control", "public, max-age=" + a); // cache header
         res.setHeader("poketube-cacher", "PAGE");

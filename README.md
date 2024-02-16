@@ -103,7 +103,7 @@ git clone https://github.com/ashley0143/poke.git
 Or you can use our forgejo instance:
 
 ```
-git clone https://git.poketube.fun/ashley/poke.gitt
+git clone https://git.poketube.fun/ashley/poke.git
 ```
 
 Now, install the needed dependencies within the Poke folder:

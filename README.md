@@ -82,7 +82,11 @@ you can view the source code of the openh264 codec in this repo :3 --> https://g
 PLEASE NOTE THAT THIS SOFTWARE MAY INCULUDE CODECS THAT IN CERTAIN COUNTRIES MAY BE COVERED BY PATENTS OR HAVE LEGAL ISSUES. PATENT AND COPYRIGHT LAWS OPERATE DIFFERENTLY DEPENDING ON WHICH COUNTRY YOU ARE IN. PLEASE OBTAIN LEGAL ADVICE IF YOU ARE UNSURE WHETHER A PARTICULAR PATENT OR RESTRICTION APPLIES TO A CODEC YOU WISH TO USE IN YOUR COUNTRY.
 
 ## Hosting Poke~
-### With NodeJS
+
+### IMPORTANT 
+Before you host, if ur server is in usa, set the proxylocation to `USA` (which is the default) - if you use any eu server set it to `EU` instead to make videos load faster
+
+ ### With NodeJS
 - To self host your own Poke instance, you'll need the following:
 
   - [Node.js](https://nodejs.org/en/download/)
@@ -107,7 +111,7 @@ git clone https://git.poketube.fun/ashley/poke.git
 ```
 
 Now, install the needed dependencies within the Poke folder:
-( go to the folder by running cd pokee)
+( go to the folder by running cd poke)
 ```
 npm install 
 ```

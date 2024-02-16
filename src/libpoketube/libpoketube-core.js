@@ -10,6 +10,7 @@ const { toJson } = require("xml2json");
 const { curly } = require("node-libcurl");
 const getdislikes = require("../libpoketube/libpoketube-dislikes.js");
 const getColors = require("get-image-colors");
+const config = require("../../config.json")
 
 /**
  * Class representing PokeTube's core functionality.
@@ -174,7 +175,7 @@ class InnerTubePokeVidious {
 const pokeTubeApiCore = new InnerTubePokeVidious({
   tubeApi: "https://inner-api.poketube.fun/api/",
   invapi: "https://invid-api.poketube.fun/api/v1",
-  invapi_alt: "https://iv.ggtyler.dev/api/v1",
+  invapi_alt: config.proxylocation === "EU" ? "https://invid-api.poketube.fun/api/v1" : "https://iv.ggtyler.dev/api/v1",
   dislikes: "https://returnyoutubedislikeapi.com/votes?videoId=",
   t_url: "https://t.poketube.fun/",
 });

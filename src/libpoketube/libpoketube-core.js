@@ -14,10 +14,10 @@ const getColors = require("get-image-colors");
 /**
  * Class representing PokeTube's core functionality.
  */
-class PokeTubeCore {
+class InnerTubePokeVidious {
   /**
-   * Create an instance of PokeTubeCore.
-   * @param {object} config - Configuration object for PokeTubeCore.
+   * Create an instance of InnerTubePokeVidious.
+   * @param {object} config - Configuration object for InnerTubePokeVidious.
    * @param {string} config.tubeApi - Tube API URL.
    * @param {string} config.invapi - Invid API URL.
    * @param {string} config.dislikes - Dislikes API URL.
@@ -62,7 +62,7 @@ class PokeTubeCore {
    * @param {string} v - Video ID.
    * @returns {Promise<object>} Promise resolving to the video information.
    */
-  async video(v, contentlang, contentregion) {
+  async getYouTubeApiVideo(v, contentlang, contentregion) {
     
     const { fetch } = await import("undici");
     
@@ -167,8 +167,8 @@ class PokeTubeCore {
   }
 }
 
-// Create an instance of PokeTubeCore with the provided config
-const pokeTubeApiCore = new PokeTubeCore({
+// Create an instance of InnerTubePokeVidious with the provided config
+const pokeTubeApiCore = new InnerTubePokeVidious({
   tubeApi: "https://inner-api.poketube.fun/api/",
   invapi: "https://invid-api.poketube.fun/api/v1",
   invapi_alt: "https://iv.ggtyler.dev/api/v1",

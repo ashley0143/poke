@@ -585,19 +585,6 @@ color:#ea9999 !important;
 	   
  
                                                                                       <% } %>
-           <% if (!isMobile) { %>  
-
-    <div onclick="closePopup()" id="popup-container">
-        <div id="close-btn" onclick="closePopup()">X</div>
-   
-                            <% if (cinv.descriptionHtml) { %>  
-
-
- <p style="color:#fff;margin-left: 10px;font-weight: bold;"><%-cinv.descriptionHtml%></p>
-     </div>
-      
-      <% } %>
-      <% } %>
 
 
 	   
@@ -624,15 +611,38 @@ color:#ea9999 !important;
     </nav>
 
                                                                                      <% } %>
+                         <% if (cinv.error) { %>  
+<style>
+
+body {
+background: #111 !important;
+height: 100%;
+}
+.banned-user {
+	border-radius: 50%;
+	margin-bottom: -2em;
+	pointer-events: none;
+}
+.ban-reason {
+    background:  #b91f1f;
+  border-radius: 2em;
+  padding: 10px;
+  margin-top: 4em;
+} 
+
+</style>
+<img class="banned-user" src="<%- media_proxy_url %>/proxy?url=https://yt3.googleusercontent.com/a/default-user=s100-c-k-c0x00ffffff-no-rj">
+<p class="ban-reason"> <%- cinv.error %> - literally 1984 lmao</p>
+               
+                                                                                           <% } %>
 
         <section class=youtube-video>
 <div class="channel-page">
 
 <div class="channel-page">
-       
-               
-      
-                                 
+
+                                                      <% if (!cinv.error) { %>  
+    
           <% if (!isMobile) { %>  
             <div class="channel-info-container" style="text-align: center;">
 
@@ -1540,6 +1550,19 @@ width: fit-content;
        <% } %>
                        </div>
    <% } %>
+           <% if (!isMobile) { %>  
+
+    <div onclick="closePopup()" id="popup-container">
+        <div id="close-btn" onclick="closePopup()">X</div>
+   
+                            <% if (cinv.descriptionHtml) { %>  
+
+<p style="color:#fff;margin-left: 10px;font-weight: bold;text-align: left;"><%-cinv.descriptionHtml%></p>
+     </div>
+      
+      <% } %>
+      <% } %>
+                                                                                           <% } %>
 
 <script src="/css/custom-css.js"> </script>
   <script>

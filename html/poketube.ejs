@@ -1823,20 +1823,6 @@ if (/[?&]autoplay=/.test(location.search)) {
 }
  <% } %>
   
-const lazyElements = document.querySelectorAll('*');
-
-const observer = new IntersectionObserver((entries, observer) => {
-  entries.forEach(entry => {
-    if (entry.isIntersecting) {
-      entry.target.classList.add('loaded');
-      observer.unobserve(entry.target);
-    }
-  });
-});
-
-lazyElements.forEach(element => {
-  observer.observe(element);
-});
 
 </script>
      <script>

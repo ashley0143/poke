@@ -1895,7 +1895,7 @@ let lastDrawTime = 0; // Timestamp of the last draw request
 const loopStart = () => {
   const now = performance.now();
   const elapsed = now - lastDrawTime;
-  if (elapsed >= (1000 / 30)) { // Adjusted for milliseconds
+  if (elapsed >= (1000 / 15)) { // Adjusted for milliseconds
     lastDrawTime = now;
     draw();
   }

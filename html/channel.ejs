@@ -648,12 +648,12 @@ height: 100%;
 
         <% if (j?.Channel?.Metadata?.Banners.Thumbnail) { %>
 
-          <img src="https://p.poketube.fun/<%=j.Channel?.Metadata.Banners.Thumbnail[2].$t%>">
-                               <% } %>
+          <img src="<%- media_proxy_url %>/proxy?url=<%=j.Channel?.Metadata.Banners.Thumbnail[2].$t%>" style="height: 30em;object-fit: cover;pointer-events:none;">
+           <% } %>
                                
-		<div class="channel-info" style="margin-bottom: 2em;margin-left:3em">
+<div class="channel-info" style="margin-bottom: 3em;margin-left:2em;margin-top: -11em;">
 		<a href="/avatars/<%=j.Channel?.Metadata.Avatars.Thumbnail?.$t.replace("https://yt3.googleusercontent.com/", "")%>" class="avatar">
-				<img src="/avatars/<%=j.Channel?.Metadata.Avatars.Thumbnail?.$t.replace("https://yt3.googleusercontent.com/", "")%>" alt="Channel Avatar">
+				<img src="/avatars/<%=j.Channel?.Metadata.Avatars.Thumbnail?.$t.replace("https://yt3.googleusercontent.com/", "")%>" alt="Channel Avatar" style="border: 1px solid gray;border-radius: 50%;">
 			</a>
       
     

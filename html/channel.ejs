@@ -647,12 +647,19 @@ height: 100%;
             <div class="channel-info-container" style="text-align: center;">
               
 <% if (j?.Channel?.Metadata?.Banners.Thumbnail) { %>
+    <% let thumbnailFound = false; %>
     <% for (let i = 5; i >= 1; i--) { %>
         <% if (j.Channel.Metadata.Banners.Thumbnail[i]?.['$t']) { %>
             <img src="<%- media_proxy_url %>/proxy?url=<%= j.Channel.Metadata.Banners.Thumbnail[i].$t %>" style="height: 30em; object-fit: cover; pointer-events: none;" id="thumbnail_version_<%= i %>">
+            <% thumbnailFound = true; %>
             <% break; %>
         <% } %>
     <% } %>
+    <% if (!thumbnailFound) { %>
+        <img src="https://yt3.googleusercontent.com/tfEr9n7lMxqks-RabIC3cp66_Z2QVFk9qyGofc3MGfvM-NfndDHZPT8AVa9LCoNmzQSQ9wx2Mg=w1707-fcrop64=1,00005a57ffffa5a8-k-c0xffffffff-no-nd-rj" style="height: 30em; object-fit: cover; pointer-events: none;" id="default_thumbnail">
+    <% } %>
+<% } else { %>
+    <img src="https://yt3.googleusercontent.com/tfEr9n7lMxqks-RabIC3cp66_Z2QVFk9qyGofc3MGfvM-NfndDHZPT8AVa9LCoNmzQSQ9wx2Mg=w1707-fcrop64=1,00005a57ffffa5a8-k-c0xffffffff-no-nd-rj" style="height: 30em; object-fit: cover; pointer-events: none;" id="default_thumbnail">
 <% } %>
 
 

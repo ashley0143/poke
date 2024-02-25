@@ -57,6 +57,33 @@
         "branch": "dev"
       }
     }
+  ],
+[
+    "poke.shiggy.cloud",
+    {
+      "uri": "https://poke.shiggy.cloud",
+      "CLOUDFLARE": false,
+      "piwik": false,
+      "region": "🇬🇧",
+      "software": {
+        "name": "poketube",
+        "version": "latest",
+        "branch": "dev"
+      }
+    }
+  ],
+  [
+    "poke.fr1.shiggy.cloud",
+    {
+      "uri": "https://poke.fr1.shiggy.cloud",
+      "CLOUDFLARE": false,
+      "piwik": false,
+      "region": "🇫🇷",
+      "software": {
+        "name": "poketube",
+        "version": "latest",
+        "branch": "dev"
+      }
+    }
   ]
 ]
-

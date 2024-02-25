@@ -395,7 +395,7 @@ a[data-onclick="jump_to_time"] {
                                             		 	               <% } %> 
   <!-- ICONS -->
  <link href="<%- proxyurl %>/https://site-assets.fontawesome.com/releases/v6.1.1/css/all.css" rel=stylesheet>
- <link href="<%- proxyurl %>/https://unpkg.com/ionicons@4.5.10-0/dist/css/ionicons.css" rel=stylesheet>
+ <link href="<%- proxyurl %>/https://unpkg.com/ionicons@4.5.10-0/dist/css/ionicons.min.css" rel=stylesheet>
 
   
   <noscript>
@@ -1199,7 +1199,7 @@ display: block; !important;" autoplay controls>
 					</a>
   
    <% if (!video?.Channel.Name.endsWith(' - Topic')) { %> 
-    <% if (!inv_vid.title.endsWith('Audio)')) { %> 
+    <% if (!inv_vid.title.endsWith('IGNORE_THIS_PLEASE)')) { %> 
    <% if (support != undefined) { %> 
 
     <div class="new-button button-encryption">
@@ -1221,7 +1221,7 @@ display: block; !important;" autoplay controls>
       <% if (support == undefined) { %> 
 
  <% if (!video?.Channel.Name.endsWith(' - Topic')) { %> 
-    <% if (!inv_vid.title.endsWith('Audio)')) { %> 
+    <% if (!inv_vid.title.endsWith('IGNORE_THIS_PLEASE)')) { %> 
 
       <div class="new-button button-encryption">
 					<a   title="Switch PokeTube Instance :3" style="color:var(--text-color);text-decoration: none;" href="https://redirect.poketube.fun/watch?v=<%=inv_vid.videoId%>">
@@ -1238,14 +1238,12 @@ display: block; !important;" autoplay controls>
                                                                           <% }%>                                                                              <% }%>      
                                                                                                                    <% }%>                                                                                                                          <% if (video?.Channel.Name.endsWith(' - Topic') || inv_vid.title.endsWith('Audio)')) { %> 
                                                             
-                            <% if (video?.Channel.Name.endsWith(' - Topic') || inv_vid.title.endsWith('Audio)'))  { %> 
-                                                 					<a  class="new-button" title="open this song in poketube music player :3" style="color:var(--text-color);text-decoration: none;" href="/music?v=<%=inv_vid.videoId%>">
+                            <% if (video?.Channel.Name.endsWith(' - Topic') || inv_vid.title.endsWith('IGNORE_THIS_PLEASE)'))  { %> 
+                                                 					<a  class="new-button" title="open this song in poketube music player :3" style="color:var(--text-color);text-decoration: none;" href="/">
                                                                                                     <div class="pill-button">
 
           <i class="fa-light fa-music"></i>
-                  Open In Music Player
-                                                            </div>
-                                                 </a>
+WIP!                                                 </a>
 
                                                                        <% }%>                     
                                                                           <% }%>      
@@ -1253,7 +1251,7 @@ display: block; !important;" autoplay controls>
     
                                                     
  <% if (!video?.Channel.Name.endsWith(' - Topic')) { %> 
-    <% if (!inv_vid.title.endsWith('Audio)')) { %>            
+    <% if (!inv_vid.title.endsWith('IGNORE_THIS_PLEASE)')) { %>            
       <%  if (inv.comments) { %> 
 
       <div class="new-button button-lite" style=";margin-left: -4px;">
@@ -1291,7 +1289,7 @@ display: block; !important;" autoplay controls>
            <div style="margin-top:1em;">
              
         
-              <%-String(channelurlfixer(inv_vid.descriptionHtml)).replace(/\n/g, " <br> ").replace(/twitter\.com/g, "nitter.freedit.eu").replace(/reddit\.com/g, "redlib.matthew.science") %>
+              <%-String(channelurlfixer(inv_vid.descriptionHtml)).replace(/\n/g, " <br> ").replace(/twitter\.com/g, "twitter.com").replace(/reddit\.com/g, "redlib.matthew.science") %>
                    </div> 
                           <% } %>                          <% } %>                                  <% } %>          
                              
@@ -1302,7 +1300,7 @@ display: block; !important;" autoplay controls>
            <div style="margin-top:1em;">
              
         
-              <%-String(linkify(inv_vid.description)).replace(/\n/g, " <br> ").replace(/twitter\.com/g, "nitter.freedit.eu").replace(/reddit\.com/g, "redlib.matthew.science") %>
+              <%-String(linkify(inv_vid.description)).replace(/\n/g, " <br> ").replace(/twitter\.com/g, "twitter.com").replace(/reddit\.com/g, "redlib.matthew.science") %>
                    </div> 
                           <% } %>                          <% } %>                                  <% } %>          
                              
@@ -1411,7 +1409,7 @@ display: block; !important;" autoplay controls>
                                  <div style="display: flex;margin-left: -134px;gap: 3px;margin-top: 8px;">
           <%  if (twitter) { %> 
   <div style="background: #0009;width: fit-content;padding: 5px;border-radius: 6px;margin-bottom: -15px;">
-<img src="<%- proxyurl %>/https://cdn.glitch.global/d68d17bb-f2c0-4bc3-993f-50902734f652/8473b88f-36a4-437f-8c14-fb9e38a623d9.image.png?v=1693424579898" class="loaded" style="width: 22px;height: 23px;vertical-align: -7px;"><a  style="margin: 1px;" href="https://nitter.freedit.eu/<%- twitter.name %>"> @<%- twitter.name %></a>
+<img src="<%- proxyurl %>/https://cdn.glitch.global/d68d17bb-f2c0-4bc3-993f-50902734f652/8473b88f-36a4-437f-8c14-fb9e38a623d9.image.png?v=1693424579898" class="loaded" style="width: 22px;height: 23px;vertical-align: -7px;"><a  style="margin: 1px;" href="https://twitter.com/<%- twitter.name %>"> @<%- twitter.name %></a>
               </div>
               <% } %>  
                 
@@ -1825,21 +1823,7 @@ if (/[?&]autoplay=/.test(location.search)) {
 }
  <% } %>
   
-const lazyElements = document.querySelectorAll('*');
-
-const observer = new IntersectionObserver((entries, observer) => {
-  entries.forEach(entry => {
-    if (entry.isIntersecting) {
-      entry.target.classList.add('loaded');
-      observer.unobserve(entry.target);
-    }
-  });
-});
-
-lazyElements.forEach(element => {
-  observer.observe(element);
-});
-
+ 
 </script>
      <script>
 	const languageCode = localStorage.getItem("Language");
@@ -1906,10 +1890,19 @@ lazyElements.forEach(element => {
 
 <script>
 let requestId;
+let lastDrawTime = 0; // Timestamp of the last draw request
 
 const loopStart = () => {
-  requestId = window.requestAnimationFrame(loopStart)
-}
+  const now = performance.now();
+  const elapsed = now - lastDrawTime;
+  if (elapsed >= (1000 / 30)) { // Adjusted for milliseconds
+    lastDrawTime = now;
+    draw();
+  }
+
+  // Continue loop using requestAnimationFrame
+  requestId = window.requestAnimationFrame(loopStart);
+};
 
 const loopCancel = () => {
   window.cancelAnimationFrame(requestId)
@@ -2009,7 +2002,10 @@ window.addEventListener("unload", cleanup)
 </script>
 <!-- SCRIPTS END -->
   
-</div>           <script>
+</div>          
+     <% if(secure) { %>
+
+     <script>
           var statsurl = "https://invid-api.poketube.fun/api/v1/stats"
           
             const userAgent = window.navigator.userAgent;
@@ -2044,6 +2040,7 @@ fetch(statsurl + "?browser=" + encodedBrowserName)
              
      
            </script>
+          <% } %>   
 
  
     </ptd-app-ejs>
@@ -2098,7 +2095,7 @@ fetch(statsurl + "?browser=" + encodedBrowserName)
 <title> <%=inv_vid.title%> | PokeTube Mobile</title>
  <link href="/css/mobile.css?v=2" rel=stylesheet>
  <link href="/css/app.main.css" rel=stylesheet>
-    <link href=<%- proxyurl %>/https://unpkg.com/ionicons@4.5.10-0/dist/css/ionicons.css rel=stylesheet>
+    <link href="<%- proxyurl %>/https://unpkg.com/ionicons@4.5.10-0/dist/css/ionicons.css" rel=stylesheet>
 
     <link href=<%- proxyurl %>/https://site-assets.fontawesome.com/releases/v6.1.1/css/all.css rel=stylesheet>
 <style>
@@ -2113,7 +2110,7 @@ fetch(statsurl + "?browser=" + encodedBrowserName)
     text-decoration:underline;
     font-weight:bold
 }
-  
+
   .video a {
   text-decoration:none !important;
 }
@@ -2253,10 +2250,8 @@ a {
                                                                       <% } %>               
 
        </div>            
-   <div class="video-title" style="padding: 10px;background: #0009;margin-bottom: 6px;margin-left: 6px;margin-right: 12px;border-radius: 15px;margin-top: 4px;font-family: poketube flex;font-weight: 800;font-stretch: ultra-expanded;">
-                    
-                    <%=inv_vid.title%> <br>
-                                                                             <a id="language-button" href="#desc-container" style="color: pink;
+   <div class="video-title" style="padding: 10px;background: #0009;margin-bottom: 6px;margin-left: 6px;margin-right: 12px;border-radius: 15px;margin-top: 4px;font-family: poketube flex;font-weight: 800;font-stretch: ultra-expanded;"><%=inv_vid.title%> <br>
+<a id="language-button" href="#desc-container" style="color: pink;
 margin: 0;
 font-size: 13px;margin:0;padding:0;white-space: nowrap;
 " class="switch"><%=engagement.viewCount.toLocaleString()%> views <%=date%> <ptd-custom-more>...more</ptd-custom-more>
@@ -2376,28 +2371,7 @@ font-size: 13px;margin:0;padding:0;white-space: nowrap;
   </div>
                     
  				<div class="video-info-bar" style="font-family:'Inter';">
-  
-      <!--
-<div class="video-info-buttons" style="font-family:'Inter';;white-space:yes;background:#333;border-radius: 15px;margin: 6px;align-self: center;align-items: center;">
-  <div>
-   <i class="fa-light fa-thumbs-up"  style="font-size:x-large" ></i>
-     <%=convert(engagement.likes)%>
-       </div>
-              <div>
- <i class="fa-light fa-thumbs-down"  style="font-size:x-large" ></i><%=convert(engagement.dislikes)%>
-                </div>
-					<a style="color:#fff" href="/download?v=<%=inv_vid.videoId%>&from=mobile">   
-            <i style="font-size:x-large" class="fa-light fa-download"></i>
-            Download
-					</a>
-            <a style="color:#fff" onclick="share()">   
-            <i style="font-size:x-large" class="fa-light fa-share"></i>
-            Share
-					</a>
- 	<a style="color:#fff" href="#more-button-container"> <i style="font-size:x-large;color:#fff" class="fa-thin fa-circle-plus"></i>More.. </a>
-            </div>
 
--->
 				</div>
               
  
@@ -2405,7 +2379,7 @@ font-size: 13px;margin:0;padding:0;white-space: nowrap;
                                  <div style="display: flex;gap: 3px;">
           <%  if (twitter) { %> 
   <div style="background: #000;width: fit-content;padding: 5px;border-radius: 6px;margin-bottom: -15px;">
-<img src="<%- proxyurl %>/https://cdn.glitch.global/d68d17bb-f2c0-4bc3-993f-50902734f652/8473b88f-36a4-437f-8c14-fb9e38a623d9.image.png?v=1693424579898" class="loaded" style="width: 22px;height: 23px;vertical-align: -7px;"><a  style="margin: 1px;" href="https://nitter.freedit.eu/<%- twitter.name %>"> @<%- twitter.name %></a>
+<img src="<%- proxyurl %>/https://cdn.glitch.global/d68d17bb-f2c0-4bc3-993f-50902734f652/8473b88f-36a4-437f-8c14-fb9e38a623d9.image.png?v=1693424579898" class="loaded" style="width: 22px;height: 23px;vertical-align: -7px;"><a  style="margin: 1px;" href="https://twitter.com/<%- twitter.name %>"> @<%- twitter.name %></a>
               </div>
     
               <% } %>  
@@ -2527,24 +2501,29 @@ font-size: 13px;margin:0;padding:0;white-space: nowrap;
 
                 
  <div class="nerddd" style="background:#272727;padding: 5px;margin-top: 12px;border-radius: 11px;font-family: 'PokeTube Flex';font-stretch: extra-expanded;font-weight: 700;">
-              <%-String(channelurlfixer(inv_vid.descriptionHtml)).replace(/\n/g, " <br> ").replace(/twitter\.com/g, "nitter.freedit.eu").replace(/reddit\.com/g, "redlib.matthew.science") %>
+              <%-String(channelurlfixer(inv_vid.descriptionHtml)).replace(/\n/g, " <br> ").replace(/twitter\.com/g, "twitter.com").replace(/reddit\.com/g, "redlib.matthew.science") %>
                             
-  <div style="margin: 10px;">
-                    <div style="justify-content: center;display: flex;padding: 11px;font-family: Ginto nord;gap: 3px;background: #1f1f1f;border-top-left-radius: 10px;border-top-right-radius: 10px;">
-Connections
-    </div>  
- <p style="background: #1f1f1f;text-align:center;margin-bottom:1px">
-the channels social media accounts! 
-    </p>
-                              
 
-                              
-                                                            <div style="background:#181818;" class="fromtheweb-outer">
+                  
+  
+
+
+                      
+ 
+                          </div>
+       <div style="background: #272727;margin-top:10px;border-radius: 11px;">
+
+
+             
+<div class="fromtheweb-outer" style="height: 7em;">
+
 <div class="fromtheweb-inner" style="height: 2em;">
+                            <div class="video-title" style="color:var(--text-color);font-family:var(--text-font-primary);;font-weight:var(--text-header-weight);font-stretch: extra-expanded;margin-top: 10px;margin-bottom: 10px;">Connections</div>
+
                                  <div style="display: flex;gap: 3px;">
           <%  if (twitter) { %> 
   <div style="background: #0009;width: fit-content;padding: 5px;border-radius: 6px;margin-bottom: -15px;">
-<img src="<%- proxyurl %>/https://cdn.glitch.global/d68d17bb-f2c0-4bc3-993f-50902734f652/8473b88f-36a4-437f-8c14-fb9e38a623d9.image.png?v=1693424579898" class="loaded" style="width: 22px;height: 23px;vertical-align: -7px;"><a  style="margin: 1px;" href="https://nitter.freedit.eu/<%- twitter.name %>"> @<%- twitter.name %></a>
+<img src="<%- proxyurl %>/https://cdn.glitch.global/d68d17bb-f2c0-4bc3-993f-50902734f652/8473b88f-36a4-437f-8c14-fb9e38a623d9.image.png?v=1693424579898" class="loaded" style="width: 22px;height: 23px;vertical-align: -7px;"><a  style="margin: 1px;" href="https://twitter.com/<%- twitter.name %>"> @<%- twitter.name %></a>
               </div>
     
               <% } %>  
@@ -2597,33 +2576,6 @@ the channels social media accounts!
  			</div>
   
                 </div>
-                  
-  
- <%  if (Array.isArray(inv_vid?.keywords)) { %> 
-
-                            <div class="video-title" style="color:var(--text-color);font-family:var(--text-font-primary);;font-weight:var(--text-header-weight);font-stretch: extra-expanded;margin-top: 10px;margin-bottom: 10px;">Tags</div>
-                      <div class="tags">
-        
- <% inv_vid.keywords.forEach(x => { %>
- <div class="tag">
-   <a href="/hashtag/<%=x %>" style="color:var(--text-color)">
-   <%=x %>
-     </a>
-   </div>
-   
-         <% }) %>  
-
-           
-           </div>
-   
-                      
-           <hr style="clear: both;display: block;border: none;border-bottom: 0.5px solid #2f2f2f;/*! width: 4.5em; */height: 0;">
-            <% } %>  
-     
-
-                      
- 
-                          </div>
    <div style="padding:10px;background: #272727;margin-top:10px;border-radius: 11px;">
        <div class="video-title" style="color:var(--text-color);font-family:var(--text-font-primary);;font-weight:var(--text-header-weight);font-stretch: extra-expanded;margin-top: 10px;margin-bottom: 10px;">Uploader</div>
 
@@ -2645,6 +2597,25 @@ the channels social media accounts!
   
     
      </div>
+      <%  if (Array.isArray(inv_vid?.keywords)) { %> 
+<div class="video-title" style="background: #272727;color:var(--text-color);font-family:var(--text-font-primary);;font-weight:var(--text-header-weight);font-stretch: extra-expanded;margin-top: 10px;margin-bottom: -10px;padding: 10px;border-top-left-radius: 11px;border-top-right-radius: 11px;">Tags</div>
+        <div class="tags" style="padding: 10px;background: #272727;margin-top: 10px;border-bottom-left-radius: 11px;border-bottom-right-radius:11px;">
+ <br>
+ <% inv_vid.keywords.forEach(x => { %>
+ <div class="tag">
+   <a href="/hashtag/<%=x %>" style="color:var(--text-color)">
+   <%=x %>
+     </a>
+   </div>         <% }) %>  
+
+ 
+
+           
+           </div>
+   
+                      
+             <% } %>  
+     
      <style>
        .nerddd {
                white-space: -moz-pre-wrap !important;  /* Mozilla, since 1999 */
@@ -2663,14 +2634,15 @@ the channels social media accounts!
            Video id : <%=inv_vid.videoId%> <br>
        ImmersiveAmbientModecolor: <% if (lightOrDark(color) == "light") { %><%=color%> (color 1)<% } %><% if (lightOrDark(color) == "dark") { %> <%=color2%> (color 2) <% } %> <br>  
         Video Format :<% if (!qua) { %>  22 (720p) openh264 ( https://github.com/cisco/openh264) mp4a.40.2  | 44100Hz  <% } %>
-      <% if (qua === "medium") { %>  18 (320p)  openh264 (https://github.com/cisco/openh264) mp4a.40.2 | 44100Hz  <% } %>       <br> 
-       PokeTubeEncryptID: <%=sha384(inv_vid.videoId)%> <br>
+      <% if (qua === "medium") { %>  18 (320p)  openh264 (https://github.com/cisco/openh264) mp4a.40.2 | 44100Hz  <% } %>  
+  
         <% if (inv_vid.genre === "Music") { %> 
-        Audio Format: ALAC lossless (https://codeberg.org/Ashley/poke/src/branch/main/alac) Audio/ Flac<br>
+    <br>    Audio Format: ALAC lossless (https://codeberg.org/Ashley/poke/src/branch/main/alac) Audio/ Flac<br>
                                     <% } %>   
     <% if (inv_vid.genre !== "Music") { %> 
-        Audio Format: Opus - Normalized audio<br>
-                                    <% } %>   
+        <br> Audio Format: Opus - Normalized audio<br>
+                                    <% } %>     
+       PokeTubeEncryptID: <%=sha384(inv_vid.videoId)%> <br>
                       <% if (isvidious) { %>
 
        Proxy : <%= u.replace("https://","") %> - refresh the page to change the proxy location<br>

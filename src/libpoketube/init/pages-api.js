@@ -28,6 +28,7 @@ function getJson(str) {
 
 const pkg = require("../../../package.json");
 const cnf = require("../../../config.json");
+const innertube = require("../libpoketube-youtubei-objects.json");
 
 const verfull = "v24.2801-JeSsIcA-MAJOR-stable-dev-nonLTS-git-MTcwNjQzMTc0OQ==";
 const versmol = "v24.2801-JeSsIcA"
@@ -188,6 +189,7 @@ app.get("/avatars/:v", async function (req, res) {
         v8: process.versions.v8,
       },
       invidious,
+      innertube,
       flac: {
         poketube_flac: "1.2a",
         apple_musickit: "1.2.3",

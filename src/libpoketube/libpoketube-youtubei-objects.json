@@ -1,0 +1,49 @@
+{
+  "innertube": {
+    "innertubeApiVersion":"v1",
+    "pokevidious":"20.24",
+    "innertubeContextClientVersion":"2.20240214.05.00",
+    "youtubei":"https://www.youtube.com/youtubei/v1/",
+    "PAGE_BUILD_LABEL": "youtube.desktop.web_20240214_05_RC00",
+    "CLIENT": {
+      "clientName": "WEB",
+      "projectClientName":"PokeVidious",
+      "clientVersion": "2.20240214.05.00"
+    },
+    "CONTEXT_CLIENT": {
+      "INNERTUBE_CONTEXT_CLIENT_NAME": "1",
+      "INNERTUBE_CONTEXT_CLIENT_VERSION": "2.20240214.05.00",
+      "INNERTUBE_CONTEXT_GL": "US",
+      "INNERTUBE_CONTEXT_HL": "en-US"
+    },
+    "LATEST_ECATCHER_SERVICE_PARAMS": { "client.name": "WEB" },
+    "INNERTUBE_API_KEYS": {
+      "WEB_KIDS": "AIzaSyBbZV_fZ3an51sF-mvs5w37OqqbsTOzwtU",
+      "WEB_MUSIC": "AIzaSyC9XL3ZjWddXya6X74dJoCTL-WEYFDNX30",
+      "WEB_CREATOR": "AIzaSyBUPetSUmoZL-OhlxA7wSac5XinrygCqMo",
+      "WEB_REMIX": "AIzaSyC9XL3ZjWddXya6X74dJoCTL-WEYFDNX30",
+      "WEB": "AIzaSyAO_FJ2SlqU8Q4STEHLGCilw_Y9_11qcW8",
+      "ANDROID_MUSIC": "AIzaSyAOghZGza2MQSZkY_zfZ370N-PUdXEo8AI",
+      "ANDROID_EMBEDDED": "AIzaSyCjc_pVEDi4qsv5MtC2dMXzpIaDoRFLsxw",
+      "ANDROID_CREATOR": "AIzaSyD_qjV8zaaUMehtLkrKFgVeSX_Iqbtyws8",
+      "ANDROID_KIDS": "AIzaSyAxxQKWYcEX8jHlflLt2Qcbb-rlolzBhhk",
+      "ANDROID": "AIzaSyA8eiZmM1FaDVjRy-df2KTyQ_vz_yYM39w",
+      "IOS_MUSIC": "AIzaSyBAETezhkwP0ZWA02RsqT1zu78Fpt0bC_s",
+      "IOS_CREATOR": "AIzaSyAPyF5GfQI-kOa6nZwO8EsNrGdEx9bioNs",
+      "IOS_KIDS": "AIzaSyA6_JWXwHaVBQnoutCv1-GvV97-rJ949Bc",
+      "IOS": "AIzaSyB-63vPrdThhKuerbB2N_l7Kwwcxj6yUAc",
+      "TV": "AIzaSyDCU8hByM-4DrUqRUYnGn-3llEO78bcxq8"
+    },
+    "INNERTUBE_API_ENPOINTS": {
+      "UPLOAD_ENPOINT": "https://upload.youtube.com",
+      "LIVE_CHAT_BASE_TANGO_CONFIG": {
+        "apiKey": "AIzaSyB-63vPrdThhKuerbB2N_l7Kwwcxj6yUAc",
+        "channelUri": "https://client-channel.google.com/client-channel/client",
+        "clientName": "yt-live-comments",
+        "requiresAuthToken": false,
+        "senderUri": "https://clients4.google.com/invalidation/lcs/client",
+        "useNewTango": true
+      }
+    }
+  }
+}

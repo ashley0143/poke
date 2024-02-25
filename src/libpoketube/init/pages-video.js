@@ -1,6 +1,6 @@
 const {
   fetcher,
-  core,
+  INNERTUBE,
   wiki,
   musicInfo,
   modules,
@@ -192,7 +192,7 @@ module.exports = function (app, config, renderTemplate) {
     var contentlang = hl || "en-US";
     var contentregion = region || "US";
 
-    const isVideoValid = await core.isvalidvideo(v);
+    const isVideoValid = await INNERTUBE.isvalidvideo(v);
     if (!isVideoValid) {
       return res.redirect("/?fromerror=21_video_not_valid");
     }
@@ -202,7 +202,7 @@ module.exports = function (app, config, renderTemplate) {
     const secure = ["poketube.fun"].includes(req.hostname);
     const verify = req.hostname === "poketube.sudovanilla.com";
     
-    core.video(v, contentlang, contentregion).then((data) => {
+    INNERTUBE.getYouTubeApiVideo(v, contentlang, contentregion).then((data) => {
       try {
         const k = data?.video;
         const channel_uploads = data?.channel_uploads
@@ -357,9 +357,9 @@ module.exports = function (app, config, renderTemplate) {
         engagement,
         comments: inv_comments,
         vid: inv_vid,
-      } = await core.video(v);
+      } = await INNERTUBE.getYouTubeApiVideo(v);
 
-      const data = await core.video(v);
+      const data = await INNERTUBE.getYouTubeApiVideo(v);
       const color = data.color;
       const color2 = data.color2;
       const desc = data?.desc;

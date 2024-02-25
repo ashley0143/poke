@@ -585,19 +585,6 @@ color:#ea9999 !important;
 	   
  
                                                                                       <% } %>
-           <% if (!isMobile) { %>  
-
-    <div onclick="closePopup()" id="popup-container">
-        <div id="close-btn" onclick="closePopup()">X</div>
-   
-                            <% if (cinv.descriptionHtml) { %>  
-
-
- <p style="color:#fff;margin-left: 10px;font-weight: bold;"><%-cinv.descriptionHtml%></p>
-     </div>
-      
-      <% } %>
-      <% } %>
 
 
 	   
@@ -624,26 +611,61 @@ color:#ea9999 !important;
     </nav>
 
                                                                                      <% } %>
+                         <% if (cinv.error) { %>  
+<style>
+
+body {
+background: #111 !important;
+height: 100%;
+}
+.banned-user {
+	border-radius: 50%;
+	margin-bottom: -2em;
+	pointer-events: none;
+}
+.ban-reason {
+    background:  #b91f1f;
+  border-radius: 2em;
+  padding: 10px;
+  margin-top: 4em;
+} 
+
+</style>
+<img class="banned-user" src="<%- media_proxy_url %>/proxy?url=https://yt3.googleusercontent.com/a/default-user=s100-c-k-c0x00ffffff-no-rj">
+<p class="ban-reason"> <%- cinv.error %> - literally 1984 lmao</p>
+               
+                                                                                           <% } %>
 
         <section class=youtube-video>
 <div class="channel-page">
 
 <div class="channel-page">
-       
-               
-      
-                                 
+
+                                                      <% if (!cinv.error) { %>  
+    
           <% if (!isMobile) { %>  
             <div class="channel-info-container" style="text-align: center;">
+              
+<% if (j?.Channel?.Metadata?.Banners.Thumbnail) { %>
+    <% let thumbnailFound = false; %>
+    <% for (let i = 5; i >= 1; i--) { %>
+        <% if (j.Channel.Metadata.Banners.Thumbnail[i]?.['$t']) { %>
+            <img src="<%- media_proxy_url %>/proxy?url=<%= j.Channel.Metadata.Banners.Thumbnail[i].$t %>" style="height: 30em; object-fit: cover; pointer-events: none;" id="thumbnail_version_<%= i %>">
+            <% thumbnailFound = true; %>
+            <% break; %>
+        <% } %>
+    <% } %>
+    <% if (!thumbnailFound) { %>
+        <img src="https://yt3.googleusercontent.com/tfEr9n7lMxqks-RabIC3cp66_Z2QVFk9qyGofc3MGfvM-NfndDHZPT8AVa9LCoNmzQSQ9wx2Mg=w1707-fcrop64=1,00005a57ffffa5a8-k-c0xffffffff-no-nd-rj" style="height: 30em; object-fit: cover; pointer-events: none;" id="default_thumbnail">
+    <% } %>
+<% } else { %>
+    <img src="https://yt3.googleusercontent.com/tfEr9n7lMxqks-RabIC3cp66_Z2QVFk9qyGofc3MGfvM-NfndDHZPT8AVa9LCoNmzQSQ9wx2Mg=w1707-fcrop64=1,00005a57ffffa5a8-k-c0xffffffff-no-nd-rj" style="height: 30em; object-fit: cover; pointer-events: none;" id="default_thumbnail">
+<% } %>
 
-        <% if (j?.Channel?.Metadata?.Banners.Thumbnail) { %>
 
-          <img src="https://p.poketube.fun/<%=j.Channel?.Metadata.Banners.Thumbnail[2].$t%>">
-                               <% } %>
-                               
-		<div class="channel-info" style="margin-bottom: 2em;margin-left:3em">
+<div class="channel-info" style="margin-bottom: 3em;margin-left:2em;margin-top: -11em;">
 		<a href="/avatars/<%=j.Channel?.Metadata.Avatars.Thumbnail?.$t.replace("https://yt3.googleusercontent.com/", "")%>" class="avatar">
-				<img src="/avatars/<%=j.Channel?.Metadata.Avatars.Thumbnail?.$t.replace("https://yt3.googleusercontent.com/", "")%>" alt="Channel Avatar">
+				<img src="/avatars/<%=j.Channel?.Metadata.Avatars.Thumbnail?.$t.replace("https://yt3.googleusercontent.com/", "")%>" alt="Channel Avatar" style="border: 1px solid gray;border-radius: 50%;">
 			</a>
       
     
@@ -1540,6 +1562,19 @@ width: fit-content;
        <% } %>
                        </div>
    <% } %>
+           <% if (!isMobile) { %>  
+
+    <div onclick="closePopup()" id="popup-container">
+        <div id="close-btn" onclick="closePopup()">X</div>
+   
+                            <% if (cinv.descriptionHtml) { %>  
+
+<p style="color:#fff;margin-left: 10px;font-weight: bold;text-align: left;"><%-cinv.descriptionHtml%></p>
+     </div>
+      
+      <% } %>
+      <% } %>
+                                                                                           <% } %>
 
 <script src="/css/custom-css.js"> </script>
   <script>

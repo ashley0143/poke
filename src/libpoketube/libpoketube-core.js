@@ -10,16 +10,18 @@ const { toJson } = require("xml2json");
 const { curly } = require("node-libcurl");
 const getdislikes = require("../libpoketube/libpoketube-dislikes.js");
 const getColors = require("get-image-colors");
+const config = require("../../config.json")
 
 /**
  * Class representing PokeTube's core functionality.
  */
-class PokeTubeCore {
+class InnerTubePokeVidious {
   /**
-   * Create an instance of PokeTubeCore.
-   * @param {object} config - Configuration object for PokeTubeCore.
+   * Create an instance of InnerTubePokeVidious.
+   * @param {object} config - Configuration object for InnerTubePokeVidious.
    * @param {string} config.tubeApi - Tube API URL.
    * @param {string} config.invapi - Invid API URL.
+   * @param {string} config.invapi_alt - Invid API URL - ALT .
    * @param {string} config.dislikes - Dislikes API URL.
    * @param {string} config.t_url - Matomo URL.
    */
@@ -27,6 +29,8 @@ class PokeTubeCore {
     this.config = config;
     this.cache = {};
     this.language = "hl=en-US";
+    this.apikey = "AIzaSyAO_FJ2SlqU8Q4STEHLGCilw_Y9_11qcW8"
+    this.INNERTUBE_CONTEXT_CLIENT_VERSION = "1"
     this.region = "region=US";
     this.sqp = "-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLBy_x4UUHLNDZtJtH0PXeQGoRFTgw";
   }
@@ -62,7 +66,7 @@ class PokeTubeCore {
    * @param {string} v - Video ID.
    * @returns {Promise<object>} Promise resolving to the video information.
    */
-  async video(v, contentlang, contentregion) {
+  async getYouTubeApiVideo(v, contentlang, contentregion) {
     
     const { fetch } = await import("undici");
     
@@ -167,11 +171,11 @@ class PokeTubeCore {
   }
 }
 
-// Create an instance of PokeTubeCore with the provided config
-const pokeTubeApiCore = new PokeTubeCore({
+// Create an instance of InnerTubePokeVidious with the provided config
+const pokeTubeApiCore = new InnerTubePokeVidious({
   tubeApi: "https://inner-api.poketube.fun/api/",
   invapi: "https://invid-api.poketube.fun/api/v1",
-  invapi_alt: "https://iv.ggtyler.dev/api/v1",
+  invapi_alt: config.proxylocation === "EU" ? "https://invid-api.poketube.fun/api/v1" : "https://iv.ggtyler.dev/api/v1",
   dislikes: "https://returnyoutubedislikeapi.com/votes?videoId=",
   t_url: "https://t.poketube.fun/",
 });

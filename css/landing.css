@@ -890,7 +890,7 @@ video {
   height: 100%;
   object-fit: cover;
   z-index: -1;
-  opacity: 0.2;
+  opacity: 0.27;
   pointer-events: none;
 }
 

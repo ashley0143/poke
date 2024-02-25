@@ -48,6 +48,10 @@ module.exports = function (app, config, renderTemplate) {
     }
   });
 
+  app.get("/502", function (req, res) {
+    renderTemplate(res, req, "502.ejs");
+  });
+
   app.get("/143", function (req, res) {
     var number_easteregg = getRandomArbitrary(0, 143);
 

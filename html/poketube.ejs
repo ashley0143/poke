@@ -1033,7 +1033,7 @@ display: block; !important;" autoplay controls>
                                                              </video>
                <% if (!a) { %>  
 
-                                                             <canvas width="150" height="150" id="ambient-canvas"></canvas>
+                                                             <canvas width="12" height="6" id="ambient-canvas"></canvas>
                         
                  <% } %>         
 
@@ -1889,61 +1889,41 @@ if (/[?&]autoplay=/.test(location.search)) {
                <% if(!IsOldWindows) { %>
 
 <script>
+const AMvideo = document.getElementById("video")
+const canvas = document.getElementById("ambient-canvas")
+const ctx = canvas.getContext("2d")
+
 let requestId;
 let lastDrawTime = 0; // Timestamp of the last draw request
-
-const loopStart = () => {
+const loop = () => {
   const now = performance.now();
   const elapsed = now - lastDrawTime;
-  if (elapsed >= (1000 / 30)) { // Adjusted for milliseconds
+  if (elapsed >= (1000 / 24)) {
     lastDrawTime = now;
-    draw();
+    ctx.drawImage(AMvideo, 0, 0, canvas.width, canvas.height);
   }
 
-  // Continue loop using requestAnimationFrame
-  requestId = window.requestAnimationFrame(loopStart);
+  requestId = window.requestAnimationFrame(loop);
 };
+    
+const drawStart = () => {
+  requestId = window.requestAnimationFrame(loop)
+}
 
-const loopCancel = () => {
+const drawPause = () => {
   window.cancelAnimationFrame(requestId)
   requestId = undefined
 }
 
-const AMvideo = document.getElementById("video")
-const canvas = document.getElementById("ambient-canvas")
-const ctx = canvas.getContext("2d")
-    
-let step;
-
-const draw = () => {
-     ctx.drawImage(AMvideo, 0, 0, canvas.width, canvas.height);
- };
-
-const drawLoop = () => {
-  draw()
-  step = window.requestAnimationFrame(drawLoop)
-}
-
-const drawPause = () => {
-  window.cancelAnimationFrame(step)
-  step = undefined
-}
-
-
 const init = () => {
   video.pause();video.play();
-  AMvideo.addEventListener("loadeddata", draw, false)
-  AMvideo.addEventListener("seeked", draw, false)
-  AMvideo.addEventListener("play", drawLoop, false)
+  AMvideo.addEventListener("play", drawStart, false)
   AMvideo.addEventListener("pause", drawPause, false)
   AMvideo.addEventListener("ended", drawPause, false)
 }
 
-
 const cleanup = () => {
-  AMvideo.removeEventListener("loadeddata", draw)
-  AMvideo.removeEventListener("seeked", draw)
-  AMvideo.removeEventListener("play", drawLoop)
+  AMvideo.removeEventListener("play", drawStart)
   AMvideo.removeEventListener("pause", drawPause)
   AMvideo.removeEventListener("ended", drawPause)
 }

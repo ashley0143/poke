@@ -1898,7 +1898,7 @@ let lastDrawTime = 0; // Timestamp of the last draw request
 const loop = () => {
   const now = performance.now();
   const elapsed = now - lastDrawTime;
-  if (elapsed >= (1000 / 24)) {
+  if (elapsed >= (1000 / 30)) {
     lastDrawTime = now;
     ctx.drawImage(AMvideo, 0, 0, canvas.width, canvas.height);
   }

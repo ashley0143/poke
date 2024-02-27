@@ -3,3 +3,9 @@ Enable hardware acceleration - or alternatively close ambient mode by clicking o
 
 # Video lags
 Enable hardware acceleration -if it no worky open a issue https://codeberg.org/ashley/poke/issues here :3
+
+# Video not loading 
+Try the SD version - if that dont worky um report a issue at https://codeberg.org/ashley/poke/issues :3
+
+# RW89DGHRUFURTEJDFMTRF HELLPP POKE IS TOOOOO SLOOW!!
+skill issue

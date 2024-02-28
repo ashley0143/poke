@@ -589,7 +589,7 @@ background-color: #0000;
     top: 0;
 }
 </style>
-                               <% if(shortsui) { %>
+         <% if(shortsui) { %>
                                                        <script>
         // Function to apply styles after DOM has loaded
         function applyStyles() {
@@ -622,7 +622,40 @@ background-color: #0000;
         window.onload = applyStyles;
                                  </script>
                                                     <% } %>
-                                
+
+            <% if (inv_vid.author.endsWith(' - Topic')) { %> 
+                                                       <script>
+        // Function to apply styles after DOM has loaded
+        function applyStyles() {
+            const styles = `
+                .player {
+                    width: fit-content;
+                    margin-left: auto;
+                    margin-right: auto;
+                    height: fit-content;
+                }
+
+                .video-player-container {
+                    max-width: fit-content;
+                    min-width: fit-content;
+                    margin-left: auto;
+                    margin-right: auto;
+                    aspect-ratio: var(--ptd-watch-width-ratio) / var(--ptd-watch-height-ratio);
+                }
+            `;
+
+            // Create a style element and set its content
+            const styleElement = document.createElement('style');
+            styleElement.innerHTML = styles;
+
+            // Append the style element to the document head
+            document.head.appendChild(styleElement);
+        }
+
+        // Event listener to call applyStyles after DOM has loaded
+        window.onload = applyStyles;
+                                 </script>
+                                                    <% } %>
              <% if(dm) { %>
                
                

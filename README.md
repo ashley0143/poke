@@ -1,5 +1,4 @@
-# see https://codeberg.org/Ashley/poke/issues/59 if you are having problems using poke
-
+ 
 <h1 align="center">
   <a href="https://poketube.fun/watch?v=9sJUDx7iEJw&quality=medium&=sjohgteojgytrueugtye4jhtytjrjnyıı">
    <img src="https://poketube.fun/css/logo-poke.svg" width="400"> 
@@ -33,12 +32,15 @@ Stallman though poke was GNU poke lmaoooo
     src="https://api.netweak.com/status-badges/K2LY9"
     alt="Netweak status badge"
   />
-</a>
+</a><br>
 <a href="https://tosdr.org/en/service/7114">
    <img src="https://shields.tosdr.org/en_7114.svg"/>
 </a>
 <img src="https://raw.githubusercontent.com/vshymanskyy/StandWithUkraine/main/badges/StandWithUkraine.svg"> <a href="./LICENSE"><img src="https://img.shields.io/badge/License-GPL--3-FF6666" alt="License - GPL-3"></a>
 
+<a href="https://ci.poketube.fun/ashley/poke">
+  <img src="https://ci.poketube.fun/api/badges/ashley/poke/status.svg" />
+</a>
 </div>
 
 ## Welcome!

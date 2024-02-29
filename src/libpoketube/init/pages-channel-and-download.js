@@ -177,7 +177,7 @@ module.exports = function (app, config, renderTemplate) {
     const { fetch } = await import("undici");
 
     const search = await fetch(
-      `https://4get.sudovanilla.com/api/v1/web?s=${query}`
+      `https://search.zeroish.xyz/api.php?q=${query}&p=1&t=0`
     );
     const web = getJson(await search.text());
 

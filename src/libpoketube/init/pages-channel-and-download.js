@@ -176,10 +176,13 @@ module.exports = function (app, config, renderTemplate) {
 
     const { fetch } = await import("undici");
 
-    const search = await fetch(
-      `https://search.zeroish.xyz/api.php?q=${query}&p=1&t=0`
-    );
-    const web = getJson(await search.text());
+    let allResults = [];
+
+ for (let page = 1; page <= 3; page++) {
+    const search = await fetch(`https://search.zeroish.xyz/api.php?q=${query}&p=${page}&t=0`);
+    const results = await search.json();
+    allResults = allResults.concat(results);
+}
 
     if (req.query.lucky === "true") {
       res.redirect("/im-feeling-lucky?query=" + query);
@@ -218,7 +221,7 @@ module.exports = function (app, config, renderTemplate) {
     let continuation = req.query.continuation || "";
 
     try {
-      const results = web;
+      const results = allResults;
 
       renderTemplate(res, req, "search-web.ejs", {
         j: "",

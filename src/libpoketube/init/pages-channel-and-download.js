@@ -218,7 +218,7 @@ module.exports = function (app, config, renderTemplate) {
     let continuation = req.query.continuation || "";
 
     try {
-      const results = web;
+      const results = Object.entries(web);
 
       renderTemplate(res, req, "search-web.ejs", {
         j: "",

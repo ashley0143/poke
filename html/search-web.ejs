@@ -456,23 +456,21 @@ Web
     </div>
                                                                           <div class="video-list" >
 
-     <% results.forEach(x => { %>
-                                                                       <div class="video" style="height: 7em;">
-
+<% results.forEach((x, index) => { %>
+    <div class="video" style="height: 7em;">
         <a style="min-width: 81em;" href="<%= x.url %>"><%= x.title %></a><br>
-        <p style="color:gray;display: flex;flex-direction: column;width: 48em;margin-top: -8em;"><%= x.url %><br>
-          <% if (!isMobile) { %> 
+        <p style="color:gray;display: flex;flex-direction: column;width: 48em;margin-top: -8em;">
+            <%= x.url %><br>
+            <% if (!isMobile) { %>
+                <span class="search-result"><%- x.description %></span>
+            <% } %>
+            <% if (isMobile) { %>
+                <span class="search-result"><%- x.description %></span>
+            <% } %>
+        </p>
+    </div>
+<% }) %>
 
-         <span class="search-result"><%- x.description %></span>
-                     <% } %> 
- <% if (isMobile) { %> 
-   
-         <span class="search-result"><%- x.description %></span>
-                     <% } %> 
-          </p>
-              </div>
-
-             <% }) %>
  
         </a>
         </div>

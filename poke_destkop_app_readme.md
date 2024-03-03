@@ -2,7 +2,7 @@ Requirements:
 
 - Python 3
 - GTK 3
-- VLC media player
+- VLC media player (pip version: pip install python3-vlc)
 - YouTube-DL (`yt-dlp`)
 - Python modules: `gi`, `json`, `subprocess`, `urllib`
  

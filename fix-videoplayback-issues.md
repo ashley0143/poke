@@ -7,5 +7,7 @@ Enable hardware acceleration -if it no worky open a issue https://codeberg.org/a
 # Video not loading 
 Try the SD version - if that dont worky um report a issue at https://codeberg.org/ashley/poke/issues :3
 
+# video quailty is low
+please open a issue :3 
 # RW89DGHRUFURTEJDFMTRF HELLPP POKE IS TOOOOO SLOOW!!
 skill issue

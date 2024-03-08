@@ -558,7 +558,7 @@ color:#ea9999 !important;
      <nav>
       <div class="left"><a class="class" href="/143" style=font-family:Inter,sans-serif;color:#fff> <img style="transform: scale(1.3);padding-left:0.9em;width: 8.5em;display: block;margin-left: auto;margin-right: auto;" src="/css/logo.svg?v=5">         </a>             </div>                                    
       <div class="middle">
-      <div class="search">
+      <div class="search" style="margin-right: 5em;">
         
         <form action="/search">
    <input class="search-bar" autocomplete="on" id="fname" name="query" placeholder="" style="color:#fff;font-family:Inter,sans-serif;border-radius: 8px;" data-ddg-inputtype="identities.firstName">
@@ -685,7 +685,8 @@ height: 100%;
 			<div class="name" style="background: #333;border-radius: 12px;padding: 17px;height: 7em;margin-left: 4em;margin-top: 7px;gap: 3px;">
 				<p style="font-family:PokeTube Flex,sans-serif;font-weight:1000;font-stretch: ultra-expanded;margin-top: 16px;margin-bottom: 15px;"><%=j.Channel?.Metadata.Name%>
           
-                <% if (cinv?.authorVerified) { %><span style="background: #0005;padding: 3px;padding-top:  2.5px !important;display: inline-flex;border-radius: 3px;">
+                <% if (cinv?.authorVerified) { %>
+                <span style="padding: 1px;padding-top:  2.5px !important;display: inline-flex;border-radius: 3px;">
 
                                 
  <i class="fa-solid fa-badge-check" style="width: 18px;margin-right:1px" title="Verified Channel"></i>

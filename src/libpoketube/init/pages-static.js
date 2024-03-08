@@ -127,6 +127,10 @@ module.exports = function (app, config, renderTemplate) {
     const p = getJson(await playlist.text());
     var mediaproxy = config.media_proxy;
 
+    if (req.useragent.source.includes("Pardus")) {
+      var media_proxy = "https://media-proxy.ashley0143.xyz";
+    }
+
     renderTemplate(res, req, "playlist.ejs", {
       p,
       mediaproxy,

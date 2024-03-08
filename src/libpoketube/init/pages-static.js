@@ -128,7 +128,7 @@ module.exports = function (app, config, renderTemplate) {
     var mediaproxy = config.media_proxy;
 
     if (req.useragent.source.includes("Pardus")) {
-      var media_proxy = "https://media-proxy.ashley0143.xyz";
+      var mediaproxy = "https://media-proxy.ashley0143.xyz";
     }
 
     renderTemplate(res, req, "playlist.ejs", {

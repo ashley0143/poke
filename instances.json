@@ -5,9 +5,9 @@
       "uri": "https://poketube.fun",
       "CLOUDFLARE": false,
       "piwik": true,
-      "proxy":true,
-      "official":true,
-      "DEFAULT":true,
+      "proxy": true,
+      "official": true,
+      "DEFAULT": true,
       "region": "🇺🇸",
       "software": {
         "name": "poketube",
@@ -44,7 +44,7 @@
       }
     }
   ],
-    [
+  [
     "poke.ashley0143.xyz",
     {
       "uri": "https://poke.ashley0143.xyz",
@@ -58,7 +58,7 @@
       }
     }
   ],
-[
+  [
     "poke.shiggy.cloud",
     {
       "uri": "https://poke.shiggy.cloud",
@@ -90,6 +90,20 @@
     "poke.shiggy.pt",
     {
       "uri": "https://poke.shiggy.pt",
+      "CLOUDFLARE": true,
+      "piwik": false,
+      "region": "🇬🇧",
+      "software": {
+        "name": "poketube",
+        "version": "latest",
+        "branch": "dev"
+      }
+    }
+  ],
+  [
+    "poked.shiggy.pt",
+    {
+      "uri": "https://poked.shiggy.pt",
       "CLOUDFLARE": true,
       "piwik": false,
       "region": "🇬🇧",

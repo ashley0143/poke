@@ -535,7 +535,7 @@ font-weight: 1000;
           ><%= x.title %></a>
         <div style="display: flex; flex-direction: column; row-gap: 8px;font-weight:bold">
           <a href="/watch?v=<%= x.videoId %>"><span><%= x.viewCountText %></span> <span>•</span> <span><%= x.publishedText %></span></a>
-          <a href="/channel?id=<%= x.authorId %>">By <%=x.author %></a>
+          <a href="/channel?id=<%= x.authorId %>"><%=x.author %></a>
         </div>
       </div>
     </div>
@@ -659,21 +659,21 @@ font-weight: 1000;
                          changeFavicon("<%- media_proxy_url %>/proxy?url=https://static.wikia.nocookie.net/omori/images/d/d8/Something_Float_%282018_Demo%29.gif")
                          var textList = [
                              "sunny... i love you",
-                             "SUNNY... I'm... sorry..."
+                             "SUNNY... I'm... sorry...",
+                             "liar.",
+                             "143",
                          ];
 
-                         // Select four different text elements
                          var textElements = document.querySelectorAll('.title');
 
                          textElements.forEach(function(element, index) {
-                             element.textContent = textList[index % textList.length]; // Use modulo to cycle through textList
+                             element.textContent = textList[index % textList.length];  
                          });
 
 
                          var backgroundClasses = ['something-background-a', 'something-background-b', 'something-background-c'];
 
-                         // Loop through each thumbnail element and assign a random background image class
-                         thumbnails.forEach(function(thumbnail) {
+                          thumbnails.forEach(function(thumbnail) {
                              var randomIndex = Math.floor(Math.random() * backgroundClasses.length);
                              thumbnail.classList.add(backgroundClasses[randomIndex]);
                          });

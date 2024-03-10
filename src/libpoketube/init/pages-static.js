@@ -197,11 +197,9 @@ module.exports = function (app, config, renderTemplate) {
       const minimizedCss = new CleanCSS().minify(css).styles;
       // Serve the minimized CSS file
       res.header("Content-Type", "text/css");
-      res.send(
-        notice +
-          " " +
-          minimizedCss.replace("https://p.poketube.fun", config.p_url)
-      );
+     res.send(
+  notice + " " + minimizedCss.replace(/https:\/\/p\.poketube\.fun\//g, config.p_url)
+);
     } else {
       // Serve the original file
       res.sendFile(req.params.id, { root: html_location });

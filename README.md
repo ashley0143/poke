@@ -134,7 +134,7 @@ mkdir poketube && cd poketube
 
 Download the docker compose and config file:
 ```
-curl -O https://codeberg.org/Ashley/poketube/raw/branch/main/docker-compose.yml
+curl -O https://codeberg.org/Ashley/poke/raw/branch/main/docker-compose.yml
 ```
 
 Run PokeTube:
@@ -162,7 +162,7 @@ see the each sections LICENSE tho!!
 Copyleft 2021-202x Poke Project
 
 
-[Code Of conduct](https://codeberg.org/Ashley/poketube/src/branch/main/CODE_OF_CONDUCT.md)
+[Code Of conduct](https://codeberg.org/Ashley/poke/src/branch/main/CODE_OF_CONDUCT.md)
 
 [Privacy Policy](https://poketube.fun/privacy)
 

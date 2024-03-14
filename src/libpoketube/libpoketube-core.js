@@ -100,7 +100,7 @@ class InnerTubePokeVidious {
     const { json, video } = videoData;
 
     var channel_uploads = { };
-    if (f) {
+    if (f == "true") {
       channel_uploads = await fetch(
         `${this.config.invapi}/channels/${vid.authorId}?hl=${contentlang}&region=${contentregion}`
       );

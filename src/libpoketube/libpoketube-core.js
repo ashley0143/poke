@@ -66,7 +66,7 @@ class InnerTubePokeVidious {
    * @param {string} v - Video ID.
    * @returns {Promise<object>} Promise resolving to the video information.
    */
-  async getYouTubeApiVideo(v, contentlang, contentregion) {
+  async getYouTubeApiVideo(f, v, contentlang, contentregion) {
     
     const { fetch } = await import("undici");
     
@@ -99,10 +99,13 @@ class InnerTubePokeVidious {
     const vid = await this.getJson(videoInfo);
     const { json, video } = videoData;
 
-    const channel_uploads = await fetch(
-      `${this.config.invapi}/channels/${vid.authorId}?hl=${contentlang}&region=${contentregion}`
-    );
-    const p = this.getJson(await channel_uploads.text());
+    let channel_uploads = null;
+    if (f) {
+      channel_uploads = await fetch(
+        `${this.config.invapi}/channels/${vid.authorId}?hl=${contentlang}&region=${contentregion}`
+      );
+      channel_uploads = this.getJson(await channel_uploads.text());
+    }
 
     if (!vid) {
       console.log(
@@ -123,7 +126,7 @@ class InnerTubePokeVidious {
             video,
             vid,
             comments,
-            channel_uploads:p,
+            channel_uploads,
             engagement: fe.engagement,
             wiki: "",
             desc: "",

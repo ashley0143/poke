@@ -202,7 +202,7 @@ module.exports = function (app, config, renderTemplate) {
     const secure = ["poketube.fun"].includes(req.hostname);
     const verify = req.hostname === "poketube.sudovanilla.com";
     
-    INNERTUBE.getYouTubeApiVideo(v, contentlang, contentregion).then((data) => {
+    INNERTUBE.getYouTubeApiVideo(f, v, contentlang, contentregion).then((data) => {
       try {
         const k = data?.video;
         const channel_uploads = data?.channel_uploads

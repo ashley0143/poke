@@ -99,12 +99,12 @@ class InnerTubePokeVidious {
     const vid = await this.getJson(videoInfo);
     const { json, video } = videoData;
 
-    let channel_uploads = null;
+    var channel_uploads = { };
     if (f) {
       channel_uploads = await fetch(
         `${this.config.invapi}/channels/${vid.authorId}?hl=${contentlang}&region=${contentregion}`
       );
-      channel_uploads = this.getJson(await channel_uploads.text());
+     var p = this.getJson(await channel_uploads.text());
     }
 
     if (!vid) {
@@ -126,7 +126,7 @@ class InnerTubePokeVidious {
             video,
             vid,
             comments,
-            channel_uploads,
+            channel_uploads: p,
             engagement: fe.engagement,
             wiki: "",
             desc: "",

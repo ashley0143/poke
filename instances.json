@@ -87,23 +87,9 @@
     }
   ],
   [
-    "poke.shiggy.pt",
+    "poke.alphexo.dev",
     {
-      "uri": "https://poke.shiggy.pt",
-      "CLOUDFLARE": true,
-      "piwik": false,
-      "region": "🇬🇧",
-      "software": {
-        "name": "poketube",
-        "version": "latest",
-        "branch": "dev"
-      }
-    }
-  ],
-  [
-    "poked.shiggy.pt",
-    {
-      "uri": "https://poked.shiggy.pt",
+      "uri": "https://poke.alphexo.dev",
       "CLOUDFLARE": true,
       "piwik": false,
       "region": "🇬🇧",

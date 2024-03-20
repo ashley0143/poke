@@ -135,6 +135,49 @@ app.get("/avatars/:v", async function (req, res) {
       res.send(body);
     } catch {}
   });
+  
+ 
+app.use("/sb/i/:v/:imagePath/:img", async function (req, res) {
+  const { v, imagePath, img } = req.params;  
+  const { sqp, xywh } = req.query;  
+        const sighMatch = req.url.match(/&amp;sigh=([^&#]+)/);  
+    const sigh = sighMatch ? sighMatch[1] : undefined;
+ 
+ 
+  const url = `https://yt.miruku.cafe/sb/i/${v}/${imagePath}/${img}?sqp=${sqp}&sigh=${sigh}&xywh=${req.query.xywh}`;
+
+  try {
+    let f = await modules.fetch(url + `?cachefixer=${btoa(Date.now())}`, {
+      method: req.method,
+    });
+
+    f.body.pipe(res);
+    console.log(url)
+  } catch (error) {
+    console.error("Error fetching image:", error);
+    res.status(500).send("Error fetching image");
+  }
+});
+  
+  app.get("/api/storyboards", async (req, res) => {
+    const { fetch } = await import("undici");
+
+    const id = req.query.v;
+    const l = req.query.h;
+
+    try {
+        let url = `https://yt.miruku.cafe/api/v1/storyboards/${id}?width=320&height=180`;
+
+        let f = await fetch(url);
+        let body = await f.text();
+
+         body = body.replace(/#xywh=(\d+),(\d+),(\d+),(\d+)/g, (match, x, y, w, h) => {
+            return `&xywh=${x},${y},${w},${h}`;  
+        });
+
+        res.send(body);
+    } catch {}
+});
 
   app.get("/feeds/videos.xml", async (req, res) => {
     const id = req.query.channel_id;

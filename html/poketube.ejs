@@ -1075,7 +1075,8 @@ display: block; !important;" autoplay controls>
                                                              </video>
                <% if (!a) { %>  
 
-                                                             <canvas width="12" height="6" id="ambient-canvas"></canvas>
+                                                             <canvas width="12" height="6" class="ambient-canvas" id="ambient-canvas-1"></canvas>
+                                                             <canvas width="12" height="6" class="ambient-canvas" id="ambient-canvas-2"></canvas>
                         
                  <% } %>         
 
@@ -1930,29 +1931,43 @@ if (/[?&]autoplay=/.test(location.search)) {
 
 <script>
 const AMvideo = document.getElementById("video")
-const canvas = document.getElementById("ambient-canvas")
-const ctx = canvas.getContext("2d")
+const oddCanvas = document.getElementById("ambient-canvas-1")
+const evenCanvas = document.getElementById("ambient-canvas-2")
+const oddCtx = oddCanvas.getContext("2d")
+const evenCtx = evenCanvas.getContext("2d")
 
-let requestId;
-let lastDrawTime = 0; // Timestamp of the last draw request
-const loop = () => {
-  const now = performance.now();
-  const elapsed = now - lastDrawTime;
-  if (elapsed >= (1000 / 30)) {
-    lastDrawTime = now;
-    ctx.drawImage(AMvideo, 0, 0, canvas.width, canvas.height);
+const frameIntervalMs = 200
+const canvasOpacity = "0.4"
+
+let intervalId
+let oddFrame = true
+const drawFrame = () => {
+  if (oddFrame) {
+    oddCtx.drawImage(AMvideo, 0, 0, oddCanvas.width, oddCanvas.height)
+    transitionToOddCanvas()
+  } else {
+    evenCtx.drawImage(AMvideo, 0, 0, evenCanvas.width, evenCanvas.height)
+    transitionToEvenCanvas()
   }
-
-  requestId = window.requestAnimationFrame(loop);
+  oddFrame = !oddFrame
 };
-    
+
+const transitionToOddCanvas = () => {
+  oddCanvas.style.opacity = canvasOpacity
+  evenCanvas.style.opacity = "0"
+}
+
+const transitionToEvenCanvas = () => {
+  evenCanvas.style.opacity = canvasOpacity
+  oddCanvas.style.opacity = "0"
+}
+
 const drawStart = () => {
-  requestId = window.requestAnimationFrame(loop)
+  intervalId = window.setInterval(drawFrame, frameIntervalMs)
 }
 
 const drawPause = () => {
-  window.cancelAnimationFrame(requestId)
-  requestId = undefined
+  if (intervalId) window.clearInterval(intervalId)
 }
 
 const init = () => {
@@ -1960,12 +1975,15 @@ const init = () => {
   AMvideo.addEventListener("play", drawStart, false)
   AMvideo.addEventListener("pause", drawPause, false)
   AMvideo.addEventListener("ended", drawPause, false)
+
+  oddCanvas.style.transition = evenCanvas.style.transition = `opacity ${frameIntervalMs}ms`
 }
 
 const cleanup = () => {
   AMvideo.removeEventListener("play", drawStart)
   AMvideo.removeEventListener("pause", drawPause)
   AMvideo.removeEventListener("ended", drawPause)
+  drawPause();
 }
 
 window.addEventListener("load", init)
@@ -1977,7 +1995,7 @@ window.addEventListener("unload", cleanup)
   z-index: 0;
 }
 .popup {z-index: 1}
-#ambient-canvas {
+.ambient-canvas {
   width: 100%;
   height: calc(100% - 18px);
   position: absolute;
@@ -1985,7 +2003,6 @@ window.addEventListener("unload", cleanup)
   border-radius: 18px;
   filter: blur(20px);
   transform: scale(1.1);
-  opacity: 0.4;
   z-index: -1;
 }
 </style>

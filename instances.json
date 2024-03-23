@@ -99,5 +99,35 @@
         "branch": "dev"
       }
     }
+  ],
+  [
+    "poke.ggtyler.dev",
+    {
+      "uri": "https://poke.ggtyler.dev",
+      "CLOUDFLARE": false,
+      "piwik": false,
+      "proxy": false,
+      "region": "🇺🇸",
+      "software": {
+        "name": "poketube",
+        "version": "latest",
+        "branch": "dev"
+      }
+    }
+  ],
+  [
+    "cal1.poke.ggtyler.dev",
+    {
+      "uri": "https://cal1.poke.ggtyler.dev",
+      "CLOUDFLARE": false,
+      "piwik": false,
+      "proxy": false,
+      "region": "🇺🇸",
+      "software": {
+        "name": "poketube",
+        "version": "latest",
+        "branch": "dev"
+      }
+    }
   ]
 ]

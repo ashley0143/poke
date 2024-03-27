@@ -136,7 +136,7 @@ module.exports = function (app, config, renderTemplate) {
       const headers = {};
 
       const xmlData = await fetch(
-        `https://${config.invapi}/search?q=${encodeURIComponent(
+        `${config.invapi}/search?q=${encodeURIComponent(
           query
         )}&page=${encodeURIComponent(
           continuation

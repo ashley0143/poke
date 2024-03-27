@@ -27,6 +27,7 @@ function getJson(str) {
 }
 
 const pkg = require("../../../package.json");
+const os = require('os');
 const cnf = require("../../../config.json");
 const innertube = require("../libpoketube-youtubei-objects.json");
 
@@ -214,6 +215,9 @@ app.use("/sb/i/:v/:imagePath/:img", async function (req, res) {
       .fetch("https://invid-api.poketube.fun/api/v1/stats")
       .then((res) => res.text())
       .then((txt) => getJson(txt));
+       
+       const cpus = os.cpus();
+      const totalMemory = os.totalmem();
 
     const response = {
       pt_version: {
@@ -226,6 +230,10 @@ app.use("/sb/i/:v/:imagePath/:img", async function (req, res) {
       vernum: versionnumber,
       codename,
       config:cnf,
+      system:{
+      ram:`${totalMemory / (1024 * 1024 * 1024)} GB`,
+      cpu:cpus[0].model,
+      },
       packages: {
         libpt: version,
         node: process.version,

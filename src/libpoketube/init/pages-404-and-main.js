@@ -79,7 +79,7 @@ module.exports = function (app, config, renderTemplate) {
     }
 
     const invtrend = await fetch(
-      `https://invid-api.poketube.fun/api/v1/trending${tab}`
+      `${config.invapi}/trending${tab}`
     );
     const t = getJson(await invtrend.text());
 

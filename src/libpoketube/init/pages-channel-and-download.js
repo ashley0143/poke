@@ -136,7 +136,7 @@ module.exports = function (app, config, renderTemplate) {
       const headers = {};
 
       const xmlData = await fetch(
-        `https://invid-api.poketube.fun/api/v1/search?q=${encodeURIComponent(
+        `https://${config_invapi}/search?q=${encodeURIComponent(
           query
         )}&page=${encodeURIComponent(
           continuation
@@ -288,7 +288,7 @@ module.exports = function (app, config, renderTemplate) {
         }
       };
 
-      const apiUrl = "https://invid-api.poketube.fun/api/v1/channels/";
+      const apiUrl = config_invapi + "/channels/";
       const channelUrl = `${apiUrl}${atob(
         ChannelTabs.videos
       )}/${ID}/?sort_by=${sort_by}${continuation}`;

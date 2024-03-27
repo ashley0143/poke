@@ -217,7 +217,8 @@ app.use("/sb/i/:v/:imagePath/:img", async function (req, res) {
       .then((txt) => getJson(txt));
        
        const cpus = os.cpus();
-      const totalMemory = os.totalmem();
+       const totalMemory = os.totalmem() / (1024 * 1024 * 1024); 
+       const roundedMemory = totalMemory.toFixed(2); 
 
     const response = {
       pt_version: {
@@ -231,7 +232,7 @@ app.use("/sb/i/:v/:imagePath/:img", async function (req, res) {
       codename,
       config:cnf,
       system:{
-      ram:`${totalMemory / (1024 * 1024 * 1024)} GB`,
+      ram:`${roundedMemory} GB`,
       cpu:cpus[0].model,
       },
       packages: {

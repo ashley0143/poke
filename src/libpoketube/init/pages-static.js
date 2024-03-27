@@ -121,7 +121,7 @@ module.exports = function (app, config, renderTemplate) {
     if (req.useragent.isMobile) res.redirect("/");
 
     const playlist = await fetch(
-      `https://invid-api.poketube.fun/api/v1/playlists/${req.query.list}?hl=en-us`
+      `${config.invapi}playlists/${req.query.list}?hl=en-us`
     );
 
     const p = getJson(await playlist.text());

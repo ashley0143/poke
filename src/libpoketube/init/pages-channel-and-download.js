@@ -136,7 +136,7 @@ module.exports = function (app, config, renderTemplate) {
       const headers = {};
 
       const xmlData = await fetch(
-        `https://${config_invapi}/search?q=${encodeURIComponent(
+        `https://${config.invapi}/search?q=${encodeURIComponent(
           query
         )}&page=${encodeURIComponent(
           continuation
@@ -288,7 +288,7 @@ module.exports = function (app, config, renderTemplate) {
         }
       };
 
-      const apiUrl = config_invapi + "/channels/";
+      const apiUrl = config.invapi + "/channels/";
       const channelUrl = `${apiUrl}${atob(
         ChannelTabs.videos
       )}/${ID}/?sort_by=${sort_by}${continuation}`;

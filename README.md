@@ -1,4 +1,3 @@
- 
 <h1 align="center">
   <a href="https://poketube.fun/watch?v=9sJUDx7iEJw&quality=medium&=sjohgteojgytrueugtye4jhtytjrjnyıı">
    <img src="https://poketube.fun/css/logo-poke.svg" width="400"> 
@@ -41,6 +40,7 @@ Stallman though poke was GNU poke lmaoooo
 <a href="https://ci.poketube.fun/ashley/poke">
   <img src="https://ci.poketube.fun/api/badges/ashley/poke/status.svg" />
 </a>
+<a href="https://app.fossa.com/projects/git%2Bgithub.com%2Fashley0143%2Fpoke?ref=badge_shield" alt="FOSSA Status"><img src="https://app.fossa.com/api/projects/git%2Bgithub.com%2Fashley0143%2Fpoke.svg?type=shield"/></a>
 </div>
 
 ## Welcome!
@@ -176,3 +176,7 @@ We additionally use the GNU Coding Standard, see [this link.](https://www.gnu.or
 <a href="https://gnu.org/not-open-source"><img width="200" src="https://autumn.revolt.chat/attachments/eNpfwV2C1_wudONe43YCvWr-4vbvLpG78HbuXgOYfO"></a>
 </div>
 
+
+
+## License
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fashley0143%2Fpoke.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2Fashley0143%2Fpoke?ref=badge_large)

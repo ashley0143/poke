@@ -742,8 +742,12 @@ body {
   background-color: #909098;
 }
 
+:root {
+  --default-cursor: url('/static/cursor.ico') 2 0, default;
+  --pointer-cursor: url('/static/cursor-pointer.ico') 14 0, pointer;
+}
 
-body {cursor: url('/static/cursor.ico'), default}
+body {cursor: var(--default-cursor)}
 
 a,
 btn,
@@ -753,7 +757,7 @@ select,
 button,
 summary,
 span > a,
-li > a {cursor: url('/static/cursor-pointer.ico'), pointer !important;}
+li > a {cursor: var(--pointer-cursor) !important;}
 
 p {
   color: #fff;
@@ -1285,5 +1289,5 @@ nav .middle .search-bar {
 }
 
 form > .btn.btn-success:hover {
-  cursor: pointer;
+  cursor: var(--pointer-cursor);
 }

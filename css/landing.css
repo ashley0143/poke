@@ -684,6 +684,11 @@
   font-display: swap;
 }
 
+:root {
+  --default-cursor: url('/static/cursor.ico') 2 0, default;
+  --pointer-cursor: url('/static/cursor-pointer.ico') 14 0, pointer;
+}
+
 html {
   min-height: 100%;
 } 
@@ -700,7 +705,7 @@ body {
   flex-direction: column;
   justify-content: flex-start;
 }
-body {cursor: url('/static/cursor.ico'), default}
+body {cursor: var(--default-cursor)}
 
 a,
 btn,
@@ -710,8 +715,8 @@ select,
 button,
 summary,
 span > a,
-li > a {cursor: url('/static/cursor-pointer.ico'), pointer}
-.btn {cursor: url('/static/cursor-pointer.ico'), pointer !important}
+li > a {cursor: var(--pointer-cursor)}
+.btn {cursor: var(--pointer-cursor) !important}
 
 @font-face {
   font-family: "PokeTube Flex";
@@ -765,7 +770,7 @@ button[type="submit"] {
   border: 2px #612153 solid;
   border-radius: 24px;
   padding: 8px 10px;
-  cursor: pointer;
+  cursor: var(--pointer-cursor);
 }
 button[type="submit"]:hover {
   background: #ffffff2e;

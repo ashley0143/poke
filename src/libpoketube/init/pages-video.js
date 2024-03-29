@@ -355,7 +355,6 @@ module.exports = function (app, config, renderTemplate) {
     var contentregion =  "US";
 
       const {
-        video: k,
         json,
         engagement,
         comments: inv_comments,
@@ -368,7 +367,8 @@ module.exports = function (app, config, renderTemplate) {
       const color2 = data.color2;
       const desc = data?.desc;
       const isMobile = req.useragent.isMobile;
-      const wiki = data.wiki;
+      const wiki = data?.wiki;
+      const k = data?.video;
       const { channel: tj } = data;
       const u = await media_proxy(v);
       const d = desc.toString().replace(/\n/g, " <br> ");

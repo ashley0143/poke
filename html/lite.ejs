@@ -593,7 +593,7 @@ background: none !important;
                   <% } %>
 
             <% if (inv_vid.recommendedVideos.length < 1) { %> 
- <% channel_uploads.latestVideos.forEach(x => { %>
+ <% channel_uploads?.latestVideos.forEach(x => { %>
     <div class="fade-in video">
         <% if (!optout) { %><a class="thumbnail" href="/lite?v=<%= x.videoId %>" style="background-image:url(<%- media_proxy_url %>/proxy?url=https://vid.puffyan.us/vi/<%= x.videoId %>/hqdefault.jpg?sqp=-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLBy_x4UUHLNDZtJtH0PXeQGoRFTgw);border-radius:9.5px" alt="<%= x.Title %>"><span class="video-length"><%- turntomins(x.lengthSeconds) || "LIVE"%></span><% } %><% if (optout) { %><a class="thumbnail"href="/lite?v=<%= x.videoId %>&m=f"style="background-image:url(<%- media_proxy_url %>/proxy?url=https://vid.puffyan.us/vi/<%= x.videoId %>/hqdefault.jpg?sqp=-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLBy_x4UUHLNDZtJtH0PXeQGoRFTgw);border-radius:9.5px"alt="<%= x.Title %>"><span class="video-length"><%- x.duration || "LIVE"%></span><% } %></a>
             <div class="info">

@@ -350,7 +350,8 @@ module.exports = function (app, config, renderTemplate) {
 
     try {
       var mediaproxy = config.media_proxy
-  var contentlang "en-US";
+
+  var contentlang = "en-US";
     var contentregion =  "US";
 
       const {

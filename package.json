@@ -34,7 +34,7 @@
     "quick.db": "^7.1.3",
     "activitypub-express": "^4.4.1",
     "duck-duck-scrape": "^2.2.5",
-    "google-it": "^1.6.4", 
+    "google-it": "^1.6.4"
   },
   "engines": {
     "node": "16.x"

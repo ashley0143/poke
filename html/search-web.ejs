@@ -18,16 +18,14 @@
 -->
 <!DOCTYPE html>
 <head>
-<head>
 <title>Searching <%=q%> - PokeSearch</title>
 <link rel="manifest" href="/manifest.json">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=3.0, user-scalable=1" />
   <link href=/css/yt-ukraine.svg?v=6 rel=icon>
-   <link href="https://fonts.poketube.fun/css/fonts.css" rel=stylesheet>
-<link href=/css/app-cdn.min.css rel=stylesheet>
-<link href=/css/app.main.css?v=44600 rel=stylesheet>
-<link href=/css/search.main.css?v=57 rel=stylesheet>
- <link href=/css/watch.main.css rel=stylesheet>
+<link href=/css/app-cdn.min.css?v=44600 rel=stylesheet>
+<link href=/css/app.main.css?v=44600rel=stylesheet>
+<link href=/css/search.main.css?v=44600 rel=stylesheet> 
+ <link href=/css/watch.main.css?v=44600 rel=stylesheet>
 <link rel="search" type="application/opensearchdescription+xml" title="PokeTube" href="https://poketube.fun/api/opensearch" />
   <meta content="Searching <%=q%> - PokeTube" property=og:title>
        <% if (q == "do the harlem shake") { %>  
@@ -147,6 +145,7 @@ summary:hover{
   word-break: break-all;
   white-space: normal;
     }
+
 .hide {
   display: none;
 }
@@ -456,21 +455,23 @@ Web
     </div>
                                                                           <div class="video-list" >
 
-<% results.forEach((x, index) => { %>
-    <div class="video" style="height: 7em;">
-        <a style="min-width: 81em;" href="<%= x.url %>"><%= x.title %></a><br>
-        <p style="color:gray;display: flex;flex-direction: column;width: 48em;margin-top: -8em;">
-            <%= x.url %><br>
-            <% if (!isMobile) { %>
-                <span class="search-result"><%- x.description %></span>
-            <% } %>
-            <% if (isMobile) { %>
-                <span class="search-result"><%- x.description %></span>
-            <% } %>
-        </p>
-    </div>
-<% }) %>
+     <% results.forEach(x => { %>
+                                                                       <div class="video" style="height: 6em;">
 
+        <a style="min-width: 81em;" href="<%= x.link %>"><%= x.title %></a><br>
+        <p style="color:gray;display: flex;flex-direction: column;width: 48em;margin-top: -8em;"><%= x.link %><br>
+          <% if (!isMobile) { %> 
+
+         <span style="color:white;width: 48em;display: flex;"><%= x.snippet %></span>
+                     <% } %> 
+ <% if (isMobile) { %> 
+
+         <span style="color:white;max-width: 15em;display: flex;"><%= x.snippet %></span>
+                     <% } %> 
+          </p>
+              </div>
+
+             <% }) %>
  
         </a>
         </div>

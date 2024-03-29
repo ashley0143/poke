@@ -446,7 +446,7 @@ module.exports = function (app, config, renderTemplate) {
         if (req.query.from === "short") var shortsui = true;
 
         try {
-          renderTemplate(res, req, "poketube.ejs", {
+          renderTemplate(res, req, "lite.ejs", {
             color: data.color,
             color2: data.color2,
             linkify,

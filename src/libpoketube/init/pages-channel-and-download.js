@@ -167,19 +167,40 @@ module.exports = function (app, config, renderTemplate) {
   });
 
   app.get("/im-feeling-lucky", function (req, res) {
-    res.send("WIP");
+    const query = req.query.query;
+
+    const search = require("google-it");
+
+    const getRandomLinkAndRedirect = (query, res) => {
+      search({ query: `${query}` }).then((results) => {
+        // Check if there are any results
+        if (results.length > 0) {
+          // Get a random index
+          const randomIndex = Math.floor(Math.random() * results.length);
+
+          // Get the random result object
+          const randomResult = results[randomIndex];
+
+          // Get the link from the random result
+          const randomLink = randomResult.link;
+
+          // Redirect to the random link
+          res.redirect(randomLink);
+        } else {
+          // Handle case when no results are found
+          res.send("No results found.");
+        }
+      });
+    };
+
+    getRandomLinkAndRedirect(query, res);
   });
 
   app.get("/web", async (req, res) => {
     const query = req.query.query;
     const tab = req.query.tab;
 
-    const { fetch } = await import("undici");
-
-    const search = await fetch(
-      `https://librex.uk.to/api.php?q=${query}&p=1&t=0`
-    );
-    const web = getJson(await search.text());
+    const search = require("google-it");
 
     if (req.query.lucky === "true") {
       res.redirect("/im-feeling-lucky?query=" + query);
@@ -218,18 +239,18 @@ module.exports = function (app, config, renderTemplate) {
     let continuation = req.query.continuation || "";
 
     try {
-      const results = Object.entries(web);
-
-      renderTemplate(res, req, "search-web.ejs", {
-        j: "",
-        IsOldWindows,
-        h: "",
-        tab,
-        continuation,
-        isMobile: req.useragent.isMobile,
-        results: results,
-        q: query,
-        summary: "",
+      search({ query: `${req.query.query}` }).then((results) => {
+        renderTemplate(res, req, "search-web.ejs", {
+          j: "",
+          IsOldWindows,
+          h: "",
+          tab,
+          continuation,
+          isMobile: req.useragent.isMobile,
+          results: results,
+          q: query,
+          summary: "",
+        });
       });
     } catch (error) {
       console.error(`Error while searching for '${query}':`, error);

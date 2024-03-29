@@ -354,20 +354,16 @@ module.exports = function (app, config, renderTemplate) {
   var contentlang = "en-US";
     var contentregion =  "US";
 
-      const {
-        json,
-        engagement,
-        comments: inv_comments,
-        vid: inv_vid,
-      } = await INNERTUBE?.getYouTubeApiVideo(f, v, contentlang, contentregion);
-
-  
+ 
       const data = await INNERTUBE?.getYouTubeApiVideo(f, v, contentlang, contentregion);
       const color = data.color;
       const color2 = data.color2;
       const desc = data?.desc;
       const isMobile = req.useragent.isMobile;
       const wiki = data?.wiki;
+      const json = data?.json;
+      const inv_vid = data?.vid;
+     const  engagement = data?.engagement
       const k = data?.video;
       const { channel: tj } = data;
       const u = await media_proxy(v);

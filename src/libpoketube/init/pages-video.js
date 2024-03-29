@@ -350,6 +350,8 @@ module.exports = function (app, config, renderTemplate) {
 
     try {
       var mediaproxy = config.media_proxy
+  var contentlang "en-US";
+    var contentregion =  "US";
 
       const {
         video: k,
@@ -357,9 +359,10 @@ module.exports = function (app, config, renderTemplate) {
         engagement,
         comments: inv_comments,
         vid: inv_vid,
-      } = await INNERTUBE?.getYouTubeApiVideo(f, v);
+      } = await INNERTUBE?.getYouTubeApiVideo(f, v, contentlang, contentregion);
 
-      const data = await INNERTUBE?.getYouTubeApiVideo(f, v);
+  
+      const data = await INNERTUBE?.getYouTubeApiVideo(f, v, contentlang, contentregion);
       const color = data.color;
       const color2 = data.color2;
       const desc = data?.desc;

@@ -441,19 +441,7 @@ background: none !important;
                       </span> 
                       
                                                  <hr style="clear: both;display: block;border: none;border-bottom: 0.5px solid #2f2f2f;/*! width: 4.5em; */height: 0;">
-     <%  if (Array.isArray(video?.Tags?.Tag)) { %> 
-
-                            <div class="video-title" style="color:#fff;font-family:'PokeTube Flex';font-weight:1000;font-stretch: extra-expanded;margin-top: 10px;margin-bottom: 10px;">Tags</div>
-                      <div class="tags">
-        
- <% video.Tags.Tag.forEach(x => { %>
- <div class="tag">
-   <a href="/hashtag/<%=x %>" style="color:#fff">
-   <%=x %>
-     </a>
-   </div>
-   
-         <% }) %>  
+     
            </div>
    
    

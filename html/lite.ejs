@@ -1,3 +1,4 @@
+ <% try { %>
   <% if (!isMobile) { %> 
 <!--
 
@@ -639,3 +640,6 @@ background: none !important;
 </html>
 
   <% } %>
+<% } catch (error) { %>
+  <%- error %>
+ <% } %>

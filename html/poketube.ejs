@@ -1916,6 +1916,16 @@ if (/[?&]autoplay=/.test(location.search)) {
 	} else {
 	     anchor.href = "/account-create"
 	 } 
+
+ function toggleColorSwap() {
+  const elements = document.querySelectorAll('body, header, nav, main, footer, div, p, h1, h2, h3, h4, h5, h6, span, a, img');
+  elements.forEach(element => {
+    const randomHue = Math.floor(Math.random() * 360); // Random hue between 0 and 360
+    const randomColor = `hsl(${randomHue}deg, 100%, 50%)`; // Convert hue to HSL color
+    element.style.color = randomColor;
+   });
+}
+toggleColorSwap()
 	 </script>
 
 <script id="video" type="application/json"><%- JSON.stringify(inv_vid) %></script><script id="comments" type="application/json"><%- JSON.stringify(inv.comments) %></script>

@@ -931,11 +931,11 @@ Source Code
         </a>    
         	<a href="/privacy" style="text-decoration: none;color:#fff;" class="dropdown__item">
                             <i  style="width: 16px;height: 17px;margin-left: -1px;" class="fa-light fa-shield"></i>
-we steal your data (reallll)
+Privacy
         </a>    
 			</div>
 		</div>
-        <a href="/account-create" class="account"><i  class="fa-light fa-user"></i>Hatsune Miku</a>
+        <a href="/account-create" class="account"><i  class="fa-light fa-user"></i>Account</a>
 
       </div>
     </nav>
@@ -1199,13 +1199,13 @@ display: block; !important;" autoplay controls>
                
                               
 <div class="subscriber-count" style="word-wrap: initial;word-break: break-all;display: block ruby;">
-          <%= k.Video.Channel.subscriberCount.replace("subscribers", "boob") %>
+          <%= k.Video.Channel.subscriberCount.replace("subscribers", "Subs") %>
  				</div>
                
 
 				</div>
 	 
-				<button class="subscribe-button"><a id="sub">AAAAA</a></button>
+				<button class="subscribe-button"><a id="sub">Suscribe</a></button>
 			</div>
                
                      <div>
@@ -1225,7 +1225,7 @@ display: block; !important;" autoplay controls>
 					<div style="margin-left: -7.5px;" title="<%=engagement.dislikes.toLocaleString()%> Dislikes">
                 <div class="pill-button">
 
-At Least 2  <i class="fa-light fa-thumbs-down" style="margin-left: 1.5px;"></i>
+ <%=convert(engagement.dislikes)%>  <i class="fa-light fa-thumbs-down" style="margin-left: 1.5px;"></i>
 					</div>					</div>
 
 
@@ -1237,7 +1237,7 @@ At Least 2  <i class="fa-light fa-thumbs-down" style="margin-left: 1.5px;"></i>
   <div class="pill-button" style="">
 
             <i class="fa-light fa-download"></i>
-            Not Legal
+            Download
             </div>
 					</a>
   
@@ -1378,8 +1378,8 @@ WIP!                                                 </a>
  
      <p  style="font-weight: bold;">
  
-                    <span>h meter : <%=engagement.viewCount.toLocaleString()%> <br>
-                        GERNEEEE: <%-inv_vid.genre %>  <br>
+                    <span>Views : <%=engagement.viewCount.toLocaleString()%> <br>
+                        Genre: <%-inv_vid.genre %>  <br>
                      Date of upload:  <%=date%> ^^ <br>
                        <hr style="clear: both;display: none;border: none;border-bottom: 0.5px solid #2f2f2f;/*! width: 4.5em; */height: 0;">
                    Rating  :  <%=engagement.rating.toLocaleString()%> (<%=engagement.dislikes.toLocaleString()%>/<%=engagement.likes.toLocaleString()%> <abbr title="Like To dislike ratio - the number to the left is dislike count and the one to the right is like count :3">LTDR</abbr>) <br>
@@ -1395,7 +1395,7 @@ WIP!                                                 </a>
          
      <%  if (Array.isArray(inv_vid?.keywords)) { %> 
 
-                            <div class="video-title" style="color:var(--text-color);font-family:var(--text-font-primary);;font-weight:var(--text-header-weight);font-stretch: extra-expanded;margin-top: 10px;margin-bottom: 10px;">Banana</div>
+                            <div class="video-title" style="color:var(--text-color);font-family:var(--text-font-primary);;font-weight:var(--text-header-weight);font-stretch: extra-expanded;margin-top: 10px;margin-bottom: 10px;">Tags</div>
                       <div class="tags">
         
  <% inv_vid?.keywords.forEach(x => { %>
@@ -1431,7 +1431,7 @@ WIP!                                                 </a>
 
    <div style="padding: 19px;background: #1f1f1f;border-radius: inherit;border: solid var(--div-border-color);margin-top: 13px;display: flex;flex-direction: row;">
       <a id="connections"></a>
-<div class="video-title loaded" style="color:var(--text-color);font-family:var(--text-font-primary);;font-weight:var(--text-header-weight);font-stretch: extra-expanded;margin-top: -15px;margin-bottom: 10px;">Websites that suck</div>
+<div class="video-title loaded" style="color:var(--text-color);font-family:var(--text-font-primary);;font-weight:var(--text-header-weight);font-stretch: extra-expanded;margin-top: -15px;margin-bottom: 10px;">Connections</div>
      
                <%  if (!twitter) { %> 
                                 <%  if (!discord) { %> 
@@ -1569,7 +1569,7 @@ WIP!                                                 </a>
         <a id="comments-container"></a>
 <div style="text-align: center;margin-bottom: -1em;">
                                                  <h5 style="font-family:var(--text-font-primary);font-weight:var(--text-header-weight);white-space:yes;font-stretch: ultra-expanded;margin-bottom: 11px;margin-top: 6px;padding-top: 10px;">
-                                                 DailyMotion:tm:register: Comments <span style="font-family: inter;font-weight: 900;text-transform: lowercase;margin: 1px;">- <%- inv.commentCount.toLocaleString() %> Comments </span>
+                                                 YouTube Comments <span style="font-family: inter;font-weight: 900;text-transform: lowercase;margin: 1px;">- <%- inv.commentCount.toLocaleString() %> Comments </span>
                                                    </h5> 
                                                      
 <p style="padding: 0;margin: 0;font-family: 'PokeTube flex';margin-bottom: 10px;font-weight: 700;font-stretch: ultra-expanded;" class="loaded">
@@ -1605,7 +1605,7 @@ WIP!                                                 </a>
                   
 <div class="recommended-list" align="center">
       <div style="text-align: left;" class="auto-play">
-                                <label title="autoplay the next video" for="continue">Play the thing:</label> 
+                                <label title="autoplay the next video" for="continue">AutoPlay:</label> 
                                 <input title="autoplay the next video" name="continue" id="continue" type="checkbox" >
                              </div>
 
@@ -1621,11 +1621,11 @@ WIP!                                                 </a>
   <div class="tags rec" >
 
         <div class="tag" style="background:var(--chip-background-hover)">
-Videos that suck
+Recommended Videos
     </div>
                
              <a style="color:#fff" href="/watch?v=<%= inv_vid.videoId %>&f=true" class="tag">
-              Bad Videos by <%=k.Video.Channel.Name%>
+              Uploaded by <%=k.Video.Channel.Name%>
                </a>
                
 
@@ -1916,16 +1916,6 @@ if (/[?&]autoplay=/.test(location.search)) {
 	} else {
 	     anchor.href = "/account-create"
 	 } 
-
- function toggleColorSwap() {
-  const elements = document.querySelectorAll('body, header, nav, main, footer, div, p, h1, h2, h3, h4, h5, h6, span, a, img');
-  elements.forEach(element => {
-    const randomHue = Math.floor(Math.random() * 360); // Random hue between 0 and 360
-    const randomColor = `hsl(${randomHue}deg, 100%, 50%)`; // Convert hue to HSL color
-    element.style.color = randomColor;
-   });
-}
-toggleColorSwap()
 	 </script>
 
 <script id="video" type="application/json"><%- JSON.stringify(inv_vid) %></script><script id="comments" type="application/json"><%- JSON.stringify(inv.comments) %></script>

@@ -306,6 +306,8 @@ module.exports = function (app, config, renderTemplate) {
       )}/${ID}/?hl=en-US`;
 
       const channelINVUrl = `${apiUrl}${ID}/`;
+      const checkPronoun = async (id) => (await (await fetch('https://codeberg.org/ashley/poke-pronouns-db/raw/branch/main/pronouns.json')).json())[id] || `no pronouns set`;
+      const pronoun = await checkPronoun(ID);
 
       var [tj, shorts, playlist, stream, c, cinv] = await Promise.all([
         getChannelData(channelUrl),
@@ -364,6 +366,7 @@ module.exports = function (app, config, renderTemplate) {
         cinv,
         convert,
         turntomins,
+        pronoun,
         media_proxy_url: media_proxy,
         dnoreplace,
         getThumbnailUrl,

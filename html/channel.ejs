@@ -695,7 +695,7 @@ height: 100%;
                                                                  <% } %>
  <span style="font-size: 10px;color: gray;">@<%- cinv.authorId %>@youtube.com</span>
 </p>           
-                    <p style="margin-bottom: -17px;" class="subs"><%=subs%> subscribers - <%- pronoun%></p>
+                    <p style="margin-bottom: -17px;" class="subs"><%=subs%> subscribers - <%- pronoun %></p>
  
 <p style="padding:0;font-weight:bold;max-inline-size: 37em;display: -webkit-box;-webkit-line-clamp: 3;-webkit-box-orient: vertical;"> 
  
@@ -978,9 +978,9 @@ width: fit-content;
 				<img src="https://p.poketube.fun/<%=j.Channel?.Metadata.Avatars.Thumbnail.$t%>" alt="Channel Avatar">
 			</a>
 			<div class="name">
-				<p style="font-family:PokeTube Flex,sans-serif;font-weight:1000;font-stretch: ultra-expanded;white-space:yes;"><%=j.Channel?.Metadata.Name%>  </p>
+				<p style="font-family:PokeTube Flex,sans-serif;font-weight:1000;font-stretch: ultra-expanded;white-space:yes;"> <%=j.Channel?.Metadata.Name%>  </p>
           <p style="margin: -9px;">
-            			<%=subs%> subscribers  
+            			<%=subs%> subscribers - <%- pronoun %>
 
         </p>
  			</div>

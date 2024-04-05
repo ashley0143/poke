@@ -440,9 +440,6 @@ module.exports = function (app, config, renderTemplate) {
           (uaos === "Windows 7" || uaos === "Windows 8") &&
           browser === "Firefox";
 
-        if (uaos === "Windows XP" || uaos === "Windows Vista")
-          res.redirect("/lite?v=" + req.query.v);
-
         if (req.query.from === "short") var shortsui = true;
 
         try {

@@ -44,14 +44,10 @@
 <meta content="<%=k.Video.Channel.Name%>" name=twitter:author>
 <meta content="https://poketube.fun/watch?v=<%=inv_vid.videoId%>" name=twitter:url>
 <meta content="<%=inv_vid.title%> | Poke" name=twitter:title>
-<meta name="twitter:card" content="player">
-<meta content="1280" name=twitter:player:width>
-<meta content="720" name=twitter:player:height>
-<meta content="https://eu-proxy.poketube.fun/latest_version?id=<%=inv_vid.videoId%>&itag=22&local=true" property="twitter:player">
 <meta content="Watch this video from <%=k.Video.Channel.Name%> On Poke! 
 👍 <%=convert(engagement.likes)%> | 👎 <%=convert(engagement.dislikes)%> | 📈 <%=convert(engagement.viewCount)%> Views 🗓️ <%= date %>" property=twitter:description>
-<meta content="https://i.ytimg.com/vi/<%=inv_vid.videoId%>/maxresdefault.jpg" property=twitter:image>
 <meta content="https://i.ytimg.com/vi/<%=inv_vid.videoId%>/maxresdefault.jpg" property=og:image>
+<meta content=summary_large_image name=twitter:card>
 <link href="https://poketube.fun/watch?v=<%=inv_vid.videoId%>" itemprop=url>
 <!-- closes the } --> <% } %> 
 <meta name="darkreader-lock"> <!-- tells dark reader that the site has a dark theme and to turn itself off -->

@@ -44,10 +44,11 @@
 <meta content="<%=k.Video.Channel.Name%>" name=twitter:author>
 <meta content="https://poketube.fun/watch?v=<%=inv_vid.videoId%>" name=twitter:url>
 <meta content="<%=inv_vid.title%> | Poke" name=twitter:title>
+<meta name="twitter:card" content="player">
 <meta content="video/mp4" property="og:video:type">
 <meta content="640" property="og:video:width">
 <meta content="360" property="og:video:height">
-<meta content="https://eu-proxy.poketube.fun/latest_version?id=<%=inv_vid.videoId%>&itag=22&local=true" property="og:video:url">
+<meta content="https://eu-proxy.poketube.fun/latest_version?id=<%=inv_vid.videoId%>&itag=22&local=true" property="twitter:player">
 <meta content="Watch this video from <%=k.Video.Channel.Name%> On Poke! 
 👍 <%=convert(engagement.likes)%> | 👎 <%=convert(engagement.dislikes)%> | 📈 <%=convert(engagement.viewCount)%> Views 🗓️ <%= date %>" property=twitter:description>
 <meta content="https://i.ytimg.com/vi/<%=inv_vid.videoId%>/maxresdefault.jpg" property=og:image>

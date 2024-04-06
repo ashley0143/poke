@@ -1552,13 +1552,9 @@ WIP!                                                 </a>
                 
                              </div>
 
-
- 
- 
-                                                   <% if(!inv.comments) { %>  
+                                                                                                        <% if(inv.error) { %>  
 <p style="text-align: center">
-  no comments on this video (it may be disabled or theres just no comments lol or youtube did something that broke comments ;_;)
-                                                     </p>
+<%- inv.error %>                                                     </p>
                                                      <% } %>                     
 
                                                      

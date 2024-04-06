@@ -1554,7 +1554,12 @@ WIP!                                                 </a>
 
                                                                                                         <% if(inv.error) { %>  
 <p style="text-align: center">
-<%- inv.error %>                                                     </p>
+<%- inv.error %> <br>Backtrace: <br>
+<span>
+<%- inv.errorBacktrace %>
+</span>
+<a href="https://github.com/iv-org/invidious/issues/new/choose">Report this issue</a>
+</p>
                                                      <% } %>                     
 
                                                      

@@ -11,6 +11,8 @@ const { curly } = require("node-libcurl");
 const getdislikes = require("../libpoketube/libpoketube-dislikes.js");
 const getColors = require("get-image-colors");
 const config = require("../../config.json")
+const { Innertube, UniversalCache } = require('youtubei.js');
+
 
 /**
  * Class representing PokeTube's core functionality.
@@ -69,7 +71,8 @@ class InnerTubePokeVidious {
   async getYouTubeApiVideo(f, v, contentlang, contentregion) {
     
     const { fetch } = await import("undici");
-    
+    const yt = await Innertube.create({ cache: new UniversalCache(false), generate_session_locally: true });
+
     if (v == null) return "Gib ID";
 
     // Check if result is already cached
@@ -81,8 +84,7 @@ class InnerTubePokeVidious {
     let desc = "";
     
     try {
-    const [invComments, videoInfo, videoData] = await Promise.all([
-      fetch(`${this.config.invapi}/comments/${v}?hl=${contentlang}&region=${contentregion}&h=${btoa(Date.now())}`).then((res) => res.text()),
+    const [videoInfo, videoData] = await Promise.all([
       fetch(`${this.config.invapi}/videos/${v}?hl=${contentlang}&region=${contentregion}&h=${btoa(Date.now())}`).then((res) => res.text()),
       curly
         .get(`${this.config.tubeApi}video?v=${v}`, {
@@ -95,7 +97,9 @@ class InnerTubePokeVidious {
         }),
     ]);
 
-    const comments = await this.getJson(invComments);
+   
+    const comments = await yt.getComments(v);
+  
     const vid = await this.getJson(videoInfo);
     const { json, video } = videoData;
 

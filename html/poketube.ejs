@@ -1295,14 +1295,14 @@ WIP!                                                 </a>
                                                     
  <% if (!video?.Channel.Name.endsWith(' - Topic')) { %> 
     <% if (!inv_vid.title.endsWith('IGNORE_THIS_PLEASE)')) { %>            
-      <%  if (inv.comments) { %> 
+      <%  if (inv.contents) { %> 
 
       <div class="new-button button-lite" style=";margin-left: -4px;">
         <a title="See videos comments" style="color:var(--text-color);text-decoration: none" href="#comments-container">
                                         <div class="pill-button">
 
                <i class="fa-light fa-message-lines"></i>
-              <%- inv.commentCount.toLocaleString() %>
+              <%- inv.header?.comments_count %>
                                                       </div>       
         </a>
                                                                             </div>
@@ -1552,25 +1552,16 @@ WIP!                                                 </a>
                 
                              </div>
 
-                                                                                                        <% if(inv.error) { %>  
-<p style="text-align: center">
-<%- inv.error %> <br>Backtrace: <br>
-<span class="description" style="background: red;display: flex;font-family: monospace, mono;font-size: 15px;margin-top: 3px;margin-bottom: 1em;border-radius: 1em;padding: 4px;">
-<%- inv.errorBacktrace %>
-</span>
-<a href="https://github.com/iv-org/invidious/issues/new/choose">Report this issue</a>
-</p>
-                                                     <% } %>                     
-
+                                                                  
                                                      
-                                                                                                                                           <%  if (inv.comments) { %> 
+                                                                                                                                           <%  if (inv.contents) { %> 
                                                                                                                                                                               <div class="comments">                                                                   
 
 <div class="comments-class-or-something-i-cant-find-a-name-lol">
         <a id="comments-container"></a>
 <div style="text-align: center;margin-bottom: -1em;">
                                                  <h5 style="font-family:var(--text-font-primary);font-weight:var(--text-header-weight);white-space:yes;font-stretch: ultra-expanded;margin-bottom: 11px;margin-top: 6px;padding-top: 10px;">
-                                                 YouTube Comments <span style="font-family: inter;font-weight: 900;text-transform: lowercase;margin: 1px;">- <%- inv.commentCount.toLocaleString() %> Comments </span>
+                                                 YouTube Comments <span style="font-family: inter;font-weight: 900;text-transform: lowercase;margin: 1px;">- <%- inv.header?.comments_count %> Comments </span>
                                                    </h5> 
                                                      
 <p style="padding: 0;margin: 0;font-family: 'PokeTube flex';margin-bottom: 10px;font-weight: 700;font-stretch: ultra-expanded;" class="loaded">
@@ -1578,8 +1569,55 @@ WIP!                                                 </a>
   </p>    
                                         
                                                    </div>
- <% inv.comments.forEach(x =>{ %><div class="fade-in<%- x.commentId %><%- btoa(x.commentId) %>"><div class="_ comment_<%- x.commentId %><%- btoa(btoa(x.commentId)) %>"style="padding:10px"><div class="comment-list left-padding"style="background:#333;padding-top:1px;padding:10px;border-radius:30px;padding-top:0"><div class="d-flex justify-content-between single-comment"style="padding-top:none"><div class="d-flex justify-content-between user"><div class="desc"><h5 style="display:flex;margin-top:7px;padding-top:10px"><div class="thumb"><a href="/channel?id=<%- x.authorId%>@youtube.com"style="width:40px;height:40px"class="avatar"><img loading="lazy"src="<%- media_proxy_url %>/proxy?url=<%= x.authorThumbnails[1].url.replace("https://yt3.ggpht.com/", "https://vid.puffyan.us/ggpht/") %>"></a></div><%  if (!x.authorIsChannelOwner) { %><p class="comments-author"><a href="/channel?id=<%- x.authorId%>"style="color:var(--text-color);text-decoration:none"><%- x.author%><%  if (x.verified) { %><i class="icon ion ion-md-checkmark-circle"></i><% } %><p class="date-publish"><%- x.publishedText %></p></a></p><% } %><%  if (x.authorIsChannelOwner) { %><p class="comments-author owner"><a href="/channel?id=<%- x.authorId%>@youtube.com"style="color:var(--text-color);text-decoration:none"><%- x.author%><%  if (x.verified) { %><i class="icon ion ion-md-checkmark-circle"></i><% } %><p class="date-publish"><%- x.publishedText %></p></a><% } %></h5><p class="comment"style="font-weight:700"><%- x.contentHtml %><br><br><% if (x.likeCount === 0) { %><i class="fa-light fa-thumbs-up"></i> | <i class="fa-light fa-thumbs-down"></i><% } else { %><i class="fa-light fa-thumbs-up"></i> <%= convert(x.likeCount) %> | <i class="fa-light fa-thumbs-down"></i><% } %><%   if(x.creatorHeart) { %> <i class="icon creator-heart-small-container ion-ios-heart"style="color:#ffabcc"title="<%= x.creatorHeart.creatorName%> marked it with a ❤ owo"></i><% } %></div></div></div></div></div></div><% }) %>
-      <center>
+<% for (const thread of inv.contents) { %>
+    <% const x = thread.comment; %>
+<div class="fade-in<%- x.commentId %><%- btoa(x.commentId) %>">
+    <div class="_ comment_<%- x.commentId %><%- btoa(btoa(x.commentId)) %>" style="padding:10px">
+        <div class="comment-list left-padding" style="background:#333;padding-top:1px;padding:10px;border-radius:30px;padding-top:0">
+            <div class="d-flex justify-content-between single-comment" style="padding-top:none">
+                <div class="d-flex justify-content-between user">
+                    <div class="desc">
+                        <h5 style="display:flex;margin-top:7px;padding-top:10px">
+                            <div class="thumb"><a href="/channel?id=<%- x.author.id%>@youtube.com" style="width:40px;height:40px" class="avatar"><img loading="lazy"src="<%- media_proxy_url %>/proxy?url=<%= x.author.thumbnails[0].url.replace("https://yt3.ggpht.com/", "https://vid.puffyan.us/ggpht/") %>"></a></div>
+                            <%  if (!x.author_is_channel_owner) { %>
+                                <p class="comments-author">
+                                    <a href="/channel?id=<%- x.author.id%>" style="color:var(--text-color);text-decoration:none">
+                                        <%- x.author.name %>
+                                            <%  if (x.is_verified) { %><i class="icon ion ion-md-checkmark-circle"></i>
+                                                <% } %>
+                                                    <p class="date-publish">
+                                                        <%- x.published_time %>
+                                                    </p>
+                                    </a>
+                                </p>
+                                <% } %>
+                                    <%  if (x.author_is_channel_owner) { %>
+                                        <p class="comments-author owner">
+                                            <a href="/channel?id=<%- x.authorId%>@youtube.com" style="color:var(--text-color);text-decoration:none">
+                                                <%- x.author.name %>
+                                                    <%  if (x.verified) { %><i class="icon ion ion-md-checkmark-circle"></i>
+                                                        <% } %>
+                                                            <p class="date-publish">
+                                                                <%- x.published_time %>
+                                                            </p>
+                                            </a>
+                                            <% } %>
+                        </h5>
+                        <p class="comment" style="font-weight:700">
+                            <%- x.content %><br><br>
+                                <% if (x.like_count === 0) { %><i class="fa-light fa-thumbs-up"></i> | <i class="fa-light fa-thumbs-down"></i>
+                                    <% } else { %><i class="fa-light fa-thumbs-up"></i>
+                                        <%= x.like_count %> | <i class="fa-light fa-thumbs-down"></i>
+                                            <% } %>
+                                                <%   if(x.creatorHeart) { %> <i class="icon creator-heart-small-container ion-ios-heart" style="color:#ffabcc" title="<%= x.creatorHeart.creatorName%> marked it with a ❤ owo"></i>
+                                                    <% } %>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>  <% } %>
+        <center>
                   <a href="#top">Go To Top</a>
                     </center>
           </div>
@@ -1590,13 +1628,13 @@ WIP!                                                 </a>
                                                        <% } %>
 
                                 
-                 <% if(!inv.comments) { %>  
+                 <% if(!inv.contents) { %>  
                    </div>                                       
 
                                                          <% } %>
 
 
-                      <% if(inv.comments) { %>  
+                      <% if(inv.contents) { %>  
                    </div>                                       
 
                                                          <% } %>
@@ -2179,7 +2217,7 @@ a {
 
 </style>
   
-             <%  if (Array.isArray( !inv.comments)) { %> 
+             <%  if (Array.isArray( !inv.contents)) { %> 
 
   <style>
 #desc-container {
@@ -2345,12 +2383,12 @@ font-size: 13px;margin:0;padding:0;white-space: nowrap;
 
 
       </div>
-     <%  if (Array.isArray( inv.comments)) { %> 
+     <%  if (Array.isArray( inv.contents)) { %> 
       		<a class="new-button" title="Comments " style="color:#fff;text-decoration: none;margin-right: 0; " href="#comments-container">
                             <div class="pill-button">
 
             <i class="fa-light fa-comments"></i>
-           <%- convert(inv.commentCount) %> Comments
+           <%- inv.header?.comments_count.toString() %> Comments
             </div>
 					</a>
                                                                                                              <% }%>      
@@ -2807,7 +2845,7 @@ More Epic options owo~
 
                                                                                                                                   <%  if (inv != "Disabled") { %> 
 
-                                                                             <%  if (!Array.isArray( inv.comments)) { %> 
+                                                                             <%  if (!Array.isArray( inv.contents)) { %> 
                                                                                <p>
                                                                                  Comments couldnt load ;-; (<a href="https://codeberg.org/Ashley/poketube/issues/new">Report dis issue</a> or refresh the god damn page lol)
                                                                                </p>
@@ -2822,10 +2860,10 @@ More Epic options owo~
                               <% } %>
 
                                      
-                        <%  if (Array.isArray( inv.comments)) { %> 
+                        <%  if (Array.isArray( inv.contents)) { %> 
 
-                                 <% inv.comments.forEach(x =>{ %>
- 
+<% for (const thread of inv.contents) { %>
+    <% const x = thread.comment; %> 
                                  
                                    <div class="<%- x.commentId %>" style="padding: 10px;">
 
@@ -2834,23 +2872,23 @@ More Epic options owo~
           <div class="user justify-content-between d-flex">
             <div class="desc">
                    <h5 style="display: flex;margin-top: 7px;padding-top: 10px;"><div class="thumb">
-				<a href="/channel?id=<%- x.authorId%>" class="avatar" style="width: 40px;height: 40px;">
-					<img style="width: 50px;height: 50px;" loading="lazy" src="<%- media_proxy_url %>/proxy?url=<%= x.authorThumbnails[1].url.replace("https://yt3.ggpht.com/", "https://vid.puffyan.us/ggpht/") %>">
+				<a href="/channel?id=<%- x.author.id%>" class="avatar" style="width: 40px;height: 40px;">
+					<img style="width: 50px;height: 50px;" loading="lazy" src="<%- media_proxy_url %>/proxy?url=<%= x.author.thumbnails[0].url.replace("https://yt3.ggpht.com/", "https://vid.puffyan.us/ggpht/") %>">
                                </a>
             </div>
-                                                          <%  if (!x.authorIsChannelOwner) { %> 
+                                                          <%  if (!x.author_is_channel_owner) { %> 
 
                 <p style="margin: 7px;font-family:inter;white-space: -moz-pre-wrap !important;white-space: -pre-wrap;white-space: -o-pre-wrap;white-space: pre-wrap;word-wrap: anywhere;white-space: -webkit-pre-wrap;word-break: break-all;white-space: normal;">
-                  				<a href="/channel?id=<%- x.authorId%>" style="color: #fff;text-decoration: none;" >
+                  				<a href="/channel?id=<%- x.author.id%>" style="color: #fff;text-decoration: none;" >
 
-                <%- x.author%>    <%  if (x.verified) { %> 
+                <%- x.author.name %>    <%  if (x.author.is_verified) { %> 
                                                               
                                                                    <i class="icon ion ion-md-checkmark-circle"></i>
                                                                                                 <% } %>    <p style="  margin: 0; 
   margin-top: 12px; !important;
   font-size: small; !important;
   color: gray !important; white-space: nowrap;">
-                  <%- x.publishedText %>
+                  <%- x.published_time %>
                   </p>
                   </a>
                             
@@ -2859,19 +2897,19 @@ More Epic options owo~
                   
                   </p>                                                                <% } %>   
 
-                                          <%  if (x.authorIsChannelOwner) { %> 
+                                          <%  if (x.author_is_channel_owner) { %> 
 <p style="margin: 5px;font-family:inter;white-space: -moz-pre-wrap !important;white-space: -pre-wrap;white-space: -o-pre-wrap;white-space: pre-wrap;word-wrap: anywhere;white-space: -webkit-pre-wrap;word-break: break-all;white-space: normal;background: #4a4a4a;padding: 3px;border-radius: 6px;width: auto;height: 1.4em;justify-self: center; ">
   
-                  				<a href="/channel?id=<%- x.authorId%>" style="color: #fff;text-decoration: none;" >
+                  				<a href="/channel?id=<%- x.author.id%>" style="color: #fff;text-decoration: none;" >
 
-                                <%- x.author%>    <%  if (x.verified) { %> 
+                                <%- x.author.name %>    <%  if (x.author.is_verified) { %> 
                                                               
                                                                    <i class="icon ion ion-md-checkmark-circle"></i>
                                                                                                 <% } %>    <p style="  margin: 0; 
   margin-top: 12px; !important;
   font-size: small; !important;
   color: gray !important; white-space: nowrap;">
-                  <%- x.publishedText %>
+                  <%- x.published_time %>
                   </p>
                   </a>
                                   
@@ -2884,9 +2922,9 @@ More Epic options owo~
 
               </h5>
               <p class="comment" style="font-weight: bold;">
-                <%- x.contentHtml %>
+                <%- x.content %>
               <span style="  white-space: nowrap;">   <i class="fa-light fa-thumbs-up"></i>
- <%- convert(x.likeCount) %> | <i class="fa-light fa-thumbs-down"></i> 
+ <%- x.like_count %> | <i class="fa-light fa-thumbs-down"></i> 
    
    <%   if(x.creatorHeart) { %> 
 
@@ -2902,7 +2940,7 @@ More Epic options owo~
                           
                                                </div>
 
-                                                                        <% }) %>   
+                                                                        <% } %>   
 
                                    <% } %>   
                                      

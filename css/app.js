@@ -132,6 +132,31 @@ timeLinks.forEach(link => {
   }
 });
 
+const videoPlayer = document.getElementById('video');
+
+function time(seconds) {
+  videoPlayer.currentTime = seconds;
+}
+
+ document.addEventListener('click', function(event) {
+  const clickedElement = event.target; 
+
+   if (clickedElement.classList.contains('comment')) {
+    const commentText = clickedElement.textContent.trim();
+
+     const timestampMatch = commentText.match(/(\d{1,2}:\d{2})/);
+
+    if (timestampMatch) {
+      const timestamp = timestampMatch[0];  
+      let parts = timestamp.split(':');
+      let seconds = (+parts[0]) * 60 + (+parts[1]); 
+
+       time(seconds);
+    }
+  }
+});
+
+
   
 
 // Save and resume video progress

@@ -15,6 +15,7 @@ const {
   capitalizeFirstLetter,
   turntomins,
   getRandomInt,
+  escapeHtml,
   getRandomArbitrary,
 } = require("../ptutils/libpt-coreutils.js");
 const media_proxy = require("../libpoketube-video.js");
@@ -325,6 +326,7 @@ module.exports = function (app, config, renderTemplate) {
             convert,
             universe,
             wiki: data.wiki,
+            escapeHtml,
             f,
             t: config.t_url,
             optout: m,

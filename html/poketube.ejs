@@ -1604,7 +1604,7 @@ WIP!                                                 </a>
                                             <% } %>
                         </h5>
                         <p class="comment" style="font-weight:700">
-                            <%- x.content %><br><br>
+                            <%- escapeHtml(x.content) %><br><br>
                                 <% if (x.like_count === 0) { %><i class="fa-light fa-thumbs-up"></i> | <i class="fa-light fa-thumbs-down"></i>
                                     <% } else { %><i class="fa-light fa-thumbs-up"></i>
                                         <%= x.like_count %> | <i class="fa-light fa-thumbs-down"></i>

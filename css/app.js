@@ -136,7 +136,16 @@ const videoPlayer = document.getElementById('video');
 
 function time(seconds) {
   videoPlayer.currentTime = seconds;
+
+  // Add #video to the URL  
+  window.location.hash = 'top'; 
+
+  // Remove #video after a short delay
+  setTimeout(() => {   
+    history.replaceState(null, null, ' '); 
+  }, 250);  
 }
+
 
  document.addEventListener('click', function(event) {
   const clickedElement = event.target; 

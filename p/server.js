@@ -11,6 +11,7 @@ const URL_WHITELIST = [
   "cdn.statically.io",
   "site-assets.fontawesome.com",
   "fonts.gstatic.com",
+  "cdn.jsdelivr.net",
   "yt3.ggpht.com",
   "tube.kuylar.dev",
   "lh3.googleusercontent.com",

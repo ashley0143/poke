@@ -1,4 +1,4 @@
-version: "3"
+# To run, please do either docker compose up -d (for docker's own version) or docker-compose up -d (for your OSes package managers verison)
 services:
   poketube:
     image: quay.io/sudovanilla/poketube

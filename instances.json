@@ -59,34 +59,6 @@
     }
   ],
   [
-    "poke.shiggy.cloud",
-    {
-      "uri": "https://poke.shiggy.cloud",
-      "CLOUDFLARE": false,
-      "piwik": false,
-      "region": "🇬🇧",
-      "software": {
-        "name": "poketube",
-        "version": "latest",
-        "branch": "dev"
-      }
-    }
-  ],
-  [
-    "poke.fr1.shiggy.cloud",
-    {
-      "uri": "https://poke.fr1.shiggy.cloud",
-      "CLOUDFLARE": false,
-      "piwik": false,
-      "region": "🇫🇷",
-      "software": {
-        "name": "poketube",
-        "version": "latest",
-        "branch": "dev"
-      }
-    }
-  ],
-  [
     "poke.alphexo.dev",
     {
       "uri": "https://poke.alphexo.dev",
@@ -123,6 +95,35 @@
       "piwik": false,
       "proxy": false,
       "region": "🇺🇸",
+      "software": {
+        "name": "poketube",
+        "version": "latest",
+        "branch": "dev"
+      }
+    }
+  ],
+  [
+    "poke.am1.shiggy.cloud",
+    {
+      "uri": "https://poke.am1.shiggy.cloud",
+      "CLOUDFLARE": false,
+      "piwik": false,
+      "proxy": false,
+      "region": "🇳🇱",
+      "software": {
+        "name": "poketube",
+        "version": "latest",
+        "branch": "dev"
+      }
+    }
+  ],  [
+    "poke.am2.shiggy.cloud",
+    {
+      "uri": "https://poke.am2.shiggy.cloud",
+      "CLOUDFLARE": false,
+      "piwik": false,
+      "proxy": false,
+      "region": "🇳🇱",
       "software": {
         "name": "poketube",
         "version": "latest",

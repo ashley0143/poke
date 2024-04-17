@@ -25,9 +25,16 @@ function init(app, config, rendertemplate) {
 
  
   app.get("/*", function (req, res, next) {
-    if (didstart) return next();
+  if (didstart) return next();
 
-    return rendertemplate(res, req, "timeout.ejs");
+   const userAgent = req.headers['user-agent'];
+    if (userAgent && (userAgent.includes('MSIE') || userAgent.includes('Trident'))) {  
+        const htmlContent = `<!DOCTYPE html><html><head><title>Browser is not supported :p</title><style>body{margin-left:auto;margin-right:auto;display:flex;max-width:43em;font-family:sans-serif;}</style></head><body><h1>Heyo :3</h1><br><p style="margin-top:4em;margin-left:-7.4em;">hoi - poke does and <b>will not work</b> on Internet Explorer :p<br>if u wanna use poke try using Firefox (firefox.com) or Chromium :3<br>love u :3</p></body></html>`;
+        res.send(htmlContent);
+    } else {
+        didstart = true;
+        next();
+    }
   });
 
 

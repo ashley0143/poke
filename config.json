@@ -5,6 +5,9 @@
     "invchannel": "https://invid-api.poketube.fun/api/v1",
     "p_url":"https://p.poketube.fun",
     "media_proxy": "https://image-proxy.poketube.fun",
+    "email_main_url":"https://email-server.poketube.fun",
+    "mastodon_client_url":"https://fediverse.poketube.fun",
+    "libreoffice_online_url":"https://office.poketube.fun"
     "cacher_max_age": "864000",
     "enablealwayshttps": false,
     "proxylocation":"USA",

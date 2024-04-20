@@ -75,19 +75,35 @@ class InnerTubePokeVidious {
      * @param {Object} headers - The headers to include in the fetch request.
      * @returns {Promise<string>} A promise that resolves to the text content of the response.
      */
+    /**
+     * Fetch data from the specified URL with the given headers, retrying once if status code is 500.
+     * @param {string} url - The URL to fetch data from.
+     * @param {Object} headers - The headers to include in the fetch request.
+     * @returns {Promise<Response>} A promise that resolves to the response object.
+     */
     async function fetchData(url, headers) {
+      let response;
+      let retry = false;
+
       /**
-       * @type {Response}
+       * Retry fetching if status code is 500.
        */
-      const response = await fetch(url, { headers });
+      do {
+        try {
+          response = await fetch(url, { headers });
+          if (response.status === 500) {
+            console.log("Retrying due to status 500...");
+            retry = true;
+          } else {
+            retry = false;
+          }
+        } catch (error) {
+          console.error("Error occurred during fetch:", error);
+          retry = false;
+        }
+      } while (retry);
 
-      if (response.status === 500) {
-        // If status is 500, fetch again
-        console.log("Retrying due to status 500...");
-        return fetchData(url, headers);
-      }
-
-      return response.text();
+      return response;
     }
 
     const { fetch } = await import("undici");

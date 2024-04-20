@@ -1,5 +1,5 @@
 /**
- * PokeTube is a Free/Libre youtube front-end !
+ * Poke is a Free/Libre youtube front-end !
  *
  * This file is Licensed under LGPL-3.0-or-later. Poketube itself is GPL, Only this file is LGPL.
  * See a copy here: https://www.gnu.org/licenses/lgpl-3.0.txt
@@ -10,9 +10,8 @@ const { toJson } = require("xml2json");
 const { curly } = require("node-libcurl");
 const getdislikes = require("../libpoketube/libpoketube-dislikes.js");
 const getColors = require("get-image-colors");
-const config = require("../../config.json")
-const { Innertube, UniversalCache } = require('youtubei.js');
-
+const config = require("../../config.json");
+const { Innertube, UniversalCache } = require("youtubei.js");
 
 /**
  * Class representing PokeTube's core functionality.
@@ -31,10 +30,11 @@ class InnerTubePokeVidious {
     this.config = config;
     this.cache = {};
     this.language = "hl=en-US";
-    this.apikey = "AIzaSyAO_FJ2SlqU8Q4STEHLGCilw_Y9_11qcW8"
-    this.INNERTUBE_CONTEXT_CLIENT_VERSION = "1"
+    this.apikey = "AIzaSyAO_FJ2SlqU8Q4STEHLGCilw_Y9_11qcW8";
+    this.INNERTUBE_CONTEXT_CLIENT_VERSION = "1";
     this.region = "region=US";
-    this.sqp = "-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLBy_x4UUHLNDZtJtH0PXeQGoRFTgw";
+    this.sqp =
+      "-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLBy_x4UUHLNDZtJtH0PXeQGoRFTgw";
   }
 
   /**
@@ -69,9 +69,32 @@ class InnerTubePokeVidious {
    * @returns {Promise<object>} Promise resolving to the video information.
    */
   async getYouTubeApiVideo(f, v, contentlang, contentregion) {
-    
+    /**
+     * Fetch data from the specified URL with the given headers, retrying if status code is 500.
+     * @param {string} url - The URL to fetch data from.
+     * @param {Object} headers - The headers to include in the fetch request.
+     * @returns {Promise<string>} A promise that resolves to the text content of the response.
+     */
+    async function fetchData(url, headers) {
+      /**
+       * @type {Response}
+       */
+      const response = await fetch(url, { headers });
+
+      if (response.status === 500) {
+        // If status is 500, fetch again
+        console.log("Retrying due to status 500...");
+        return fetchData(url, headers);
+      }
+
+      return response.text();
+    }
+
     const { fetch } = await import("undici");
-    const yt = await Innertube.create({ cache: new UniversalCache(false), generate_session_locally: true });
+    const yt = await Innertube.create({
+      cache: new UniversalCache(false),
+      generate_session_locally: true,
+    });
 
     if (v == null) return "Gib ID";
 
@@ -82,78 +105,74 @@ class InnerTubePokeVidious {
     const headers = {};
 
     let desc = "";
-    
+
     try {
-    const [videoInfo, videoData] = await Promise.all([
-      fetch(`${this.config.invapi}/videos/${v}?hl=${contentlang}&region=${contentregion}&h=${btoa(Date.now())}`).then((res) => res.text()),
-      curly
-        .get(`${this.config.tubeApi}video?v=${v}`, {
-          httpHeader: Object.entries(headers).map(([k, v]) => `${k}: ${v}`),
-        })
-        .then((res) => {
-          const json = toJson(res.data);
-          const video = this.getJson(json);
-          return { json, video };
-        }),
-    ]);
+      const [videoInfo, videoData] = await Promise.all([
+        fetchData(`${this.config.invapi}/videos/${v}?hl=${contentlang}&region=${contentregion}&h=${btoa(Date.now())}`),
+        curly
+          .get(`${this.config.tubeApi}video?v=${v}`, {
+            httpHeader: Object.entries(headers).map(([k, v]) => `${k}: ${v}`),
+          })
+          .then((res) => {
+            const json = toJson(res.data);
+            const video = this.getJson(json);
+            return { json, video };
+          }),
+      ]);
 
-   
-    const comments = await yt.getComments(v);
-  
-    const vid = await this.getJson(videoInfo);
-    const { json, video } = videoData;
+      const comments = await yt.getComments(v);
 
-    var channel_uploads = { };
-    if (f == "true") {
-      channel_uploads = await fetch(
-        `${this.config.invapi}/channels/${vid.authorId}?hl=${contentlang}&region=${contentregion}`
-      );
-     var p = this.getJson(await channel_uploads.text());
-    }
+      const vid = await this.getJson(videoInfo);
+      const { json, video } = videoData;
 
-    if (!vid) {
-      console.log(
-        `Sorry nya, we couldn't find any information about that video qwq`
-      );
-    }
-
-    if (this.checkUnexistingObject(vid)) {
-      const fe = await getdislikes(v);
-
-      try {
-        const headers = {};
-
-        // Store result in cache
-        this.cache[v] = {
-          result: {
-            json: json?.video,
-            video,
-            vid,
-            comments,
-            channel_uploads: p,
-            engagement: fe.engagement,
-            wiki: "",
-            desc: "",
-            color: await getColors(
-              `https://vid.puffyan.us/vi/${v}/hqdefault.jpg?sqp=${this.sqp}`
-            ).then((colors) => colors[0].hex()),
-            color2: await getColors(
-              `https://vid.puffyan.us/vi/${v}/hqdefault.jpg?sqp=${this.sqp}`
-            ).then((colors) => colors[1].hex()),
-          },
-          timestamp: Date.now(),
-        };
-
-        return this.cache[v].result;
-      } catch (error) {
-        this.initError("Error getting video", error);
+      var channel_uploads = {};
+      if (f == "true") {
+        channel_uploads = await fetch(
+          `${this.config.invapi}/channels/${vid.authorId}?hl=${contentlang}&region=${contentregion}`
+        );
+        var p = this.getJson(await channel_uploads.text());
       }
-    }
-    } catch {
-      
-    }
-    }
 
+      if (!vid) {
+        console.log(
+          `Sorry nya, we couldn't find any information about that video qwq`
+        );
+      }
+
+      if (this.checkUnexistingObject(vid)) {
+        const fe = await getdislikes(v);
+
+        try {
+          const headers = {};
+
+          // Store result in cache
+          this.cache[v] = {
+            result: {
+              json: json?.video,
+              video,
+              vid,
+              comments,
+              channel_uploads: p,
+              engagement: fe.engagement,
+              wiki: "",
+              desc: "",
+              color: await getColors(
+                `https://vid.puffyan.us/vi/${v}/hqdefault.jpg?sqp=${this.sqp}`
+              ).then((colors) => colors[0].hex()),
+              color2: await getColors(
+                `https://vid.puffyan.us/vi/${v}/hqdefault.jpg?sqp=${this.sqp}`
+              ).then((colors) => colors[1].hex()),
+            },
+            timestamp: Date.now(),
+          };
+
+          return this.cache[v].result;
+        } catch (error) {
+          this.initError("Error getting video", error);
+        }
+      }
+    } catch {}
+  }
 
   /**
    * Check if a video ID is valid.
@@ -182,7 +201,10 @@ class InnerTubePokeVidious {
 const pokeTubeApiCore = new InnerTubePokeVidious({
   tubeApi: "https://inner-api.poketube.fun/api/",
   invapi: "https://invid-api.poketube.fun/api/v1",
-  invapi_alt: config.proxylocation === "EU" ? "https://invid-api.poketube.fun/api/v1" : "https://iv.ggtyler.dev/api/v1",
+  invapi_alt:
+    config.proxylocation === "EU"
+      ? "https://invid-api.poketube.fun/api/v1"
+      : "https://iv.ggtyler.dev/api/v1",
   dislikes: "https://returnyoutubedislikeapi.com/votes?videoId=",
   t_url: "https://t.poketube.fun/",
 });

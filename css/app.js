@@ -96,10 +96,6 @@ function fadeInElements() {
   });
 }
 
-window.addEventListener('scroll', fadeInElements);
-document.addEventListener('fullscreenchange', fadeInElements);
-setInterval(fadeInElements, 100);
- 
 function jumpToTime(e) {
   e.preventDefault();
   
@@ -188,7 +184,7 @@ function resumeProgress() {
 }
 
 video.addEventListener('timeupdate', () => {
-  if (Math.floor(video.currentTime) % 1 === 0) {
+  if (Math.floor(video.currentTime) % 5 === 0) {
     saveProgress();
   }
 });

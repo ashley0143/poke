@@ -81,7 +81,7 @@ class InnerTubePokeVidious {
        */
       const response = await fetch(url, { headers });
 
-      while (response.status === 500) {
+      if (response.status === 500) {
         // If status is 500, fetch again
         return fetchData(url, headers);
       }

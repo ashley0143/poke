@@ -183,10 +183,8 @@ function resumeProgress() {
   }
 }
 
-video.addEventListener('timeupdate', () => {
-  if (Math.floor(video.currentTime) % 5 === 0) {
-    saveProgress();
-  }
+window.addEventListener('beforeunload', () => {
+  saveProgress();
 });
 
 video.addEventListener('ended', () => {

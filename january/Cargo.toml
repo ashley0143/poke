@@ -6,7 +6,7 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-actix-web = "4.0"
+actix-web = "4.4.1"
 lazy_static = "1.4"
 imagesize = "0.8"
 reqwest = "0.11"

@@ -70,7 +70,7 @@ class InnerTubePokeVidious {
    */
   async getYouTubeApiVideo(f, v, contentlang, contentregion) {
     /**
-     * Fetch data from the specified URL with the given headers, retrying if status code is 500.
+     * Fetch data from the specified URL with the given headers.
      * @param {string} url - The URL to fetch data from.
      * @param {Object} headers - The headers to include in the fetch request.
      * @returns {Promise<string>} A promise that resolves to the text content of the response.
@@ -80,11 +80,6 @@ class InnerTubePokeVidious {
        * @type {Response}
        */
       const response = await fetch(url, { headers });
-
-      if (response.status === 500) {
-        // If status is 500, fetch again
-        return fetchData(url, headers);
-      }
 
       return response.text();
     }

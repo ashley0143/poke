@@ -1,9 +1,92 @@
-# To run, please do either docker compose up -d (for docker's own version) or docker-compose up -d (for your OSes package managers verison)
+# To run this entire stack (contains all services):
+
+# 1. Verify you have docker and docker-compose
+# 2. Make sure this repository is cloned recursively (check if the `pokevidious` folder has stuff in it)
+# 3. Adjust domains in `docker/Caddyfile` and `config.json`
+#    DO NOT touch tubeApi, invapi, invchannel, videourl in `config.json` unless you know what you are doing
+# 4. Optionally replace `build` with `image` in some services to save time on building
+# 5. Run `docker-compose up -d` or `docker compose up -d` (notice the dash)
+
 services:
-  poketube:
-    image: quay.io/sudovanilla/poketube
+  poketube: # port 6003
+    # image: quay.io/sudovanilla/poketube
+    build:
+      context: .
+      dockerfile: Dockerfile
+    depends_on:
+      - invidious
+      - lighttube
+      - january
     restart: unless-stopped
     volumes:
-      - ./config.json:/poketube/config.json
+      - ./config.json:/poketube/config.json:ro
+
+  # lighttube - tubeApi
+  lighttube: # port 80
+    image: docker.io/kuylar/lighttube:20220711
+    depends_on:
+      - mongo
+    restart: unless-stopped
+    volumes:
+      - ./docker/lighttube.yaml:/etc/lighttube.yml:ro
+  mongo: # port 27017
+    image: docker.io/mongo:latest
+    env_file: ./docker/mongo.env
+    restart: unless-stopped
+    volumes:
+      - ./docker/data/mongo:/data/db
+
+  # invidious - invapi, invchannel and videourl
+  invidious: # port 3000
+    image: quay.io/invidious/invidious:latest
+    # build:
+    #     context: pokevidious
+    #     dockerfile: docker/Dockerfile
+    depends_on:
+      - postgres
+    restart: unless-stopped
+    deploy:
+      replicas: 2 # Adjust number depending on server load
+    volumes:
+      - ./docker/invidious.yaml:/invidious/config/config.yml:ro
+  postgres: # port 5432
+    image: docker.io/library/postgres:14
+    env_file: ./docker/postgres.env
+    restart: unless-stopped
+    volumes:
+      - ./docker/data/postgres:/var/lib/postgresql/data
+      - ./pokevidious/config/sql:/config/sql:ro
+      - ./pokevidious/docker/init-invidious-db.sh:/docker-entrypoint-initdb.d/init-invidious-db.sh:ro
+
+  # january - media_proxy
+  january: # port 7000
+    # image: ghcr.io/revoltchat/january:latest
+    build:
+      context: january
+      dockerfile: Dockerfile
+    restart: unless-stopped
+
+  # p / pproxy - some kind of proxy idk
+  pproxy: # port 6014
+    build:
+      context: p
+      dockerfile: Dockerfile
+    volumes:
+      - ./docker/pproxy.json:/pproxy/whitelist.json:ro
+    restart: unless-stopped
+
+  # caddy - reverse proxy to connect everything together
+  caddy: # exposed ports 80, 443 / 8090
+    image: docker.io/caddy:latest
+    restart: unless-stopped
+    volumes:
+      - ./docker/Caddyfile:/etc/caddy/Caddyfile:ro
+      - ./docker/data/caddy:/data
     ports:
-      - "6003:6003"
+      # Notice this is the only service with ports exposed
+      - 80:80
+      - 443:443
+      # If you are running another proxy on the host and the ports are taken
+      # ... use this instead, and proxy the relevant domains to 127.0.0.1:8090
+      # Be aware that browsers will refuse
+      # - 127.0.0.1:8090:80

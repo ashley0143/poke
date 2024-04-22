@@ -1,0 +1,8 @@
+db:
+  dbname: invidious
+  user: postgres
+  password: postgres
+  host: postgres
+  port: 5432
+check_tables: true
+hmac_key: ujZnZzcMoxg2pEjdV52c

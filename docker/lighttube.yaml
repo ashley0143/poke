@@ -1,0 +1,8 @@
+Interface:
+  MessageOfTheDay: meow
+Credentials:
+  UseCredentials: false
+  Sapisid:
+  Psid:
+Database:
+  MongoConnectionString: mongodb://lighttube:lighttube@mongo:27017/

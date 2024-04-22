@@ -1,0 +1,23 @@
+# You may want to remove the http:// part for automatic HTTPS
+# This is needed here because we're testing locally
+
+http://poketube.test {
+    reverse_proxy poketube:6003
+}
+
+http://image-proxy.poketube.test {
+    reverse_proxy january:7000
+}
+
+http://eu-proxy.poketube.test {
+    @invidious {
+        path /videoplayback*
+        path /latest_version*
+    }
+
+    reverse_proxy @invidious invidious:3000
+}
+
+http://p.poketube.test {
+    reverse_proxy pproxy:6014
+}

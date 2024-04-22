@@ -1,41 +1,10 @@
 const express = require("express");
-const fetch = require("node-fetch");
+// const fetch = require("node-fetch");
 const { URL } = require("url");
 const { Readable } = require("node:stream");
 
 // Array of hostnames that will be proxied
-const URL_WHITELIST = [
-  "i.ytimg.com",
-  "yt3.googleusercontent.com",
-  "cdn.glitch.global",
-  "cdn.statically.io",
-  "site-assets.fontawesome.com",
-  "fonts.gstatic.com",
-  "cdn.jsdelivr.net",
-  "yt3.ggpht.com",
-  "tube.kuylar.dev",
-  "lh3.googleusercontent.com",
-  "is4-ssl.mzstatic.com",
-  "is2-ssl.mzstatic.com",
-  "is1-ssl.mzstatic.com",
-  "fonts.bunny.net",
-  "demo.matomo.org",
-  "is5-ssl.mzstatic.com",
-  "is3-ssl.mzstatic.com",
-  "twemoji.maxcdn.com",
-  "unpkg.com",
-  "lite.duckduckgo.com",
-  "youtube.com",
-  "returnyoutubedislikeapi.com",
-  "cdn.zptr.cc",
-  "inv.vern.cc",
-  "invidious.privacydev.net",
-  "inv.zzls.xyz",
-  "vid.puffyan.us",
-  "invidious.lidarshield.cloud",
-  "invidious.epicsite.xyz",
-  "invidious.esmailelbob.xyz",
-];
+const URL_WHITELIST = require("./whitelist.json");
 
 const app = express();
 
@@ -162,7 +131,8 @@ const { fetch } = await import("undici")
 });
 
 app.get("/bangs", async (req, res) => {
- 
+    const { fetch } = await import("undici")
+
     let f = await fetch("https://lite.duckduckgo.com/lite/?q=" + req.query.q, {
       method: req.method,
     });

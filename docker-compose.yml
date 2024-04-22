@@ -2,8 +2,7 @@
 
 # 1. Verify you have docker and docker-compose
 # 2. Make sure this repository is cloned recursively (check if the `pokevidious` folder has stuff in it)
-# 3. Optionally replace `build` with `image` in some services to save time on building
-# 4. Proceed either to Section A or Section B
+# 3. Proceed either to Section A or Section B
 
 # Section A : Local development
 # 1. Add this to your hosts file /etc/hosts (Linux) or C:\Windows\System32\drivers\etc\hosts (Windows)
@@ -17,6 +16,7 @@
 # 3. Adjust domains in `docker/Caddyfile` and `docker/config.json`
 # 3.1 DO NOT touch tubeApi, invapi, invchannel, videourl in `docker/config.json` unless you know what you are doing
 # 3.2 As for the others, make sure they're all https in both files
+# 3.2 You don't need to touch the other config files unless you know what you are doing
 # 4. Run `docker-compose up -d` or `docker compose up -d` (notice the dash)
 # 5. Visit your domain in your browser
 
@@ -56,7 +56,8 @@ services:
     #     context: pokevidious
     #     dockerfile: docker/Dockerfile
     depends_on:
-      - postgres
+      postgres:
+        condition: service_healthy
     restart: unless-stopped
     deploy:
       replicas: 2 # Adjust number depending on server load
@@ -66,6 +67,11 @@ services:
     image: docker.io/library/postgres:14
     env_file: ./docker/postgres.env
     restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $POSTGRES_USER"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
     volumes:
       - ./docker/data/postgres:/var/lib/postgresql/data
       - ./pokevidious/config/sql:/config/sql:ro

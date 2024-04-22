@@ -245,7 +245,7 @@ module.exports = function (app, config, renderTemplate) {
           var vidurl = u.losslessurl;
         }
 
-        var vidurl = "https://eu-proxy.poketube.fun";
+        var vidurl = config.videourl;
         var isvidious = true;
 
         if (req.useragent.source.includes("Pardus")) {

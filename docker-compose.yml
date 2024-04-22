@@ -2,10 +2,23 @@
 
 # 1. Verify you have docker and docker-compose
 # 2. Make sure this repository is cloned recursively (check if the `pokevidious` folder has stuff in it)
-# 3. Adjust domains in `docker/Caddyfile` and `config.json`
-#    DO NOT touch tubeApi, invapi, invchannel, videourl in `config.json` unless you know what you are doing
-# 4. Optionally replace `build` with `image` in some services to save time on building
-# 5. Run `docker-compose up -d` or `docker compose up -d` (notice the dash)
+# 3. Optionally replace `build` with `image` in some services to save time on building
+# 4. Proceed either to Section A or Section B
+
+# Section A : Local development
+# 1. Add this to your hosts file /etc/hosts (Linux) or C:\Windows\System32\drivers\etc\hosts (Windows)
+#
+# 127.0.0.1 poketube.test image-proxy.poketube.test eu-proxy.poketube.test p.poketube.test
+#
+# 2. Run `docker-compose up -d` or `docker compose up -d` (notice the dash)
+# 3. Visit `http://poketube.test` in your browser
+
+# Section B : Production
+# 3. Adjust domains in `docker/Caddyfile` and `docker/config.json`
+# 3.1 DO NOT touch tubeApi, invapi, invchannel, videourl in `docker/config.json` unless you know what you are doing
+# 3.2 As for the others, make sure they're all https in both files
+# 4. Run `docker-compose up -d` or `docker compose up -d` (notice the dash)
+# 5. Visit your domain in your browser
 
 services:
   poketube: # port 6003
@@ -19,7 +32,7 @@ services:
       - january
     restart: unless-stopped
     volumes:
-      - ./config.json:/poketube/config.json:ro
+      - ./docker/poke.json:/poketube/config.json:ro
 
   # lighttube - tubeApi
   lighttube: # port 80

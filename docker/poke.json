@@ -1,0 +1,17 @@
+{
+    "tubeApi": "http://lighttube:80/api",
+    "invapi": "http://invidious:3000/api/v1",
+    "dislikes": "https://returnyoutubedislikeapi.com/votes?videoId=",
+    "invchannel": "http://invidious:3000/api/v1",
+    "p_url": "http://p.poketube.test",
+    "media_proxy": "http://image-proxy.poketube.test",
+    "videourl": "http://eu-proxy.poketube.test",
+    "email_main_url": "https://email-server.poketube.fun",
+    "mastodon_client_url": "https://fediverse.poketube.fun",
+    "libreoffice_online_url": "https://office.poketube.fun",
+    "cacher_max_age": "864000",
+    "enablealwayshttps": false,
+    "proxylocation": "USA",
+    "t_url": "https://t.poketube.fun/",
+    "server_port": "6003"
+}

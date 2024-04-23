@@ -1294,7 +1294,11 @@ WIP!                                                 </a>
                                         <div class="pill-button">
 
                <i class="fa-light fa-message-lines"></i>
-              <%- inv.commentCount.toLocaleString() %>
+<% if (!isNaN(inv.commentCount)) { %>
+  <%= inv.commentCount.toLocaleString() %>
+<% } else { %>
+ 0
+<% } %>
                                                       </div>       
         </a>
                                                                             </div>

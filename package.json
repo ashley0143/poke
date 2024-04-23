@@ -28,7 +28,7 @@
     "node-libcurl": "^3.0.0",
     "uglify-js": "^3.17.4",
     "ping": "^0.4.4",
-    "undici": "^5.25.2",
+    "undici": "^6.14.0",
     "express-rate-limit": "^7.0.2",
     "toobusy-js": "^0.5.1",
     "quick.db": "^7.1.3",

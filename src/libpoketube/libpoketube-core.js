@@ -70,8 +70,7 @@ class InnerTubePokeVidious {
   async getYouTubeApiVideo(f, v, contentlang, contentregion) {
     
     const { fetch } = await import("undici");
-    const yt = await Innertube.create({ cache: new UniversalCache(false), generate_session_locally: true });
-
+ 
     if (v == null) return "Gib ID";
 
     // Check if result is already cached

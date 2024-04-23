@@ -84,7 +84,8 @@ class InnerTubePokeVidious {
     let desc = "";
     
     try {
-    const [videoInfo, videoData] = await Promise.all([
+    const [invComments, videoInfo, videoData] = await Promise.all([
+      fetch(`${this.config.invapi}/comments/${v}?hl=${contentlang}&region=${contentregion}&h=${btoa(Date.now())}`).then((res) => res.text()),
       fetch(`${this.config.invapi}/videos/${v}?hl=${contentlang}&region=${contentregion}&h=${btoa(Date.now())}`).then((res) => res.text()),
       curly
         .get(`${this.config.tubeApi}video?v=${v}`, {
@@ -98,7 +99,7 @@ class InnerTubePokeVidious {
     ]);
 
    
-    const comments = await yt.getComments(v);
+    const comments = await this.getJson(invComments);
   
     const vid = await this.getJson(videoInfo);
     const { json, video } = videoData;

@@ -11,7 +11,6 @@ const { curly } = require("node-libcurl");
 const getdislikes = require("../libpoketube/libpoketube-dislikes.js");
 const getColors = require("get-image-colors");
 const config = require("../../config.json")
-const { Innertube, UniversalCache } = require('youtubei.js');
 
 
 /**

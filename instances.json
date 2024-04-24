@@ -31,20 +31,6 @@
     }
   ],
   [
-    "poke.vern.cc",
-    {
-      "uri": "https://poke.vern.cc",
-      "CLOUDFLARE": false,
-      "piwik": false,
-      "region": "🇺🇸",
-      "software": {
-        "name": "poketube",
-        "version": "latest",
-        "branch": "dev"
-      }
-    }
-  ],
-  [
     "poke.ashley0143.xyz",
     {
       "uri": "https://poke.ashley0143.xyz",

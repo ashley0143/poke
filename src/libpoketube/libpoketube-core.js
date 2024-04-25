@@ -109,7 +109,7 @@ async getYouTubeApiVideo(f, v, contentlang, contentregion) {
         }
 
      let retryCount = 0;
-        while (vid.error && retryCount < 1) {
+        while (vid.error && retryCount < 2) {
             console.log(`Retrying: ${retryCount + 1}`);
             const retryVideoInfo = await fetch(`https://par1.iv.ggtyler.dev/api/v1/videos/${v}?hl=${contentlang}&region=${contentregion}&h=${btoa(Date.now())}`).then((res) => res.text());
             vid = await this.getJson(retryVideoInfo);

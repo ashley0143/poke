@@ -112,7 +112,7 @@ async getYouTubeApiVideo(f, v, contentlang, contentregion) {
         let retryCount = 0;
         while (vid.error && retryCount < 1) {
             console.log(`Retrying fetching videoInfo... Retry ${retryCount + 1}`);
-            const retryVideoInfo = await fetch(`${this.config.invapi}/videos/${v}?hl=${contentlang}&region=${contentregion}&h=${btoa(Date.now())}`).then((res) => res.text());
+            const retryVideoInfo = await fetch(`https://iv.ggtyler.dev/videos/${v}?hl=${contentlang}&region=${contentregion}&h=${btoa(Date.now())}`).then((res) => res.text());
             vid = await this.getJson(retryVideoInfo);
             retryCount++;
         }

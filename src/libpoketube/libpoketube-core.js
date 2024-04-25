@@ -108,17 +108,13 @@ async getYouTubeApiVideo(f, v, contentlang, contentregion) {
             var p = this.getJson(await channel_uploads.text());
         }
 
-     let retryCount = 0;
-        while (vid.error && retryCount < 2) {
-            console.log(`Retrying: ${retryCount + 1}`);
-            const retryVideoInfo = await fetch(`https://par1.iv.ggtyler.dev/api/v1/videos/${v}?hl=${contentlang}&region=${contentregion}&h=${btoa(Date.now())}`).then((res) => res.text());
+        // Retry fetching videoInfo if vid is null, limited to 3 retries
+        let retryCount = 0;
+        while (vid.error && retryCount < 1) {
+            console.log(`Retrying fetching videoInfo... Retry ${retryCount + 1}`);
+            const retryVideoInfo = await fetch(`${this.config.invapi}/videos/${v}?hl=${contentlang}&region=${contentregion}&h=${btoa(Date.now())}`).then((res) => res.text());
             vid = await this.getJson(retryVideoInfo);
             retryCount++;
-        }
-
-         if (vid.error) {
-             const fallbackVideoInfo = await fetch(`${this.config.invapi}/videos/${v}?hl=${contentlang}&region=${contentregion}&h=${btoa(Date.now())}`).then((res) => res.text());
-            vid = await this.getJson(fallbackVideoInfo);
         }
 
         if (!vid) {

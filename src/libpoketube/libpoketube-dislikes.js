@@ -47,7 +47,6 @@ class PokeTubeDislikesAPIManager  {
     const { fetch } = await import("undici");
 
     const engagement = await fetch(fallbackUrl).then((res) => res.json());
-    engagement.viewCount = this.videoId === "cc2-4ci4G84" ? 1406988074 : engagement.viewCount;
     return engagement;
 
   }

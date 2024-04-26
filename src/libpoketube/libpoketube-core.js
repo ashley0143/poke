@@ -67,90 +67,91 @@ class InnerTubePokeVidious {
    * @param {string} v - Video ID.
    * @returns {Promise<object>} Promise resolving to the video information.
    */
-async getYouTubeApiVideo(f, v, contentlang, contentregion) {
-
+  async getYouTubeApiVideo(f, v, contentlang, contentregion) {
+    
     const { fetch } = await import("undici");
  
     if (v == null) return "Gib ID";
 
     // Check if result is already cached
     if (this.cache[v] && Date.now() - this.cache[v].timestamp < 3600000) {
-        return this.cache[v].result;
+      return this.cache[v].result;
     }
     const headers = {};
 
     let desc = "";
     
     try {
-        const [invComments, videoInfo, videoData] = await Promise.all([
-            fetch(`${this.config.invapi}/comments/${v}?hl=${contentlang}&region=${contentregion}&h=${btoa(Date.now())}`).then((res) => res.text()),
-            fetch(`${this.config.invapi}/videos/${v}?hl=${contentlang}&region=${contentregion}&h=${btoa(Date.now())}`).then((res) => res.text()),
-            curly
-                .get(`${this.config.tubeApi}video?v=${v}`, {
-                    httpHeader: Object.entries(headers).map(([k, v]) => `${k}: ${v}`),
-                })
-                .then((res) => {
-                    const json = toJson(res.data);
-                    const video = this.getJson(json);
-                    return { json, video };
-                }),
-        ]);
+    const [invComments, videoInfo, videoData] = await Promise.all([
+      fetch(`${this.config.invapi}/comments/${v}?hl=${contentlang}&region=${contentregion}&h=${btoa(Date.now())}`).then((res) => res.text()),
+      fetch(`${this.config.invapi}/videos/${v}?hl=${contentlang}&region=${contentregion}&h=${btoa(Date.now())}`).then((res) => res.text()),
+      curly
+        .get(`${this.config.tubeApi}video?v=${v}`, {
+          httpHeader: Object.entries(headers).map(([k, v]) => `${k}: ${v}`),
+        })
+        .then((res) => {
+          const json = toJson(res.data);
+          const video = this.getJson(json);
+          return { json, video };
+        }),
+    ]);
 
-        const comments = await this.getJson(invComments);
-        let vid = await this.getJson(videoInfo);
-        const { json, video } = videoData;
+   
+    const comments = await this.getJson(invComments);
+  
+    const vid = await this.getJson(videoInfo);
+    const { json, video } = videoData;
 
-        var channel_uploads = {};
-        if (f == "true") {
-            channel_uploads = await fetch(
-                `${this.config.invapi}/channels/${vid.authorId}?hl=${contentlang}&region=${contentregion}`
-            );
-            var p = this.getJson(await channel_uploads.text());
-        }
-
-
-        if (!vid) {
-            console.log(
-                `Sorry nya, we couldn't find any information about that video qwq`
-            );
-        }
-
-        if (this.checkUnexistingObject(vid)) {
-            const fe = await getdislikes(v);
-
-            try {
-                const headers = {};
-
-                // Store result in cache
-                this.cache[v] = {
-                    result: {
-                        json: json?.video,
-                        video,
-                        vid,
-                        comments,
-                        channel_uploads: p,
-                        engagement: fe.engagement,
-                        wiki: "",
-                        desc: "",
-                        color: await getColors(
-                            `https://vid.puffyan.us/vi/${v}/hqdefault.jpg?sqp=${this.sqp}`
-                        ).then((colors) => colors[0].hex()),
-                        color2: await getColors(
-                            `https://vid.puffyan.us/vi/${v}/hqdefault.jpg?sqp=${this.sqp}`
-                        ).then((colors) => colors[1].hex()),
-                    },
-                    timestamp: Date.now(),
-                };
-
-                return this.cache[v].result;
-            } catch (error) {
-                this.initError("Error getting video", error);
-            }
-        }
-    } catch {
-
+    var channel_uploads = { };
+    if (f == "true") {
+      channel_uploads = await fetch(
+        `${this.config.invapi}/channels/${vid.authorId}?hl=${contentlang}&region=${contentregion}`
+      );
+     var p = this.getJson(await channel_uploads.text());
     }
-}
+
+    if (!vid) {
+      console.log(
+        `Sorry nya, we couldn't find any information about that video qwq`
+      );
+    }
+
+    if (this.checkUnexistingObject(vid)) {
+      const fe = await getdislikes(v);
+
+      try {
+        const headers = {};
+
+        // Store result in cache
+        this.cache[v] = {
+          result: {
+            json: json?.video,
+            video,
+            vid,
+            comments,
+            channel_uploads: p,
+            engagement: fe.engagement,
+            wiki: "",
+            desc: "",
+            color: await getColors(
+              `https://vid.puffyan.us/vi/${v}/hqdefault.jpg?sqp=${this.sqp}`
+            ).then((colors) => colors[0].hex()),
+            color2: await getColors(
+              `https://vid.puffyan.us/vi/${v}/hqdefault.jpg?sqp=${this.sqp}`
+            ).then((colors) => colors[1].hex()),
+          },
+          timestamp: Date.now(),
+        };
+
+        return this.cache[v].result;
+      } catch (error) {
+        this.initError("Error getting video", error);
+      }
+    }
+    } catch {
+      
+    }
+    }
 
 
   /**

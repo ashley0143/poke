@@ -1584,13 +1584,13 @@ width: fit-content;
 
     <div onclick="closePopup()" id="popup-container">
         <div id="close-btn" onclick="closePopup()">X</div>
-   
+   <div class="video-title" style=";font-stretch: extra-expanded;margin-top: 10px;margin-bottom: -10px;padding: 10px;border-top-left-radius: 11px;border-top-right-radius: 11px;font-family: &quot;poketube flex&quot; , sans-serif;font-weight: 850;text-align: left;">About</div>
                             <% if (cinv.descriptionHtml) { %>  
 
 <p style="color:#fff;margin-left: 10px;font-weight: bold;text-align: left;"><%-cinv.descriptionHtml%></p>
        <%  if (Array.isArray(cinv?.tags)) { %> 
-	<div class="video-title" style="background: #272727;color:var(--text-color);font-family:var(--text-font-primary);;font-weight:var(--text-header-weight);font-stretch: extra-expanded;margin-top: 10px;margin-bottom: -10px;padding: 10px;border-top-left-radius: 11px;border-top-right-radius: 11px;">Tags</div>
-	        <div class="tags-channel" style="padding: 10px;background: #272727;margin-top: 10px;border-bottom-left-radius: 11px;border-bottom-right-radius:11px;">
+<div class="video-title" style=";font-stretch: extra-expanded;margin-top: 10px;margin-bottom: -10px;padding: 10px;border-top-left-radius: 11px;border-top-right-radius: 11px;font-family: &quot;poketube flex&quot; , sans-serif;font-weight: 1000;text-align: left;">Tags</div>	    
+    <div class="tags-channel" style="padding: 10px;background: #272727;margin-top: 10px;border-radius: 11px;>
 	 <br>
 	 <% cinv.tags.forEach(x => { %>
 	 <div class="tag-channel">

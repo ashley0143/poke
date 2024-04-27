@@ -1677,7 +1677,7 @@ Recommended Videos
                             <% } %>
                                 <div>
                                     <a class="max-lines-2" href="/channel?id=<%= x.authorId %>@youtube.com" style="-webkit-line-clamp:1;width:12em;word-wrap:break-word">
-                                        <%=x.author %> <% if (x?.authorVerified) { %>  <span> <a href="https://support.google.com/youtube/answer/3046484?hl=en"> <i class="icon ion ion-md-checkmark-circle" title="verified channel"></i></a>      </span><% } %> 
+                                         <span> <%=x.author %> <% if (x?.authorVerified) { %>  <a href="https://support.google.com/youtube/answer/3046484?hl=en"> <i class="icon ion ion-md-checkmark-circle" title="verified channel"></i></a>     <% } %>  </span>
                                     </a>
                                     <div class="video-views">
                                           

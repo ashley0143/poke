@@ -1591,16 +1591,17 @@ width: fit-content;
      </div>
       
       <% } %>
-            <%  if (Array.isArray(inv_vid?.tags)) { %> 
+            <%  if (Array.isArray(cinv?.tags)) { %> 
 	<div class="video-title" style="background: #272727;color:var(--text-color);font-family:var(--text-font-primary);;font-weight:var(--text-header-weight);font-stretch: extra-expanded;margin-top: 10px;margin-bottom: -10px;padding: 10px;border-top-left-radius: 11px;border-top-right-radius: 11px;">Tags</div>
 	        <div class="tags-channel" style="padding: 10px;background: #272727;margin-top: 10px;border-bottom-left-radius: 11px;border-bottom-right-radius:11px;">
 	 <br>
-	 <% inv_vid.tags.forEach(x => { %>
+	 <% cinv.tags.forEach(x => { %>
 	 <div class="tag-channel">
 	   <a href="/hashtag/<%=x %>" style="color:var(--text-color)">
 	   <%=x %>
 	     </a>
 	   </div>         <% }) %>  
+      <% } %>
 
       <% } %>
                                                                                            <% } %>

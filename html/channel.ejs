@@ -1678,6 +1678,12 @@ document.getElementById('search').addEventListener('keyup', function () {
             event.preventDefault();
             togglePopup();
         }); 
+
+       document.addEventListener('keydown', function (event) {
+        if (event.key === 'Escape' && isPopupOpen) {
+            closePopup();
+        }
+    });
 // @license-end
 
      </script>

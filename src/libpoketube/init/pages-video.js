@@ -246,7 +246,7 @@ module.exports = function (app, config, renderTemplate) {
         }
 
         var vidurl = config.videourl;
-        var isvidious = false;
+        var isvidious = true;
 
         if (req.useragent.source.includes("Pardus")) {
           var vidurl = "https://iv.ggtyler.dev";

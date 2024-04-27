@@ -1266,7 +1266,15 @@ width: fit-content;
 	<div class="pagination-buttons" style="border-top: none;justify-content: center">
     <a style="color:#fff" href="/channel?id=<%=ID%>&continuation=<%=tj.continuation%>">Next Page</a>
  	</div>
-                           
+    <% if (!isMobile) { %>  
+
+  <script>    window.addEventListener('scroll', function() {
+         if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
+            window.location.href = window.location.href + '&continuation=<%=tj.continuation%>';
+        }
+    });
+    </script>                       <% } %>
+
                        <% } %>
 
  

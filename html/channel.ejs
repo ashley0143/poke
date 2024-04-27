@@ -198,6 +198,22 @@ padding-bottom: 32px;
   <!-- STYLES START -->
   
 <style>
+
+.tags-channel {
+  display:flex;
+  flex-direction:row;
+  overflow-x:auto;
+  column-gap:3px
+}
+.tag-channel {
+  background:#333;
+  padding:5px;
+  border-radius:4px;
+  word-break:break-all;
+  white-space:nowrap;
+  font-family:Montserrat,sans-serif
+}
+
    a.class:hover {
     text-decoration:underline;
     font-weight:bold
@@ -1575,6 +1591,17 @@ width: fit-content;
      </div>
       
       <% } %>
+            <%  if (Array.isArray(inv_vid?.tags)) { %> 
+	<div class="video-title" style="background: #272727;color:var(--text-color);font-family:var(--text-font-primary);;font-weight:var(--text-header-weight);font-stretch: extra-expanded;margin-top: 10px;margin-bottom: -10px;padding: 10px;border-top-left-radius: 11px;border-top-right-radius: 11px;">Tags</div>
+	        <div class="tags-channel" style="padding: 10px;background: #272727;margin-top: 10px;border-bottom-left-radius: 11px;border-bottom-right-radius:11px;">
+	 <br>
+	 <% inv_vid.tags.forEach(x => { %>
+	 <div class="tag-channel">
+	   <a href="/hashtag/<%=x %>" style="color:var(--text-color)">
+	   <%=x %>
+	     </a>
+	   </div>         <% }) %>  
+
       <% } %>
                                                                                            <% } %>
 

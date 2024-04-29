@@ -108,15 +108,26 @@ module.exports = function (app, config, renderTemplate) {
 
     const poketube_universe_value = "poketube_smart_search";
 
-    if (query?.includes("youtube.com/watch?v=")) {
-      try {
-        var videoid = query?.split("v=");
+    if (query) {
+    let redirectTo = null;
 
-        res.redirect("/watch?v=" + videoid[1]);
-      } catch {
-        return;
-      }
+          if (query.includes("youtube.com/watch?v=")) {
+        redirectTo = "/watch?v=";
+          } else if (query.includes("channel:")) {
+        redirectTo = "/channel?id=";
+          } else if (query.includes("video:")) {
+        redirectTo = "/watch?v=";
+     }
+
+    if (redirectTo) {
+        try {
+            const id = query.split(":")[1];
+            res.redirect(`${redirectTo}${id}`);
+        } catch {
+            return;
+        }
     }
+}
 
     if (query && query.startsWith("!") && query.length > 2) {
       res.redirect("https://lite.duckduckgo.com/lite/?q=" + query);

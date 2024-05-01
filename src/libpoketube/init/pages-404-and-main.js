@@ -116,6 +116,7 @@ module.exports = function (app, config, renderTemplate) {
     const random = splash[Math.floor(Math.random() * splash.length)];
     const browser = req.useragent.browser;
     const isOldWindows = (uaos === "Windows 7" || uaos === "Windows 8") && browser === "Firefox";
+    var proxyurl = config.p_url;
 
     const secure = [
       "poketube.fun",
@@ -136,6 +137,7 @@ module.exports = function (app, config, renderTemplate) {
         secure,
         verify,
         isOldWindows,
+        proxyurl,
         random
       });
     };

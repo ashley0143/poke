@@ -47,9 +47,9 @@ This is the source code of Poke (formerly PokeTube), the privacy-friendly youtub
 
 # Features
 
-| <img width="100%" style="border-radius: 24px" src="./css/README_RYD.png"> | <div style="text-align: left"><h3>Return YouTube Dislikes Built-In</h3> Dislikes are viewable thanks to the Return YouTube Dislikes API.</div> |
+| <img width="100%" style="border-radius: 24px" src="./css/README_RYD.png"> | <div style="text-align: left"><h3>Return YouTube Dislikes Built-In</h3>See the dislikes from returnyoutubedislike! </div> |
 | - | - |
-| <div style="text-align: right"><h3>PWA Support</h3> With PWA Support, you can install Poke on your mobile device.</div> | <img width="100%" style="border-radius: 24px" src="./css/README_PWA.jpg"> |
+| <div style="text-align: right"><h3>PWA Support</h3> With PWA Support, you can install Poke on your mobile device :3</div> | <img width="100%" style="border-radius: 24px" src="./css/README_PWA.jpg"> |
 
 <h3>Customize</h3>
 Customize Poketube However you want :3
@@ -84,7 +84,7 @@ PLEASE NOTE THAT THIS SOFTWARE MAY INCULUDE CODECS THAT IN CERTAIN COUNTRIES MAY
 Before you host, if ur server is in usa, set the proxylocation to `USA` (which is the default) - if you use any eu server set it to `EU` instead to make videos load faster
 
  ### With NodeJS
-To self host your own Poke instance, you'll need some packages installed on your Linux install.
+To self host your own Poke instance, you'll need some packages installed on your GNU/Linux install.
 
 <details>
 <summary>For Fedora/RHEL/Rocky/CentOS</summary>

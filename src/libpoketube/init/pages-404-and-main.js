@@ -47,6 +47,29 @@ const splash = [
     "pika!",
     "fsf.org",
     "ssfffssfssfffaassssfsdf!",
+    "can you save my hds?",
+    "sahlo folina!",
+    "we come for you!",
+    "no chances!",
+    "dema dont control us!",
+    "im fairly local!",
+    "i dont wanna go like this!",
+    "east is up!",
+    "not done, josh dun!",
+    "your the judge, oh no!",
+    "I dont wanna backslide",
+    "sai is propaganda!",
+    " •|i|• Ø i+! ].[",
+    "stay alive! |-/",
+    "the few, the proud, the Emotional!",
+    "ill morph into someone else",
+    "still alive",
+    "follow the torches",
+    "i created this world!",
+    "to feel some control!",
+    "destory it if i want!",
+    "o7 keons",
+    "at least let me clean my room",
     "100+ stars on gh!",
     "now even gayer!",
     "poketube!!!",
@@ -116,6 +139,7 @@ module.exports = function (app, config, renderTemplate) {
     const random = splash[Math.floor(Math.random() * splash.length)];
     const browser = req.useragent.browser;
     const isOldWindows = (uaos === "Windows 7" || uaos === "Windows 8") && browser === "Firefox";
+    var proxyurl = config.p_url;
 
     const secure = [
       "poketube.fun",
@@ -136,6 +160,7 @@ module.exports = function (app, config, renderTemplate) {
         secure,
         verify,
         isOldWindows,
+        proxyurl,
         random
       });
     };

@@ -20,10 +20,7 @@
 
 <!-- Global Header-->
 <!-- This should be inserted as a component/partial -->
-
-<!-- Eventfully, this should be used on ALL pages, to keep things -->
-<!-- things consistant across Poke.                               -->
-
+ 
 <header>
     <div class="header-content">
         <div class="header-start">
@@ -31,35 +28,6 @@
                 <img src="/css/logo-poke.svg?v=5"/>
            <p class="subtitle"> <%- random %></p>                
             </a>
-            <% if (secure) { %>
-                <i style="margin-left: 12px;" class="fa-light fa-lock"
-                title="
-                This is a secure and/or offical instance!
-                you can trust this instance becuase:
-            
-                - its a offical instance (offical instances have the max. privacy rules )
-                - logs are kept closed
-            
-                if you see this lock icon, you can trust the instance!!
-            
-                But Please note that unofficial instances can add the same lock icon, so please be careful about dad :D!
-            
-                To verfiy u cab use this hashed code on SHA-265 
-                d312fe1994124e29478
-                caaddefabec047746608
-                b8ef09b69b3ac2f63f4
-                e53a4a
-            
-                if your domain matches this code you are probably in poketube.fun owo:3
-                "></i>
-            <% } %>
-            <% if (verify) { %> 
-                <i style="margin-left: 12px;" class="fa-light fa-badge-check"
-                title="
-                This is a veried instance!
-                this instance was verified to be fast and secure!
-                "></i>
-            <% } %>
         </div>
         <div class="header-center">
             <form action="/search">
@@ -91,6 +59,7 @@
         justify-content: space-between;
         max-width: 1264px;
         margin: auto;
+        height: 3em;
     }
 
     .header-start {
@@ -100,6 +69,7 @@
 
     .header-start img {
         height: 32px;
+        margin-top: 3em;
     }
 
     form[action="/search"] {
@@ -151,4 +121,4 @@
         color: white;
         gap: 6px;
     }
-</style>
+</style> <link href="<%- proxyurl %>/https://site-assets.fontawesome.com/releases/v6.1.1/css/all.css" rel=stylesheet>

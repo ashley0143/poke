@@ -67,7 +67,7 @@ const splash = [
     "follow the torches",
     "i created this world!",
     "to feel some control!",
-    "destory it if i want!"
+    "destory it if i want!",
     "o7 keons",
     "at least let me clean my room",
     "100+ stars on gh!",

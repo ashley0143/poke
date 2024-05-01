@@ -117,12 +117,24 @@ module.exports = function (app, config, renderTemplate) {
     const browser = req.useragent.browser;
     const isOldWindows = (uaos === "Windows 7" || uaos === "Windows 8") && browser === "Firefox";
 
+    const secure = [
+      "poketube.fun",
+      "localhost" // Testing purposes
+    ].includes(req.hostname);
+    const verify = [
+      "poketube.fun",
+      "poke.ashley0143.xyz",
+      "localhost"
+    ].includes(req.hostname);
+
     const rendermainpage = () => {
       if (req.useragent.isMobile) {
         return res.redirect("/app");
       }
 
       return renderTemplate(res, req, "landing.ejs", {
+        secure,
+        verify,
         isOldWindows,
         random
       });

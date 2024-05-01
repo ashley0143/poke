@@ -458,15 +458,15 @@ Web
      <% results.forEach(x => { %>
                                                                        <div class="video" style="height: 6em;">
 
-        <a style="min-width: 81em;" href="<%= x.link %>"><%= x.title %></a><br>
-        <p style="color:gray;display: flex;flex-direction: column;width: 48em;margin-top: -8em;"><%= x.link %><br>
+        <a style="min-width: 81em;" href="<%= x.url %>"><%= x.title %></a><br>
+        <p style="color:gray;display: flex;flex-direction: column;width: 48em;margin-top: -8em;"><%= x.url %><br>
           <% if (!isMobile) { %> 
 
-         <span style="color:white;width: 48em;display: flex;"><%= x.snippet %></span>
+         <span style="color:white;width: 48em;display: flex;"><%= x.description %></span>
                      <% } %> 
  <% if (isMobile) { %> 
 
-         <span style="color:white;max-width: 15em;display: flex;"><%= x.snippet %></span>
+         <span style="color:white;max-width: 15em;display: flex;"><%= x.description %></span>
                      <% } %> 
           </p>
               </div>

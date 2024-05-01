@@ -1,0 +1,71 @@
+<div class="card">
+    <div class="card-title">
+        <div class="card-icon" style="background: <%= icon_background %>;">
+            <% if(icon="none"){ %><% } else{ %>  <%- icon %><% } %>
+        </div>
+        <h2><%= title %></h2>
+    </div>
+    <p><%= description %></p>
+    <% if (actions=="true") { %>
+        <div class="card-actions">
+            <% if (has_secondary_action=="true") { %>
+                <a class="card-secondary" href="<%= secondary_link %>"><%- secondary_icon %>  <%= secondary_text %></a>
+            <% } %>
+            <a class="card-primary" href="<%= primary_link %>"><%- primary_icon %>  <%= primary_text %></a>
+        </div>
+     <% }%> 
+</div>
+
+<style>
+.card {
+  padding: 24px;
+}
+.card-title {
+  display: flex;
+  align-items: center;
+}
+.card-title h2 {
+  font-family: "PokeTube flex";
+  font-stretch: ultra-expanded;
+  font-weight: 1000;
+  margin: 0px;
+}
+.card-title svg {
+  width: 32px;
+  height: 32px;
+  margin-right: 12px;
+}
+.card-actions {
+  display: flex;
+  align-items: center;
+  justify-content: right;
+  gap: 12px;
+}
+.card-actions a {
+  color: white;
+  border: 2px white solid;
+  border-radius: 3rem;
+  padding: 12px 24px 12px 12px;
+  display: flex;
+  align-items: center;
+}
+.card-actions a:hover {
+  filter: brightness(0.8);
+  text-decoration: nones;
+}
+.card-actions svg {
+  width: 24px !important;
+  height: 24px !important;
+  margin-right: 6px;
+}
+.card-actions .card-primary {
+  background: white;
+  color: black;
+}
+.card-actions .card-primary svg {
+  fill: black;
+}
+.card-actions .card-secondary  svg {
+  fill: white;
+}
+</style>

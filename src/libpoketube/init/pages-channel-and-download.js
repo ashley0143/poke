@@ -229,8 +229,9 @@ module.exports = function (app, config, renderTemplate) {
     let continuation = req.query.continuation || "";
 
     try {
-      const results = Object.entries(web);
 
+      const results = web.web; 
+      
       renderTemplate(res, req, "search-web.ejs", {
         j: "",
         IsOldWindows,

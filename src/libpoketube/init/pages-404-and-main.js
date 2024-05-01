@@ -54,7 +54,7 @@ const splash = [
     "dema dont control us!",
     "im fairly local!",
     "i dont wanna go like this!",
-    "at least let me clean my room"
+    "at least let me clean my room",
     "100+ stars on gh!",
     "now even gayer!",
     "poketube!!!",

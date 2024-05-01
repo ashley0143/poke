@@ -188,7 +188,7 @@ module.exports = function (app, config, renderTemplate) {
     const { fetch } = await import("undici");
 
     const search = await fetch(
-      `https://4get.sudovanilla.com/api/v1/web?q=${query}`
+      `https://4get.sudovanilla.com/api/v1/web?s=${query}`
     );
     const web = getJson(await search.text());
 

@@ -37,27 +37,22 @@ Stallman though poke was GNU poke lmaoooo
    <img src="https://shields.tosdr.org/en_7114.svg"/>
 </a>
 <img src="https://raw.githubusercontent.com/vshymanskyy/StandWithUkraine/main/badges/StandWithUkraine.svg"> <a href="./LICENSE"><img src="https://img.shields.io/badge/License-GPL--3-FF6666" alt="License - GPL-3"></a>
-
-<a href="https://ci.poketube.fun/ashley/poke">
-  <img src="https://ci.poketube.fun/api/badges/ashley/poke/status.svg" />
-</a>
 </div>
+
+![Preview](./css/README_Preview.png)
 
 ## Welcome!
 
 This is the source code of Poke (formerly PokeTube), the privacy-friendly youtube front-end built with the InnerTube API!
 
+# Features
 
-<h1>Features</h1>
- <h3>Return Youtube Dislikes Built-in  </h3>
-<img src="https://autumn.revolt.chat/attachments/0JlGwlnJdMcQwc6qzoo2qpmMAOWbrYMZ9vDX50l80r/resim.png">
-<p>See the dislikes from returnyoutubedislike!</p>
+| <img width="100%" style="border-radius: 24px" src="./css/README_RYD.png"> | <div style="text-align: left"><h3>Return YouTube Dislikes Built-In</h3> Dislikes are viewable thanks to the Return YouTube Dislikes API.</div> |
+| - | - |
+| <div style="text-align: right"><h3>PWA Support</h3> With PWA Support, you can install Poke on your mobile device.</div> | <img width="100%" style="border-radius: 24px" src="./css/README_PWA.jpg"> |
 
 <h3>Customize</h3>
 Customize Poketube However you want :3
-
-<h3>PWA</h3>
-Install PokeTube as a pwa on your mobile device :3
 
 <h3>Accounts </h3>
 Suscribe (yes Suscribe hehe sussy baka) to whaever channel you want!
@@ -89,28 +84,50 @@ PLEASE NOTE THAT THIS SOFTWARE MAY INCULUDE CODECS THAT IN CERTAIN COUNTRIES MAY
 Before you host, if ur server is in usa, set the proxylocation to `USA` (which is the default) - if you use any eu server set it to `EU` instead to make videos load faster
 
  ### With NodeJS
-- To self host your own Poke instance, you'll need the following:
+To self host your own Poke instance, you'll need some packages installed on your Linux install.
 
-  - [Node.js](https://nodejs.org/en/download/)
-  - [npm](http://npmjs.com) (Included with Node.js)
+<details>
+<summary>For Fedora/RHEL/Rocky/CentOS</summary>
+<br/>
+
+```
+sudo dnf install git make gcc libcurl nodejs python libcurl4 g++
+```
+
+</details>
+
+<details>
+<summary>For Debian/Ubuntu</summary>
+<br/>
+
+```
+sudo apt install git make gcc libcurl4-openssl-dev nodejs npm python g++
+```
+
+</details>
+<br/>
 
 Once you have everything, clone our repo:
+
+<details open>
+<summary>Clone via Codeberg</summary>
+<br/>
 
 ```
 git clone https://codeberg.org/ashley/poke.git
 ```
 
-You can also clone using our Github mirror if you'd prefer:
+</details>
+<details>
+<summary>Clone via GitHub</summary>
+<br/>
 
 ```
 git clone https://github.com/ashley0143/poke.git
 ```
 
-Or you can use our forgejo instance:
-
-```
-git clone https://git.poketube.fun/ashley/poke.git
-```
+</details>
+<br/>
 
 Now, install the needed dependencies within the Poke folder:
 ( go to the folder by running cd poke)

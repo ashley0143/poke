@@ -1035,3 +1035,10 @@ a.icon-button > img {
     width: 500px;
     padding: 8px;
 }
+.search-options {
+    display: flex;
+    justify-content: space-evenly;
+    width: 100%;
+    max-width: 855px;
+    margin: auto;
+  }

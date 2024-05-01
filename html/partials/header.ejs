@@ -28,35 +28,6 @@
                 <img src="/css/logo-poke.svg?v=5"/>
            <p class="subtitle"> <%- random %></p>                
             </a>
-            <% if (secure) { %>
-                <i style="margin-left: 12px;" class="fa-light fa-lock"
-                title="
-                This is a secure and/or offical instance!
-                you can trust this instance becuase:
-            
-                - its a offical instance (offical instances have the max. privacy rules )
-                - logs are kept closed
-            
-                if you see this lock icon, you can trust the instance!!
-            
-                But Please note that unofficial instances can add the same lock icon, so please be careful about dad :D!
-            
-                To verfiy u cab use this hashed code on SHA-265 
-                d312fe1994124e29478
-                caaddefabec047746608
-                b8ef09b69b3ac2f63f4
-                e53a4a
-            
-                if your domain matches this code you are probably in poketube.fun owo:3
-                "></i>
-            <% } %>
-            <% if (verify) { %> 
-                <i style="margin-left: 12px;" class="fa-light fa-badge-check"
-                title="
-                This is a veried instance!
-                this instance was verified to be fast and secure!
-                "></i>
-            <% } %>
         </div>
         <div class="header-center">
             <form action="/search">

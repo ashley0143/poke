@@ -58,7 +58,7 @@ const splash = [
     "not done, josh dun!",
     "your the judge, oh no!",
     "I dont wanna backslide",
-    "welcome back to trench!"
+    "welcome back to trench!",
     "sai is propaganda!",
     " •|i|• Ø i+! ].[",
     "stay alive! |-/",

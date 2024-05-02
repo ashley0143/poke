@@ -250,7 +250,7 @@ module.exports = function (app, config, renderTemplate) {
 
         if (req.useragent.source.includes("Pardus")) {
           var vidurl = "https://iv.ggtyler.dev";
-          var mediaproxy = "https://media-proxy.ashley0143.xyz"
+          var mediaproxy = "https://nyc1.pokejan.ggtyler.dev/"
           var isvidious = true;
           var isSchoolProxy = "";
         }

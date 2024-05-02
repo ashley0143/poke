@@ -731,30 +731,30 @@ a.new-button:hover {
   display: none;
 }
 
-.v:checked ~ .div_box {
-  display: flex;
-  margin-top: -51em;
-  text-align: left;
-  background: #0009;
-  border-radius: 10px;
-  height: fit-content;
-  padding: 10px;
-  font-family: "ubuntu", sans-serif;
-  margin-left: -11em;
-  width: 43em;
-  position: absolute;
-  white-space: -moz-pre-wrap !important; /* Mozilla, since 1999 */
-  white-space: -pre-wrap; /* Opera 4-6 */
-  white-space: -o-pre-wrap; /* Opera 7 */
-  white-space: pre-wrap; /* css-3 */
-  word-wrap: break-word; /* Internet Explorer 5.5+ */
-  white-space: -webkit-pre-wrap; /* Newer versions of Chrome/Safari*/
-  word-break: break-all;
-  white-space: normal;
-  height: -moz-fit-content;
-  height: -webkit-fit-content;
-  max-width: 708px;
-  max-height: 185.6px;
+.v:checked~.div_box {
+  display:flex;
+  margin-top:-51em;
+  text-align:left;
+  background:#0009;
+  border-radius:10px;
+  height:fit-content;
+  padding:10px;
+  font-family:ubuntu,sans-serif;
+  width:43em;
+  position:absolute;
+  white-space:-moz-pre-wrap!important;
+  white-space:-pre-wrap;
+  white-space:-o-pre-wrap;
+  white-space:pre-wrap;
+  word-wrap:break-word;
+  white-space:-webkit-pre-wrap;
+  word-break:break-all;
+  white-space:normal;
+  height:-moz-fit-content;
+  height:-webkit-fit-content;
+  max-width:708px;
+  max-height:185.6px;
+  margin-right: 13em;
 }
 
 @media screen and (min-width: 1400px) {

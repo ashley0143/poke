@@ -66,30 +66,27 @@ summary:hover{
   <style>
     
     
- .tags.rec {
-  font-weight: 600;
-  font-stretch: expanded;
-  overflow:hidden;
-  width: auto;
-  max-width: fit-content;
-  margin-right: auto;
-  padding-left: 1.5em;
-  margin-top: 7px;
+.search-options {
   display: flex;
-  gap: 3px;
-  margin-inline: auto;
-  margin-left: 8em;
- }
-
+  justify-content: space-between;
+  width: 100%;
+  max-width: 855px;
+  margin: auto;
+  padding: 24px 0px 12px 0px;
+}
     
 .tags.rec:hover{
   overflow-x:auto;
 }
-
+.tags.rec {
+  display: flex;
+  gap: 12px;
+  height: max-content;
+}
 .tags.rec > .tag {
   border-radius: 8px;
-  background:var(--chip-background-hover);
-
+  background: var(--chip-background-hover);
+  padding: 8px 16px;
 }
 
 .tag {
@@ -99,6 +96,19 @@ summary:hover{
   white-space: nowrap;
   font-family: ubuntu, sans-serif;
 } 
+
+#filters-collapse summary {
+  color: white;
+  font-weight: bold;
+  font-size: 20px;
+}
+.filter-options div {
+  padding: 6px 12px;
+}
+.filter-name.underlined {
+  padding: 12px 0px 12px 23px;
+  font-weight: bold;
+}
     
 .container {
       max-width: 800px;

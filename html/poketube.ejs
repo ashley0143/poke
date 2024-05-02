@@ -1001,95 +1001,71 @@ Privacy
     
     
 		<div id="<%=sha384(inv_vid.videoId)%>" class="video-player-container">
- 
- 
-<video class="player video-ambient-container" id="video" style="border-radius: 16px;
-box-sizing: border-box;
-min-width: 100%;
-display: block; !important;" autoplay controls>
-       
-              <% if (isvidious) { %>
-                   <% if (!qua) { %>                       
-                                                <source src="<%=u%>/latest_version?id=<%=inv_vid.videoId%>&itag=22&local=true" type="video/mp4; codecs=&quot;avc1.64001F, mp4a.40.2&quot;" label="hd720" selected="true">
+      <video class="player video-ambient-container" id="video" style="border-radius: 16px; box-sizing: border-box; min-width: 100%; display: block;" autoplay controls>
+      <% if (isvidious) { %>
+        <% if (!qua) { %>
+          <source src="<%=u%>/latest_version?id=<%=inv_vid.videoId%>&itag=22&local=true" type="video/mp4; codecs=&quot;avc1.64001F, mp4a.40.2&quot;" label="hd720" selected="true">
+        <% } %>
+        <% if (qua === "medium") { %>
+          <source src="<%=u%>/latest_version?id=<%=inv_vid.videoId%>&itag=18&local=true" type="video/mp4; codecs=&quot;avc1.64001F, mp4a.40.2&quot;" label="sd360" selected="true">
+        <% } %>
+      <% } %>
 
-                                                                             <% } %>                
+      <% if (!isSchoolProxy) { %>
+        <% if (!isvidious) { %>
+          <% if (!qua) { %>
+            <source src="https://tube.kuylar.dev/proxy/media/<%=inv_vid.videoId%>/22" type="video/mp4; codecs=&quot;avc1.64001F, mp4a.40.2&quot;" label="hd720" selected="true">
+          <% } %>
+          <% if (qua === "medium") { %>
+            <source src="https://tube.kuylar.dev/proxy/media/<%=inv_vid.videoId%>/18" type="video/mp4; codecs=&quot;avc1.64001F, mp4a.40.2&quot;" label="sd360" selected="true">
+          <% } %>
+        <% } %>
+      <% } %>
 
-      <% if (qua === "medium") { %>  
+      <% if (isSchoolProxy) { %>
+        <% if (!qua) { %>
+          <source src="https://tube-proxy.ashley0143.xyz/proxy/media/<%=inv_vid.videoId%>/22" type="video/mp4; codecs=&quot;avc1.64001F, mp4a.40.2&quot;" label="hd720" selected="true">
+        <% } %>
+        <% if (qua === "medium") { %>  
+          <source src="https://tube-proxy.ashley0143.xyz/proxy/media/<%=inv_vid.videoId%>/18" type="video/mp4; codecs=&quot;avc1.64001F, mp4a.40.2&quot;" label="sd360" selected="true">
+        <% } %>
+      <% } %>
 
-                                                <source src="<%=u%>/latest_version?id=<%=inv_vid.videoId%>&itag=18&local=true" type="video/mp4; codecs=&quot;avc1.64001F, mp4a.40.2&quot;" label="sd360" selected="true">
-        
-                                                                           <% } %>                
-                                                                                                       <% } %>                     
-              <% if (!isSchoolProxy) { %>
+      <%  if (Array.isArray( inv_vid.captions)) { %> 
+        <% inv_vid.captions?.forEach(x => { %>
+          <track src="/api/subtitles?v=<%=inv_vid.videoId%>&h=<%= x.label %>" label="<%= x.label.replace("United States","Simplified - USA") %>" kind="subtitles">      
+        <% }) %>   
+      <% } %>                     
+      
+      <%  if (!Array.isArray( inv_vid.captions)) { %> 
+        <track src="/api/subtitles?v=<%=inv_vid.videoId%>&h=<%= %>" label="<%=  video.Subtitles.Subtitle.language.replace("United States","Simplified - USA") %>" kind="subtitles">      
+      <% } %>                                                       
+    </video>
+      
+    <% if (!a) { %>
+      <canvas width="12" height="6" class="ambient-canvas" id="ambient-canvas-1"></canvas>
+      <canvas width="12" height="6" class="ambient-canvas" id="ambient-canvas-2"></canvas>
+    <% } %>
+    
+    <div class="pwp">
+      <% if (!qua) { %> 
+        <a><i style="display: block;" title="High Definition [Current]" class="fa-solid fa-high-definition"></i> High Definition </a>
+        <a href="/watch?v=<%=inv_vid.videoId%>&quality=medium"><i style="display: block;" title="Standard Definition" class="fa-light fa-standard-definition"></i> Standard Definition</a>
+      <% } %>
 
-              <% if (!isvidious) { %>
-                
-                   <% if (!qua) { %>                       
-                                                <source src="https://tube.kuylar.dev/proxy/media/<%=inv_vid.videoId%>/22" type="video/mp4; codecs=&quot;avc1.64001F, mp4a.40.2&quot;" label="hd720" selected="true">
+      <% if (qua) { %> 
+        <a href="/watch?v=<%=inv_vid.videoId%>">  <i style="display: block;"  title="High Definition" class="fa-light fa-high-definition"></i> High Definition </a>
+        <a><i style="display: block;" title="Standard Definition [Current]"  class="fa-solid fa-standard-definition"></i> Standard Definition</a>
+      <% } %>
 
-                                                                             <% } %>                
+      <input type="checkbox" class="v" id="box" style="display:none">
+      <label class="h" for="box">
+        <div class="fnt">
+          <i title="Stats for nerdys" class="fa-light fa-bug"></i> Stats
+        </div>
+      </label>
 
-      <% if (qua === "medium") { %>  
-
-                                                <source src="https://tube.kuylar.dev/proxy/media/<%=inv_vid.videoId%>/18" type="video/mp4; codecs=&quot;avc1.64001F, mp4a.40.2&quot;" label="sd360" selected="true">
-                                                                                   <% } %>                
-
-        
-                                                                           <% } %>                
-                                                                                                       <% } %>                     
-              <% if (isSchoolProxy) { %>
-        <% if (!qua) { %>                       
-                                                <source src="https://tube-proxy.ashley0143.xyz/proxy/media/<%=inv_vid.videoId%>/22" type="video/mp4; codecs=&quot;avc1.64001F, mp4a.40.2&quot;" label="hd720" selected="true">
-
-                                                                             <% } %>                
-
-      <% if (qua === "medium") { %>  
-
-                                                <source src="https://tube-proxy.ashley0143.xyz/proxy/media/<%=inv_vid.videoId%>/18" type="video/mp4; codecs=&quot;avc1.64001F, mp4a.40.2&quot;" label="sd360" selected="true">
-        
-                                                                           <% } %>  
-                                      
-                                                                                                   <% } %>                
-
-       
-     <%  if (Array.isArray( inv_vid.captions)) { %> 
-   <% inv_vid.captions?.forEach(x => { %>
-     <track src="/api/subtitles?v=<%=inv_vid.videoId%>&h=<%= x.label %>" label="<%= x.label.replace("United States","Simplified - USA") %>" kind="subtitles">      
-     
-          <% }) %>   
-                                                                                                       <% } %>                     
-     <%  if (!Array.isArray( inv_vid.captions)) { %> 
-     <track src="/api/subtitles?v=<%=inv_vid.videoId%>&h=<%= %>" label="<%=  video.Subtitles.Subtitle.language.replace("United States","Simplified - USA") %>" kind="subtitles">      
-     
-             
-                                                           <% } %>         
-                                                                           
-                                                             </video>
-               <% if (!a) { %>  
-
-                                                             <canvas width="12" height="6" class="ambient-canvas" id="ambient-canvas-1"></canvas>
-                                                             <canvas width="12" height="6" class="ambient-canvas" id="ambient-canvas-2"></canvas>
-                        
-                 <% } %>         
-
- <div class="pwp" style="display: flex;justify-content: center;align-items: center;flex-direction: row; column-gap: 3px;margin-top: 2px;max-height: 16px;" align="center">
-                                
-  <% if (!qua) { %> 
-
-                                 <i style="display: block;" title="High Definition [Current]" class="fa-solid fa-high-definition"></i> <a href="/watch?v=<%=inv_vid.videoId%>&quality=medium"><i style="display: block;" title="Standard Definition" class="fa-light fa-standard-definition"></i></a>
-                                                                      <% } %>               
-                               <% if (qua) { %> 
-                                 <a href="/watch?v=<%=inv_vid.videoId%>">  <i style="display: block;"  title="High Definition" class="fa-light fa-high-definition"></i> </a>  <i style="display: block;" title="Standard Definition [Current]"  class="fa-solid fa-standard-definition"></i>
-
-                                                                      <% } %>   
-                                                                           <input type="checkbox" class="v" id="box" style="display:none">
-                                                                        <label class="h" for="box">
-                                                                          <div class="fnt">
-                                                                            
-<i title="Stats for nerdys" class="fa-light fa-bug" style="margin-left: 0.9em;display:block;"></i>
-                                                                          </div>
-
-                                                                        </label>
+      <a onclick="if(document.querySelector('.watch-page').style.display === 'grid') {document.querySelector('.watch-page').style.display = 'flex'} else {document.querySelector('.watch-page').style.display = 'grid'}"><i class="fa-sharp fa-light fa-up-right-and-down-left-from-center"></i> Theater</a>
                                                                         
 <%  if (inv.comments) { %> 
                 <input type="checkbox" class="hj" id="j" style="display:none">
@@ -1101,7 +1077,7 @@ display: block; !important;" autoplay controls>
                                                                         </label>
                                                                       <% } %>   
                                                                         
-                                                                   <a href="#video"  class="maxi"  id="maximize">  <i style="display: block;"  title="Maximise!" class="fa-light fa-maximize"></i> </a> 
+                                                                   
                                                                            
                                                      
 <!-- Stats for nerds -->
@@ -1142,7 +1118,6 @@ display: block; !important;" autoplay controls>
                       
        </div>
        </div>
-                                                            <br>
 <div class="video-info" >           
         	<div class="video-info-panel gradient">  
             <% if (k.Video.Channel.Name == "7clouds") { %> 
@@ -3214,10 +3189,11 @@ video.addEventListener('ended', () => {
 window.addEventListener('load', () => {
   resumeProgress();
 });
-
-
 </script>
-           
+
+
+
+
   <noscript>
   <style>
     .auto-play{

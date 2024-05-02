@@ -783,6 +783,23 @@ a.new-button:hover {
   display: none;
 }
 
+.pwp {
+  display: flex;
+  align-items: center;
+  justify-content: end;
+  gap: 6px;
+  padding: 16px 0px;
+}
+.pwp a, .fnt {
+  background: #452f37;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 6px 12px;
+  color: white;
+}
+
 .hj:checked ~ .flying_cmnt {
   display: grid;
   position: absolute;
@@ -814,7 +831,7 @@ marquee {
 }
 
 #video:target {
-object-fit:none;
+object-fit:contain;
 }
 
 #secret-theme:target{

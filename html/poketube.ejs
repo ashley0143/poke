@@ -395,6 +395,11 @@ a[data-onclick="jump_to_time"] {
     .auto-play{
       display:none !important;
     }  
+
+    .theather {
+      display:none !important;
+    }
+
     .progress-container {
             display:none !important;
     }
@@ -1065,7 +1070,7 @@ Privacy
         </div>
       </label>
 
-      <a onclick="if(document.querySelector('.watch-page').style.display === 'grid') {document.querySelector('.watch-page').style.display = 'flex'} else {document.querySelector('.watch-page').style.display = 'grid'}"><i class="fa-sharp fa-light fa-up-right-and-down-left-from-center"></i> Theater</a>
+      <a onclick="if(document.querySelector('.watch-page').style.display === 'grid') {document.querySelector('.watch-page').style.display = 'flex'} else {document.querySelector('.watch-page').style.display = 'grid'}" class="theather"><i class="fa-sharp fa-light fa-up-right-and-down-left-from-center"></i> Theater</a>
                                                                         
 <%  if (inv.comments) { %> 
                 <input type="checkbox" class="hj" id="j" style="display:none">

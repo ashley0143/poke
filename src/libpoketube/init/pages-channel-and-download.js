@@ -109,25 +109,25 @@ module.exports = function (app, config, renderTemplate) {
     const poketube_universe_value = "poketube_smart_search";
 
     if (query) {
-    let redirectTo = null;
+      let redirectTo = null;
 
-          if (query.includes("youtube.com/watch?v=")) {
+      if (query.includes("youtube.com/watch?v=")) {
         redirectTo = "/watch?v=";
-          } else if (query.includes("channel:")) {
+      } else if (query.includes("channel:")) {
         redirectTo = "/channel?id=";
-          } else if (query.includes("video:")) {
+      } else if (query.includes("video:")) {
         redirectTo = "/watch?v=";
-     }
+      }
 
-    if (redirectTo) {
+      if (redirectTo) {
         try {
-            const id = query.split(":")[1];
-            res.redirect(`${redirectTo}${id}`);
+          const id = query.split(":")[1];
+          res.redirect(`${redirectTo}${id}`);
         } catch {
-            return;
+          return;
         }
+      }
     }
-}
 
     if (query && query.startsWith("!") && query.length > 2) {
       res.redirect("https://lite.duckduckgo.com/lite/?q=" + query);
@@ -229,9 +229,8 @@ module.exports = function (app, config, renderTemplate) {
     let continuation = req.query.continuation || "";
 
     try {
+      const results = web.web;
 
-      const results = web.web; 
-      
       renderTemplate(res, req, "search-web.ejs", {
         j: "",
         IsOldWindows,
@@ -318,7 +317,7 @@ module.exports = function (app, config, renderTemplate) {
       )}/${ID}/?hl=en-US`;
 
       const channelINVUrl = `${apiUrl}${ID}/`;
-      const checkPronoun = async (id) => (await (await fetch('https://codeberg.org/ashley/poke-pronouns-db/raw/branch/main/pronouns.json')).json())[id] || `no pronouns set`;
+      const checkPronoun = async (id) => (await (await fetch('https://codeberg.org/ashley/poke-pronouns-db/raw/branch/main/pronouns.json')).json())[id] || `no pronouns set`; 
       const pronoun = await checkPronoun(ID);
 
       var [tj, shorts, playlist, stream, c, cinv] = await Promise.all([

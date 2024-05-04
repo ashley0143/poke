@@ -270,7 +270,7 @@ module.exports = function (app, config, renderTemplate) {
             );
           }
 
-          if (inv_vid.error) {
+          if (inv_vid?.error) {
             renderTemplate(res, req, "404.ejs", {
               v,
             });

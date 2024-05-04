@@ -32,9 +32,19 @@
   const media_proxy = require("./src/libpoketube/libpoketube-video.js");
   const { sinit } = require("./src/libpoketube/init/superinit.js");
   const innertube = require("./src/libpoketube/libpoketube-youtubei-objects.json");
-  
+  const fs = require("fs");
   const config = require("./config.json");
   const u = await media_proxy();
+
+  fs.readFile("ascii_txt.txt", "utf8", (err, data) => {
+    if (err) {
+      console.error("Error reading the file:", err);
+      return;
+    }
+
+    // Log the ASCII art to the console
+    console.log(data);
+  });
   initlog("Loading...");
   initlog(
     "[Welcome] Welcome To Poke - The ultimate privacy app - :3 " +
@@ -65,12 +75,11 @@
   const sha384 = modules.hash;
   const rateLimit = require("express-rate-limit");
 
+  const limiter = rateLimit({
+    windowMs: 45 * 1000, // 45 Seconds
+    max: 886, // limit each IP to 866 requests per windowMs
+  });
 
-   const limiter = rateLimit({
-     windowMs:45 * 1000, // 45 Seconds
-     max: 886, // limit each IP to 866 requests per windowMs
-   });
-   
   var app = modules.express();
   app.use(limiter);
   initlog("Loaded express.js");
@@ -79,7 +88,7 @@
   app.use(modules.useragent.express());
   app.use(modules.express.json()); // for parsing application/json
   app.enable("trust proxy");
-  var toobusy = require('toobusy-js')
+  var toobusy = require("toobusy-js");
 
   const renderTemplate = async (res, req, template, data = {}) => {
     res.render(
@@ -87,26 +96,25 @@
       Object.assign(data)
     );
   };
-  
- // Set check interval to a faster value. This will catch more latency spikes
-// but may cause the check to be too sensitive.
-toobusy.interval(110);
 
-toobusy.maxLag(3500);
-  
-  app.use(function(req, res, next) {
-  if (toobusy()) {
-    res.send(503, "I'm busy right now, sorry.");
-  } else {
-    next();
-  }
-});
-  
-  toobusy.onLag(function(currentLag) {
-  process.exit(1);
-  console.log("Event loop lag detected! Latency: " + currentLag + "ms");
-});
-  
+  // Set check interval to a faster value. This will catch more latency spikes
+  // but may cause the check to be too sensitive.
+  toobusy.interval(110);
+
+  toobusy.maxLag(3500);
+
+  app.use(function (req, res, next) {
+    if (toobusy()) {
+      res.send(503, "I'm busy right now, sorry.");
+    } else {
+      next();
+    }
+  });
+
+  toobusy.onLag(function (currentLag) {
+    process.exit(1);
+    console.log("Event loop lag detected! Latency: " + currentLag + "ms");
+  });
 
   const random_words = [
     "banana pie",
@@ -140,8 +148,8 @@ toobusy.maxLag(3500);
       res.header("secure-poketube-instance", "1");
 
       // opt out of googles "FLOC" bullcrap :p See https://spreadprivacy.com/block-floc-with-duckduckgo/
-      res.header("Permissions-Policy", "interest-cohort=()")
-      res.header("software-name", "poke")
+      res.header("Permissions-Policy", "interest-cohort=()");
+      res.header("software-name", "poke");
       next();
     });
 
@@ -162,10 +170,22 @@ toobusy.maxLag(3500);
     });
 
     app.use(function (req, res, next) {
-      res.header("X-PokeTube-Youtube-Client-Name", innertube.innertube.CONTEXT_CLIENT.INNERTUBE_CONTEXT_CLIENT_NAME);
-      res.header("Hey-there", "Do u wanna help poke? contributons are welcome :3 https://codeberg.org/Ashley/poke")
-      res.header("X-PokeTube-Youtube-Client-Version", innertube.innertube.CLIENT.clientVersion);
-      res.header("X-PokeTube-Client-name", innertube.innertube.CLIENT.projectClientName);
+      res.header(
+        "X-PokeTube-Youtube-Client-Name",
+        innertube.innertube.CONTEXT_CLIENT.INNERTUBE_CONTEXT_CLIENT_NAME
+      );
+      res.header(
+        "Hey-there",
+        "Do u wanna help poke? contributons are welcome :3 https://codeberg.org/Ashley/poke"
+      );
+      res.header(
+        "X-PokeTube-Youtube-Client-Version",
+        innertube.innertube.CLIENT.clientVersion
+      );
+      res.header(
+        "X-PokeTube-Client-name",
+        innertube.innertube.CLIENT.projectClientName
+      );
       res.header("X-PokeTube-Speeder", "3 seconds no cache, 280ms w/cache");
       res.header("X-HOSTNAME", req.hostname);
       if (req.url.match(/^\/(css|js|img|font)\/.+/)) {
@@ -177,7 +197,7 @@ toobusy.maxLag(3500);
       }
 
       const a = 890;
-      
+
       if (!req.url.match(/^\/(css|js|img|font)\/.+/)) {
         res.setHeader("Cache-Control", "public, max-age=" + a); // cache header
         res.setHeader("poketube-cacher", "PAGE");

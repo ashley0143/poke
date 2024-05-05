@@ -110,9 +110,11 @@ module.exports = function (app, config, renderTemplate) {
 
     if (query) {
       let redirectTo = null;
+      let splitParam = ":";
 
       if (query.includes("youtube.com/watch?v=")) {
-        redirectTo = "/watch?v=";
+        redirectTo = "/watch";
+        splitParam = "?v=";
       } else if (query.includes("channel:")) {
         redirectTo = "/channel?id=";
       } else if (query.includes("video:")) {
@@ -121,8 +123,8 @@ module.exports = function (app, config, renderTemplate) {
 
       if (redirectTo) {
         try {
-          const id = query.split(":")[1];
-          res.redirect(`${redirectTo}${id}`);
+          const id = query.split(splitParam)[1];
+          res.redirect(`${redirectTo}${splitParam}${id}`);
         } catch {
           return;
         }

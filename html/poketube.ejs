@@ -1066,9 +1066,14 @@ Privacy
       <input type="checkbox" class="v" id="box" style="display:none">
       <label class="h" for="box">
         <div class="fnt">
-          <i title="Stats for nerdys" class="fa-light fa-bug"></i> Stats
+    <% if (Math.floor(Math.random() * 50) === 0) { %>
+          <i title="Stats for nerdys" class="fa-light fa-bug"></i> Stats For Nerds
+    <% } else { %>
+          <i title="Stats for nerdys" class="fa-light fa-bug"></i> Stats For Puppies
+    <% } %>
         </div>
       </label>
+
 
       <a onclick="if(document.querySelector('.watch-page').style.display === 'grid') {document.querySelector('.watch-page').style.display = 'flex'} else {document.querySelector('.watch-page').style.display = 'grid'}" class="theather"><i class="fa-sharp fa-light fa-up-right-and-down-left-from-center"></i> Theater</a>
                                                                         

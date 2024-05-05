@@ -32,10 +32,10 @@ const cnf = require("../../../config.json");
 const innertube = require("../libpoketube-youtubei-objects.json");
 
 const verfull = "v24.0505-SaMaRa-MAJOR-stable-dev-nonLTS-git-MTcxNDkyMzczMg==";
-const versmol = "v24.0605-SaMaRa"
+const versmol = "v24.0505-SaMaRa"
 const branch = "dev/master";
-const codename = "SaMaRa";
-const versionnumber = "290";
+const codename = "samara";
+const versionnumber = "291";
 const relaseunixdate = "MTcxNDkyMzczMg=="
 const updatequote = "Love is the ultimate software update; embrace the patches, for they refine the code of our shared existence, hand in hand, heart to heard (unknown)"
 

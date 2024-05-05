@@ -36,7 +36,7 @@ const versmol = "v24.0605-SaMaRa"
 const branch = "dev/master";
 const codename = "SaMaRa";
 const versionnumber = "290";
-const relaseunixdate = "MTcxNDkyMzczMg==
+const relaseunixdate = "MTcxNDkyMzczMg=="
 const updatequote = "Love is the ultimate software update; embrace the patches, for they refine the code of our shared existence, hand in hand, heart to heard (unknown)"
 
 

@@ -141,8 +141,8 @@ function lightOrDark(color) {
 }
 
 function isDntEnabled(req) {
-  const dntHeader = req.header('DNT');
-  return dntHeader && (dntHeader === '1' || dntHeader === 'true');
+  const dntHeader = req.header("DNT");
+  return dntHeader && (dntHeader === "1" || dntHeader === "true");
 }
 
 function IsInArray(array, id) {
@@ -184,7 +184,7 @@ module.exports = function (app, config, renderTemplate) {
   });
 
   app.get("/watch", async (req, res) => {
-    const { dm, region, hl, v, e, r, f, m, quality: q, a, universe, } = req.query;
+    const { dm, region, hl, v, e, r, f, m, quality: q, a, universe, } = req.query; 
 
     if (!v) {
       return res.redirect("/");
@@ -202,153 +202,158 @@ module.exports = function (app, config, renderTemplate) {
 
     const secure = ["poketube.fun"].includes(req.hostname);
     const verify = req.hostname === "poketube.sudovanilla.com";
-    
-    INNERTUBE.getYouTubeApiVideo(f, v, contentlang, contentregion).then((data) => {
-      try {
-        const k = data?.video;
-        const channel_uploads = data?.channel_uploads
-        const json = data?.json;
-        const engagement = data?.engagement;
-        const inv_comments = data?.comments || "Disabled";
-        const inv_vid = data?.vid;
-        const desc = data?.desc || "";
 
-        let d = false;
-        if (desc !== "[object Object]") {
-          d = desc.toString().replace(/\n/g, " <br> ");
-        }
-        
-
-        const descriptionString = String(inv_vid?.description);
-
-        function extractInfo(regex) {
-          return descriptionString !== "[object Object]"
-            ? (regex.exec(descriptionString) ?? {}).groups
-            : undefined;
-        }
-
-        const support = extractInfo(PATREON_REGEX);
-        const twitter = extractInfo(X_REGEX);
-        const discord = extractInfo(CORD_REGEX);
-        const twitch = extractInfo(TWITCH_REGEX);
-        const reddit = extractInfo(REDDIT_REGEX);
-        const instagram = extractInfo(INSTAGRAM_REGEX);
-        
-        
-        var proxyurl = config.p_url;
-        var vidurl = u.url;
-        var isvidious = u.isInvidiousURL;
-        var mediaproxy = config.media_proxy
-        
-        
-        if (inv_vid?.genre === "Music") {
-          var vidurl = u.losslessurl;
-        }
-
-        var vidurl = config.videourl;
-        var isvidious = true;
-
-        if (req.useragent.source.includes("Pardus")) {
-          var vidurl = "https://iv.ggtyler.dev";
-          var mediaproxy = "https://media-proxy.ashley0143.xyz"
-          var isvidious = true;
-          var isSchoolProxy = "";
-        }
-        
-        // unused
-        let badges = "";
-        let comments = "";
-        let nnn = "";
-
-        const dnt_val = isDntEnabled(req)
-        
-        if (
-          inv_vid?.error ===
-            "The uploader has not made this video available in your country" ||
-          inv_vid?.error === "This video is not available"
-        ) {
-          res.send(
-            "error: " + inv_vid.error + " please refresh the page please qt"
-          );
-        }
-
-        var uaos = req.useragent.os;
-        const browser = req.useragent.browser;
-        const IsOldWindows =
-          (uaos === "Windows 7" || uaos === "Windows 8") &&
-          browser === "Firefox";
-
-        if (uaos === "Windows XP" || uaos === "Windows Vista")
-          res.redirect("/lite?v=" + req.query.v);
-
-        if (req.query.from === "short") var shortsui = true;
-
+    INNERTUBE.getYouTubeApiVideo(f, v, contentlang, contentregion).then(
+      (data) => {
         try {
-          renderTemplate(res, req, "poketube.ejs", {
-            color: data.color,
-            color2: data.color2,
-            linkify,
-            engagement,
-            IsOldWindows,
-            channelurlfixer,
-            support,
-            shortsui,
-            u: vidurl,
-            isvidious: isvidious,
-            video: json,
-            date: k.Video.uploadDate,
-            e,
-            a,
-            twitter,
-            k,
-            dm,
-            proxyurl,
-            media_proxy_url: mediaproxy,
-            instagram,
-            useragent: req.useragent,
-            verify,
-            discord,
-            turntomins,
-            twitch,
-            dnt_val,
-            reddit,
-            channel_uploads,
-            secure,
-            process,
-            isSchoolProxy,
-            sha384,
-            lightOrDark,
-            isMobile: req.useragent.isMobile,
-            tj: data.channel,
-            r,
-            qua: q,
-            inv: inv_comments,
-            convert,
-            universe,
-            wiki: data.wiki,
-            escapeHtml,
-            f,
-            t: config.t_url,
-            optout: m,
-            badges,
-            desc,
-            comments,
-            n: nnn,
-            inv_vid,
-            lyrics: "",
-          });
-        } catch {
-          return;
+          const k = data?.video;
+          const channel_uploads = data?.channel_uploads;
+          const json = data?.json;
+          const engagement = data?.engagement;
+          const inv_comments = data?.comments || "Disabled";
+          const inv_vid = data?.vid;
+          const desc = data?.desc || "";
+
+          let d = false;
+          if (desc !== "[object Object]") {
+            d = desc.toString().replace(/\n/g, " <br> ");
+          }
+
+          const descriptionString = String(inv_vid?.description);
+
+          function extractInfo(regex) {
+            return descriptionString !== "[object Object]"
+              ? (regex.exec(descriptionString) ?? {}).groups
+              : undefined;
+          }
+
+          const support = extractInfo(PATREON_REGEX);
+          const twitter = extractInfo(X_REGEX);
+          const discord = extractInfo(CORD_REGEX);
+          const twitch = extractInfo(TWITCH_REGEX);
+          const reddit = extractInfo(REDDIT_REGEX);
+          const instagram = extractInfo(INSTAGRAM_REGEX);
+
+          var proxyurl = config.p_url;
+          var vidurl = u.url;
+          var isvidious = u.isInvidiousURL;
+          var mediaproxy = config.media_proxy;
+
+          if (inv_vid?.genre === "Music") {
+            var vidurl = u.losslessurl;
+          }
+
+          var vidurl = config.videourl;
+          var isvidious = true;
+
+          if (req.useragent.source.includes("Pardus")) {
+            var vidurl = "https://iv.ggtyler.dev";
+            var mediaproxy = "https://nyc1.pokejan.ggtyler.dev/";
+            var isvidious = true;
+            var isSchoolProxy = "";
+          }
+
+          // unused
+          let badges = "";
+          let comments = "";
+          let nnn = "";
+
+          const dnt_val = isDntEnabled(req);
+
+          if (
+            inv_vid?.error ===
+              "The uploader has not made this video available in your country" ||
+            inv_vid?.error === "This video is not available"
+          ) {
+            res.send(
+              "error: " + inv_vid.error + " please refresh the page please qt"
+            );
+          }
+
+          if (inv_vid?.error) {
+            renderTemplate(res, req, "404.ejs", {
+              v,
+            });
+          }
+
+          var uaos = req.useragent.os;
+          const browser = req.useragent.browser;
+          const IsOldWindows =
+            (uaos === "Windows 7" || uaos === "Windows 8") &&
+            browser === "Firefox";
+
+          if (uaos === "Windows XP" || uaos === "Windows Vista")
+            res.redirect("/lite?v=" + req.query.v);
+
+          if (req.query.from === "short") var shortsui = true;
+
+          try {
+            renderTemplate(res, req, "poketube.ejs", {
+              color: data.color,
+              color2: data.color2,
+              linkify,
+              engagement,
+              IsOldWindows,
+              channelurlfixer,
+              support,
+              shortsui,
+              u: vidurl,
+              isvidious: isvidious,
+              video: json,
+              date: k.Video.uploadDate,
+              e,
+              a,
+              twitter,
+              k,
+              dm,
+              proxyurl,
+              media_proxy_url: mediaproxy,
+              instagram,
+              useragent: req.useragent,
+              verify,
+              discord,
+              turntomins,
+              twitch,
+              dnt_val,
+              reddit,
+              channel_uploads,
+              secure,
+              process,
+              isSchoolProxy,
+              sha384,
+              lightOrDark,
+              isMobile: req.useragent.isMobile,
+              tj: data.channel,
+              r,
+              qua: q,
+              inv: inv_comments,
+              convert,
+              universe,
+              wiki: data.wiki,
+              escapeHtml,
+              f,
+              t: config.t_url,
+              optout: m,
+              badges,
+              desc,
+              comments,
+              n: nnn,
+              inv_vid,
+              lyrics: "",
+            });
+          } catch {
+            return;
+          }
+        } catch (error) {
+          console.error(error);
+          return res.redirect(`/watch?v=${req.query.v}&fx=1&err=${error}`);
         }
-      } catch (error) {
-        console.error(error);
-        return res.redirect(`/watch?v=${req.query.v}&fx=1&err=${error}`);
       }
-    });
+    );
   });
 
   app.get("/lite", async (req, res) => {
-    const { dm, region, hl, v, e, r, f, m, quality: q, a, universe, } = req.query;
+    const { dm, region, hl, v, e, r, f, m, quality: q, a, universe, } = req.query; 
 
     if (!v) {
       return res.redirect("/");
@@ -366,145 +371,144 @@ module.exports = function (app, config, renderTemplate) {
 
     const secure = ["poketube.fun"].includes(req.hostname);
     const verify = req.hostname === "poketube.sudovanilla.com";
-    
-    INNERTUBE.getYouTubeApiVideo(f, v, contentlang, contentregion).then((data) => {
-      try {
-        const k = data?.video;
-        const channel_uploads = data?.channel_uploads
-        const json = data?.json;
-        const engagement = data?.engagement;
-        const inv_comments = data?.comments || "Disabled";
-        const inv_vid = data?.vid;
-        const desc = data?.desc || "";
 
-        let d = false;
-        if (desc !== "[object Object]") {
-          d = desc.toString().replace(/\n/g, " <br> ");
-        }
-        
-
-        const descriptionString = String(inv_vid?.description);
-
-        function extractInfo(regex) {
-          return descriptionString !== "[object Object]"
-            ? (regex.exec(descriptionString) ?? {}).groups
-            : undefined;
-        }
-
-        const support = extractInfo(PATREON_REGEX);
-        const twitter = extractInfo(X_REGEX);
-        const discord = extractInfo(CORD_REGEX);
-        const twitch = extractInfo(TWITCH_REGEX);
-        const reddit = extractInfo(REDDIT_REGEX);
-        const instagram = extractInfo(INSTAGRAM_REGEX);
-        
-        
-        var proxyurl = config.p_url;
-        var vidurl = u.url;
-        var isvidious = u.isInvidiousURL;
-        var mediaproxy = config.media_proxy
-        
-        
-        if (inv_vid?.genre === "Music") {
-          var vidurl = u.losslessurl;
-        }
-
-        var vidurl = "https://eu-proxy.poketube.fun";
-        var isvidious = true;
-
-        if (req.useragent.source.includes("Pardus")) {
-          var vidurl = "https://iv.ggtyler.dev";
-          var mediaproxy = "https://media-proxy.ashley0143.xyz"
-          var isvidious = true;
-          var isSchoolProxy = "";
-        }
-        
-        // unused
-        let badges = "";
-        let comments = "";
-        let nnn = "";
-
-        const dnt_val = isDntEnabled(req)
-        
-        if (
-          inv_vid?.error ===
-            "The uploader has not made this video available in your country" ||
-          inv_vid?.error === "This video is not available"
-        ) {
-          res.send(
-            "error: " + inv_vid.error + " please refresh the page please qt"
-          );
-        }
-
-        var uaos = req.useragent.os;
-        const browser = req.useragent.browser;
-        const IsOldWindows =
-          (uaos === "Windows 7" || uaos === "Windows 8") &&
-          browser === "Firefox";
-
-        if (req.query.from === "short") var shortsui = true;
-
+    INNERTUBE.getYouTubeApiVideo(f, v, contentlang, contentregion).then(
+      (data) => {
         try {
-          renderTemplate(res, req, "lite.ejs", {
-            color: data.color,
-            color2: data.color2,
-            linkify,
-            engagement,
-            IsOldWindows,
-            channelurlfixer,
-            support,
-            shortsui,
-            u: vidurl,
-            isvidious: isvidious,
-            video: json,
-            date: k.Video.uploadDate,
-            e,
-            a,
-            twitter,
-            k,
-            dm,
-            proxyurl,
-            media_proxy_url: mediaproxy,
-            instagram,
-            useragent: req.useragent,
-            verify,
-            discord,
-            turntomins,
-            twitch,
-            dnt_val,
-            reddit,
-            channel_uploads,
-            secure,
-            process,
-            isSchoolProxy,
-            sha384,
-            lightOrDark,
-            isMobile: req.useragent.isMobile,
-            tj: data.channel,
-            r,
-            qua: q,
-            inv: inv_comments,
-            convert,
-            universe,
-            wiki: data.wiki,
-            f,
-            t: config.t_url,
-            optout: m,
-            badges,
-            desc,
-            comments,
-            n: nnn,
-            inv_vid,
-            lyrics: "",
-          });
-        } catch {
-          return;
+          const k = data?.video;
+          const channel_uploads = data?.channel_uploads;
+          const json = data?.json;
+          const engagement = data?.engagement;
+          const inv_comments = data?.comments || "Disabled";
+          const inv_vid = data?.vid;
+          const desc = data?.desc || "";
+
+          let d = false;
+          if (desc !== "[object Object]") {
+            d = desc.toString().replace(/\n/g, " <br> ");
+          }
+
+          const descriptionString = String(inv_vid?.description);
+
+          function extractInfo(regex) {
+            return descriptionString !== "[object Object]"
+              ? (regex.exec(descriptionString) ?? {}).groups
+              : undefined;
+          }
+
+          const support = extractInfo(PATREON_REGEX);
+          const twitter = extractInfo(X_REGEX);
+          const discord = extractInfo(CORD_REGEX);
+          const twitch = extractInfo(TWITCH_REGEX);
+          const reddit = extractInfo(REDDIT_REGEX);
+          const instagram = extractInfo(INSTAGRAM_REGEX);
+
+          var proxyurl = config.p_url;
+          var vidurl = u.url;
+          var isvidious = u.isInvidiousURL;
+          var mediaproxy = config.media_proxy;
+
+          if (inv_vid?.genre === "Music") {
+            var vidurl = u.losslessurl;
+          }
+
+          var vidurl = "https://eu-proxy.poketube.fun";
+          var isvidious = true;
+
+          if (req.useragent.source.includes("Pardus")) {
+            var vidurl = "https://iv.ggtyler.dev";
+            var mediaproxy = "https://media-proxy.ashley0143.xyz";
+            var isvidious = true;
+            var isSchoolProxy = "";
+          }
+
+          // unused
+          let badges = "";
+          let comments = "";
+          let nnn = "";
+
+          const dnt_val = isDntEnabled(req);
+
+          if (
+            inv_vid?.error ===
+              "The uploader has not made this video available in your country" ||
+            inv_vid?.error === "This video is not available"
+          ) {
+            res.send(
+              "error: " + inv_vid.error + " please refresh the page please qt"
+            );
+          }
+
+          var uaos = req.useragent.os;
+          const browser = req.useragent.browser;
+          const IsOldWindows =
+            (uaos === "Windows 7" || uaos === "Windows 8") &&
+            browser === "Firefox";
+
+          if (req.query.from === "short") var shortsui = true;
+
+          try {
+            renderTemplate(res, req, "lite.ejs", {
+              color: data.color,
+              color2: data.color2,
+              linkify,
+              engagement,
+              IsOldWindows,
+              channelurlfixer,
+              support,
+              shortsui,
+              u: vidurl,
+              isvidious: isvidious,
+              video: json,
+              date: k.Video.uploadDate,
+              e,
+              a,
+              twitter,
+              k,
+              dm,
+              proxyurl,
+              media_proxy_url: mediaproxy,
+              instagram,
+              useragent: req.useragent,
+              verify,
+              discord,
+              turntomins,
+              twitch,
+              dnt_val,
+              reddit,
+              channel_uploads,
+              secure,
+              process,
+              isSchoolProxy,
+              sha384,
+              lightOrDark,
+              isMobile: req.useragent.isMobile,
+              tj: data.channel,
+              r,
+              qua: q,
+              inv: inv_comments,
+              convert,
+              universe,
+              wiki: data.wiki,
+              f,
+              t: config.t_url,
+              optout: m,
+              badges,
+              desc,
+              comments,
+              n: nnn,
+              inv_vid,
+              lyrics: "",
+            });
+          } catch {
+            return;
+          }
+        } catch (error) {
+          console.error(error);
+          return res.redirect(`/watch?v=${req.query.v}&fx=1&err=${error}`);
         }
-      } catch (error) {
-        console.error(error);
-        return res.redirect(`/watch?v=${req.query.v}&fx=1&err=${error}`);
       }
-    });
+    );
   });
 
   app.get("/music", async function (req, res) {

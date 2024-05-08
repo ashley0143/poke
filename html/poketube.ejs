@@ -370,12 +370,12 @@ a[data-onclick="jump_to_time"] {
    </style>
  
   <!-- css files -->
-  <link href="/css/app-cdn.min.css" rel=stylesheet>
-  <link href="/css/app.main.css?v=44600" rel=stylesheet>
-  <link href="/css/watch.main.css" rel=stylesheet>
-  <link href="/css/watch-util.css" rel=stylesheet>
-  <link href="/css/watch-navbar.css" rel=stylesheet>
-  <link href="/css/poketube.css?v=989344" rel=stylesheet>
+  <link href="/css/app-cdn.min.css?v=9893448" rel=stylesheet>
+  <link href="/css/app.main.css?v=446008" rel=stylesheet>
+  <link href="/css/watch.main.css?v=9893448" rel=stylesheet>
+  <link href="/css/watch-util.css?v=9893448" rel=stylesheet>
+  <link href="/css/watch-navbar.css?v=9893448" rel=stylesheet>
+  <link href="/css/poketube.css?v=98934844" rel=stylesheet>
 
 <% if (k.Video.Channel.Name == "7clouds") { %> 
 <style>
@@ -395,6 +395,11 @@ a[data-onclick="jump_to_time"] {
     .auto-play{
       display:none !important;
     }  
+
+    .theather {
+      display:none !important;
+    }
+
     .progress-container {
             display:none !important;
     }
@@ -1061,11 +1066,16 @@ Privacy
       <input type="checkbox" class="v" id="box" style="display:none">
       <label class="h" for="box">
         <div class="fnt">
-          <i title="Stats for nerdys" class="fa-light fa-bug"></i> Stats
+    <% if (Math.floor(Math.random() * 50) === 0) { %>
+          <i title="Stats for nerdys" class="fa-light fa-bug"></i> Stats For Puppies
+    <% } else { %>
+          <i title="Stats for nerdys" class="fa-light fa-bug"></i> Stats For Nerds
+    <% } %>
         </div>
       </label>
 
-      <a onclick="if(document.querySelector('.watch-page').style.display === 'grid') {document.querySelector('.watch-page').style.display = 'flex'} else {document.querySelector('.watch-page').style.display = 'grid'}"><i class="fa-sharp fa-light fa-up-right-and-down-left-from-center"></i> Theater</a>
+
+      <a onclick="if(document.querySelector('.watch-page').style.display === 'grid') {document.querySelector('.watch-page').style.display = 'flex'} else {document.querySelector('.watch-page').style.display = 'grid'}" class="theather"><i class="fa-sharp fa-light fa-up-right-and-down-left-from-center"></i> Theater</a>
                                                                         
 <%  if (inv.comments) { %> 
                 <input type="checkbox" class="hj" id="j" style="display:none">

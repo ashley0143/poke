@@ -82,6 +82,14 @@ document.addEventListener('DOMContentLoaded', function() {
   window.addEventListener('resize', lazyLoadBg);
 });
 
+const htmlContent = `<!DOCTYPE html><html><head><title>Browser is not supported :p</title><style>body{margin-left:auto;margin-right:auto;display:flex;max-width:43em;font-family:sans-serif;background-color:white;}</style></head><body><h1>Heyo :3</h1><br><p style="margin-top:4em;margin-left:-7.4em;">hoi - poke does and <b>will not work</b> on Internet Explorer :p<br>if u wanna use poke try using Firefox (firefox.com) or Chromium :3<br>love u :3</p></body></html>`;
+
+ if (/MSIE \d|Trident.*rv:/.test(navigator.userAgent)) {
+     document.open();
+    document.write(htmlContent);
+    document.close();
+}
+
 // Fade in elements on scroll or fullscreen change
 function fadeInElements() {
   const elements = document.querySelectorAll('.fade-in');

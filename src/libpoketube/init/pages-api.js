@@ -30,6 +30,7 @@ const pkg = require("../../../package.json");
 const os = require('os');
 const cnf = require("../../../config.json");
 const innertube = require("../libpoketube-youtubei-objects.json");
+const { exec } = require('child_process');
 
 const verfull = "v24.0605-VeE-MINOR_UPDATE-stable-dev-nonLTS-git-MTcxNTAwOTczNQ==";
 const versmol = "v24.0605-vEe"
@@ -211,6 +212,8 @@ app.use("/sb/i/:v/:imagePath/:img", async function (req, res) {
   });
 
   app.get("/api/version.json", async (req, res) => {
+    let latestCommitHash;
+
     const invidious = await modules
       .fetch("https://invid-api.poketube.fun/api/v1/stats")
       .then((res) => res.text())
@@ -220,12 +223,15 @@ app.use("/sb/i/:v/:imagePath/:img", async function (req, res) {
        const totalMemory = os.totalmem() / (1024 * 1024 * 1024); 
        const roundedMemory = totalMemory.toFixed(2); 
 
+      exec('git rev-list HEAD -n 1 --abbrev-commit', (error, stdout, stderr) => latestCommitHash = error || stderr ? console.error(`Error executing command: ${error || stderr}`) : stdout.trim());
+
     const response = {
       pt_version: {
        version:versmol,
        version_full:verfull
       },
       branch,
+      commit: latestCommitHash,
       updatequote,
       relaseunixdate,
       vernum: versionnumber,

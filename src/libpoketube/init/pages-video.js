@@ -190,6 +190,13 @@ module.exports = function (app, config, renderTemplate) {
       return res.redirect("/");
     }
 
+    const regex = new RegExp("^([a-zA-Z0-9_-]{11})");
+    const isMatch = regex.test(v);
+
+    if (!isMatch) {
+      return res.redirect("/");
+    }
+    
     var contentlang = hl || "en-US";
     var contentregion = region || "US";
 

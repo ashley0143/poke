@@ -79,6 +79,7 @@ const splash = [
     "men are handsome!",
     "enbys are cute!",
     "you are cute :3",
+    "read if cute!",
     "stallmansupport.org!!!"
 ]
 

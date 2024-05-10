@@ -167,7 +167,9 @@ class InnerTubePokeVidious {
    */
   isvalidvideo(v) {
     if (v != "assets" && v != "cdn-cgi" && v != "404") {
-      return true;
+      const regex = new RegExp("^([a-zA-Z0-9_-]{11})");
+      const isMatch = regex.test(v);
+      return isMatch;
     } else {
       return false;
     }

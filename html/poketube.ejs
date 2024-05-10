@@ -2177,8 +2177,10 @@ a {
                                                                                                               <% } %>   
 
  <style>
+
  .video-player-container {
-  position: relative;
+  position: sticky;
+  z-index: 1;
 }
 
 .player {
@@ -2189,6 +2191,7 @@ a {
 .box-shadow-0em {
   box-shadow: 0em;
 }
+     
 
     <% if (lightOrDark(color) == "dark") { %>  
  #shadow {
@@ -2202,6 +2205,8 @@ a {
   filter: blur(5px); 
   transition: opacity 0.2s ease; 
   opacity: 0; 
+  z-index: -1;
+
 }
    <% } %>            
 <% if (lightOrDark(color) == "light") { %>  
@@ -2217,6 +2222,8 @@ a {
   filter: blur(5px); 
   transition: opacity 0.2s ease; 
   opacity: 0; 
+    z-index: -1;
+
 }
                                                                                      <% } %>     
 </style>
@@ -2286,7 +2293,7 @@ a {
                                 
  		</div>
 
-<div class="video-info" >
+<div class="video-info" style="position: sticky;z-index: 1;">
         <div style="linear-gradient(135deg,#f97794 10%,#623aa2 100%,#8e6f7e 100%);border-radius: 10px;margin-bottom: 10px;padding-bottom: 1em;padding-top: 0.3em;">
           
                                         <div style="display: flex;justify-content: center;align-items: center;flex-direction: row; column-gap: 3px;margin-top: -14px;" align="center">
@@ -3218,17 +3225,28 @@ function resumeProgress() {
   }
 }
 
-// Define a function to toggle the opacity
-function toggleOpacity() {
-  const element = document.getElementById('shadow'); 
+ function toggleOpacity() {
+  const element = document.getElementById('shadow'); // Replace 'yourElementId' with the ID of your element
+  const video = document.getElementById('video'); // Assuming your video element has an ID of 'video'
   const currentOpacity = parseFloat(window.getComputedStyle(element).opacity);
 
+   if (video.paused) {
+    return; 
+  }
+
    if (currentOpacity === 1) {
+    element.style.transition = 'opacity 1s ease'; // Adjust the duration as needed
     element.style.opacity = 0;
   } else {
+    element.style.transition = 'opacity 1s ease'; // Adjust the duration as needed
     element.style.opacity = 1;
   }
 }
+
+ window.onload = function() {
+  setInterval(toggleOpacity, 200);
+};
+
 
  window.onload = function() {
   setInterval(toggleOpacity, 200);

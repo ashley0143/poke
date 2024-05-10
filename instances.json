@@ -8,9 +8,9 @@
       "proxy": true,
       "official": true,
       "DEFAULT": true,
-      "region": "🇺🇸",
+      "region": "🇩🇪",
       "software": {
-        "name": "poketube",
+        "name": "poke",
         "version": "lastest",
         "branch": "dev"
       }
@@ -24,7 +24,7 @@
       "piwik": false,
       "region": "🇺🇸",
       "software": {
-        "name": "poketube",
+        "name": "poke",
         "version": "lastest",
         "branch": "dev"
       }
@@ -38,7 +38,7 @@
       "piwik": false,
       "region": "🇺🇸",
       "software": {
-        "name": "poketube",
+        "name": "poke",
         "version": "latest",
         "branch": "dev"
       }
@@ -52,7 +52,7 @@
       "piwik": false,
       "region": "🇬🇧",
       "software": {
-        "name": "poketube",
+        "name": "poke",
         "version": "latest",
         "branch": "dev"
       }
@@ -67,7 +67,7 @@
       "proxy": false,
       "region": "🇺🇸",
       "software": {
-        "name": "poketube",
+        "name": "poke",
         "version": "latest",
         "branch": "dev"
       }
@@ -97,7 +97,7 @@
       "proxy": false,
       "region": "🇳🇱",
       "software": {
-        "name": "poketube",
+        "name": "poke",
         "version": "latest",
         "branch": "dev"
       }
@@ -111,7 +111,21 @@
       "proxy": false,
       "region": "🇳🇱",
       "software": {
-        "name": "poketube",
+        "name": "poke",
+        "version": "latest",
+        "branch": "dev"
+      }
+    }
+  ],  [
+    "poke.blahai.gay",
+    {
+      "uri": "https://poke.blahai.gay/",
+      "CLOUDFLARE": true,
+      "piwik": false,
+      "proxy": false,
+      "region": "🇩🇪",
+      "software": {
+        "name": "poke",
         "version": "latest",
         "branch": "dev"
       }

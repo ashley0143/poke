@@ -2177,25 +2177,46 @@ a {
                                                                                                               <% } %>   
 
  <style>
- .player {
-  border-radius: 6px;
-  transition: box-shadow 0.2s ease;  
+ #videoContainer {
+  position: relative;
 }
+
+.player {
+  border-radius: 6px;
+}
+
 
 .box-shadow-0em {
   box-shadow: 0em;
 }
 
     <% if (lightOrDark(color) == "dark") { %>  
-
-.box-shadow-custom {
+ #shadow {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border-radius: 6px;
   box-shadow: 0 13em 14em <%=color2%>;
+  filter: blur(5px); 
+  transition: opacity 0.2s ease; 
+  opacity: 0; 
 }
    <% } %>            
 <% if (lightOrDark(color) == "light") { %>  
 
-.box-shadow-custom {
-  box-shadow: 0 13em 14em <%=color%>;
+ #shadow {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border-radius: 6px;
+  box-shadow: 0 13em 14em <%=color2%>;
+  filter: blur(5px); 
+  transition: opacity 0.2s ease; 
+  opacity: 0; 
 }
                                                                                      <% } %>     
 </style>
@@ -2263,6 +2284,8 @@ a {
  					</video>
                                                  
  		</div>
+  <div id="shadow"></div>
+
 <div class="video-info" >
         <div style="linear-gradient(135deg,#f97794 10%,#623aa2 100%,#8e6f7e 100%);border-radius: 10px;margin-bottom: 10px;padding-bottom: 1em;padding-top: 0.3em;">
           
@@ -3194,21 +3217,21 @@ function resumeProgress() {
     video.currentTime = progress;
   }
 }
-// Define a function to toggle the CSS class for box-shadow
-function toggleBoxShadowClass() {
-  const videoElement = document.getElementById('video');
-  if (videoElement.classList.contains('box-shadow-0em')) {
-    videoElement.classList.remove('box-shadow-0em');
-    videoElement.classList.add('box-shadow-custom');
+
+// Define a function to toggle the opacity
+function toggleOpacity() {
+  const element = document.getElementById('shadow'); 
+  const currentOpacity = parseFloat(window.getComputedStyle(element).opacity);
+
+   if (currentOpacity === 1) {
+    element.style.opacity = 0;
   } else {
-    videoElement.classList.remove('box-shadow-custom');
-    videoElement.classList.add('box-shadow-0em');
+    element.style.opacity = 1;
   }
 }
 
-// Call the toggleBoxShadowClass function every 200ms after the page loads
-window.onload = function() {
-  setInterval(toggleBoxShadowClass, 200);
+ window.onload = function() {
+  setInterval(toggleOpacity, 200);
 };
 
 video.addEventListener('timeupdate', () => {

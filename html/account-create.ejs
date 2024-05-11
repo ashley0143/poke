@@ -63,10 +63,10 @@ var apiurl = "https://poketube.fun/api"
 if(!localStorage.getItem("UserID")) {
   localStorage.setItem('UserID', `<%- userid %>`);
   <% db.set(`user.${userid}`, userid) %>
-  location.href = "/my-acc?ID=" +  `<%- userid %>`
+  location.href = "/my-acc?ID=" +  `<%- userid %>` + "&rparam=1"
 }
 
 if(localStorage.getItem("UserID")) {
-  location.href = "/my-acc?ID=" + localStorage.getItem("UserID")
+  location.href = "/my-acc?ID=" + localStorage.getItem("UserID") +  "&rparam=1"
 }
   </script>

@@ -3248,10 +3248,6 @@ function resumeProgress() {
 };
 
 
- window.onload = function() {
-  setInterval(toggleOpacity, 200);
-};
-
 video.addEventListener('timeupdate', () => {
   if (Math.floor(video.currentTime) % 1 === 0) {
     saveProgress();

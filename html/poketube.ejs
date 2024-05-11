@@ -1113,6 +1113,8 @@ Privacy
        Proxy : tube-proxy.poketube.fun - refresh the page to change the proxy location<br>
                           <% } %>   
        Date : <%- Date.now() %> - <%- useragent.os.replace("Linux", "GNU/Linux") %> on <%- useragent.browser %> <br>
+                                                       <% if (k.Video.Channel.id != "UCBQZwaNPFfJ1gZ1fLZpAEGw") { %> 
+
                                                   <% if (isvidious) { %>
 
        Mystery text :  <%=btoa(inv_vid.videoId + " i " + " lov " + " u " + u.replace("https://","") ) %> <br>
@@ -1121,6 +1123,12 @@ Privacy
 
        Mystery text :  <%=btoa(inv_vid.videoId + " i " + " lov " + " u " + "tube-proxy.poketube.fun" ) %> <br>
                                                                               <% } %>   
+                                                                              <% } %>   
+
+                                                <% if (k.Video.Channel.id == "UCBQZwaNPFfJ1gZ1fLZpAEGw") { %> 
+       Mystery text :  <%=btoa("dmaorg.info/found/15398642_14/clancy.html" + inv_vid.videoId) %>                                    
+                                                                              <% } %>   
+
 
        143 : true <br>
         </div>

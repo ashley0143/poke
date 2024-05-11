@@ -3235,16 +3235,16 @@ function resumeProgress() {
   }
 
    if (currentOpacity === 1) {
-    element.style.transition = 'opacity 1s ease'; // Adjust the duration as needed
+    element.style.transition = 'opacity 0.2s ease'; // Adjust the duration as needed
     element.style.opacity = 0;
   } else {
-    element.style.transition = 'opacity 1s ease'; // Adjust the duration as needed
+    element.style.transition = 'opacity 0.2s ease'; // Adjust the duration as needed
     element.style.opacity = 1;
   }
 }
 
  window.onload = function() {
-  setInterval(toggleOpacity, 1500);
+  setInterval(toggleOpacity, 4500);
 };
 
 

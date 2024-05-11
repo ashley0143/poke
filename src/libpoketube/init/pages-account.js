@@ -107,9 +107,9 @@ app.get("/account-create", async function (req, res) {
 app.get("/my-acc", async function (req, res) {
     var userid = req.query.ID;
 
-    // Check if userid is more than 6 characters
-    if (userid.length > 6) {
-        return res.status(400).json({ error: "IDs can be 6 characters max silly :3" });
+    // Check if userid is more than 7 characters
+    if (userid.length > 7) {
+        return res.status(400).json({ error: "IDs can be 7 characters max silly :3" });
     }
 
     var userSubs =  db.get(`user.${userid}.subs`);

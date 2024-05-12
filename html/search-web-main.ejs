@@ -17,7 +17,9 @@
         NodeList.prototype.forEach = Array.prototype.forEach;
   </script> 
   <style>
-    
+    * {
+      font-family: "poketube flex" !important
+    }
 @keyframes gradient {
   0% {
     background-position: 0 50%;
@@ -35,19 +37,28 @@
   animation: gradient 64s ease infinite;
   background-size: 400% 400%;
 }
+    
+    a {
+ 	color: #fff;
+	font-weight: 686;
+	font-stretch: extra-expanded;
+     }
      
     .downnav {
   position: fixed;
   padding:10px;
   bottom: 0;
   left: 0;
-  width: 100%;
   margin: auto;
   overflow: hidden;
   z-index: 1;
   color:#fff;
-  background-color: #0f0f0f;
-}</style>
+  background-color: #0007;
+  border-radius: 5px;
+  width: calc(100% - 33px);
+  margin-left: 6px;
+    }
+  </style>
   <script>
 <!--//--><![CDATA[//><!--
 /**
@@ -219,18 +230,16 @@
   <input placeholder="Search the web" name="query" autocomplete="off" id="search_form_input_homepage" class="search__input" type="text" autofocus />
 
 <div>
-      <button class="btn btn-success" type="submit" style="margin-top: 1em;margin-left: auto;text-align: center;display: flex;flex-direction: column;background: #fff;background-color: #303134;border: 1px solid #303134;border-radius: 4px;color: #e8eaed;font-family: arial,sans-serif;font-size: 14px;padding: 0 16px;line-height: 27px;height: 36px;min-width: 54px;margin-right: 13em;text-align: center;cursor: pointer;user-select: none;">
+      <button class="btn btn-success" type="submit" style="margin-top: 1em;margin-left: auto;text-align: center;display: flex;flex-direction: column;background: #fff;background-color: #303134;border: 1px solid #303134;border-radius: 4px;color: #e8eaed;font-family: arial,sans-serif;font-size: 14px;padding: 0 16px;line-height: 27px;height: 36px;min-width: 54px;margin-right: 9em;text-align: center;cursor: pointer;user-select: none;">
     <p style="margin-top: auto;margin-bottom: auto;font-weight: 1000;margin-left: 6px;font-stretch: ultra-expanded;font-family:&quot;poketube flex&quot;;Poketube flex;">Search Poke</p>
   </button>
-
-   <button class="btn btn-success" name="lucky" value="true" type="submit" style="margin-top: 1em;margin-left: auto;text-align: center;display: flex;flex-direction: column;background: #fff;background-color: #303134;border: 1px solid #303134;border-radius: 4px;color: #e8eaed;font-family: arial,sans-serif;font-size: 14px;padding: 0 16px;line-height: 27px;height: 36px;min-width: 54px;margin-right: 9em;text-align: center;cursor: pointer;user-select: none;margin-top: -38px;margin-left: 21em;">
-    <p style="margin-top: auto;margin-bottom: auto;font-weight: 1000;margin-left: 6px;font-stretch: ultra-expanded;font-family:&quot;poketube flex&quot;;Poketube flex;">Im feeling lucky</p>
-  </button>
+  <div style="margin-left: 5.5em;margin-right: auto;width: fit-content;color: #fff;font-weight: 1000;font-stretch: ultra-expanded;font-size: 33px;margin-bottom: -1em;margin-top: 6px;" id="clock"></div>
+ <span style="color:#fff;margin-left: auto;margin-right: 8em;text-align: center;display: flex;width: fit-content;margin-top: 2em;font-size: ;" id="weatherInfo"></span> 
            </div>
 </form>
 
 <div class="downnav">
-<span style="color:#fff;" id="weatherInfo"></span> - <a style="color:#fff" href="/translate"> Translate </a> - <a style="color:#fff" href="/map"> PokeMaps </a> - <a style="color:#fff" href="/account-create">My Account</a> - <a style="color:#fff" href="/privacy">Privacy</a> -   <a style="color:#fff" href="https://codeberg.org/ashley/poketube">Git</a>
+<a style="color:#fff" href="/translate"> Translate </a> - <a style="color:#fff" href="/map"> PokeMaps </a> - <a style="color:#fff" href="/account-create">My Account</a> - <a style="color:#fff" href="/privacy">Privacy</a> -   <a style="color:#fff" href="https://codeberg.org/ashley/poketube">Git</a>
 <div style="float: right;">
 <a style="color:#fff" id="osInfo"></a> <a style="color:#fff;margin-right: 1em;" href="/license">License</a>
   </div>
@@ -257,6 +266,27 @@ if (userAgent.includes("windows")) {
 
 const osInfoElement = document.getElementById("osInfo");
 osInfoElement.textContent = `${osName} - `;
+    
+    function updateClock() {
+  var now = new Date();
+  var hours = now.getHours();
+  var minutes = now.getMinutes();
+  var seconds = now.getSeconds();
+
+  // Add leading zeros to minutes and seconds
+  minutes = (minutes < 10 ? "0" : "") + minutes;
+  seconds = (seconds < 10 ? "0" : "") + seconds;
+
+  // Display the time in the "clock" div
+  document.getElementById("clock").innerHTML = hours + ":" + minutes + ":" + seconds;
+
+  // Update the clock every second
+  setTimeout(updateClock, 1000);
+}
+
+// Call the function to initially display the clock
+updateClock();
+
   </script>  <script>  
 const css = localStorage.getItem("poke-custom-css");
 
@@ -320,7 +350,7 @@ if (window.location.hostname === "poketube.fun" && config.plausible_enabled == t
 
       // Call the fetchAndDisplayWeather function when the page loads
       fetchAndDisplayWeather();
-</script><script src="/static/emojis.js"></script><style> img.emoji {height: 1em;width: 1em;margin: 0 .05em 0 .1em;vertical-align: -0.1em;}</style>
+</script><script src="/static/emojis.js"></script><script src="/static/data-mobile.js"></script><style> img.emoji {height: 1em;width: 1em;margin: 0 .05em 0 .1em;vertical-align: -0.1em;}</style>
 <script>twemoji.parse(document.body,{ base: 'https://p.poketube.fun/https://cdn.zptr.cc/twemoji/' })</script></div>
  </div> <!-- id="content_homepage" -->
   </div> <!-- id="content_wrapper_homepage" -->

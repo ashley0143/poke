@@ -546,6 +546,7 @@ font-weight: 1000;
         <div style="display: flex; flex-direction: column; row-gap: 8px;font-weight:bold">
           <a href="/watch?v=<%= x.videoId %>"><span><%= x.viewCountText %></span> <span>•</span> <span><%= x.publishedText %></span></a>
           <a href="/channel?id=<%= x.authorId %>"><%=x.author %></a>
+          <a href="/download?v=<%= x.videoId %>" style="display: flex;align-self: end;"><i class="fa-light fa-download" style="display: flex;align-self: end;margin-top: 3.1em;font-size: 19px;padding: 5px;border-radius: 18px;margin-left: 16em;"></i></a>
         </div>
       </div>
     </div>

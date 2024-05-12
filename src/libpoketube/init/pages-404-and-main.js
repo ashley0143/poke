@@ -47,6 +47,7 @@ const splash = [
     "pika!",
     "fsf.org",
     "ssfffssfssfffaassssfsdf!",
+    "𝓯𝓻𝓮𝓪𝓴𝔂poke",
     "can you save my hds?",
     "sahlo folina!",
     "we come for you!",
@@ -79,6 +80,7 @@ const splash = [
     "men are handsome!",
     "enbys are cute!",
     "you are cute :3",
+    "read if cute!",
     "stallmansupport.org!!!"
 ]
 

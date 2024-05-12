@@ -70,17 +70,17 @@ app.get("/api/set-channel-subs", async function (req, res) {
             channelName: channelToSubName,
             avatar: avatar, // Store the avatar URL along with the subscription
         });
-        res.json("user subbed");
+        res.redirect("/account-create")
     } else if (!db.get(`user.${userid}.subs.${channelToSub}`)) {
         // If the user has 'subs' but not this particular subscription, add it
         db.set(`user.${userid}.subs.${channelToSub}`, {
             channelName: channelToSubName,
             avatar: avatar, // Store the avatar URL along with the subscription
         });
-        res.json("user subbed");
+        res.redirect("/account-create")
     } else {
         // If the user is already subscribed to this channel, send a message indicating so
-        res.json("user already subscribed");
+        res.json("ur already subscribed");
     }
 });
 
@@ -104,10 +104,17 @@ app.get("/account-create", async function (req, res) {
     }
 });
 
-  app.get("/my-acc", async function (req, res) {
-        var userid = req.query.ID
-       var userSubs =  db.get(`user.${userid}.subs`)
-       renderTemplate(res, req, "account-me.ejs", { userid, userSubs });
+app.get("/my-acc", async function (req, res) {
+    var userid = req.query.ID;
 
+    // Check if userid is more than 7 characters
+    if (userid.length > 7) {
+        return res.status(400).json({ error: "IDs can be 7 characters max silly :3" });
+    }
+
+    var userSubs =  db.get(`user.${userid}.subs`);
+
+    renderTemplate(res, req, "account-me.ejs", { userid, userSubs });
 });
+
 };

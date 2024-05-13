@@ -830,6 +830,12 @@ marquee {
   display:none;
 }
 
+@media screen and (max-height: 840px) {
+  .video-player-container {
+    max-height: 10% !important;
+  }
+}
+
 #video:target {
 object-fit:contain;
 }

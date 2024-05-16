@@ -10,8 +10,7 @@
     (at your option) any later version.
 
     This program is distributed in the hope that it will be useful,
-
-      but WITHOUT ANY WARRANTY; without even the implied warranty of
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     GNU General Public License for more details.
 
@@ -60,6 +59,26 @@
           overflow-x: hidden;
         }
 
+        .discover-video-button > a {
+          border: 2px white solid;
+          border-radius: 3rem;
+          padding: 12px 1em 12px 12px;
+          display: flex;
+          align-items: center;
+          width: 146px;
+          text-align: center;
+          margin: auto;
+          color: #fff;
+          margin-bottom: 2em;
+          margin-top: 26px;
+          text-decoration: none;
+        }
+
+        .discover-video-button > a:hover {
+          filter: brightness(0.8);
+        }
+
+
         .subtitle {
           text-align: center;
           color: #FFFF00;
@@ -91,15 +110,16 @@
   <div class="landing">
     <h1>PRIVACY APP OF YOUR DREAMS</h1>
     <p style="max-width: 800px;">Poke is a free software youtube front-end, search engine, translator, map app and even more!!1!! Watch silly videos, search stuff on the internet and do all of that and more anonymously in this all-in-one privacy app!!!1! :3</p><br>
-   <a style="color: white; text-decoration: underline;" href="/app"> Discover videos! </a> - <a style="color: white; text-decoration: underline;" href="https://buildpalestine.com/2021/05/15/trusted-organizations-to-donate-to-palestine">Help & Support Palestine</a> - <a style="color: white; text-decoration: underline;" href="https://war.ukraine.ua/donate"> Donate to Ukraine </a>
+    <a style="color: white; text-decoration: underline;" href="https://buildpalestine.com/2021/05/15/trusted-organizations-to-donate-to-palestine">Help & Support Palestine</a> - <a style="color: white; text-decoration: underline;" href="https://war.ukraine.ua/donate"> Donate to Ukraine </a>
 
     <img src="/static/poke-chan-outfit-a.png" title="Poke-chan sitting :3">
     <div style="display: flex; gap: 12px;">
       <img src="/static/poke-screnshot-v2.png" />
       <img src="/static/Poke-Mobile.jpg" />
-    </div>
+    </div> 
 
     <!-- Icons are from Iconoir -->
+    <h1 style="margin-left: auto;margin-right: auto;text-align: center;margin-bottom: -1em;margin-top: 1em;"> Why Choose Poke Lol? </h1>
     <div class="new-feature-set">
       <div class="feature-set">
         <div class="feature-set-title">
@@ -180,7 +200,11 @@
         primary_link='https://codeberg.org/ashley/poke'
       )%>    
     </div>
- 
+
+    <h1 style="font-size: xx-large;text-align: center;">So, wha ru waiting 4? </h1>
+    <div class="discover-video-button">
+    <a href="/app">Start Discovering! :3</a>
+    </div> 
  
     <script>
       // @license magnet:?xt=urn:btih:1f739d935676111cfff4b4693e3816e664797050&dn=gpl-3.0.txt GPL-3.0-or-later 

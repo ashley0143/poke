@@ -190,13 +190,14 @@ module.exports = function (app, config, renderTemplate) {
     const { fetch } = await import("undici");
 
     const search = await fetch(
-      `https://4get.sudovanilla.com/api/v1/web?s=${query}`
+      `https://4get.sudovanilla.org/api/v1/web?s=${query}`
     );
     const web = getJson(await search.text());
 
     if (req.query.lucky === "true") {
       res.redirect("/im-feeling-lucky?query=" + query);
     }
+
     var uaos = req.useragent.os;
     var IsOldWindows;
 
@@ -268,6 +269,7 @@ module.exports = function (app, config, renderTemplate) {
       if (ID.endsWith("@poketube.fun")) {
         ID = ID.slice(0, -"@poketube.fun".length);
       }
+      
       const tab = req.query.tab;
       const cache = {};
 

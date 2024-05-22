@@ -62,6 +62,7 @@ summary:hover{
 </style>    
 
   <link href=https://p.poketube.fun/https://site-assets.fontawesome.com/releases/v6.1.1/css/all.css rel=stylesheet>
+  <link href="https://p.poketube.fun/https://cdn.jsdelivr.net/npm/ionicons@4.5.0-0/dist/css/ionicons.min.css" rel=stylesheet>
 
   <style>
     
@@ -545,7 +546,9 @@ font-weight: 1000;
           ><%= x.title %></a>
         <div style="display: flex; flex-direction: column; row-gap: 8px;font-weight:bold">
           <a href="/watch?v=<%= x.videoId %>"><span><%= x.viewCountText %></span> <span>•</span> <span><%= x.publishedText %></span></a>
-          <a href="/channel?id=<%= x.authorId %>"><%=x.author %></a>
+          <a href="/channel?id=<%= x.authorId %>"><%=x.author %><% if (x?.authorVerified) { %> 
+          <i class="icon ion ion-md-checkmark-circle" title="verified channel"></i><% } %> 
+</a>
           <a href="/download?v=<%= x.videoId %>" style="background: #333;width: 7.6em;border-radius: 18px;"><div style="display: flex;">
           <i class="fa-light fa-download" style="display: flex;font-size: 16px;padding: 5px;border-radius: 18px;margin-left: 2px;"> </i><span style="margin-top: 6px;">Download</span></div>  </a>
         </div>

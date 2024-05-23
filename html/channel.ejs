@@ -1247,7 +1247,10 @@ width: fit-content;
 
  
     	<div class="video-grid" >
-            
+             <%  if (!Array.isArray( tj?.videos)) { %> 
+<p> No content on this channel :c <%  if (Array?.isArray( shorts.videos)) { %> try <a href="/channel?id=<%=ID%>&tab=shorts"> Try Looking at shorts maybe lol :p</a> </p>                              
+  <% } %>
+    <% } %>          
    
              <%  if (Array.isArray( tj?.videos)) { %> 
 
@@ -1262,10 +1265,7 @@ width: fit-content;
  		 	               <% }) %>   
  <% } %>
            
-             <%  if (!Array.isArray( tj?.videos)) { %> 
-<p> No content on this channel :c <%  if (Array?.isArray( shorts.videos)) { %> try <a href="/channel?id=<%=ID%>&tab=shorts"> Try Looking at shorts maybe lol :p</a> </p>                              
-  <% } %>
-    <% } %>
+  
 
 
          

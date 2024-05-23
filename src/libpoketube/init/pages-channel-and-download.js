@@ -370,11 +370,7 @@ module.exports = function (app, config, renderTemplate) {
       const dnoreplace = about?.Description.toString();
       
 
-      if(!Array.isArray(tj?.videos)) {
-        if(Array.isArray(shorts?.videos)) {
-        res.redirect(`/channel?id=${req.query.id}&tab=shorts`)
-      }
-      }
+     
       
 
       renderTemplate(res, req, "channel.ejs", {

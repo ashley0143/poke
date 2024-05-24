@@ -831,7 +831,7 @@ marquee {
 }
 
 @media screen and (max-height: 840px) {
-  .video-player-container {
+  .theatermodeon {
     max-height: 10% !important;
   }
 }

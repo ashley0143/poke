@@ -375,7 +375,7 @@ a[data-onclick="jump_to_time"] {
   <link href="/css/watch.main.css?v=9893448" rel=stylesheet>
   <link href="/css/watch-util.css?v=9893448" rel=stylesheet>
   <link href="/css/watch-navbar.css?v=9893448" rel=stylesheet>
-  <link href="/css/poketube.css?v=98934844" rel=stylesheet>
+  <link href="/css/poketube.css?v=9489344844" rel=stylesheet>
 
 <% if (k.Video.Channel.Name == "7clouds") { %> 
 <style>
@@ -1075,7 +1075,7 @@ Privacy
       </label>
 
 
-      <a onclick="if(document.querySelector('.watch-page').style.display === 'grid') {document.querySelector('.watch-page').style.display = 'flex'} else {document.querySelector('.watch-page').style.display = 'grid'}" class="theather"><i class="fa-sharp fa-light fa-up-right-and-down-left-from-center"></i> Theater</a>
+      <a onclick="toggleTheaterMode()"" class="theather"><i class="fa-sharp fa-light fa-up-right-and-down-left-from-center"></i> Theater</a>
                                                                         
 <%  if (inv.comments) { %> 
                 <input type="checkbox" class="hj" id="j" style="display:none">
@@ -1785,7 +1785,7 @@ Recommended Videos
     history.replaceState(null, '', newUrl);
   }
 }
-            
+    
 <% if (Array.isArray(inv_vid.recommendedVideos) && inv_vid.recommendedVideos.length > 1) { %> 
         
 let checkbox = document.getElementById("continue");
@@ -1859,6 +1859,22 @@ if (/[?&]autoplay=/.test(location.search)) {
  
 </script>
      <script>
+     function toggleTheaterMode() {
+    var videoPlayerContainer = document.querySelector('.video-player-container');
+    if (videoPlayerContainer.classList.contains('theatermodeon')) {
+        videoPlayerContainer.classList.remove('theatermodeon');
+    } else {
+        videoPlayerContainer.classList.add('theatermodeon');
+    }
+    
+    var watchPage = document.querySelector('.watch-page');
+    if (watchPage.style.display === 'grid') {
+        watchPage.style.display = 'flex';
+    } else {
+        watchPage.style.display = 'grid';
+    }
+}
+
 	const languageCode = localStorage.getItem("Language");
 	const regionCode = localStorage.getItem("Region");
 	const currentURL = location.href;

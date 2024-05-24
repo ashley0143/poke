@@ -896,8 +896,15 @@ white-space: nowrap;text-decoration: none;" href="/feeds/videos.xml?channel_id=<
                                                                 <% } %>
 
                                                                                      <% if (tab === "shorts") { %>
+ <%  if (Array?.isArray(tj?.videos)) { %> 
+   <%  if (tj?.videos[0]) { %> 
+<%  if (turntomins(tj?.videos[0]?.lengthSeconds)  != "aN:aN" ) { %> 
 
                 <a href="/channel?id=<%=ID%>" class="tab" style="color:#cfe2f3;">Videos</a>
+  <% } %>
+      <% } %>
+
+      <% } %>
 <%  if (Array?.isArray(shorts?.videos)) { %> 
 
                    <a href="/channel?id=<%=ID%>&tab=shorts" class="tab active shr">Shorts</a>
@@ -1240,7 +1247,10 @@ width: fit-content;
 
  
     	<div class="video-grid" >
-            
+             <%  if (!Array.isArray( tj?.videos)) { %> 
+<p> No content on this channel :c <%  if (Array?.isArray( shorts.videos)) { %> try <a href="/channel?id=<%=ID%>&tab=shorts"> Try Looking at shorts maybe lol :p</a> </p>                              
+  <% } %>
+    <% } %>          
    
              <%  if (Array.isArray( tj?.videos)) { %> 
 
@@ -1254,9 +1264,10 @@ width: fit-content;
  			</a>	
  		 	               <% }) %>   
  <% } %>
+           
+  
 
-                                             
- 
+
          
  
                        

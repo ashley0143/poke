@@ -2227,8 +2227,7 @@ a {
   border-radius: 6px;
   box-shadow: 0 13em 14em <%=color2%>;
   filter: blur(5px); 
-  transition: opacity 0.2s ease; 
-  opacity: 0; 
+  opacity: 1; 
   z-index: -1;
 
 }
@@ -2244,8 +2243,7 @@ a {
   border-radius: 6px;
   box-shadow: 0 13em 14em <%=color2%>;
   filter: blur(5px); 
-  transition: opacity 0.2s ease; 
-  opacity: 0; 
+  opacity: 1; 
     z-index: -1;
 
 }
@@ -3249,27 +3247,9 @@ function resumeProgress() {
   }
 }
 
- function toggleOpacity() {
-  const element = document.getElementById('shadow'); // Replace 'yourElementId' with the ID of your element
-  const video = document.getElementById('video'); // Assuming your video element has an ID of 'video'
-  const currentOpacity = parseFloat(window.getComputedStyle(element).opacity);
+ 
 
-   if (video.paused) {
-    return; 
-  }
-
-   if (currentOpacity === 1) {
-    element.style.transition = 'opacity 3s ease'; // Adjust the duration as needed
-    element.style.opacity = 0;
-  } else {
-    element.style.transition = 'opacity 3s ease'; // Adjust the duration as needed
-    element.style.opacity = 1;
-  }
-}
-
- window.onload = function() {
-  setInterval(toggleOpacity, 1500);
-};
+ 
 
 
 video.addEventListener('timeupdate', () => {

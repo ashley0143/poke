@@ -189,9 +189,7 @@ module.exports = function (app, config, renderTemplate) {
 
     const { fetch } = await import("undici");
 
-    const search = await fetch(
-      `https://4get.sudovanilla.org/api/v1/web?s=${query}`
-    );
+    const search = await fetch(atob("aHR0cHM6Ly80Z2V0LnN1ZG92YW5pbGxhLm9yZy9hcGkvdjEvd2ViP3M9") + query);
     const web = getJson(await search.text());
 
     if (req.query.lucky === "true") {
@@ -344,6 +342,15 @@ module.exports = function (app, config, renderTemplate) {
           return `https://vid.puffyan.us/vi/${video.videoId}/hqdefault.jpg`;
         }
       }
+ 
+        if (continuation) {
+        const currentAuthorId = cinv.authorId;
+        const firstVideoAuthorId = tj.videos[0].authorId;
+        
+        if (currentAuthorId !== firstVideoAuthorId) {
+          res.status(400).send("continuation does not match the channel :c - how tf did this happen :sob:");
+        }
+       }
 
       cache[ID] = {
         result: {

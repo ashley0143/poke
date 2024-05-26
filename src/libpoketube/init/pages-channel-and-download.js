@@ -372,15 +372,15 @@ module.exports = function (app, config, renderTemplate) {
 
      
       
-        if (continuation) {
-        const currentAuthorId = ID;
-        const firstVideoAuthorId = tj.videos[0].authorId;
-        
-        if (currentAuthorId !== firstVideoAuthorId) {
-          res.status(400).send("continuation does not match the channel :c - how tf did this happen :sob:");
-        }
-       }
-       
+    if (continuation) {
+     const currentAuthorId = String(cinv.authorId).trim();
+     const firstVideoAuthorId = String(tj.videos[0].authorId).trim();
+     
+     if (currentAuthorId.localeCompare(firstVideoAuthorId) !== 0) {
+       res.status(400).send("Continuation does not match the channel :c");
+     }
+    }
+
       renderTemplate(res, req, "channel.ejs", {
         ID,
         tab,

@@ -343,14 +343,7 @@ module.exports = function (app, config, renderTemplate) {
         }
       }
  
-        if (continuation) {
-        const currentAuthorId = cinv.authorId;
-        const firstVideoAuthorId = tj.videos[0].authorId;
-        
-        if (currentAuthorId !== firstVideoAuthorId) {
-          res.status(400).send("continuation does not match the channel :c - how tf did this happen :sob:");
-        }
-       }
+
 
       cache[ID] = {
         result: {
@@ -379,7 +372,15 @@ module.exports = function (app, config, renderTemplate) {
 
      
       
-
+        if (continuation) {
+        const currentAuthorId = ID;
+        const firstVideoAuthorId = tj.videos[0].authorId;
+        
+        if (currentAuthorId !== firstVideoAuthorId) {
+          res.status(400).send("continuation does not match the channel :c - how tf did this happen :sob:");
+        }
+       }
+       
       renderTemplate(res, req, "channel.ejs", {
         ID,
         tab,

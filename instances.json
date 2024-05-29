@@ -89,13 +89,13 @@
     }
   ],
   [
-    "poke.am1.shiggy.cloud",
+    "poke.uk1.littkai.co.uk",
     {
-      "uri": "https://poke.am1.shiggy.cloud",
+      "uri": "https://poke.uk1.littkai.co.uk",
       "CLOUDFLARE": false,
       "piwik": false,
       "proxy": false,
-      "region": "🇳🇱",
+      "region": "🇬🇧",
       "software": {
         "name": "poke",
         "version": "latest",
@@ -103,13 +103,13 @@
       }
     }
   ],  [
-    "poke.am2.shiggy.cloud",
+    "poke.uk2.littlekai.co.uk",
     {
-      "uri": "https://poke.am2.shiggy.cloud",
+      "uri": "https://poke.uk2.littlekai.co.uk",
       "CLOUDFLARE": false,
       "piwik": false,
       "proxy": false,
-      "region": "🇳🇱",
+      "region": "🇬🇧",
       "software": {
         "name": "poke",
         "version": "latest",

@@ -214,7 +214,7 @@ app.get("/game-hub", function (req, res) {
   var gameslist = ["pong", "tic-tac-toe", "sudoku", "snake"];
   var requestedGame = req.query.game;
 
-  if (!gameslist.includes(requestedGame)) {
+  if (req.query.game && !gameslist.includes(requestedGame)) {
     return renderTemplate(res, req, "404.ejs");
   }
 

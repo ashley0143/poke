@@ -210,11 +210,20 @@ module.exports = function (app, config, renderTemplate) {
     }
   });
 
-  app.get("/game-hub", function (req, res) {
-    renderTemplate(res, req, "gamehub.ejs", {
-      game: req.query.game,
-    });
+app.get("/game-hub", function (req, res) {
+  var gameslist = ["pong", "tic-tac-toe", "sudoku", "snake"];
+  var requestedGame = req.query.game;
+
+  if (!requestedGame || !gameslist.includes(requestedGame)) {
+    return renderTemplate(res, req, "404.ejs");
+  }
+
+  renderTemplate(res, req, "gamehub.ejs", {
+    game: requestedGame,
   });
+});
+
+
   app.get("/static/:id", (req, res) => {
     const id = req.params.id;
 

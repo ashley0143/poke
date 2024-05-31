@@ -1670,7 +1670,14 @@ Recommended Videos
                             <% } %>
                                 <div>
                                     <a class="max-lines-2" href="/channel?id=<%= x.authorId %>@youtube.com" style="-webkit-line-clamp:1;width:12em;word-wrap:break-word">
-                                         <span> <%=x.author %> <% if (x?.authorVerified) { %>   <i class="icon ion ion-md-checkmark-circle" style="margin-left: 0em;" title="verified channel"></i>     <% } %>  </span>
+                                         <span> <%=x.author %> <% if (x?.authorVerified) { %>
+  <% if (x.title.toLowerCase().includes("official video") || x.title.toLowerCase().includes("official music video") || x.title.toLowerCase().includes("official audio")) { %>    
+    <i class="fa-light fa-music-note" style="margin-left: 0em;" title="official artist channel"></i>
+  <% } else { %>
+    <i class="icon ion ion-md-checkmark-circle" style="margin-left: 0em;" title="verified channel"></i>     
+  <% } %>
+<% } %>
+ </span>
                                     </a>
                                     <div class="video-views">
                                           

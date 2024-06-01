@@ -273,7 +273,7 @@ exec('git rev-list HEAD -n 1 --abbrev-commit', (error, stdout, stderr) => {
     const { fetch } = await import("undici");
 
     try {
-      const url = `https://codeberg.org/Ashley/poketube/raw/branch/main/instances.json`;
+      const url = `https://raw.githubusercontent.com/ashley0143/poke/main/instances.json`;
 
       let f = await fetch(url)
         .then((res) => res.text())

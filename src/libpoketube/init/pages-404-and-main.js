@@ -161,6 +161,7 @@ module.exports = function (app, config, renderTemplate) {
 
       return renderTemplate(res, req, "landing.ejs", {
         secure,
+        embedtype:req.query.embedtype,
         verify,
         isOldWindows,
         proxyurl,

@@ -34,19 +34,19 @@
   <link rel="manifest" href="/manifest.json">
   <meta name="darkreader-lock"> <!-- tells dark reader that the site has a dark theme and to turn itself off -->
   <meta content="▶▶ Poke - The privacy app of your dreams!" property=og:title>
+<% if(embedtype === "woke") { %>
+  <meta content="Poke is a 𝔀𝓸𝓴𝓮 software YouTube front-end, search engine, translator, 𝔀𝓸𝓴𝓮 app, and even 𝔀𝓸𝓴𝓮!! Watch 𝔀𝓸𝓴𝓮 videos, search the internet, and do all of that and more 𝔀𝓸𝓴𝓮 in this all-in-one 𝔀𝓸𝓴𝓮 app!!!"
+    property="twitter:description">
+  <meta content="https://cdn.glitch.global/302c6ee0-629f-453b-9024-bad1f8d7be36/9fhFiXJ.png?v=1717357642758"
+    property="og:image">
+<% } else { %>
+  <meta content="Poke is a free software YouTube front-end, search engine, translator, map app, and more!! Watch silly videos, search the internet, and do all of that and more anonymously in this all-in-one privacy app!!!"
+    property="twitter:description">
+  <meta content="https://cdn.glitch.global/302c6ee0-629f-453b-9024-bad1f8d7be36/poke.png?v=1716216428745"
+    property="og:image">
+<% } %>
 
-  <% if(embedtype === "woke") { %>
-  <meta content="Poke is a 𝔀𝓸𝓴𝓮 software youtube front-end, search engine, translator, 𝔀𝓸𝓴𝓮 app and even 𝔀𝓸𝓴𝓮!! Watch 𝔀𝓸𝓴𝓮 videos, search stuff on the internet and do all of that and more 𝔀𝓸𝓴𝓮 in this all-in-one 𝔀𝓸𝓴𝓮 app!!!"
-    property=twitter:description>
-        <% } %>
 
-  <% if(!embedtype) { %>
-  <meta content="Poke is a free software youtube front-end, search engine, translator, map app and even more!! Watch silly videos, search stuff on the internet and do all of that and more anonymously in this all-in-one privacy app!!!"
-    property=twitter:description>
-        <% } %>
-  <meta
-    content="https://cdn.glitch.global/302c6ee0-629f-453b-9024-bad1f8d7be36/poke.png?v=1716216428745"
-    property="og:image" />
   <meta content="summary_large_image" name="twitter:card" />
   <% if(isOldWindows) { %>
     <style>

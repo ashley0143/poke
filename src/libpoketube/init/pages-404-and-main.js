@@ -53,6 +53,15 @@ const splash = [
     "we come for you!",
     "no chances!",
     "dema dont control us!",
+    "i see your problem is, your proctologist",
+    "got both hands on your shoulder",
+    "while ur bottomless!",
+    "you should bounce bounce bounce man!"
+    "its lavish!",
+    "im vibin, vibin!"
+    "i would swim the paladin strait",
+    "hello clancy!",
+    "NO NOT ME,ITS FOR A FRIEND",
     "im fairly local!",
     "i dont wanna go like this!",
     "east is up!",
@@ -73,6 +82,8 @@ const splash = [
     "o7 keons",
     "at least let me clean my room",
     "100+ stars on gh!",
+    "let the vibe slide over me!",
+    "sip a capri sun like its don peregon"
     "now even gayer!",
     "poketube!!!",
     "rvlt.gg/poke!",

@@ -58,7 +58,7 @@ const splash = [
     "while ur bottomless!",
     "you should bounce bounce bounce man!",
     "its lavish!",
-    "im vibin, vibin!"
+    "im vibin, vibin!",
     "i would swim the paladin strait",
     "hello clancy!",
     "NO NOT ME,ITS FOR A FRIEND",

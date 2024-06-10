@@ -83,7 +83,7 @@ const splash = [
     "at least let me clean my room",
     "100+ stars on gh!",
     "let the vibe slide over me!",
-    "sip a capri sun like its don peregon"
+    "sip a capri sun like its don peregon",
     "now even gayer!",
     "poketube!!!",
     "rvlt.gg/poke!",

@@ -1376,6 +1376,17 @@ WIP!                                                 </a>
                      Date of upload:  <%=date%> ^^ <br>
                        <hr style="clear: both;display: none;border: none;border-bottom: 0.5px solid #2f2f2f;/*! width: 4.5em; */height: 0;">
                    Rating  :  <%=engagement.rating.toLocaleString()%> (<%=engagement.dislikes.toLocaleString()%>/<%=engagement.likes.toLocaleString()%> <abbr title="Like To dislike ratio - the number to the left is dislike count and the one to the right is like count :3">LTDR</abbr>) <br>
+
+                   <%
+        const likes = parseInt(engagement.likes) || 0;
+        const dislikes = parseInt(engagement.dislikes) || 0;
+        const total = likes + dislikes;
+
+        const likePercentage = total > 0 ? ((likes / total) * 100).toFixed(2) + '%' : '0%';
+        const dislikePercentage = total > 0 ? ((dislikes / total) * 100).toFixed(2) + '%' : '0%';
+    %>
+              
+                      <span><%= likePercentage %></span> of the users lieked the video!!
                       RYD date created : <%=engagement.dateCreated.toLocaleString()%>  <br>
                       <a href="https://returnyoutubedislikeapi.com/votes?videoId=<%=inv_vid.videoId%>">See in json</a>
                       

@@ -1383,10 +1383,22 @@ WIP!                                                 </a>
         const total = likes + dislikes;
 
         const likePercentage = total > 0 ? ((likes / total) * 100).toFixed(2) + '%' : '0%';
-        const dislikePercentage = total > 0 ? ((dislikes / total) * 100).toFixed(2) + '%' : '0%';
+
+            const getPercentageColor = (percentage) => {
+            const num = parseFloat(percentage);
+            if (num >= 80) {
+                return 'green';
+            } else if (num >= 50) {
+                return 'orange';
+            } else {
+                return 'red';
+            }
+        };
+
+      const likeColor = getLikePercentageColor(likePercentage);
     %>
               
-                      <span><%= likePercentage %></span> of the users lieked the video!!
+                      <span style="color: <%= likeColor %>;"><%= likePercentage %></span> of the users lieked the video!! <br>
                       RYD date created : <%=engagement.dateCreated.toLocaleString()%>  <br>
                       <a href="https://returnyoutubedislikeapi.com/votes?videoId=<%=inv_vid.videoId%>">See in json</a>
                       

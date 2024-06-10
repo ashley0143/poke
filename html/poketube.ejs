@@ -1383,8 +1383,9 @@ WIP!                                                 </a>
         const total = likes + dislikes;
 
         const likePercentage = total > 0 ? ((likes / total) * 100).toFixed(2) + '%' : '0%';
+        const dislikePercentage = total > 0 ? ((dislikes / total) * 100).toFixed(2) + '%' : '0%';
 
-            const getPercentageColor = (percentage) => {
+        const getLikePercentageColor = (percentage) => {
             const num = parseFloat(percentage);
             if (num >= 80) {
                 return 'green';
@@ -1395,10 +1396,25 @@ WIP!                                                 </a>
             }
         };
 
-      const likeColor = getPercentageColor(likePercentage);
+        const getDislikePercentageColor = (percentage) => {
+            const num = parseFloat(percentage);
+            if (num >= 50) {
+                return 'red';
+            } else if (num >= 20) {
+                return 'orange';
+            } else {
+                return 'green';
+            }
+        };
+
+        const likeColor = getLikePercentageColor(likePercentage);
+        const dislikeColor = getDislikePercentageColor(dislikePercentage);
+
     %>
               
                       <span style="color: <%= likeColor %>;"><%= likePercentage %></span> of the users lieked the video!! <br>
+                      <span style="color: <%= dislikeColor %>;"><%= dislikePercentage %></span> of the users dislieked the video!! <br>
+
                       RYD date created : <%=engagement.dateCreated.toLocaleString()%>  <br>
                       <a href="https://returnyoutubedislikeapi.com/votes?videoId=<%=inv_vid.videoId%>">See in json</a>
                       

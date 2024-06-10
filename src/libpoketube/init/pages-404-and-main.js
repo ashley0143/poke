@@ -56,7 +56,7 @@ const splash = [
     "i see your problem is, your proctologist",
     "got both hands on your shoulder",
     "while ur bottomless!",
-    "you should bounce bounce bounce man!"
+    "you should bounce bounce bounce man!",
     "its lavish!",
     "im vibin, vibin!"
     "i would swim the paladin strait",

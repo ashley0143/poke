@@ -2664,24 +2664,73 @@ font-size: 13px;margin:0;padding:0;white-space: nowrap;
     </div>
  <div>
 
-                
+                <%
+        const likes = parseInt(engagement.likes) || 0;
+        const dislikes = parseInt(engagement.dislikes) || 0;
+        const total = likes + dislikes;
+
+        const likePercentage = total > 0 ? ((likes / total) * 100).toFixed(2) : 0;
+        const dislikePercentage = total > 0 ? ((dislikes / total) * 100).toFixed(2) : 0;
+
+        const getLikePercentageColor = (percentage) => {
+            if (percentage >= 80) {
+                return 'green';
+            } else if (percentage >= 50) {
+                return 'orange';
+            } else {
+                return 'red';
+            }
+        };
+
+        const getDislikePercentageColor = (percentage) => {
+            if (percentage >= 50) {
+                return 'red';
+            } else if (percentage >= 20) {
+                return 'orange';
+            } else {
+                return 'green';
+            }
+        };
+
+        const likeColor = getLikePercentageColor(likePercentage);
+        const dislikeColor = getDislikePercentageColor(dislikePercentage);
+
+        const userScore = (parseFloat(likePercentage) - parseFloat(dislikePercentage) / 2).toFixed(2);
+
+        const getUserScoreLabel = (score) => {
+            if (score >= 80) {
+                return 'Overwhelmingly Positive';
+            } else if (score >= 60) {
+                return 'Positive';
+            } else if (score >= 40) {
+                return 'Mixed';
+            } else if (score >= 20) {
+                return 'Negative';
+            } else {
+                return 'Overwhelmingly Negative';
+            }
+        };
+
+        const userScoreLabel = getUserScoreLabel(userScore);
+        const userScoreColor = userScore >= 80 ? 'green' : userScore >= 50 ? 'orange' : 'red';
+    %>      
  <div class="nerddd" style="background:#272727;padding: 5px;margin-top: 12px;border-radius: 11px;font-family: 'PokeTube Flex';font-stretch: extra-expanded;font-weight: 700;">
               <%-String(channelurlfixer(inv_vid.descriptionHtml)).replace(/\n/g, " <br> ").replace(/twitter\.com/g, "twitter.com").replace(/reddit\.com/g, "redlib.matthew.science") %>
                 
                
-
-
-                      
- 
-                          </div>
-
-                          
+                    
  <div class="video-title" style="color:var(--text-color);font-family:var(--text-font-primary);;font-weight:var(--text-header-weight);font-stretch: extra-expanded;margin-top: 10px;margin-bottom: 10px;">Rating! :3</div>
 
                  <br><span style="color: <%= likeColor %>;"><%= likePercentage %>%</span> of the users lieked the video!! <br>
                       <span style="color: <%= dislikeColor %>;"><%= dislikePercentage %>%</span> of the users dislieked the video!! <br>
                       User score: <span style="color: <%= userScoreColor %>;"><%= userScore %></span>- <%= userScoreLabel %><br><br>
 
+
+                      
+ 
+                          </div>
+
+      
                   
   
        <div style="background: #272727;margin-top:10px;border-radius: 11px;">

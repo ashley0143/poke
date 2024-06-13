@@ -17,10 +17,10 @@
     }
   ],
   [
-    "poketube.sudovanilla.com",
+    "pt.sudovanilla.org",
     {
-      "uri": "https://poketube.sudovanilla.com",
-      "CLOUDFLARE": true,
+      "uri": "https://pt.sudovanilla.org",
+      "CLOUDFLARE": false,
       "piwik": false,
       "region": "🇺🇸",
       "software": {

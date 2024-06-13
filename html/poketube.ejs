@@ -1141,7 +1141,15 @@ Privacy
        </div>
        </div>
 <div class="video-info" >           
+     <% if (universe) { %>  
+
+        	<div class="video-info-panel gradient" style="display:none;">  
+                                                                                        <% } %>   
+ <% if (!universe) { %>  
+
         	<div class="video-info-panel gradient">  
+                                                                                        <% } %>   
+
             <% if (k.Video.Channel.Name == "7clouds") { %> 
             <div class="video-title t" style="font-family: 'Edo SZ', sans-serif !important;font-weight:bold;line-break: auto;max-width: max-content;margin: 0;margin-bottom: 0;padding: 0;"
                                                    		 	               <% } %> 
@@ -1655,6 +1663,17 @@ WIP!                                                 </a>
 
                   
 <div class="recommended-list" align="center">
+     <% if (universe) { %>  
+     <% if (k.Video.Channel.Name == "7clouds") { %> 
+            <div class="video-title t" style="font-family: 'Edo SZ', sans-serif !important;font-weight:bold;line-break: auto;max-width: max-content;margin: 0;margin-bottom: 0;padding: 0;"
+                                                   		 	               <% } %> 
+<% if (k.Video.Channel.Name !== "7clouds") { %> 
+                          <div class="video-title t" style="font-family:inter;font-weight:bold;line-break: auto;max-width: max-content;margin: 0;margin-bottom: 0;padding: 0;"
+                                                   		 	               <% } %> 
+                                                                     <div>   <i class="fa-light fa-thumbs-up"></i>  <%=convert(engagement.likes)%> ||  <i class="fa-light fa-thumbs-down"></i>  <%=convert(engagement.dislikes)%>  </div>
+                
+                     <% } %>
+
       <div style="text-align: left;" class="auto-play">
                                 <label title="autoplay the next video" for="continue">AutoPlay:</label> 
                                 <input title="autoplay the next video" name="continue" id="continue" type="checkbox" >

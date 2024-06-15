@@ -189,7 +189,7 @@ module.exports = function (app, config, renderTemplate) {
 
     const { fetch } = await import("undici");
 
-    const search = await fetch(atob("aHR0cHM6Ly80Z2V0LnN1ZG92YW5pbGxhLm9yZy9hcGkvdjEvd2ViP3M9") + query);
+    const search = await fetch(atob("aHR0cHM6Ly9zZWFyY2guc3Vkb3ZhbmlsbGEub3JnL2FwaS92MS93ZWI/cz0=") + query);
     const web = getJson(await search.text());
 
     if (req.query.lucky === "true") {

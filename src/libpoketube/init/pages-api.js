@@ -32,13 +32,13 @@ const cnf = require("../../../config.json");
 const innertube = require("../libpoketube-youtubei-objects.json");
 const { exec } = require('child_process');
 
-const verfull = "v24.0605-VeE-MINOR_UPDATE-stable-dev-nonLTS-git-MTcxNTAwOTczNQ==";
-const versmol = "v24.0605-vEe"
+const verfull = "v24.1906-sho-MAJOR_UPDATE-stable-dev-nonLTS-git-MTcxODc5NDY3NQ==";
+const versmol = "v24.1906-sho"
 const branch = "dev/master";
-const codename = "vee";
-const versionnumber = "291";
-const relaseunixdate = "MTcxNTAwOTczNQ=="
-const updatequote = "Love is the ultimate software update; embrace the patches, for they refine the code of our shared existence, hand in hand, heart to heard (unknown)"
+const codename = "sho";
+const versionnumber = "293";
+const relaseunixdate = "MTcxODc5NDY3NQ=="
+const updatequote = "pls fund vennie plush -Bims"
 
 
 module.exports = function (app, config, renderTemplate) {

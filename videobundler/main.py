@@ -44,8 +44,8 @@ def get_merged_video():
     audio_itag = request.args.get("audio_itag")
     video_itag = request.args.get("video_itag")
     # Download both audio and video
-    subprocess.run(["wget", f"-O{job_id}.m4a", f"{os.getenv("PROXY_URL")}/latest_version?id={video_id}&itag={audio_itag}&local=true"], check=True)
-    subprocess.run(["wget", f"-O{job_id}.mp4", f"{os.getenv("PROXY_URL")}/latest_version?id={video_id}&itag={video_itag}&local=true"], check=True)
+    subprocess.run(["wget", f"-O{job_id}.m4a", f"{os.getenv('PROXY_URL')}/latest_version?id={video_id}&itag={audio_itag}&local=true"], check=True)
+    subprocess.run(["wget", f"-O{job_id}.mp4", f"{os.getenv('PROXY_URL')}/latest_version?id={video_id}&itag={video_itag}&local=true"], check=True)
     # Merge both files
     subprocess.run(f"ffmpeg -i {pwd}/{job_id}.m4a -i {pwd}/{job_id}.mp4 -c copy {pwd}/output.{job_id}.mp4", shell=True, check=True)
     thread = Thread(target=autodelete, args = (job_id, ))

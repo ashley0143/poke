@@ -22,4 +22,5 @@ Takes 2 input streams, downloads them, and spits out a combined file.
 ## Endpoints
 
 - `/`: Will return `{success:true}` if alive.
-- `/get_merged_video?id=VIDEO_ID&audio_itag=AUDIO_ITAG&video_itag=VIDEO_ITAG`: Returns a merged video. ID is the youtube video ID, and itags are self explanatory.
+- `/[ANYTHING]?id=VIDEO_ID&audio_itag=AUDIO_ITAG&video_itag=VIDEO_ITAG`: Starts the merging process. ID is the youtube video ID, and itags are self explanatory. As a response, you will get a job ID that you will be able to use in future requests to query the video or its status. When this process is finished, the inactive autodelete counter will start, which will allow you to fetch the video until the countdown is over.
+> Replace `[ANYTHING]` with absolutely anything, however it has to be unique to the request. Preferably use an UUID

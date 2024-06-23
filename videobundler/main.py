@@ -1,64 +1,71 @@
-from datetime import datetime
-from dotenv import load_dotenv
-from flask import Flask, request, Response, send_file
-from threading import Thread
-from time import sleep
-
-import io
-import json
+import asyncio
+import aiohttp
+from aiohttp import web
+import string
 import os
 import random
-import string
 import subprocess
-import uuid
 
-load_dotenv()
-
-app = Flask(__name__)
-
-def autodelete(job_id: str):
-    sleep(os.getenv("TIME_BEFORE_DELETE"))
-    os.remove(f"{job_id}.mp4")
-    os.remove(f"{job_id}.m4a")
-    os.remove(f"output.{job_id}.mp4")
+app = web.Application()
+app.router._frozen = False
 
 def get_random_string(length):
-    # choose from all lowercase letter
-    letters = string.ascii_lowercase
-    result_str = "".join(random.choice(letters) for i in range(length))
-    return result_str
+	# choose from all lowercase letter
+	letters = string.ascii_lowercase
+	result_str = "".join(random.choice(letters) for i in range(length))
+	return result_str
 
-@app.route("/")
-def ping():
-    return json.loads("""
-    {
-        "success": true
-    }
-    """)
+async def merge(request):
+	# register params
+	try:
+		job_id = request.rel_url.query["id"]
+		video_id: str = request.rel_url.query["id"]
+		audio_itag: str = request.rel_url.query["audio_itag"]
+		video_itag: str = request.rel_url.query["video_itag"]
+	except:
+		# no one gives a fuck
+		_ = 0
+	# validate
+	if " " in video_id or len(video_id) > 11:
+		print(f"Video {video_id} flagged as invalid, dropping request")
+		return
+	if not audio_itag.isdigit():
+		print(f"Audio itag {audio_itag} flagged as invalid, dropping request")
+		return
+	if not video_itag.isdigit():
+		print(f"Video itag {video_itag} flagged as invalid, dropping request")
+		return
+	if os.path.isfile(f"done.{job_id}"):
+		return web.FileResponse(
+			path=f"output.{job_id}.mp4"
+		)
+	proc_audio = await asyncio.create_subprocess_shell(
+		f"wget -O{job_id}.m4a \"https://eu-proxy.poketube.fun/latest_version?id={video_id}&itag={audio_itag}&local=true\"",
+	)
+	proc_video = await asyncio.create_subprocess_shell(
+		f"wget -O{job_id}.mp4 \"https://eu-proxy.poketube.fun/latest_version?id={video_id}&itag={video_itag}&local=true\""
+	)
+	await asyncio.gather(proc_audio.wait(), proc_video.wait())
+	proc_ffmpeg = await asyncio.create_subprocess_shell(
+		f"ffmpeg -i {job_id}.m4a -i {job_id}.mp4 -c copy output.{job_id}.mp4"
+	)
+	await proc_ffmpeg.wait()
+	f = open(f"done.{job_id}", "a")
+	f.write(":3")
+	f.close()
+	return web.FileResponse(
+		path=f"output.{job_id}.mp4"
+	)
 
-@app.route("/get_merged_video")
-def get_merged_video():
-    pwd = os.getcwd()
-    video_id = request.args.get("id")
-    job_id = get_random_string(10)
-    audio_itag = request.args.get("audio_itag")
-    video_itag = request.args.get("video_itag")
-    # Download both audio and video
-    subprocess.run(["wget", f"-O{job_id}.m4a", f"{os.getenv("PROXY_URL")}/latest_version?id={video_id}&itag={audio_itag}&local=true"], check=True)
-    subprocess.run(["wget", f"-O{job_id}.mp4", f"{os.getenv("PROXY_URL")}/latest_version?id={video_id}&itag={video_itag}&local=true"], check=True)
-    # Merge both files
-    subprocess.run(f"ffmpeg -i {pwd}/{job_id}.m4a -i {pwd}/{job_id}.mp4 -c copy {pwd}/output.{job_id}.mp4", shell=True, check=True)
-    thread = Thread(target=autodelete, args = (job_id, ))
-    thread.start()
-    with open(f"output.{job_id}.mp4", "rb") as bytes:
-        return send_file(
-            io.BytesIO(bytes.read()),
-            mimetype="video/mp4",
-            download_name=f"output.{job_id}.mp4",
-            as_attachment=True
-        )
+async def ping(request):
+	return web.Response(body='{"success": true}', content_type="application/json")
 
+async def init_app():
+	app.router.add_get("/{id:.+}", merge)
+	app.router.add_get("/", ping)
+	return app
 
-if __name__ == "__main__":
-    from waitress import serve
-    serve(app, host="0.0.0.0", port=os.getenv("PORT"))
+if __name__ == '__main__':
+	loop = asyncio.get_event_loop()
+	app = loop.run_until_complete(init_app())
+	web.run_app(app, port=3030)

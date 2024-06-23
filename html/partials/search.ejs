@@ -1,0 +1,88 @@
+<form action="/search">
+    <input autocomplete="off" type="search" class="search-bar" id="fname" name="query">
+    <button><?xml version="1.0" encoding="UTF-8"?><svg width="24px" height="24px" viewBox="0 0 24 24" stroke-width="1.5" fill="none" xmlns="http://www.w3.org/2000/svg" color="#ffffff"><path d="M17 17L21 21" stroke="#ffffff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path><path d="M3 11C3 15.4183 6.58172 19 11 19C13.213 19 15.2161 18.1015 16.6644 16.6493C18.1077 15.2022 19 13.2053 19 11C19 6.58172 15.4183 3 11 3C6.58172 3 3 6.58172 3 11Z" stroke="#ffffff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path></svg></button>
+</form>
+<div style="opacity: 0;" class="suggestions"></div>
+<script>
+/*    
+@licstart  The following is the entire license notice for the 
+JavaScript code in this page.
+
+Copyright (C) 2024 SudoVanilla
+
+The JavaScript code in this page is free software: you can
+redistribute it and/or modify it under the terms of the GNU
+General Public License (GNU GPL) as published by the Free Software
+Foundation, either version 3 of the License, or (at your option)
+any later version.  The code is distributed WITHOUT ANY WARRANTY;
+without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE.  See the GNU GPL for more details.
+
+As additional permission under GNU GPL version 3 section 7, you
+may distribute non-source (e.g., minimized or compacted) forms of
+that code without the copy of the GNU GPL normally required by
+section 4, provided you include this license notice and a URL
+through which recipients can access the Corresponding Source.   
+
+
+@licend  The above is the entire license notice
+for the JavaScript code in this page.
+*/
+
+// Dismiss when the end-user clicks else where
+document.body.addEventListener("click", function (evt) {
+    document.querySelector('.suggestions').style.opacity = '0'
+});
+
+// When the end-user starts typing, trigget the fetch function
+document.querySelector('input[type="search"]').addEventListener('input', function(e) {
+    if (e.target.value !== '') {
+        document.querySelector('.suggestions').style.opacity = '1'
+        GetResults()
+    }
+    else {null}
+});
+
+// Fetch
+function GetResults() {
+    var SearchValue = document.querySelector('input[type="search"]').value
+    var YouTubeSuggestions = document.querySelector('.suggestions')
+    fetch(`https://yt.sudovanilla.org/api/v1/search/suggestions?q=${SearchValue}`)
+    .then(response => response.json())
+    .then(data => {YouTubeSuggestions.innerHTML = ListOfSuggestionsYT(data)})
+}
+
+// Create List
+function ListOfSuggestionsYT(data) {
+    const text = data.suggestions.map(data => `<a href="/search?query=${data}">${data}</a>`).join("\n")
+    return `${text}`
+}
+
+</script>
+
+<style>
+    
+.suggestions {
+    position: absolute;
+    display: grid;
+    background: #473e46d6;
+    border-radius: 6px;
+    margin-top: 10px;
+    width: 329px;
+    z-index: 5;
+    backdrop-filter: blur(10px);
+    gap: 4px;
+    padding: 4px 0px;
+}
+.suggestions a {
+  color: white;
+  background: transparent;
+  padding: 6px 12px;
+  border-radius: 4px;
+  margin: 0px 4px;
+}
+.suggestions a:hover {
+    background: #f9f9f917;
+    text-decoration: none;
+}
+</style>

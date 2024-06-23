@@ -54,7 +54,7 @@
 <link href="/css/yt-ukraine.svg?v=3" rel=icon>
 <link rel="manifest" href="/manifest.json">
 <link href=/css/snow.css rel=stylesheet> 
-<title> <%=inv_vid.title%> | PokeTube </title>  
+<title> <%=inv_vid.title%> | Watch </title>  
 <style>     
   .comments-area {
   background: #f1f9ff;
@@ -930,6 +930,10 @@ Source Code
                             <i  style="width: 16px;height: 17px;margin-left: -1px;" class="fa-light fa-shield"></i>
 Privacy
         </a>    
+        	<a href="https://discord.poketube.fun" style="text-decoration: none;color:#fff;" class="dropdown__item">
+                            <i class="fa-brands fa-discord"></i>
+Offical Discord Server! :3
+        </a>    
 			</div>
 		</div>
         <a href="/account-create" class="account"><i  class="fa-light fa-user"></i>Account</a>
@@ -1001,7 +1005,11 @@ Privacy
           <a href="https://codeberg.org/ashley/poke/src/branch/main/fix-videoplayback-issues.md" style="color: #fff;">
       <i class="fa-light fa-info-circle"></i>    Having issues?</a>
               </div>
-                                                                                                             
+               <div >
+          <a href="https://discord.poketube.fun" style="color: #fff;">
+      <i class="fa-brands fa-discord"></i>  Discord Server</a>
+              </div>
+                                                                                                                       
     </div>
     
     
@@ -1137,7 +1145,15 @@ Privacy
        </div>
        </div>
 <div class="video-info" >           
+     <% if (universe) { %>  
+
+        	<div class="video-info-panel gradient" style="display:none;">  
+                                                                                        <% } %>   
+ <% if (!universe) { %>  
+
         	<div class="video-info-panel gradient">  
+                                                                                        <% } %>   
+
             <% if (k.Video.Channel.Name == "7clouds") { %> 
             <div class="video-title t" style="font-family: 'Edo SZ', sans-serif !important;font-weight:bold;line-break: auto;max-width: max-content;margin: 0;margin-bottom: 0;padding: 0;"
                                                    		 	               <% } %> 
@@ -1372,6 +1388,63 @@ WIP!                                                 </a>
                      Date of upload:  <%=date%> ^^ <br>
                        <hr style="clear: both;display: none;border: none;border-bottom: 0.5px solid #2f2f2f;/*! width: 4.5em; */height: 0;">
                    Rating  :  <%=engagement.rating.toLocaleString()%> (<%=engagement.dislikes.toLocaleString()%>/<%=engagement.likes.toLocaleString()%> <abbr title="Like To dislike ratio - the number to the left is dislike count and the one to the right is like count :3">LTDR</abbr>) <br>
+
+         <%
+        const likes = parseInt(engagement.likes) || 0;
+        const dislikes = parseInt(engagement.dislikes) || 0;
+        const total = likes + dislikes;
+
+        const likePercentage = total > 0 ? ((likes / total) * 100).toFixed(2) : 0;
+        const dislikePercentage = total > 0 ? ((dislikes / total) * 100).toFixed(2) : 0;
+
+        const getLikePercentageColor = (percentage) => {
+            if (percentage >= 80) {
+                return 'green';
+            } else if (percentage >= 50) {
+                return 'orange';
+            } else {
+                return 'red';
+            }
+        };
+
+        const getDislikePercentageColor = (percentage) => {
+            if (percentage >= 50) {
+                return 'red';
+            } else if (percentage >= 20) {
+                return 'orange';
+            } else {
+                return 'green';
+            }
+        };
+
+        const likeColor = getLikePercentageColor(likePercentage);
+        const dislikeColor = getDislikePercentageColor(dislikePercentage);
+
+        const userScore = (parseFloat(likePercentage) - parseFloat(dislikePercentage) / 2).toFixed(2);
+
+        const getUserScoreLabel = (score) => {
+            if (score >= 80) {
+                return 'Overwhelmingly Positive';
+            } else if (score >= 60) {
+                return 'Positive';
+            } else if (score >= 40) {
+                return 'Mixed';
+            } else if (score >= 20) {
+                return 'Negative';
+            } else {
+                return 'Overwhelmingly Negative';
+            }
+        };
+
+        const userScoreLabel = getUserScoreLabel(userScore);
+        const userScoreColor = userScore >= 80 ? 'green' : userScore >= 50 ? 'orange' : 'red';
+    %>
+
+
+                          
+                      <br><span style="color: <%= likeColor %>;"><%= likePercentage %>%</span> of the users lieked the video!! <br>
+                      <span style="color: <%= dislikeColor %>;"><%= dislikePercentage %>%</span> of the users dislieked the video!! <br>
+                      User score: <span style="color: <%= userScoreColor %>;"><%= userScore %></span>- <%= userScoreLabel %><br><br>
                       RYD date created : <%=engagement.dateCreated.toLocaleString()%>  <br>
                       <a href="https://returnyoutubedislikeapi.com/votes?videoId=<%=inv_vid.videoId%>">See in json</a>
                       
@@ -1594,6 +1667,28 @@ WIP!                                                 </a>
 
                   
 <div class="recommended-list" align="center">
+     <% if (universe) { %>  
+
+            <% if (k.Video.Channel.Name == "7clouds") { %> 
+            <div class="video-title t" style="font-family: 'Edo SZ', sans-serif !important;font-weight:bold;line-break: auto;max-width: max-content;margin: 0;margin-bottom: 0;padding: 0;"
+                                                   		 	               <% } %> 
+<% if (k.Video.Channel.Name !== "7clouds") { %> 
+                          <div class="video-title t" style="font-family:inter;font-weight:bold;line-break: auto;max-width: max-content;margin: 0;margin-bottom: 0;padding: 0;"
+                                                   		 	               <% } %> 
+
+                                <% if (inv_vid?.title !== k.Video.Title) { %>
+                 title="Non-Translated title : <%=inv_vid.title%>"
+               <% } %> 
+            > <%-k.Video.Title.replace(/\/channel\//g, "/channel?id=").replace(/https:\/\/youtube.com/g, ""); %> 
+                 
+
+             </div>        
+                                                             
+                                                             
+                                                                     <div>    <i class="fa-light fa-thumbs-up"></i>  <%=convert(engagement.likes)%> ||  <i class="fa-light fa-thumbs-down"></i>  <%=convert(engagement.dislikes)%>  </div>
+                
+                     <% } %>
+
       <div style="text-align: left;" class="auto-play">
                                 <label title="autoplay the next video" for="continue">AutoPlay:</label> 
                                 <input title="autoplay the next video" name="continue" id="continue" type="checkbox" >
@@ -1653,34 +1748,58 @@ Recommended Videos
 <% if (!f) { %>
   
 <% if (inv_vid.recommendedVideos) { %>
+<% 
+const musicChannels = new Set();
+inv_vid?.recommendedVideos.forEach(video => {
+  if (video.title.toLowerCase().includes("official video") || video.title.toLowerCase().includes("official music video") || video.title.toLowerCase().includes("official audio")) {
+    musicChannels.add(video.authorId);
+  }
+});
+%>
 
 <% inv_vid?.recommendedVideos.forEach(x => { %>
-    <div class="fade-in video">
-        <% if (!optout) { %><a class="thumbnail" href="/watch?v=<%= x.videoId %>" style="background-image:url(<%- media_proxy_url %>/proxy?url=https://yt.miruku.cafe/vi/<%= x.videoId %>/hqdefault.jpg?sqp=-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLBy_x4UUHLNDZtJtH0PXeQGoRFTgw);border-radius:9.5px" alt="<%= x.Title %>"><span class="video-length"><%- turntomins(x.lengthSeconds) || "LIVE"%></span><% } %><% if (optout) { %><a class="thumbnail"href="/watch?v=<%= x.videoId %>&m=f"style="background-image:url(<%- media_proxy_url %>/proxy?url=https://yt.miruku.cafe/vi/<%= x.videoId %>/hqdefault.jpg?sqp=-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLBy_x4UUHLNDZtJtH0PXeQGoRFTgw);border-radius:9.5px"alt="<%= x.Title %>"><span class="video-length"><%- x.duration || "LIVE"%></span><% } %></a>
+    <div class="fade-in video channel-<%= x.authorId %>">
+        <% if (!optout) { %>
+            <a class="thumbnail" href="/watch?v=<%= x.videoId %>" style="background-image:url(<%- media_proxy_url %>/proxy?url=https://yt.miruku.cafe/vi/<%= x.videoId %>/hqdefault.jpg?sqp=-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLBy_x4UUHLNDZtJtH0PXeQGoRFTgw);border-radius:9.5px" alt="<%= x.Title %>">
+                <span class="video-length"><%- turntomins(x.lengthSeconds) || "LIVE"%></span>
+            <% } %>
+            <% if (optout) { %>
+                <a class="thumbnail" href="/watch?v=<%= x.videoId %>&m=f" style="background-image:url(<%- media_proxy_url %>/proxy?url=https://yt.miruku.cafe/vi/<%= x.videoId %>/hqdefault.jpg?sqp=-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLBy_x4UUHLNDZtJtH0PXeQGoRFTgw);border-radius:9.5px" alt="<%= x.Title %>">
+                    <span class="video-length"><%- x.duration || "LIVE"%></span>
+                <% } %>
+            </a>
             <div class="info">
                 <% if (!optout) { %>
                     <a class="max-lines-2 title" href="/watch?v=<%= x.videoId %>" style="font-stretch:ultra-expanded;font-weight:850" title="<%= x.title %>">
                         <%= x.title %>
                     </a>
-                    <% } %>
-                        <% if (optout) { %>
-                            <a class="max-lines-2 title" href="/watch?v=<%= x.videoId %>&m=f" style="font-stretch:100%;font-weight:800" title="<%= x.Title %>">
-                              <%= x.title %>
-                            </a>
+                <% } %>
+                <% if (optout) { %>
+                    <a class="max-lines-2 title" href="/watch?v=<%= x.videoId %>&m=f" style="font-stretch:100%;font-weight:800" title="<%= x.title %>">
+                        <%= x.title %>
+                    </a>
+                <% } %>
+                <div>
+                    <a class="max-lines-2" href="/channel?id=<%= x.authorId %>@youtube.com" style="-webkit-line-clamp:1;width:12em;word-wrap:break-word">
+                        <span>
+                            <%= x.author %> 
+                            <% if (x?.authorVerified) { %>
+                                <% if (musicChannels.has(x.authorId)) { %>
+                                    <i class="fa-light fa-music-note" style="margin-left: 0em;" title="verified artist channel"></i>
+                                <% } else { %>
+                                    <i class="icon ion ion-md-checkmark-circle" style="margin-left: 0em;" title="verified channel"></i>     
+                                <% } %>
                             <% } %>
-                                <div>
-                                    <a class="max-lines-2" href="/channel?id=<%= x.authorId %>@youtube.com" style="-webkit-line-clamp:1;width:12em;word-wrap:break-word">
-                                         <span> <%=x.author %> <% if (x?.authorVerified) { %>   <i class="icon ion ion-md-checkmark-circle" style="margin-left: 0em;" title="verified channel"></i>     <% } %>  </span>
-                                    </a>
-                                    <div class="video-views">
-                                          
-                                                <%= convert(x.viewCount) %> views
- 
-                                    </div>
-                                </div>
+                        </span>
+                    </a>
+                    <div class="video-views">
+                        <%= convert(x.viewCount) %> views
+                    </div>
+                </div>
             </div>
-    </div>
-    <% }) %>
+        </div>
+<% }) %>
+
       
       
         <% } %>
@@ -2227,8 +2346,7 @@ a {
   border-radius: 6px;
   box-shadow: 0 13em 14em <%=color2%>;
   filter: blur(5px); 
-  transition: opacity 0.2s ease; 
-  opacity: 0; 
+  opacity: 1; 
   z-index: -1;
 
 }
@@ -2244,8 +2362,7 @@ a {
   border-radius: 6px;
   box-shadow: 0 13em 14em <%=color2%>;
   filter: blur(5px); 
-  transition: opacity 0.2s ease; 
-  opacity: 0; 
+  opacity: 1; 
     z-index: -1;
 
 }
@@ -2581,18 +2698,75 @@ font-size: 13px;margin:0;padding:0;white-space: nowrap;
     </div>
  <div>
 
-                
+                <%
+        const likes = parseInt(engagement.likes) || 0;
+        const dislikes = parseInt(engagement.dislikes) || 0;
+        const total = likes + dislikes;
+
+        const likePercentage = total > 0 ? ((likes / total) * 100).toFixed(2) : 0;
+        const dislikePercentage = total > 0 ? ((dislikes / total) * 100).toFixed(2) : 0;
+
+        const getLikePercentageColor = (percentage) => {
+            if (percentage >= 80) {
+                return 'green';
+            } else if (percentage >= 50) {
+                return 'orange';
+            } else {
+                return 'red';
+            }
+        };
+
+        const getDislikePercentageColor = (percentage) => {
+            if (percentage >= 50) {
+                return 'red';
+            } else if (percentage >= 20) {
+                return 'orange';
+            } else {
+                return 'green';
+            }
+        };
+
+        const likeColor = getLikePercentageColor(likePercentage);
+        const dislikeColor = getDislikePercentageColor(dislikePercentage);
+
+        const userScore = (parseFloat(likePercentage) - parseFloat(dislikePercentage) / 2).toFixed(2);
+
+        const getUserScoreLabel = (score) => {
+            if (score >= 80) {
+                return 'Overwhelmingly Positive';
+            } else if (score >= 60) {
+                return 'Positive';
+            } else if (score >= 40) {
+                return 'Mixed';
+            } else if (score >= 20) {
+                return 'Negative';
+            } else {
+                return 'Overwhelmingly Negative';
+            }
+        };
+
+        const userScoreLabel = getUserScoreLabel(userScore);
+        const userScoreColor = userScore >= 80 ? 'green' : userScore >= 50 ? 'orange' : 'red';
+    %>      
  <div class="nerddd" style="background:#272727;padding: 5px;margin-top: 12px;border-radius: 11px;font-family: 'PokeTube Flex';font-stretch: extra-expanded;font-weight: 700;">
               <%-String(channelurlfixer(inv_vid.descriptionHtml)).replace(/\n/g, " <br> ").replace(/twitter\.com/g, "twitter.com").replace(/reddit\.com/g, "redlib.matthew.science") %>
-                            
+                
+               
+                    
+ <div class="video-title" style="color:var(--text-color);font-family:var(--text-font-primary);;font-weight:var(--text-header-weight);font-stretch: extra-expanded;margin-top: 10px;margin-bottom: 10px;">Rating! :3</div>
 
-                  
-  
+                 <br><span style="color: <%= likeColor %>;"><%= likePercentage %>%</span> of the users lieked the video!! <br>
+                      <span style="color: <%= dislikeColor %>;"><%= dislikePercentage %>%</span> of the users dislieked the video!! <br>
+                      User score: <span style="color: <%= userScoreColor %>;"><%= userScore %></span>- <%= userScoreLabel %><br><br>
 
 
                       
  
                           </div>
+
+      
+                  
+  
        <div style="background: #272727;margin-top:10px;border-radius: 11px;">
 
 
@@ -3249,27 +3423,9 @@ function resumeProgress() {
   }
 }
 
- function toggleOpacity() {
-  const element = document.getElementById('shadow'); // Replace 'yourElementId' with the ID of your element
-  const video = document.getElementById('video'); // Assuming your video element has an ID of 'video'
-  const currentOpacity = parseFloat(window.getComputedStyle(element).opacity);
+ 
 
-   if (video.paused) {
-    return; 
-  }
-
-   if (currentOpacity === 1) {
-    element.style.transition = 'opacity 3s ease'; // Adjust the duration as needed
-    element.style.opacity = 0;
-  } else {
-    element.style.transition = 'opacity 3s ease'; // Adjust the duration as needed
-    element.style.opacity = 1;
-  }
-}
-
- window.onload = function() {
-  setInterval(toggleOpacity, 1500);
-};
+ 
 
 
 video.addEventListener('timeupdate', () => {

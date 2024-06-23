@@ -32,13 +32,13 @@ const cnf = require("../../../config.json");
 const innertube = require("../libpoketube-youtubei-objects.json");
 const { exec } = require('child_process');
 
-const verfull = "v24.0605-VeE-MINOR_UPDATE-stable-dev-nonLTS-git-MTcxNTAwOTczNQ==";
-const versmol = "v24.0605-vEe"
+const verfull = "v24.1906-sho-MAJOR_UPDATE-stable-dev-nonLTS-git-MTcxODc5NDY3NQ==";
+const versmol = "v24.1906-sho"
 const branch = "dev/master";
-const codename = "vee";
-const versionnumber = "291";
-const relaseunixdate = "MTcxNTAwOTczNQ=="
-const updatequote = "Love is the ultimate software update; embrace the patches, for they refine the code of our shared existence, hand in hand, heart to heard (unknown)"
+const codename = "sho";
+const versionnumber = "293";
+const relaseunixdate = "MTcxODc5NDY3NQ=="
+const updatequote = "pls fund vennie plush -Bims"
 
 
 module.exports = function (app, config, renderTemplate) {
@@ -117,7 +117,7 @@ app.get("/avatars/:v", async function (req, res) {
       var format = "mp3";
     }
 
-    const url = `https://tube.kuylar.dev/proxy/media/${v}/${q}`;
+    const url = `https://tube-nightly.kuylar.dev/proxy/media/${v}/${q}`;
 
     res.redirect(url);
   });
@@ -181,17 +181,6 @@ app.use("/sb/i/:v/:imagePath/:img", async function (req, res) {
     } catch {}
 });
 
-  app.get("/feeds/videos.xml", async (req, res) => {
-    const id = req.query.channel_id;
-
-    let url = `https://youtube.com/feeds/videos.xml?channel_id=${id}`;
-
-    let f = await modules.fetch(url, {
-      method: req.method,
-    });
-
-    f.body.pipe(res);
-  });
 
   app.get("/api/redirect", async (req, res) => {
     const red_url = atob(req.query.u);
@@ -273,7 +262,7 @@ exec('git rev-list HEAD -n 1 --abbrev-commit', (error, stdout, stderr) => {
     const { fetch } = await import("undici");
 
     try {
-      const url = `https://codeberg.org/Ashley/poketube/raw/branch/main/instances.json`;
+      const url = `https://raw.githubusercontent.com/ashley0143/poke/main/instances.json`;
 
       let f = await fetch(url)
         .then((res) => res.text())

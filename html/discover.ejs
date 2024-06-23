@@ -327,7 +327,9 @@ margin-left: auto;
   background: var(--not-quite-black);
   text-decoration: none;
   border-radius: 1em;
-}     </style>
+}     
+
+</style>
                      
   
  <style> 
@@ -413,12 +415,10 @@ border:solid;
  <div class="channel-page" >   
           <audio id="audio" style="display:none;" loop autoplay></audio>
 
-    <img src="https://t.poketube.fun/t/rep.gif" style="width: 0;visibility: hidden;display:none;" id="discover_main">
-
+ 
       
    <h1 style="font-size: 2em;margin-left: auto;margin-right: auto;text-align: center;font-family: poketube flex;font-weight: 1000;font-stretch: ultra-expanded;color: #fff;margin-bottom: 7px;margin-top: 31px;">
-Discover Popular videos on poketube!
-   </h1>
+Popular Videos On Poke :3   </h1>
         <% if (!tab) { %> 
 
      <div class="tabs tabs-center">
@@ -492,9 +492,9 @@ Discover Popular videos on poketube!
 
 
                                  
-    	<div class="video-grid" style="border-radius:12px">
+<div class="video-grid" style="border-top-left-radius:2em;width: 80em;border-top-right-radius: 2em;border: solid 1px purple;">
    <% inv.forEach(x =>  { %>
-			<a href="/watch?v=<%- x.videoId %>"  class="video">
+			<a href="/watch?v=<%- x.videoId %>"  class="video author-<%- x.author %>">
 				<div class="thumbnail" style="background-image: url('/vi/<%= x.videoId %>/hqdefault.jpg?sqp=-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLBy_x4UUHLNDZtJtH0PXeQGoRFTgw');border-radius: 10px;"><span class="video-length"><%- turntomins(x.lengthSeconds) %></span></div>
 				<div class="info">
 					<span class="title max-lines-2" title="<%- x.title %>" style="font-family:Inter,sans-serif;"><%- x.title %></span>
@@ -506,7 +506,7 @@ Discover Popular videos on poketube!
           
 
  		 	               <% }) %>   
-                       
+                       <p>u reached the end.... :sob: </p>
                        
                                    </div>
                      		 	            

@@ -548,10 +548,14 @@ font-weight: 1000;
           <a href="/watch?v=<%= x.videoId %>"><span><%= x.viewCountText %></span> <span>•</span> <span><%= x.publishedText %></span></a>
           <a href="/channel?id=<%= x.authorId %>"><%=x.author %><% if (x?.authorVerified) { %> 
           <i class="icon ion ion-md-checkmark-circle" title="verified channel"></i><% } %> 
-</a>
+</a>      
+          <div style="display: inline-flex;flex-direction: row;min-width: 6em;gap: 4px;">
           <a href="/download?v=<%= x.videoId %>" style="background: #333;width: 7.6em;border-radius: 18px;"><div style="display: flex;">
           <i class="fa-light fa-download" style="display: flex;font-size: 16px;padding: 5px;border-radius: 18px;margin-left: 2px;"> </i><span style="margin-top: 6px;">Download</span></div>  </a>
+          <a href="/web?query=<%= x.title %>" style="background: #333;width: 7.6em;border-radius: 18px;height: 2em;width: 13.5em;"><div style="display: flex;">
+          <i class="fa-light fa-search" style="display: flex;font-size: 16px;padding: 5px;border-radius: 18px;margin-left: 2px;"> </i><span style="margin-top: 6px;">Search Title On Web :3</span></div>  </a>       
         </div>
+     </div>
       </div>
     </div>
           

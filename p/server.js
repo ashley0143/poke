@@ -73,6 +73,7 @@ const proxy = async (req, res) => {
       return res.status(400).send("Malformed URL");
     }
 
+    // Sanity check, to avoid being used as an open proxy
     if (!URL_WHITELIST.includes(url.host)) {
       console.log(`==> Refusing to proxy host ${url.host}`);
       res.status(401).send(`Hostname '${url.host}' is not permitted`);

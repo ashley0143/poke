@@ -5,6 +5,7 @@ import string
 import os
 import random
 import subprocess
+from aiohttp.web import Response, FileResponse
 
 app = web.Application()
 app.router._frozen = False
@@ -31,20 +32,20 @@ async def merge(request):
 	if not video_itag.isdigit():
 		print(f"Video itag {video_itag} flagged as invalid, dropping request")
 		return
-	if os.path.isfile(f"done.{job_id}"):
+	if os.path.isfile(f"{job_id}.mp4"):
 		return web.FileResponse(
-			path=f"output.{job_id}.mp4"
+			path=f"{job_id}.mp4"
 		)
+	cmdline = f"ffmpeg -i \"https://eu-proxy.poketube.fun/latest_version?id={video_id}&itag={audio_itag}&local=true\" -i \"https://eu-proxy.poketube.fun/latest_version?id={video_id}&itag={video_itag}&local=true\" -c copy -f mp4 -movflags frag_keyframe+empty_moov {video_id}.mp4"
 	proc_ffmpeg = await asyncio.create_subprocess_shell(
-		f"ffmpeg -i \"https://eu-proxy.poketube.fun/latest_version?id={video_id}&itag={audio_itag}&local=true\" -i \"https://eu-proxy.poketube.fun/latest_version?id={video_id}&itag={video_itag}&local=true\" -c copy output.{job_id}.mp4"
+		cmdline,
+		stdout=asyncio.subprocess.PIPE,
+		stderr=asyncio.subprocess.PIPE
 	)
-	await proc_ffmpeg.wait()
-	f = open(f"done.{job_id}", "a")
-	f.write(":3")
-	f.close()
-	return web.FileResponse(
-		path=f"output.{job_id}.mp4"
-	)
+	print(f"ffmpeg -i \"https://eu-proxy.poketube.fun/latest_version?id={video_id}&itag={audio_itag}&local=true\" -i \"https://eu-proxy.poketube.fun/latest_version?id={video_id}&itag={video_itag}&local=true\" -c copy -f mp4 -movflags frag_keyframe+empty_moov -")
+	stdout, stderr = await proc_ffmpeg.communicate()
+	response = FileResponse(f"{video_id}.mp4")
+	return response
 
 async def ping(request):
 	return web.Response(body='{"success": true}', content_type="application/json")

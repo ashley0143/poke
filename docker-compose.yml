@@ -1,8 +1,8 @@
 # To run, please do either docker compose up -d (for docker's own version) or docker-compose up -d (for your OSes package managers verison)
 services:
-  poketube:
-    image: codeberg.org/korbs/poke:amd64
-    # image: codeberg.org/korbs/poke:arm64 # Use this if you're using a Raspberry Pi or an arm architecture
+  poke:
+    image: codeberg.org/poketube/poke:amd64
+    # image: codeberg.org/poketube/poke:arm64 # Works with ARM64/v8, not ARM64/v7
     restart: unless-stopped
     volumes:
       - ./config.json:/poketube/config.json

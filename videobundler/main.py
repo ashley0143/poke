@@ -52,7 +52,7 @@ async def merge(request):
         return web.FileResponse(
                 path=f"{job_id}.mp4"
         )
-    cmdline = f"ffmpeg -i \"https://eu-proxy.poketube.fun/latest_version?id={video_id}&itag={audio_itag}&local=true\" -i \"https://eu-proxy.poketube.fun/latest_version?id={video_id}&itag={video_itag}&local=true\" -c copy -f mp4 -movflags frag_keyframe+empty_moov -"
+    cmdline = f"ffmpeg -i \"https://eu-proxy.poketube.fun/latest_version?id={video_id}&itag={audio_itag}&local=true\" -i \"https://eu-proxy.poketube.fun/latest_version?id={video_id}&itag={video_itag}&local=true\" -c copy -f mp4 -movflags frag_keyframe+empty_moov --duration 300 -"
     #proc_ffmpeg = await asyncio.create_subprocess_shell(
     #       cmdline,
     #       stdout=asyncio.subprocess.PIPE

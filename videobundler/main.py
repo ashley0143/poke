@@ -59,9 +59,39 @@ async def merge(request):
     #)
     #print(f"ffmpeg -i \"https://eu-proxy.poketube.fun/latest_version?id={video_id}&itag={audio_itag}&local=true\" -i \"https://eu-proxy.poketube.fun/latest_version?id={video_id}&itag={video_itag}&local=true\" -c copy -f mp4 -movflags frag_keyframe+empty_moov -")
     #stdout, _ = await proc_ffmpeg.communicate()
-    iwannakillmyself = await run_command(cmdline)
-    response = Response(body=iwannakillmyself, content_type="video/mp4", headers="")
-    return response
+    #iwannakillmyself = await run_command(cmdline)
+    process = await asyncio.create_subprocess_shell(
+        cmdline,
+        stdout=asyncio.subprocess.PIPE,
+    )
+    # Wait for the subprocess to finish
+    #stdout, stderr = await process.communicate()
+    response = web.StreamResponse(status=200, reason='OK', headers={
+        'Content-Type': 'video/mp4',
+        'Transfer-Encoding': 'chunked',
+    })
+    await response.prepare(request)
+    try:
+        while True:
+            # Read data from stdout
+            chunk = await process.stdout.readline()
+            if not chunk:
+                break
+            # Write the chunk to the response
+            await response.write(chunk)
+    except Exception as e:
+        print(f"Error streaming FFmpeg output: {e}")
+    finally:
+        # Close the response
+        await response.write_eof()
+        return response
+    # Check for errors
+    #if process.returncode != 0:                                                                                # Log or handle the error
+        #print(f"Command '{args}' failed with return code {process.returncode}")
+        #return None
+    # Decode stdout and return                                                                                return stdout
+    #response = Response(body=stdout, content_type="video/mp4", headers="")
+    #return response
 
 async def ping(request):
     return web.Response(body='{"success": true}', content_type="application/json")

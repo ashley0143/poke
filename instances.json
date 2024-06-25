@@ -134,7 +134,7 @@
    "poketube.darkness.services",
     {
       "uri": "https://poketube.darkness.services/",
-      "CLOUDFLARE": false,
+      "CLOUDFLARE": true,
       "piwik": false,
       "proxy": false,
       "region": "US",
@@ -145,4 +145,3 @@
       }
     }
   ]   
-]

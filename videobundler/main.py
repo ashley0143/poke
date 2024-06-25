@@ -57,9 +57,9 @@ async def merge(request: aiohttp.web.Request):
 			stderr=asyncio.subprocess.PIPE
 		)
 		response = web.StreamResponse(status=206, reason='OK', headers={
-		'Content-Type': 'video/mp4',
-		'Transfer-Encoding': 'chunked',
-		'Accept-Ranges': 'bytes'
+			'Content-Type': 'application/octet-stream',
+			'Transfer-Encoding': 'chunked',
+			'Content-Disposition': 'inline'
 		})
 		await response.prepare(request)
 		try:
@@ -69,9 +69,10 @@ async def merge(request: aiohttp.web.Request):
 					break
 				await response.write(chunk)
 		except Exception as e:
+			
 			print(f"Error streaming FFmpeg output: {e}")
-		finally:
-			await response.write_eof()
+		#finally:
+			#await response.write_eof()
 	else:
 		# Likely to be chromium browser, so to avoid browser shitting itself we download file
 		job_id = f"{request.rel_url.query["id"]}_{request.rel_url.query["audio_itag"]}_{request.rel_url.query["video_itag"]}"
@@ -79,11 +80,9 @@ async def merge(request: aiohttp.web.Request):
 			return web.FileResponse(
 				path=f"{job_id}.mp4"
 			)
-		cmdline = f"ffmpeg -i \"https://eu-proxy.poketube.fun/latest_version?id={video_id}&itag={audio_itag}&local=true\" -i \"https://eu-proxy.poketube.fun/latest_version?id={video_id}&itag={video_itag}&local=true\" -c copy -f mp4 -movflags frag_keyframe+empty_moov {job_id}.mp4"
+		cmdline = f"ffmpeg -i \"https://eu-proxy.poketube.fun/latest_version?id={video_id}&itag={audio_itag}&local=true\" -i \"https://eu-proxy.poketube.fun/latest_version?id={video_id}&itag={video_itag}&local=true\" -c:v copy -f mp4 -movflags frag_keyframe+empty_moov {job_id}.mp4"
 		process = await asyncio.create_subprocess_shell(
-			cmdline,
-			stdout=asyncio.subprocess.PIPE,
-			stderr=asyncio.subprocess.PIPE
+			cmdline
 		)
 		await process.wait()
 		if process.returncode != 0:                                                                                # Log or handle the error

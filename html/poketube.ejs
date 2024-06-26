@@ -1011,50 +1011,155 @@ Offical Discord Server! :3
               </div>
                                                                                                                        
     </div>
-    
-    
-		<div id="<%=sha384(inv_vid.videoId)%>" class="video-player-container">
-      <video class="player video-ambient-container" id="video" style="border-radius: 16px; box-sizing: border-box; min-width: 100%; display: block;" autoplay controls>
-      <% if (isvidious) { %>
-        <% if (!qua) { %>
-          <source src="<%=u%>/latest_version?id=<%=inv_vid.videoId%>&itag=22&local=true" type="video/mp4; codecs=&quot;avc1.64001F, mp4a.40.2&quot;" label="hd720" selected="true">
+ <div id="<%= sha384(inv_vid.videoId) %>" class="video-player-container">
+    <video class="player video-ambient-container" id="videoPlayer" style="border-radius: 16px; box-sizing: border-box; min-width: 100%; display: block;" autoplay controls>
+        <% if (isvidious) { %>
+            <% if (!qua) { %>
+                <source src="<%= u %>/latest_version?id=<%= inv_vid.videoId %>&itag=22&local=true" type="video/mp4; codecs=&quot;avc1.64001F, mp4a.40.2&quot;" label="hd720" selected="true">
+            <% } %>
+            <% if (qua === "medium") { %>
+                <source src="<%= u %>/latest_version?id=<%= inv_vid.videoId %>&itag=18&local=true" type="video/mp4; codecs=&quot;avc1.64001F, mp4a.40.2&quot;" label="sd360" selected="true">
+            <% } %>
         <% } %>
-        <% if (qua === "medium") { %>
-          <source src="<%=u%>/latest_version?id=<%=inv_vid.videoId%>&itag=18&local=true" type="video/mp4; codecs=&quot;avc1.64001F, mp4a.40.2&quot;" label="sd360" selected="true">
-        <% } %>
-      <% } %>
 
-      <% if (!isSchoolProxy) { %>
-        <% if (!isvidious) { %>
-          <% if (!qua) { %>
-            <source src="https://tube.kuylar.dev/proxy/media/<%=inv_vid.videoId%>/22" type="video/mp4; codecs=&quot;avc1.64001F, mp4a.40.2&quot;" label="hd720" selected="true">
-          <% } %>
-          <% if (qua === "medium") { %>
-            <source src="https://tube.kuylar.dev/proxy/media/<%=inv_vid.videoId%>/18" type="video/mp4; codecs=&quot;avc1.64001F, mp4a.40.2&quot;" label="sd360" selected="true">
-          <% } %>
+        <% if (!isSchoolProxy) { %>
+            <% if (!isvidious) { %>
+                <% if (!qua) { %>
+                    <source src="https://tube.kuylar.dev/proxy/media/<%= inv_vid.videoId %>/22" type="video/mp4; codecs=&quot;avc1.64001F, mp4a.40.2&quot;" label="hd720" selected="true">
+                <% } %>
+                <% if (qua === "medium") { %>
+                    <source src="https://tube.kuylar.dev/proxy/media/<%= inv_vid.videoId %>/18" type="video/mp4; codecs=&quot;avc1.64001F, mp4a.40.2&quot;" label="sd360" selected="true">
+                <% } %>
+            <% } %>
         <% } %>
-      <% } %>
 
-      <% if (isSchoolProxy) { %>
-        <% if (!qua) { %>
-          <source src="https://tube-proxy.ashley0143.xyz/proxy/media/<%=inv_vid.videoId%>/22" type="video/mp4; codecs=&quot;avc1.64001F, mp4a.40.2&quot;" label="hd720" selected="true">
+        <% if (isSchoolProxy) { %>
+            <% if (!qua) { %>
+                <source src="https://tube-proxy.ashley0143.xyz/proxy/media/<%= inv_vid.videoId %>/22" type="video/mp4; codecs=&quot;avc1.64001F, mp4a.40.2&quot;" label="hd720" selected="true">
+            <% } %>
+            <% if (qua === "medium") { %>  
+                <source src="https://tube-proxy.ashley0143.xyz/proxy/media/<%= inv_vid.videoId %>/18" type="video/mp4; codecs=&quot;avc1.64001F, mp4a.40.2&quot;" label="sd360" selected="true">
+            <% } %>
         <% } %>
-        <% if (qua === "medium") { %>  
-          <source src="https://tube-proxy.ashley0143.xyz/proxy/media/<%=inv_vid.videoId%>/18" type="video/mp4; codecs=&quot;avc1.64001F, mp4a.40.2&quot;" label="sd360" selected="true">
-        <% } %>
-      <% } %>
 
-      <%  if (Array.isArray( inv_vid.captions)) { %> 
-        <% inv_vid.captions?.forEach(x => { %>
-          <track src="/api/subtitles?v=<%=inv_vid.videoId%>&h=<%= x.label %>" label="<%= x.label.replace("United States","Simplified - USA") %>" kind="subtitles">      
-        <% }) %>   
-      <% } %>                     
+        <% if (Array.isArray(inv_vid.captions)) { %> 
+            <% inv_vid.captions.forEach(x => { %>
+                <track src="/api/subtitles?v=<%= inv_vid.videoId %>&h=<%= x.label %>" label="<%= x.label.replace("United States", "Simplified - USA") %>" kind="subtitles">      
+            <% }) %>   
+        <% } %>                     
       
-      <%  if (!Array.isArray( inv_vid.captions)) { %> 
-        <track src="/api/subtitles?v=<%=inv_vid.videoId%>&h=<%= %>" label="<%=  video.Subtitles.Subtitle.language.replace("United States","Simplified - USA") %>" kind="subtitles">      
-      <% } %>                                                       
+        <% if (!Array.isArray(inv_vid.captions)) { %> 
+            <track src="/api/subtitles?v=<%= inv_vid.videoId %>&h=<%= %>" label="<%= video.Subtitles.Subtitle.language.replace("United States", "Simplified - USA") %>" kind="subtitles">      
+        <% } %>                                                       
     </video>
-      
+
+    <!-- Custom Video Player Controls -->
+    <div class="custom-controls">
+        <button id="playPauseBtn" class="control-btn" aria-label="Play"><i class="fal fa-play fa-lg"></i></button>
+        <div class="time-display">
+            <span id="currentTime">0:00</span> / <span id="totalTime">0:00</span>
+        </div>
+        <input id="volumeControl" type="range" min="0" max="1" step="0.01" value="1">
+    </div>
+</div>
+
+<!-- Custom CSS for Video Player -->
+<style>
+    .video-player-container {
+        position: relative;
+        width: 100%;
+        max-width: 640px; /* Adjust as needed */
+        margin: 0 auto; /* Center horizontally */
+        overflow: hidden;
+    }
+
+    .player {
+        width: 100%;
+        height: auto;
+    }
+
+    .custom-controls {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 10px;
+        background: rgba(0, 0, 0, 0.7);
+        border-top: 1px solid #444;
+    }
+
+    .control-btn {
+        background: none;
+        border: none;
+        color: #fff;
+        cursor: pointer;
+        outline: none;
+    }
+
+    .control-btn:hover {
+        opacity: 0.7;
+    }
+
+    .time-display {
+        display: flex;
+        align-items: center;
+        color: #fff;
+        font-size: 0.9em;
+    }
+
+    .time-display span {
+        margin: 0 5px;
+    }
+
+    /* Adjust other styles as needed */
+</style>
+
+<!-- Custom JavaScript for Video Player -->
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const video = document.getElementById('videoPlayer');
+        const playPauseBtn = document.getElementById('playPauseBtn');
+        const volumeControl = document.getElementById('volumeControl');
+        const currentTimeDisplay = document.getElementById('currentTime');
+        const totalTimeDisplay = document.getElementById('totalTime');
+        const seekbar = document.getElementById('seekbar');
+
+        // Play/Pause functionality
+        playPauseBtn.addEventListener('click', () => {
+            if (video.paused) {
+                video.play();
+                playPauseBtn.innerHTML = '<i class="fal fa-pause fa-lg"></i>';
+            } else {
+                video.pause();
+                playPauseBtn.innerHTML = '<i class="fal fa-play fa-lg"></i>';
+            }
+        });
+
+        // Synchronize controls with video
+        video.addEventListener('timeupdate', () => {
+            currentTimeDisplay.textContent = formatTime(video.currentTime);
+            totalTimeDisplay.textContent = formatTime(video.duration);
+        });
+
+        // Volume control
+        volumeControl.addEventListener('input', () => {
+            video.volume = volumeControl.value;
+        });
+
+        // Seekbar functionality
+        seekbar.addEventListener('input', () => {
+            const seekTo = (seekbar.value / 100) * video.duration;
+            video.currentTime = seekTo;
+        });
+
+        // Format time helper function
+        function formatTime(seconds) {
+            const minutes = Math.floor(seconds / 60);
+            const secs = Math.floor(seconds % 60);
+            return `${minutes}:${secs < 10 ? '0' : ''}${secs}`;
+        }
+    });
+</script>
+
     <% if (!a) { %>
       <canvas width="12" height="6" class="ambient-canvas" id="ambient-canvas-1"></canvas>
       <canvas width="12" height="6" class="ambient-canvas" id="ambient-canvas-2"></canvas>
@@ -1893,6 +1998,7 @@ inv_vid?.recommendedVideos.forEach(video => {
  
     
 <!-- SCRIPTS -->
+ 
 <!-- AUTOPLAY -->
 <script>
  function removeParam(paramName) {

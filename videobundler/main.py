@@ -75,7 +75,7 @@ async def merge(request: aiohttp.web.Request):
 			#await response.write_eof()
 	else:
 		# Likely to be chromium browser, so to avoid browser shitting itself we download file
-		job_id = f"{request.rel_url.query["id"]}_{request.rel_url.query["audio_itag"]}_{request.rel_url.query["video_itag"]}"
+		job_id = f'{request.rel_url.query["id"]}_{request.rel_url.query["audio_itag"]}_{request.rel_url.query["video_itag"]}'
 		if os.path.isfile(f"{job_id}.mp4"):
 			return web.FileResponse(
 				path=f"{job_id}.mp4"

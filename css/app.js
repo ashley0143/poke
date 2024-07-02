@@ -369,9 +369,11 @@ video.addEventListener("contextmenu", function(event) {
         });
 
  speedOption.addEventListener("click", function() {
+
             var currentSpeed = video.playbackRate;
             var newSpeed = getNextSpeed(currentSpeed);
             video.playbackRate = newSpeed;
+            document.getElementById("aud").playbackRate = newSpeed;
             speedOption.innerHTML = "<i class='fa-light fa-gauge'></i> Speed: " + newSpeed.toFixed(2) + "x";
         });
 

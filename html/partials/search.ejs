@@ -8,7 +8,7 @@
 @licstart  The following is the entire license notice for the 
 JavaScript code in this page.
 
-Copyright (C) 2024 SudoVanilla
+Copyright (C) 2024 Poke Project
 
 The JavaScript code in this page is free software: you can
 redistribute it and/or modify it under the terms of the GNU
@@ -47,7 +47,7 @@ document.querySelector('input[type="search"]').addEventListener('input', functio
 function GetResults() {
     var SearchValue = document.querySelector('input[type="search"]').value
     var YouTubeSuggestions = document.querySelector('.suggestions')
-    fetch(`https://yt.sudovanilla.org/api/v1/search/suggestions?q=${SearchValue}`)
+    fetch(window.location.origin + `/api/improving-poke/getsugesstions?q=${SearchValue}`)
     .then(response => response.json())
     .then(data => {YouTubeSuggestions.innerHTML = ListOfSuggestionsYT(data)})
 }

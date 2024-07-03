@@ -1200,46 +1200,7 @@ Offical Discord Server! :3
           <a href="/download?v=<%=inv_vid.videoId%>" style="color: #fff;">
        <i class="fa-light fa-download"></i> Download Video</a>
               </div>
-                <div>
-
-                  
-                   <% if (isvidious) { %>
-                   <% if (!qua) { %>          
-                                                 <a href="<%=u%>/latest_version?id=<%=inv_vid.videoId%>&itag=22&local=true" style="color: #fff;" target="_blank">
-          <i class="fa-light fa-arrow-up-right-from-square"></i> Open video in new tab
-</a>
-
-                                                                             <% } %>                
-
-      <% if (qua === "medium") { %>  
-
-                        <a href="<%=u%>/latest_version?id=<%=inv_vid.videoId%>&itag=18&local=true" target="_blank" style="color: #fff;">
-          <i class="fa-light fa-arrow-up-right-from-square"></i> Open video in new tab
-</a>
-        
-                                                                           <% } %>                
-                                                                                                       <% } %>                     
-
-              <% if (!isvidious) { %>
-                
-                   <% if (!qua) { %>                       
- <a href="https://tube-proxy.poketube.fun/proxy/media/<%=inv_vid.videoId%>/22 " target="_blank" style="color: #fff;">
-          <i class="fa-light fa-arrow-up-right-from-square"></i> Open video in new tab
-</a>
-
-
-                                                                             <% } %>                
-
-      <% if (qua === "medium") { %>  
-
-                 <a href="https://tube-proxy.poketube.fun/proxy/media/<%=inv_vid.videoId%>/18 " target="_blank" style="color: #fff;">
-          <i class="fa-light fa-arrow-up-right-from-square"></i> Open video in new tab
-</a>
-
-
-                                                                           <% } %>                
-                                                                                                       <% } %>                     
-              </div>
+             
                 <div id="loopOption"> 
         <i class="fa-light fa-repeat"> </i> Loop Video
               </div>
@@ -1385,13 +1346,13 @@ Offical Discord Server! :3
            <div class="div_box">
          Video id : <%=inv_vid.videoId%> <br>
        ImmersiveAmbientModecolor: <% if (lightOrDark(color) == "light") { %><%=color%> (color 1)<% } %><% if (lightOrDark(color) == "dark") { %> <%=color2%> (color 2) <% } %> <br>  
-        Video Format :<% if (!qua) { %>  22 (720p) openh264 ( https://github.com/cisco/openh264) mp4a.40.2  | 44100Hz  <% } %>
+        Video Format :<% if (!qua) { %>  140 (720p) openh264 ( https://github.com/cisco/openh264) mp4a.40.2  | 44100Hz  <% } %>
       <% if (qua === "medium") { %>  18 (320p)  openh264 (https://github.com/cisco/openh264) mp4a.40.2 | 44100Hz  <% } %>       <br> 
         <% if (inv_vid.genre === "Music") { %> 
         Audio Format: ALAC lossless (https://github.com/macosforge/alac) <br>
                                     <% } %>   
     <% if (inv_vid.genre !== "Music") { %> 
-        Audio Format: Opus - Normalized audio<br>
+        Audio Format: 136 ( High ) <br>
                                     <% } %>   
         PokeTubeEncryptID: <%=sha384(inv_vid.videoId)%> <br>
                       <% if (isvidious) { %>

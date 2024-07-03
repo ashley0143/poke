@@ -1243,7 +1243,7 @@ Offical Discord Server! :3
       <video class="player video-ambient-container" id="video" style="border-radius: 16px; box-sizing: border-box; min-width: 100%; display: block;" preload>
       <% if (isvidious) { %>
         <% if (!qua) { %>
-          <source src="<%=u%>/latest_version?id=<%=inv_vid.videoId%>&itag=136&local=true" type="video/mp4; codecs=&quot;avc1.64001F, mp4a.40.2&quot;" label="hd720" selected="true">
+          <source src="<%=u%>/latest_version?id=<%=inv_vid.videoId%>&itag=<%= itag_hd %>&local=true" type="video/mp4; codecs=&quot;avc1.64001F, mp4a.40.2&quot;" label="hd720" selected="true">
         <% } %>
         <% if (qua === "medium") { %>
           <source src="<%=u%>/latest_version?id=<%=inv_vid.videoId%>&itag=18&local=true" type="video/mp4; codecs=&quot;avc1.64001F, mp4a.40.2&quot;" label="sd360" selected="true">
@@ -1346,13 +1346,13 @@ Offical Discord Server! :3
            <div class="div_box">
          Video id : <%=inv_vid.videoId%> <br>
        ImmersiveAmbientModecolor: <% if (lightOrDark(color) == "light") { %><%=color%> (color 1)<% } %><% if (lightOrDark(color) == "dark") { %> <%=color2%> (color 2) <% } %> <br>  
-        Video Format :<% if (!qua) { %>  140 (720p) openh264 ( https://github.com/cisco/openh264) mp4a.40.2  | 44100Hz  <% } %>
+        Video Format :<% if (!qua) { %>  <%= itag_hd %> (720p) openh264 ( https://github.com/cisco/openh264) mp4a.40.2  | 44100Hz  <% } %>
       <% if (qua === "medium") { %>  18 (320p)  openh264 (https://github.com/cisco/openh264) mp4a.40.2 | 44100Hz  <% } %>       <br> 
         <% if (inv_vid.genre === "Music") { %> 
         Audio Format: ALAC lossless (https://github.com/macosforge/alac) <br>
                                     <% } %>   
     <% if (inv_vid.genre !== "Music") { %> 
-        Audio Format: 136 ( High ) <br>
+        Audio Format: 140 ( High ) <br>
                                     <% } %>   
         PokeTubeEncryptID: <%=sha384(inv_vid.videoId)%> <br>
                       <% if (isvidious) { %>

@@ -30,7 +30,7 @@ const pkg = require("../../../package.json");
 const os = require('os');
 const cnf = require("../../../config.json");
 const innertube = require("../libpoketube-youtubei-objects.json");
-const { exec } = require('child_process');
+const { execSync } = require('child_process');
 
 const verfull = "v24.1906-sho-MAJOR_UPDATE-stable-dev-nonLTS-git-MTcxODc5NDY3NQ==";
 const versmol = "v24.1906-sho"

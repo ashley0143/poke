@@ -247,10 +247,10 @@ execSync('git rev-list HEAD -n 1 --abbrev-commit', (error, stdout, stderr) => {
     const response = {
       pt_version: {
        version:versmol,
-       version_full:verfull
+       version_full:verfull,
+       commit: latestCommitHash
       },
       branch,
-      commit: latestCommitHash,
       updatequote,
       relaseunixdate,
       vernum: versionnumber,

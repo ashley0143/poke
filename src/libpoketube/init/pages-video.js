@@ -265,7 +265,7 @@ module.exports = function (app, config, renderTemplate) {
               return null;
             }
           }
-          const itag_hd = await findItag(videoObject);
+          const itag_hd = findItag(videoObject);
           var proxyurl = config.p_url;
           var vidurl = u.url;
           var isvidious = u.isInvidiousURL;

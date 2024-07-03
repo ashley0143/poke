@@ -196,7 +196,7 @@ app.use("/sb/i/:v/:imagePath/:img", async function (req, res) {
  app.get("/api/improving-poke/getsugesstions", async (req, res) => {
     const query = req.query.q;
 
-    let url = `https://invid-api.poketube.fun/api/v1/search/suggestions?q=${id}`;
+    let url = `https://invid-api.poketube.fun/api/v1/search/suggestions?q=${query}`;
 
     let f = await modules.fetch(url, {
       method: req.method,

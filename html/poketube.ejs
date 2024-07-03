@@ -1243,7 +1243,15 @@ Offical Discord Server! :3
       <video class="player video-ambient-container" id="video" style="border-radius: 16px; box-sizing: border-box; min-width: 100%; display: block;" preload>
       <% if (isvidious) { %>
         <% if (!qua) { %>
-          <source src="<%=u%>/latest_version?id=<%=inv_vid.videoId%>&itag=<%- itag_hd %>&local=true" type="video/mp4; codecs=&quot;avc1.64001F, mp4a.40.2&quot;" label="hd720" selected="true">
+<% 
+  let itag = '136'; // Default itag
+  adaptiveFormats.forEach(format => {
+    if (format.itag == '298') {
+      itag = '298';
+    }
+  });
+%>
+<source src="<%=u%>/latest_version?id=<%=inv_vid.videoId%>&itag=<%=itag%>&local=true" type="video/mp4; codecs=&quot;avc1.64001F, mp4a.40.2&quot;" label="hd720" selected="true">
         <% } %>
         <% if (qua === "medium") { %>
           <source src="<%=u%>/latest_version?id=<%=inv_vid.videoId%>&itag=18&local=true" type="video/mp4; codecs=&quot;avc1.64001F, mp4a.40.2&quot;" label="sd360" selected="true">

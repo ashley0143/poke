@@ -196,7 +196,7 @@ module.exports = function (app, config, renderTemplate) {
     if (!isMatch) {
       return res.redirect("/");
     }
-    
+
     var contentlang = hl || "en-US";
     var contentregion = region || "US";
 
@@ -241,6 +241,34 @@ module.exports = function (app, config, renderTemplate) {
           const reddit = extractInfo(REDDIT_REGEX);
           const instagram = extractInfo(INSTAGRAM_REGEX);
 
+          const videoObject = inv_vid?.adaptiveFormats;
+          function findItag(adaptiveFormats) {
+            let has298 = false;
+            let has136 = false;
+            let itag298, itag136;
+
+            adaptiveFormats.forEach((format) => {
+              if (format.itag == 298) {
+                has298 = true;
+                itag298 = format;
+              }
+              if (format.itag == 136) {
+                has136 = true;
+                itag136 = format;
+              }
+            });
+
+            if (has298 && has136) {
+              return { itag298, itag136 };
+            } else if (has298) {
+              return itag298;
+            } else if (has136) {
+              return itag136;
+            } else {
+              return null;
+            }
+          }
+          const itag_hd = findItag(videoObject);
           var proxyurl = config.p_url;
           var vidurl = u.url;
           var isvidious = u.isInvidiousURL;
@@ -302,6 +330,7 @@ module.exports = function (app, config, renderTemplate) {
               engagement,
               IsOldWindows,
               channelurlfixer,
+              itag_hd,
               support,
               shortsui,
               u: vidurl,
@@ -361,6 +390,7 @@ module.exports = function (app, config, renderTemplate) {
 
   app.get("/lite", async (req, res) => {
     const { dm, region, hl, v, e, r, f, m, quality: q, a, universe, } = req.query; 
+
 
     if (!v) {
       return res.redirect("/");

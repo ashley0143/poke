@@ -130,18 +130,5 @@
         "branch": "dev"
       }
     }
-  ],  [
-   "poketube.darkness.services",
-    {
-      "uri": "https://poketube.darkness.services/",
-      "CLOUDFLARE": true,
-      "piwik": false,
-      "proxy": false,
-      "region": "US",
-      "software": {
-        "name": "poke",
-        "version": "latest",
-        "branch": "dev"
-      }
-    }
-  ]   
+  ]
+]

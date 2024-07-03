@@ -1723,7 +1723,7 @@ WIP!                                                 </a>
                           
                       <br><span style="color: <%= likeColor %>;"><%= likePercentage %>%</span> of the users lieked the video!! <br>
                       <span style="color: <%= dislikeColor %>;"><%= dislikePercentage %>%</span> of the users dislieked the video!! <br>
-                      User score: <span class="<%= userScoreClass %>" style="color: <%= userScoreColor %>;"><%= userScore %></span>- <%= userScoreLabel %><br><br>
+                      User score: <span style="color: <%= userScoreColor %>;"><%= userScore %></span>- <span class="<%= userScoreClass %>"> <%= userScoreLabel %> </span><br><br>
                       RYD date created : <%=engagement.dateCreated.toLocaleString()%>  <br>
                       <a href="https://returnyoutubedislikeapi.com/votes?videoId=<%=inv_vid.videoId%>">See in json</a>
                       

@@ -184,69 +184,9 @@ module.exports = function (app, config, renderTemplate) {
   });
 
   app.get("/web", async (req, res) => {
-    const query = req.query.query;
-    const tab = req.query.tab;
-
-    const { fetch } = await import("undici");
-
-    const search = await fetch(atob("aHR0cHM6Ly80Z2V0LmhidWJsaS5jYy8vYXBpL3YxL3dlYj9zPQ==") + query);
-    const web = getJson(await search.text());
-
-    if (req.query.lucky === "true") {
-      res.redirect("/im-feeling-lucky?query=" + query);
-    }
-
-    var uaos = req.useragent.os;
-    var IsOldWindows;
-
-    if (uaos == "Windows 7" && req.useragent.browser == "Firefox") {
-      IsOldWindows = true;
-    } else if (uaos == "Windows 8" && req.useragent.browser == "Firefox") {
-      IsOldWindows = true;
-    } else {
-      IsOldWindows = false;
-    }
-
-    const poketube_universe_value = "poketube_smart_search";
-
-    if (query?.includes("youtube.com/watch?v=")) {
-      try {
-        var videoid = query?.split("v=");
-
-        res.redirect("/watch?v=" + videoid[1]);
-      } catch {
-        return;
-      }
-    }
-
-    if (query && query.startsWith("!") && query.length > 2) {
-      res.redirect("https://lite.duckduckgo.com/lite/?q=" + query);
-    }
-
-    if (!query) {
-      return renderTemplate(res, req, "search-web-main.ejs");
-    }
-
-    let continuation = req.query.continuation || "";
-
-    try {
-      const results = web?.web;
-
-      renderTemplate(res, req, "search-web.ejs", {
-        j: "",
-        IsOldWindows,
-        h: "",
-        tab,
-        continuation,
-        isMobile: req.useragent.isMobile,
-        results: results,
-        q: query,
-        summary: "",
-      });
-    } catch (error) {
-      console.error(`Error while searching for '${query}':`, error);
-      res.redirect("/");
-    }
+    
+       res.redirect("/");
+ 
   });
 
   app.get("/channel/", async (req, res) => {

@@ -235,7 +235,7 @@ app.use("/sb/i/:v/:imagePath/:img", async function (req, res) {
        const totalMemory = os.totalmem() / (1024 * 1024 * 1024); 
        const roundedMemory = totalMemory.toFixed(2); 
 
-exec('git rev-list HEAD -n 1 --abbrev-commit', (error, stdout, stderr) => {
+execSync('git rev-list HEAD -n 1 --abbrev-commit', (error, stdout, stderr) => {
   if (error || stderr) {
     console.error(`Error executing command: ${error || stderr}`);
     return;

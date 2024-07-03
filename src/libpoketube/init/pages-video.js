@@ -243,32 +243,29 @@ module.exports = function (app, config, renderTemplate) {
 
           const videoObject = inv_vid?.adaptiveFormats;
           function findItag(adaptiveFormats) {
-            let has298 = false;
-            let has136 = false;
-            let itag298, itag136;
+            let itag298 = null;
+            let itag136 = null;
 
             adaptiveFormats.forEach((format) => {
               if (format.itag == 298) {
-                has298 = true;
                 itag298 = format;
               }
               if (format.itag == 136) {
-                has136 = true;
                 itag136 = format;
               }
             });
 
-            if (has298 && has136) {
+            if (itag298 && itag136) {
               return { itag298, itag136 };
-            } else if (has298) {
+            } else if (itag298) {
               return itag298;
-            } else if (has136) {
+            } else if (itag136) {
               return itag136;
             } else {
               return null;
             }
           }
-          const itag_hd = findItag(videoObject);
+          const itag_hd = await findItag(videoObject);
           var proxyurl = config.p_url;
           var vidurl = u.url;
           var isvidious = u.isInvidiousURL;
@@ -390,7 +387,6 @@ module.exports = function (app, config, renderTemplate) {
 
   app.get("/lite", async (req, res) => {
     const { dm, region, hl, v, e, r, f, m, quality: q, a, universe, } = req.query; 
-
 
     if (!v) {
       return res.redirect("/");

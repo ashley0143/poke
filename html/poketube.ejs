@@ -671,6 +671,13 @@ background-color: #0000;
   html:fullscreen *:not(html, video, body, ptd-app-ejs, .app, .watch-page, .primary, .video-player-container, #popupMenu, #popupMenu *) {
     visibility: hidden !important;
   }
+  #nojs-high-res-warning {
+    background-color: #823434aa;
+    margin: 30px;
+    padding: 5px 20px;
+    border: 2px solid red;
+    border-radius: 10px;
+  }
 </style>
 <noscript>
   <style>
@@ -704,16 +711,10 @@ background-color: #0000;
     let setTime = false
     const seekbar = document.getElementById("duration-slider")
     const video = document.getElementById("video");
-    let previousTimestamp = 0;
     video.addEventListener("timeupdate", (event) => {
       seekbar.value = event.target.currentTime;
       const timestamps = document.getElementById("timestamps");
       timestamps.innerText = `${csts(video.currentTime)}/${csts(video.duration)}`;
-      if(event.target.currentTime - previousTimestamp >= 5 || event.target.currentTime - previousTimestamp <= -5) {
-        console.log("GAY")
-        aud.currentTime = event.target.currentTime;
-      }
-      previousTimestamp = event.target.currentTime;
     });
       seekbar.addEventListener("input", (event) => {
           video.pause()
@@ -743,6 +744,15 @@ background-color: #0000;
       playPauseButton.addEventListener("click", () => {
         toggleVideo()
       });
+      setInterval(() => {
+        if(Math.round(video.currentTime) != Math.round(aud.currentTime)) {
+          video.pause(); aud.pause(); playPauseButton.innerHTML = playSVG;
+          video.currentTime > aud.currentTime ? aud.currentTime = video.currentTime : video.currentTime = aud.currentTime;
+          setTimeout(() => {
+            video.play(); aud.play(); playPauseButton.innerHTML = pauseSVG;
+          }, 800)
+        }
+      }, 1000)
       video.addEventListener("click", toggleVideo);
       video.addEventListener("dblclick", () => { 
         document.documentElement.requestFullscreen();
@@ -1240,6 +1250,13 @@ Offical Discord Server! :3
       <% } else { %>
         <audio id="aud"></audio>
       <% } %>
+      <noscript>
+        <% if (!qua) { %>
+          <div id="nojs-high-res-warning">
+            <p>Due to YouTube's recent changes on high resolution playback, it is sadly impossible to play high-resolution video with audio without client-side JavaScript enabled. Switch to SD quality or enable JavaScript to play your video with audio.</p>
+          </div>
+        <% } %>
+      </noscript>
       <video class="player video-ambient-container" id="video" style="border-radius: 16px; box-sizing: border-box; min-width: 100%; display: block;" preload>
       <% if (isvidious) { %>
         <% if (!qua) { %>

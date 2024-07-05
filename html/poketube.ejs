@@ -697,6 +697,7 @@ background-color: #0000;
   </style>
 </noscript>
 <script>
+  const qua = new URLSearchParams(new URL(window.location.href).search).get("quality") || "";
   const playSVG = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>play-circle-outline</title><path d="M12,20C7.59,20 4,16.41 4,12C4,7.59 7.59,4 12,4C16.41,4 20,7.59 20,12C20,16.41 16.41,20 12,20M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M10,16.5L16,12L10,7.5V16.5Z" /></svg>'
   const pauseSVG = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>pause-circle-outline</title><path d="M13,16V8H15V16H13M9,16V8H11V16H9M12,2A10,10 0 0,1 22,12A10,10 0 0,1 12,22A10,10 0 0,1 2,12A10,10 0 0,1 12,2M12,4A8,8 0 0,0 4,12A8,8 0 0,0 12,20A8,8 0 0,0 20,12A8,8 0 0,0 12,4Z" /></svg>'
   function csts(seconds) {
@@ -753,8 +754,10 @@ background-color: #0000;
     });
       seekbar.addEventListener("input", (event) => {
           video.pause()
-          aud.pause()
-          aud.currentTime = event.target.value
+          if(qua != "medium") {
+            aud.pause()
+            aud.currentTime = event.target.value
+          }
           video.currentTime = event.target.value
       });
       
@@ -765,10 +768,10 @@ background-color: #0000;
           if(document.getElementById("popupMenu").style.display == "none") {
             if(!document.fullscreen) {
               if(!video.paused) {
-              video.pause(); aud.pause(); playPauseButton.innerHTML = playSVG;
+              video.pause(); if(qua != "medium") { aud.pause(); } playPauseButton.innerHTML = playSVG;
             }
             else {
-              video.play(); aud.play(); playPauseButton.innerHTML = pauseSVG;
+              video.play(); if(qua != "medium") { aud.play(); } playPauseButton.innerHTML = pauseSVG;
             }
             }
           }
@@ -780,11 +783,13 @@ background-color: #0000;
         toggleVideo()
       });
       setInterval(() => {
+        if(qua == "medium")
+          return;
         if(Math.round(video.currentTime) - Math.round(aud.currentTime) > 1 || Math.round(video.currentTime) - Math.round(aud.currentTime) < -1 || Math.round(aud.currentTime) - Math.round(video.currentTime) > 1 || Math.round(aud.currentTime) - Math.round(video.currentTime) < -1) {
-          video.pause(); aud.pause(); playPauseButton.innerHTML = playSVG;
+          video.pause(); if(qua != "medium") { aud.pause(); } playPauseButton.innerHTML = playSVG;
           video.currentTime > aud.currentTime ? aud.currentTime = video.currentTime : video.currentTime = aud.currentTime;
           setTimeout(() => {
-            video.play(); aud.play(); playPauseButton.innerHTML = pauseSVG;
+            video.play(); if(qua != "medium") { aud.play(); } playPauseButton.innerHTML = pauseSVG;
           }, 800)
         }
       }, 1000)
@@ -793,7 +798,12 @@ background-color: #0000;
         document.documentElement.requestFullscreen();
       });
       document.getElementById("muteOption").addEventListener("click", () => {
-        aud.volume == 0 ? aud.volume = 1 : aud.volume = 0;
+        if(qua != "medium") { 
+          aud.volume == 0 ? aud.volume = 1 : aud.volume = 0; 
+        }
+        else {
+          video.volume == 0 ? video.volume = 1 : video.volume = 0; 
+        }
       });
       document.getElementById("syncOption").addEventListener("click", () => {
         video.pause(); aud.pause(); playPauseButton.innerHTML = playSVG;
@@ -836,25 +846,27 @@ background-color: #0000;
         const timestamps = document.getElementById("timestamps");
         timestamps.innerText = `${csts(video.currentTime)}/${csts(video.duration)}`;
         // Media controls fix
-        aud.addEventListener("pause", () => {
-          vid.pause(); playPauseButton.innerHTML = playSVG;
-        });
-        aud.addEventListener("play", () => {
-          vid.play(); playPauseButton.innerHTML = pauseSVG;
-        });
-        vid.addEventListener("pause", () => {
-          aud.pause(); playPauseButton.innerHTML = playSVG;
-        });
-        vid.addEventListener("play", () => {
-          aud.play(); playPauseButton.innerHTML = pauseSVG;
-        });
-        aud.addEventListener("timechange", () => {
-          vid.currentTime = aud.currentTime;
-        });
+        if(qua != "medium") { 
+            aud.addEventListener("pause", () => {
+            vid.pause(); playPauseButton.innerHTML = playSVG;
+          });
+          aud.addEventListener("play", () => {
+            vid.play(); playPauseButton.innerHTML = pauseSVG;
+          });
+          vid.addEventListener("pause", () => {
+            aud.pause(); playPauseButton.innerHTML = playSVG;
+          });
+          vid.addEventListener("play", () => {
+            aud.play(); playPauseButton.innerHTML = pauseSVG;
+          });
+          aud.addEventListener("timechange", () => {
+            vid.currentTime = aud.currentTime;
+          });
+        }
         // Show controls
         try {
-          aud.play();
           vid.play();
+          aud.play();
         }
         catch {}
         

@@ -780,16 +780,7 @@ background-color: #0000;
         toggleVideo()
       });
       setInterval(() => {
-        if(Math.round(video.currentTime) != Math.round(aud.currentTime)) {
-          video.pause(); aud.pause(); playPauseButton.innerHTML = playSVG;
-          video.currentTime > aud.currentTime ? aud.currentTime = video.currentTime : video.currentTime = aud.currentTime;
-          setTimeout(() => {
-            video.play(); aud.play(); playPauseButton.innerHTML = pauseSVG;
-          }, 800)
-        }
-      }, 1000)
-      setInterval(() => {
-        if(Math.round(video.currentTime) != Math.round(aud.currentTime)) {
+        if(Math.round(video.currentTime) - Math.round(aud.currentTime) > 1 || Math.round(video.currentTime) - Math.round(aud.currentTime) < -1 || Math.round(aud.currentTime) - Math.round(video.currentTime) > 1 || Math.round(aud.currentTime) - Math.round(video.currentTime) < -1) {
           video.pause(); aud.pause(); playPauseButton.innerHTML = playSVG;
           video.currentTime > aud.currentTime ? aud.currentTime = video.currentTime : video.currentTime = aud.currentTime;
           setTimeout(() => {

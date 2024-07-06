@@ -658,6 +658,7 @@ background-color: #0000;
   }
   #timestamps {
     margin-right: 40px;
+    text-shadow: 1px 1px 2px black;
   }
   html:fullscreen video {
     display: block !important;
@@ -739,6 +740,7 @@ background-color: #0000;
     }
     document.getElementById("buffer-failed-warning").style.display = "block";
   }
+  let canPlayPause = true;
   document.addEventListener("DOMContentLoaded", () => {
     //FIXME: saved playback intentionally overwritten
     localStorage.setItem(`progress-${new URLSearchParams(window.location.search).get('v')}`, 0);
@@ -754,6 +756,7 @@ background-color: #0000;
     });
       seekbar.addEventListener("input", (event) => {
           video.pause()
+          canPlayPause = false;
           if(qua != "medium") {
             aud.pause()
             aud.currentTime = event.target.value
@@ -762,9 +765,11 @@ background-color: #0000;
       });
       
       // Play/Pause
+      
       const playPauseButton = document.getElementById("play-pause");
       playPauseButton.innerHTML = pauseSVG;
       function toggleVideo() {    
+        if(!canPlayPause) return;
           if(document.getElementById("popupMenu").style.display == "none") {
             if(!document.fullscreen) {
               if(!video.paused) {
@@ -795,8 +800,9 @@ background-color: #0000;
         }
       });
       document.getElementById("syncOption").addEventListener("click", () => {
-        video.pause(); aud.pause(); playPauseButton.innerHTML = playSVG;
+        aud.pause(); video.pause();  playPauseButton.innerHTML = playSVG;
         video.currentTime > aud.currentTime ? aud.currentTime = video.currentTime : video.currentTime = aud.currentTime;
+        playPauseButton.innerHTML = pauseSVG;
       });
       document.addEventListener("fullscreenchange", function() {
         if(document.fullscreen) {
@@ -834,24 +840,17 @@ background-color: #0000;
         seekbar.max = video.duration
         const timestamps = document.getElementById("timestamps");
         timestamps.innerText = `${csts(video.currentTime)}/${csts(video.duration)}`;
-        // Media controls fix
-        if(qua != "medium") { 
-            aud.addEventListener("pause", () => {
-            vid.pause(); playPauseButton.innerHTML = playSVG;
-          });
-          aud.addEventListener("play", () => {
-            vid.play(); playPauseButton.innerHTML = pauseSVG;
-          });
-          vid.addEventListener("pause", () => {
-            aud.pause(); playPauseButton.innerHTML = playSVG;
-          });
-          vid.addEventListener("play", () => {
-            aud.play(); playPauseButton.innerHTML = pauseSVG;
-          });
-          aud.addEventListener("timechange", () => {
-            vid.currentTime = aud.currentTime;
-          });
-        }
+        video.addEventListener("seeked", (event) => {
+          setTimeout(()=>{
+            canPlayPause = true;
+            video.pause(); aud.pause(); playPauseButton.innerHTML = playSVG;
+          },1)
+        });
+        aud.addEventListener("seeked", (event) => {
+          setTimeout(()=>{
+            video.pause(); aud.pause(); playPauseButton.innerHTML = playSVG;
+          },1)
+        });
         // Show controls
         try {
           vid.play();
@@ -868,23 +867,15 @@ background-color: #0000;
         }
         
     }
-    let shouldPlay = 0;
     const aud = document.getElementById("aud");
     const vid = document.getElementById("video");
-    aud.addEventListener("canplay", () => {
-      shouldPlay++;
-      if(shouldPlay >= 2) {
+    function shouldPlay() {
+      if(vid.readyState === HTMLMediaElement.HAVE_ENOUGH_DATA && aud.readyState === HTMLMediaElement.HAVE_ENOUGH_DATA) {
         startPlayback();
-        shouldPlay = 0;
       }
-    });
-    vid.addEventListener("canplay", () => {
-      shouldPlay++;
-      if(shouldPlay >= 2) {
-        startPlayback();
-        shouldPlay = 0;
-      }
-    });
+    }
+    aud.addEventListener("canplaythrough", shouldPlay);
+    vid.addEventListener("canplaythrough", shouldPlay);
   })
 </script>
          <% if(shortsui) { %>

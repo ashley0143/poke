@@ -2424,10 +2424,17 @@ const drawPause = () => {
 }
 
 const init = () => {
+
+  //fixes a issue where firefox/chromium fails to load the ambinet mode and doesnt load it. - please dont remove this line lmao
+    
+  video.pause();video.play(); 
+    
+  // DO NOT REMOVE 
+  
   AMvideo.addEventListener("play", drawStart, false)
   AMvideo.addEventListener("pause", drawPause, false)
   AMvideo.addEventListener("ended", drawPause, false)
-
+   
   oddCanvas.style.transition = evenCanvas.style.transition = `opacity ${frameIntervalMs}ms`
 }
 

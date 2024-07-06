@@ -777,22 +777,11 @@ background-color: #0000;
           }
           else {
             document.getElementById("popupMenu").style.display = "none"
-          }
+          } 
       }
       playPauseButton.addEventListener("click", () => {
         toggleVideo()
       });
-      setInterval(() => {
-        if(qua == "medium")
-          return;
-        if(Math.round(video.currentTime) - Math.round(aud.currentTime) > 1 || Math.round(video.currentTime) - Math.round(aud.currentTime) < -1 || Math.round(aud.currentTime) - Math.round(video.currentTime) > 1 || Math.round(aud.currentTime) - Math.round(video.currentTime) < -1) {
-          video.pause(); if(qua != "medium") { aud.pause(); } playPauseButton.innerHTML = playSVG;
-          video.currentTime > aud.currentTime ? aud.currentTime = video.currentTime : video.currentTime = aud.currentTime;
-          setTimeout(() => {
-            video.play(); if(qua != "medium") { aud.play(); } playPauseButton.innerHTML = pauseSVG;
-          }, 800)
-        }
-      }, 1000)
       video.addEventListener("click", toggleVideo);
       video.addEventListener("dblclick", () => { 
         document.documentElement.requestFullscreen();

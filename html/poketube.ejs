@@ -697,195 +697,220 @@ background-color: #0000;
   </style>
 </noscript>
 <script>
-  const qua = new URLSearchParams(new URL(window.location.href).search).get("quality") || "";
-  const playSVG = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>play-circle-outline</title><path d="M12,20C7.59,20 4,16.41 4,12C4,7.59 7.59,4 12,4C16.41,4 20,7.59 20,12C20,16.41 16.41,20 12,20M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M10,16.5L16,12L10,7.5V16.5Z" /></svg>'
-  const pauseSVG = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>pause-circle-outline</title><path d="M13,16V8H15V16H13M9,16V8H11V16H9M12,2A10,10 0 0,1 22,12A10,10 0 0,1 12,22A10,10 0 0,1 2,12A10,10 0 0,1 12,2M12,4A8,8 0 0,0 4,12A8,8 0 0,0 12,20A8,8 0 0,0 20,12A8,8 0 0,0 12,4Z" /></svg>'
-  function csts(seconds) {
-    var hours = Math.floor(seconds / 3600);
-    var minutes = Math.floor((seconds - (hours * 3600)) / 60);
-    var secs = Math.floor(seconds - (hours * 3600) - (minutes * 60));
-    if (hours === 0) {
-        var timeString = minutes.toString().padStart(2, '0') + ':' +
-          secs.toString().padStart(2, '0');
-    } else {
-        var timeString = hours.toString().padStart(2, '0') + ':' +
-          minutes.toString().padStart(2, '0') + ':' +
-          secs.toString().padStart(2, '0');
-    }
-    return timeString;
+ const qua = new URLSearchParams(new URL(window.location.href).search).get("quality") || "";
+const playSVG = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>play-circle-outline</title><path d="M12,20C7.59,20 4,16.41 4,12C4,7.59 7.59,4 12,4C16.41,4 20,7.59 20,12C20,16.41 16.41,20 12,20M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M10,16.5L16,12L10,7.5V16.5Z" /></svg>'
+const pauseSVG = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>pause-circle-outline</title><path d="M13,16V8H15V16H13M9,16V8H11V16H9M12,2A10,10 0 0,1 22,12A10,10 0 0,1 12,22A10,10 0 0,1 2,12A10,10 0 0,1 12,2M12,4A8,8 0 0,0 4,12A8,8 0 0,0 12,20A8,8 0 0,0 20,12A8,8 0 0,0 12,4Z" /></svg>'
+
+function csts(seconds) {
+  var hours = Math.floor(seconds / 3600);
+  var minutes = Math.floor((seconds - (hours * 3600)) / 60);
+  var secs = Math.floor(seconds - (hours * 3600) - (minutes * 60));
+  var timeString;
+  if (hours === 0) {
+    timeString = minutes.toString().padStart(2, '0') + ':' + secs.toString().padStart(2, '0');
+  } else {
+    timeString = hours.toString().padStart(2, '0') + ':' + minutes.toString().padStart(2, '0') + ':' + secs.toString().padStart(2, '0');
+  }
+  return timeString;
 }
-  function showErrorCard(e) {
-    try {
-      switch (e.target.error.code) {
+
+function showErrorCard(e) {
+  try {
+    switch (e.target.error.code) {
       case e.target.error.MEDIA_ERR_ABORTED:
         return;
-        break;
       case e.target.error.MEDIA_ERR_NETWORK:
-        document.querySelector("div p span").innerText = "(Network error)"
+        document.querySelector("div p span").innerText = "(Network error)";
         break;
       case e.target.error.MEDIA_ERR_DECODE:
-        document.querySelector("div p span").innerText = "(Decode error/lack of browser support)"
+        document.querySelector("div p span").innerText = "(Decode error/lack of browser support)";
         break;
       case e.target.error.MEDIA_ERR_SRC_NOT_SUPPORTED:
-        document.querySelector("div p span").innerText = "(Network error or format not supported)"
+        document.querySelector("div p span").innerText = "(Network error or format not supported)";
         break;
       default:
-        document.querySelector("div p span").innerText = "(Unknown error)"
+        document.querySelector("div p span").innerText = "(Unknown error)";
         break;
-      } 
     }
-    catch {
-      document.querySelector("div p span").innerText = "(Network error)"
-    }
-    document.getElementById("buffer-failed-warning").style.display = "block";
+  } catch {
+    document.querySelector("div p span").innerText = "(Network error)";
   }
-  document.addEventListener("DOMContentLoaded", () => {
-    //FIXME: saved playback intentionally overwritten
-    localStorage.setItem(`progress-${new URLSearchParams(window.location.search).get('v')}`, 0);
-    // Controls and high-res playback
-    //TODO - a
-    let setTime = false
-    const seekbar = document.getElementById("duration-slider")
-    const video = document.getElementById("video");
-    video.addEventListener("timeupdate", (event) => {
-      seekbar.value = event.target.currentTime;
-      const timestamps = document.getElementById("timestamps");
-      timestamps.innerText = `${csts(video.currentTime)}/${csts(video.duration)}`;
-    });
-      seekbar.addEventListener("input", (event) => {
-          video.pause()
-          if(qua != "medium") {
-            aud.pause()
-            aud.currentTime = event.target.value
-          }
-          video.currentTime = event.target.value
-      });
-      
-      // Play/Pause
-      const playPauseButton = document.getElementById("play-pause");
-      playPauseButton.innerHTML = pauseSVG;
-      function toggleVideo() {    
-          if(document.getElementById("popupMenu").style.display == "none") {
-            if(!document.fullscreen) {
-              if(!video.paused) {
-              video.pause(); if(qua != "medium") { aud.pause(); } playPauseButton.innerHTML = playSVG;
-            }
-            else {
-              video.play(); if(qua != "medium") { aud.play(); } playPauseButton.innerHTML = pauseSVG;
-            }
-            }
-          }
-          else {
-            document.getElementById("popupMenu").style.display = "none"
-          } 
-      }
-      playPauseButton.addEventListener("click", () => {
-        toggleVideo()
-      });
-      video.addEventListener("click", toggleVideo);
-      video.addEventListener("dblclick", () => { 
-        document.documentElement.requestFullscreen();
-      });
-      document.getElementById("muteOption").addEventListener("click", () => {
-        if(qua != "medium") { 
-          aud.volume == 0 ? aud.volume = 1 : aud.volume = 0; 
-        }
-        else {
-          video.volume == 0 ? video.volume = 1 : video.volume = 0; 
-        }
-      });
-      document.getElementById("syncOption").addEventListener("click", () => {
-        video.pause(); aud.pause(); playPauseButton.innerHTML = playSVG;
-        video.currentTime > aud.currentTime ? aud.currentTime = video.currentTime : video.currentTime = aud.currentTime;
-      });
-      document.addEventListener("fullscreenchange", function() {
-        if(document.fullscreen) {
-          video.controlsList = "noplaybackrate nodownload"
-          window.onscroll = function () { window.scrollTo(0, 0); };
-          document.documentElement.style.overflow = "hidden"
-          video.controls = true;
-        }
-        if(!document.fullscreen) {
-          video.controlsList = ""
-          window.onscroll = null;
-          document.documentElement.style.overflow = null
-          video.controls = false;
-        }
-      });
-      video.addEventListener("fullscreenchange", () => {
-        video.fullscreen = false;
-        document.exitFullscreen();
-      });
-      video.addEventListener("contextmenu", (event) => {
-        if(document.fullscreen) {
-          event.preventDefault()
-          const popupMenu = document.getElementById('popupMenu');
-          if (popupMenu) {
-            const xPosition = event.clientX + window.pageXOffset;
-            const yPosition = event.clientY + window.pageYOffset;
-            popupMenu.style.left = `${xPosition}px`;
-            popupMenu.style.top = `${yPosition}px`;
-          }
-          popupMenu.style.display = "block"
-        }
-      });
-    function startPlayback() {
-        // Final prepare
-        seekbar.max = video.duration
-        const timestamps = document.getElementById("timestamps");
-        timestamps.innerText = `${csts(video.currentTime)}/${csts(video.duration)}`;
-        // Media controls fix
-        if(qua != "medium") { 
-            aud.addEventListener("pause", () => {
-            vid.pause(); playPauseButton.innerHTML = playSVG;
-          });
-          aud.addEventListener("play", () => {
-            vid.play(); playPauseButton.innerHTML = pauseSVG;
-          });
-          vid.addEventListener("pause", () => {
-            aud.pause(); playPauseButton.innerHTML = playSVG;
-          });
-          vid.addEventListener("play", () => {
-            aud.play(); playPauseButton.innerHTML = pauseSVG;
-          });
-          aud.addEventListener("timechange", () => {
-            vid.currentTime = aud.currentTime;
-          });
-        }
-        // Show controls
-        try {
-          vid.play();
-          aud.play();
-        }
-        catch {}
-        
-        if(!setTime) {
-          //FIXME: saved playback intentionally overwritten
-          aud.currentTime = 0
-          vid.currentTime = 0
-          seekbar.value = 0
-          setTime = true
-        }
-        
+  document.getElementById("buffer-failed-warning").style.display = "block";
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  //FIXME: saved playback intentionally overwritten
+  localStorage.setItem(`progress-${new URLSearchParams(window.location.search).get('v')}`, 0);
+  // Controls and high-res playback
+  //TODO - a
+  let setTime = false
+  const seekbar = document.getElementById("duration-slider")
+  const video = document.getElementById("video");
+  video.addEventListener("timeupdate", (event) => {
+    seekbar.value = event.target.currentTime;
+    const timestamps = document.getElementById("timestamps");
+    timestamps.innerText = `${csts(video.currentTime)}/${csts(video.duration)}`;
+  });
+  
+  seekbar.addEventListener("input", (event) => {
+    video.pause();
+    if (qua != "medium") {
+      aud.pause();
+      aud.currentTime = event.target.value;
     }
-    let shouldPlay = 0;
-    const aud = document.getElementById("aud");
-    const vid = document.getElementById("video");
-    aud.addEventListener("canplay", () => {
-      shouldPlay++;
-      if(shouldPlay >= 2) {
-        startPlayback();
-        shouldPlay = 0;
+    video.currentTime = event.target.value;
+  });
+
+  // Play/Pause
+  const playPauseButton = document.getElementById("play-pause");
+  playPauseButton.innerHTML = pauseSVG;
+  function toggleVideo() {
+    if (document.getElementById("popupMenu").style.display == "none") {
+      if (!document.fullscreen) {
+        if (!video.paused) {
+          video.pause();
+          if (qua != "medium") {
+            aud.pause();
+          }
+          playPauseButton.innerHTML = playSVG;
+        } else {
+          video.play();
+          if (qua != "medium") {
+            aud.play();
+          }
+          playPauseButton.innerHTML = pauseSVG;
+        }
       }
-    });
-    vid.addEventListener("canplay", () => {
-      shouldPlay++;
-      if(shouldPlay >= 2) {
-        startPlayback();
-        shouldPlay = 0;
+    } else {
+      document.getElementById("popupMenu").style.display = "none";
+    }
+  }
+  playPauseButton.addEventListener("click", () => {
+    toggleVideo();
+  });
+  video.addEventListener("click", toggleVideo);
+  video.addEventListener("dblclick", () => {
+    document.documentElement.requestFullscreen();
+  });
+  document.getElementById("muteOption").addEventListener("click", () => {
+    if (qua != "medium") {
+      aud.volume == 0 ? aud.volume = 1 : aud.volume = 0;
+    } else {
+      video.volume == 0 ? video.volume = 1 : video.volume = 0;
+    }
+  });
+  document.getElementById("syncOption").addEventListener("click", () => {
+    video.pause();
+    aud.pause();
+    playPauseButton.innerHTML = playSVG;
+    video.currentTime > aud.currentTime ? aud.currentTime = video.currentTime : video.currentTime = aud.currentTime;
+  });
+  document.addEventListener("fullscreenchange", function() {
+    if (document.fullscreen) {
+      video.controlsList = "noplaybackrate nodownload";
+      window.onscroll = function () { window.scrollTo(0, 0); };
+      document.documentElement.style.overflow = "hidden";
+      video.controls = true;
+    }
+    if (!document.fullscreen) {
+      video.controlsList = "";
+      window.onscroll = null;
+      document.documentElement.style.overflow = null;
+      video.controls = false;
+    }
+  });
+  video.addEventListener("fullscreenchange", () => {
+    video.fullscreen = false;
+    document.exitFullscreen();
+  });
+  video.addEventListener("contextmenu", (event) => {
+    if (document.fullscreen) {
+      event.preventDefault();
+      const popupMenu = document.getElementById('popupMenu');
+      if (popupMenu) {
+        const xPosition = event.clientX + window.pageXOffset;
+        const yPosition = event.clientY + window.pageYOffset;
+        popupMenu.style.left = `${xPosition}px`;
+        popupMenu.style.top = `${yPosition}px`;
       }
-    });
-  })
+      popupMenu.style.display = "block";
+    }
+  });
+
+  function startPlayback() {
+    // Final prepare
+    seekbar.max = video.duration;
+    const timestamps = document.getElementById("timestamps");
+    timestamps.innerText = `${csts(video.currentTime)}/${csts(video.duration)}`;
+    // Media controls fix
+    if (qua != "medium") {
+      aud.addEventListener("pause", () => {
+        video.pause();
+        playPauseButton.innerHTML = playSVG;
+      });
+      aud.addEventListener("play", () => {
+        video.play();
+        playPauseButton.innerHTML = pauseSVG;
+      });
+      video.addEventListener("pause", () => {
+        aud.pause();
+        playPauseButton.innerHTML = playSVG;
+      });
+      video.addEventListener("play", () => {
+        aud.play();
+        playPauseButton.innerHTML = pauseSVG;
+      });
+      aud.addEventListener("timeupdate", () => {
+        video.currentTime = aud.currentTime;
+      });
+    }
+    // Show controls
+    try {
+      video.play();
+      aud.play();
+    } catch {}
+
+    if (!setTime) {
+      //FIXME: saved playback intentionally overwritten
+      aud.currentTime = 0;
+      video.currentTime = 0;
+      seekbar.value = 0;
+      setTime = true;
+    }
+  }
+
+  let shouldPlay = 0;
+  const aud = document.getElementById("aud");
+  const vid = document.getElementById("video");
+
+  function checkReadyState() {
+    if (vid.readyState >= 3) { // HAVE_FUTURE_DATA or higher
+      if (aud.readyState < 3) {
+        aud.load(); // load the audio if not ready
+      }
+      if (vid.readyState >= 3 && aud.readyState >= 3) {
+        startPlayback();
+      }
+    }
+  }
+
+  vid.addEventListener("canplay", () => {
+    shouldPlay++;
+    if (shouldPlay >= 2) {
+      checkReadyState();
+      shouldPlay = 0;
+    }
+  });
+
+  aud.addEventListener("canplay", () => {
+    shouldPlay++;
+    if (shouldPlay >= 2) {
+      checkReadyState();
+      shouldPlay = 0;
+    }
+  });
+});
+
 </script>
          <% if(shortsui) { %>
                                                        <script>

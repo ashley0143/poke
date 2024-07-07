@@ -755,6 +755,17 @@ background-color: #0000;
       const timestamps = document.getElementById("timestamps");
       timestamps.innerText = `${csts(video.currentTime)}/${csts(video.duration)}`;
     });
+    setTimeout(()=>{
+      video.addEventListener("seeking", (event) => {     
+      if(!didFirstTimePlay) return; 
+      if(qua != "medium") {
+        video.pause()
+        canPlayPause = false;
+        aud.pause()
+        aud.currentTime = event.target.currentTime
+      }
+    });
+    }, 200)
       seekbar.addEventListener("input", (event) => {
           video.pause()
           canPlayPause = false;
@@ -788,6 +799,8 @@ background-color: #0000;
       playPauseButton.addEventListener("click", () => {
         toggleVideo()
       });
+      video.addEventListener("pause", ()=>{if(qua != "medium") {aud.pause()}});
+      video.addEventListener("play", ()=>{if(qua != "medium") {aud.play()}})
       video.addEventListener("click", toggleVideo);
       video.addEventListener("dblclick", () => { 
         document.documentElement.requestFullscreen();

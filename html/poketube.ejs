@@ -741,6 +741,7 @@ background-color: #0000;
     document.getElementById("buffer-failed-warning").style.display = "block";
   }
   let canPlayPause = true;
+  let didFirstTimePlay = false;
   document.addEventListener("DOMContentLoaded", () => {
     //FIXME: saved playback intentionally overwritten
     localStorage.setItem(`progress-${new URLSearchParams(window.location.search).get('v')}`, 0);
@@ -749,7 +750,7 @@ background-color: #0000;
     let setTime = false
     const seekbar = document.getElementById("duration-slider")
     const video = document.getElementById("video");
-    video.addEventListener("timeupdate", (event) => {
+    video.addEventListener("timeupdate", (event) => {      
       seekbar.value = event.target.currentTime;
       const timestamps = document.getElementById("timestamps");
       timestamps.innerText = `${csts(video.currentTime)}/${csts(video.duration)}`;
@@ -804,6 +805,24 @@ background-color: #0000;
         video.currentTime > aud.currentTime ? aud.currentTime = video.currentTime : video.currentTime = aud.currentTime;
         playPauseButton.innerHTML = pauseSVG;
       });
+      setTimeout(()=>{
+           if(!didFirstTimePlay) {
+            video.addEventListener("seeked", (event) => {
+          setTimeout(()=>{
+              canPlayPause = true;
+              if(video.currentTime==0||aud.currentTime==0) return;
+              video.pause(); aud.pause(); playPauseButton.innerHTML = playSVG;
+              },1)
+           });
+          aud.addEventListener("seeked", (event) => {
+            setTimeout(()=>{
+              if(video.currentTime==0||aud.currentTime==0) return;
+              video.pause(); aud.pause(); playPauseButton.innerHTML = playSVG;
+            },1)
+          });
+          didFirstTimePlay = true;
+           }
+          },100)
       document.addEventListener("fullscreenchange", function() {
         if(document.fullscreen) {
           video.controlsList = "noplaybackrate nodownload"
@@ -840,21 +859,14 @@ background-color: #0000;
         seekbar.max = video.duration
         const timestamps = document.getElementById("timestamps");
         timestamps.innerText = `${csts(video.currentTime)}/${csts(video.duration)}`;
-        video.addEventListener("seeked", (event) => {
-          setTimeout(()=>{
-            canPlayPause = true;
-            video.pause(); aud.pause(); playPauseButton.innerHTML = playSVG;
-          },1)
-        });
-        aud.addEventListener("seeked", (event) => {
-          setTimeout(()=>{
-            video.pause(); aud.pause(); playPauseButton.innerHTML = playSVG;
-          },1)
-        });
+        
         // Show controls
         try {
+          playPauseButton.innerHTML = pauseSVG;
           vid.play();
           aud.play();
+          didFirstTimePlay = true;
+          
         }
         catch {}
         

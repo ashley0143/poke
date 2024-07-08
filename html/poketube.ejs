@@ -1276,7 +1276,7 @@ Offical Discord Server! :3
                       </div>
               <div id="syncOption"> 
                 <i class="fa-light fa-rotate"> </i> Sync Audio/Video
-              </div>
+  autoplay            </div>
                        <div id="speedOption"> 
 <i class="fa-light fa-gauge"></i> Speed: 1.00x
                                                                              </div>                        
@@ -1301,7 +1301,7 @@ Offical Discord Server! :3
 		<div id="<%=sha384(inv_vid.videoId)%>" class="video-player-container">
       
       <% if (!qua) { //TODO - a %>
-        <audio id="aud" preload>
+        <audio id="aud" autoplay preload>
           <source src="<%=u%>/latest_version?id=<%=inv_vid.videoId%>&itag=140&local=true" type="video/mp4" onerror="showErrorCard(event)"/>
         </audio>
       <% } else { %>
@@ -1323,7 +1323,7 @@ Offical Discord Server! :3
           <span></span>
         </p>
       </div>
-      <video class="player video-ambient-container" id="video" style="border-radius: 16px; box-sizing: border-box; min-width: 100%; display: block;" preload onerror="showErrorCard(event)">
+      <video class="player video-ambient-container" id="video" style="border-radius: 16px; box-sizing: border-box; min-width: 100%; display: block;" autoplay preload onerror="showErrorCard(event)">
       <% if (isvidious) { %>
         <% if (!qua) { %>
 <% 

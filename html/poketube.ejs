@@ -370,12 +370,14 @@ a[data-onclick="jump_to_time"] {
    </style>
  
   <!-- css files -->
+  <!-- these files are cached for 10 days -->
   <link href="/css/app-cdn.min.css?v=9893448" rel=stylesheet>
   <link href="/css/app.main.css?v=446008" rel=stylesheet>
   <link href="/css/watch.main.css?v=9893448" rel=stylesheet>
   <link href="/css/watch-util.css?v=9893448" rel=stylesheet>
   <link href="/css/watch-navbar.css?v=9893448" rel=stylesheet>
   <link href="/css/poketube.css?v=9489344844" rel=stylesheet>
+  <!-- css files end -->
 
 <% if (k.Video.Channel.Name == "7clouds") { %> 
 <style>
@@ -386,7 +388,10 @@ a[data-onclick="jump_to_time"] {
 </style>
                                             		 	               <% } %> 
   <!-- ICONS -->
+ 
+ <!-- Fake Font awsome pro -->
  <link href="<%- proxyurl %>/https://site-assets.fontawesome.com/releases/v6.1.1/css/all.css" rel=stylesheet>
+ 
  <link href="<%- proxyurl %>/https://cdn.jsdelivr.net/npm/ionicons@4.5.0-0/dist/css/ionicons.min.css" rel=stylesheet>
 
   
@@ -2096,7 +2101,7 @@ inv_vid?.recommendedVideos.forEach(video => {
 %>
 
 <% inv_vid?.recommendedVideos.forEach(x => { %>
-    <div class="fade-in video channel-<%= x.authorId %>">
+    <div class="fade-in video" data-channel="<%= x.authorId %>">
         <% if (!optout) { %>
             <a class="thumbnail" href="/watch?v=<%= x.videoId %>" style="background-image:url(<%- media_proxy_url %>/proxy?url=https://yt.miruku.cafe/vi/<%= x.videoId %>/hqdefault.jpg?sqp=-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLBy_x4UUHLNDZtJtH0PXeQGoRFTgw);border-radius:9.5px" alt="<%= x.Title %>">
                 <span class="video-length"><%- turntomins(x.lengthSeconds) || "LIVE"%></span>

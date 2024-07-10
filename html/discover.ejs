@@ -494,7 +494,7 @@ Popular Videos On Poke :3   </h1>
                                  
 <div class="video-grid" style="border-top-left-radius:2em;width: 80em;border-top-right-radius: 2em;border: solid 1px purple;">
    <% inv.forEach(x =>  { %>
-			<a href="/watch?v=<%- x.videoId %>"  class="video author-<%- x.author %>">
+			<a href="/watch?v=<%- x.videoId %>" class="video canloadhd" data-author="<%- x.author %>" >
 				<div class="thumbnail" style="background-image: url('/vi/<%= x.videoId %>/hqdefault.jpg?sqp=-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLBy_x4UUHLNDZtJtH0PXeQGoRFTgw');border-radius: 10px;"><span class="video-length"><%- turntomins(x.lengthSeconds) %></span></div>
 				<div class="info">
 					<span class="title max-lines-2" title="<%- x.title %>" style="font-family:Inter,sans-serif;"><%- x.title %></span>

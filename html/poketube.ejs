@@ -805,12 +805,46 @@ background-color: #0000;
       video.addEventListener("dblclick", () => { 
         document.documentElement.requestFullscreen();
       });
+      function handleVolumeChange(element) {
+        switch (element.volume) {
+          case 1:
+            element.volume = 0;
+            document.querySelector("#muteOption #new").innerText = "25%"
+            document.querySelector("#muteOption #current").innerText = "0%"
+            break;
+          case 0:
+            element.volume = 0.25;
+            document.querySelector("#muteOption #new").innerText = "50%"
+            document.querySelector("#muteOption #current").innerText = "25%"
+            break;
+          case 0.25:
+            element.volume = 0.5;
+            document.querySelector("#muteOption #new").innerText = "75%"
+            document.querySelector("#muteOption #current").innerText = "50%"
+            break;
+          case 0.5:
+            element.volume = 0.75;
+            document.querySelector("#muteOption #new").innerText = "100%"
+            document.querySelector("#muteOption #current").innerText = "75%"
+            break;
+          case 0.75:
+            element.volume = 1;
+            document.querySelector("#muteOption #new").innerText = "0%"
+            document.querySelector("#muteOption #current").innerText = "100%"
+            break;
+          default:
+            element.volume = 1;
+            document.querySelector("#muteOption #new").innerText = "0%"
+            document.querySelector("#muteOption #current").innerText = "100%"
+            break;
+        }
+      }
       document.getElementById("muteOption").addEventListener("click", () => {
         if(qua != "medium") { 
-          aud.volume == 0 ? aud.volume = 1 : aud.volume = 0; 
+          handleVolumeChange(aud)
         }
         else {
-          video.volume == 0 ? video.volume = 1 : video.volume = 0; 
+          handleVolumeChange(video)
         }
       });
       document.getElementById("syncOption").addEventListener("click", () => {
@@ -1277,7 +1311,7 @@ Offical Discord Server! :3
         <i class="fa-light fa-repeat"> </i> Loop Video
               </div>
               <div id="muteOption"> 
-                <i class="fa-light fa-volume-xmark"> </i> Mute/Unmute
+                <i class="fa-light fa-volume-xmark"> </i> Set volume to <span id="new">0%</span> (currently <span id="current">100%</span>)
                       </div>
               <div id="syncOption"> 
                 <i class="fa-light fa-rotate"> </i> Sync Audio/Video

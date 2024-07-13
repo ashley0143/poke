@@ -2786,7 +2786,7 @@ a {
 
 
                      
-                                                <source src="https://eu-proxy.poketube.fun/latest_version?id=<%=inv_vid.videoId%>&itag=22&local=true" type="video/mp4; codecs=&quot;avc1.64001F, mp4a.40.2&quot;" label="hd720" selected="true">
+                                                <source src="https://eu-proxy.poketube.fun/latest_version?id=<%=inv_vid.videoId%>&itag=18&local=true" type="video/mp4; codecs=&quot;avc1.64001F, mp4a.40.2&quot;" label="hd720" selected="true">
 
                                                                              <% } %>                
 
@@ -2822,18 +2822,7 @@ a {
 <div class="video-info" style="position: sticky;z-index: 1;">
         <div style="linear-gradient(135deg,#f97794 10%,#623aa2 100%,#8e6f7e 100%);border-radius: 10px;margin-bottom: 10px;padding-bottom: 1em;padding-top: 0.3em;">
           
-                                        <div style="display: flex;justify-content: center;align-items: center;flex-direction: row; column-gap: 3px;margin-top: -14px;" align="center">
-                                
-  <% if (!qua) { %> 
-
-                                 <i style="display: block;" title="High Definition [Current]" class="fa-solid fa-high-definition"></i> <a href="/watch?v=<%=inv_vid.videoId%>&quality=medium"><i style="display: block;" title="Standard Definition" class="fa-light fa-standard-definition"></i></a>
-                                                                      <% } %>               
-                               <% if (qua) { %> 
-                                 <a href="/watch?v=<%=inv_vid.videoId%>">  <i style="display: block;"  title="High Definition" class="fa-light fa-high-definition"></i> </a>  <i style="display: block;" title="Standard Definition [Current]"  class="fa-solid fa-standard-definition"></i>
-
-                                                                      <% } %>               
-
-       </div>            
+                           
    <div class="video-title" style="padding: 10px;background: #0009;margin-bottom: 6px;margin-left: 6px;margin-right: 12px;border-radius: 15px;margin-top: 4px;font-family: poketube flex;font-weight: 800;font-stretch: ultra-expanded;"><%=inv_vid.title%> <br>
 <a id="language-button" href="#desc-container" style="color: pink;
 margin: 0;

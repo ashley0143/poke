@@ -259,7 +259,7 @@ module.exports = function (app, config, renderTemplate) {
       )}/${ID}/?hl=en-US`;
 
       const channelINVUrl = `${apiUrl}${ID}/`;
-      const checkPronoun = async (id) => (await (await fetch('https://codeberg.org/ashley/poke-pronouns-db/raw/branch/main/pronouns.json')).json())[id] || `no pronouns set`; 
+      const checkPronoun = async (id) => (await (await fetch('https://raw.githubusercontent.com/ashley0143/poke/main/pronounsdb.json')).json())[id] || `no pronouns set`; 
       const pronoun = await checkPronoun(ID);
 
       var [tj, shorts, playlist, stream, c, cinv] = await Promise.all([

@@ -121,7 +121,7 @@ module.exports = function (app, config, renderTemplate) {
     const t = getJson(await invtrend.text());
 
     const invpopular = await fetch(
-      `https://invid-api.poketube.fun/api/v1/popular`
+      `https://invid-api.poketube.fun/bHj665PpYhUdPWuKPfZuQGoX/api/v1/popular`
     );
     const p = getJson(await invpopular.text());
 

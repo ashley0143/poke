@@ -321,11 +321,17 @@ module.exports = function (app, config, renderTemplate) {
      }
     }
 
+   const ChannelFirstVideoObject = await fetch(
+        `${config.invapi}/videos/${tj.videos[0].videoId}`
+      )
+        .then((res) => res.text())
+        .then((txt) => getJson(txt));
+
       renderTemplate(res, req, "channel.ejs", {
         ID,
         tab,
         shorts,
-        firstVideo:tj.videos[0],
+        firstVideo:ChannelFirstVideoObject,
         j: boutJson,
         sort: sort_by,
         stream,

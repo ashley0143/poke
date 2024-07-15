@@ -230,16 +230,7 @@ module.exports = function (app, config, renderTemplate) {
         ? `&continuation=${req.query.continuations}`
         : "";
       const sort_by = req.query.sort_by || "newest";
-
-      const getChannelData = async (url) => {
-        try {
-          return await fetch(url)
-            .then((res) => res.text())
-            .then((txt) => getJson(txt));
-        } catch (error) {
-          return null;
-        }
-      };
+ 
 
   const getChannelData = async (url) => {
   try {

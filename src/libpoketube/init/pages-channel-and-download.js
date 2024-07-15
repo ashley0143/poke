@@ -284,13 +284,12 @@ module.exports = function (app, config, renderTemplate) {
           stream,
           c,
           cinv,
-          boutJson,
         },
         timestamp: Date.now(),
       };
 
       if (cache[ID] && Date.now() - cache[ID].timestamp < 3600000) {
-        var { tj, shorts, stream, c, boutJson } = cache[ID].result;
+        var { tj, shorts, stream, c } = cache[ID].result;
       }
 
 //TOBEREMOVED
@@ -322,7 +321,6 @@ module.exports = function (app, config, renderTemplate) {
         tab,
         shorts,
         firstVideo:ChannelFirstVideoObject,
-        j: boutJson,
         sort: sort_by,
         stream,
         tj,

@@ -317,21 +317,23 @@ var [tj, shorts, playlist, stream, c] = await Promise.all([
       
 
      
-      
-    if (continuation) {
-     const currentAuthorId = String(cinv.authorId).trim();
-     const firstVideoAuthorId = String(tj.videos[0].authorId).trim();
-     
-     if (currentAuthorId.localeCompare(firstVideoAuthorId) !== 0) {
-       res.status(400).send("Continuation does not match the channel :c");
-     }
+      if (tj) {
+  if (continuation) {
+    const currentAuthorId = String(cinv.authorId).trim();
+    const firstVideoAuthorId = String(tj.videos[0].authorId).trim();
+    
+    if (currentAuthorId.localeCompare(firstVideoAuthorId) !== 0) {
+      res.status(400).send("Continuation does not match the channel :c");
+      return; // Exit the function after sending the response
     }
+  }
 
-   const ChannelFirstVideoObject = await fetch(
-        `${config.invapi}/videos/${tj.videos[0].videoId}`
-      )
-        .then((res) => res.text())
-        .then((txt) => getJson(txt));
+  var ChannelFirstVideoObject = await fetch(
+    `${config.invapi}/videos/${tj.videos[0].videoId}`
+  )
+    .then((res) => res.text())
+    .then((txt) => getJson(txt));
+}
 
       renderTemplate(res, req, "channel.ejs", {
         ID,

@@ -184,9 +184,7 @@ module.exports = function (app, config, renderTemplate) {
   });
 
   app.get("/web", async (req, res) => {
-    
-       res.redirect("/");
- 
+    res.redirect("/");
   });
 
   app.get("/channel/", async (req, res) => {
@@ -207,7 +205,7 @@ module.exports = function (app, config, renderTemplate) {
       if (ID.endsWith("@poketube.fun")) {
         ID = ID.slice(0, -"@poketube.fun".length);
       }
-      
+
       const tab = req.query.tab;
       const cache = {};
 
@@ -259,8 +257,8 @@ module.exports = function (app, config, renderTemplate) {
       )}/${ID}/?hl=en-US`;
 
       const channelINVUrl = `${apiUrl}${ID}/`;
-      
-      const pronoun = "no pronouns :c"
+
+      const pronoun = "no pronouns :c";
 
       var [tj, shorts, playlist, stream, c, cinv] = await Promise.all([
         getChannelData(channelUrl),
@@ -282,8 +280,6 @@ module.exports = function (app, config, renderTemplate) {
           return `https://vid.puffyan.us/vi/${video.videoId}/hqdefault.jpg`;
         }
       }
- 
-
 
       cache[ID] = {
         result: {
@@ -308,30 +304,48 @@ module.exports = function (app, config, renderTemplate) {
         " <br> "
       );
       const dnoreplace = about?.Description.toString();
-      
 
-     
-      
-    if (continuation) {
-     const currentAuthorId = String(cinv.authorId).trim();
-     const firstVideoAuthorId = String(tj.videos[0].authorId).trim();
-     
-     if (currentAuthorId.localeCompare(firstVideoAuthorId) !== 0) {
-       res.status(400).send("Continuation does not match the channel :c");
-     }
-    }
+      if (continuation) {
+        const currentAuthorId = String(cinv.authorId).trim();
+        const firstVideoAuthorId = String(tj.videos[0].authorId).trim();
 
-   const ChannelFirstVideoObject = await fetch(
-        `${config.invapi}/videos/${tj.videos[0].videoId}`
-      )
-        .then((res) => res.text())
-        .then((txt) => getJson(txt));
+        if (currentAuthorId.localeCompare(firstVideoAuthorId) !== 0) {
+          res.status(400).send("Continuation does not match the channel :c");
+        }
+      }
+
+      let ChannelFirstVideoObject;
+
+      if (tj && tj.videos && tj.videos.length > 0) {
+        ChannelFirstVideoObject = await fetch(
+          `${config.invapi}/videos/${tj.videos[0].videoId}`
+        )
+          .then((res) => res.text())
+          .then((txt) => JSON.parse(txt));
+      } else if (shorts && shorts.videos && shorts.videos.length > 0) {
+        ChannelFirstVideoObject = await fetch(
+          `${config.invapi}/videos/${shorts.videos[0].videoId}`
+        )
+          .then((res) => res.text())
+          .then((txt) => JSON.parse(txt));
+      } else if (stream && stream.videos && stream.videos.length > 0) {
+        ChannelFirstVideoObject = await fetch(
+          `${config.invapi}/videos/${stream.videos[0].videoId}`
+        )
+          .then((res) => res.text())
+          .then((txt) => JSON.parse(txt));
+      } else {
+        ChannelFirstVideoObject = {
+          subCountText: "0",
+          authorVerified: false,
+        };
+      }
 
       renderTemplate(res, req, "channel.ejs", {
         ID,
         tab,
         shorts,
-        firstVideo:ChannelFirstVideoObject,
+        firstVideo: ChannelFirstVideoObject,
         j: boutJson,
         sort: sort_by,
         stream,

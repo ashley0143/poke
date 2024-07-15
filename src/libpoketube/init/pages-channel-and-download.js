@@ -262,9 +262,11 @@ const streamUrl = ChannelTabs.streams ? `${apiUrl}${ID}/${atob(ChannelTabs.strea
 const communityUrl = ChannelTabs.community ? `${apiUrl}${atob(ChannelTabs.community)}/${ID}/?hl=en-US` : null;
 const PlaylistUrl = ChannelTabs.playlist ? `${apiUrl}${atob(ChannelTabs.playlist)}/${ID}/?hl=en-US` : null;
 
+
 const fetchData = async (url) => {
-  return url ? getChannelData(url) : null;
+  return url ? getChannelData(url) : "";
 };
+
 
 var [tj, shorts, playlist, stream, c] = await Promise.all([
   fetchData(channelUrl),

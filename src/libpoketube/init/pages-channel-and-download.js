@@ -210,16 +210,8 @@ module.exports = function (app, config, renderTemplate) {
       
       const tab = req.query.tab;
       const cache = {};
-
-      try {
-        // about
-        const bout = await fetch(config.tubeApi + `channel?id=${ID}&tab=about`);
-        const h = await bout.text();
-        var boutJson = JSON.parse(modules.toJson(h));
-      } catch {
-        boutJson = " ";
-      }
-
+ 
+ 
       const continuation = req.query.continuation
         ? `&continuation=${req.query.continuation}`
         : "";
@@ -301,13 +293,11 @@ module.exports = function (app, config, renderTemplate) {
         var { tj, shorts, stream, c, boutJson } = cache[ID].result;
       }
 
-      const subscribers = boutJson.Channel?.Metadata.Subscribers;
-      const about = boutJson?.Channel?.Contents?.ItemSection?.About;
-      const description = about?.Description.toString().replace(
-        /\n/g,
-        " <br> "
-      );
-      const dnoreplace = about?.Description.toString();
+//TOBEREMOVED
+      const subscribers = ""
+      const about = ""
+      const description = ""
+      const dnoreplace = ""
       
 
      

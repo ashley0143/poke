@@ -325,6 +325,7 @@ module.exports = function (app, config, renderTemplate) {
         ID,
         tab,
         shorts,
+        firstVideo:tj.videos[0],
         j: boutJson,
         sort: sort_by,
         stream,

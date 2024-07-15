@@ -230,52 +230,46 @@ module.exports = function (app, config, renderTemplate) {
         ? `&continuation=${req.query.continuations}`
         : "";
       const sort_by = req.query.sort_by || "newest";
- 
 
-  const getChannelData = async (url) => {
-  try {
-    return await fetch(url)
-      .then((res) => res.text())
-      .then((txt) => getJson(txt));
-  } catch (error) {
-    return null;
-  }
-};
+      const getChannelData = async (url) => {
+        try {
+          return await fetch(url)
+            .then((res) => res.text())
+            .then((txt) => getJson(txt));
+        } catch (error) {
+          return null;
+        }
+      };
 
-const apiUrl = config.invapi + "/channels/";
-const channelINVUrl = `${apiUrl}${ID}/`;
-const checkPronoun = async (id) => (await (await fetch('https://raw.githubusercontent.com/ashley0143/poke/main/pronounsdb.json')).json())[id] || `no pronouns set`;
-const pronoun = await checkPronoun(ID);
+      const apiUrl = config.invapi + "/channels/";
+      const channelUrl = `${apiUrl}${atob(
+        ChannelTabs.videos
+      )}/${ID}/?sort_by=${sort_by}${continuation}`;
+      const shortsUrl = `${apiUrl}${ID}/${atob(
+        ChannelTabs.shorts
+      )}?sort_by=${sort_by}${continuations}`;
+      const streamUrl = `${apiUrl}${ID}/${atob(
+        ChannelTabs.streams
+      )}?sort_by=${sort_by}${continuationl}`;
+      const communityUrl = `${apiUrl}${atob(
+        ChannelTabs.community
+      )}/${ID}/?hl=en-US`;
+      const PlaylistUrl = `${apiUrl}${atob(
+        ChannelTabs.playlist
+      )}/${ID}/?hl=en-US`;
 
-const channelINVData = await getChannelData(channelINVUrl);
-const cinv = await getChannelData(channelINVUrl);
+      const channelINVUrl = `${apiUrl}${ID}/`;
+      
+      const pronoun = "no pronouns :c"
 
-if (!channelINVData) {
-  throw new Error('Failed to fetch channel INV data');
-}
-
-const ChannelTabs = channelINVData.tabs;
-
-const channelUrl = ChannelTabs.videos ? `${apiUrl}${atob(ChannelTabs.videos)}/${ID}/?sort_by=${sort_by}${continuation}` : null;
-const shortsUrl = ChannelTabs.shorts ? `${apiUrl}${ID}/${atob(ChannelTabs.shorts)}?sort_by=${sort_by}${continuations}` : null;
-const streamUrl = ChannelTabs.streams ? `${apiUrl}${ID}/${atob(ChannelTabs.streams)}?sort_by=${sort_by}${continuationl}` : null;
-const communityUrl = ChannelTabs.community ? `${apiUrl}${atob(ChannelTabs.community)}/${ID}/?hl=en-US` : null;
-const PlaylistUrl = ChannelTabs.playlist ? `${apiUrl}${atob(ChannelTabs.playlist)}/${ID}/?hl=en-US` : null;
-
-
-const fetchData = async (url) => {
-  return url ? getChannelData(url) : "";
-};
-
-
-var [tj, shorts, playlist, stream, c] = await Promise.all([
-  fetchData(channelUrl),
-  fetchData(shortsUrl),
-  fetchData(PlaylistUrl),
-  fetchData(streamUrl),
-  fetchData(communityUrl)
-]);
-
+      var [tj, shorts, playlist, stream, c, cinv] = await Promise.all([
+        getChannelData(channelUrl),
+        getChannelData(shortsUrl),
+        getChannelData(PlaylistUrl),
+        getChannelData(streamUrl),
+        getChannelData(communityUrl),
+        getChannelData(channelINVUrl),
+      ]);
 
       function getThumbnailUrl(video) {
         const maxresDefaultThumbnail = video.videoThumbnails.find(
@@ -317,23 +311,21 @@ var [tj, shorts, playlist, stream, c] = await Promise.all([
       
 
      
-      if (tj) {
-  if (continuation) {
-    const currentAuthorId = String(cinv.authorId).trim();
-    const firstVideoAuthorId = String(tj.videos[0].authorId).trim();
-    
-    if (currentAuthorId.localeCompare(firstVideoAuthorId) !== 0) {
-      res.status(400).send("Continuation does not match the channel :c");
-      return; // Exit the function after sending the response
+      
+    if (continuation) {
+     const currentAuthorId = String(cinv.authorId).trim();
+     const firstVideoAuthorId = String(tj.videos[0].authorId).trim();
+     
+     if (currentAuthorId.localeCompare(firstVideoAuthorId) !== 0) {
+       res.status(400).send("Continuation does not match the channel :c");
+     }
     }
-  }
 
-  var ChannelFirstVideoObject = await fetch(
-    `${config.invapi}/videos/${tj.videos[0].videoId}`
-  )
-    .then((res) => res.text())
-    .then((txt) => getJson(txt));
-}
+   const ChannelFirstVideoObject = await fetch(
+        `${config.invapi}/videos/${tj.videos[0].videoId}`
+      )
+        .then((res) => res.text())
+        .then((txt) => getJson(txt));
 
       renderTemplate(res, req, "channel.ejs", {
         ID,

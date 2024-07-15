@@ -316,21 +316,12 @@ module.exports = function (app, config, renderTemplate) {
 
       let ChannelFirstVideoObject;
 
-      if (tj && tj.videos && tj.videos.length > 0) {
+      const source = [tj, shorts, stream].find(
+        (i) => i && i.videos && i.videos.length > 0
+      );
+      if (source) {
         ChannelFirstVideoObject = await fetch(
-          `${config.invapi}/videos/${tj.videos[0].videoId}`
-        )
-          .then((res) => res.text())
-          .then((txt) => JSON.parse(txt));
-      } else if (shorts && shorts.videos && shorts.videos.length > 0) {
-        ChannelFirstVideoObject = await fetch(
-          `${config.invapi}/videos/${shorts.videos[0].videoId}`
-        )
-          .then((res) => res.text())
-          .then((txt) => JSON.parse(txt));
-      } else if (stream && stream.videos && stream.videos.length > 0) {
-        ChannelFirstVideoObject = await fetch(
-          `${config.invapi}/videos/${stream.videos[0].videoId}`
+          `${config.invapi}/videos/${source.videos[0].videoId}`
         )
           .then((res) => res.text())
           .then((txt) => JSON.parse(txt));

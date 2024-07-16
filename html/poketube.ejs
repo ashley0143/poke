@@ -720,6 +720,21 @@ background-color: #0000;
     }
     return timeString;
 }
+function cstsRemaining(totalTimeInSeconds, elapsedTimeInSeconds) {
+    var remainingSeconds = totalTimeInSeconds - elapsedTimeInSeconds;
+    var hours = Math.floor(remainingSeconds / 3600);
+    var minutes = Math.floor((remainingSeconds % 3600) / 60);
+    var secs = Math.floor(remainingSeconds % 60);
+
+    var timeString;
+    if (hours === 0) {
+        timeString = minutes.toString().padStart(2, '0') + ':' + secs.toString().padStart(2, '0');
+    } else {
+        timeString = hours.toString().padStart(2, '0') + ':' + minutes.toString().padStart(2, '0') + ':' + secs.toString().padStart(2, '0');
+    }
+
+    return '-' + timeString;
+}
   function showErrorCard(e) {
     try {
       switch (e.target.error.code) {
@@ -755,9 +770,18 @@ background-color: #0000;
     let setTime = false
     const seekbar = document.getElementById("duration-slider")
     const video = document.getElementById("video");
+    let shouldUseRemaining = false;
+    const timestamps = document.getElementById("timestamps");
     video.addEventListener("timeupdate", (event) => {      
       seekbar.value = event.target.currentTime;
-      const timestamps = document.getElementById("timestamps");
+      timestamps.innerText = shouldUseRemaining ? `${cstsRemaining(video.duration, video.currentTime)}/${csts(video.duration)}` : `${csts(video.currentTime)}/${csts(video.duration)}`;
+    });
+    timestamps.addEventListener("mouseover", () => {
+      shouldUseRemaining = true;
+      timestamps.innerText = `${cstsRemaining(video.duration, video.currentTime)}/${csts(video.duration)}`;
+    });
+    timestamps.addEventListener("mouseout", () => {
+      shouldUseRemaining = false;
       timestamps.innerText = `${csts(video.currentTime)}/${csts(video.duration)}`;
     });
     

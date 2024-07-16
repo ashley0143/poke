@@ -169,7 +169,7 @@ const CORD_REGEX = /https:\/\/discord.gg\/(?<name>[\w\d_-]+)/;
 const TWITCH_REGEX = /https:\/\/twitch.tv\/(?<name>[\w\d_-]+)/;
 const REDDIT_REGEX = /https:\/\/reddit\.com\/r\/(?<name>[\w\d_-]+)/;
 const INSTAGRAM_REGEX = /https:\/\/www.instagram.com\/(?<name>[\w\d_-]+)/;
-const LNKTO_REGEX = /https:\/\/(?:www\.)?\w+\.lnk\.to\/(?<path>\S*)/;
+const LNKTO_REGEX = /https:\/\/(?<subdomain>\w+)\.lnk\.to\/(?<path>\S*)/;
 
 module.exports = function (app, config, renderTemplate) {
   app.get("/encryption", async function (req, res) {

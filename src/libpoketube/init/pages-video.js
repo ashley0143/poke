@@ -169,6 +169,7 @@ const CORD_REGEX = /https:\/\/discord.gg\/(?<name>[\w\d_-]+)/;
 const TWITCH_REGEX = /https:\/\/twitch.tv\/(?<name>[\w\d_-]+)/;
 const REDDIT_REGEX = /https:\/\/reddit\.com\/r\/(?<name>[\w\d_-]+)/;
 const INSTAGRAM_REGEX = /https:\/\/www.instagram.com\/(?<name>[\w\d_-]+)/;
+const LNKTO_REGEX = /https:\/\/(?:www\.)?\w+\.lnk\.to\/(?<path>\S*)/;
 
 module.exports = function (app, config, renderTemplate) {
   app.get("/encryption", async function (req, res) {
@@ -236,6 +237,7 @@ module.exports = function (app, config, renderTemplate) {
 
           const support = extractInfo(PATREON_REGEX);
           const twitter = extractInfo(X_REGEX);
+          const linkto = extractInfo(LNKTO_REGEX);
           const discord = extractInfo(CORD_REGEX);
           const twitch = extractInfo(TWITCH_REGEX);
           const reddit = extractInfo(REDDIT_REGEX);
@@ -306,6 +308,7 @@ module.exports = function (app, config, renderTemplate) {
               color2: data.color2,
               linkify,
               engagement,
+              linkto,
               IsOldWindows,
               channelurlfixer,
               itag_hd,

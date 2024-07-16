@@ -1691,6 +1691,7 @@ Offical Discord Server! :3
    <% if (!video?.Channel.Name.endsWith(' - Topic')) { %> 
     <% if (!inv_vid.title.endsWith('IGNORE_THIS_PLEASE)')) { %> 
    <% if (support != undefined) { %> 
+   <% if (linkto == undefined) { %> 
 
     <div class="new-button button-encryption">
 					<a title="Support the Creator of the video!" style="color:var(--text-color);text-decoration: none;" href="https://www.patreon.com/join/<%- support.name %>">
@@ -1708,7 +1709,10 @@ Offical Discord Server! :3
                                      <% }%>                                                                              <% }%>      
                          <% }%>   
 
+                         <% }%>   
+
       <% if (support == undefined) { %> 
+   <% if (linkto == undefined) { %> 
 
  <% if (!video?.Channel.Name.endsWith(' - Topic')) { %> 
     <% if (!inv_vid.title.endsWith('IGNORE_THIS_PLEASE)')) { %> 
@@ -1725,7 +1729,8 @@ Offical Discord Server! :3
 
 
    </a>
-                                                                          <% }%>                                                                              <% }%>      
+                                                                                                                            <% }%>                                                                              <% }%>      
+                        <% }%>                                                                              <% }%>      
                                                                                                                    <% }%>                                                                                                                          <% if (video?.Channel.Name.endsWith(' - Topic') || inv_vid.title.endsWith('Audio)')) { %> 
                                                             
                             <% if (video?.Channel.Name.endsWith(' - Topic') || inv_vid.title.endsWith('IGNORE_THIS_PLEASE)'))  { %> 

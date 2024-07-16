@@ -1691,7 +1691,6 @@ Offical Discord Server! :3
    <% if (!video?.Channel.Name.endsWith(' - Topic')) { %> 
     <% if (!inv_vid.title.endsWith('IGNORE_THIS_PLEASE)')) { %> 
    <% if (support != undefined) { %> 
-      <% if (linkto == undefined) { %> 
 
     <div class="new-button button-encryption">
 					<a title="Support the Creator of the video!" style="color:var(--text-color);text-decoration: none;" href="https://www.patreon.com/join/<%- support.name %>">
@@ -1707,12 +1706,9 @@ Offical Discord Server! :3
    </a>
       
                                      <% }%>                                                                              <% }%>      
-
-                         <% }%>                            <% }%>   
-
+                         <% }%>   
 
       <% if (support == undefined) { %> 
-      <% if (linkto == undefined) { %> 
 
  <% if (!video?.Channel.Name.endsWith(' - Topic')) { %> 
     <% if (!inv_vid.title.endsWith('IGNORE_THIS_PLEASE)')) { %> 
@@ -1729,33 +1725,8 @@ Offical Discord Server! :3
 
 
    </a>
-                                                                          <% }%>       
-                                                                                                                                                    <% }%>                                                                              <% }%>      
-                                                                       <% }%>      
-                         <% }%>   
-                                                                                                                   <% } %>        
-      <% if (support == undefined) { %> 
-      <% if (linkto != undefined) { %> 
-
- <% if (!video?.Channel.Name.endsWith(' - Topic')) { %> 
-    <% if (!inv_vid.title.endsWith('IGNORE_THIS_PLEASE)')) { %> 
-
-      <div class="new-button button-encryption">
-					<a   title="Stream Music!" style="color:var(--text-color);text-decoration: none;" href="https://<%= linkto.subdomain %>.lnk.to/<%= linkto.path %>">
-                                        <div class="pill-button">
-
-               <i class="fa-light fa-music-note"></i>
-                Stream music!
-            </div>
-            
-            </div>
-
-
-   </a>
                                                                           <% }%>                                                                              <% }%>      
                                                                                                                    <% }%>                                                                                                                          <% if (video?.Channel.Name.endsWith(' - Topic') || inv_vid.title.endsWith('Audio)')) { %> 
-                         <% }%>   
-                         <% }%>   
                                                             
                             <% if (video?.Channel.Name.endsWith(' - Topic') || inv_vid.title.endsWith('IGNORE_THIS_PLEASE)'))  { %> 
                                                  					<a  class="new-button" title="open this song in poketube music player :3" style="color:var(--text-color);text-decoration: none;" href="/">
@@ -1765,7 +1736,8 @@ Offical Discord Server! :3
 WIP!                                                 </a>
 
                                                                        <% }%>                     
-     
+                                                                          <% }%>      
+    
     
                                                     
  <% if (!video?.Channel.Name.endsWith(' - Topic')) { %> 

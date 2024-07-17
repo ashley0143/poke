@@ -236,7 +236,7 @@ module.exports = function (app, config, renderTemplate) {
           }
 
           const support = extractInfo(PATREON_REGEX);
-          const twitter = extractInfo(X_REGEX);
+          const STUPID_ELON_MUSK_WEBSITE_HE_CALLS_IT_X_FOR_SOME_REASON_LOL_FUCK_YOU_ELON = extractInfo(X_REGEX);
           const linkto = extractInfo(LNKTO_REGEX);
           const discord = extractInfo(CORD_REGEX);
           const twitch = extractInfo(TWITCH_REGEX);
@@ -320,7 +320,7 @@ module.exports = function (app, config, renderTemplate) {
               date: k.Video.uploadDate,
               e,
               a,
-              twitter,
+              twitter:STUPID_ELON_MUSK_WEBSITE_HE_CALLS_IT_X_FOR_SOME_REASON_LOL_FUCK_YOU_ELON,
               k,
               dm,
               proxyurl,

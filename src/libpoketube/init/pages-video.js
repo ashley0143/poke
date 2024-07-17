@@ -236,7 +236,7 @@ module.exports = function (app, config, renderTemplate) {
           }
 
           const support = extractInfo(PATREON_REGEX);
-          const STUPID_ELON_MUSK_WEBSITE_HE_CALLS_IT_X_FOR_SOME_REASON_LOL_FUCK_YOU_ELON = extractInfo(X_REGEX);
+          const STUPID_ELON_MUSK_WEBSITE_HE_IS_TRYING_TO_CALL_IT_X_FOR_SOME_REASON_WHICH_IS_A_STUPID_NAME_THAT_SHOULD_HAVE_STOPPED_WITH_PAYPAL_WE_WILL_FOREVER_CALL_IT_TWITTER_AND_HE_CAN_DO_NOTHING_ABOUT_IT_LOL_FUCK_YOU_ELON_TRANS_RIGHTS_BTW = extractInfo(X_REGEX);
           const linkto = extractInfo(LNKTO_REGEX);
           const discord = extractInfo(CORD_REGEX);
           const twitch = extractInfo(TWITCH_REGEX);
@@ -320,7 +320,7 @@ module.exports = function (app, config, renderTemplate) {
               date: k.Video.uploadDate,
               e,
               a,
-              twitter:STUPID_ELON_MUSK_WEBSITE_HE_CALLS_IT_X_FOR_SOME_REASON_LOL_FUCK_YOU_ELON,
+              twitter:STUPID_ELON_MUSK_WEBSITE_HE_IS_TRYING_TO_CALL_IT_X_FOR_SOME_REASON_WHICH_IS_A_STUPID_NAME_THAT_SHOULD_HAVE_STOPPED_WITH_PAYPAL_WE_WILL_FOREVER_CALL_IT_TWITTER_AND_HE_CAN_DO_NOTHING_ABOUT_IT_LOL_FUCK_YOU_ELON_TRANS_RIGHTS_BTW,
               k,
               dm,
               proxyurl,

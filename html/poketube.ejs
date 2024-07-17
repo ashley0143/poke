@@ -1690,7 +1690,7 @@ Offical Discord Server! :3
   
    <% if (!video?.Channel.Name.endsWith(' - Topic')) { %> 
     <% if (!inv_vid.title.endsWith('IGNORE_THIS_PLEASE)')) { %> 
-   <% if (support != undefined) { %> 
+<% if (support != undefined && linkto === undefined) { %>
 
     <div class="new-button button-encryption">
 					<a title="Support the Creator of the video!" style="color:var(--text-color);text-decoration: none;" href="https://www.patreon.com/join/<%- support.name %>">
@@ -1708,7 +1708,7 @@ Offical Discord Server! :3
                                      <% }%>                                                                              <% }%>      
                          <% }%>   
 
-      <% if (support == undefined) { %> 
+<% if (support == undefined || linkto === undefined) { %>
 
  <% if (!video?.Channel.Name.endsWith(' - Topic')) { %> 
     <% if (!inv_vid.title.endsWith('IGNORE_THIS_PLEASE)')) { %> 
@@ -1727,7 +1727,25 @@ Offical Discord Server! :3
    </a>
                                                                           <% }%>                                                                              <% }%>      
                                                                                                                    <% }%>                                                                                                                          <% if (video?.Channel.Name.endsWith(' - Topic') || inv_vid.title.endsWith('Audio)')) { %> 
-                                                            
+                                                            <% if (support == undefined || linkto !== undefined) { %>
+
+ <% if (!video?.Channel.Name.endsWith(' - Topic')) { %> 
+    <% if (!inv_vid.title.endsWith('IGNORE_THIS_PLEASE)')) { %> 
+
+      <div class="new-button button-encryption">
+					<a   title="Switch PokeTube Instance :3" style="color:var(--text-color);text-decoration: none;" href="https://redirect.poketube.fun/watch?v=<%=inv_vid.videoId%>">
+                                        <div class="pill-button">
+
+               <i class="fa-light fa-rocket-launch"></i>
+              LinktoTestObject
+            </div>
+            
+            </div>
+
+
+   </a>
+                                                                          <% }%>                                                                              <% }%>      
+                                                                                                                   <% }%>     
                             <% if (video?.Channel.Name.endsWith(' - Topic') || inv_vid.title.endsWith('IGNORE_THIS_PLEASE)'))  { %> 
                                                  					<a  class="new-button" title="open this song in poketube music player :3" style="color:var(--text-color);text-decoration: none;" href="/">
                                                                                                     <div class="pill-button">

@@ -92,7 +92,11 @@ const splash = [
     "enbys are cute!",
     "you are cute :3",
     "read if cute!",
-    "stallmansupport.org!!!"
+    "stallmansupport.org!!!",
+    "does not include revolt.chat!",
+    "revolt-free!",
+    "not for revolt users!"
+
 ]
 
 

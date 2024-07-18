@@ -1690,7 +1690,7 @@ Offical Discord Server! :3
   
    <% if (!video?.Channel.Name.endsWith(' - Topic')) { %> 
     <% if (!inv_vid.title.endsWith('IGNORE_THIS_PLEASE)')) { %> 
-<% if (support != undefined && linkto.subdomain == undefined) { %>
+<% if (support != undefined && linkto == undefined) { %>
 
     <div class="new-button button-encryption">
 					<a title="Support the Creator of the video!" style="color:var(--text-color);text-decoration: none;" href="https://www.patreon.com/join/<%- support.name %>">
@@ -1708,7 +1708,7 @@ Offical Discord Server! :3
                                      <% }%>                                                                              <% }%>      
                          <% }%>   
 
-<% if (support == undefined && linkto.subdomain == undefined) { %>
+<% if (support == undefined && linkto == undefined) { %>
 
  <% if (!video?.Channel.Name.endsWith(' - Topic')) { %> 
     <% if (!inv_vid.title.endsWith('IGNORE_THIS_PLEASE)')) { %> 

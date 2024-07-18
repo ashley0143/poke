@@ -1708,7 +1708,7 @@ Offical Discord Server! :3
                                      <% }%>                                                                              <% }%>      
                          <% }%>   
 
-<% if (support == undefined || linkto.subdomain == undefined) { %>
+<% if (support == undefined && linkto.subdomain == undefined) { %>
 
  <% if (!video?.Channel.Name.endsWith(' - Topic')) { %> 
     <% if (!inv_vid.title.endsWith('IGNORE_THIS_PLEASE)')) { %> 
@@ -1733,7 +1733,7 @@ Offical Discord Server! :3
     <% if (!inv_vid.title.endsWith('IGNORE_THIS_PLEASE)')) { %> 
 
       <div class="new-button button-encryption">
-					<a   title="Stream!" style="color:var(--text-color);text-decoration: none;" href="https://<%= linkto.subdomain %>.lnk.to/<%= linkto.path %>">
+					<a   title="Stream The Song :3" style="color:var(--text-color);text-decoration: none;" href="https://<%= linkto.subdomain %>.lnk.to/<%= linkto.path %>">
                                         <div class="pill-button">
 
                <i class="fa-light fa-music-note"></i>

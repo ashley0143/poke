@@ -85,8 +85,9 @@ const splash = [
     "let the vibe slide over me!",
     "sip a capri sun like its don peregon",
     "now even gayer!",
+    "its joever..",
     "poketube!!!",
-    "rvlt.gg/poke!",
+    "discord.poketube.fun!",
     "women are pretty!",
     "men are handsome!",
     "enbys are cute!",
@@ -95,8 +96,11 @@ const splash = [
     "stallmansupport.org!!!",
     "does not include revolt.chat!",
     "revolt-free!",
-    "not for revolt users!"
-
+    "not for revolt users!",
+    "%99 free of revolt!",
+    "does include nya~!!!",
+    "you're literally showing ads!",
+    "actually stable! :3"
 ]
 
 

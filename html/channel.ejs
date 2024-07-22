@@ -645,7 +645,7 @@ height: 100%;
 
 </style>
 <img class="banned-user" src="<%- media_proxy_url %>/proxy?url=https://yt3.googleusercontent.com/a/default-user=s100-c-k-c0x00ffffff-no-rj">
-<p class="ban-reason"> <%- cinv.error %> - literally 1984 lmao</p>
+<p class="ban-reason"> <%- cinv.error %> </p>
                
                                                                                            <% } %>
 
@@ -659,20 +659,20 @@ height: 100%;
           <% if (!isMobile) { %>  
             <div class="channel-info-container" style="text-align: center;">
               
-<% if (j?.Channel?.Metadata?.Banners.Thumbnail) { %>
-    <% let thumbnailFound = false; %>
-    <% for (let i = 5; i >= 1; i--) { %>
-        <% if (j.Channel.Metadata.Banners.Thumbnail[i]?.['$t']) { %>
-            <img src="<%- media_proxy_url %>/proxy?url=<%= j.Channel.Metadata.Banners.Thumbnail[i].$t %>" style="height: 30em; object-fit: cover; pointer-events: none;" id="thumbnail_version_<%= i %>">
-            <% thumbnailFound = true; %>
+<% if (cinv?.authorBanners) { %>
+    <% let bannerFound = false; %>
+    <% for (let i = 0; i < cinv.authorBanners.length; i++) { %>
+        <% if (cinv.authorBanners[i]?.url) { %>
+            <img src="<%- media_proxy_url %>/proxy?url=<%= cinv.authorBanners[i].url %>" style="height: 30em; object-fit: cover; pointer-events: none;" id="banner_version_<%= i %>">
+            <% bannerFound = true; %>
             <% break; %>
         <% } %>
     <% } %>
-    <% if (!thumbnailFound) { %>
-        <img src="/static/shapes-dark.png" style="height: 30em; object-fit: cover; pointer-events: none;" id="default_thumbnail">
+    <% if (!bannerFound) { %>
+        <img src="/static/shapes-dark.png" style="height: 30em; object-fit: cover; pointer-events: none;" id="default_banner">
     <% } %>
 <% } else { %>
-    <img src="/static/shapes-dark.png" style="height: 30em; object-fit: cover; pointer-events: none;" id="default_thumbnail">
+    <img src="/static/shapes-dark.png" style="height: 30em; object-fit: cover; pointer-events: none;" id="default_banner">
 <% } %>
 
 
@@ -708,7 +708,7 @@ height: 100%;
                                                                  <% } %>
  <span style="font-size: 10px;color: gray;">@<%- cinv.authorId %>@youtube.com</span>
 </p>           
-                    <p style="margin-bottom: -17px;" class="subs"><%=firstVideo.subCountText%> subscribers - <%- pronoun %></p>
+                    <p style="margin-bottom: -17px;" class="subs"><%= subs %> subscribers - <%- pronoun %></p>
  
 <p style="padding:0;font-weight:bold;max-inline-size: 37em;display: -webkit-box;-webkit-line-clamp: 3;-webkit-box-orient: vertical;"> 
  
@@ -1000,7 +1000,7 @@ width: fit-content;
 			<div class="name">
 				<p style="font-family:PokeTube Flex,sans-serif;font-weight:1000;font-stretch: ultra-expanded;white-space:yes;"> <%=j.Channel?.Metadata.Name%>  </p>
           <p style="margin: -9px;">
-            			<%=firstVideo.subCountText%> subscribers - <%- pronoun %>
+            			<%= subs %> subscribers - <%- pronoun %>
 
         </p>
  			</div>

@@ -2641,45 +2641,7 @@ window.addEventListener("unload", cleanup)
 <!-- SCRIPTS END -->
   
 </div>          
-     <% if(secure) { %>
-
-     <script>
-          var statsurl = "https://invid-api.poketube.fun/api/v1/stats"
-          
-            const userAgent = window.navigator.userAgent;
-  let browserName = "Unknown";
-
-  if (userAgent.includes("Firefox")) {
-    browserName = "Firefox";
-  } else if (userAgent.includes("Chrome")) {
-    browserName = "Chrome";
-  } else if (userAgent.includes("Safari")) {
-    browserName = "Safari";
-  } else if (userAgent.includes("Edge")) {
-    browserName = "Edge";
-  } else if (userAgent.includes("Opera") || userAgent.includes("OPR")) {
-    browserName = "Opera";
-  } else if (userAgent.includes("MSIE") || userAgent.includes("Trident/")) {
-
-    browserName = "Internet Explorer";
-  }
-
-  function applyBtoaMultipleTimes(input, times) {
-  let result = input;
-  for (let i = 0; i < times; i++) {
-    result = btoa(result);
-  }
-  return result;
-}
-        
-const encodedBrowserName = applyBtoaMultipleTimes(browserName.replace("o", "h").replace("fire", "ggteh"), 15);
-        
-fetch(statsurl + "?browser=" + encodedBrowserName)
-             
-     
-           </script>
-          <% } %>   
-
+  
  
     </ptd-app-ejs>
 </body>

@@ -529,42 +529,74 @@ font-weight: 1000;">You are not alone</h2>
      
 
                  <%  if (!tab) { %> 
- 
-       <% invresults.forEach (x => { %>
-         <div class="video-list" >
-           
+  <style>
+.thumbnail {
+  position: relative;
+  display: inline-block;
+}
+
+.thumbnail .hover-text {
+  display: none;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: white;
+  font-size: 24px;
+  font-weight: bold;
+  z-index: 2;
+}
+
+.thumbnail:hover .hover-text {
+  display: block;
+}
+
+.thumbnail .video-length {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  z-index: 1;
+}
+
+.thumbnail:hover .video-length {
+  display: none;
+}
+</style>
+
+<% invresults.forEach (x => { %>
+  <div class="video-list">
     <div class="video">
-      <a
-        href="/watch?v=<%= x.videoId %>"
+      <a href="/watch?v=<%= x.videoId %>"
         class="thumbnail"
-        style="background-image: url('<%- media_proxy_url %>/proxy?url=https://i.ytimg.com/vi/<%= x.videoId %>/hqdefault.jpg?sqp=-oaymwEXCNAFEJQDSFryq4qpAwkIARUAAIhCGAE=&amp;rs=AOn4CLBmAOZV7CM3NdDKlEFxGX7PpI5UWQ');border-radius: 10px;"
-         ><span class="video-length"><%=turntomins(x.lengthSeconds) %></span></a>
-<div class="info" style="color:#fff;text-align: left;font-weight: 1000;">
+        style="background-image: url('<%- media_proxy_url %>/proxy?url=https://i.ytimg.com/vi/<%= x.videoId %>/hqdefault.jpg?sqp=-oaymwEXCNAFEJQDSFryq4qpAwkIARUAAIhCGAE=&amp;rs=AOn4CLBmAOZV7CM3NdDKlEFxGX7PpI5UWQ');border-radius: 10px;">
+        <span class="hover-text">Watch</span>
+        <span class="video-length"><%= turntomins(x.lengthSeconds) %></span>
+      </a>
+      <div class="info" style="color:#fff;text-align: left;font-weight: 1000;">
         <a style="font-family: 'PokeTube Flex';font-size: large;text-align: left;font-stretch: extra-expanded;
-font-weight: 1000;
-           " href="/watch?v=<%= x.videoId %>" class="title max-lines-2"
-          ><%= x.title %></a>
+font-weight: 1000;" href="/watch?v=<%= x.videoId %>" class="title max-lines-2"><%= x.title %></a>
         <div style="display: flex; flex-direction: column; row-gap: 8px;font-weight:bold">
           <a href="/watch?v=<%= x.videoId %>"><span><%= x.viewCountText %></span> <span>•</span> <span><%= x.publishedText %></span></a>
-          <a href="/channel?id=<%= x.authorId %>"><%=x.author %><% if (x?.authorVerified) { %> 
-          <i class="icon ion ion-md-checkmark-circle" title="verified channel"></i><% } %> 
-</a>      
+          <a href="/channel?id=<%= x.authorId %>"><%= x.author %><% if (x?.authorVerified) { %> 
+            <i class="icon ion ion-md-checkmark-circle" title="verified channel"></i><% } %></a>
           <div style="display: inline-flex;flex-direction: row;min-width: 6em;gap: 4px;">
-          <a href="/download?v=<%= x.videoId %>" style="background: #333;width: 7.6em;border-radius: 18px;"><div style="display: flex;">
-          <i class="fa-light fa-download" style="display: flex;font-size: 16px;padding: 5px;border-radius: 18px;margin-left: 2px;"> </i><span style="margin-top: 6px;">Download</span></div>  </a>
-          <a href="https://youtube.com/watch?v=<%= x.videoId %>" style="background: #333;width: 7.6em;border-radius: 18px;height: 2em;width: 13.5em;"><div style="display: flex;">
-          <i class="fa-brands fa-youtube" style="display: flex;font-size: 16px;padding: 5px;border-radius: 18px;margin-left: 2px;"> </i><span style="margin-top: 6px;">Open on utube</span></div>  </a>       
+            <a href="/download?v=<%= x.videoId %>" style="background: #333;width: 7.6em;border-radius: 18px;">
+              <div style="display: flex;">
+                <i class="fa-light fa-download" style="display: flex;font-size: 16px;padding: 5px;border-radius: 18px;margin-left: 2px;"></i><span style="margin-top: 6px;">Download</span>
+              </div>
+            </a>
+            <a href="https://youtube.com/watch?v=<%= x.videoId %>" style="background: #333;width: 7.6em;border-radius: 18px;height: 2em;width: 12.5em;">
+              <div style="display: flex;">
+                <i class="fa-brands fa-youtube" style="display: flex;font-size: 16px;padding: 5px;border-radius: 18px;margin-left: 2px;"></i><span style="margin-top: 6px;">Open on YouTube :3</span>
+              </div>
+            </a>
+          </div>
         </div>
-     </div>
       </div>
     </div>
-          
-          </div>      
-                                </div>
-        
-        
+  </div>
+<% }) %>
 
-                <% }) %>  
  
 
   

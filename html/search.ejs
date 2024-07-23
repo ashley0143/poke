@@ -511,8 +511,11 @@ Web              </a>
                      </div>   
           </div>
           
-               <% if (q.includes("suicide")) { %>  
-            
+<% 
+const searchStrings = ["suicide", "no text to speach", "ntts", "vencord support", "murder", "how to murder"];
+if (searchStrings.some(str => q.includes(str))) { 
+%>
+
 <div class="container">          
     <h2 style="font-family: 'PokeTube Flex';font-size: large;text-align: left;font-stretch: ultra-expanded;
 font-weight: 1000;">You are not alone</h2>

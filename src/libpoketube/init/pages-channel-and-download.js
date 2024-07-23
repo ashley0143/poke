@@ -297,7 +297,7 @@ module.exports = function (app, config, renderTemplate) {
         var { tj, shorts, stream, c, boutJson } = cache[ID].result;
       }
 
-      const subscribers = convert(cinv.subCount);
+      const subscribers = convert(cinv?.subCount);
       const about = boutJson?.Channel?.Contents?.ItemSection?.About;
       const description = about?.Description.toString().replace(
         /\n/g,

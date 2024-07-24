@@ -314,23 +314,10 @@ module.exports = function (app, config, renderTemplate) {
         }
       }
 
-      let ChannelFirstVideoObject;
-
-      const source = [tj, shorts, stream].find(
-        (i) => i && i.videos && i.videos.length > 0
-      );
-      if (source) {
-        ChannelFirstVideoObject = await fetch(
-          `${config.invapi}/videos/${source.videos[0].videoId}`
-        )
-          .then((res) => res.text())
-          .then((txt) => JSON.parse(txt));
-      } else {
-        ChannelFirstVideoObject = {
+      let ChannelFirstVideoObject = {
           subCountText: "0",
           authorVerified: false,
         };
-      }
 
       renderTemplate(res, req, "channel.ejs", {
         ID,

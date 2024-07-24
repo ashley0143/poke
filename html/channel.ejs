@@ -1276,11 +1276,23 @@ width: fit-content;
  	</div>
     <% if (!isMobile) { %>  
 
-  <script>    window.addEventListener('scroll', function() {
-         if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
-            window.location.href = window.location.href + '&continuation=<%=tj.continuation%>';
+  <script> 
+  window.addEventListener('scroll', function() {
+    if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
+        var currentUrl = new URL(window.location.href);
+        var params = new URLSearchParams(currentUrl.search);
+        var continuationValue = '<%=tj.continuation%>';
+
+        if (params.has('continuation')) {
+            params.set('continuation', continuationValue);
+        } else {
+            params.append('continuation', continuationValue);
         }
-    });
+
+        currentUrl.search = params.toString();
+        window.location.href = currentUrl.toString();
+    }
+});
     </script>                       <% } %>
 
                        <% } %>

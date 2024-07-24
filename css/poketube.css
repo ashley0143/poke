@@ -573,7 +573,8 @@ a.avatar {
   border-radius: 8px;
   font-family: "Montserrat", sans-serif;
   box-shadow: var(--border-color) 0 0 5px;
-  background-color: var(--context-menu-background);
+  background-color: #222022d6;
+  backdrop-filter: blur(20px);
 }
 
 .dropdown__item {

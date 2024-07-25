@@ -307,7 +307,7 @@ module.exports = function (app, config, renderTemplate) {
 
       if (continuation) {
         const currentAuthorId = String(cinv.authorId).trim();
-        const firstVideoAuthorId = String(tj.videos[0].authorId).trim();
+        const firstVideoAuthorId = String(tj?.videos[0].authorId).trim();
 
         if (currentAuthorId.localeCompare(firstVideoAuthorId) !== 0) {
           res.status(400).send("Continuation does not match the channel :c");

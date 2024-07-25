@@ -764,6 +764,11 @@ function cstsRemaining(totalTimeInSeconds, elapsedTimeInSeconds) {
   let canPlayPause = true;
   let didFirstTimePlay = false;
   document.addEventListener("DOMContentLoaded", () => {
+    setInterval(()=>{
+    if(!document.getElementById("video").paused) {
+      document.getElementById("play-pause").innerHTML = pauseSVG;
+    }
+    }, 100);
     //FIXME: saved playback intentionally overwritten
     localStorage.setItem(`progress-${new URLSearchParams(window.location.search).get('v')}`, 0);
     // Controls and high-res playback

@@ -767,6 +767,11 @@ function cstsRemaining(totalTimeInSeconds, elapsedTimeInSeconds) {
     setInterval(()=>{
     if(!document.getElementById("video").paused) {
       document.getElementById("play-pause").innerHTML = pauseSVG;
+      
+    }
+    else {
+      aud.pause()
+      document.getElementById("play-pause").innerHTML = playSVG;
     }
     }, 100);
     //FIXME: saved playback intentionally overwritten
@@ -970,7 +975,7 @@ function cstsRemaining(totalTimeInSeconds, elapsedTimeInSeconds) {
     const aud = document.getElementById("aud");
     const vid = document.getElementById("video");
     function shouldPlay() {
-      if(vid.readyState === HTMLMediaElement.HAVE_ENOUGH_DATA && aud.readyState === HTMLMediaElement.HAVE_ENOUGH_DATA) {
+      if(vid.readyState === HTMLMediaElement.HAVE_ENOUGH_DATA) {
         startPlayback();
       }
     }

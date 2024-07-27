@@ -980,13 +980,12 @@ function cstsRemaining(totalTimeInSeconds, elapsedTimeInSeconds) {
       }
     }
     aud.addEventListener("canplaythrough", shouldPlay);
-    vid.addEventListener("canplaythrough", shouldPlay);
+    vid.addEventListener("canplaythrough", shouldPlay); 
   })
-</script>
-<script>
-const audi = document.getElementById("aud");
+
+
 const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-const source = audioContext.createMediaElementSource(audi);
+const source = audioContext.createMediaElementSource(aud);
 const analyser = audioContext.createAnalyser();
 
 source.connect(analyser);
@@ -1005,7 +1004,7 @@ function checkAudio() {
     if (video.ended || video.paused || quality === 'medium') return;
 
     // Check if the audio volume is greater than 0
-    if (audi.volume === 0) return;
+    if (aud.volume === 0) return;
 
     const bufferLength = analyser.fftSize;
     const dataArray = new Uint8Array(bufferLength);
@@ -1016,13 +1015,16 @@ function checkAudio() {
 
     if (!isAudioPlaying) {
         // Play/pause workaround to reset audio
-        audi.pause();
-        audi.play();
+        aud.pause();
+        aud.play();
     }
 }
 
 // Check audio every second
 setInterval(checkAudio, 1000);
+</script>
+<script>
+
 </script>
          <% if(shortsui) { %>
                                                        <script>

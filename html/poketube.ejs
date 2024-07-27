@@ -980,10 +980,10 @@ function cstsRemaining(totalTimeInSeconds, elapsedTimeInSeconds) {
       }
     }
     aud.addEventListener("canplaythrough", shouldPlay);
-    vid.addEventListener("canplaythrough", shouldPlay); 
+    vid.addEventListener("canplaythrough", shouldPlay);
   })
-
-
+</script>
+<script>
 const audioContext = new (window.AudioContext || window.webkitAudioContext)();
 const source = audioContext.createMediaElementSource(aud);
 const analyser = audioContext.createAnalyser();
@@ -1022,9 +1022,6 @@ function checkAudio() {
 
 // Check audio every second
 setInterval(checkAudio, 1000);
-</script>
-<script>
-
 </script>
          <% if(shortsui) { %>
                                                        <script>

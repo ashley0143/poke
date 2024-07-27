@@ -984,44 +984,69 @@ function cstsRemaining(totalTimeInSeconds, elapsedTimeInSeconds) {
   })
 </script>
 <script>
-const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-const source = audioContext.createMediaElementSource(aud);
-const analyser = audioContext.createAnalyser();
+document.addEventListener("DOMContentLoaded", () => {
+    const audio = document.getElementById('aud');
 
-source.connect(analyser);
-analyser.connect(audioContext.destination);
-
-function getQueryParam(name) {
-    const urlParams = new URLSearchParams(window.location.search);
-    return urlParams.get(name);
-}
-
-// Check the quality parameter
-const quality = getQueryParam('qua');
-
-// Function to check if audio is playing
-function checkAudio() {
-    if (video.ended || video.paused || quality === 'medium') return;
-
-    // Check if the audio volume is greater than 0
-    if (aud.volume === 0) return;
-
-    const bufferLength = analyser.fftSize;
-    const dataArray = new Uint8Array(bufferLength);
-    analyser.getByteFrequencyData(dataArray);
-    
-    // Check if there's any significant audio data
-    const isAudioPlaying = dataArray.some(value => value > 0);
-
-    if (!isAudioPlaying) {
-        // Play/pause workaround to reset audio
-        aud.pause();
-        aud.play();
+    if (!video || !audio) {
+        console.error("Video or audio element not found!");
+        return;
     }
-}
 
-// Check audio every second
-setInterval(checkAudio, 1000);
+    // Checks if the browser supports AudioContext
+    if (!window.AudioContext && !window.webkitAudioContext) {
+        console.error("Web Audio API not supported in this browser.");
+        return;
+    }
+
+    const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+    let source;
+
+    try {
+        source = audioContext.createMediaElementSource(audio);
+    } catch (e) {
+        console.error("Error creating media element source:", e);
+        return;
+    }
+
+    const analyser = audioContext.createAnalyser();
+    source.connect(analyser);
+    analyser.connect(audioContext.destination);
+
+    // Function to get query parameter from URL
+    function getQueryParam(name) {
+        const urlParams = new URLSearchParams(window.location.search);
+        return urlParams.get(name);
+    }
+
+    // Check the quality parameter
+    const quality = getQueryParam('qua');
+
+    // Function to check if audio is playing
+    function checkAudio() {
+        // Check if the video has ended, is paused, or has medium quality
+        if (video.ended || video.paused || quality === 'medium') return;
+
+        // Check if the audio volume is greater than 0
+        if (audio.volume === 0) return;
+
+        const bufferLength = analyser.fftSize;
+        const dataArray = new Uint8Array(bufferLength);
+        analyser.getByteFrequencyData(dataArray);
+
+        // Check if there's any significant audio data
+        const isAudioPlaying = dataArray.some(value => value > 0);
+
+        if (!isAudioPlaying) {
+            // Play/pause workaround to reset audio
+            audio.pause();
+            audio.play();
+        }
+    }
+
+    // Check audio every second
+    setInterval(checkAudio, 1000);
+});
+
 </script>
          <% if(shortsui) { %>
                                                        <script>

@@ -984,8 +984,9 @@ function cstsRemaining(totalTimeInSeconds, elapsedTimeInSeconds) {
   })
 </script>
 <script>
+const audi = document.getElementById("aud");
 const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-const source = audioContext.createMediaElementSource(aud);
+const source = audioContext.createMediaElementSource(audi);
 const analyser = audioContext.createAnalyser();
 
 source.connect(analyser);
@@ -1004,7 +1005,7 @@ function checkAudio() {
     if (video.ended || video.paused || quality === 'medium') return;
 
     // Check if the audio volume is greater than 0
-    if (aud.volume === 0) return;
+    if (audi.volume === 0) return;
 
     const bufferLength = analyser.fftSize;
     const dataArray = new Uint8Array(bufferLength);
@@ -1015,8 +1016,8 @@ function checkAudio() {
 
     if (!isAudioPlaying) {
         // Play/pause workaround to reset audio
-        aud.pause();
-        aud.play();
+        audi.pause();
+        audi.play();
     }
 }
 

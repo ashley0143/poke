@@ -38,7 +38,7 @@
      "youtubei.js": "^9.3.0"
   },
   "engines": {
-    "node": "18.x"
+    "node": ">=18"
   },
   "repository": {
     "url": "https://codeberg.org/Ashley/poketube"

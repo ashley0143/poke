@@ -168,7 +168,13 @@ const X_REGEX = /https:\/\/twitter.com\/(?<name>[\w\d_-]+)/;
 const CORD_REGEX = /https:\/\/discord.gg\/(?<name>[\w\d_-]+)/;
 const TWITCH_REGEX = /https:\/\/twitch.tv\/(?<name>[\w\d_-]+)/;
 const REDDIT_REGEX = /https:\/\/reddit\.com\/r\/(?<name>[\w\d_-]+)/;
+
+/* meta software */
 const INSTAGRAM_REGEX = /https:\/\/www.instagram.com\/(?<name>[\w\d_-]+)/;
+const THREADS_BY_INSTAGRAM_REGEX = /https:\/\/www.threads.net\/(?<name>[\w\d_-]+)/;
+const FACEBOOK_REGEX = /https:\/\/www.facebook.com\/(?<name>[\w\d_-]+)/;
+
+/* music */
 const LNKTO_REGEX = /https:\/\/(?<subdomain>\w+).lnk.to\/(?<path>\S*)/;
 
 module.exports = function (app, config, renderTemplate) {

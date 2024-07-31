@@ -378,6 +378,9 @@ a[data-onclick="jump_to_time"] {
   <link href="/css/watch-util.css?v=9893448" rel=stylesheet>
   <link href="/css/watch-navbar.css?v=9893448" rel=stylesheet>
   <link href="/css/poketube.css?v=948934774844" rel=stylesheet>
+  //TODO - Bundle videojs
+  <link href="https://vjs.zencdn.net/8.16.1/video-js.css" rel="stylesheet" />
+  <script src="https://vjs.zencdn.net/8.16.1/video.min.js"></script>
   <!-- css files end -->
 
 <% if (k.Video.Channel.Name == "7clouds") { %> 
@@ -704,285 +707,6 @@ background-color: #0000;
   </style>
 </noscript>
 <script>
-  const qua = new URLSearchParams(new URL(window.location.href).search).get("quality") || "";
-  const playSVG = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>play-circle-outline</title><path d="M12,20C7.59,20 4,16.41 4,12C4,7.59 7.59,4 12,4C16.41,4 20,7.59 20,12C20,16.41 16.41,20 12,20M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M10,16.5L16,12L10,7.5V16.5Z" /></svg>'
-  const pauseSVG = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>pause-circle-outline</title><path d="M13,16V8H15V16H13M9,16V8H11V16H9M12,2A10,10 0 0,1 22,12A10,10 0 0,1 12,22A10,10 0 0,1 2,12A10,10 0 0,1 12,2M12,4A8,8 0 0,0 4,12A8,8 0 0,0 12,20A8,8 0 0,0 20,12A8,8 0 0,0 12,4Z" /></svg>'
-  function csts(seconds) {
-    var hours = Math.floor(seconds / 3600);
-    var minutes = Math.floor((seconds - (hours * 3600)) / 60);
-    var secs = Math.floor(seconds - (hours * 3600) - (minutes * 60));
-    if (hours === 0) {
-        var timeString = minutes.toString().padStart(2, '0') + ':' +
-          secs.toString().padStart(2, '0');
-    } else {
-        var timeString = hours.toString().padStart(2, '0') + ':' +
-          minutes.toString().padStart(2, '0') + ':' +
-          secs.toString().padStart(2, '0');
-    }
-    return timeString;
-}
-function cstsRemaining(totalTimeInSeconds, elapsedTimeInSeconds) {
-    var remainingSeconds = totalTimeInSeconds - elapsedTimeInSeconds;
-    var hours = Math.floor(remainingSeconds / 3600);
-    var minutes = Math.floor((remainingSeconds % 3600) / 60);
-    var secs = Math.floor(remainingSeconds % 60);
-
-    var timeString;
-    if (hours === 0) {
-        timeString = minutes.toString().padStart(2, '0') + ':' + secs.toString().padStart(2, '0');
-    } else {
-        timeString = hours.toString().padStart(2, '0') + ':' + minutes.toString().padStart(2, '0') + ':' + secs.toString().padStart(2, '0');
-    }
-
-    return '-' + timeString;
-}
-  function showErrorCard(e) {
-    try {
-      switch (e.target.error.code) {
-      case e.target.error.MEDIA_ERR_ABORTED:
-        return;
-        break;
-      case e.target.error.MEDIA_ERR_NETWORK:
-        document.querySelector("div p span").innerText = "(Network error)"
-        break;
-      case e.target.error.MEDIA_ERR_DECODE:
-        document.querySelector("div p span").innerText = "(Decode error/lack of browser support)"
-        break;
-      case e.target.error.MEDIA_ERR_SRC_NOT_SUPPORTED:
-        document.querySelector("div p span").innerText = "(Network error or format not supported)"
-        break;
-      default:
-        document.querySelector("div p span").innerText = "(Unknown error)"
-        break;
-      } 
-    }
-    catch {
-      document.querySelector("div p span").innerText = "(Network error)"
-    }
-    document.getElementById("buffer-failed-warning").style.display = "block";
-  }
-  let canPlayPause = true;
-  let didFirstTimePlay = false;
-  document.addEventListener("DOMContentLoaded", () => {
-    setInterval(()=>{
-    if(!document.getElementById("video").paused) {
-      document.getElementById("play-pause").innerHTML = pauseSVG;
-      
-    }
-    else {
-      aud.pause()
-      document.getElementById("play-pause").innerHTML = playSVG;
-    }
-    }, 100);
-    //FIXME: saved playback intentionally overwritten
-    localStorage.setItem(`progress-${new URLSearchParams(window.location.search).get('v')}`, 0);
-    // Controls and high-res playback
-    //TODO - a
-    let setTime = false
-    const seekbar = document.getElementById("duration-slider")
-    const video = document.getElementById("video");
-    let shouldUseRemaining = false;
-    const timestamps = document.getElementById("timestamps");
-    video.addEventListener("timeupdate", (event) => {      
-      seekbar.value = event.target.currentTime;
-      timestamps.innerText = shouldUseRemaining ? `${cstsRemaining(video.duration, video.currentTime)}/${csts(video.duration)}` : `${csts(video.currentTime)}/${csts(video.duration)}`;
-    });
-    timestamps.addEventListener("mouseover", () => {
-      shouldUseRemaining = true;
-      timestamps.innerText = `${cstsRemaining(video.duration, video.currentTime)}/${csts(video.duration)}`;
-    });
-    timestamps.addEventListener("mouseout", () => {
-      shouldUseRemaining = false;
-      timestamps.innerText = `${csts(video.currentTime)}/${csts(video.duration)}`;
-    });
-    // test
-    
-      seekbar.addEventListener("input", (event) => {
-          video.pause()
-          canPlayPause = false;
-          if(qua != "medium") {
-            aud.pause()
-            aud.currentTime = event.target.value
-          }
-          video.currentTime = event.target.value
-          canPlayPause = true;
-          setTimeout(()=>{
-            video.play();
-            aud.play();
-          }, 200)
-      });
-      
-      // Play/Pause
-      
-      const playPauseButton = document.getElementById("play-pause");
-      playPauseButton.innerHTML = pauseSVG;
-      function toggleVideo() {    
-        if(!canPlayPause) return;
-          if(document.getElementById("popupMenu").style.display == "none") {
-            if(!document.fullscreen) {
-              if(!video.paused) {
-              video.pause(); if(qua != "medium") { aud.pause(); } playPauseButton.innerHTML = playSVG;
-            }
-            else {
-              video.play(); if(qua != "medium") { aud.play(); } playPauseButton.innerHTML = pauseSVG;
-            }
-            }
-          }
-          else {
-            document.getElementById("popupMenu").style.display = "none"
-          } 
-      }
-      playPauseButton.addEventListener("click", () => {
-        toggleVideo()
-      });
-      video.addEventListener("pause", ()=>{if(qua != "medium") {aud.pause()}});
-      video.addEventListener("play", ()=>{if(qua != "medium") {aud.play()}})
-      video.addEventListener("click", toggleVideo);
-      video.addEventListener("dblclick", () => { 
-        document.documentElement.requestFullscreen();
-      });
-      function handleVolumeChange(element) {
-        switch (element.volume) {
-          case 1:
-            element.volume = 0;
-            document.querySelector("#muteOption #new").innerText = "25%"
-            document.querySelector("#muteOption #current").innerText = "0%"
-            break;
-          case 0:
-            element.volume = 0.25;
-            document.querySelector("#muteOption #new").innerText = "50%"
-            document.querySelector("#muteOption #current").innerText = "25%"
-            break;
-          case 0.25:
-            element.volume = 0.5;
-            document.querySelector("#muteOption #new").innerText = "75%"
-            document.querySelector("#muteOption #current").innerText = "50%"
-            break;
-          case 0.5:
-            element.volume = 0.75;
-            document.querySelector("#muteOption #new").innerText = "100%"
-            document.querySelector("#muteOption #current").innerText = "75%"
-            break;
-          case 0.75:
-            element.volume = 1;
-            document.querySelector("#muteOption #new").innerText = "0%"
-            document.querySelector("#muteOption #current").innerText = "100%"
-            break;
-          default:
-            element.volume = 1;
-            document.querySelector("#muteOption #new").innerText = "0%"
-            document.querySelector("#muteOption #current").innerText = "100%"
-            break;
-        }
-      }
-      document.getElementById("muteOption").addEventListener("click", () => {
-        if(qua != "medium") { 
-          handleVolumeChange(aud)
-        }
-        else {
-          handleVolumeChange(video)
-        }
-      });
-      document.getElementById("syncOption").addEventListener("click", () => {
-        aud.pause(); video.pause();  playPauseButton.innerHTML = playSVG;
-        video.currentTime > aud.currentTime ? aud.currentTime = video.currentTime : video.currentTime = aud.currentTime;
-        playPauseButton.innerHTML = pauseSVG;
-      });
-      setTimeout(()=>{
-           if(!didFirstTimePlay) {
-            video.addEventListener("seeked", (event) => {
-          setTimeout(()=>{
-              canPlayPause = true;
-              if(video.currentTime==0||aud.currentTime==0) return;
-              video.pause(); aud.pause(); playPauseButton.innerHTML = playSVG;
-              },1)
-           });
-          aud.addEventListener("seeked", (event) => {
-            setTimeout(()=>{
-              if(video.currentTime==0||aud.currentTime==0) return;
-              video.pause(); aud.pause(); playPauseButton.innerHTML = playSVG;
-            },1)
-          });
-          didFirstTimePlay = true;
-           }
-          },100)
-      document.addEventListener("fullscreenchange", function() {
-        if(document.fullscreen) {
-          video.controlsList = "noplaybackrate nodownload"
-          window.onscroll = function () { window.scrollTo(0, 0); };
-          document.documentElement.style.overflow = "hidden"
-          video.controls = true;
-        }
-        if(!document.fullscreen) {
-          video.controlsList = ""
-          window.onscroll = null;
-          document.documentElement.style.overflow = null
-          video.controls = false;
-        }
-      });
-      video.addEventListener("fullscreenchange", () => {
-        video.fullscreen = false;
-        document.exitFullscreen();
-      });
-      video.addEventListener("contextmenu", (event) => {
-        if(document.fullscreen) {
-          event.preventDefault()
-          const popupMenu = document.getElementById('popupMenu');
-          if (popupMenu) {
-            const xPosition = event.clientX + window.pageXOffset;
-            const yPosition = event.clientY + window.pageYOffset;
-            popupMenu.style.left = `${xPosition}px`;
-            popupMenu.style.top = `${yPosition}px`;
-          }
-          popupMenu.style.display = "block"
-        }
-      });
-    function startPlayback() {
-        // Final prepare
-        seekbar.max = video.duration
-        const timestamps = document.getElementById("timestamps");
-        timestamps.innerText = `${csts(video.currentTime)}/${csts(video.duration)}`;
-        
-        // Show controls
-        try {
-          playPauseButton.innerHTML = pauseSVG;
-          vid.play();
-          aud.play();
-          didFirstTimePlay = true;
-          
-        }
-        catch {}
-        
-        if(!setTime) {
-          //FIXME: saved playback intentionally overwritten
-          aud.currentTime = 0
-          vid.currentTime = 0
-          seekbar.value = 0
-          setTime = true
-        }
-        setTimeout(()=>{
-      video.addEventListener("seeking", (event) => {     
-      if(!didFirstTimePlay) return; 
-      if(qua != "medium") {
-        video.pause()
-        canPlayPause = false;
-        aud.pause()
-        aud.currentTime = event.target.currentTime
-      }
-    });
-    }, 500)
-    }
-    const aud = document.getElementById("aud");
-    const vid = document.getElementById("video");
-    function shouldPlay() {
-      if(vid.readyState === HTMLMediaElement.HAVE_ENOUGH_DATA) {
-        startPlayback();
-      }
-    }
-    aud.addEventListener("canplaythrough", shouldPlay);
-    vid.addEventListener("canplaythrough", shouldPlay);
-  })
-</script>
          <% if(shortsui) { %>
                                                        <script>
         // Function to apply styles after DOM has loaded
@@ -1094,7 +818,7 @@ function cstsRemaining(totalTimeInSeconds, elapsedTimeInSeconds) {
        </style>
       <% } %>
                            
-                                      
+                                  </script>    
     </head>
     
  
@@ -1412,14 +1136,6 @@ Offical Discord Server! :3
     
     
 		<div id="<%=sha384(inv_vid.videoId)%>" class="video-player-container">
-      
-      <% if (!qua) { //TODO - a %>
-        <audio id="aud" preload>
-          <source src="<%=u%>/latest_version?id=<%=inv_vid.videoId%>&itag=140&local=true" type="video/mp4" onerror="showErrorCard(event)"/>
-        </audio>
-      <% } else { %>
-        <audio id="aud"></audio>
-      <% } %>
       <noscript>
         <% if (!qua) { %>
           <div id="nojs-high-res-warning" class="error-card">
@@ -1435,70 +1151,23 @@ Offical Discord Server! :3
           <br/>
           <span></span>
         </p>
-      </div>
-      <video class="player video-ambient-container" id="video" style="border-radius: 16px; box-sizing: border-box; min-width: 100%; display: block;" autoplay preload onerror="showErrorCard(event)">
-      <% if (isvidious) { %>
         <% if (!qua) { %>
-<% 
-  let itag = '136'; // Default itag
-  inv_vid.adaptiveFormats.forEach(format => {
-    if (format.itag == '298') {
-      itag = '298';
-    }
-  });
-%>
-<source src="<%=u%>/latest_version?id=<%=inv_vid.videoId%>&itag=<%=itag%>&local=true" type="video/mp4; codecs=&quot;avc1.64001F, mp4a.40.2&quot;" label="hd720" selected="true" onerror="showErrorCard(event)">
-        <% } %>
-        <% if (qua === "medium") { %>
-          <source src="<%=u%>/latest_version?id=<%=inv_vid.videoId%>&itag=18&local=true" type="video/mp4; codecs=&quot;avc1.64001F, mp4a.40.2&quot;" label="sd360" selected="true" onerror="showErrorCard(event)">
-        <% } %>
-      <% } %>
-
-      <% if (!isSchoolProxy) { %>
-        <% if (!isvidious) { %>
-          <% if (!qua) { %>
-            <source src="https://tube.kuylar.dev/proxy/media/<%=inv_vid.videoId%>/22" type="video/mp4; codecs=&quot;avc1.64001F, mp4a.40.2&quot;" label="hd720" selected="true" onerror="showErrorCard(event)">
-          <% } %>
-          <% if (qua === "medium") { %>
-            <source src="https://tube.kuylar.dev/proxy/media/<%=inv_vid.videoId%>/18" type="video/mp4; codecs=&quot;avc1.64001F, mp4a.40.2&quot;" label="sd360" selected="true" onerror="showErrorCard(event)">
-          <% } %>
-        <% } %>
-      <% } %>
-
-      <% if (isSchoolProxy) { %>
-        <% if (!qua) { %>
-          <source src="https://tube-proxy.ashley0143.xyz/proxy/media/<%=inv_vid.videoId%>/22" type="video/mp4; codecs=&quot;avc1.64001F, mp4a.40.2&quot;" label="hd720" selected="true" onerror="showErrorCard()">
-        <% } %>
-        <% if (qua === "medium") { %>  
-          <source src="https://tube-proxy.ashley0143.xyz/proxy/media/<%=inv_vid.videoId%>/18" type="video/mp4; codecs=&quot;avc1.64001F, mp4a.40.2&quot;" label="sd360" selected="true" onerror="showErrorCard()">
-        <% } %>
-      <% } %>
-
-      <%  if (Array.isArray( inv_vid.captions)) { %> 
-        <% inv_vid.captions?.forEach(x => { %>
-          <track src="/api/subtitles?v=<%=inv_vid.videoId%>&h=<%= x.label %>" label="<%= x.label.replace("United States","Simplified - USA") %>" kind="subtitles">      
-        <% }) %>   
-      <% } %>                     
+        <video
+        id="my-video"
+        class="video-js"
+        controls
+        autoplay
+        preload="auto"
+        data-setup="{}"
+      >
+        <source src="https://eu-proxy.poketube.fun/latest_version?id=<%=inv_vid.videoId%>&itag=136&local=true" type="video/mp4" />
+    <p class="vjs-no-js">
       
-      <%  if (!Array.isArray( inv_vid.captions)) { %> 
-        <track src="/api/subtitles?v=<%=inv_vid.videoId%>&h=<%= %>" label="<%=  video.Subtitles.Subtitle.language.replace("United States","Simplified - USA") %>" kind="subtitles">      
-      <% } %>                                                       
+    </p>
     </video>
-    <div id="controls"> <!-- TODO: CONTROLS -->
-      <button id="play-pause" class="control-button">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>play-circle-outline</title><path d="M12,20C7.59,20 4,16.41 4,12C4,7.59 7.59,4 12,4C16.41,4 20,7.59 20,12C20,16.41 16.41,20 12,20M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M10,16.5L16,12L10,7.5V16.5Z" /></svg>
-      </button>
+        <% } %>
+      </div>
       
-      <div id="seekbar">
-          <input type="range" min="0" step="any" value="0" id="duration-slider">
-      </div>
-      <p id="timestamps">...</p>
-      <!--
-      <div>
-        <span>volume</span>
-        <input type="range" min="0" max="1" step="any" value="1" id="volume-slider">
-      </div>
-      -->
       
   </div>
     <% if (!a) { %>

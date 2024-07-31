@@ -1064,7 +1064,7 @@ Offical Discord Server! :3
           <span></span>
         </p>
       </div>
-      <video class="video-js player video-ambient-container" id="video" style="border-radius: 16px; box-sizing: border-box; min-width: 100%; display: block;" autoplay preload onerror="showErrorCard(event)">
+      <video class="video-js player video-ambient-container" id="video" style="border-radius: 16px; box-sizing: border-box; min-width: 100%; display: block;" autoplay preload>
       <% if (isvidious) { %>
         <% if (!qua) { %>
 <% 
@@ -1076,11 +1076,11 @@ Offical Discord Server! :3
   });
 %>
   <% if (!qua) { //TODO - a %>
-          <source src="<%=u%>/latest_version?id=<%=inv_vid.videoId%>&itag=140&local=true" type="audio/ogg" onerror="showErrorCard(event)"/>
+          <source src="<%=u%>/latest_version?id=<%=inv_vid.videoId%>&itag=140&local=true" type="audio/ogg"/>
       <% } else { %>
         <audio id="aud"></audio>
       <% } %>
-<source src="<%=u%>/latest_version?id=<%=inv_vid.videoId%>&itag=<%=itag%>&local=true" type="video/mp4; codecs=&quot;avc1.64001F, mp4a.40.2&quot;" label="hd720" selected="true" onerror="showErrorCard(event)">
+<source src="<%=u%>/latest_version?id=<%=inv_vid.videoId%>&itag=<%=itag%>&local=true" type="video/mp4; codecs=&quot;avc1.64001F, mp4a.40.2&quot;" label="hd720" selected="true">
         <% } %>
         <% if (qua === "medium") { %>
           <source src="<%=u%>/latest_version?id=<%=inv_vid.videoId%>&itag=18&local=true" type="video/mp4; codecs=&quot;avc1.64001F, mp4a.40.2&quot;" label="sd360" selected="true" onerror="showErrorCard(event)">

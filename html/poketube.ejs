@@ -1156,10 +1156,11 @@ Offical Discord Server! :3
       <% if (!qua) { %>
         <video
         id="my-video"
-        class="video-js"
-        style="width:720px;"
+        class="video-js player video-ambient-container"
         controls
         autoplay
+                style="border-radius: 16px; box-sizing: border-box; min-width: 100%; display: block;"
+
         preload="auto"
         data-setup="{}"
       >
@@ -2249,7 +2250,7 @@ const init = () => {
 
   //fixes a issue where firefox/chromium fails to load the ambinet mode and doesnt load it. - please dont remove this line lmao
     
-  //video.pause();video.play(); 
+  video.pause();video.play(); 
     
   // DO NOT REMOVE 
   

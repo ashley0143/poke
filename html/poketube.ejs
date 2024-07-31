@@ -1151,23 +1151,25 @@ Offical Discord Server! :3
           <br/>
           <span></span>
         </p>
-        <% if (!qua) { %>
+        
+      </div>
+      <% if (!qua) { %>
         <video
         id="my-video"
         class="video-js"
+        style="width:720px;"
         controls
         autoplay
         preload="auto"
         data-setup="{}"
       >
+        <source id="my-spanish-audio-track" src="https://eu-proxy.poketube.fun/latest_version?id=<%=inv_vid.videoId%>&itag=18&local=true" type="audio/ogg">
         <source src="https://eu-proxy.poketube.fun/latest_version?id=<%=inv_vid.videoId%>&itag=136&local=true" type="video/mp4" />
     <p class="vjs-no-js">
       
     </p>
     </video>
         <% } %>
-      </div>
-      
       
   </div>
     <% if (!a) { %>
@@ -2247,7 +2249,7 @@ const init = () => {
 
   //fixes a issue where firefox/chromium fails to load the ambinet mode and doesnt load it. - please dont remove this line lmao
     
-  video.pause();video.play(); 
+  //video.pause();video.play(); 
     
   // DO NOT REMOVE 
   

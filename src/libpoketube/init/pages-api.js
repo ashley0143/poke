@@ -193,6 +193,18 @@ app.use("/sb/i/:v/:imagePath/:img", async function (req, res) {
     f.body.pipe(res);
   });
 
+ app.get("/api/manifest/dash/id/:id", async (req, res) => {
+    const id = req.params.id;
+
+    let url = `https://invid-api.poketube.fun/bHj665PpYhUdPWuKPfZuQGoX/api/manifest/dash/id/${id}`;
+
+    let f = await modules.fetch(url, {
+      method: req.method,
+    });
+
+    f.body.pipe(res);
+  });
+
  app.get("/api/improving-poke/getsugesstions", async (req, res) => {
     const query = req.query.q;
 

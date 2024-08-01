@@ -618,73 +618,7 @@ background-color: #0000;
 <script>
   
 </script>
-         <% if(shortsui) { %>
-                                                       <script>
-        // Function to apply styles after DOM has loaded
-        function applyStyles() {
-            const styles = `
-                .player {
-                    width: fit-content;
-                    margin-left: auto;
-                    margin-right: auto;
-                    height: fit-content;
-                }
-
-                .video-player-container {
-                    max-width: fit-content;
-                    min-width: fit-content;
-                    margin-left: auto;
-                    margin-right: auto;
-                    aspect-ratio: var(--ptd-watch-width-ratio) / var(--ptd-watch-height-ratio);
-                }
-            `;
-
-            // Create a style element and set its content
-            const styleElement = document.createElement('style');
-            styleElement.innerHTML = styles;
-
-            // Append the style element to the document head
-            document.head.appendChild(styleElement);
-        }
-
-        // Event listener to call applyStyles after DOM has loaded
-        window.onload = applyStyles;
-                                 </script>
-                                                    <% } %>
-
-            <% if (inv_vid.author.endsWith(' - Topic')) { %> 
-                                                       <script>
-        // Function to apply styles after DOM has loaded
-        function applyStyles() {
-            const styles = `
-                .player {
-                    width: fit-content;
-                    margin-left: auto;
-                    margin-right: auto;
-                    height: fit-content;
-                }
-
-                .video-player-container {
-                    max-width: fit-content;
-                    min-width: fit-content;
-                    margin-left: auto;
-                    margin-right: auto;
-                    aspect-ratio: var(--ptd-watch-width-ratio) / var(--ptd-watch-height-ratio);
-                }
-            `;
-
-            // Create a style element and set its content
-            const styleElement = document.createElement('style');
-            styleElement.innerHTML = styles;
-
-            // Append the style element to the document head
-            document.head.appendChild(styleElement);
-        }
-
-        // Event listener to call applyStyles after DOM has loaded
-        window.onload = applyStyles;
-                                 </script>
-                                                    <% } %>
+       
              <% if(dm) { %>
                
                
@@ -771,16 +705,20 @@ background-color: #0000;
 
       <% if (!qua) { //TODO - a %>
      
-      var sources = player.currentSources();
+<% 
+  let itag = '136'; // Default itag
+  inv_vid.adaptiveFormats.forEach(format => {
+    if (format.itag == '298') {
+      itag = '298';
+    }
+  });
+%>
+           player.src([
+        { type: "video/mp4", src: "<%=u%>/latest_version?id=<%=inv_vid.videoId%>&itag=<%=itag%>&local=true" },  
+        { type: "audio/mp3", src: "<%=u%>/latest_version?id=<%=inv_vid.videoId%>&itag=140&local=true" }  
+      ]);
+ 
 
-      // Add the new audio source
-      sources.push({
-        type: 'audio/mp3',
-        src: '<%=u%>/latest_version?id=<%=inv_vid.videoId%>&itag=140&local=true'
-      });
-
-      // Set the updated source list
-      player.src(sources);
        <% } else { %>   
          <% } %>  
     });
@@ -1068,16 +1006,7 @@ Offical Discord Server! :3
       <video class="video-js player video-ambient-container" id="video" style="border-radius: 16px; box-sizing: border-box; min-width: 100%; display: block;" autoplay controls>
       <% if (isvidious) { %>
         <% if (!qua) { %>
-<% 
-  let itag = '136'; // Default itag
-  inv_vid.adaptiveFormats.forEach(format => {
-    if (format.itag == '298') {
-      itag = '298';
-    }
-  });
-%>
-<source src="<%=u%>/latest_version?id=<%=inv_vid.videoId%>&itag=<%=itag%>&local=true" type="video/mp4; codecs=&quot;avc1.64001F, mp4a.40.2&quot;" label="hd720" selected="true">
-    
+
    
    
    

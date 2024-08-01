@@ -766,7 +766,9 @@ background-color: #0000;
 </script>
 <ptd-app-iconfixer>
 <script>
-  var player = videojs('video');
+    document.addEventListener('DOMContentLoaded', function() {
+      var player = videojs('my-video');
+    });
 </script>    
 </ptd-app-iconfixer>
 <ptd-app-ejs>

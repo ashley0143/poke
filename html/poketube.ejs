@@ -382,7 +382,7 @@ a[data-onclick="jump_to_time"] {
 
   <link href="https://vjs.zencdn.net/7.17.0/video-js.css" rel="stylesheet" />
   <script src="https://vjs.zencdn.net/7.17.0/video.min.js"></script>
-
+<script src="https://cdn.jsdelivr.net/npm/videojs-contrib-dash@latest/dist/videojs-dash.min.js"></script>
 <% if (k.Video.Channel.Name == "7clouds") { %> 
 <style>
  @font-face {
@@ -703,21 +703,7 @@ background-color: #0000;
     document.addEventListener('DOMContentLoaded', function() {
       var player = videojs('video');
 
-      <% if (!qua) { //TODO - a %>
-     
-<% 
-  let itag = '136'; // Default itag
-  inv_vid.adaptiveFormats.forEach(format => {
-    if (format.itag == '298') {
-      itag = '298';
-    }
-  });
-%>
-           player.src([
-        { type: "video/mp4", src: "<%=u%>/latest_version?id=<%=inv_vid.videoId%>&itag=<%=itag%>&local=true" },  
-        { type: "audio/mp3", src: "<%=u%>/latest_version?id=<%=inv_vid.videoId%>&itag=140&local=true" }  
-      ]);
- 
+      
 
        <% } else { %>   
          <% } %>  
@@ -1007,7 +993,7 @@ Offical Discord Server! :3
       <% if (isvidious) { %>
         <% if (!qua) { %>
 
-           <source id="my-spanish-audio-track" src="https://eu-proxy.poketube.fun/latest_version?id=<%=inv_vid.videoId%>&itag=18&local=true" type="audio/ogg">
+           <source src="https://invid-api.poketube.fun/bHj665PpYhUdPWuKPfZuQGoX/api/manifest/dash/id/<%=inv_vid.videoId%>" type="application/dash+xml">
    
    
         <% } %>

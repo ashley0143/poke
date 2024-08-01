@@ -770,11 +770,17 @@ background-color: #0000;
       var player = videojs('video');
 
       <% if (!qua) { //TODO - a %>
-      player.src({
+     
+      var sources = player.currentSources();
+
+      // Add the new audio source
+      sources.push({
         type: 'audio/mp3',
         src: '<%=u%>/latest_version?id=<%=inv_vid.videoId%>&itag=140&local=true'
       });
 
+      // Set the updated source list
+      player.src(sources);
        <% } else { %>   
          <% } %>  
     });

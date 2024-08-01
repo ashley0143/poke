@@ -766,16 +766,7 @@ background-color: #0000;
 </script>
 <ptd-app-iconfixer>
 <script>
- // Preload the icon image
-    var iconImage = new Image();
-    iconImage.src = "/css/yt-ukraine.svg";
-
-    // Wait for the icon image to load before showing it
-    iconImage.onload = function() {
-      var iconElement = document.querySelector('link[rel="icon"]');
-      iconElement.href = iconImage.src;
-      iconElement.type = "image/svg+xml";
-    };
+  var player = videojs('my-video');
 </script>    
 </ptd-app-iconfixer>
 <ptd-app-ejs>
@@ -1057,7 +1048,7 @@ Offical Discord Server! :3
         <% } %>
       </noscript>
    
-      <video class="video-js player video-ambient-container" id="video" style="border-radius: 16px; box-sizing: border-box; min-width: 100%; display: block;" autoplay preload>
+      <video class="video-js player video-ambient-container" id="video" style="border-radius: 16px; box-sizing: border-box; min-width: 100%; display: block;" autoplay controls>
       <% if (isvidious) { %>
         <% if (!qua) { %>
 <% 

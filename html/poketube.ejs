@@ -768,6 +768,15 @@ background-color: #0000;
 <script>
     document.addEventListener('DOMContentLoaded', function() {
       var player = videojs('video');
+
+      <% if (!qua) { //TODO - a %>
+      player.src({
+        type: 'audio/mp3',
+        src: '<%=u%>/latest_version?id=<%=inv_vid.videoId%>&itag=140&local=true'
+      });
+
+       <% } else { %>   
+         <% } %>  
     });
 </script>    
 </ptd-app-iconfixer>
@@ -1062,10 +1071,7 @@ Offical Discord Server! :3
   });
 %>
 <source src="<%=u%>/latest_version?id=<%=inv_vid.videoId%>&itag=<%=itag%>&local=true" type="video/mp4; codecs=&quot;avc1.64001F, mp4a.40.2&quot;" label="hd720" selected="true">
-   <% if (!qua) { //TODO - a %>
-    <source id="my-spanish-audio-track" src="<%=u%>/latest_version?id=<%=inv_vid.videoId%>&itag=140&local=true" type="audio/ogg"> 
-      <% } else { %>
-      <% } %>   
+    
    
    
    

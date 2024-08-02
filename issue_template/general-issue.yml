@@ -7,7 +7,7 @@ body:
     attributes:
       value: |
         > [!WARNING]
-        > Please check if the issue already exists before creating it!   
+        > Please check if the issue already exists before creating it! [u will explod if it already exists]   
   - type: textarea
     id: describe
     attributes:
@@ -19,7 +19,7 @@ body:
     id: browser
     attributes:
       label: What browser and OS are you using?
-      description: eg. Chrome on Windows 10, Firefox on Fedora 40
+      description: eg. Chrome on Windows 10, Firefox on Fedora GNU/Linux 40
     validations:
       required: true
   - type: textarea

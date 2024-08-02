@@ -546,117 +546,116 @@ font-weight: 1000;">You are not alone</h2>
 const fakeNewsSources = {
     "InfoWars": { 
         category: "conspiracy", 
-        reason: "InfoWars has been widely criticized for promoting conspiracy theories and false information. For example, it falsely claimed that the Sandy Hook Elementary School shooting was a hoax.", 
-        link: "https://www.theguardian.com/us-news/2018/oct/15/alex-jones-infowars-sandy-hook" 
+        reason: "InfoWars has been widely criticized for promoting conspiracy theories and false information, such as falsely claiming that the Sandy Hook Elementary School shooting was a hoax.", 
+        search: "InfoWars fact-check" 
     },
     "Breitbart": { 
         category: "conservative", 
-        reason: "Breitbart is known for its extreme political bias and has spread misleading information. For instance, it has downplayed the severity of COVID-19 and other critical issues.", 
-        link: "https://www.nytimes.com/2020/03/26/us/politics/breitbart-coronavirus.html" 
+        reason: "Breitbart is known for its extreme political bias and spreading misleading information, including downplaying the severity of COVID-19.", 
+        search: "Breitbart fact-check" 
     },
     "Daily Mail": { 
         category: "tabloid", 
-        reason: "The Daily Mail is frequently criticized for sensationalism and misinformation. For example, it has published misleading health and science stories.", 
-        link: "https://www.theguardian.com/media/2016/jul/21/daily-mail-fake-news-health-claims" 
+        reason: "The Daily Mail is frequently criticized for sensationalism and misinformation, such as publishing misleading health and science stories.", 
+        search: "Daily Mail fact-check" 
     },
     "Natural News": { 
         category: "pseudoscience", 
-        reason: "Natural News is known for promoting pseudoscience and conspiracy theories, such as false claims about vaccines. It often spreads unverified and harmful information.", 
-        link: "https://www.factcheck.org/2021/01/natural-news-promotes-unfounded-claims-about-covid-19-vaccines/" 
+        reason: "Natural News promotes pseudoscience and conspiracy theories, including false vaccine claims and unverified health information.", 
+        search: "Natural News fact-check" 
     },
     "RT": { 
         category: "state-sponsored", 
-        reason: "RT is a state-funded media outlet known for promoting Russian government perspectives and has been criticized for biased reporting on international issues.", 
-        link: "https://www.bbc.com/news/world-europe-32123616" 
+        reason: "RT is a state-funded media outlet known for promoting Russian government perspectives and biased reporting on international issues.", 
+        search: "RT fact-check" 
     },
     "Sputnik": { 
         category: "state-sponsored", 
-        reason: "Sputnik, like RT, is known for spreading Russian state propaganda and publishing misleading information about Western countries.", 
-        link: "https://www.reuters.com/article/us-usa-russia-propaganda-idUSKBN1K30NK" 
+        reason: "Sputnik spreads Russian state propaganda and publishes misleading information about Western countries.", 
+        search: "Sputnik fact-check" 
     },
     "Before It's News": { 
         category: "conspiracy", 
         reason: "Before It's News is known for spreading conspiracy theories and fake news, including fabricated stories about global events.", 
-        link: "https://www.snopes.com/fact-check/before-its-news/" 
+        search: "Before It's News fact-check" 
     },
     "Your News Wire": { 
         category: "conspiracy", 
-        reason: "Your News Wire is known for publishing false information and conspiracy theories, including fabricated reports on various topics.", 
-        link: "https://www.politifact.com/factchecks/2018/dec/14/your-news-wire/fake-news-purveyor-yournewswire-rebrands-itself-ne/" 
+        reason: "Your News Wire publishes false information and conspiracy theories, including fabricated reports on various topics.", 
+        search: "Your News Wire fact-check" 
     },
     "WorldTruth.TV": { 
         category: "conspiracy", 
-        reason: "WorldTruth.TV is known for spreading conspiracy theories and pseudoscience, including false health information and other dubious claims.", 
-        link: "https://mediabiasfactcheck.com/worldtruth-tv/" 
+        reason: "WorldTruth.TV spreads conspiracy theories and pseudoscience, including false health information and other dubious claims.", 
+        search: "WorldTruth.TV fact-check" 
     },
     "NewsPunch": { 
         category: "conspiracy", 
-        reason: "NewsPunch is known for publishing false information and conspiracy theories, including unsubstantiated claims about political figures.", 
-        link: "https://www.politifact.com/factchecks/2018/dec/14/newspunch/fake-news-purveyor-yournewswire-rebrands-itself-ne/" 
+        reason: "NewsPunch publishes false information and conspiracy theories, including unsubstantiated claims about political figures.", 
+        search: "NewsPunch fact-check" 
     },
     "Civic Tribune": { 
         category: "fake-news", 
-        reason: "Civic Tribune is a fake news site known for hoaxes and misinformation, including fabricated stories about political events.", 
-        link: "https://www.snopes.com/fact-check/civic-tribune-hoaxes/" 
+        reason: "Civic Tribune is known for hoaxes and misinformation, including fabricated stories about political events.", 
+        search: "Civic Tribune fact-check" 
     },
     "The Daily Stormer": { 
         category: "extremist", 
-        reason: "The Daily Stormer is known for promoting hate speech and extremist views, including anti-Semitic and other hateful content.", 
-        link: "https://www.adl.org/resources/backgrounders/daily-stormer" 
+        reason: "The Daily Stormer promotes hate speech and extremist views, including anti-Semitic and other hateful content.", 
+        search: "The Daily Stormer fact-check" 
     },
     "Times of Israel": { 
         category: "state-sponsored", 
-        reason: "Times of Israel has been criticized for biased reporting and spreading propaganda, particularly regarding the Israel-Palestine conflict.", 
-        link: "https://www.theguardian.com/world/2018/jul/19/times-of-israel-criticism-jewish-nation-state-law" 
+        reason: "Times of Israel has faced criticism for biased reporting and spreading propaganda, especially regarding the Israel-Palestine conflict.", 
+        search: "Times of Israel fact-check" 
     },
     "Zero Hedge": { 
         category: "conspiracy", 
-        reason: "Zero Hedge is known for promoting conspiracy theories and financial misinformation, including false claims about market events.", 
-        link: "https://www.bbc.com/news/technology-57001905" 
+        reason: "Zero Hedge promotes conspiracy theories and financial misinformation, including false claims about market events.", 
+        search: "Zero Hedge fact-check" 
     },
     "Pravda": { 
         category: "state-sponsored", 
-        reason: "Pravda is a state-run media outlet known for spreading Russian government propaganda, with a history of biased reporting on international events.", 
-        link: "https://www.bbc.com/news/world-europe-32123616" 
+        reason: "Pravda is a state-run media outlet known for spreading Russian government propaganda with a history of biased reporting on international events.", 
+        search: "Pravda fact-check" 
     },
     "Press TV": { 
         category: "state-sponsored", 
-        reason: "Press TV is known for promoting Iranian government propaganda and often spreads biased information about Western countries.", 
-        link: "https://www.reuters.com/investigates/special-report/usa-iran-press-tv/" 
+        reason: "Press TV promotes Iranian government propaganda and often spreads biased information about Western countries.", 
+        search: "Press TV fact-check" 
     },
     "Fox News": { 
         category: "conservative", 
-        reason: "Fox News is often criticized for extreme political bias and misinformation. For example, it has faced scrutiny for its reporting on the 2020 US election.", 
-        link: "https://www.nytimes.com/2020/11/13/business/media/fox-news-election.html" 
+        reason: "Fox News is often criticized for extreme political bias and misinformation, such as its reporting on the 2020 US election.", 
+        search: "Fox News fact-check" 
     },
     "The Blaze": { 
         category: "conservative", 
-        reason: "The Blaze is known for promoting right-wing viewpoints and sometimes misleading information, including false claims about political figures.", 
-        link: "https://www.washingtonpost.com/lifestyle/style/the-blaze-the-conservative-news-site-glenn-beck-started-in-2010-is-no-more/2020/06/16/84506e54-b0a2-11ea-856d-5054296735e5_story.html" 
+        reason: "The Blaze promotes right-wing viewpoints and sometimes misleading information, including false claims about political figures.", 
+        search: "The Blaze fact-check" 
     },
     "OANN": { 
         category: "conservative", 
-        reason: "OANN is known for spreading far-right viewpoints and conspiracy theories, including false claims about election fraud.", 
-        link: "https://www.nytimes.com/2021/03/11/us/oann-dominion.html" 
+        reason: "OANN spreads far-right viewpoints and conspiracy theories, including false claims about election fraud.", 
+        search: "OANN fact-check" 
     },
     "Newsmax": { 
         category: "conservative", 
-        reason: "Newsmax has been criticized for promoting extreme right-wing perspectives and misinformation, including false claims about the COVID-19 pandemic.", 
-        link: "https://www.reuters.com/article/us-usa-election-newsmax-idUSKBN28S2L6" 
+        reason: "Newsmax promotes extreme right-wing perspectives and misinformation, including false claims about the COVID-19 pandemic.", 
+        search: "Newsmax fact-check" 
     },
     "Al Jazeera": { 
         category: "state-sponsored", 
-        reason: "Al Jazeera is a Qatar state-funded media outlet with a history of promoting government viewpoints. It has faced criticism for biased reporting on Middle Eastern conflicts.", 
-        link: "https://www.theguardian.com/world/2017/jun/23/al-jazeera-journalists-qatari-state-funded-network" 
+        reason: "Al Jazeera, a Qatar state-funded media outlet, has a history of promoting government viewpoints and biased reporting on Middle Eastern conflicts.", 
+        search: "Al Jazeera fact-check" 
     },
     "The Sun": { 
         category: "tabloid", 
-        reason: "The Sun is known for sensationalism and often publishes exaggerated or false stories, particularly about celebrities and other high-profile topics.", 
-        link: "https://www.bbc.com/news/entertainment-arts-53292953" 
+        reason: "The Sun is known for sensationalism and often publishes exaggerated or false stories, particularly about celebrities and high-profile topics.", 
+        search: "The Sun fact-check" 
     }
 };
 
-// Normalize search query
 const normalizedQuery = q.toLowerCase().replace(/\s+/g, '');
 const matchedSource = Object.keys(fakeNewsSources).find(source => normalizedQuery.includes(source.toLowerCase().replace(/\s+/g, '')));
 
@@ -664,17 +663,17 @@ if (q.includes('-showall')) {
 %>
 
 <div class="container">          
-    <h2 style="font-family: 'PokeTube Flex'; font-size: large; text-align: left; font-weight: bold;">
-        <span style="font-size: xx-large; color: red;">🔍</span> Debug mode !
+    <h2 class="debug-title">
+        <span class="debug-icon">🔍</span> Debug Info
     </h2>
-    <p>
+    <p class="debug-intro">
         Here are all the sources and their details:
     </p>
-    <ul>
+    <ul class="debug-list">
         <% Object.keys(fakeNewsSources).forEach(source => { %>
-            <li>
+            <li class="debug-item">
                 <strong><%= source %></strong> - <%= fakeNewsSources[source].reason %> <br>
-                <a href="<%= fakeNewsSources[source].link %>">Read more</a>
+                <a class="debug-link" href="https://www.google.com/search?q=<%= fakeNewsSources[source].search %>">Find more info</a>
             </li>
         <% }); %>
     </ul>
@@ -683,33 +682,88 @@ if (q.includes('-showall')) {
 <% } else if (matchedSource) { %>
 
 <div class="container">          
-    <h2 style="font-family: 'PokeTube Flex';font-size: large;text-align: left;font-stretch: ultra-expanded;
-font-weight: 1000;">
-        <span style="font-size: xx-large; color: red;">🚫</span> <br>
-         Be Cautious with This Source 
+    <h2 class="warning-title">
+        <span class="warning-icon">🚫</span> 
+        <br> Be Cautious with This Source 
     </h2>
-    <p>
+    <p class="warning-intro">
         Hai there! It looks like you might be looking at info from <strong><%= matchedSource %></strong>, which is known for spreading fake news or propaganda.
     </p>
-    <p>
+    <p class="warning-tips">
         Here are some quick tips to check if what you're reading is legit:
     </p>
-    <ul style="background-color: #f9f9f9; border: 1px solid #ddd; border-radius: 5px; padding: 15px; list-style-type: none;">
-        <li style="margin-bottom: 10px;"><strong>Check the source's rep:</strong> Reliable sites usually have a good track record for being accurate and fair.</li>
-        <li style="margin-bottom: 10px;"><strong>See if other reputable sites are reporting the same news:</strong> If it's just one place, be cautious.</li>
-        <li style="margin-bottom: 10px;"><strong>Use fact-checking sites:</strong> Try <a href="https://www.snopes.com/">Snopes</a> or <a href="https://www.factcheck.org/">FactCheck.org</a>.</li>
-        <li style="margin-bottom: 10px;"><strong>Look at the publication date:</strong> Make sure it's current and not out of context.</li>
-        <li><strong>Check for links and citations:</strong> Good articles usually back up their claims with evidence.</li>
+    <ul class="tips-list">
+        <li class="tips-item"><strong>Check the source's rep:</strong> Reliable sites usually have a good track record for being accurate and fair.</li>
+        <li class="tips-item"><strong>See if other reputable sites are reporting the same news:</strong> If it's just one place, be cautious.</li>
+        <li class="tips-item"><strong>Use fact-checking sites:</strong> Try <a href="https://www.snopes.com/" class="fact-check-link">Snopes</a> or <a href="https://www.factcheck.org/" class="fact-check-link">FactCheck.org</a>.</li>
+        <li class="tips-item"><strong>Look at the publication date:</strong> Make sure it's current and not out of context.</li>
+        <li class="tips-item"><strong>Check for links and citations:</strong> Good articles usually back up their claims with evidence.</li>
     </ul>
-    <p>
-        For more info on why <strong><%= matchedSource %></strong> might not be reliable, check out these sources:
+    <p class="warning-info">
+        For more info on why <strong><%= matchedSource %></strong> might not be reliable, check out a search for:
     </p>
-    <ul>
-        <li><a href="<%= fakeNewsSources[matchedSource].link %>"><%= fakeNewsSources[matchedSource].reason %></a></li>
+    <ul class="warning-links">
+        <li><a class="warning-link" href="https://www.google.com/search?q=<%= fakeNewsSources[matchedSource].search %>"><%= fakeNewsSources[matchedSource].reason %></a></li>
     </ul>
 </div>
 
 <% } %>
+
+<style>
+    .container {
+        max-width: 800px;
+        margin: 20px auto;
+        padding: 20px;
+        border-radius: 8px;
+        background: #1a1a1a;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    .debug-title, .warning-title {
+        font-family: 'PokeTube Flex', sans-serif;
+        font-size: 24px;
+        text-align: left;
+        font-weight: bold;
+        color: #333;
+    }
+
+    .debug-icon, .warning-icon {
+        font-size: 30px;
+    }
+
+    .debug-intro, .warning-intro, .warning-tips, .warning-info {
+        font-size: 16px;
+        color: #555;
+        margin: 10px 0;
+    }
+
+    .debug-list, .tips-list, .warning-links {
+        padding: 0;
+        margin: 0;
+        list-style: none;
+    }
+
+    .debug-item, .tips-item, .warning-link {
+        margin-bottom: 10px;
+    }
+
+    .debug-link, .fact-check-link, .warning-link {
+        color: #007bff;
+        text-decoration: none;
+    }
+
+    .debug-link:hover, .fact-check-link:hover, .warning-link:hover {
+        text-decoration: underline;
+    }
+
+    .tips-list {
+        background-color: #f9f9f9;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        padding: 15px;
+    }
+</style>
+
 
 
 

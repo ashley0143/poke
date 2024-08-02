@@ -542,6 +542,175 @@ font-weight: 1000;">You are not alone</h2>
 </div>
 <% } %>
 
+<% 
+const fakeNewsSources = {
+    "InfoWars": { 
+        category: "conspiracy", 
+        reason: "InfoWars has been widely criticized for promoting conspiracy theories and false information. For example, it falsely claimed that the Sandy Hook Elementary School shooting was a hoax.", 
+        link: "https://www.theguardian.com/us-news/2018/oct/15/alex-jones-infowars-sandy-hook" 
+    },
+    "Breitbart": { 
+        category: "conservative", 
+        reason: "Breitbart is known for its extreme political bias and has spread misleading information. For instance, it has downplayed the severity of COVID-19 and other critical issues.", 
+        link: "https://www.nytimes.com/2020/03/26/us/politics/breitbart-coronavirus.html" 
+    },
+    "Daily Mail": { 
+        category: "tabloid", 
+        reason: "The Daily Mail is frequently criticized for sensationalism and misinformation. For example, it has published misleading health and science stories.", 
+        link: "https://www.theguardian.com/media/2016/jul/21/daily-mail-fake-news-health-claims" 
+    },
+    "Natural News": { 
+        category: "pseudoscience", 
+        reason: "Natural News is known for promoting pseudoscience and conspiracy theories, such as false claims about vaccines. It often spreads unverified and harmful information.", 
+        link: "https://www.factcheck.org/2021/01/natural-news-promotes-unfounded-claims-about-covid-19-vaccines/" 
+    },
+    "RT": { 
+        category: "state-sponsored", 
+        reason: "RT is a state-funded media outlet known for promoting Russian government perspectives and has been criticized for biased reporting on international issues.", 
+        link: "https://www.bbc.com/news/world-europe-32123616" 
+    },
+    "Sputnik": { 
+        category: "state-sponsored", 
+        reason: "Sputnik, like RT, is known for spreading Russian state propaganda and publishing misleading information about Western countries.", 
+        link: "https://www.reuters.com/article/us-usa-russia-propaganda-idUSKBN1K30NK" 
+    },
+    "Before It's News": { 
+        category: "conspiracy", 
+        reason: "Before It's News is known for spreading conspiracy theories and fake news, including fabricated stories about global events.", 
+        link: "https://www.snopes.com/fact-check/before-its-news/" 
+    },
+    "Your News Wire": { 
+        category: "conspiracy", 
+        reason: "Your News Wire is known for publishing false information and conspiracy theories, including fabricated reports on various topics.", 
+        link: "https://www.politifact.com/factchecks/2018/dec/14/your-news-wire/fake-news-purveyor-yournewswire-rebrands-itself-ne/" 
+    },
+    "WorldTruth.TV": { 
+        category: "conspiracy", 
+        reason: "WorldTruth.TV is known for spreading conspiracy theories and pseudoscience, including false health information and other dubious claims.", 
+        link: "https://mediabiasfactcheck.com/worldtruth-tv/" 
+    },
+    "NewsPunch": { 
+        category: "conspiracy", 
+        reason: "NewsPunch is known for publishing false information and conspiracy theories, including unsubstantiated claims about political figures.", 
+        link: "https://www.politifact.com/factchecks/2018/dec/14/newspunch/fake-news-purveyor-yournewswire-rebrands-itself-ne/" 
+    },
+    "Civic Tribune": { 
+        category: "fake-news", 
+        reason: "Civic Tribune is a fake news site known for hoaxes and misinformation, including fabricated stories about political events.", 
+        link: "https://www.snopes.com/fact-check/civic-tribune-hoaxes/" 
+    },
+    "The Daily Stormer": { 
+        category: "extremist", 
+        reason: "The Daily Stormer is known for promoting hate speech and extremist views, including anti-Semitic and other hateful content.", 
+        link: "https://www.adl.org/resources/backgrounders/daily-stormer" 
+    },
+    "Times of Israel": { 
+        category: "state-sponsored", 
+        reason: "Times of Israel has been criticized for biased reporting and spreading propaganda, particularly regarding the Israel-Palestine conflict.", 
+        link: "https://www.theguardian.com/world/2018/jul/19/times-of-israel-criticism-jewish-nation-state-law" 
+    },
+    "Zero Hedge": { 
+        category: "conspiracy", 
+        reason: "Zero Hedge is known for promoting conspiracy theories and financial misinformation, including false claims about market events.", 
+        link: "https://www.bbc.com/news/technology-57001905" 
+    },
+    "Pravda": { 
+        category: "state-sponsored", 
+        reason: "Pravda is a state-run media outlet known for spreading Russian government propaganda, with a history of biased reporting on international events.", 
+        link: "https://www.bbc.com/news/world-europe-32123616" 
+    },
+    "Press TV": { 
+        category: "state-sponsored", 
+        reason: "Press TV is known for promoting Iranian government propaganda and often spreads biased information about Western countries.", 
+        link: "https://www.reuters.com/investigates/special-report/usa-iran-press-tv/" 
+    },
+    "Fox News": { 
+        category: "conservative", 
+        reason: "Fox News is often criticized for extreme political bias and misinformation. For example, it has faced scrutiny for its reporting on the 2020 US election.", 
+        link: "https://www.nytimes.com/2020/11/13/business/media/fox-news-election.html" 
+    },
+    "The Blaze": { 
+        category: "conservative", 
+        reason: "The Blaze is known for promoting right-wing viewpoints and sometimes misleading information, including false claims about political figures.", 
+        link: "https://www.washingtonpost.com/lifestyle/style/the-blaze-the-conservative-news-site-glenn-beck-started-in-2010-is-no-more/2020/06/16/84506e54-b0a2-11ea-856d-5054296735e5_story.html" 
+    },
+    "OANN": { 
+        category: "conservative", 
+        reason: "OANN is known for spreading far-right viewpoints and conspiracy theories, including false claims about election fraud.", 
+        link: "https://www.nytimes.com/2021/03/11/us/oann-dominion.html" 
+    },
+    "Newsmax": { 
+        category: "conservative", 
+        reason: "Newsmax has been criticized for promoting extreme right-wing perspectives and misinformation, including false claims about the COVID-19 pandemic.", 
+        link: "https://www.reuters.com/article/us-usa-election-newsmax-idUSKBN28S2L6" 
+    },
+    "Al Jazeera": { 
+        category: "state-sponsored", 
+        reason: "Al Jazeera is a Qatar state-funded media outlet with a history of promoting government viewpoints. It has faced criticism for biased reporting on Middle Eastern conflicts.", 
+        link: "https://www.theguardian.com/world/2017/jun/23/al-jazeera-journalists-qatari-state-funded-network" 
+    },
+    "The Sun": { 
+        category: "tabloid", 
+        reason: "The Sun is known for sensationalism and often publishes exaggerated or false stories, particularly about celebrities and other high-profile topics.", 
+        link: "https://www.bbc.com/news/entertainment-arts-53292953" 
+    }
+};
+
+// Normalize search query
+const normalizedQuery = q.toLowerCase().replace(/\s+/g, '');
+const matchedSource = Object.keys(fakeNewsSources).find(source => normalizedQuery.includes(source.toLowerCase().replace(/\s+/g, '')));
+
+if (q.includes('-showall')) {
+%>
+
+<div class="container">          
+    <h2 style="font-family: 'PokeTube Flex'; font-size: large; text-align: left; font-weight: bold;">
+        <span style="font-size: xx-large; color: red;">🔍</span> Debug mode !
+    </h2>
+    <p>
+        Here are all the sources and their details:
+    </p>
+    <ul>
+        <% Object.keys(fakeNewsSources).forEach(source => { %>
+            <li>
+                <strong><%= source %></strong> - <%= fakeNewsSources[source].reason %> <br>
+                <a href="<%= fakeNewsSources[source].link %>">Read more</a>
+            </li>
+        <% }); %>
+    </ul>
+</div>
+
+<% } else if (matchedSource) { %>
+
+<div class="container">          
+    <h2 style="font-family: 'PokeTube Flex';font-size: large;text-align: left;font-stretch: ultra-expanded;
+font-weight: 1000;">
+        <span style="font-size: xx-large; color: red;">🚫</span> <br>
+         Be Cautious with This Source 
+    </h2>
+    <p>
+        Hai there! It looks like you might be looking at info from <strong><%= matchedSource %></strong>, which is known for spreading fake news or propaganda.
+    </p>
+    <p>
+        Here are some quick tips to check if what you're reading is legit:
+    </p>
+    <ul style="background-color: #f9f9f9; border: 1px solid #ddd; border-radius: 5px; padding: 15px; list-style-type: none;">
+        <li style="margin-bottom: 10px;"><strong>Check the source's rep:</strong> Reliable sites usually have a good track record for being accurate and fair.</li>
+        <li style="margin-bottom: 10px;"><strong>See if other reputable sites are reporting the same news:</strong> If it's just one place, be cautious.</li>
+        <li style="margin-bottom: 10px;"><strong>Use fact-checking sites:</strong> Try <a href="https://www.snopes.com/">Snopes</a> or <a href="https://www.factcheck.org/">FactCheck.org</a>.</li>
+        <li style="margin-bottom: 10px;"><strong>Look at the publication date:</strong> Make sure it's current and not out of context.</li>
+        <li><strong>Check for links and citations:</strong> Good articles usually back up their claims with evidence.</li>
+    </ul>
+    <p>
+        For more info on why <strong><%= matchedSource %></strong> might not be reliable, check out these sources:
+    </p>
+    <ul>
+        <li><a href="<%= fakeNewsSources[matchedSource].link %>"><%= fakeNewsSources[matchedSource].reason %></a></li>
+    </ul>
+</div>
+
+<% } %>
+
 
 
   <% if (q.includes("whats your eta")) { %> 

@@ -541,7 +541,6 @@ font-weight: 1000;">You are not alone</h2>
     </p>
 </div>
 <% } %>
-
 <% 
 const fakeNewsSources = {
     "InfoWars": { 
@@ -564,7 +563,7 @@ const fakeNewsSources = {
         reason: "Natural News promotes pseudoscience and conspiracy theories, including false vaccine claims and unverified health information.", 
         search: "Is it true that Natural News promotes pseudoscience and false vaccine claims?" 
     },
-    "RT": { 
+    "RT news": { 
         category: "state-sponsored", 
         reason: "RT is a state-funded media outlet known for promoting Russian government perspectives and biased reporting on international issues.", 
         search: "Is it true that RT promotes Russian government perspectives and biased reporting?" 
@@ -705,6 +704,8 @@ if (q.includes('-debug-news')) {
     <ul class="warning-links">
         <li><a class="warning-link" href="https://www.google.com/search?q=<%= fakeNewsSources[matchedSource].search %>"><%= fakeNewsSources[matchedSource].reason %></a></li>
     </ul>
+
+    <p>wrong filter? <a href="https://codeberg.org/ashley/poke/issues/new">Report :3</p>
 </div>
 
 <% } %>
@@ -720,11 +721,11 @@ if (q.includes('-debug-news')) {
     }
 
     .debug-title, .warning-title {
-      font-family: 'PokeTube Flex';
-      font-size: large;
-      text-align: left;
-      font-stretch: ultra-expanded;
-      font-weight: 1000;
+        font-family: 'PokeTube Flex';
+        font-size: large;
+        text-align: left;
+        font-stretch: ultra-expanded;
+        font-weight: 1000;
     }
 
     .debug-icon, .warning-icon {

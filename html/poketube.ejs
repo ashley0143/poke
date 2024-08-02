@@ -380,9 +380,6 @@ a[data-onclick="jump_to_time"] {
   <link href="/css/poketube.css?v=948934774844" rel=stylesheet>
   <!-- css files end -->
 
-  <link href="https://vjs.zencdn.net/7.17.0/video-js.css" rel="stylesheet" />
-  <script src="https://vjs.zencdn.net/7.17.0/video.min.js"></script>
-
 <% if (k.Video.Channel.Name == "7clouds") { %> 
 <style>
  @font-face {
@@ -600,7 +597,98 @@ background-color: #0000;
     top: 0;
   
 }
-  
+  #controls {
+    display: flex;
+    visibility: hidden;
+    position: absolute;
+    bottom: 0;
+    margin-bottom: 70px  !important;
+    margin: 0 20px;
+    width: 100%;
+    align-items:flex-end;
+  }
+  video:hover~#controls, #controls:hover {
+    visibility: visible;
+  }
+  .control-button {
+    width: 40px;
+    border-radius: 5px;
+    margin-bottom: 6px;
+    padding: 3px
+  }
+  .video-player-container {
+    position: relative;
+  }
+  .control-button svg {
+    fill: #c59cd0;
+    width: 40px;
+    margin-bottom: -6px;
+  }
+  #seekbar {
+    display: flex;
+    margin-left: 20px;
+    margin-right: 20px;
+    width: 100%;
+  }
+  input[id*="-slider"] {
+    flex-grow: 1;
+    -webkit-appearance: none;
+    appearance: none;
+    background: #ffffff;
+    border: 1px solid #000000;
+    margin-bottom: 23px;
+    cursor: pointer;
+    width: 0.5rem;
+    height: 5px !important;
+    display: block;
+    border-radius: 50px;
+  }
+  input[type=range]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    border: 1px solid #000000;
+    height: 21px;
+    width: 21px;
+    border-radius: 20px;
+    background: var(--div-gradient);
+    cursor: pointer;
+    box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
+  }
+  input[type=range]::-moz-range-thumb {
+    border: 1px solid #000000;
+    height: 21px;
+    width: 21px;
+    border-radius: 20px;
+    background: var(--div-gradient);
+    cursor: pointer;
+    box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
+  }
+  #timestamps {
+    margin-right: 40px;
+    text-shadow: 1px 1px 2px black;
+  }
+  html:fullscreen video {
+    display: block !important;
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100vw !important;
+    height: 100vh !important;
+    z-index: 999999 !important;
+  }
+  html:fullscreen *:not(html, video, body, ptd-app-ejs, .app, .watch-page, .primary, .video-player-container, #popupMenu, #popupMenu *) {
+    visibility: hidden !important;
+  }
+  .error-card {
+    background-color: #823434aa;
+    margin: 30px;
+    padding: 5px 20px;
+    border: 2px solid red;
+    border-radius: 10px;
+  }
+  #buffer-failed-warning {
+    display: none;
+  }
+
   .rainbow-gradient {
     background: linear-gradient(to right, red, orange, yellow, green, blue, indigo, violet);
     -webkit-background-clip: text;
@@ -616,9 +704,352 @@ background-color: #0000;
   </style>
 </noscript>
 <script>
-  
+  const qua = new URLSearchParams(new URL(window.location.href).search).get("quality") || "";
+  const playSVG = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>play-circle-outline</title><path d="M12,20C7.59,20 4,16.41 4,12C4,7.59 7.59,4 12,4C16.41,4 20,7.59 20,12C20,16.41 16.41,20 12,20M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M10,16.5L16,12L10,7.5V16.5Z" /></svg>'
+  const pauseSVG = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>pause-circle-outline</title><path d="M13,16V8H15V16H13M9,16V8H11V16H9M12,2A10,10 0 0,1 22,12A10,10 0 0,1 12,22A10,10 0 0,1 2,12A10,10 0 0,1 12,2M12,4A8,8 0 0,0 4,12A8,8 0 0,0 12,20A8,8 0 0,0 20,12A8,8 0 0,0 12,4Z" /></svg>'
+  function csts(seconds) {
+    var hours = Math.floor(seconds / 3600);
+    var minutes = Math.floor((seconds - (hours * 3600)) / 60);
+    var secs = Math.floor(seconds - (hours * 3600) - (minutes * 60));
+    if (hours === 0) {
+        var timeString = minutes.toString().padStart(2, '0') + ':' +
+          secs.toString().padStart(2, '0');
+    } else {
+        var timeString = hours.toString().padStart(2, '0') + ':' +
+          minutes.toString().padStart(2, '0') + ':' +
+          secs.toString().padStart(2, '0');
+    }
+    return timeString;
+}
+function cstsRemaining(totalTimeInSeconds, elapsedTimeInSeconds) {
+    var remainingSeconds = totalTimeInSeconds - elapsedTimeInSeconds;
+    var hours = Math.floor(remainingSeconds / 3600);
+    var minutes = Math.floor((remainingSeconds % 3600) / 60);
+    var secs = Math.floor(remainingSeconds % 60);
+
+    var timeString;
+    if (hours === 0) {
+        timeString = minutes.toString().padStart(2, '0') + ':' + secs.toString().padStart(2, '0');
+    } else {
+        timeString = hours.toString().padStart(2, '0') + ':' + minutes.toString().padStart(2, '0') + ':' + secs.toString().padStart(2, '0');
+    }
+
+    return '-' + timeString;
+}
+  function showErrorCard(e) {
+    try {
+      switch (e.target.error.code) {
+      case e.target.error.MEDIA_ERR_ABORTED:
+        return;
+        break;
+      case e.target.error.MEDIA_ERR_NETWORK:
+        document.querySelector("div p span").innerText = "(Network error)"
+        break;
+      case e.target.error.MEDIA_ERR_DECODE:
+        document.querySelector("div p span").innerText = "(Decode error/lack of browser support)"
+        break;
+      case e.target.error.MEDIA_ERR_SRC_NOT_SUPPORTED:
+        document.querySelector("div p span").innerText = "(Network error or format not supported)"
+        break;
+      default:
+        document.querySelector("div p span").innerText = "(Unknown error)"
+        break;
+      } 
+    }
+    catch {
+      document.querySelector("div p span").innerText = "(Network error)"
+    }
+    document.getElementById("buffer-failed-warning").style.display = "block";
+  }
+  let canPlayPause = true;
+  let didFirstTimePlay = false;
+  document.addEventListener("DOMContentLoaded", () => {
+    setInterval(()=>{
+    if(!document.getElementById("video").paused) {
+      document.getElementById("play-pause").innerHTML = pauseSVG;
+      
+    }
+    else {
+      aud.pause()
+      document.getElementById("play-pause").innerHTML = playSVG;
+    }
+    }, 100);
+    //FIXME: saved playback intentionally overwritten
+    localStorage.setItem(`progress-${new URLSearchParams(window.location.search).get('v')}`, 0);
+    // Controls and high-res playback
+    //TODO - a
+    let setTime = false
+    const seekbar = document.getElementById("duration-slider")
+    const video = document.getElementById("video");
+    let shouldUseRemaining = false;
+    const timestamps = document.getElementById("timestamps");
+    video.addEventListener("timeupdate", (event) => {      
+      seekbar.value = event.target.currentTime;
+      timestamps.innerText = shouldUseRemaining ? `${cstsRemaining(video.duration, video.currentTime)}/${csts(video.duration)}` : `${csts(video.currentTime)}/${csts(video.duration)}`;
+    });
+    timestamps.addEventListener("mouseover", () => {
+      shouldUseRemaining = true;
+      timestamps.innerText = `${cstsRemaining(video.duration, video.currentTime)}/${csts(video.duration)}`;
+    });
+    timestamps.addEventListener("mouseout", () => {
+      shouldUseRemaining = false;
+      timestamps.innerText = `${csts(video.currentTime)}/${csts(video.duration)}`;
+    });
+    // test
+    
+      seekbar.addEventListener("input", (event) => {
+          video.pause()
+          canPlayPause = false;
+          if(qua != "medium") {
+            aud.pause()
+            aud.currentTime = event.target.value
+          }
+          video.currentTime = event.target.value
+          canPlayPause = true;
+          setTimeout(()=>{
+            video.play();
+            aud.play();
+          }, 200)
+      });
+      
+      // Play/Pause
+      
+      const playPauseButton = document.getElementById("play-pause");
+      playPauseButton.innerHTML = pauseSVG;
+      function toggleVideo() {    
+        if(!canPlayPause) return;
+          if(document.getElementById("popupMenu").style.display == "none") {
+            if(!document.fullscreen) {
+              if(!video.paused) {
+              video.pause(); if(qua != "medium") { aud.pause(); } playPauseButton.innerHTML = playSVG;
+            }
+            else {
+              video.play(); if(qua != "medium") { aud.play(); } playPauseButton.innerHTML = pauseSVG;
+            }
+            }
+          }
+          else {
+            document.getElementById("popupMenu").style.display = "none"
+          } 
+      }
+      playPauseButton.addEventListener("click", () => {
+        toggleVideo()
+      });
+      video.addEventListener("pause", ()=>{if(qua != "medium") {aud.pause()}});
+      video.addEventListener("play", ()=>{if(qua != "medium") {aud.play()}})
+      video.addEventListener("click", toggleVideo);
+      video.addEventListener("dblclick", () => { 
+        document.documentElement.requestFullscreen();
+      });
+      function handleVolumeChange(element) {
+        switch (element.volume) {
+          case 1:
+            element.volume = 0;
+            document.querySelector("#muteOption #new").innerText = "25%"
+            document.querySelector("#muteOption #current").innerText = "0%"
+            break;
+          case 0:
+            element.volume = 0.25;
+            document.querySelector("#muteOption #new").innerText = "50%"
+            document.querySelector("#muteOption #current").innerText = "25%"
+            break;
+          case 0.25:
+            element.volume = 0.5;
+            document.querySelector("#muteOption #new").innerText = "75%"
+            document.querySelector("#muteOption #current").innerText = "50%"
+            break;
+          case 0.5:
+            element.volume = 0.75;
+            document.querySelector("#muteOption #new").innerText = "100%"
+            document.querySelector("#muteOption #current").innerText = "75%"
+            break;
+          case 0.75:
+            element.volume = 1;
+            document.querySelector("#muteOption #new").innerText = "0%"
+            document.querySelector("#muteOption #current").innerText = "100%"
+            break;
+          default:
+            element.volume = 1;
+            document.querySelector("#muteOption #new").innerText = "0%"
+            document.querySelector("#muteOption #current").innerText = "100%"
+            break;
+        }
+      }
+      document.getElementById("muteOption").addEventListener("click", () => {
+        if(qua != "medium") { 
+          handleVolumeChange(aud)
+        }
+        else {
+          handleVolumeChange(video)
+        }
+      });
+      document.getElementById("syncOption").addEventListener("click", () => {
+        aud.pause(); video.pause();  playPauseButton.innerHTML = playSVG;
+        video.currentTime > aud.currentTime ? aud.currentTime = video.currentTime : video.currentTime = aud.currentTime;
+        playPauseButton.innerHTML = pauseSVG;
+      });
+      setTimeout(()=>{
+           if(!didFirstTimePlay) {
+            video.addEventListener("seeked", (event) => {
+          setTimeout(()=>{
+              canPlayPause = true;
+              if(video.currentTime==0||aud.currentTime==0) return;
+              video.pause(); aud.pause(); playPauseButton.innerHTML = playSVG;
+              },1)
+           });
+          aud.addEventListener("seeked", (event) => {
+            setTimeout(()=>{
+              if(video.currentTime==0||aud.currentTime==0) return;
+              video.pause(); aud.pause(); playPauseButton.innerHTML = playSVG;
+            },1)
+          });
+          didFirstTimePlay = true;
+           }
+          },100)
+      document.addEventListener("fullscreenchange", function() {
+        if(document.fullscreen) {
+          video.controlsList = "noplaybackrate nodownload"
+          window.onscroll = function () { window.scrollTo(0, 0); };
+          document.documentElement.style.overflow = "hidden"
+          video.controls = true;
+        }
+        if(!document.fullscreen) {
+          video.controlsList = ""
+          window.onscroll = null;
+          document.documentElement.style.overflow = null
+          video.controls = false;
+        }
+      });
+      video.addEventListener("fullscreenchange", () => {
+        video.fullscreen = false;
+        document.exitFullscreen();
+      });
+      video.addEventListener("contextmenu", (event) => {
+        if(document.fullscreen) {
+          event.preventDefault()
+          const popupMenu = document.getElementById('popupMenu');
+          if (popupMenu) {
+            const xPosition = event.clientX + window.pageXOffset;
+            const yPosition = event.clientY + window.pageYOffset;
+            popupMenu.style.left = `${xPosition}px`;
+            popupMenu.style.top = `${yPosition}px`;
+          }
+          popupMenu.style.display = "block"
+        }
+      });
+    function startPlayback() {
+        // Final prepare
+        seekbar.max = video.duration
+        const timestamps = document.getElementById("timestamps");
+        timestamps.innerText = `${csts(video.currentTime)}/${csts(video.duration)}`;
+        
+        // Show controls
+        try {
+          playPauseButton.innerHTML = pauseSVG;
+          vid.play();
+          aud.play();
+          didFirstTimePlay = true;
+          
+        }
+        catch {}
+        
+        if(!setTime) {
+          //FIXME: saved playback intentionally overwritten
+          aud.currentTime = 0
+          vid.currentTime = 0
+          seekbar.value = 0
+          setTime = true
+        }
+        setTimeout(()=>{
+      video.addEventListener("seeking", (event) => {     
+      if(!didFirstTimePlay) return; 
+      if(qua != "medium") {
+        video.pause()
+        canPlayPause = false;
+        aud.pause()
+        aud.currentTime = event.target.currentTime
+      }
+    });
+    }, 500)
+    }
+    const aud = document.getElementById("aud");
+    const vid = document.getElementById("video");
+    function shouldPlay() {
+      if(vid.readyState === HTMLMediaElement.HAVE_ENOUGH_DATA) {
+        startPlayback();
+      }
+    }
+    aud.addEventListener("canplaythrough", shouldPlay);
+    vid.addEventListener("canplaythrough", shouldPlay);
+  })
 </script>
-       
+         <% if(shortsui) { %>
+                                                       <script>
+        // Function to apply styles after DOM has loaded
+        function applyStyles() {
+            const styles = `
+                .player {
+                    width: fit-content;
+                    margin-left: auto;
+                    margin-right: auto;
+                    height: fit-content;
+                }
+
+                .video-player-container {
+                    max-width: fit-content;
+                    min-width: fit-content;
+                    margin-left: auto;
+                    margin-right: auto;
+                    aspect-ratio: var(--ptd-watch-width-ratio) / var(--ptd-watch-height-ratio);
+                }
+            `;
+
+            // Create a style element and set its content
+            const styleElement = document.createElement('style');
+            styleElement.innerHTML = styles;
+
+            // Append the style element to the document head
+            document.head.appendChild(styleElement);
+        }
+
+        // Event listener to call applyStyles after DOM has loaded
+        window.onload = applyStyles;
+                                 </script>
+                                                    <% } %>
+
+            <% if (inv_vid.author.endsWith(' - Topic')) { %> 
+                                                       <script>
+        // Function to apply styles after DOM has loaded
+        function applyStyles() {
+            const styles = `
+                .player {
+                    width: fit-content;
+                    margin-left: auto;
+                    margin-right: auto;
+                    height: fit-content;
+                }
+
+                .video-player-container {
+                    max-width: fit-content;
+                    min-width: fit-content;
+                    margin-left: auto;
+                    margin-right: auto;
+                    aspect-ratio: var(--ptd-watch-width-ratio) / var(--ptd-watch-height-ratio);
+                }
+            `;
+
+            // Create a style element and set its content
+            const styleElement = document.createElement('style');
+            styleElement.innerHTML = styles;
+
+            // Append the style element to the document head
+            document.head.appendChild(styleElement);
+        }
+
+        // Event listener to call applyStyles after DOM has loaded
+        window.onload = applyStyles;
+                                 </script>
+                                                    <% } %>
              <% if(dm) { %>
                
                
@@ -700,28 +1131,16 @@ background-color: #0000;
 </script>
 <ptd-app-iconfixer>
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      var player = videojs('video');
+ // Preload the icon image
+    var iconImage = new Image();
+    iconImage.src = "/css/yt-ukraine.svg";
 
-      <% if (!qua) { //TODO - a %>
-     
-<% 
-  let itag = '136'; // Default itag
-  inv_vid.adaptiveFormats.forEach(format => {
-    if (format.itag == '298') {
-      itag = '298';
-    }
-  });
-%>
-           player.src([
-        { type: "video/mp4", src: "<%=u%>/latest_version?id=<%=inv_vid.videoId%>&itag=<%=itag%>&local=true" },  
-        { type: "audio/mp3", src: "<%=u%>/latest_version?id=<%=inv_vid.videoId%>&itag=140&local=true" }  
-      ]);
- 
-
-       <% } else { %>   
-         <% } %>  
-    });
+    // Wait for the icon image to load before showing it
+    iconImage.onload = function() {
+      var iconElement = document.querySelector('link[rel="icon"]');
+      iconElement.href = iconImage.src;
+      iconElement.type = "image/svg+xml";
+    };
 </script>    
 </ptd-app-iconfixer>
 <ptd-app-ejs>
@@ -843,7 +1262,7 @@ if your domain matches this code you are probably in poketube.fun owo:3
 <div class="video-title" style="color:var(--text-color);font-family:var(--text-font-primary);;font-weight:var(--text-header-weight);font-stretch: extra-expanded;margin-top: 0px;margin-bottom: -3px;font-size: larger;line-height: 20.7px;text-align: center;">Options</div>
         				<a href="/customize" style="text-decoration: none;" class="dropdown__item">
                             <i  class="fa-light fa-brush"></i>
-                      Customize Poke
+                      Customize PokeTube
         </a>
     
 		<a href="/account-create" style="text-decoration: none;" class="dropdown__item">
@@ -994,7 +1413,13 @@ Offical Discord Server! :3
     
 		<div id="<%=sha384(inv_vid.videoId)%>" class="video-player-container">
       
-   
+      <% if (!qua) { //TODO - a %>
+        <audio id="aud" preload>
+          <source src="<%=u%>/latest_version?id=<%=inv_vid.videoId%>&itag=140&local=true" type="video/mp4" onerror="showErrorCard(event)"/>
+        </audio>
+      <% } else { %>
+        <audio id="aud"></audio>
+      <% } %>
       <noscript>
         <% if (!qua) { %>
           <div id="nojs-high-res-warning" class="error-card">
@@ -1002,14 +1427,27 @@ Offical Discord Server! :3
           </div>
         <% } %>
       </noscript>
-   
-      <video class="video-js player video-ambient-container" id="video" style="border-radius: 16px; box-sizing: border-box; min-width: 100%; display: block;" autoplay controls>
+      <div id="buffer-failed-warning" class="error-card">
+        <p>
+        Oh no, the video couldn't be loaded :(
+          <br/>
+          You can try refreshing the page!
+          <br/>
+          <span></span>
+        </p>
+      </div>
+      <video class="player video-ambient-container" id="video" style="border-radius: 16px; box-sizing: border-box; min-width: 100%; display: block;" autoplay preload onerror="showErrorCard(event)">
       <% if (isvidious) { %>
         <% if (!qua) { %>
-
-           <source id="my-spanish-audio-track" src="https://eu-proxy.poketube.fun/latest_version?id=<%=inv_vid.videoId%>&itag=18&local=true" type="audio/ogg">
-   
-   
+<% 
+  let itag = '136'; // Default itag
+  inv_vid.adaptiveFormats.forEach(format => {
+    if (format.itag == '298') {
+      itag = '298';
+    }
+  });
+%>
+<source src="<%=u%>/latest_version?id=<%=inv_vid.videoId%>&itag=<%=itag%>&local=true" type="video/mp4; codecs=&quot;avc1.64001F, mp4a.40.2&quot;" label="hd720" selected="true" onerror="showErrorCard(event)">
         <% } %>
         <% if (qua === "medium") { %>
           <source src="<%=u%>/latest_version?id=<%=inv_vid.videoId%>&itag=18&local=true" type="video/mp4; codecs=&quot;avc1.64001F, mp4a.40.2&quot;" label="sd360" selected="true" onerror="showErrorCard(event)">
@@ -1046,8 +1484,23 @@ Offical Discord Server! :3
         <track src="/api/subtitles?v=<%=inv_vid.videoId%>&h=<%= %>" label="<%=  video.Subtitles.Subtitle.language.replace("United States","Simplified - USA") %>" kind="subtitles">      
       <% } %>                                                       
     </video>
-    
+    <div id="controls"> <!-- TODO: CONTROLS -->
+      <button id="play-pause" class="control-button">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>play-circle-outline</title><path d="M12,20C7.59,20 4,16.41 4,12C4,7.59 7.59,4 12,4C16.41,4 20,7.59 20,12C20,16.41 16.41,20 12,20M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M10,16.5L16,12L10,7.5V16.5Z" /></svg>
+      </button>
       
+      <div id="seekbar">
+          <input type="range" min="0" step="any" value="0" id="duration-slider">
+      </div>
+      <p id="timestamps">...</p>
+      <!--
+      <div>
+        <span>volume</span>
+        <input type="range" min="0" max="1" step="any" value="1" id="volume-slider">
+      </div>
+      -->
+      
+  </div>
     <% if (!a) { %>
       <canvas width="12" height="6" class="ambient-canvas" id="ambient-canvas-1"></canvas>
       <canvas width="12" height="6" class="ambient-canvas" id="ambient-canvas-2"></canvas>
@@ -2397,7 +2850,7 @@ a {
 
 
                      
-                                                <source src="https://eu-proxy.poketube.fun/latest_version?id=<%=inv_vid.videoId%>&itag=136&local=true" type="video/mp4; codecs=&quot;avc1.64001F, mp4a.40.2&quot;" label="hd720" selected="true">
+                                                <source src="https://eu-proxy.poketube.fun/latest_version?id=<%=inv_vid.videoId%>&itag=18&local=true" type="video/mp4; codecs=&quot;avc1.64001F, mp4a.40.2&quot;" label="hd720" selected="true">
 
                                                                              <% } %>                
 

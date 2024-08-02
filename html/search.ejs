@@ -659,7 +659,7 @@ const fakeNewsSources = {
 const normalizedQuery = q.toLowerCase().replace(/\s+/g, '');
 const matchedSource = Object.keys(fakeNewsSources).find(source => normalizedQuery.includes(source.toLowerCase().replace(/\s+/g, '')));
 
-if (q.includes('-showall')) {
+if (q.includes('-debug-news')) {
 %>
 
 <div class="container">          
@@ -720,11 +720,11 @@ if (q.includes('-showall')) {
     }
 
     .debug-title, .warning-title {
-        font-family: 'PokeTube Flex', sans-serif;
-        font-size: 24px;
-        text-align: left;
-        font-weight: bold;
-        color: #fff;
+      font-family: 'PokeTube Flex';
+      font-size: large;
+      text-align: left;
+      font-stretch: ultra-expanded;
+      font-weight: 1000;
     }
 
     .debug-icon, .warning-icon {
@@ -757,7 +757,7 @@ if (q.includes('-showall')) {
     }
 
     .tips-list {
-        background-color: #f9f9f9;
+        background-color: #111;
         border: 1px solid #ddd;
         border-radius: 5px;
         padding: 15px;

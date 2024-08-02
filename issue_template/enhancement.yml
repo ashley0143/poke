@@ -1,0 +1,19 @@
+name: Enhancement
+description: This is an enhancement/feature you would like to see in Poke
+title: "[Bug]: "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        > [!WARNING]
+        > The following will never be added:
+        > * iOS app (use the PWA)
+        > * non-free codecs
+  - type: textarea
+    id: describe
+    attributes:
+      label: Describe the enhancement
+      placeholder: What would you like to see being added?
+    validations:
+      required: true

@@ -1,0 +1,29 @@
+name: Search filter issue
+description: This is for issues related to the self-harm and misinfo search filters
+title: "[Bug]: "
+labels: ["search-issue"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        > [!CAUTION]
+        > This form isn't to request the removal of a source. Do not use it for that      
+  - type: input
+    id: search
+    attributes:
+      label: What was your exact search?
+    validations:
+      required: true
+  - type: input
+    id: flag
+    attributes:
+      label: What was it flagged as?
+      placeholder: Self-harm, or the name of the news source
+    validations:
+      required: true
+  - type: input
+    id: describe
+    attributes:
+      label: Anything else worthy to know?
+    validations:
+      required: false

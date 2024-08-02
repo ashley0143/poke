@@ -1,0 +1,48 @@
+name: Player bug
+description: This is an issue with the Poke video player
+title: "[Bug]: "
+labels: ["player-bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        > [!CAUTION]
+        > If your issue matches **all of** the 3 points below:
+        > * JavaScript is disabled;
+        > * AND playback is high-resolution;
+        > * AND audio isn't working;
+        >
+        > **DO NOT open an issue.** Hi-res audio will not work without JavaScript enabled.
+  - type: textarea
+    id: describe
+    attributes:
+      label: Describe the issue
+      placeholder: In detail, what happened?
+    validations:
+      required: true
+  - type: dropdown
+    id: js
+    attributes:
+      label: JavaScript and resolution
+      description: Choose one of the 4 options below.
+      options:
+        - JS enabled, high res
+        - JS enabled, low res
+        - JS disabled, high res
+        - JS disabled, low res
+    validations:
+      required: true
+  - type: input
+    id: browser
+    attributes:
+      label: What browser and OS are you using?
+      description: eg. Chrome on Windows 10, Firefox on Fedora 40
+    validations:
+      required: true
+  - type: textarea
+    id: logs
+    render: true
+    attributes:
+      render: true
+      label: Error logs
+      placeholder: If any, are there error logs in your browser console?

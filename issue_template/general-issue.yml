@@ -1,0 +1,31 @@
+name: General issue
+description: This is an issue with Poke not related to the video player
+title: "[Bug]: "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        > [!WARNING]
+        > Please check if the issue already exists before creating it!   
+  - type: textarea
+    id: describe
+    attributes:
+      label: Describe the issue
+      placeholder: In detail, what happened?
+    validations:
+      required: true
+  - type: input
+    id: browser
+    attributes:
+      label: What browser and OS are you using?
+      description: eg. Chrome on Windows 10, Firefox on Fedora 40
+    validations:
+      required: true
+  - type: textarea
+    id: logs
+    render: true
+    attributes:
+      render: true
+      label: Error logs
+      placeholder: If any, are there error logs in your browser console?

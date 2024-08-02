@@ -655,7 +655,7 @@ const fakeNewsSources = {
         search: "Is it true that The Sun publishes exaggerated or false stories?" 
     }
 };
->
+
 const normalizedQuery = q.toLowerCase().replace(/\s+/g, '');
 const matchedSource = Object.keys(fakeNewsSources).find(source => normalizedQuery.includes(source.toLowerCase().replace(/\s+/g, '')));
 

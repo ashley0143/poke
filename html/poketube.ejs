@@ -679,12 +679,7 @@ background-color: #0000;
                     audio.pause();
                 });
 
-                video.on('timeupdate', () => {
-                    if (Math.abs(video.currentTime() - audio.currentTime) > 0.3) {
-                        audio.pause(); // Pause audio if it's not in sync
-                        audio.currentTime = video.currentTime();
-                    }
-                });
+            
 
                 video.on('seeking', handleSeek);
 

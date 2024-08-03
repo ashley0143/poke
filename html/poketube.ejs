@@ -648,6 +648,12 @@ background-color: #0000;
                     // Pause video and audio when seeking
                     video.pause();
                     audio.pause();
+                    
+                    // Sync audio with video during seeking
+                    if (Math.abs(video.currentTime() - audio.currentTime) > 0.3) {
+                        audio.currentTime = video.currentTime();
+                    }
+
                     if (!checkAudioBuffer()) {
                         // Resume playback when buffering is sufficient
                         audio.addEventListener('canplay', () => {
@@ -657,6 +663,7 @@ background-color: #0000;
                         }, { once: true });
                     }
                 };
+
 
                 video.on('play', () => {
                     audio.play();

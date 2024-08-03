@@ -612,24 +612,49 @@ background-color: #0000;
 </style>
 
 <script>
-           document.addEventListener("DOMContentLoaded", () => {
+             document.addEventListener("DOMContentLoaded", () => {
             const video = videojs('video', {
                 controls: true,
                 autoplay: false,
                 preload: 'auto'
             });
+            const qua = new URLSearchParams(window.location.search).get("qua") || "";
 
+            if (qua !== "medium") {
             const audio = document.getElementById('aud');
 
-            localStorage.setItem(`progress-${new URLSearchParams(window.location.search).get('v')}`, 0);
+            // Sync audio with video
+            const syncAudioWithVideo = () => {
+                if (Math.abs(video.currentTime() - audio.currentTime) > 0.3) {
+                    audio.currentTime = video.currentTime();
+                }
+            };
 
-
+            // Sync volume between audio and video
             const syncVolume = () => {
                 audio.volume = video.volume();
             };
 
             const syncVolumeWithVideo = () => {
                 video.volume(audio.volume);
+            };
+
+            const checkAudioBuffer = () => {
+                // Check if audio buffered enough
+                const buffered = audio.buffered;
+                const bufferedEnd = buffered.length > 0 ? buffered.end(buffered.length - 1) : 0;
+                return audio.currentTime <= bufferedEnd;
+            };
+
+            const handleSeek = () => {
+                if (!checkAudioBuffer()) {
+                    video.pause();
+                }
+                audio.addEventListener('canplay', () => {
+                    if (video.paused) {
+                        video.play();
+                    }
+                }, { once: true });
             };
 
             video.on('play', () => {
@@ -640,28 +665,27 @@ background-color: #0000;
                 audio.pause();
             });
 
-            video.on('timeupdate', () => {
-                syncAudioWithVideo();
-            });
+      
 
-            video.on('seeking', () => {
-                audio.currentTime = video.currentTime();
-            });
+            video.on('seeking', handleSeek);
 
             video.on('seeked', () => {
-                audio.currentTime = video.currentTime();
+                if (video.paused && checkAudioBuffer()) {
+                    video.play();
+                }
             });
 
             video.on('volumechange', syncVolume);
             audio.addEventListener('volumechange', syncVolumeWithVideo);
 
-            document.addEventListener('fullscreenchange', () => {
+             document.addEventListener('fullscreenchange', () => {
                 if (!document.fullscreenElement) {
                     video.pause();
                 }
             });
         });
-</script>
+}
+        </script>
 
              <% if(dm) { %>
                

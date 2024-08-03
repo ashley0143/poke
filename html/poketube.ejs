@@ -618,7 +618,7 @@ background-color: #0000;
                 autoplay: false,
                 preload: 'auto'
             });
-            const qua = new URLSearchParams(window.location.search).get("qua") || "";
+            const qua = new URLSearchParams(window.location.search).get("quality") || "";
 
             if (qua !== "medium") {
             const audio = document.getElementById('aud');
@@ -683,8 +683,9 @@ background-color: #0000;
                     video.pause();
                 }
             });
+            }
+
         });
-}
         </script>
 
              <% if(dm) { %>

@@ -378,8 +378,8 @@ a[data-onclick="jump_to_time"] {
   <link href="/css/watch-util.css?v=9893448" rel=stylesheet>
   <link href="/css/watch-navbar.css?v=9893448" rel=stylesheet>
   <link href="/css/poketube.css?v=948934774844" rel=stylesheet>
-    <link href="https://vjs.zencdn.net/7.15.4/video-js.css" rel="stylesheet" />
-    <script src="https://vjs.zencdn.net/7.15.4/video.min.js"></script>
+    <link href="https://vjs.zencdn.net/8.16.0/video-js.css" rel="stylesheet" />
+    <script src="https://vjs.zencdn.net/8.16.0/video.min.js"></script>
 
   <!-- css files end -->
 
@@ -612,7 +612,7 @@ background-color: #0000;
 </style>
 
 <script>
-             document.addEventListener("DOMContentLoaded", () => {
+            document.addEventListener("DOMContentLoaded", () => {
             const video = videojs('video', {
                 controls: true,
                 autoplay: false,
@@ -667,32 +667,34 @@ background-color: #0000;
                     }
                 };
 
-                video.on('play', () => {
-                    if (isVideoBuffered()) {
-                        audio.play();
+                const syncPlayPause = () => {
+                    if (video.paused) {
+                        audio.pause();
                     } else {
-                        video.pause();
+                        audio.play().catch(() => {
+                            video.pause();
+                        });
                     }
-                });
+                };
 
-                video.on('pause', () => {
-                    audio.pause();
-                });
+                video.on('play', syncPlayPause);
+                video.on('pause', syncPlayPause);
 
                 video.on('timeupdate', () => {
                     if (Math.abs(video.currentTime() - audio.currentTime) > 0.3) {
                         audio.pause(); // Pause audio if it's not in sync
                         audio.currentTime = video.currentTime();
+                        audio.play();
                     }
                 });
 
                 video.on('seeking', handleSeek);
 
                 video.on('seeked', () => {
-                    if (isVideoBuffered()) {
+                    if (isVideoBuffered() && checkAudioBuffer()) {
                         video.play();
+                        audio.play();
                     }
-                    audio.play(); // Ensure audio is playing after seek
                 });
 
                 video.on('volumechange', syncVolume);
@@ -704,9 +706,28 @@ background-color: #0000;
                         audio.pause();
                     }
                 });
+
+                // Ensure audio and video are both ready before playing
+                let videoReady = false;
+                let audioReady = false;
+
+                video.on('canplay', () => {
+                    videoReady = true;
+                    if (videoReady && audioReady) {
+                        video.play();
+                        audio.play();
+                    }
+                });
+
+                audio.addEventListener('canplay', () => {
+                    audioReady = true;
+                    if (videoReady && audioReady) {
+                        video.play();
+                        audio.play();
+                    }
+                });
             }
         });
-
         </script>
 
              <% if(dm) { %>

@@ -397,9 +397,7 @@ a[data-onclick="jump_to_time"] {
  <link href="<%- proxyurl %>/https://site-assets.fontawesome.com/releases/v6.1.1/css/all.css" rel=stylesheet>
  
  <link href="<%- proxyurl %>/https://cdn.jsdelivr.net/npm/ionicons@4.5.0-0/dist/css/ionicons.min.css" rel=stylesheet>
-
-    <link href="https://vjs.zencdn.net/7.15.4/video-js.css" rel="stylesheet" />
-    <script src="https://vjs.zencdn.net/7.15.4/video.min.js"></script>
+ 
 
   
   <noscript>
@@ -623,12 +621,8 @@ background-color: #0000;
 
             const audio = document.getElementById('aud');
 
-            // Sync audio with video
-            const syncAudioWithVideo = () => {
-                if (Math.abs(video.currentTime() - audio.currentTime) > 0.3) {
-                    audio.currentTime = video.currentTime();
-                }
-            };
+            localStorage.setItem(`progress-${new URLSearchParams(window.location.search).get('v')}`, 0);
+
 
             const syncVolume = () => {
                 audio.volume = video.volume();
@@ -1047,7 +1041,7 @@ Offical Discord Server! :3
         <% } %>
       </noscript>
    
-      <video class="video-js player video-ambient-container" id="video" style="border-radius: 16px; box-sizing: border-box; min-width: 100%; display: block;" autoplay preload onerror="showErrorCard(event)">
+      <video class="video-js player video-ambient-container" id="video" style="border-radius: 16px; box-sizing: border-box; min-width: 100%; display: block;" preload onerror="showErrorCard(event)">
       <% if (isvidious) { %>
         <% if (!qua) { %>
 <% 

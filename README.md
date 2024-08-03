@@ -79,7 +79,7 @@ Poke uses OpenH264, which is free software! No non-free components included :3 V
 
 ## Poke Community
 
-Join us on [Revolt](https://rvlt.gg/poketube) or [Matrix](https://matrix.to/#/#poke:vern.cc)! I promise we're cool! <3
+Join us on [Discord](https://discord.poketube.fun/) or [Matrix](https://matrix.to/#/#poke:vern.cc)! I promise we're cool! <3
 
  
 

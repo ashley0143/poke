@@ -511,6 +511,7 @@ Web              </a>
                      </div>   
           </div>
  <% 
+<% 
 function isMathExpression(query) {
     return /^[0-9\s\+\-\*\/\.\x]+$/.test(query);
 }
@@ -613,6 +614,18 @@ if (isMathExpression(query)) {
     const options = { weekday: 'long' };
     answer = now.toLocaleDateString(undefined, options);
 }
+
+const upsellMessages = [
+    "[new] Try searching 'What's 4+4?'",
+    "[new] Ask 'What's the date today?'",
+    "[new] Try 'What time is it in New York?'",
+    "[new] Ask 'What's the current year?'",
+    "[new] Try searching 'What's 7*8?'"
+];
+
+const showUpsell = !answer && Math.random() < 0.2;
+const randomUpsellMessage = showUpsell ? upsellMessages[Math.floor(Math.random() * upsellMessages.length)] : '';
+%>
 %>
 <% if (answer) { %>
 <div class="container">
@@ -623,8 +636,11 @@ if (isMathExpression(query)) {
         <%= answer %>
     </span>
 </div>
+<% } else if (showUpsell) { %>
+    <a href="/search?query=<%= encodeURIComponent(randomUpsellMessage.replace('[new] ', '')) %>" style="font-size: 1.5em; margin-bottom: 3em; text-align: left !important; margin-right: 7em; color: #007bff; text-decoration: none;">
+        <%= randomUpsellMessage %>
+    </a>
 <% } %>
-
 <% 
 const searchStrings = [
     "suicide", "self harm", "self-harm", "support", "murder", "how to murder", "kill myself", 

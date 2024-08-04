@@ -612,106 +612,95 @@ background-color: #0000;
 </style>
 
 <script>
-       document.addEventListener("DOMContentLoaded", () => {
-    const video = videojs('video', {
-        controls: true,
-        autoplay: false,
-        preload: 'auto'
-    });
+             document.addEventListener("DOMContentLoaded", () => {
+            const video = videojs('video', {
+                controls: true,
+                autoplay: false,
+                preload: 'auto'
+            });
 
-    const qua = new URLSearchParams(window.location.search).get("quality") || "";
-    localStorage.setItem(`progress-${new URLSearchParams(window.location.search).get('v')}`, 0);
+            const qua = new URLSearchParams(window.location.search).get("quality") || "";
+            localStorage.setItem(`progress-${new URLSearchParams(window.location.search).get('v')}`, 0);
 
-    if (qua !== "medium") {
-        const audio = document.getElementById('aud');
+            if (qua !== "medium") {
+                const audio = document.getElementById('aud');
 
-        // Sync volume between audio and video
-        const syncVolume = () => {
-            audio.volume = video.volume();
-        };
+                // Sync volume between audio and video
+                const syncVolume = () => {
+                    audio.volume = video.volume();
+                };
 
-        const syncVolumeWithVideo = () => {
-            video.volume(audio.volume);
-        };
+                const syncVolumeWithVideo = () => {
+                    video.volume(audio.volume);
+                };
 
-        const checkAudioBuffer = () => {
-            const buffered = audio.buffered;
-            const bufferedEnd = buffered.length > 0 ? buffered.end(buffered.length - 1) : 0;
-            return audio.currentTime <= bufferedEnd;
-        };
+                const checkAudioBuffer = () => {
+                    const buffered = audio.buffered;
+                    const bufferedEnd = buffered.length > 0 ? buffered.end(buffered.length - 1) : 0;
+                    return audio.currentTime <= bufferedEnd;
+                };
 
-        const isVideoBuffered = () => {
-            // Check if video has enough buffered data
-            const buffered = video.buffered();
-            return buffered.length > 0 && buffered.end(buffered.length - 1) >= video.currentTime();
-        };
+                const isVideoBuffered = () => {
+                    // Check if video has enough buffered data
+                    const buffered = video.buffered();
+                    return buffered.length > 0 && buffered.end(buffered.length - 1) >= video.currentTime();
+                };
 
-        const handleSeek = () => {
-            // Pause video and audio when seeking
-            video.pause();
-            audio.pause();
-            
-            // Sync audio with video during seeking
-            if (Math.abs(video.currentTime() - audio.currentTime) > 0.3) {
-                audio.currentTime = video.currentTime();
-            }
-
-            // Wait for audio to be buffered sufficiently
-            if (!checkAudioBuffer()) {
-                audio.addEventListener('canplay', () => {
-                    if (video.paused && isVideoBuffered()) {
-                        video.play();
-                        audio.play();
+                const handleSeek = () => {
+                    // Pause video and audio when seeking
+                    video.pause();
+                    audio.pause();
+                    
+                    // Sync audio with video during seeking
+                    if (Math.abs(video.currentTime() - audio.currentTime) > 0.3) {
+                        audio.currentTime = video.currentTime();
                     }
-                }, { once: true });
-            }
-        };
 
-        video.on('play', () => {
-            if (isVideoBuffered()) {
-                audio.play();
-            } else {
-                video.pause();
+                    // Wait for audio to be buffered sufficiently
+                    if (!checkAudioBuffer()) {
+                        audio.addEventListener('canplay', () => {
+                            if (video.paused && isVideoBuffered()) {
+                                video.play();
+                                audio.play();
+                            }
+                        }, { once: true });
+                    }
+                };
+
+                video.on('play', () => {
+                    if (isVideoBuffered()) {
+                        audio.play();
+                    } else {
+                        video.pause();
+                    }
+                });
+
+                video.on('pause', () => {
+                    audio.pause();
+                });
+
+            
+
+                video.on('seeking', handleSeek);
+
+                video.on('seeked', () => {
+                    if (isVideoBuffered()) {
+                        video.play();
+                    }
+                    audio.play(); // Ensure audio is playing after seek
+                });
+
+                video.on('volumechange', syncVolume);
+                audio.addEventListener('volumechange', syncVolumeWithVideo);
+
+                document.addEventListener('fullscreenchange', () => {
+                    if (!document.fullscreenElement) {
+                        video.pause();
+                        audio.pause();
+                    }
+                });
             }
         });
-
-        video.on('pause', () => {
-            audio.pause();
-        });
-
-        video.on('seeking', handleSeek);
-
-        video.on('seeked', () => {
-            if (isVideoBuffered()) {
-                video.play();
-            }
-            audio.play(); // Ensure audio is playing after seek
-        });
-
-        video.on('volumechange', syncVolume);
-        audio.addEventListener('volumechange', syncVolumeWithVideo);
-
-        document.addEventListener('fullscreenchange', () => {
-            if (!document.fullscreenElement) {
-                video.pause();
-                audio.pause();
-            }
-        });
-
-        // Initial synchronization
-        const syncAtStart = () => {
-            if (video.readyState() >= 3 && audio.readyState >= 3) { // Check if both video and audio are ready
-                audio.currentTime = video.currentTime();
-                video.play();
-                audio.play();
-            }
-        };
-
-        video.on('canplay', syncAtStart);
-        audio.addEventListener('canplay', syncAtStart);
-    }
-});
-
 
         </script>
 

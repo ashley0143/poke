@@ -510,7 +510,70 @@ Web              </a>
                   
                      </div>   
           </div>
-          
+          <% 
+function isMathExpression(query) {
+    return /^[0-9\s\+\-\*\/\.\x]+$/.test(query);
+}
+
+function evaluateMathExpression(expression) {
+    try {
+        return eval(expression);
+    } catch (error) {
+        return 'Invalid Expression';
+    }
+}
+
+function getCurrentDate() {
+    const now = new Date();
+    return now.toLocaleDateString();
+}
+
+function getCurrentYear() {
+    return new Date().getFullYear();
+}
+
+function getTimeInTimezone(timezone) {
+    const now = new Date();
+    const options = { timeZone: timezone, timeStyle: 'medium', hour12: false };
+    return now.toLocaleTimeString('en-US', options);
+}
+
+const query = q.toLowerCase().trim();
+let answer = '';
+
+if (isMathExpression(query)) {
+    answer = evaluateMathExpression(query);
+} else if (query.includes('date') || query.includes('what date is it')) {
+    answer = getCurrentDate();
+} else if (query.includes('year') || query.includes('what year is it')) {
+    answer = getCurrentYear();
+} else if (query.includes('what time is it in')) {
+    const timezone = query.split('what time is it in')[1].trim();
+    try {
+        answer = getTimeInTimezone(timezone);
+    } catch (error) {
+        answer = 'Invalid Timezone';
+    }
+} else if (query.includes('what time is it')) {
+    answer = new Date().toLocaleTimeString();
+} else if (query.includes('day') || query.includes('what day is it')) {
+    const now = new Date();
+    const options = { weekday: 'long' };
+    answer = now.toLocaleDateString(undefined, options);
+}
+%>
+
+<% if (answer) { %>
+<div class="container">
+    <h2 style="font-family: 'PokeTube Flex';font-size: large;text-align: left;font-stretch: ultra-expanded; font-weight: 1000; margin-bottom: -0.1em;">
+        Answer to ur question
+    </h2>
+    <span style="font-size: 7em; margin-bottom: 3em; text-align: left !important; margin-right: 7em;">
+        <%= answer %>
+    </span>
+</div>
+<% } %>
+
 <% 
 const searchStrings = [
     "suicide", "self harm", "self-harm", "support", "murder", "how to murder", "kill myself", 

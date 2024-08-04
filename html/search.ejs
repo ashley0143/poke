@@ -510,7 +510,7 @@ Web              </a>
                   
                      </div>   
           </div>
-          <% 
+ <% 
 function isMathExpression(query) {
     return /^[0-9\s\+\-\*\/\.\x]+$/.test(query);
 }
@@ -532,7 +532,63 @@ function getCurrentYear() {
     return new Date().getFullYear();
 }
 
-function getTimeInTimezone(timezone) {
+function getTimeInTimezone(location) {
+    const timezones = {
+        "california": "America/Los_Angeles",
+        "new york": "America/New_York",
+        "chicago": "America/Chicago",
+        "denver": "America/Denver",
+        "phoenix": "America/Phoenix",
+        "anchorage": "America/Anchorage",
+        "honolulu": "Pacific/Honolulu",
+        "london": "Europe/London",
+        "paris": "Europe/Paris",
+        "berlin": "Europe/Berlin",
+        "madrid": "Europe/Madrid",
+        "rome": "Europe/Rome",
+        "moscow": "Europe/Moscow",
+        "athens": "Europe/Athens",
+        "sydney": "Australia/Sydney",
+        "melbourne": "Australia/Melbourne",
+        "brisbane": "Australia/Brisbane",
+        "perth": "Australia/Perth",
+        "tokyo": "Asia/Tokyo",
+        "osaka": "Asia/Osaka",
+        "seoul": "Asia/Seoul",
+        "beijing": "Asia/Shanghai",
+        "shanghai": "Asia/Shanghai",
+        "hong kong": "Asia/Hong_Kong",
+        "taipei": "Asia/Taipei",
+        "bangkok": "Asia/Bangkok",
+        "jakarta": "Asia/Jakarta",
+        "delhi": "Asia/Kolkata",
+        "mumbai": "Asia/Kolkata",
+        "kolkata": "Asia/Kolkata",
+        "karachi": "Asia/Karachi",
+        "lahore": "Asia/Karachi",
+        "dubai": "Asia/Dubai",
+        "abu dhabi": "Asia/Dubai",
+        "riyadh": "Asia/Riyadh",
+        "johannesburg": "Africa/Johannesburg",
+        "cairo": "Africa/Cairo",
+        "nairobi": "Africa/Nairobi",
+        "lagos": "Africa/Lagos",
+        "algiers": "Africa/Algiers",
+        "casablanca": "Africa/Casablanca",
+        "lisbon": "Europe/Lisbon",
+        "dublin": "Europe/Dublin",
+        "zurich": "Europe/Zurich",
+        "vienna": "Europe/Vienna",
+        "stockholm": "Europe/Stockholm",
+        "oslo": "Europe/Oslo",
+        "helsinki": "Europe/Helsinki"
+    };
+
+    const timezone = timezones[location.toLowerCase()];
+    if (!timezone) {
+        return null;
+    }
+
     const now = new Date();
     const options = { timeZone: timezone, timeStyle: 'medium', hour12: false };
     return now.toLocaleTimeString('en-US', options);
@@ -548,12 +604,8 @@ if (isMathExpression(query)) {
 } else if (query.includes('year') || query.includes('what year is it')) {
     answer = getCurrentYear();
 } else if (query.includes('what time is it in')) {
-    const timezone = query.split('what time is it in')[1].trim();
-    try {
-        answer = getTimeInTimezone(timezone);
-    } catch (error) {
-        answer = 'Invalid Timezone';
-    }
+    const location = query.split('what time is it in')[1].trim();
+    answer = getTimeInTimezone(location);
 } else if (query.includes('what time is it')) {
     answer = new Date().toLocaleTimeString();
 } else if (query.includes('day') || query.includes('what day is it')) {
@@ -562,10 +614,9 @@ if (isMathExpression(query)) {
     answer = now.toLocaleDateString(undefined, options);
 }
 %>
-
 <% if (answer) { %>
 <div class="container">
-    <h2 style="font-family: 'PokeTube Flex';font-size: large;text-align: left;font-stretch: ultra-expanded; font-weight: 1000; margin-bottom: -0.1em;">
+    <h2 style="font-family: 'PokeTube Flex';font-size: large;text-align: left !important;font-stretch: ultra-expanded; font-weight: 1000; margin-bottom: -0.1em;">
         Answer to ur question
     </h2>
     <span style="font-size: 7em; margin-bottom: 3em; text-align: left !important; margin-right: 7em;">

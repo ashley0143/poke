@@ -624,6 +624,17 @@ const upsellMessages = [
 
 const showUpsell = !answer && Math.random() < 0.2;
 const randomUpsellMessage = showUpsell ? upsellMessages[Math.floor(Math.random() * upsellMessages.length)] : '';
+
+
+function extractQueryFromUpsellMessage(message) {
+    return message.replace("[new] Try searching '", "")
+                  .replace("[new] Try '", "")
+                  .replace("[new] Ask '", "")
+                  .replace("[new] Try ", "")
+                  .replace("'", "")
+                  .replace("?", "")
+                  .trim();
+}
 %>
 %>
 <% if (answer) { %>
@@ -636,10 +647,24 @@ const randomUpsellMessage = showUpsell ? upsellMessages[Math.floor(Math.random()
     </span>
 </div>
 <% } else if (showUpsell) { %>
-    <a href="/search?query=<%= encodeURIComponent(randomUpsellMessage.replace('[new] ', '')) %>" style="font-size: 1.5em; margin-bottom: 3em; text-align: left !important; margin-right: 7em; color: #007bff; text-decoration: none;">
-        <%= randomUpsellMessage %>
+<style>
+.advertisements-upsell-instant-awnsers {
+font-size: 22px;
+  margin-bottom: 3em;
+  text-decoration: none;
+  color: #fff;
+  margin-left: 11.4em;
+  font-family: "poketube flex";
+  font-weight: 1000;
+  font-stretch: extra-expanded;
+}
+</style>
+    <a href="/search?query=<%= encodeURIComponent(extractQueryFromUpsellMessage(randomUpsellMessage)) %>" class="advertisements-upsell-instant-awnsers">
+            <%= randomUpsellMessage %>
     </a>
 <% } %>
+
+<!-- self harm -->
 <% 
 const searchStrings = [
     "suicide", "self harm", "self-harm", "support", "murder", "how to murder", "kill myself", 

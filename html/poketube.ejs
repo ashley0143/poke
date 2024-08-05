@@ -692,7 +692,17 @@ background-color: #0000;
 
                 video.on('volumechange', syncVolume);
                 audio.addEventListener('volumechange', syncVolumeWithVideo);
+      
+        // Listen for media control events
+        document.addEventListener('play', () => {
+            video.play();
+            audio.play();
+        });
 
+        document.addEventListener('pause', () => {
+            video.pause();
+            audio.pause();
+        }); 
                 document.addEventListener('fullscreenchange', () => {
                     if (!document.fullscreenElement) {
                         video.pause();

@@ -231,7 +231,7 @@ app.get("/game-hub", function (req, res) {
       res.redirect("/css/" + id);
     } else if (id.endsWith(".js")) {
       if (id.endsWith(".bundle.js")) {
-        const jsFiles = ["app.js", "custom-css.js", "emojis.js"];
+        const jsFiles = ["app.js", "custom-css.js", "emojis.js", "vjs.min.js"];
         const combinedContent = jsFiles
           .map((fileName) => {
             const filePath = path.join(html_location, fileName);
@@ -247,7 +247,7 @@ app.get("/game-hub", function (req, res) {
         res.send(
           "// @license magnet:?xt=urn:btih:1f739d935676111cfff4b4693e3816e664797050&dn=gpl-3.0.txt GPL-3.0-or-later" +
             `\n` +
-            `// Includes app.js, emojis.js, and custom-css.js. Source code can be found for these 3 files in https://codeberg.org/Ashley/poketube/src/branch/main/css/` +
+            `// Includes app.js, emojis.js, vjs.js, and custom-css.js. Source code can be found for these 3 files in https://codeberg.org/Ashley/poketube/src/branch/main/css/` +
             `\n` +
             minimizedJs +
             `\n` +

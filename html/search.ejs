@@ -516,6 +516,11 @@ function isMathExpression(query) {
 }
 
 function evaluateMathExpression(expression) {
+    // twenyone
+    if (expression.replace(/\s+/g, '') === '9+10') {
+        return '21';
+    }
+
     try {
         return eval(expression);
     } catch (error) {

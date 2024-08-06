@@ -38,7 +38,9 @@ const splash = [
     "XD!",
     "nya!",
     "say gex!",
+    "also try piped!",
     "also try invidious!",
+    "also try vencord!",
     "rms <3!",
     "du hast",
     "can u belive no one bought this?",
@@ -97,10 +99,16 @@ const splash = [
     "does not include revolt.chat!",
     "revolt-free!",
     "not for revolt users!",
+    "banned in revolt.chat!",
+    "revolt users dont like it!",
+    "why are u advertising!!!!111!",
+    "hello buy revolt pro for 9.99$",
     "%99 free of revolt!",
     "does include nya~!!!",
     "you're literally showing ads!",
-    "actually stable! :3"
+    "actually stable! :3",
+    "hey revolt u su-",
+
 ]
 
 

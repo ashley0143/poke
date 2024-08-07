@@ -626,7 +626,7 @@ if (isMathExpression(query)) {
 } else if (query.includes('am i a good girl') || query.includes('am i a good boy?')) {
     answer = query.includes('girl') ? "yesh :3 u are a good girl" : "yesh :3 u are a good boy";
 } else if (query.includes('ur hot') || query.includes('you are hot')) {
-    answer = "jrifyehgyerfgu <br> 9wdswgfsafgydwgbf <br> wdfge >~< "
+    answer = "jrifyehgyerfgu9wdswgfsafgydwgbfwdfge >~< "
 } 
 
 const upsellMessages = [
@@ -657,7 +657,8 @@ function extractQueryFromUpsellMessage(message) {
     <h2 style="font-family: 'PokeTube Flex';font-size: large;text-align: left !important;font-stretch: ultra-expanded; font-weight: 1000; margin-bottom: -0.1em;">
         Answer to ur question
     </h2>
-    <span style="font-size: 7em; margin-bottom: 3em; text-align: left !important; margin-right: 7em;">
+    <h2 style="font-family: 'PokeTube Flex';font-size: large;text-align:  right !important;font-stretch: ultra-expanded; font-weight: 1000; margin-bottom: -0.1em;margin-top: -1em;"><i title="PokeInstant Anwser! (not ai/LLM)" class="fa-light fa-sparkles"></i></h2>
+    <span style="font-size: 7em; margin-bottom: 3em; text-align: left !important; margin-right: 7em;white-space: -moz-pre-wrap !important;white-space: -pre-wrap;white-space: -o-pre-wrap;white-space: pre-wrap;word-wrap: break-word;white-space: -webkit-pre-wrap;word-break: break-all;white-space: normal;">
         <%- answer %>
     </span>
 </div>

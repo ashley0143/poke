@@ -617,7 +617,17 @@ if (isMathExpression(query)) {
     const now = new Date();
     const options = { weekday: 'long' };
     answer = now.toLocaleDateString(undefined, options);
-}
+} else if (query.includes('u are cute') || query.includes('you are cute')) {
+    answer = "jifshfgdhjf >~< no u"
+} else if (query.includes('ur cute') || query.includes('your cute')) {
+    answer = "efkohgefgef >///< no u"
+} else if (query.includes('am i cute') || query.includes('am i a cutie?')) {
+    answer = "yesh :3 u are "
+} else if (query.includes('am i a good girl') || query.includes('am i a good boy?')) {
+    answer = query.includes('girl') ? "yesh :3 u are a good girl" : "yesh :3 u are a good boy";
+} else if (query.includes('ur hot') || query.includes('you are hot')) {
+    answer = "jrifyehgyerfgu9wdswgfsafgysdfdwgbfwdfge >~< "
+} 
 
 const upsellMessages = [
     "[new] Try searching 'What's 4+4?'",
@@ -627,7 +637,7 @@ const upsellMessages = [
     "[new] Try searching 'What's 7*8?'"
 ];
 
-const showUpsell = !answer && Math.random() < 0.2;
+const showUpsell = !answer && Math.random() < 0.1;
 const randomUpsellMessage = showUpsell ? upsellMessages[Math.floor(Math.random() * upsellMessages.length)] : '';
 
 

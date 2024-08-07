@@ -626,7 +626,7 @@ if (isMathExpression(query)) {
 } else if (query.includes('am i a good girl') || query.includes('am i a good boy?')) {
     answer = query.includes('girl') ? "yesh :3 u are a good girl" : "yesh :3 u are a good boy";
 } else if (query.includes('ur hot') || query.includes('you are hot')) {
-    answer = "jrifyehgyerfgu9wdswgfsafgysdfdwgbfwdfge >~< "
+    answer = "jrifyehgyerfgu9wd <br> swgfsafgydwgbfwdfge >~< "
 } 
 
 const upsellMessages = [
@@ -658,7 +658,7 @@ function extractQueryFromUpsellMessage(message) {
         Answer to ur question
     </h2>
     <span style="font-size: 7em; margin-bottom: 3em; text-align: left !important; margin-right: 7em;">
-        <%= answer %>
+        <%- answer %>
     </span>
 </div>
 <% } else if (showUpsell) { %>

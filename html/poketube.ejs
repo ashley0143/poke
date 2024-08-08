@@ -1619,6 +1619,7 @@ WIP!                                                 </a>
                                 <%  if (!discord) { %> 
                                 <%  if (!reddit) { %> 
    <%  if (!twitch) { %> 
+     <%  if (!threads) { %> 
                      
      <%  if (!instagram) { %> 
        <div style="margin-left: -131px;margin-top: 10px;">
@@ -1626,7 +1627,8 @@ WIP!                                                 </a>
        </div>
          <% } %>  
                                                                 <% } %>  
-                               <% } %>  
+                               <% } %>                                 <% } %>  
+
 
                                <% } %>                                 <% } %>  
 
@@ -1661,6 +1663,12 @@ WIP!                                                 </a>
                        <%  if (instagram) { %> 
   <div style="background: #0009;width: fit-content;padding: 5px;border-radius: 6px;margin-bottom: -15px;">
 <img src="<%- proxyurl %>/https://cdn.glitch.global/d68d17bb-f2c0-4bc3-993f-50902734f652/52704940-684c-41e8-b0de-cca642fa39f8.image.png?v=1693429793193" class="loaded" style="width: 22px;height: 23px;vertical-align: -7px;"><a  style="margin: 1px;" href="https://instagram.com/<%- instagram.name %>"> <%- instagram.name %></a>
+              </div>
+              <% } %>  
+
+                   <%  if (threads) { %> 
+  <div style="background: #0009;width: fit-content;padding: 5px;border-radius: 6px;margin-bottom: -15px;">
+<img src="<%- proxyurl %>/https://cdn.glitch.global/302c6ee0-629f-453b-9024-bad1f8d7be36/threads.png?v=1723156164613" class="loaded" style="width: 22px;height: 23px;vertical-align: -7px;"><a  style="margin: 1px;" href="https://threads.net/<%- threads.name %>"> <%- threads.name %></a>
               </div>
               <% } %>  
    </div>

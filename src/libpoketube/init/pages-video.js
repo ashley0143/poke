@@ -247,7 +247,10 @@ module.exports = function (app, config, renderTemplate) {
           const discord = extractInfo(CORD_REGEX);
           const twitch = extractInfo(TWITCH_REGEX);
           const reddit = extractInfo(REDDIT_REGEX);
+          
+          /* meta software */
           const instagram = extractInfo(INSTAGRAM_REGEX);
+          const threads_by_instagram = extractInfo(THREADS_BY_INSTAGRAM_REGEX);
 
           const videoObject = inv_vid?.adaptiveFormats;
           function findItag(adaptiveFormats) {
@@ -348,6 +351,7 @@ module.exports = function (app, config, renderTemplate) {
               isMobile: req.useragent.isMobile,
               tj: data.channel,
               r,
+              threads:threads_by_instagram,
               qua: q,
               inv: inv_comments,
               convert,

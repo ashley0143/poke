@@ -164,7 +164,7 @@ function getJson(str) {
 const PATREON_REGEX = /https:\/\/(?:www\.)?patreon.com\/(?<name>[\w\d_-]+)/;
 
 /* connections */
-const X_REGEX = /https:\/\/twitter.com\/(?<name>[\w\d_-]+)/;
+const TWITTER_REGEX = /https:\/\/twitter.com\/(?<name>[\w\d_-]+)/;
 const CORD_REGEX = /https:\/\/discord.gg\/(?<name>[\w\d_-]+)/;
 const TWITCH_REGEX = /https:\/\/twitch.tv\/(?<name>[\w\d_-]+)/;
 const REDDIT_REGEX = /https:\/\/reddit\.com\/r\/(?<name>[\w\d_-]+)/;
@@ -233,7 +233,7 @@ module.exports = function (app, config, renderTemplate) {
             d = desc.toString().replace(/\n/g, " <br> ");
           }
 
-          const descriptionString = String(inv_vid?.description);
+          const descriptionString = String(inv_vid?.description).replace(/\bx.com\b/, "twitter.com")
 
           function extractInfo(regex) {
             return descriptionString !== "[object Object]"
@@ -242,7 +242,7 @@ module.exports = function (app, config, renderTemplate) {
           }
 
           const support = extractInfo(PATREON_REGEX);
-          const STUPID_ELON_MUSK_WEBSITE_HE_IS_TRYING_TO_CALL_IT_X_FOR_SOME_REASON_WHICH_IS_A_STUPID_NAME_THAT_SHOULD_HAVE_STOPPED_WITH_PAYPAL_WE_WILL_FOREVER_CALL_IT_TWITTER_AND_HE_CAN_DO_NOTHING_ABOUT_IT_LOL_FUCK_YOU_ELON_TRANS_RIGHTS_BTW = extractInfo(X_REGEX);
+          const STUPID_ELON_MUSK_WEBSITE_HE_IS_TRYING_TO_CALL_IT_X_FOR_SOME_REASON_WHICH_IS_A_STUPID_NAME_WE_WILL_FOREVER_CALL_IT_TWITTER_AND_HE_CAN_DO_NOTHING_ABOUT_IT_LOL_FUCK_YOU_ELON_TRANS_RIGHTS_BTW = extractInfo(TWITTER_REGEX);
           const linkto = extractInfo(LNKTO_REGEX);
           const discord = extractInfo(CORD_REGEX);
           const twitch = extractInfo(TWITCH_REGEX);
@@ -326,7 +326,7 @@ module.exports = function (app, config, renderTemplate) {
               date: k.Video.uploadDate,
               e,
               a,
-              twitter:STUPID_ELON_MUSK_WEBSITE_HE_IS_TRYING_TO_CALL_IT_X_FOR_SOME_REASON_WHICH_IS_A_STUPID_NAME_THAT_SHOULD_HAVE_STOPPED_WITH_PAYPAL_WE_WILL_FOREVER_CALL_IT_TWITTER_AND_HE_CAN_DO_NOTHING_ABOUT_IT_LOL_FUCK_YOU_ELON_TRANS_RIGHTS_BTW,
+              twitter:STUPID_ELON_MUSK_WEBSITE_HE_IS_TRYING_TO_CALL_IT_X_FOR_SOME_REASON_WHICH_IS_A_STUPID_NAME_WE_WILL_FOREVER_CALL_IT_TWITTER_AND_HE_CAN_DO_NOTHING_ABOUT_IT_LOL_FUCK_YOU_ELON_TRANS_RIGHTS_BTW,
               k,
               dm,
               proxyurl,
@@ -420,7 +420,7 @@ module.exports = function (app, config, renderTemplate) {
           }
 
           const support = extractInfo(PATREON_REGEX);
-          const twitter = extractInfo(X_REGEX);
+          const twitter = extractInfo(TWITTER_REGEX);
           const discord = extractInfo(CORD_REGEX);
           const twitch = extractInfo(TWITCH_REGEX);
           const reddit = extractInfo(REDDIT_REGEX);

@@ -110,6 +110,13 @@ function jumpToTime(e) {
   const link = e.target;
   const video = document.getElementById('video');
   const time = link.dataset.jumpTime;
+
+  const qualityforaudiostuff = new URLSearchParams(window.location.search).get("quality") || "";
+  
+  if (qualityforaudiostuff !== "medium") {
+  var audiojumptotime = document.getElementById('aud');
+  audiojumptotime.currentTime = time;
+  }
   
   video.currentTime = time;
 
@@ -344,29 +351,34 @@ video.addEventListener("contextmenu", function(event) {
 
     loopedIndicator.style.display = "none"; // Initially hide the indicator
 
-    loopOption.addEventListener("click", function() {
-             var looped = video.loop;
-            video.loop = !looped;
+loopOption.addEventListener("click", function() {
+  const quaindt = new URLSearchParams(window.location.search).get("quality") || "";
 
+    var looped = video.loop;
+    video.loop = !looped;
 
-            // Update the looped indicator popup
-            var displaySpecialText = Math.random() < 0.5;
+    if (quaindt !== "medium") {
+    var loopedaudioelement = document.getElementById("aud");
+    if (loopedaudioelement) {
+        audio.loop = !looped;
+    }
+    }
 
-            // Update the looped indicator popup
-            if (displaySpecialText) {
-                var specialText = looped ? "Unlooped >.<" : "Looped~ :3 >~<";
-                loopedIndicator.textContent = specialText;
-            } else {
-                loopedIndicator.textContent = looped ? "Unlooped!" : "Looped!";
-            }
-             loopedIndicator.style.display = "block";
+     var displaySpecialText = Math.random() < 0.5;
 
-            // Hide the indicator after 2 seconds
-            setTimeout(function() {
-                loopedIndicator.style.display = "none";
-            }, 2000);
+    if (displaySpecialText) {
+        var specialText = looped ? "Unlooped >.<" : "Looped~ :3 >~<";
+        loopedIndicator.textContent = specialText;
+    } else {
+        loopedIndicator.textContent = looped ? "Unlooped!" : "Looped!";
+    }
+    loopedIndicator.style.display = "block";
 
-        });
+    // Hide the indicator after 2 seconds
+    setTimeout(function() {
+        loopedIndicator.style.display = "none";
+    }, 2000);
+});
 
  speedOption.addEventListener("click", function() {
 

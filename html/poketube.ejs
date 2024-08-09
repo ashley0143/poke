@@ -623,7 +623,7 @@ background-color: #0000;
              document.addEventListener("DOMContentLoaded", () => {
             const video = videojs('video', {
                 controls: true,
-                autoplay: false,
+                autoplay: true,
                 preload: 'auto',
                   plugins: {
             hotkeys: {
@@ -1089,7 +1089,7 @@ Offical Discord Server! :3
 		<div id="<%=sha384(inv_vid.videoId)%>" class="video-player-container">
       
       <% if (!qua) { //TODO - a %>
-        <audio id="aud" preload>
+        <audio id="aud" autoplay preload>
           <source src="<%=u%>/latest_version?id=<%=inv_vid.videoId%>&itag=140&local=true" type="video/mp4" onerror="showErrorCard(event)"/>
         </audio>
       <% } else { %>

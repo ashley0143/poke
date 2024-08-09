@@ -27,16 +27,6 @@ url.searchParams.delete('fx');
 history.replaceState(null, '', url.toString());
 
 
-// Retrieve volume from local storage or set to max if not available
-const initialVolume = localStorage.getItem('playerVolume') || 1;
-const video = document.getElementById('video');
-video.volume = initialVolume;
-
-// Save volume to local storage whenever it changes
-video.addEventListener('volumechange', function() {
-  localStorage.setItem('playerVolume', this.volume);
-});
-
 // Get the progress bar and container elements
 const progressBar = document.querySelector(".progress-bar");
 const progressContainer = document.querySelector(".progress-container");
@@ -176,44 +166,10 @@ function time(seconds) {
   }
 });
 
-
-  
-
-// Save and resume video progress
-const videoId = new URLSearchParams(window.location.search).get('v');
-const localStorageKey = `progress-${videoId}`;
-
-function saveProgress() {
-  localStorage.setItem(localStorageKey, video.currentTime);
-}
-
-function removeProgress() {
-  localStorage.removeItem(localStorageKey);
-}
-
-function resumeProgress() {
-  const progress = localStorage.getItem(localStorageKey);
-  if (progress) {
-    video.currentTime = progress;
-  }
-}
-
-window.addEventListener('beforeunload', () => {
-  saveProgress();
-});
-
-video.addEventListener('ended', () => {
-  removeProgress();
-});
-
-window.addEventListener('load', () => {
-  resumeProgress();
-});
-
 // Adjust video element style on fullscreen change
 const videoElement = document.getElementById("video");
 videoElement.addEventListener("fullscreenchange", () => {
-  videoElement.style.borderRadius = document.fullscreenElement === videoElement ? "0em" : "16px";
+  videoElement.style.borderRadius = document.fullscreenElement === videoElement ? "0em !important" : "16px";
 });
 
 function fetchUrls(urls) {

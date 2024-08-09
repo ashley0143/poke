@@ -360,7 +360,7 @@ loopOption.addEventListener("click", function() {
     if (quaindt !== "medium") {
     var loopedaudioelement = document.getElementById("aud");
     if (loopedaudioelement) {
-        audio.loop = !looped;
+        loopedaudioelement.loop = !looped;
     }
     }
 

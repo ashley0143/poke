@@ -122,13 +122,7 @@ class InnerTubePokeVidious {
       );
     }
 
-    var vidOBJECT = ""
-    if(vid.error) {
-      var vidOBJECT = vid.error
-    } else {
-      var vidOBJECT = vid
-    }
-     if (this.checkUnexistingObject(vid)) {
+    if (this.checkUnexistingObject(vid)) {
       const fe = await getdislikes(v);
 
       try {
@@ -139,7 +133,7 @@ class InnerTubePokeVidious {
           result: {
             json: json?.video,
             video,
-            vidOBJECT,
+            vid,
             comments,
             channel_uploads: p,
             engagement: fe.engagement,
@@ -156,8 +150,6 @@ class InnerTubePokeVidious {
         };
 
         return this.cache[v].result;
-
-    
       } catch (error) {
         this.initError("Error getting video", error);
       }

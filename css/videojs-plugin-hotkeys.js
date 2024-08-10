@@ -1,9 +1,14 @@
 /*
- * Video.js Hotkeys
+ * Video.js Hotkeys For Poke
  * https://github.com/ctd1500/videojs-hotkeys
  *
+ * forked for poke - non-fork version copyright:
  * Copyright (c) 2015 Chris Dougherty
  * Licensed under the Apache-2.0 license.
+ * 
+ * fork copy(left)right:
+ * Copyleft (c) 2024 Poke (Ashley)
+ * Licensed under the GNU GPL 3.0 or later license.
  */
 
 ;(function(root, factory) {
@@ -20,7 +25,7 @@
 }(this, function (videojs) {
   "use strict";
   if (typeof window !== 'undefined') {
-    window['videojs_hotkeys'] = { version: "0.2.28" };
+    window['videojs_hotkeys'] = { version: "0.2.29-poke" };
   }
 
   var hotkeys = function(options) {
@@ -31,7 +36,7 @@
       volumeStep: 0.1,
       seekStep: 5,
       enableMute: true,
-      enableVolumeScroll: true,
+      enableVolumeScroll: false,
       enableHoverScroll: false,
       enableFullscreen: true,
       enableNumbers: true,

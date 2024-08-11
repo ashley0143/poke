@@ -633,8 +633,7 @@ background-color: #0000;
 
 
  document.addEventListener('keydown', function(event) {
-  const video = document.querySelector('video'); // Adjust if you have a different way to reference your video element
-
+  if (document.activeElement === video) {
   // Toggle play/pause with the Spacebar
   if (event.code === 'Space') {
     event.preventDefault(); // Prevent default action, like activating buttons
@@ -669,7 +668,7 @@ background-color: #0000;
     video.currentTime = time;
   }
 });
-
+            }
                 const audio = document.getElementById('aud');
 
                 // Sync volume between audio and video

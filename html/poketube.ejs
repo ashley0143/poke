@@ -617,20 +617,13 @@ background-color: #0000;
 }
 
 </style>
-  <script src="/static/videojs-plugin-hotkeys.js?v=50"></script>
-
+ 
 <script>
              document.addEventListener("DOMContentLoaded", () => {
             const video = videojs('video', {
                 controls: true,
                 autoplay: false,
                 preload: 'auto',
-                  plugins: {
-            hotkeys: {
-      volumeStep: 0.1,
-      seekStep: 5,
-      enableModifiersForNumbers: false
-    },
   },
 
             });

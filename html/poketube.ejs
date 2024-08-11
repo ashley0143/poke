@@ -617,58 +617,28 @@ background-color: #0000;
 }
 
 </style>
- 
+  <script src="/static/videojs-plugin-hotkeys.js?v=508"></script>
+
 <script>
              document.addEventListener("DOMContentLoaded", () => {
             const video = videojs('video', {
                 controls: true,
                 autoplay: false,
                 preload: 'auto',
+                  plugins: {
+            hotkeys: {
+      volumeStep: 0.1,
+      seekStep: 5,
+      enableModifiersForNumbers: false
+    },
+  },
+
             });
 
             const qua = new URLSearchParams(window.location.search).get("quality") || "";
             localStorage.setItem(`progress-${new URLSearchParams(window.location.search).get('v')}`, 0);
 
             if (qua !== "medium") {
-
-
- document.addEventListener('keydown', function(event) {
-  if (document.activeElement === video) {
-  // Toggle play/pause with the Spacebar
-  if (event.code === 'Space') {
-    event.preventDefault(); // Prevent default action, like activating buttons
-    if (video.paused) {
-      video.play();
-    } else {
-      video.pause();
-    }
-  }
-
-  // Toggle fullscreen with the F key
-  if (event.code === 'KeyF') {
-    event.preventDefault();
-    if (document.fullscreenElement) {
-      document.exitFullscreen();
-    } else {
-      video.requestFullscreen();
-    }
-  }
-
-  // Toggle mute with the M key
-  if (event.code === 'KeyM') {
-    event.preventDefault();
-    video.muted = !video.muted;
-  }
-
-  // Seeking options with keys 1 to 9
-  if (event.code >= 'Digit1' && event.code <= 'Digit9') {
-    event.preventDefault();
-    const percent = parseInt(event.code.replace('Digit', '')) * 10;
-    const time = (percent / 100) * video.duration;
-    video.currentTime = time;
-  }
-});
-            }}
                 const audio = document.getElementById('aud');
 
                 // Sync volume between audio and video
@@ -757,7 +727,6 @@ background-color: #0000;
                 });
             }
         });
-
 
         </script>
 

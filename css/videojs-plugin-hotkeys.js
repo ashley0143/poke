@@ -35,7 +35,7 @@
     var def_options = {
       volumeStep: 0.1,
       seekStep: 5,
-      enableMute: true,
+      enableMute: false,
       enableVolumeScroll: false,
       enableHoverScroll: false,
       enableFullscreen: true,
@@ -327,17 +327,7 @@
             activeEl == pEl.querySelector('.vjs-control-bar') ||
             volumeHover) {
 
-          if (enableVolumeScroll) {
-            event = window.event || event;
-            var delta = Math.max(-1, Math.min(1, (event.wheelDelta || -event.detail)));
-            event.preventDefault();
-
-            if (delta == 1) {
-              player.volume(player.volume() + volumeStep);
-            } else if (delta == -1) {
-              player.volume(player.volume() - volumeStep);
-            }
-          }
+        
         }
       }
     };

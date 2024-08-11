@@ -724,27 +724,27 @@ document.addEventListener('keydown', function(event) {
   // Toggle play/pause with the Spacebar and prevent control activation
   if (event.key === ' ' || event.key === 'Spacebar') {
     event.preventDefault(); // Prevent default action, like activating buttons
-    if (player.paused()) {
-      player.play();
+    if (video.paused()) {
+      video.play();
     } else {
-      player.pause();
+      video.pause();
     }
   }
 
   // Toggle fullscreen with the F key
   if (event.key === 'f' || event.key === 'F') {
     event.preventDefault();
-    if (player.isFullscreen()) {
-      player.exitFullscreen();
+    if (video.isFullscreen()) {
+      video.exitFullscreen();
     } else {
-      player.requestFullscreen();
+      video.requestFullscreen();
     }
   }
 
   // Toggle mute with the M key
   if (event.key === 'm' || event.key === 'M') {
     event.preventDefault();
-    player.muted(!player.muted());
+    video.muted(!video.muted());
   }
 
   if (event.ctrlKey || event.metaKey || event.altKey) {
@@ -759,7 +759,7 @@ document.addEventListener('keydown', function(event) {
     var number = ewhich - sub;
 
     event.preventDefault();
-    player.currentTime(player.duration() * number * 0.1);
+    video.currentTime(video.duration() * number * 0.1);
   }
 });
 

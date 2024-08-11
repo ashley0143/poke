@@ -632,11 +632,13 @@ background-color: #0000;
             if (qua !== "medium") {
 
 
-document.addEventListener('keydown', function(event) {
-  // Toggle play/pause with the Spacebar and prevent control activation
-  if (event.key === ' ' || event.key === 'Spacebar') {
+ document.addEventListener('keydown', function(event) {
+  const video = document.querySelector('video'); // Adjust if you have a different way to reference your video element
+
+  // Toggle play/pause with the Spacebar
+  if (event.code === 'Space') {
     event.preventDefault(); // Prevent default action, like activating buttons
-    if (video.paused()) {
+    if (video.paused) {
       video.play();
     } else {
       video.pause();
@@ -644,34 +646,27 @@ document.addEventListener('keydown', function(event) {
   }
 
   // Toggle fullscreen with the F key
-  if (event.key === 'f' || event.key === 'F') {
+  if (event.code === 'KeyF') {
     event.preventDefault();
-    if (video.isFullscreen()) {
-      video.exitFullscreen();
+    if (document.fullscreenElement) {
+      document.exitFullscreen();
     } else {
       video.requestFullscreen();
     }
   }
 
   // Toggle mute with the M key
-  if (event.key === 'm' || event.key === 'M') {
+  if (event.code === 'KeyM') {
     event.preventDefault();
-    video.muted(!video.muted());
+    video.muted = !video.muted;
   }
 
-  if (event.ctrlKey || event.metaKey || event.altKey) {
-    return;
-  }
-  
-  var ewhich = event.which || event.keyCode;
-
-  // Number keys from 0-9 skip to a percentage of the video. 0 is 0% and 9 is 90%
-  if ((ewhich >= 48 && ewhich <= 57) || (ewhich >= 96 && ewhich <= 105)) {
-    var sub = ewhich >= 96 ? 96 : 48;
-    var number = ewhich - sub;
-
+  // Seeking options with keys 1 to 9
+  if (event.code >= 'Digit1' && event.code <= 'Digit9') {
     event.preventDefault();
-    video.currentTime(video.duration * number * 0.1);
+    const percent = parseInt(event.code.replace('Digit', '')) * 10;
+    const time = (percent / 100) * video.duration;
+    video.currentTime = time;
   }
 });
 

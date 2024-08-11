@@ -719,6 +719,52 @@ background-color: #0000;
             }
         });
 
+
+document.addEventListener('keydown', function(event) {
+  // Toggle play/pause with the Spacebar and prevent control activation
+  if (event.key === ' ' || event.key === 'Spacebar') {
+    event.preventDefault(); // Prevent default action, like activating buttons
+    if (player.paused()) {
+      player.play();
+    } else {
+      player.pause();
+    }
+  }
+
+  // Toggle fullscreen with the F key
+  if (event.key === 'f' || event.key === 'F') {
+    event.preventDefault();
+    if (player.isFullscreen()) {
+      player.exitFullscreen();
+    } else {
+      player.requestFullscreen();
+    }
+  }
+
+  // Toggle mute with the M key
+  if (event.key === 'm' || event.key === 'M') {
+    event.preventDefault();
+    player.muted(!player.muted());
+  }
+
+  if (event.ctrlKey || event.metaKey || event.altKey) {
+    return;
+  }
+  
+  var ewhich = event.which || event.keyCode;
+
+  // Number keys from 0-9 skip to a percentage of the video. 0 is 0% and 9 is 90%
+  if ((ewhich >= 48 && ewhich <= 57) || (ewhich >= 96 && ewhich <= 105)) {
+    var sub = ewhich >= 96 ? 96 : 48;
+    var number = ewhich - sub;
+
+    event.preventDefault();
+    player.currentTime(player.duration() * number * 0.1);
+  }
+});
+
+});
+
         </script>
 
              <% if(dm) { %>

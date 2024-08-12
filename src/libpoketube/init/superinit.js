@@ -94,7 +94,7 @@ function init(app, config, rendertemplate) {
           
       }, 100);
     } catch (err) {
-      initlog("[FAILED] Load pages \n" + err);
+      initlog("[POKE SEGFAULT] Load pages \n" + err);
       console.error(err);
     }
   }, 100);

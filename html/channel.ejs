@@ -764,7 +764,7 @@ white-space: nowrap;text-decoration: none;" href="/feeds/videos.xml?channel_id=<
 
   <%  if (c.comments.length != "0") { %> 
 
-     <a  href="/channel?id=<%=ID%>&tab=community"  class="tab" style="color:pink">Community</a>
+     <a  href="/channel?id=<%=ID%>&tab=community"  class="tab" style="color:pink">Posts</a>
                                                                          <% } %>
                                                                          <% } %>
 
@@ -809,7 +809,7 @@ white-space: nowrap;text-decoration: none;" href="/feeds/videos.xml?channel_id=<
 
   <%  if (c.comments.length != "0") { %> 
 
-     <a  href="/channel?id=<%=ID%>&tab=community"  class="tab" style="color:pink">Community</a>
+     <a  href="/channel?id=<%=ID%>&tab=community"  class="tab" style="color:pink">Posts</a>
                                                                          <% } %>
                                                                          <% } %>
 
@@ -851,7 +851,7 @@ white-space: nowrap;text-decoration: none;" href="/feeds/videos.xml?channel_id=<
 
   <%  if (c?.comments?.length != "0") { %> 
 
-     <a  href="/channel?id=<%=ID%>&tab=community"  class="tab" style="color:pink">Community</a>
+     <a  href="/channel?id=<%=ID%>&tab=community"  class="tab" style="color:pink">Posts</a>
                                                                              <% } %>
                                              
                                                                           <% } %>
@@ -879,7 +879,7 @@ white-space: nowrap;text-decoration: none;" href="/feeds/videos.xml?channel_id=<
 
       <% } %>
 
-     <a  href="/channel?id=<%=ID%>&tab=community"  class="tab active" style="color:pink">Community</a>
+     <a  href="/channel?id=<%=ID%>&tab=community"  class="tab active" style="color:pink">Posts</a>
  
   
 <%  if (Array.isArray(playlist?.playlists)) { %> 
@@ -920,7 +920,7 @@ white-space: nowrap;text-decoration: none;" href="/feeds/videos.xml?channel_id=<
 
   <%  if (c?.comments?.length != "0") { %> 
 
-     <a  href="/channel?id=<%=ID%>&tab=community"  class="tab" style="color:pink">Community</a>
+     <a  href="/channel?id=<%=ID%>&tab=community"  class="tab" style="color:pink">Posts</a>
                                                                          <% } %>
                                                                          <% } %>
 
@@ -955,7 +955,7 @@ white-space: nowrap;text-decoration: none;" href="/feeds/videos.xml?channel_id=<
 
   <%  if (c?.comments?.length != "0") { %> 
 
-     <a  href="/channel?id=<%=ID%>&tab=community"  class="tab" style="color:pink">Community</a>
+     <a  href="/channel?id=<%=ID%>&tab=community"  class="tab" style="color:pink">Posts</a>
                                                                          <% } %>
                                                                          <% } %>
 
@@ -1034,7 +1034,7 @@ width: fit-content;
 
   <%  if (c.comments.length != "0") { %> 
 
-     <a  href="/channel?id=<%=ID%>&tab=community"  class="tab">Community</a>
+     <a  href="/channel?id=<%=ID%>&tab=community"  class="tab">Posts</a>
                                                                          <% } %>
                                                                          <% } %>
                                                                                                                                                                      <%  if (Array?.isArray(shorts?.videos)) { %> 
@@ -1065,7 +1065,7 @@ width: fit-content;
                    <a href="/channel?id=<%=ID%>&tab=shorts" class="tab">Shorts</a>
   <% } %>
       <% } %>
-                <a href="/channel?id=<%=ID%>&tab=community"  class="tab active">Community</a>
+                <a href="/channel?id=<%=ID%>&tab=community"  class="tab active">Posts</a>
                                                                 <% } %>
         <% if (tab ==="shorts") { %>
 
@@ -1077,7 +1077,7 @@ width: fit-content;
                    <a href="/channel?id=<%=ID%>&tab=shorts" class="tab active">Shorts</a>
   <% } %>
       <% } %>
-                <a href="/channel?id=<%=ID%>&tab=community"  class="tab">Community</a>
+                <a href="/channel?id=<%=ID%>&tab=community"  class="tab">Posts</a>
                                                                 <% } %>
             </div>
      
@@ -1514,8 +1514,7 @@ width: fit-content;
                                                                                                   </a>
                             
                             <span>
-                                <br>   <%- x.publishedText %> -                         <span>   
- <%- convert(x.likeCount) %>   likes
+                                <br>  Posted <%- x.publishedText %> - <span>   
         </span>   
 
                             </span>
@@ -1563,7 +1562,8 @@ width: fit-content;
                  
                <% } %>
 
-   
+   <i class="fa-light fa-thumbs-up"></i> <%- convert(x.likeCount) %>   
+
               </div>
 
                   

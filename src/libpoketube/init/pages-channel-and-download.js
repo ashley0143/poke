@@ -280,7 +280,7 @@ var continuationExists = 'continuation' in req.query;
 
 if (ID.includes(bannedchannels) && !bypassExists && !tabExists && !continuationExists) {
   var cinv = {
-    error:`this channel may include propaganda. If you still wanna view content <a href="/channel?id=${ID}&bypass=${bypassQuery}">click here</a> to bypass this restriction.`
+    error:`this channel may include disinformation. If you still wanna view content <a href="/channel?id=${ID}&bypass=${bypassQuery}">click here</a> to bypass this restriction.`
  }
 }
 

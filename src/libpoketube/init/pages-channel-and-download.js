@@ -280,7 +280,7 @@ var continuationExists = 'continuation' in req.query;
 
 if (ID.includes(bannedchannels) && !bypassExists && !tabExists && !continuationExists) {
   var cinv = {
-    error =  `this channel was banned for violating the code of conduct. You can still watch content but cannot view the channel itself. If you still wanna view content <a href="?bypass=${bypassQuery}">click here</a> to bypass this restriction.`
+    error:`this channel was banned for violating the code of conduct. You can still watch content but cannot view the channel itself. If you still wanna view content <a href="?bypass=${bypassQuery}">click here</a> to bypass this restriction.`
  }
 }
 

@@ -269,6 +269,14 @@ module.exports = function (app, config, renderTemplate) {
         getChannelData(channelINVUrl),
       ]);
 
+     var bannedchannels = ["UC1okSIA8UEY8OqvtjGHFvzA"]
+     
+      if(ID.includes(bannedchannels)) {
+        var cinv = {
+          error: "banned from poke for violating code of conduct. you can still watch content but u cant view the channel itself!"
+        }
+      }
+
       function getThumbnailUrl(video) {
         const maxresDefaultThumbnail = video.videoThumbnails.find(
           (thumbnail) => thumbnail.quality === "maxresdefault"

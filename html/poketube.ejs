@@ -617,7 +617,6 @@ background-color: #0000;
 }
 
 </style>
-  <script src="/static/videojs-plugin-hotkeys.js?v=508"></script>
 
 <script>
              document.addEventListener("DOMContentLoaded", () => {
@@ -625,14 +624,7 @@ background-color: #0000;
                 controls: true,
                 autoplay: false,
                 preload: 'auto',
-                  plugins: {
-            hotkeys: {
-      volumeStep: 0.1,
-      seekStep: 5,
-      enableModifiersForNumbers: false
-    },
-  },
-
+        
             });
 
             const qua = new URLSearchParams(window.location.search).get("quality") || "";

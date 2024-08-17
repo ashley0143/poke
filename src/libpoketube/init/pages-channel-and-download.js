@@ -269,13 +269,22 @@ module.exports = function (app, config, renderTemplate) {
         getChannelData(channelINVUrl),
       ]);
 
-     var bannedchannels = ["UC1okSIA8UEY8OqvtjGHFvzA"]
      
-      if(ID.includes(bannedchannels)) {
-        var cinv = {
-          error: "banned from poke for violating code of conduct. you can still watch content but u cant view the channel itself!"
+var bannedchannels = ["UC1okSIA8UEY8OqvtjGHFvzA"];
+var bypassQuery = "cG9rZXR1YmVjaGFubmVsYnlwYXNzbG9scGVvcGxldGhpbmt0aGlzaXNjZW5zb3JzaGlwLTQ1OTBh";
+
+var bypassExists = req.query.bypass === bypassQuery;
+var tabExists = 'tab' in req.query;
+var continuationExists = 'continuation' in req.query;
+
+
+if (ID.includes(bannedchannels) && !bypassExists && !tabExists && !continuationExists) {
+  var cinv = {
+    error =  `this channel was banned for violating the code of conduct. You can still watch content but cannot view the channel itself. If you still wanna view content <a href="?bypass=${bypassQuery}">click here</a> to bypass this restriction.`;
         }
-      }
+}
+
+
 
       function getThumbnailUrl(video) {
         const maxresDefaultThumbnail = video.videoThumbnails.find(

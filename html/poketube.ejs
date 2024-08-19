@@ -675,11 +675,10 @@ document.addEventListener("DOMContentLoaded", () => {
         };
 
         video.on('play', () => {
-            // Sync audio with video before playing
-            if (Math.abs(video.currentTime() - audio.currentTime) > 0.3) {
-                audio.currentTime = video.currentTime();
-            }
-            
+            // Set initial sync point at 0.01 seconds
+            video.currentTime(0.01);
+            audio.currentTime = 0.01;
+
             // Wait for both video and audio to be buffered sufficiently
             if (isVideoBuffered() && checkAudioBuffer()) {
                 video.play();
@@ -735,7 +734,6 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 });
-
 
         </script>
 

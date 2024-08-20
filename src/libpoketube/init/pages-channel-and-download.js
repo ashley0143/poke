@@ -110,14 +110,14 @@ module.exports = function (app, config, renderTemplate) {
 
     if (query) {
       let redirectTo = null;
-      let splitParam = "::";
+      let splitParam = ":";
 
       if (query.includes("youtube.com/watch?v=")) {
         redirectTo = "/watch";
         splitParam = "?v=";
-      } else if (query.includes("channel:")) {
+      } else if (query.includes("channel")) {
         redirectTo = "/channel?id=";
-      } else if (query.includes("video:")) {
+      } else if (query.includes("video")) {
         redirectTo = "/watch?v=";
       }
 

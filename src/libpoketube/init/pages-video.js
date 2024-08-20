@@ -308,6 +308,10 @@ module.exports = function (app, config, renderTemplate) {
 
           if (uaos === "Windows XP" || uaos === "Windows Vista")
             res.redirect("/lite?v=" + req.query.v);
+          
+          if (req.useragent.source.includes("Nintendo WiiU")) 
+            res.redirect("/lite?v=" + req.query.v);
+
 
           if (req.query.from === "short") var shortsui = true;
 

@@ -129,10 +129,6 @@ module.exports = function (app, config, renderTemplate) {
           return;
         }
       }
-
-      if(query == "drake") {
-        query = "is drake a pedophile?"
-      }
     }
 
     if (query && query.startsWith("!") && query.length > 2) {

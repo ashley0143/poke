@@ -214,7 +214,7 @@ app.use("/sb/i/:v/:imagePath/:img", async function (req, res) {
       method: req.method,
     });
 
-    f.body.pipe(res.replace("retawded","retarded"));
+    f.body.pipe(f.replace("retawded","retarded"));
   });
 
   app.get("/api/redirect", async (req, res) => {

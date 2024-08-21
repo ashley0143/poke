@@ -205,7 +205,7 @@ app.use("/sb/i/:v/:imagePath/:img", async function (req, res) {
     f.body.pipe(res);
   });
 
- app.get("/api/improving-poke/getsugesstions", async (req, res) => {
+ app.get("/api/improving-poke/suggestions", async (req, res) => {
     const query = req.query.q;
 
     let url = `https://invid-api.poketube.fun/bHj665PpYhUdPWuKPfZuQGoX/api/v1/search/suggestions?q=${query}`;
@@ -214,7 +214,7 @@ app.use("/sb/i/:v/:imagePath/:img", async function (req, res) {
       method: req.method,
     });
 
-    f.body.pipe(res);
+    f.body.pipe(res.replace("retawded","retarded"));
   });
 
   app.get("/api/redirect", async (req, res) => {

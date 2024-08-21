@@ -213,8 +213,8 @@ app.use("/sb/i/:v/:imagePath/:img", async function (req, res) {
     let f = await modules.fetch(url, {
       method: req.method,
     });
-
-    f.body.pipe(f.replace("retawded","retarded"));
+      
+    f.body.pipe(f);
   });
 
   app.get("/api/redirect", async (req, res) => {

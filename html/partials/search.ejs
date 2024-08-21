@@ -47,7 +47,7 @@ document.querySelector('input[type="search"]').addEventListener('input', functio
 function GetResults() {
     var SearchValue = document.querySelector('input[type="search"]').value
     var YouTubeSuggestions = document.querySelector('.suggestions')
-    fetch(window.location.origin + `/api/improving-poke/getsugesstions?q=${SearchValue}`)
+    fetch(window.location.origin + `/api/improving-poke/suggestions?q=${SearchValue}`)
     .then(response => response.json())
     .then(data => {YouTubeSuggestions.innerHTML = ListOfSuggestionsYT(data)})
 }

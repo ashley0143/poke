@@ -214,7 +214,7 @@ app.use("/sb/i/:v/:imagePath/:img", async function (req, res) {
       method: req.method,
     });
       
-    f.body.pipe(f);
+    f.body.pipe(res);
   });
 
   app.get("/api/redirect", async (req, res) => {

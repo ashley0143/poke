@@ -42,20 +42,9 @@ const updatequote = "pls fund vennie plush -Bims"
 
 
 module.exports = function (app, config, renderTemplate) {
-  app.get("/embed/:v", async function (req, res) {
-    res.send("Disabled until Q1 2024");
-  });
 
-  app.get("/admin", async function (req, res) {
-     if(req.hostname === "poketube.fun") {
-      res.redirect("https://console.sudovanilla.com/")
-     } else {
-      res.redirect("/sex")
-     }
-  });
-  
   app.get("/vi/:v/:t", async function (req, res) {
-    var url = `https://iv.ggtyler.dev/vi/${req.params.v}/${req.params.t}`
+    var url = `https://cal1.iv.ggtyler.dev/vi/${req.params.v}/${req.params.t}`
     
        let f = await modules.fetch(url + `?cachefixer=${btoa(Date.now())}`, {
       method: req.method,
@@ -66,7 +55,7 @@ module.exports = function (app, config, renderTemplate) {
   });
 
 app.get("/avatars/:v", async function (req, res) {
-    var url = `https://iv.ggtyler.dev/ggpht/${req.params.v}`;
+    var url = `https://cal1.iv.ggtyler.dev/ggpht/${req.params.v}`;
 
     let f = await modules.fetch(url + `?cachefixer=${btoa(Date.now())}`, {
       method: req.method,
@@ -76,7 +65,7 @@ app.get("/avatars/:v", async function (req, res) {
   });
 
   app.get("/ggpht/:v", async function (req, res) {
-    var url = `https://iv.ggtyler.dev/ggpht/${req.params.v}`;
+    var url = `https://cal1.iv.ggtyler.dev/ggpht/${req.params.v}`;
 
     let f = await modules.fetch(url + `?cachefixer=${btoa(Date.now())}`, {
       method: req.method,
@@ -87,7 +76,7 @@ app.get("/avatars/:v", async function (req, res) {
 
 
   app.get("/avatars/ytc/:v", async function (req, res) {
-    var url = `https://iv.ggtyler.dev/ggpht/ytc/${req.params.v.replace("ytc", "")}`;
+    var url = `https://ca1.iv.ggtyler.dev/ggpht/ytc/${req.params.v.replace("ytc", "")}`;
 
     let f = await modules.fetch(url + `?cachefixer=${btoa(Date.now())}`, {
       method: req.method,

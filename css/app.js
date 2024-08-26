@@ -19,13 +19,9 @@ d[e>>>5]|=128<<24-e%32;d[(e+64>>>9<<4)+14]=h.floor(b/4294967296);d[(e+64>>>9<<4)
 
 const video = document.getElementById('video'); 
 
-// Get the current URL
+// Replaces the current URL without the 'fx' parameter
 const url = new URL(window.location.href);
-
-// Remove the 'fx' query parameter
 url.searchParams.delete('fx');
-
-// Replace the current URL without the 'fx' parameter
 history.replaceState(null, '', url.toString());
 
 
@@ -112,10 +108,10 @@ function jumpToTime(e) {
   
   video.currentTime = time;
 
-  window.location.hash = 'top'; // Add #video to the URL
+  window.location.hash = 'top'; // Add #top to the URL
 
   setTimeout(() => {
-    history.replaceState(null, null, ' '); // Remove #video after 1 second
+    history.replaceState(null, null, ' '); // Remove #top after 250MS
   }, 250);
 }
 
@@ -140,10 +136,8 @@ const videoPlayer = document.getElementById('video');
 function time(seconds) {
   videoPlayer.currentTime = seconds;
 
-  // Add #video to the URL  
   window.location.hash = 'top'; 
 
-  // Remove #video after a short delay
   setTimeout(() => {   
     history.replaceState(null, null, ' '); 
   }, 250);  
@@ -168,7 +162,6 @@ function time(seconds) {
   }
 });
 
-// Adjust video element style on fullscreen change
 const videoElement = document.getElementById("video");
 videoElement.addEventListener("fullscreenchange", () => {
   videoElement.style.borderRadius = document.fullscreenElement === videoElement ? "0em !important" : "16px";

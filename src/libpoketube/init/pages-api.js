@@ -44,7 +44,7 @@ const updatequote = "pls fund vennie plush -Bims"
 module.exports = function (app, config, renderTemplate) {
 
   app.get("/vi/:v/:t", async function (req, res) {
-    var url = `https://cal1.iv.ggtyler.dev/vi/${req.params.v}/${req.params.t}`
+    var url = `https://iv.ggtyler.dev/vi/${req.params.v}/${req.params.t}`
     
        let f = await modules.fetch(url + `?cachefixer=${btoa(Date.now())}`, {
       method: req.method,
@@ -55,7 +55,7 @@ module.exports = function (app, config, renderTemplate) {
   });
 
 app.get("/avatars/:v", async function (req, res) {
-    var url = `https://cal1.iv.ggtyler.dev/ggpht/${req.params.v}`;
+    var url = `https://iv.ggtyler.dev/ggpht/${req.params.v}`;
 
     let f = await modules.fetch(url + `?cachefixer=${btoa(Date.now())}`, {
       method: req.method,
@@ -65,7 +65,7 @@ app.get("/avatars/:v", async function (req, res) {
   });
 
   app.get("/ggpht/:v", async function (req, res) {
-    var url = `https://cal1.iv.ggtyler.dev/ggpht/${req.params.v}`;
+    var url = `https://iv.ggtyler.dev/ggpht/${req.params.v}`;
 
     let f = await modules.fetch(url + `?cachefixer=${btoa(Date.now())}`, {
       method: req.method,
@@ -118,7 +118,7 @@ app.get("/avatars/:v", async function (req, res) {
     const l = req.query.h;
 
     try {
-      let url = `https://pol1.iv.ggtyler.dev/api/v1/captions/${id}?label=${l}`;
+      let url = `https://iv.ggtyler.dev/api/v1/captions/${id}?label=${l}`;
 
       let f = await fetch(url);
       const body = await f.text();

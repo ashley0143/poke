@@ -2210,7 +2210,7 @@ const evenCanvas = document.getElementById("ambient-canvas-2")
 const oddCtx = oddCanvas.getContext("2d")
 const evenCtx = evenCanvas.getContext("2d")
 
-const frameIntervalMs = 880
+const frameIntervalMs = 1001
 const canvasOpacity = "0.4"
 
 let intervalId
@@ -2281,7 +2281,7 @@ window.addEventListener("unload", cleanup)
   position: absolute;
   top: 0px;
   border-radius: 18px;
-  filter: blur(200px);
+  filter: blur(150px);
   transform: scale(1.1);
   z-index: -1;
 }

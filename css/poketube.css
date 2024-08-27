@@ -573,9 +573,16 @@ a.avatar {
   border-radius: 8px;
   font-family: "Montserrat", sans-serif;
   box-shadow: var(--border-color) 0 0 5px;
-  background-color: #222022d6;
-  backdrop-filter: blur(20px);
+  background-color: var(--context-menu-background); 
 }
+
+@media (min-width: 1080px) {
+  .dropdown__menu {
+    background-color: #222022d6; 
+    backdrop-filter: blur(20px); 
+  }
+}
+
 
 .dropdown__item {
   display: flex;

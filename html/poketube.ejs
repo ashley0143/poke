@@ -2288,10 +2288,38 @@ window.addEventListener("unload", cleanup)
   position: absolute;
   top: 0px;
   border-radius: 18px;
-  filter: blur(150px);
   transform: scale(1.1);
   z-index: -1;
 }
+
+.ambient-canvas {
+  filter: blur(90px); /* its the default blur lol */
+}
+
+@media (min-width: 768px) {
+  .ambient-canvas {
+    filter: blur(110px);
+  }
+}
+
+@media (min-width: 1080px) {
+  .ambient-canvas {
+    filter: blur(120px);
+  }
+}
+
+@media (min-width: 1440px) {
+  .ambient-canvas {
+    filter: blur(150px);
+  }
+}
+
+@media (min-width: 2160px) {
+  .ambient-canvas {
+    filter: blur(200px);
+  }
+}
+
 </style>
                  <% } %>
 

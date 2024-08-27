@@ -104,6 +104,7 @@ We use the GNU Coding Standard Thingy, see [this link.](https://www.gnu.org/prep
     <img src="https://cdn.glitch.global/d68d17bb-f2c0-4bc3-993f-50902734f652/glitch-fastly-lock-up.svg">
   </a>
   <br><hr>
+  <p> this software does not support <a href="https://opensource.org">"OSI"</a> - <a href="https://rationalwiki.org/wiki/Eric_S._Raymond#Open_Source">they are terrible people </a> - pls support the FSF/GNU (<a href="https://fsf.org">fsf.org</a> or <a href="https://gnu.org">gnu.org</a>) instead :3 </p>
   <a href="https://gnu.org/not-open-source">
     <img width="200" src="https://autumn.revolt.chat/attachments/eNpfwV2C1_wudONe43YCvWr-4vbvLpG78HbuXgOYfO">
   </a>

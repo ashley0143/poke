@@ -90,16 +90,23 @@
 .comments-area .comment-list {
   padding-bottom: 30px;
 }
+
 .popup {
- display: none;
- background-color: #241c1cab;
-  backdrop-filter: blur(31px);
- position: absolute;
- padding: 10px;
-border: solid 1.5px gray;
-border-radius: 10px;
-        }
-  
+  display: none;
+  background-color: #333;
+  position: absolute;
+  padding: 10px;
+  border: solid 1.5px gray;
+  border-radius: 10px;
+}
+
+@media (min-width: 1080px) {
+  .popup {
+    background-color: #241c1cab; 
+    backdrop-filter: blur(31px); 
+  }
+}
+
   .popup > div {
 margin-bottom: 2px;
 font-family: var(--text-font-primary);

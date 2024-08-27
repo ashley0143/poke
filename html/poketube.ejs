@@ -2105,70 +2105,83 @@ if (/[?&]autoplay=/.test(location.search)) {
                <% if(!IsOldWindows) { %>
 
 <script>
-const AMvideo = document.getElementById("video")
-const oddCanvas = document.getElementById("ambient-canvas-1")
-const evenCanvas = document.getElementById("ambient-canvas-2")
-const oddCtx = oddCanvas.getContext("2d")
-const evenCtx = evenCanvas.getContext("2d")
+const AMvideo = document.getElementById("video");
+const oddCanvas = document.getElementById("ambient-canvas-1");
+const evenCanvas = document.getElementById("ambient-canvas-2");
+const oddCtx = oddCanvas.getContext("2d");
+const evenCtx = evenCanvas.getContext("2d");
 
-const frameIntervalMs = 998
-const canvasOpacity = "0.4"
+const canvasOpacity = "0.4";
 
-let intervalId
-let oddFrame = true
+let intervalId;
+let oddFrame = true;
+
+ const setFrameInterval = () => {
+  const cores = navigator.hardwareConcurrency || 2
+  return Math.max(500 / cores, 33);  
+};
+
+ const adjustCanvasSize = () => {
+  const cores = navigator.hardwareConcurrency || 2;
+
+   oddCanvas.style.width = evenCanvas.style.width = `${Math.min(1000, 800 / cores)}px`;
+  oddCanvas.style.height = evenCanvas.style.height = `${Math.min(1000, 600 / cores)}px`;
+};
+
 const drawFrame = () => {
   if (oddFrame) {
-    oddCtx.drawImage(AMvideo, 0, 0, oddCanvas.width, oddCanvas.height)
-    transitionToOddCanvas()
+    oddCtx.drawImage(AMvideo, 0, 0, oddCanvas.width, oddCanvas.height);
+    transitionToOddCanvas();
   } else {
-    evenCtx.drawImage(AMvideo, 0, 0, evenCanvas.width, evenCanvas.height)
-    transitionToEvenCanvas()
+    evenCtx.drawImage(AMvideo, 0, 0, evenCanvas.width, evenCanvas.height);
+    transitionToEvenCanvas();
   }
-  oddFrame = !oddFrame
+  oddFrame = !oddFrame;
 };
 
 const transitionToOddCanvas = () => {
-  oddCanvas.style.opacity = canvasOpacity
-  evenCanvas.style.opacity = "0"
-}
+  oddCanvas.style.opacity = canvasOpacity;
+  evenCanvas.style.opacity = "0";
+};
 
 const transitionToEvenCanvas = () => {
-  evenCanvas.style.opacity = canvasOpacity
-  oddCanvas.style.opacity = "0"
-}
+  evenCanvas.style.opacity = canvasOpacity;
+  oddCanvas.style.opacity = "0";
+};
 
 const drawStart = () => {
-  intervalId = window.setInterval(drawFrame, frameIntervalMs)
-}
+  const frameIntervalMs = setFrameInterval(); // Get optimized frame interval
+  intervalId = window.setInterval(drawFrame, frameIntervalMs);
+};
 
 const drawPause = () => {
-  if (intervalId) window.clearInterval(intervalId)
-}
+  if (intervalId) window.clearInterval(intervalId);
+};
 
 const init = () => {
+  // Fixes an issue where Firefox/Chromium fails to load the ambient mode
+  AMvideo.pause();
+  AMvideo.play();
 
-  //fixes a issue where firefox/chromium fails to load the ambinet mode and doesnt load it. - please dont remove this line lmao
-    
-  video.pause();video.play(); 
-    
-  // DO NOT REMOVE 
-  
-  AMvideo.addEventListener("play", drawStart, false)
-  AMvideo.addEventListener("pause", drawPause, false)
-  AMvideo.addEventListener("ended", drawPause, false)
-   
-  oddCanvas.style.transition = evenCanvas.style.transition = `opacity ${frameIntervalMs}ms`
-}
+  adjustCanvasSize(); // Adjust canvas size based on hardware
+
+  AMvideo.addEventListener("play", drawStart, false);
+  AMvideo.addEventListener("pause", drawPause, false);
+  AMvideo.addEventListener("ended", drawPause, false);
+
+  oddCanvas.style.transition = evenCanvas.style.transition = `opacity ${setFrameInterval()}ms`;
+};
 
 const cleanup = () => {
-  AMvideo.removeEventListener("play", drawStart)
-  AMvideo.removeEventListener("pause", drawPause)
-  AMvideo.removeEventListener("ended", drawPause)
+  AMvideo.removeEventListener("play", drawStart);
+  AMvideo.removeEventListener("pause", drawPause);
+  AMvideo.removeEventListener("ended", drawPause);
   drawPause();
-}
+};
 
-window.addEventListener("load", init)
-window.addEventListener("unload", cleanup)
+window.addEventListener("load", init);
+window.addEventListener("unload", cleanup);
+
 </script>
 <style>
 .video-player-container, #video {

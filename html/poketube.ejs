@@ -2112,20 +2112,19 @@ const oddCtx = oddCanvas.getContext("2d");
 const evenCtx = evenCanvas.getContext("2d");
 
 const canvasOpacity = "0.4";
-
 let intervalId;
 let oddFrame = true;
 
- const setFrameInterval = () => {
-  const cores = navigator.hardwareConcurrency || 2
-  return Math.max(500 / cores, 33);  
+const getFrameInterval = () => {
+  const cores = navigator.hardwareConcurrency || 2;
+  return Math.max(500 / cores, 33);
 };
 
- const adjustCanvasSize = () => {
+const adjustCanvasSize = () => {
   const cores = navigator.hardwareConcurrency || 2;
-
-   oddCanvas.style.width = evenCanvas.style.width = `${Math.min(1000, 800 / cores)}px`;
-  oddCanvas.style.height = evenCanvas.style.height = `${Math.min(1000, 600 / cores)}px`;
+  const size = Math.min(1000, 800 / cores);
+  oddCanvas.style.width = evenCanvas.style.width = `${size}px`;
+  oddCanvas.style.height = evenCanvas.style.height = `${size * 0.75}px`;
 };
 
 const drawFrame = () => {
@@ -2150,7 +2149,7 @@ const transitionToEvenCanvas = () => {
 };
 
 const drawStart = () => {
-  const frameIntervalMs = setFrameInterval(); // Get optimized frame interval
+  const frameIntervalMs = getFrameInterval();
   intervalId = window.setInterval(drawFrame, frameIntervalMs);
 };
 
@@ -2159,17 +2158,13 @@ const drawPause = () => {
 };
 
 const init = () => {
-  // Fixes an issue where Firefox/Chromium fails to load the ambient mode
   AMvideo.pause();
   AMvideo.play();
-
-  adjustCanvasSize(); // Adjust canvas size based on hardware
-
+  adjustCanvasSize();
   AMvideo.addEventListener("play", drawStart, false);
   AMvideo.addEventListener("pause", drawPause, false);
   AMvideo.addEventListener("ended", drawPause, false);
-
-  oddCanvas.style.transition = evenCanvas.style.transition = `opacity ${setFrameInterval()}ms`;
+  oddCanvas.style.transition = evenCanvas.style.transition = `opacity ${getFrameInterval()}ms`;
 };
 
 const cleanup = () => {
@@ -2181,6 +2176,7 @@ const cleanup = () => {
 
 window.addEventListener("load", init);
 window.addEventListener("unload", cleanup);
+
 
 </script>
 <style>

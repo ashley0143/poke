@@ -2116,18 +2116,9 @@ const baseFrameIntervalMs = 500;
 let intervalId;
 let oddFrame = true;
 
-const getCoreCount = () => navigator.hardwareConcurrency || 2;
-
-const getOptimizedInterval = () => {
-  const coreCount = getCoreCount();
+const getFrameInterval = () => {
+  const coreCount = navigator.hardwareConcurrency || 2;
   return Math.max(baseFrameIntervalMs / coreCount, 33);
-};
-
-const updateCanvasSize = () => {
-  const coreCount = getCoreCount();
-  const size = Math.min(1000, 800 / coreCount);
-  oddCanvas.style.width = evenCanvas.style.width = `${size}px`;
-  oddCanvas.style.height = evenCanvas.style.height = `${size * 0.75}px`;
 };
 
 const drawFrame = () => {
@@ -2135,20 +2126,14 @@ const drawFrame = () => {
   const canvas = oddFrame ? oddCanvas : evenCanvas;
   
   ctx.drawImage(AMvideo, 0, 0, canvas.width, canvas.height);
-  
-  if (oddFrame) {
-    oddCanvas.style.opacity = canvasOpacity;
-    evenCanvas.style.opacity = "0";
-  } else {
-    evenCanvas.style.opacity = canvasOpacity;
-    oddCanvas.style.opacity = "0";
-  }
+  oddCanvas.style.opacity = oddFrame ? canvasOpacity : "0";
+  evenCanvas.style.opacity = oddFrame ? "0" : canvasOpacity;
   
   oddFrame = !oddFrame;
 };
 
 const drawStart = () => {
-  const frameIntervalMs = getOptimizedInterval();
+  const frameIntervalMs = getFrameInterval();
   intervalId = setInterval(drawFrame, frameIntervalMs);
 };
 
@@ -2159,12 +2144,11 @@ const drawPause = () => {
 const init = () => {
   AMvideo.pause();
   AMvideo.play();
-  updateCanvasSize();
   AMvideo.addEventListener("play", drawStart, false);
   AMvideo.addEventListener("pause", drawPause, false);
   AMvideo.addEventListener("ended", drawPause, false);
   
-  const frameIntervalMs = getOptimizedInterval();
+  const frameIntervalMs = getFrameInterval();
   oddCanvas.style.transition = evenCanvas.style.transition = `opacity ${frameIntervalMs}ms`;
 };
 
@@ -2177,6 +2161,7 @@ const cleanup = () => {
 
 window.addEventListener("load", init);
 window.addEventListener("unload", cleanup);
+
 
 </script>
 <style>

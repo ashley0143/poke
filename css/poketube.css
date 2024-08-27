@@ -576,7 +576,7 @@ a.avatar {
   background-color: var(--context-menu-background); 
 }
 
-@media (min-width: 1079px) {
+@media (min-height: 1079px) {
   .dropdown__menu {
     background-color: #222022d6; 
     backdrop-filter: blur(20px); 

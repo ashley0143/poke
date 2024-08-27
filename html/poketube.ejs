@@ -2117,30 +2117,40 @@ const canvasOpacity = "0.4"
 let intervalId
 let oddFrame = true
 let numWorkers = navigator.hardwareConcurrency || 4
+let workers = []
 
-const drawFrame = () => {
-  if (oddFrame) {
-    oddCtx.drawImage(AMvideo, 0, 0, oddCanvas.width, oddCanvas.height)
-    transitionToOddCanvas()
+const drawFrame = (workerId) => {
+  if (workers[workerId].oddFrame) {
+    workers[workerId].ctx.drawImage(AMvideo, 0, 0, workers[workerId].canvas.width, workers[workerId].canvas.height)
+    transitionToOddCanvas(workerId)
   } else {
-    evenCtx.drawImage(AMvideo, 0, 0, evenCanvas.width, evenCanvas.height)
-    transitionToEvenCanvas()
+    workers[workerId].ctx.drawImage(AMvideo, 0, 0, workers[workerId].canvas.width, workers[workerId].canvas.height)
+    transitionToEvenCanvas(workerId)
   }
-  oddFrame = !oddFrame
+  workers[workerId].oddFrame = !workers[workerId].oddFrame
 };
 
-const transitionToOddCanvas = () => {
-  oddCanvas.style.opacity = canvasOpacity
-  evenCanvas.style.opacity = "0"
+const transitionToOddCanvas = (workerId) => {
+  workers[workerId].canvas.style.opacity = canvasOpacity
+  workers[workerId === 0 ? numWorkers - 1 : workerId - 1].canvas.style.opacity = "0"
 }
 
-const transitionToEvenCanvas = () => {
-  evenCanvas.style.opacity = canvasOpacity
-  oddCanvas.style.opacity = "0"
+const transitionToEvenCanvas = (workerId) => {
+  workers[workerId].canvas.style.opacity = canvasOpacity
+  workers[workerId === numWorkers - 1 ? 0 : workerId + 1].canvas.style.opacity = "0"
 }
 
 const drawStart = () => {
-  intervalId = window.setInterval(drawFrame, frameIntervalMs / numWorkers)
+  for (let i = 0; i < numWorkers; i++) {
+    workers[i] = {
+      canvas: i % 2 === 0 ? oddCanvas : evenCanvas,
+      ctx: i % 2 === 0 ? oddCtx : evenCtx,
+      oddFrame: i % 2 === 0
+    }
+    workers[i].canvas.style.transition = `opacity ${frameIntervalMs / numWorkers}ms`
+    workers[i].canvas.style.zIndex = i
+    intervalId = window.setInterval(() => drawFrame(i), frameIntervalMs / numWorkers)
+  }
 }
 
 const drawPause = () => {
@@ -2155,8 +2165,6 @@ const init = () => {
   AMvideo.addEventListener("play", drawStart, false)
   AMvideo.addEventListener("pause", drawPause, false)
   AMvideo.addEventListener("ended", drawPause, false)
-
-  oddCanvas.style.transition = evenCanvas.style.transition = `opacity ${frameIntervalMs / numWorkers}ms`
 }
 
 const cleanup = () => {
@@ -2168,6 +2176,7 @@ const cleanup = () => {
 
 window.addEventListener("load", init)
 window.addEventListener("unload", cleanup)
+
 
 </script>
 <style>

@@ -2132,12 +2132,12 @@ const drawFrame = (workerId) => {
 
 const transitionToOddCanvas = (workerId) => {
   workers[workerId].canvas.style.opacity = canvasOpacity
-  workers[workerId === 0 ? numWorkers - 1 : workerId - 1].canvas.style.opacity = "0"
+  workers[(workerId + 1) % numWorkers].canvas.style.opacity = "0"
 }
 
 const transitionToEvenCanvas = (workerId) => {
   workers[workerId].canvas.style.opacity = canvasOpacity
-  workers[workerId === numWorkers - 1 ? 0 : workerId + 1].canvas.style.opacity = "0"
+  workers[(workerId - 1 + numWorkers) % numWorkers].canvas.style.opacity = "0"
 }
 
 const drawStart = () => {
@@ -2147,7 +2147,8 @@ const drawStart = () => {
       ctx: i % 2 === 0 ? oddCtx : evenCtx,
       oddFrame: i % 2 === 0
     }
-    workers[i].canvas.style.transition = `opacity ${frameIntervalMs / numWorkers}ms`    intervalId = window.setInterval(() => drawFrame(i), frameIntervalMs / numWorkers)
+    workers[i].canvas.style.transition = `opacity ${frameIntervalMs / numWorkers}ms`
+    intervalId = window.setInterval(() => drawFrame(i), frameIntervalMs / numWorkers)
   }
 }
 

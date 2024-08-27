@@ -2112,59 +2112,60 @@ const oddCtx = oddCanvas.getContext("2d");
 const evenCtx = evenCanvas.getContext("2d");
 
 const canvasOpacity = "0.4";
+const baseFrameIntervalMs = 500;
 let intervalId;
 let oddFrame = true;
 
-const getFrameInterval = () => {
-  const cores = navigator.hardwareConcurrency || 2;
-  return Math.max(500 / cores, 33);
+const getCoreCount = () => navigator.hardwareConcurrency || 2;
+
+const getOptimizedInterval = () => {
+  const coreCount = getCoreCount();
+  return Math.max(baseFrameIntervalMs / coreCount, 33);
 };
 
-const adjustCanvasSize = () => {
-  const cores = navigator.hardwareConcurrency || 2;
-  const size = Math.min(1000, 800 / cores);
+const updateCanvasSize = () => {
+  const coreCount = getCoreCount();
+  const size = Math.min(1000, 800 / coreCount);
   oddCanvas.style.width = evenCanvas.style.width = `${size}px`;
   oddCanvas.style.height = evenCanvas.style.height = `${size * 0.75}px`;
 };
 
 const drawFrame = () => {
+  const ctx = oddFrame ? oddCtx : evenCtx;
+  const canvas = oddFrame ? oddCanvas : evenCanvas;
+  
+  ctx.drawImage(AMvideo, 0, 0, canvas.width, canvas.height);
+  
   if (oddFrame) {
-    oddCtx.drawImage(AMvideo, 0, 0, oddCanvas.width, oddCanvas.height);
-    transitionToOddCanvas();
+    oddCanvas.style.opacity = canvasOpacity;
+    evenCanvas.style.opacity = "0";
   } else {
-    evenCtx.drawImage(AMvideo, 0, 0, evenCanvas.width, evenCanvas.height);
-    transitionToEvenCanvas();
+    evenCanvas.style.opacity = canvasOpacity;
+    oddCanvas.style.opacity = "0";
   }
+  
   oddFrame = !oddFrame;
 };
 
-const transitionToOddCanvas = () => {
-  oddCanvas.style.opacity = canvasOpacity;
-  evenCanvas.style.opacity = "0";
-};
-
-const transitionToEvenCanvas = () => {
-  evenCanvas.style.opacity = canvasOpacity;
-  oddCanvas.style.opacity = "0";
-};
-
 const drawStart = () => {
-  const frameIntervalMs = getFrameInterval();
-  intervalId = window.setInterval(drawFrame, frameIntervalMs);
+  const frameIntervalMs = getOptimizedInterval();
+  intervalId = setInterval(drawFrame, frameIntervalMs);
 };
 
 const drawPause = () => {
-  if (intervalId) window.clearInterval(intervalId);
+  if (intervalId) clearInterval(intervalId);
 };
 
 const init = () => {
   AMvideo.pause();
   AMvideo.play();
-  adjustCanvasSize();
+  updateCanvasSize();
   AMvideo.addEventListener("play", drawStart, false);
   AMvideo.addEventListener("pause", drawPause, false);
   AMvideo.addEventListener("ended", drawPause, false);
-  oddCanvas.style.transition = evenCanvas.style.transition = `opacity ${getFrameInterval()}ms`;
+  
+  const frameIntervalMs = getOptimizedInterval();
+  oddCanvas.style.transition = evenCanvas.style.transition = `opacity ${frameIntervalMs}ms`;
 };
 
 const cleanup = () => {
@@ -2176,7 +2177,6 @@ const cleanup = () => {
 
 window.addEventListener("load", init);
 window.addEventListener("unload", cleanup);
-
 
 </script>
 <style>

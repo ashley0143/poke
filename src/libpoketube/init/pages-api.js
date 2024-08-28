@@ -44,7 +44,7 @@ const updatequote = "pls fund vennie plush -Bims"
 module.exports = function (app, config, renderTemplate) {
 
   app.get("/vi/:v/:t", async function (req, res) {
-    var url = `https://iv.ggtyler.dev/vi/${req.params.v}/${req.params.t}`
+    var url = `https://i.ytimg.com/vi/${req.params.v}/${req.params.t}`
     
        let f = await modules.fetch(url + `?cachefixer=${btoa(Date.now())}`, {
       method: req.method,

@@ -45,7 +45,11 @@
 <meta content="https://poketube.fun/watch?v=<%=inv_vid.videoId%>" name=twitter:url>
 <meta content="<%=inv_vid.title%> | Poke" name=twitter:title>
 <meta content="Watch this video from <%=k.Video.Channel.Name%> On Poke! 
-👍 <%=convert(engagement.likes)%> | 👎 <%=convert(engagement.dislikes)%> | 📈 <%=convert(engagement.viewCount)%> Views 🗓️ <%= date %>" property=twitter:description>
+👍 <%=convert(engagement.likes)%> | 👎 <%=convert(engagement.dislikes)%> | 📈 <%=convert(engagement.viewCount)%> Views 🗓️ <%= date %> 💬 <% if (!isNaN(inv.commentCount)) { %>
+  <%= inv.commentCount.toLocaleString() %>
+<% } else { %>
+ 0
+<% } %>" property=twitter:description>
 <meta content="https://i.ytimg.com/vi/<%=inv_vid.videoId%>/maxresdefault.jpg" property=og:image>
 <meta content=summary_large_image name=twitter:card>
 <link href="https://poketube.fun/watch?v=<%=inv_vid.videoId%>" itemprop=url>

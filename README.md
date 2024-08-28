@@ -53,6 +53,7 @@ Poke uses OpenH264, which is free software! No non-free components included :3 V
 
 2. **Clone Repo**
    - Codeberg: `$ git clone https://codeberg.org/ashley/poke.git`
+   - git.lgbt: `$ git clone https://git.lgbt/mirror/poke.git`
    - GitHub: `$ git clone https://github.com/ashley0143/poke.git`
 
 3. **Install Dependencies**

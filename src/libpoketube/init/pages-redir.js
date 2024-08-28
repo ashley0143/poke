@@ -66,7 +66,7 @@ module.exports = function (app, config, renderTemplate) {
   });
 
   app.get("/gaming", (req, res) => {
-    res.redirect("/discover?tab=gaming");
+    res.redirect("/app?tab=gaming");
   });
 
   app.get("/custom-theme", (req, res) => {

@@ -1864,7 +1864,10 @@ inv_vid?.recommendedVideos.forEach(video => {
         <% } %>
                   <% } %>
 
- 
+ <% if (!inv_vid.recommendedVideos) { %>
+        <p> oops </p>
+  <% } %>
+
 
   <% if (f) { %> 
  <% channel_uploads.latestVideos.forEach(x => { %>

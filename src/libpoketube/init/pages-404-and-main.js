@@ -206,6 +206,7 @@ module.exports = function (app, config, renderTemplate) {
       return renderTemplate(res, req, "landing.ejs", {
         secure,
         embedtype:req.query.embedtype,
+        DisablePokeChan:req.query.DisablePokeChan,
         verify,
         isOldWindows,
         proxyurl,

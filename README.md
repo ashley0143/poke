@@ -57,7 +57,7 @@ Poke uses OpenH264, which is free software! No non-free components included :3 V
     
     unoffical mirrors:
    - git.lgbt: `$ git clone https://git.lgbt/mirror/poke.git` [sync every 10mins]
-   - nin0git :`$ git clone https://git.nin0.dev/mirrors/poke.git` [sync every 30mins]
+   - nin0git :`$ git clone https://git.nin0.dev/mirrors/poke.git` [sync every 10mins]
 
 3. **Install Dependencies**
    - `$ cd poke`

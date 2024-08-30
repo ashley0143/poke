@@ -9,7 +9,7 @@
     "email_main_url":"https://email-server.poketube.fun",
     "mastodon_client_url":"https://fediverse.poketube.fun",
     "libreoffice_online_url":"https://office.poketube.fun",
-    "cacher_max_age": "864000",
+    "cacher_max_age": "86400",
     "enablealwayshttps": false,
     "proxylocation":"USA",
     "t_url": "https://t.poketube.fun/",

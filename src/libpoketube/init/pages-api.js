@@ -127,7 +127,89 @@ app.get("/avatars/:v", async function (req, res) {
     } catch {}
   });
   
- 
+   app.get("/api/user-score-api", async (req, res) => {
+    const { fetch } = await import("undici");
+    
+    const id = req.query.v;
+
+    try {
+      const apiUrl = `https://ryd-proxy.kavin.rocks/votes/${id}&hash=d0550b6e28c8f93533a569c314d5b4e2`;
+
+    const engagement = await fetch(apiUrl).then((res) => res.json());
+
+    const likes = parseInt(engagement.likes) || 0;
+    const dislikes = parseInt(engagement.dislikes) || 0;
+    const total = likes + dislikes;
+
+    const likePercentage = total > 0 ? ((likes / total) * 100).toFixed(2) : 0;
+    const dislikePercentage = total > 0 ? ((dislikes / total) * 100).toFixed(2) : 0;
+
+    const getLikePercentageColor = (percentage) => {
+        if (percentage >= 80) {
+            return 'green';
+        } else if (percentage >= 50) {
+            return 'orange';
+        } else {
+            return 'red';
+        }
+    };
+
+    const getDislikePercentageColor = (percentage) => {
+        if (percentage >= 50) {
+            return 'red';
+        } else if (percentage >= 20) {
+            return 'orange';
+        } else {
+            return 'green';
+        }
+    };
+
+    const likeColor = getLikePercentageColor(likePercentage);
+    const dislikeColor = getDislikePercentageColor(dislikePercentage);
+
+    const userScore = (parseFloat(likePercentage) - parseFloat(dislikePercentage) / 2).toFixed(2);
+
+    const getUserScoreLabel = (score) => {
+        if (score >= 98) {
+            return 'Masterpiece Video';
+        } else if (score >= 80) {
+            return 'Overwhelmingly Positive';
+        } else if (score >= 60) {
+            return 'Positive';
+        } else if (score >= 40) {
+            return 'Mixed';
+        } else if (score >= 20) {
+            return 'Negative';
+        } else {
+            return 'Overwhelmingly Negative';
+        }
+    };
+
+    const userScoreLabel = getUserScoreLabel(userScore);
+    const userScoreColor = userScore >= 80 ? 'green' : userScore >= 50 ? 'orange' : 'red';
+
+
+    var respon = {
+      like_count:likes,
+      dislike_count:dislikes,
+      user_score : {
+      label:userScoreLabel,
+      color:userScoreColor,
+      },
+      engagement: {
+        likeColor:likeColor,
+        dislikeColor: dislikeColor,
+        percentage: {
+          likePercentage:likePercentage,
+          dislikePercentage:dislikePercentage
+        }
+      },
+    }
+
+    res.send(respon)
+    } catch {}
+  });
+  
 app.use("/sb/i/:v/:imagePath/:img", async function (req, res) {
   const { v, imagePath, img } = req.params;  
   const { sqp, xywh } = req.query;  

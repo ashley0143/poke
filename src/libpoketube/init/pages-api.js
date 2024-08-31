@@ -127,7 +127,7 @@ app.get("/avatars/:v", async function (req, res) {
     } catch {}
   });
   
-   app.get("/api/user-score-api", async (req, res) => {
+   app.get("/api/getEngagementData", async (req, res) => {
     const { fetch } = await import("undici");
     
     const id = req.query.v;
@@ -192,7 +192,8 @@ app.get("/avatars/:v", async function (req, res) {
     var respon = {
       like_count:likes,
       dislike_count:dislikes,
-      user_score : {
+      rating:engagement.rating,
+      userScore : {
       label:userScoreLabel,
       color:userScoreColor,
       },
@@ -200,10 +201,12 @@ app.get("/avatars/:v", async function (req, res) {
         likeColor:likeColor,
         dislikeColor: dislikeColor,
         percentage: {
-          likePercentage:likePercentage,
-          dislikePercentage:dislikePercentage
+          likePercentage:`${likePercentage}%`,
+          dislikePercentage:`${dislikePercentage}%`
         }
       },
+      ReturnYouTubeDislikesApiRawResponse:engagement,
+      
     }
 
     res.send(respon)
@@ -213,7 +216,7 @@ app.get("/avatars/:v", async function (req, res) {
 app.use("/sb/i/:v/:imagePath/:img", async function (req, res) {
   const { v, imagePath, img } = req.params;  
   const { sqp, xywh } = req.query;  
-        const sighMatch = req.url.match(/&amp;sigh=([^&#]+)/);  
+     const sighMatch = req.url.match(/&amp;sigh=([^&#]+)/);  
     const sigh = sighMatch ? sighMatch[1] : undefined;
  
  

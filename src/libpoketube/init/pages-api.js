@@ -127,93 +127,108 @@ app.get("/avatars/:v", async function (req, res) {
     } catch {}
   });
   
-   app.get("/api/getEngagementData", async (req, res) => {
-    const { fetch } = await import("undici");
-    
-    const id = req.query.v;
+ app.get("/api/getEngagementData", async (req, res) => {
+  const { fetch } = await import("undici");
 
-    try {
+  const id = req.query.v;
+
+  try {
+    if (id) {
       const apiUrl = `https://ryd-proxy.kavin.rocks/votes/${id}&hash=d0550b6e28c8f93533a569c314d5b4e2`;
 
-    const engagement = await fetch(apiUrl).then((res) => res.json());
+      const response = await fetch(apiUrl);
 
-    const likes = parseInt(engagement.likes) || 0;
-    const dislikes = parseInt(engagement.dislikes) || 0;
-    const total = likes + dislikes;
+      if (response.status === 400) {
+        const error = await response.json();
+        return res.status(400).send(error);
+      }
 
-    const likePercentage = total > 0 ? ((likes / total) * 100).toFixed(2) : 0;
-    const dislikePercentage = total > 0 ? ((dislikes / total) * 100).toFixed(2) : 0;
+      const engagement = await response.json();
 
-    const getLikePercentageColor = (percentage) => {
+      const likes = parseInt(engagement.likes) || 0;
+      const dislikes = parseInt(engagement.dislikes) || 0;
+      const total = likes + dislikes;
+
+      const likePercentage = total > 0 ? ((likes / total) * 100).toFixed(2) : 0;
+      const dislikePercentage = total > 0 ? ((dislikes / total) * 100).toFixed(2) : 0;
+
+      const getLikePercentageColor = (percentage) => {
         if (percentage >= 80) {
-            return 'green';
+          return "green";
         } else if (percentage >= 50) {
-            return 'orange';
+          return "orange";
         } else {
-            return 'red';
+          return "red";
         }
-    };
+      };
 
-    const getDislikePercentageColor = (percentage) => {
+      const getDislikePercentageColor = (percentage) => {
         if (percentage >= 50) {
-            return 'red';
+          return "red";
         } else if (percentage >= 20) {
-            return 'orange';
+          return "orange";
         } else {
-            return 'green';
+          return "green";
         }
-    };
+      };
 
-    const likeColor = getLikePercentageColor(likePercentage);
-    const dislikeColor = getDislikePercentageColor(dislikePercentage);
+      const likeColor = getLikePercentageColor(likePercentage);
+      const dislikeColor = getDislikePercentageColor(dislikePercentage);
 
-    const userScore = (parseFloat(likePercentage) - parseFloat(dislikePercentage) / 2).toFixed(2);
+      const userScore = (
+        parseFloat(likePercentage) -
+        parseFloat(dislikePercentage) / 2
+      ).toFixed(2);
 
-    const getUserScoreLabel = (score) => {
+      const getUserScoreLabel = (score) => {
         if (score >= 98) {
-            return 'Masterpiece Video';
+          return "Masterpiece Video";
         } else if (score >= 80) {
-            return 'Overwhelmingly Positive';
+          return "Overwhelmingly Positive";
         } else if (score >= 60) {
-            return 'Positive';
+          return "Positive";
         } else if (score >= 40) {
-            return 'Mixed';
+          return "Mixed";
         } else if (score >= 20) {
-            return 'Negative';
+          return "Negative";
         } else {
-            return 'Overwhelmingly Negative';
+          return "Overwhelmingly Negative";
         }
-    };
+      };
 
-    const userScoreLabel = getUserScoreLabel(userScore);
-    const userScoreColor = userScore >= 80 ? 'green' : userScore >= 50 ? 'orange' : 'red';
+      const userScoreLabel = getUserScoreLabel(userScore);
+      const userScoreColor =
+        userScore >= 80 ? "green" : userScore >= 50 ? "orange" : "red";
 
+      const respon = {
+        like_count: likes,
+        dislike_count: dislikes,
+        rating: engagement.rating,
+        userScore: {
+          label: userScoreLabel,
+          score: userScore,
+          color: userScoreColor,
+        },
+        engagement: {
+          likeColor: likeColor,
+          dislikeColor: dislikeColor,
+          percentage: {
+            likePercentage: `${likePercentage}%`,
+            dislikePercentage: `${dislikePercentage}%`,
+          },
+        },
+        ReturnYouTubeDislikesApiRawResponse: engagement,
+      };
 
-    var respon = {
-      like_count:likes,
-      dislike_count:dislikes,
-      rating:engagement.rating,
-      userScore : {
-      label:userScoreLabel,
-      score:userScore,
-      color:userScoreColor,
-      },
-      engagement: {
-        likeColor:likeColor,
-        dislikeColor: dislikeColor,
-        percentage: {
-          likePercentage:`${likePercentage}%`,
-          dislikePercentage:`${dislikePercentage}%`
-        }
-      },
-      ReturnYouTubeDislikesApiRawResponse:engagement,
-      
+      res.send(respon);
+    } else {
+      res.status(400).send("pls gib ID :3");
     }
+  } catch (error) {
+    res.status(500).send("whoops >~<");
+  }
+});
 
-    res.send(respon)
-    } catch {}
-  });
-  
 app.use("/sb/i/:v/:imagePath/:img", async function (req, res) {
   const { v, imagePath, img } = req.params;  
   const { sqp, xywh } = req.query;  

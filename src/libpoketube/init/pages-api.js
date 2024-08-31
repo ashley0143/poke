@@ -222,10 +222,10 @@ app.get("/avatars/:v", async function (req, res) {
 
       res.send(respon);
     } else {
-      res.status(400).send("pls gib ID :3");
+      res.status(400).json("pls gib ID :3");
     }
   } catch (error) {
-    res.status(500).send("whoops >~<");
+    res.status(500).json("whoops (error 500) >~<");
   }
 });
 

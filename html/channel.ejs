@@ -30,7 +30,7 @@
     <meta content=website property=og:type>
     <link rel="alternate" type="application/rss+xml" href="/feeds/videos.xml?channel_id=<%=ID%>">
     <meta content="<%=j.Channel?.Metadata.Name%> - Poke" property=og:title>
-    <meta content="<%- cinv.description %>" property=twitter:description>
+    <meta content="<%- cinv?.description %>" property=twitter:description>
     <meta name="darkreader-lock"> <!-- tells dark reader that the site has a dark theme and to turn itself off -->
     <meta content="<%=j.Channel?.Metadata.Avatars.Thumbnail?.$t%>" property=og:image>
         <meta name="viewport" content="width=device-width, initial-scale=1"> 

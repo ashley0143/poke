@@ -195,6 +195,7 @@ app.get("/avatars/:v", async function (req, res) {
       rating:engagement.rating,
       userScore : {
       label:userScoreLabel,
+      score:userScore,
       color:userScoreColor,
       },
       engagement: {

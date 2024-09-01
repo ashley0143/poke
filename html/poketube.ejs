@@ -1514,22 +1514,30 @@ WIP!                                                 </a>
 
          
      <%  if (Array.isArray(inv_vid?.keywords)) { %> 
-<div class="video-title" style="color:var(--text-color);font-family:var(--text-font-primary);font-weight:var(--text-header-weight);font-stretch: extra-expanded;margin-top: 10px;margin-bottom: 10px;">Tags</div>
-<div class="tags">
-  <% if (inv_vid?.keywords && inv_vid.keywords.length > 0) { %>
-    <% inv_vid.keywords.forEach(x => { %>
-      <div class="tag">
-        <a href="/hashtag/<%= x %>" style="color:var(--text-color)">
-          <%= x %>
-        </a>
-      </div>
-    <% }) %>
+
+                            <div class="video-title" style="color:var(--text-color);font-family:var(--text-font-primary);;font-weight:var(--text-header-weight);font-stretch: extra-expanded;margin-top: 10px;margin-bottom: 10px;">Tags</div>
+                      <div class="tags">
+          <% if (inv_vid?.keywords && inv_vid.keywords.length > 0) { %>
+ <% inv_vid?.keywords.forEach(x => { %>
+ <div class="tag">
+   <a href="/hashtag/<%=x %>" style="color:var(--text-color)">
+   <%=x %>
+     </a>
+   </div>
+         <% }) %>  
+  <% } %> 
+   <% if (inv_vid?.keywords && inv_vid.keywords.length > 0) { %>
+ <% inv_vid?.keywords.forEach(x => { %>
+ <div class="tag">
+   <a href="/hashtag/<%=x %>" style="color:var(--text-color)">
+   <%=x %>
+     </a>
+   </div>
+         <% }) %>  
   <% } else { %>
     <p>oh hey i think you lost your tags <a href="/search?query=where+to+find+a+tag">look how to find one</a></p> 
-  <% } %>
-</div>
-
-           </div>
+    <% } %>
+             </div>
    
    
              <% } %>  

@@ -374,7 +374,7 @@ video[counter].classList.add("shake");
     }
 
     body {
-      animation: barrelRoll 2s alternate; /* Adjust the duration as needed */
+      animation: barrelRoll 2s alternate; 
     }
   </style>
    
@@ -661,21 +661,7 @@ function extractQueryFromUpsellMessage(message) {
     <span style="font-size: 7em; margin-bottom: 3em; text-align: left !important; margin-right: 7em;white-space: -moz-pre-wrap !important;white-space: -pre-wrap;white-space: -o-pre-wrap;white-space: pre-wrap;word-wrap: break-word;white-space: -webkit-pre-wrap;word-break: break-all;white-space: normal;"><%= answer %></span>
 </div>
 <% } else if (showUpsell) { %>
-<style>
-.upsells-2024-aug-instant-awnsers {
-font-size: 22px;
-  margin-bottom: 3em;
-  text-decoration: none;
-  color: #fff;
-  margin-left: 11.4em;
-  font-family: "poketube flex";
-  font-weight: 1000;
-  font-stretch: extra-expanded;
-}
-</style>
-    <a href="/search?query=<%= encodeURIComponent(extractQueryFromUpsellMessage(randomUpsellMessage)) %>" class="upsells-2024-aug-instant-awnsers">
-            <%= randomUpsellMessage %>
-    </a>
+
 <% } %>
 
 <!-- self harm -->
@@ -1057,7 +1043,7 @@ font-weight: 1000;" href="/watch?v=<%= x.videoId %>" class="title max-lines-2"><
 
                   </center>
       
-             <%  if (!Array.isArray(invresults)) { %>
+             <%  if (!invresults) { %>
               <br>
               <center>
              <h1 style="font-family:'Ginto nord';font-weight:900;white-space:yes;">
@@ -1077,7 +1063,6 @@ font-weight: 1000;" href="/watch?v=<%= x.videoId %>" class="title max-lines-2"><
               <p>
                 This page will be refreshed after 10 seconds
               </p>
-       <meta http-equiv="refresh" content="10">
                                    <% } %>   
                                                       </center>
 

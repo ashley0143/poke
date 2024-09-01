@@ -969,7 +969,7 @@ font-weight: 1000;">dont.</h1></a>
   display: none;
 }
 </style>
-   <%  if (invresults.length < 1) { %>
+   <%  if (invresults?.length < 1) { %>
               <style>
               #filters {
                 display:none
@@ -990,7 +990,7 @@ font-weight: 1000;">dont.</h1></a>
 </div>
                                    <% } %>   
                                    
-<% invresults.forEach (x => { %>
+<% invresults?.forEach (x => { %>
   <div class="video-list">
     <div class="video">
       <a href="/watch?v=<%= x.videoId %>"
@@ -1032,7 +1032,7 @@ font-weight: 1000;" href="/watch?v=<%= x.videoId %>" class="title max-lines-2"><
                   
              
                   
-                   <%  if (invresults.length >= 1) { %>
+                   <%  if (invresults?.length >= 1) { %>
 
                                      <center>  
 

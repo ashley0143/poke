@@ -854,13 +854,7 @@ if (q.includes('-debug-news')) {
         <li class="tips-item"><strong>Look at the publication date:</strong> Make sure it's current and not out of context.</li>
         <li class="tips-item"><strong>Check for links and citations:</strong> Good articles usually back up their claims with evidence.</li>
     </ul>
-    <p class="warning-info">
-        For more info on why <strong><%= matchedSource %></strong> might not be reliable, check out a search for:
-    </p>
-    <ul class="warning-links">
-        <li><a class="warning-link" href="https://www.google.com/search?q=<%= fakeNewsSources[matchedSource].search %>"><%= fakeNewsSources[matchedSource].reason %></a></li>
-    </ul>
-
+     
     <p>wrong filter? <a href="https://codeberg.org/ashley/poke/issues/new?template=issue_template%2fsearch-filter.yml">Report :3</p>
 </div>
 
@@ -1043,7 +1037,7 @@ font-weight: 1000;" href="/watch?v=<%= x.videoId %>" class="title max-lines-2"><
 
                   </center>
       
-             <%  if (!invresults) { %>
+             <%  if (invresults.length < 1) { %>
               <br>
               <center>
              <h1 style="font-family:'Ginto nord';font-weight:900;white-space:yes;">

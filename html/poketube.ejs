@@ -12,7 +12,7 @@
 
   This Source Code Form is subject to the terms of the GNU General Public License:
 
-  Copyright (C) 2021-2024 POKETUBE (https://codeberg.org/Ashley/poketube)
+  Copyright (C) 2021-2024 PokeTube, a part of poke project (https://codeberg.org/Ashley/poketube)
     
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -57,7 +57,7 @@
 <link href="/css/yt-ukraine.svg?v=3" rel=icon>
 <link rel="manifest" href="/manifest.json">
 <link href=/css/snow.css rel=stylesheet> 
-<title> <%=inv_vid.title%> | Watch </title>  
+<title><%= inv_vid.title %> | <%= /^[A-Z]/.test(inv_vid.title) ? 'Watch' : 'watch' %></title>
 <style>     
   .comments-area {
   background: #f1f9ff;

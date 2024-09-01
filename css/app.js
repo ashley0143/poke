@@ -278,44 +278,55 @@ function fetchUrls(urls) {
         var loopOption = document.getElementById("loopOption");
         var speedOption = document.getElementById("speedOption");
  
+let contextMenuTimer;
+let doubleClickTimeout = 300; 
 
 video.addEventListener("contextmenu", function(event) {
-    // Check if the video is in fullscreen mode
-    if (!document.fullscreenElement && !document.webkitFullscreenElement && !document.mozFullScreenElement && !document.msFullscreenElement) {
-         event.preventDefault();
+    event.preventDefault();
 
-         popupMenu.style.display = "block";
-        popupMenu.style.left = event.pageX + "px";
-        popupMenu.style.top = event.pageY + "px";
+    clearTimeout(contextMenuTimer);
+
+    contextMenuTimer = setTimeout(function() {
+        if (!document.fullscreenElement && !document.webkitFullscreenElement && !document.mozFullScreenElement && !document.msFullscreenElement) {
+            popupMenu.style.display = "block";
+            popupMenu.style.left = event.pageX + "px";
+            popupMenu.style.top = event.pageY + "px";
+        }
+    }, doubleClickTimeout);
+});
+
+video.addEventListener("dblclick", function(event) {
+    if (event.button === 2) {  
+        clearTimeout(contextMenuTimer); 
+        popupMenu.style.display = "none"; 
+        return; 
     }
 });
 
+// Hide the popup menu when clicking outside of it
+window.addEventListener("click", function(event) {
+    if (event.target !== video) {
+        popupMenu.style.display = "none";
+    }
+});
 
-        // Hide the popup menu when clicking outside of it
-        window.addEventListener("click", function(event) {
-            if (event.target !== video) {
-                popupMenu.style.display = "none";
-            }
-        });
-
-    var loopedIndicator = document.getElementById("loopedIndicator");
-
-    loopedIndicator.style.display = "none"; // Initially hide the indicator
+var loopedIndicator = document.getElementById("loopedIndicator");
+loopedIndicator.style.display = "none"; // Initially hide the indicator
 
 loopOption.addEventListener("click", function() {
-  const quaindt = new URLSearchParams(window.location.search).get("quality") || "";
+    const quaindt = new URLSearchParams(window.location.search).get("quality") || "";
 
     var looped = video.loop;
     video.loop = !looped;
 
     if (quaindt !== "medium") {
-    var loopedaudioelement = document.getElementById("aud");
-    if (loopedaudioelement) {
-        loopedaudioelement.loop = !looped;
-    }
+        var loopedaudioelement = document.getElementById("aud");
+        if (loopedaudioelement) {
+            loopedaudioelement.loop = !looped;
+        }
     }
 
-     var displaySpecialText = Math.random() < 0.5;
+    var displaySpecialText = Math.random() < 0.5;
 
     if (displaySpecialText) {
         var specialText = looped ? "Unlooped >.<" : "Looped~ :3 >~<";
@@ -331,28 +342,28 @@ loopOption.addEventListener("click", function() {
     }, 2000);
 });
 
- speedOption.addEventListener("click", function() {
+speedOption.addEventListener("click", function() {
+    var currentSpeed = video.playbackRate;
+    var newSpeed = getNextSpeed(currentSpeed);
+    video.playbackRate = newSpeed;
+    document.getElementById("aud").playbackRate = newSpeed;
+    speedOption.innerHTML = "<i class='fa-light fa-gauge'></i> Speed: " + newSpeed.toFixed(2) + "x";
+});
 
-            var currentSpeed = video.playbackRate;
-            var newSpeed = getNextSpeed(currentSpeed);
-            video.playbackRate = newSpeed;
-            document.getElementById("aud").playbackRate = newSpeed;
-            speedOption.innerHTML = "<i class='fa-light fa-gauge'></i> Speed: " + newSpeed.toFixed(2) + "x";
-        });
+function getNextSpeed(currentSpeed) {
+    if (currentSpeed === 2) {
+        return 0.25;
+    } else if (currentSpeed === 0.25) {
+        return 0.5;
+    } else if (currentSpeed === 0.5) {
+        return 0.75;
+    } else if (currentSpeed === 0.75) {
+        return 1;
+    } else {
+        return 2;
+    }
+}
 
-        function getNextSpeed(currentSpeed) {
-            if (currentSpeed === 2) {
-                return 0.25;
-            } else if (currentSpeed === 0.25) {
-                return 0.5;
-            } else if (currentSpeed === 0.5) {
-                return 0.75;
-            } else if (currentSpeed === 0.75) {
-                return 1;
-            } else {
-                return 2;
-            }
-        }
 
 const GoogleTranslateEndpoint = "https://translate.google.com/_/TranslateWebserverUi/data/batchexecute?rpcids=MkEWBc&rt=c"
 // @license-end

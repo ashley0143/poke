@@ -1,7 +1,7 @@
  <!--
     This Source Code Form is subject to the terms of the GNU General Public License:
 
-    Copyright (C) 2021-2024 POKETUBE (https://codeberg.org/Ashley/poketube)
+    Copyright (C) 2021-2024 poke (https://codeberg.org/Ashley/poketube)
     
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -19,7 +19,7 @@
 <!DOCTYPE html>
 <head>
 <head>
-<title>Searching <%=q%> - PokeTube</title>
+<title>Searching <%=q%> - Poke</title>
 <link rel="manifest" href="/manifest.json">
   <link href=/css/yt-ukraine.svg?v=6 rel=icon>
  <link href=/css/app-cdn.min.css rel=stylesheet>
@@ -972,10 +972,10 @@ font-weight: 1000;">dont.</h1></a>
    <%  if (invresults.length < 1) { %>
               <br>
               <center>
-             <div>
-              <p>Nu results found :c </p>
-              <p>
-	u can try other alternatives such as: 
+             <div style="margin-top: -1em;padding: 1em;width: fit-content;background: #111;border-radius: 1em;">
+              <p style="font-family: poketube flex;font-weight: 1000;font-stretch: extra-expanded;font-size: 2em;">Nu results found :c </p>
+               <p>
+	u can try other alternatives such as
 	<b>
 		<a href="https://invidio.us/results?q=<%=q%>">Invidious</a>
 	</b> 
@@ -1029,7 +1029,11 @@ font-weight: 1000;" href="/watch?v=<%= x.videoId %>" class="title max-lines-2"><
                   
              
                   
-                  <center> <hr style="clear: both;display: block;border: none;border-bottom: 0.5px solid #2f2f2f;margin: 0 16em;/*! width: 4.5em; */height: 0;margin-top: 1em;">
+                   <%  if (invresults.length >= 1) { %>
+
+                                     <center>  
+
+ <hr style="clear: both;display: block;border: none;border-bottom: 0.5px solid #2f2f2f;margin: 0 16em;/*! width: 4.5em; */height: 0;margin-top: 1em;">
 
 <div style="border-top: 1px solid var(--border-color);width: 100%;display: flex;gap: 43em;padding: 0;margin: 0;">
           
@@ -1053,7 +1057,8 @@ font-weight: 1000;" href="/watch?v=<%= x.videoId %>" class="title max-lines-2"><
                     </div>
 
                   </center>
-      
+                                         <% } %>   
+
            
                                                       </center>
 

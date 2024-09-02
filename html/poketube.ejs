@@ -1526,14 +1526,7 @@ WIP!                                                 </a>
    </div>
          <% }) %>  
   <% } %> 
-   <% if (inv_vid?.keywords && inv_vid.keywords.length > 0) { %>
- <% inv_vid?.keywords.forEach(x => { %>
- <div class="tag">
-   <a href="/hashtag/<%=x %>" style="color:var(--text-color)">
-   <%=x %>
-     </a>
-   </div>
-         <% }) %>  
+  
   <% } else { %>
     <p style="margin:0">oh hey i think you lost your tags <a href="/search?query=where+to+find+a+tag">look how to find one</a></p> 
     <%  } %>

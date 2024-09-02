@@ -13,6 +13,13 @@ body:
         > * AND audio isn't working;
         >
         > **DO NOT open an issue.** Hi-res audio will not work without JavaScript enabled.
+  - type: markdown
+    attributes:
+      value: |
+        > [!CAUTION]
+        > Your bug might be a Video.js bug, the player Poke uses.
+        > 
+        > Look through [Video.js issues](https://github.com/videojs/video.js/issues?q=sort%3Aupdated-desc+is%3Aissue+is%3Aopen+label%3Abug) to see if the issue is actually with Poke, or if this is just a Video.js issue out of our control. DO NOT open an issue here if the latter applies.
   - type: textarea
     id: describe
     attributes:

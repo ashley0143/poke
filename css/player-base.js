@@ -12,7 +12,6 @@ document.addEventListener("DOMContentLoaded", () => {
     if (qua !== "medium") {
         const audio = document.getElementById('aud');
 
-        // Sync volume between audio and video
         const syncVolume = () => {
             audio.volume = video.volume();
         };
@@ -104,3 +103,13 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 });
+
+window.pokePlayer = {
+    ver:`16-vjs-${videojs.VERSION}`,
+    canHasAmbientMode:true,
+    video:new URLSearchParams(window.location.search).get('v'),
+    supported_itag_list:["136", "140", "298", "18"],
+    formats:["SD", "HD"],
+}
+
+var _yt_player= videojs;

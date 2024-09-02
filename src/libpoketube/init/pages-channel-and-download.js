@@ -270,7 +270,7 @@ module.exports = function (app, config, renderTemplate) {
       ]);
 
      
-var bannedchannels = ["UC1okSIA8UEY8OqvtjGHFvzA"];
+var bannedchannels = ["UC1okSIA8UEY8OqvtjGHFvzA", "UClsVg5LkK2COQRo1mVS4taA", "UCIr4vkCsn0tdTW2xZ1jRG1g"];
 var bypassQuery = "cG9rZXR1YmVjaGFubmVsYnlwYXNzbG9scGVvcGxldGhpbmt0aGlzaXNjZW5zb3JzaGlwLTQ1OTBh";
 
 var bypassExists = req.query.bypass === bypassQuery;

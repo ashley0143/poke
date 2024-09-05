@@ -56,10 +56,10 @@ Poke uses OpenH264, which is free software! No non-free components included :3 V
    - GitHub: `$ git clone https://github.com/ashley0143/poke.git`
     
     unoffical mirrors:
+   - code.lgbt: `$ git clone https://code.lgbt/mirror/poke.git` [sync every 10mins]
    - git.lgbt: `$ git clone https://git.lgbt/mirror/poke.git` [sync every 10mins]
    - nin0git :`$ git clone https://git.nin0.dev/mirrors/poke.git` [sync every 10mins]
    - SudoVanilla: `$ git clone https://ark.sudovanilla.org/Korbs/poke.git` [sync every update]
-   - code.lgbt: `$ git clone https://code.lgbt/mirror/poke.git` [sync every 10mins]
 
 3. **Install Dependencies**
    - `$ cd poke`
@@ -78,7 +78,7 @@ Poke uses OpenH264, which is free software! No non-free components included :3 V
 2. **Download Config**
    - `$ curl -O https://codeberg.org/Ashley/poke/raw/branch/main/docker-compose.yml`
 
-3. **Run PokeTube**
+3. **Run Poke**
    - `$ docker compose up -d`
 
    Congrats! PokeTube should now be running on `localhost:6003`! 🎉

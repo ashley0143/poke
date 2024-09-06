@@ -314,7 +314,7 @@ if (ID.includes(bannedchannels) && !bypassExists && !tabExists && !continuationE
         var { tj, shorts, stream, c, boutJson } = cache[ID].result;
       }
 
-      const subscribers = convert(cinv?.subCount);
+      const subscribers = convert(cinv?.subCount || 0);
       const about = boutJson?.Channel?.Contents?.ItemSection?.About;
       const description = about?.Description.toString().replace(
         /\n/g,

@@ -375,7 +375,9 @@ module.exports = function (app, config, renderTemplate) {
               lyrics: "",
             });
           } catch {
-            return res.send("404");
+              renderTemplate(res, req, "404.ejs", {
+              v,
+            });
           }
         } catch (error) {
           console.error(error);

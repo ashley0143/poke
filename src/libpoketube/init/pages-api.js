@@ -134,7 +134,7 @@ app.get("/avatars/:v", async function (req, res) {
 
   try {
     if (id) {
-      const apiUrl = `https://ryd.ggtyler.dev/votes/${id}&hash=d0550b6e28c8f93533a569c314d5b4e2`;
+      const apiUrl = `https://ryd-proxy.kavin.rocks/votes/${id}&hash=d0550b6e28c8f93533a569c314d5b4e2`;
 
       const response = await fetch(apiUrl);
 

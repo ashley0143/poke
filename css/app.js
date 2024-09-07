@@ -331,28 +331,38 @@ loopOption.addEventListener("click", function() {
     }, 2000);
 });
 
- speedOption.addEventListener("click", function() {
+speedOption.addEventListener("click", function() {
+    var currentSpeed = video.playbackRate;
+    var newSpeed = getNextSpeed(currentSpeed);
 
-            var currentSpeed = video.playbackRate;
-            var newSpeed = getNextSpeed(currentSpeed);
-            video.playbackRate = newSpeed;
-            document.getElementById("aud").playbackRate = newSpeed;
-            speedOption.innerHTML = "<i class='fa-light fa-gauge'></i> Speed: " + newSpeed.toFixed(2) + "x";
-        });
-
-        function getNextSpeed(currentSpeed) {
-            if (currentSpeed === 2) {
-                return 0.25;
-            } else if (currentSpeed === 0.25) {
-                return 0.5;
-            } else if (currentSpeed === 0.5) {
-                return 0.75;
-            } else if (currentSpeed === 0.75) {
-                return 1;
-            } else {
-                return 2;
-            }
+    if (navigator.hardwareConcurrency < 3) {
+        var userChoice = confirm(
+            "Your system has less than 3 CPU cores ;_; Increasing the video speed will CPU usage and affect performance - Do u want to continue?"
+        );
+        
+        if (!userChoice) {
+            return; 
         }
+    }
+
+    video.playbackRate = newSpeed;
+    document.getElementById("aud").playbackRate = newSpeed;
+    speedOption.innerHTML = "<i class='fa-light fa-gauge'></i> Speed: " + newSpeed.toFixed(2) + "x";
+});
+
+function getNextSpeed(currentSpeed) {
+    if (currentSpeed === 2) {
+        return 0.25;
+    } else if (currentSpeed === 0.25) {
+        return 0.5;
+    } else if (currentSpeed === 0.5) {
+        return 0.75;
+    } else if (currentSpeed === 0.75) {
+        return 1;
+    } else {
+        return 2;
+    }
+}
 
 const GoogleTranslateEndpoint = "https://translate.google.com/_/TranslateWebserverUi/data/batchexecute?rpcids=MkEWBc&rt=c"
 // @license-end

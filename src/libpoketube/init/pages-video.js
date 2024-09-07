@@ -229,8 +229,7 @@ module.exports = function (app, config, renderTemplate) {
           const inv_vid = data?.vid;
           const desc = data?.desc || "";
 
-          if(k.Error) res.send("error")
-
+ 
           let d = false;
           if (desc !== "[object Object]") {
             d = desc.toString().replace(/\n/g, " <br> ");

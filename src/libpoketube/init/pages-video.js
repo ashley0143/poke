@@ -228,8 +228,10 @@ module.exports = function (app, config, renderTemplate) {
           const inv_vid = data?.vid;
           const desc = data?.desc || "";
 
-          if(k.Error) res.send("error")
-
+      if (k?.Error) {
+        return res.status(404).send("404: Not Found");
+      }
+      
           let d = false;
           if (desc !== "[object Object]") {
             d = desc.toString().replace(/\n/g, " <br> ");

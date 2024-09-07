@@ -341,7 +341,7 @@ app.get("/watch", async (req, res) => {
         channel_uploads,
         secure,
         process,
-        isSchoolProxy,
+        isSchoolProxy:"",
         sha384,
         lightOrDark,
         isMobile: req.useragent.isMobile,

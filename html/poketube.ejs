@@ -2189,14 +2189,20 @@ const drawPause = () => {
 }
 
 const init = () => {
-  // fixes a issue where firefox/chromium fails to load the ambinet mode and doesnt load it. - please dont remove this line lmao
-  video.pause();video.play(); 
+  // Fixes an issue where Firefox/Chromium fails to load ambient mode and doesn't load it.
+  video.pause(); video.play(); 
+  // DO NOT REMOVE
 
-  // DO NOT REMOVE 
+  // Check if ambient mode should load
+  if (numWorkers < 2 || window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    return; 
+  }
+
   AMvideo.addEventListener("play", drawStart, false)
   AMvideo.addEventListener("pause", drawPause, false)
   AMvideo.addEventListener("ended", drawPause, false)
 }
+
 
 const cleanup = () => {
   AMvideo.removeEventListener("play", drawStart)
@@ -2261,7 +2267,7 @@ window.addEventListener("unload", cleanup)
 <!-- BUNDLE VERSION 02.09.2024 -->
 <!-- BUNDLE VERSION 02.09.2024 -->
 <!-- BUNDLE VERSION 02.09.2024 -->
-<!-- BUNDLE --><script src="/static/app.bundle.js?version=02.09.2024&bundledate=020924_0143ab93_videojs8156605" > </script><!-- BUNDLE -->
+<!-- BUNDLE --><script src="/static/app.bundle.js?version=02.09.2024&bundledate=020924_0143ab93_videojs81563605" > </script><!-- BUNDLE -->
 <!-- BUNDLE VERSION 02.09.2024 -->
 <!-- BUNDLE VERSION 02.09.2024 -->
 <!-- BUNDLE VERSION 02.09.2024 -->

@@ -374,9 +374,10 @@ module.exports = function (app, config, renderTemplate) {
               inv_vid,
               lyrics: "",
             });
-          } catch {
-              renderTemplate(res, req, "404.ejs", {
+          } catch (err) {
+              renderTemplate(res, req, "video-error.ejs", {
               v,
+              err_reason:err;
             });
           }
         } catch (error) {

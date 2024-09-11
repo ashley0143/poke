@@ -646,7 +646,11 @@ height: 100%;
 </style>
 <img class="banned-user" src="<%- media_proxy_url %>/proxy?url=https://yt3.googleusercontent.com/a/default-user=s100-c-k-c0x00ffffff-no-rj">
 <p class="ban-reason"> <%- cinv.error %> </p>
-               
+
+                         <% if (cinv.error == "Could not get channel info.") { %>  
+                                <meta http-equiv="refresh" content="1"> 
+                                                                                           <% } %>
+
                                                                                            <% } %>
 
         <section class=youtube-video>

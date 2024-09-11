@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Poke - <%=error%> !!!</title>
+        <meta content="#111111" name="theme-color" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no, viewport-fit=cover" />
+        <meta name="darkreader-lock" />
+        <link href="/css/yt-ukraine.svg?v=3" rel="icon" />
+        <link rel="manifest" href="/manifest.json" />
+        <style>
+            body {
+                margin: auto;
+                background: #111111;
+                color: white;
+                font-family: arial;
+                max-width: 600px;
+            }
+            body::before {
+                background: linear-gradient(0deg, rgba(115, 32, 67, 1), rgba(17, 17, 17, 1));
+                background-repeat: no-repeat;
+                content: "";
+                position: fixed;
+                bottom: 0px;
+                left: 0px;
+                width: 100%;
+                height: 100%;
+                z-index: -1;
+                pointer-events: none;
+                transition: 1s height;
+            }
+
+            h2 {
+                font-size: 42px;
+            }
+
+            p#abstract {
+                position: fixed;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                font-size: 500px;
+                margin: 0px;
+                font-weight: bold;
+                opacity: 0.005;
+                pointer-events: none;
+                transition: 1s transform;
+            }
+
+            @media only screen and (max-width: 790px) {
+                p#abstract {
+                    transform: translate(-50%, -50%) rotate(90deg) !important;
+                }
+            }
+
+            .error {
+                position: fixed;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                text-align: center;
+                cursor: default;
+                max-width: 600px;
+                width: 100%;
+            }
+
+            .error-footer {
+                position: fixed;
+                bottom: 24px;
+                width: 100%;
+                max-width: 600px;
+                text-align: center;
+            }
+            .error-footer a {
+                color: #ac8fa5;
+                text-decoration: none;
+                margin: 0px 12px;
+            }
+            .error-footer a:hover {
+                color: #d69cc8;
+            }
+        </style>
+    </head>
+    <body>
+        <p id="abstract"><%=error%></p>
+        <div class="error">
+            <h2><%=error%></h2>
+            <p><%=description%></p>
+        </div>
+        <div class="error-footer">
+            <a href="https://codeberg.org/ashley/poke/issues/new/choose">Create issue</a>
+            <a href="https://github.com/iv-org/invidious/issues">See Invidious issues</a>
+            <a href="">Refresh Page</a>
+        </div>
+    </body>
+</html>

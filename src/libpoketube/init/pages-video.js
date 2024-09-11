@@ -377,7 +377,7 @@ module.exports = function (app, config, renderTemplate) {
           } catch (err) {
               renderTemplate(res, req, "video-error.ejs", {
               v,
-              err_reason:err;
+              err_reason:err
             });
           }
         } catch (error) {

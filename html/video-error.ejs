@@ -1,4 +1,22 @@
-<%- include('./layouts/error.ejs', {
-  error: "Video Error",
-  description: `${err_reason}`
+<%
+  function isValidYouTubeID(v) {
+    return /^[a-zA-Z0-9_-]{11}$/.test(v);
+  }
+
+  function isLetterSpam(v) {
+    return /^(.)\1+$/.test(v);
+  }
+
+  let reason;
+  
+  if (!isValidYouTubeID(v) || isLetterSpam(v)) {
+    reason = "Video not found :c";
+  } else {
+    reason = "this helps protect our community.";
+  }
+%>
+
+<%- include('./layouts/error-video.ejs', {
+  error: "oops - loading failed :c",
+  description: `${reason}`
 }) %>

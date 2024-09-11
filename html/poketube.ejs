@@ -45,7 +45,7 @@
 <meta content="<%=k.Video.Channel.Name%>" name=twitter:author>
 <meta content="https://poketube.fun/watch?v=<%=inv_vid.videoId%>" name=twitter:url>
 <meta content="<%=inv_vid.title%> | Poke" name=twitter:title>
-<meta content="Watch this video from <%=k.Video.Channel.Name%> On Poke! 
+<meta content="Watch this <%- turntomins(inv_vid.lengthSeconds) || "LIVE"%> long video from <%=k.Video.Channel.Name%> On Poke! 
 👍 <%=convert(engagement.likes)%> | 👎 <%=convert(engagement.dislikes)%> | 📈 <%=convert(engagement.viewCount)%> Views 🗓️ <%= date.replace("Premiered", " ") %> 💬 <% if (!isNaN(inv.commentCount)) { %><%= inv.commentCount.toLocaleString() %>
 <% } else { %>
  0
@@ -57,7 +57,6 @@
 <meta name="darkreader-lock"> <!-- tells dark reader that the site has a dark theme and to turn itself off -->
 <link href="/css/yt-ukraine.svg?v=3" rel=icon>
 <link rel="manifest" href="/manifest.json">
-<link href=/css/snow.css rel=stylesheet> 
 <title><%= inv_vid.title %> | <%= /^[A-Z]/.test(inv_vid.title) ? 'Watch' : 'watch' %></title>
 <style>     
   .comments-area {

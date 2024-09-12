@@ -16,8 +16,4 @@ server {
         proxy_ssl_session_reuse off;
         proxy_set_header Host $http_host;
     }
-
-    location /manifest.json {
-        root /path/to/poketube/pwa/;
-    }
 }

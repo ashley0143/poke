@@ -28,36 +28,8 @@ through which recipients can access the Corresponding Source.
 @licend  The above is the entire license notice
 for the JavaScript code in this page.
 */
-
-// Dismiss when the end-user clicks else where
-document.body.addEventListener("click", function (evt) {
-    document.querySelector('.suggestions').style.opacity = '0'
-});
-
-// When the end-user starts typing, trigget the fetch function
-document.querySelector('input[type="search"]').addEventListener('input', function(e) {
-    if (e.target.value !== '') {
-        document.querySelector('.suggestions').style.opacity = '1'
-        GetResults()
-    }
-    else {null}
-});
-
-// Fetch
-function GetResults() {
-    var SearchValue = document.querySelector('input[type="search"]').value
-    var YouTubeSuggestions = document.querySelector('.suggestions')
-    fetch(window.location.origin + `/api/improving-poke/suggestions?q=${SearchValue}`)
-    .then(response => response.json())
-    .then(data => {YouTubeSuggestions.innerHTML = ListOfSuggestionsYT(data)})
-}
-
-// Create List
-function ListOfSuggestionsYT(data) {
-    const text = data.suggestions.map(data => `<a href="/search?query=${data}">${data}</a>`).join("\n")
-    return `${text}`
-}
-
+ 
+ 
 </script>
 
 <style>

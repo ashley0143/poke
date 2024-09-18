@@ -314,12 +314,7 @@ module.exports = function (app, config, renderTemplate) {
           if (req.useragent.source.includes("Nintendo WiiU")) 
             res.redirect("/lite?v=" + req.query.v);
 
-          if(!inv_vid.allowedRegions.includes("US") && !inv_vid.allowedRegions.includes("PL")) {
-            renderTemplate(res, req, "video-error.ejs", {
-              v,
-              err_reason:""
-            });
-          }
+        
 
           if (req.query.from === "short") var shortsui = true;
 

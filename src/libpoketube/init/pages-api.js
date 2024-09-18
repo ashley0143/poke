@@ -118,7 +118,7 @@ app.get("/avatars/:v", async function (req, res) {
     const l = req.query.h;
 
     try {
-      let url = `https://pol1.iv.ggtyler.dev/api/v1/captions/${id}?label=${l}`;
+      let url = `https://kp-proxy.poketube.fun/api/v1/captions/${id}?label=${l}`;
 
       let f = await fetch(url);
       const body = await f.text();

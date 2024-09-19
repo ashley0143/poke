@@ -359,6 +359,7 @@ module.exports = function (app, config, renderTemplate) {
               tj: data.channel,
               r,
               threads:threads_by_instagram,
+              hostname:req.hostname,
               qua: q,
               inv: inv_comments,
               convert,

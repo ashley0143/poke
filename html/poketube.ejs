@@ -834,7 +834,7 @@ if your domain matches this code you are probably in poketube.fun owo:3
 <p id="fetch-count">
                    </p>
  
-             <a class="settings-icon" href="https://social.poketube.fun/share?text=watch+<%= hostname %>/watch?v=<%=inv_vid.videoId%>+<%=inv_vid.title%>+on+poke!"><i  class="fa-brands fa-mastodon"></i>
+             <a class="settings-icon" href="https://social.poketube.fun/share?text=watch+<%=inv_vid.title%>+by+<%=k.Video.Channel.Name%>+on+Poke!+%0Ahttps://<%= hostname %>/watch?v=<%=inv_vid.videoId%>"><i  class="fa-brands fa-mastodon"></i>
 </a>
         
       <a class="settings-icon" href="/customize"><i  class="fa-light fa-brush"></i>
@@ -849,7 +849,7 @@ if your domain matches this code you are probably in poketube.fun owo:3
   			
     
 			<div class="dropdown__menu" style="right: -1em;">
-      	<a href="https://social.poketube.fun/share?text=watch+<%= hostname %>/watch?v=<%=inv_vid.videoId%>+<%=inv_vid.title%>+on+poke! " style="text-decoration: none;" class="dropdown__item">
+      	<a href="https://social.poketube.fun/share?text=watch+<%=inv_vid.title%>+by+<%=k.Video.Channel.Name%>+on+Poke!+%0Ahttps://<%= hostname %>/watch?v=<%=inv_vid.videoId%>" style="text-decoration: none;" class="dropdown__item">
                             <i  class="fa-brands fa-mastodon"></i>
                       Share On PokeSocial!
         </a>

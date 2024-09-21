@@ -174,7 +174,7 @@ module.exports = function (app, config, renderTemplate) {
         summary: "",
       });
     } catch (error) {
-      console.error(`Error while searching for '${query}':`, error);
+      console.log(`Error while searching for '${query}':`, error);
       res.redirect("/");
     }
   });

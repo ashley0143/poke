@@ -322,14 +322,7 @@ if (ID.includes(bannedchannels) && !bypassExists && !tabExists && !continuationE
       );
       const dnoreplace = about?.Description.toString();
 
-      if (continuation) {
-        const currentAuthorId = String(cinv.authorId).trim();
-        const firstVideoAuthorId = String(tj?.videos[0].authorId).trim();
 
-        if (currentAuthorId.localeCompare(firstVideoAuthorId) !== 0) {
-          res.status(400).send("Continuation does not match the channel :c");
-        }
-      }
 
       let ChannelFirstVideoObject = {
           subCountText: "0",

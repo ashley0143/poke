@@ -190,7 +190,7 @@ module.exports = function (app, config, renderTemplate) {
 
     const secure = [
       "poketube.fun",
-      "localhost" // Testing purposes
+      "localhost" //  
     ].includes(req.hostname);
     const verify = [
       "poketube.fun",
@@ -206,6 +206,7 @@ module.exports = function (app, config, renderTemplate) {
       return renderTemplate(res, req, "landing.ejs", {
         secure,
         embedtype:req.query.embedtype,
+        banner:config.banner,
         DisablePokeChan:req.query.DisablePokeChan,
         verify,
         isOldWindows,

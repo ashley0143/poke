@@ -2537,9 +2537,12 @@ a {
 <div class="video-info" style="position: sticky;z-index: 1;">
         <div style="linear-gradient(135deg,#f97794 10%,#623aa2 100%,#8e6f7e 100%);border-radius: 10px;margin-bottom: 10px;padding-bottom: 1em;padding-top: 0.3em;">
                <%  if (inv_vid?.title.includes("voice training")) { %> 
+                              <%  if (inv_vid?.title.includes("voice tutorial")) { %> 
+
     <a href="https://google.com">quick escape</a> <br>
                                                            <% } %>         
 
+                                                           <% } %>         
    <div class="video-title" style="padding: 10px;background: #0009;margin-bottom: 6px;margin-left: 6px;margin-right: 12px;border-radius: 15px;margin-top: 4px;font-family: poketube flex;font-weight: 800;font-stretch: ultra-expanded;"><%=inv_vid.title%> <br>
 <a id="language-button" href="#desc-container" style="color: pink;
 margin: 0;

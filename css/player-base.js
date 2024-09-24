@@ -3,7 +3,6 @@ document.addEventListener("DOMContentLoaded", () => {
         controls: true,
         autoplay: false,
         preload: 'auto',
-
     });
 
     const qua = new URLSearchParams(window.location.search).get("quality") || "";
@@ -64,6 +63,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 audio.play();
             } else {
                 video.pause();
+                audio.pause();
             }
         });
 
@@ -71,7 +71,17 @@ document.addEventListener("DOMContentLoaded", () => {
             audio.pause();
         });
 
+        video.on('waiting', () => {
+            video.pause();
+            audio.pause();
+        });
 
+        video.on('canplaythrough', () => {
+            if (!video.paused()) {
+                video.play();
+                audio.play();
+            }
+        });
 
         video.on('seeking', handleSeek);
 

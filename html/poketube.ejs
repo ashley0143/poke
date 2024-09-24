@@ -404,7 +404,7 @@ a[data-onclick="jump_to_time"] {
   <!-- video.js -->
   <link href="/css/videojs-v8.16.0.css?v=5949545" rel="stylesheet" />
   <script src="/static/vjs.min.js?v=45959"></script>
-  <script src="/static/player-base.js?v=1648"> </script>
+  <script src="/static/player-base.js?v=14648"> </script>
 
   <!-- ICONS -->
   <!-- Font awesome pro -->
@@ -1024,7 +1024,7 @@ Offical Discord Server! :3
 
 <% if (itag && !qua) { %>
   <audio id="aud" preload>
-    <source src="<%=u%>/latest_version?id=<%=inv_vid.videoId%>&itag=<%=itag%>&local=true" type="video/mp4" onerror="showErrorCard(event)"/>
+    <source src="<%=u%>/latest_version?id=<%=inv_vid.videoId%>&itag=<%=itag%>&local=true" type="video/mp4" onerror="alert(event)"/>
   </audio>
 <% } else { %>
   <audio id="aud"></audio>

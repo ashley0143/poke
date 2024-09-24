@@ -7,112 +7,112 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const qua = new URLSearchParams(window.location.search).get("quality") || "";
     localStorage.setItem(`progress-${new URLSearchParams(window.location.search).get('v')}`, 0);
-if (qua !== "medium") {
-    const audio = document.getElementById('aud');
 
-    const syncVolume = () => {
-        audio.volume = video.volume();
-    };
+    if (qua !== "medium") {
+        const audio = document.getElementById('aud');
 
-    const syncVolumeWithVideo = () => {
-        video.volume(audio.volume);
-    };
+        const syncVolume = () => {
+            audio.volume = video.volume();
+        };
 
-    const checkAudioBuffer = () => {
-        const buffered = audio.buffered;
-        const bufferedEnd = buffered.length > 0 ? buffered.end(buffered.length - 1) : 0;
-        return audio.currentTime <= bufferedEnd;
-    };
+        const syncVolumeWithVideo = () => {
+            video.volume(audio.volume);
+        };
 
-    const isVideoBuffered = () => {
-        // Check if video has enough buffered data
-        const buffered = video.buffered();
-        return buffered.length > 0 && buffered.end(buffered.length - 1) >= video.currentTime();
-    };
+        const checkAudioBuffer = () => {
+            const buffered = audio.buffered;
+            const bufferedEnd = buffered.length > 0 ? buffered.end(buffered.length - 1) : 0;
+            return audio.currentTime <= bufferedEnd;
+        };
 
-    const handleSeek = () => {
-        // Pause video and audio when seeking
-        video.pause();
-        audio.pause();
+        const isVideoBuffered = () => {
+            // Check if video has enough buffered data
+            const buffered = video.buffered();
+            return buffered.length > 0 && buffered.end(buffered.length - 1) >= video.currentTime();
+        };
 
-        // Sync audio with video during seeking
-        if (Math.abs(video.currentTime() - audio.currentTime) > 0.3) {
-            audio.currentTime = video.currentTime();
-        }
+        const handleSeek = () => {
+            // Pause video and audio when seeking
+            video.pause();
+            audio.pause();
 
-        // Wait for audio to be buffered sufficiently
-        if (!checkAudioBuffer()) {
-            audio.addEventListener('canplay', () => {
-                if (video.paused && isVideoBuffered()) {
-                    video.play();
-                    audio.play();
-                }
-            }, { once: true });
-        }
-    };
+            // Sync audio with video during seeking
+            if (Math.abs(video.currentTime() - audio.currentTime) > 0.3) {
+                audio.currentTime = video.currentTime();
+            }
 
-    const playBothIfBuffered = () => {
-        if (isVideoBuffered() && checkAudioBuffer()) {
+            // Wait for audio to be buffered sufficiently
+            if (!checkAudioBuffer()) {
+                audio.addEventListener('canplay', () => {
+                    if (video.paused && isVideoBuffered()) {
+                        video.play();
+                        audio.play();
+                    }
+                }, {
+                    once: true
+                });
+            }
+        };
+
+        video.on('play', () => {
+            if (Math.abs(video.currentTime() - audio.currentTime) > 0.3) {
+                audio.currentTime = video.currentTime();
+            }
+
+            if (isVideoBuffered()) {
+                audio.play();
+            } else {
+                video.pause();
+                audio.pause();
+            }
+        });
+
+        video.on('pause', () => {
+            audio.pause();
+        });
+
+        video.on('waiting', () => {
+            video.pause();
+            audio.pause();
+        });
+
+        video.on('canplaythrough', () => {
+            if (!video.paused()) {
+                video.play();
+                audio.play();
+            }
+        });
+
+        video.on('seeking', handleSeek);
+
+        video.on('seeked', () => {
+            if (isVideoBuffered()) {
+                video.play();
+            }
+            audio.play(); // Ensure audio is playing after seek
+        });
+
+        video.on('volumechange', syncVolume);
+        audio.addEventListener('volumechange', syncVolumeWithVideo);
+
+        // Listen for media control events
+        document.addEventListener('play', () => {
             video.play();
             audio.play();
-        }
-    };
+        });
 
-    video.on('play', () => {
-        if (Math.abs(video.currentTime() - audio.currentTime) > 0.3) {
-            audio.currentTime = video.currentTime();
-        }
-
-        if (isVideoBuffered()) {
-            audio.play();
-        } else {
+        document.addEventListener('pause', () => {
             video.pause();
             audio.pause();
-        }
-    });
-
-    video.on('pause', () => {
-        audio.pause();
-    });
-
-    video.on('waiting', () => {
-        video.pause();
-        audio.pause();
-
-        // Add event listener to resume when buffering is done
-        video.on('canplaythrough', playBothIfBuffered);
-    });
-
-    video.on('canplaythrough', playBothIfBuffered);
-
-    video.on('seeking', handleSeek);
-
-    video.on('seeked', () => {
-        playBothIfBuffered();
-    });
-
-    video.on('volumechange', syncVolume);
-    audio.addEventListener('volumechange', syncVolumeWithVideo);
-
-    // Listen for media control events
-    document.addEventListener('play', () => {
-        video.play();
-        audio.play();
-    });
-
-    document.addEventListener('pause', () => {
-        video.pause();
-        audio.pause();
-    });
-
-    document.addEventListener('fullscreenchange', () => {
-        if (!document.fullscreenElement) {
-            video.pause();
-            audio.pause();
-        }
-    });
-}
-
+        });
+        document.addEventListener('fullscreenchange', () => {
+            if (!document.fullscreenElement) {
+                video.pause();
+                audio.pause();
+            }
+        });
+    }
+});
 
 window.pokePlayer = {
     ver:`16-vjs-${videojs.VERSION}`,

@@ -667,14 +667,14 @@ function extractQueryFromUpsellMessage(message) {
 <!-- self harm -->
 <% 
 const searchStrings = [
-    "suicide", "self harm", "self-harm", "support", "murder", "how to murder", "kill myself", 
-    "end my life", "depressed", "depression", "lonely", 
-    "hurt myself", "selfharm", "selfharm", "dying", "want to die", 
-    "kill", "die", "family problems", "family issues", "abuse", 
-    "domestic violence", "abusive parents", "family conflict", 
-    "estranged", "disowned", "run away", "runaway", ".full stop punctuation."
+    "\\bsuicide\\b", "\\bself harm\\b", "\\bself-harm\\b", "\\bsupport\\b", "\\bmurder\\b", 
+    "\\bhow to murder\\b", "\\bkill myself\\b", "\\bend my life\\b", "\\bdepressed\\b", 
+    "\\bdepression\\b", "\\blonely\\b", "\\bhurt myself\\b", "\\bselfharm\\b", "\\bdying\\b", 
+    "\\bwant to die\\b", "\\bkill\\b", "\\bdie\\b", "\\bfamily problems\\b", "\\bfamily issues\\b", 
+    "\\babuse\\b", "\\bdomestic violence\\b", "\\babusive parents\\b", "\\bfamily conflict\\b", 
+    "\\bestranged\\b", "\\bdisowned\\b", "\\brun away\\b", "\\brunaway\\b", "\\b.full stop punctuation.\\b"
 ];
-if (searchStrings.some(str => q.toLowerCase().includes(str))) { 
+if (searchStrings.some(str => new RegExp(str, 'i').test(q))) { 
 %>
 
 <div class="container">          

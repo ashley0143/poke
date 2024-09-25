@@ -61,9 +61,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
             if (isVideoBuffered()) {
                 audio.play();
-            } else {
-                video.pause();
-                audio.pause();
             }
         });
 
@@ -77,22 +74,25 @@ document.addEventListener("DOMContentLoaded", () => {
             if (isVideoBuffered()) {
                 video.play();
             }
-            audio.play(); // Ensure audio is playing after seek
+            audio.play(); // audio is playing after seek
         });
 
         video.on('volumechange', syncVolume);
         audio.addEventListener('volumechange', syncVolumeWithVideo);
 
         // Listen for media control events
-        document.addEventListener('play', () => {
-            video.play();
-            audio.play();
+        document.addEventListener('play', (e) => {
+            if (e.target === video) {
+                audio.play();
+            }
         });
 
-        document.addEventListener('pause', () => {
-            video.pause();
-            audio.pause();
+        document.addEventListener('pause', (e) => {
+            if (e.target === video) {
+                audio.pause();
+            }
         });
+
         document.addEventListener('fullscreenchange', () => {
             if (!document.fullscreenElement) {
                 video.pause();
@@ -101,6 +101,7 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 });
+
 
 window.pokePlayer = {
     ver:`16-vjs-${videojs.VERSION}`,

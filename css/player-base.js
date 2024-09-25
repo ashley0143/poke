@@ -71,25 +71,6 @@ document.addEventListener("DOMContentLoaded", () => {
             audio.pause();
         });
 
-        video.on('waiting', () => {
-            video.pause();
-            audio.pause();
-        });
-
-        video.on('canplaythrough', () => {
-            if (!video.paused()) {
-                video.play();
-                audio.play();
-            }
-        });
-
-        video.on('canplay', () => {
-            if (!video.paused()) {
-                video.play();
-                audio.play();
-            }
-        });
-
         video.on('seeking', handleSeek);
 
         video.on('seeked', () => {

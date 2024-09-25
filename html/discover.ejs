@@ -1111,7 +1111,7 @@ margin-left: auto;
               
                 <a class="tab active">Popular</a>
                                     
-                <a href="/app" class="tab Activw">Trends</a>
+                <a href="/app" class="tab active">Trends</a>
     </div>
                                                       		 	               <% } %>   
                                 <% if (!tab) { %> 
@@ -1195,9 +1195,9 @@ Privacy
                                   
                                           
                       		 	                                         <% if (tab == "search") { %> 
- <a href="/app"><-- </a><br>
+ <a href="/app"><-- go back </a><br>
                                                                      <span>
- Search morbillion amount of videos from poketube !! 
+ Search videos on poke !! 
                                                                      </span>
                                <div class=search>
         
@@ -1232,7 +1232,7 @@ Privacy
           
               	<div class="video-grid" style="background-color: var(--app-background);margin-top: -4em;">
                      <span style="margin-bottom: -8em;margin-top: 8px;">
-                         <%=j.Search.estimatedResults.toLocaleString()%> Results (estimated)
+                         <%=j.Search.estimatedResults.toLocaleString()%> Results
  </span>
        <% j.Search.Results.Video.forEach(x => { %>
 

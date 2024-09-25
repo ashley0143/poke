@@ -3196,8 +3196,8 @@ More Epic options owo~
 
               </h5>
               <p class="comment" style="font-weight: bold;">
-                <%- x.contentHtml %>
-              <span style="  white-space: nowrap;">   <i class="fa-light fa-thumbs-up"></i>
+<%- x.contentHtml.replace(/\n/g, "<br>"); %>      
+        <span style="  white-space: nowrap;">   <i class="fa-light fa-thumbs-up"></i>
  <%- convert(x.likeCount) %> | <i class="fa-light fa-thumbs-down"></i> 
    
    <%   if(x.creatorHeart) { %> 

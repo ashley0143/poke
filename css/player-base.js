@@ -26,34 +26,35 @@ document.addEventListener("DOMContentLoaded", () => {
         };
 
         const isVideoBuffered = () => {
-            // Check if video has enough buffered data
             const buffered = video.buffered();
             return buffered.length > 0 && buffered.end(buffered.length - 1) >= video.currentTime();
         };
 
         const handleSeek = () => {
-            // Pause video and audio when seeking
             video.pause();
             audio.pause();
 
-            // Sync audio with video during seeking
             if (Math.abs(video.currentTime() - audio.currentTime) > 0.3) {
                 audio.currentTime = video.currentTime();
             }
 
-            // Wait for audio to be buffered sufficiently
             if (!checkAudioBuffer()) {
                 audio.addEventListener('canplay', () => {
                     if (video.paused && isVideoBuffered()) {
                         video.play();
                         audio.play();
                     }
-                }, {
-                    once: true
-                });
+                }, { once: true });
             }
         };
 
+        const handleBufferingComplete = () => {
+            if (Math.abs(video.currentTime() - audio.currentTime) > 0.3) {
+                audio.currentTime = video.currentTime();
+            }
+        };
+
+        // Sync when playback starts
         video.on('play', () => {
             if (Math.abs(video.currentTime() - audio.currentTime) > 0.3) {
                 audio.currentTime = video.currentTime();
@@ -74,11 +75,15 @@ document.addEventListener("DOMContentLoaded", () => {
             if (isVideoBuffered()) {
                 video.play();
             }
-            audio.play(); // audio is playing after seek
+            audio.play();
         });
 
         video.on('volumechange', syncVolume);
         audio.addEventListener('volumechange', syncVolumeWithVideo);
+
+        // Detect when video or audio finishes buffering
+        video.on('canplaythrough', handleBufferingComplete);
+        audio.addEventListener('canplaythrough', handleBufferingComplete);
 
         // Listen for media control events
         document.addEventListener('play', (e) => {

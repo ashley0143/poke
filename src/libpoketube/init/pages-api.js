@@ -98,15 +98,10 @@ app.get("/avatars/:v", async function (req, res) {
   app.get("/api/video/download", async function (req, res) {
     var v = req.query.v;
 
-    var format = "mp4";
-    var q = "22";
+    var q = "18";
     if (req.query.q) q = req.query.q;
 
-    if (req.query.f) {
-      var format = "mp3";
-    }
-
-    const url = `https://tube.kuylar.dev/proxy/media/${v}/${q}`;
+    const url = `https://eu-proxy.poketube.fun/latest_version?id=${v}&itag=${q}&local=true`;
 
     res.redirect(url);
   });
@@ -118,7 +113,7 @@ app.get("/avatars/:v", async function (req, res) {
     const l = req.query.h;
 
     try {
-      let url = `https://kr-proxy.poketube.fun/api/v1/captions/${id}?label=${l}`;
+      let url = `https://eu-proxy.poketube.fun/api/v1/captions/${id}?label=${l}`;
 
       let f = await fetch(url);
       const body = await f.text();

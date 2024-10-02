@@ -1,13 +1,20 @@
+// in the beginning.... god made mrrprpmnaynayaynaynayanyuwuuuwmauwnwanwaumawp :p
+var _yt_player= videojs;
+
 document.addEventListener("DOMContentLoaded", () => {
+
+	// video.js 8 init - source can be seen in https://poketube.fun/static/vjs.min.js or the vjs.min.js file 
     const video = videojs('video', {
         controls: true,
-        autoplay: false,
+        autoplay: false, 
         preload: 'auto',
     });
 
+    // todo : remove this code lol
     const qua = new URLSearchParams(window.location.search).get("quality") || "";
     localStorage.setItem(`progress-${new URLSearchParams(window.location.search).get('v')}`, 0);
 
+ // syncs stuff if used in HD mode
     if (qua !== "medium") {
         const audio = document.getElementById('aud');
 
@@ -19,6 +26,7 @@ document.addEventListener("DOMContentLoaded", () => {
             video.volume(audio.volume);
         };
 
+        // we check if a video is buffered 
         const checkAudioBuffer = () => {
             const buffered = audio.buffered;
             const bufferedEnd = buffered.length > 0 ? buffered.end(buffered.length - 1) : 0;
@@ -30,6 +38,7 @@ document.addEventListener("DOMContentLoaded", () => {
             return buffered.length > 0 && buffered.end(buffered.length - 1) >= video.currentTime();
         };
 
+        // pauses and syncs the video when the seek is finnished :3
         const handleSeek = () => {
             video.pause();
             audio.pause();
@@ -78,14 +87,15 @@ document.addEventListener("DOMContentLoaded", () => {
             audio.play();
         });
 
+        // le volume :3
         video.on('volumechange', syncVolume);
         audio.addEventListener('volumechange', syncVolumeWithVideo);
 
-        // Detect when video or audio finishes buffering
+        // Detects when video or audio finishes buffering
         video.on('canplaythrough', handleBufferingComplete);
         audio.addEventListener('canplaythrough', handleBufferingComplete);
 
-        // Listen for media control events
+        // media control events
         document.addEventListener('play', (e) => {
             if (e.target === video) {
                 audio.play();
@@ -97,7 +107,8 @@ document.addEventListener("DOMContentLoaded", () => {
                 audio.pause();
             }
         });
-
+       
+	   // pause if it becomes full screen :3
         document.addEventListener('fullscreenchange', () => {
             if (!document.fullscreenElement) {
                 video.pause();
@@ -107,16 +118,191 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 });
 
+// youtube client stuff 
+const YoutubeAPI = {
+  DEFAULT_API_KEY: "AIzaSyAO_FJ2SlqU8Q4STEHLGCilw_Y9_11qcW8",
+  ANDROID_API_KEY: "AIzaSyA8eiZmM1FaDVjRy-df2KTyQ_vz_yYM39w",
+
+  ANDROID_APP_VERSION: "19.14.42",
+  ANDROID_USER_AGENT: "com.google.android.youtube/19.14.42 (Linux; U; Android 12; US) gzip",
+  ANDROID_SDK_VERSION: 31,
+  ANDROID_VERSION: "12",
+
+  ANDROID_TS_APP_VERSION: "1.9",
+  ANDROID_TS_USER_AGENT: "com.google.android.youtube/1.9 (Linux; U; Android 12; US) gzip",
+
+  IOS_APP_VERSION: "19.16.3",
+  IOS_USER_AGENT: "com.google.ios.youtube/19.16.3 (iPhone14,5; U; CPU iOS 17_4 like Mac OS X;)",
+  IOS_VERSION: "17.4.0.21E219",
+
+  WINDOWS_VERSION: "10.0",
+
+  ClientType: {
+    web: "Web",
+    web_embedded_player: "WebEmbeddedPlayer",
+    web_mobile: "WebMobile",
+    web_screen_embed: "WebScreenEmbed",
+    android: "Android",
+    android_embedded_player: "AndroidEmbeddedPlayer",
+    android_screen_embed: "AndroidScreenEmbed",
+    android_test_suite: "AndroidTestSuite",
+    ios: "IOS",
+    ios_embedded: "IOSEmbedded",
+    ios_music: "IOSMusic",
+    tv_html5: "TvHtml5",
+    tv_html5_screen_embed: "TvHtml5ScreenEmbed"
+  },
+
+  HARDCODED_CLIENTS: {
+    web: {
+      name: "WEB",
+      name_proto: "1",
+      version: "2.20240304.00.00",
+      api_key: "AIzaSyAO_FJ2SlqU8Q4STEHLGCilw_Y9_11qcW8",
+      screen: "WATCH_FULL_SCREEN",
+      os_name: "Windows",
+      os_version: "10.0",
+      platform: "DESKTOP"
+    },
+    web_embedded_player: {
+      name: "WEB_EMBEDDED_PLAYER",
+      name_proto: "56",
+      version: "1.20240303.00.00",
+      api_key: "AIzaSyAO_FJ2SlqU8Q4STEHLGCilw_Y9_11qcW8",
+      screen: "EMBED",
+      os_name: "Windows",
+      os_version: "10.0",
+      platform: "DESKTOP"
+    },
+    web_mobile: {
+      name: "MWEB",
+      name_proto: "2",
+      version: "2.20240304.08.00",
+      api_key: "AIzaSyAO_FJ2SlqU8Q4STEHLGCilw_Y9_11qcW8",
+      os_name: "Android",
+      os_version: "12",
+      platform: "MOBILE"
+    },
+    web_screen_embed: {
+      name: "WEB",
+      name_proto: "1",
+      version: "2.20240304.00.00",
+      api_key: "AIzaSyAO_FJ2SlqU8Q4STEHLGCilw_Y9_11qcW8",
+      screen: "EMBED",
+      os_name: "Windows",
+      os_version: "10.0",
+      platform: "DESKTOP"
+    },
+    android: {
+      name: "ANDROID",
+      name_proto: "3",
+      version: "19.14.42",
+      api_key: "AIzaSyA8eiZmM1FaDVjRy-df2KTyQ_vz_yYM39w",
+      android_sdk_version: 31,
+      user_agent: "com.google.android.youtube/19.14.42 (Linux; U; Android 12; US) gzip",
+      os_name: "Android",
+      os_version: "12",
+      platform: "MOBILE"
+    },
+    android_embedded_player: {
+      name: "ANDROID_EMBEDDED_PLAYER",
+      name_proto: "55",
+      version: "19.14.42",
+      api_key: "AIzaSyCjc_pVEDi4qsv5MtC2dMXzpIaDoRFLsxw"
+    },
+    android_screen_embed: {
+      name: "ANDROID",
+      name_proto: "3",
+      version: "19.14.42",
+      api_key: "AIzaSyAO_FJ2SlqU8Q4STEHLGCilw_Y9_11qcW8",
+      screen: "EMBED",
+      android_sdk_version: 31,
+      user_agent: "com.google.android.youtube/19.14.42 (Linux; U; Android 12; US) gzip",
+      os_name: "Android",
+      os_version: "12",
+      platform: "MOBILE"
+    },
+    android_test_suite: {
+      name: "ANDROID_TESTSUITE",
+      name_proto: "30",
+      version: "1.9",
+      api_key: "AIzaSyA8eiZmM1FaDVjRy-df2KTyQ_vz_yYM39w",
+      android_sdk_version: 31,
+      user_agent: "com.google.android.youtube/1.9 (Linux; U; Android 12; US) gzip",
+      os_name: "Android",
+      os_version: "12",
+      platform: "MOBILE"
+    },
+    ios: {
+      name: "IOS",
+      name_proto: "5",
+      version: "19.16.3",
+      api_key: "AIzaSyB-63vPrdThhKuerbB2N_l7Kwwcxj6yUAc",
+      user_agent: "com.google.ios.youtube/19.16.3 (iPhone14,5; U; CPU iOS 17_4 like Mac OS X;)",
+      device_make: "Apple",
+      device_model: "iPhone14,5",
+      os_name: "iPhone",
+      os_version: "17.4.0.21E219",
+      platform: "MOBILE"
+    },
+    ios_embedded: {
+      name: "IOS_MESSAGES_EXTENSION",
+      name_proto: "66",
+      version: "19.16.3",
+      api_key: "AIzaSyAO_FJ2SlqU8Q4STEHLGCilw_Y9_11qcW8",
+      user_agent: "com.google.ios.youtube/19.16.3 (iPhone14,5; U; CPU iOS 17_4 like Mac OS X;)",
+      device_make: "Apple",
+      device_model: "iPhone14,5",
+      os_name: "iPhone",
+      os_version: "17.4.0.21E219",
+      platform: "MOBILE"
+    },
+    ios_music: {
+      name: "IOS_MUSIC",
+      name_proto: "26",
+      version: "6.42",
+      api_key: "AIzaSyBAETezhkwP0ZWA02RsqT1zu78Fpt0bC_s",
+      user_agent: "com.google.ios.youtubemusic/6.42 (iPhone14,5; U; CPU iOS 17_4 like Mac OS X;)",
+      device_make: "Apple",
+      device_model: "iPhone14,5",
+      os_name: "iPhone",
+      os_version: "17.4.0.21E219",
+      platform: "MOBILE"
+    },
+    tv_html5: {
+      name: "TVHTML5",
+      name_proto: "7",
+      version: "7.20240304.10.00",
+      api_key: "AIzaSyAO_FJ2SlqU8Q4STEHLGCilw_Y9_11qcW8"
+    },
+    tv_html5_screen_embed: {
+      name: "TVHTML5_SIMPLY_EMBEDDED_PLAYER",
+      name_proto: "85",
+      version: "2.0",
+      api_key: "AIzaSyAO_FJ2SlqU8Q4STEHLGCilw_Y9_11qcW8",
+      screen: "EMBED"
+    }
+  },
+
+  DEFAULT_CLIENT_CONFIG: {
+    client_type: "web",
+    region: "US"
+  }
+};
+
+// player base 
+const base_player = "https://www.youtube.com/s/player/a87a9450/player_ias.vflset/en_US/base.js"
 
 window.pokePlayer = {
-    ver:`16-vjs-${videojs.VERSION}`,
+    ver:`20-a87a9450-vjs-${videojs.VERSION}`,
     canHasAmbientMode:true,
     video:new URLSearchParams(window.location.search).get('v'),
     supported_itag_list:["136", "140", "298", "18"],
     formats:["SD", "HD"],
+	YoutubeAPI,
+
 }
 
-var _yt_player= videojs;
 
 
 /* video js plugins */

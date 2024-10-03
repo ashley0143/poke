@@ -57,20 +57,22 @@ const ChannelTabs = {
 };
 
 module.exports = function (app, config, renderTemplate) {
-  app.get("/download", async function (req, res) {
-    try {
-      var v = req.query.v;
+  app.get("/download", async (req, res) => {
+  try {
+    const v = req.query.v;
 
-      renderTemplate(res, req, "download.ejs", {
-        v,
-        color: await modules
-          .getColors(`https://i.ytimg.com/vi/${v}/maxresdefault.jpg`)
-          .then((colors) => colors[0].hex()),
-        isMobile: req.useragent.isMobile,
-      });
-    } catch {
-      res.redirect("/");
-    }
+    const thumbnailUrl = `https://i.ytimg.com/vi/${v}/maxresdefault.jpg`;
+    const colors = await modules.getColors(thumbnailUrl);
+    const color = colors[0].hex();
+
+    renderTemplate(res, req, "download.ejs", {
+      v,
+      color,
+      isMobile: req.useragent.isMobile,
+    });
+  } catch (error) {
+    res.redirect("/");
+   }
   });
 
   app.get("/old/watch", async function (req, res) {
@@ -105,8 +107,6 @@ module.exports = function (app, config, renderTemplate) {
     } else {
       IsOldWindows = false;
     }
-
-    const poketube_universe_value = "poketube_smart_search";
 
     if (query) {
       let redirectTo = null;
@@ -278,8 +278,8 @@ var tabExists = 'tab' in req.query;
 var continuationExists = 'continuation' in req.query;
 
 
-if (ID.includes(bannedchannels) && !bypassExists && !tabExists && !continuationExists) {
-  var cinv = {
+if (bannedchannels.some(channel => channel === ID) && !bypassExists && !tabExists && !continuationExists) {
+    var cinv = {
     error:`this channel may include disinformation. If you still wanna view content <a href="/channel?id=${ID}&bypass=${bypassQuery}">click here</a> to bypass this restriction.`
  }
 }

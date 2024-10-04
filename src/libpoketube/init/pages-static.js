@@ -153,6 +153,52 @@ module.exports = function (app, config, renderTemplate) {
     renderTemplate(res, req, "content-settings.ejs");
   });
 
+
+ function gregorianToIslamic(gDate) {
+  const jd = Math.floor((gDate - new Date(1970, 0, 1)) / (24 * 60 * 60 * 1000)) + 2440588;
+  const islamicYear = Math.floor((30 * (jd - 1948440) + 10646) / 10631);
+  return islamicYear;
+}
+
+ function gregorianToPersian(gDate) {
+  const persianEpoch = 226895; // Julian Day of Persian Epoch
+  const jd = Math.floor((gDate - new Date(1970, 0, 1)) / (24 * 60 * 60 * 1000)) + 2440588;
+  const persianYear = Math.floor((jd - persianEpoch) / 365.2421985) + 1;
+  return persianYear;
+}
+
+app.get('/calendar', (req, res) => {
+  const queryDate = req.query.date ? new Date(req.query.date) : new Date();
+  const weekOffset = parseInt(req.query.week) || 0;
+
+  const currentDate = new Date(queryDate);
+  currentDate.setDate(currentDate.getDate() + weekOffset * 7);
+
+  const year = currentDate.getFullYear();
+  const month = currentDate.getMonth();
+  const startOfWeek = new Date(currentDate);
+  startOfWeek.setDate(currentDate.getDate() - currentDate.getDay());
+
+  const days = Array.from({ length: 7 }, (_, i) => {
+    const day = new Date(startOfWeek);
+    day.setDate(startOfWeek.getDate() + i);
+    return day;
+  });
+
+   const islamicYear = gregorianToIslamic(currentDate);
+  const persianYear = gregorianToPersian(currentDate);
+
+  renderTemplate(res, req, "calendar.ejs", {
+    year,
+    islamicYear,
+    persianYear,
+    month,
+    currentDate,
+    days,
+  });
+});
+
+
   app.get("/offline", function (req, res) {
     res.sendFile("offline.html", { root: location_pwa });
   });

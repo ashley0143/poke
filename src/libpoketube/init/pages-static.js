@@ -168,32 +168,29 @@ module.exports = function (app, config, renderTemplate) {
 }
 
 app.get('/calendar', (req, res) => {
-  const queryDate = req.query.date ? new Date(req.query.date) : new Date();
-  const weekOffset = parseInt(req.query.week) || 0;
+   const queryDate = req.query.date ? new Date(req.query.date) : new Date();
+  
+  const year = queryDate.getFullYear();
+  const month = queryDate.getMonth();
 
-  const currentDate = new Date(queryDate);
-  currentDate.setDate(currentDate.getDate() + weekOffset * 7);
+  const firstDay = new Date(year, month, 1);
+  const firstDayWeekday = firstDay.getDay();
 
-  const year = currentDate.getFullYear();
-  const month = currentDate.getMonth();
-  const startOfWeek = new Date(currentDate);
-  startOfWeek.setDate(currentDate.getDate() - currentDate.getDay());
+  const totalDays = new Date(year, month + 1, 0).getDate();
 
-  const days = Array.from({ length: 7 }, (_, i) => {
-    const day = new Date(startOfWeek);
-    day.setDate(startOfWeek.getDate() + i);
-    return day;
+  const days = Array.from({ length: 42 }, (_, i) => {
+    const day = new Date(year, month, i - firstDayWeekday + 1);
+    return (day.getMonth() === month) ? day : null;
   });
 
-   const islamicYear = gregorianToIslamic(currentDate);
-  const persianYear = gregorianToPersian(currentDate);
+  const islamicYear = gregorianToIslamic(queryDate);
+  const persianYear = gregorianToPersian(queryDate);
 
   renderTemplate(res, req, "calendar.ejs", {
     year,
     islamicYear,
     persianYear,
-    month,
-    currentDate,
+    currentDate: queryDate,
     days,
   });
 });

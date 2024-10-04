@@ -192,6 +192,7 @@ app.get('/calendar', (req, res) => {
     persianYear,
     currentDate: queryDate,
     days,
+    month,
   });
 });
 

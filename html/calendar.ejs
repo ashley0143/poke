@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-   <link rel="manifest" href="/manifest.json">
-    <link href="css/yt-ukraine.svg" rel=icon>
+  <link rel="manifest" href="/manifest.json">
+  <link href="css/yt-ukraine.svg" rel="icon">
   <title>Poke! Calendar</title>
 </head>
 <body>
@@ -13,10 +13,6 @@ body {
   background-color: #121212;
   color: #ffffff;
   font-family: Arial, sans-serif;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
   margin: 0;
 }
 
@@ -28,9 +24,29 @@ body {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   width: 90%;
   max-width: 800px;
+  margin: auto;
 }
 
-h1, h2, h3 {
+.navbar {
+  background-color: #333333;
+  padding: 10px;
+  display: flex;
+  justify-content: space-between; /* Aligns items on both ends */
+  align-items: center; /* Centers items vertically */
+}
+
+.navbar h1 {
+  margin: 0;
+  color: #bb86fc;
+}
+
+.navbar .years {
+  color: #bb86fc; /* Year text color */
+  display: flex; /* Use flexbox for alignment */
+  gap: 20px; /* Space between year elements */
+}
+
+h2, h3 {
   color: #bb86fc;
 }
 
@@ -72,40 +88,48 @@ h1, h2, h3 {
 .button:hover {
   background-color: #9c62f3;
 }
-
 </style>
-  <div class="container">
+
+<div class="container">
+  <div class="navbar">
     <h1>Poke Calendar!! woaww</h1>
-    <h2>Gregorian Year: <%= year %></h2>
-    <h2>Islamic Year: <%= islamicYear %></h2>
-    <h2>Persian Year: <%= persianYear %></h2>
-    <h3>Week of <%= currentDate.toDateString() %></h3>
-
-    <table class="calendar-table">
-      <thead>
-        <tr>
-          <th>Sunday!!!!</th>
-          <th>Monday :c</th>
-          <th>Tuesday</th>
-          <th>Wednesday</th>
-          <th>Thursday</th>
-          <th>Friday</th>
-          <th>Saturday</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <% days.forEach(day => { %>
-            <td><%= day.getDate() %> - <%= day.toDateString() %></td>
-          <% }) %>
-        </tr>
-      </tbody>
-    </table>
-
-    <div class="nav-links">
-      <a href="/calendar?date=<%= currentDate.toISOString() %>&week=-1" class="button">Previous Week</a>
-      <a href="/calendar?date=<%= currentDate.toISOString() %>&week=1" class="button">Next Week</a>
+    <div class="years">
+      <h2>Gregorian Year: <%= year %></h2>
+      <h2>Islamic Year: <%= islamicYear %></h2>
+      <h2>Persian Year: <%= persianYear %></h2>
     </div>
   </div>
+  
+  <table class="calendar-table">
+    <thead>
+      <tr>
+        <th>Sunday</th>
+        <th>Monday</th>
+        <th>Tuesday</th>
+        <th>Wednesday</th>
+        <th>Thursday</th>
+        <th>Friday</th>
+        <th>Saturday</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% for (let i = 0; i < 6; i++) { %>
+        <tr>
+          <% for (let j = 0; j < 7; j++) { %>
+            <td>
+              <% const day = days[i * 7 + j]; %>
+              <%= day ? day.getDate() : '' %>
+            </td>
+          <% } %>
+        </tr>
+      <% } %>
+    </tbody>
+  </table>
+
+  <div class="nav-links">
+    <a href="/calendar?date=<%= currentDate.toISOString() %>&month=<%= month - 1 < 0 ? 11 : month - 1 %>&year=<%= month - 1 < 0 ? year - 1 : year %>" class="button">Previous Month</a>
+    <a href="/calendar?date=<%= currentDate.toISOString() %>&month=<%= (month + 1) % 12 %>&year=<%= month + 1 > 11 ? year + 1 : year %>" class="button">Next Month</a>
+  </div>
+</div>
 </body>
 </html>

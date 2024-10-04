@@ -168,20 +168,20 @@ module.exports = function (app, config, renderTemplate) {
 }
 
 app.get('/calendar', (req, res) => {
+  // Get the date from query or default to today
   const queryDate = req.query.date ? new Date(req.query.date) : new Date();
 
+  // Extract the year and month from the date
   const year = queryDate.getFullYear();
   const month = queryDate.getMonth(); // 0 (January) to 11 (December)
 
-  const monthOffset = parseInt(req.query.month) || 0; // Get month offset from query
-  const newDate = new Date(year, month + monthOffset, 1); // Adjust the month
+  const monthOffset = parseInt(req.query.month) || 0; 
+  const newDate = new Date(year, month + monthOffset, 1); 
   const newYear = newDate.getFullYear();
   const newMonth = newDate.getMonth();
 
   const firstDay = new Date(newYear, newMonth, 1);
   const firstDayWeekday = firstDay.getDay(); // Day of the week (0-6)
-
-  const totalDays = new Date(newYear, newMonth + 1, 0).getDate();
 
   const days = Array.from({ length: 42 }, (_, i) => {
     const day = new Date(newYear, newMonth, i - firstDayWeekday + 1);
@@ -192,7 +192,7 @@ app.get('/calendar', (req, res) => {
   const persianYear = gregorianToPersian(newDate);
 
   renderTemplate(res, req, "calendar.ejs", {
-    year: newYear,
+     year: newYear,
     islamicYear,
     persianYear,
     currentDate: newDate,

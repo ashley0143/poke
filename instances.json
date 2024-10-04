@@ -2,7 +2,7 @@
   [
     "poketube.fun",
     {
-      "uri": "https://poketube.fun",
+      "url": "https://poketube.fun",
       "CLOUDFLARE": false,
       "piwik": true,
       "proxy": true,
@@ -11,7 +11,7 @@
       "region": "🇩🇪",
       "software": {
         "name": "poke",
-        "version": "lastest",
+        "version": "latest",
         "branch": "dev"
       }
     }
@@ -19,13 +19,13 @@
   [
     "pt.sudovanilla.org",
     {
-      "uri": "https://pt.sudovanilla.org",
+      "url": "https://pt.sudovanilla.org",
       "CLOUDFLARE": false,
       "piwik": false,
       "region": "🇺🇸",
       "software": {
         "name": "poke",
-        "version": "lastest",
+        "version": "latest",
         "branch": "dev"
       }
     }
@@ -33,7 +33,7 @@
   [
     "poke.ashley0143.xyz",
     {
-      "uri": "https://poke.ashley0143.xyz",
+      "url": "https://poke.ashley0143.xyz",
       "CLOUDFLARE": true,
       "piwik": false,
       "region": "🇺🇸",
@@ -47,7 +47,7 @@
   [
     "poke.alphexo.dev",
     {
-      "uri": "https://poke.alphexo.dev",
+      "url": "https://poke.alphexo.dev",
       "CLOUDFLARE": true,
       "piwik": false,
       "region": "🇬🇧",
@@ -59,9 +59,9 @@
     }
   ],
   [
-    "poke.ggtyler.dev",
+    "nyc1.poke.ggtyler.dev",
     {
-      "uri": "https://poke.ggtyler.dev",
+      "url": "https://nyc1.poke.ggtyler.dev",
       "CLOUDFLARE": false,
       "piwik": false,
       "proxy": false,
@@ -76,50 +76,37 @@
   [
     "cal1.poke.ggtyler.dev",
     {
-      "uri": "https://cal1.poke.ggtyler.dev",
+      "url": "https://cal1.poke.ggtyler.dev",
       "CLOUDFLARE": false,
       "piwik": false,
       "proxy": false,
       "region": "🇺🇸",
       "software": {
-        "name": "poketube",
+        "name": "poke",
         "version": "latest",
         "branch": "dev"
       }
     }
   ],
   [
-    "poke.uk1.littkai.co.uk",
+    "pol1.poke.ggtyler.dev",
     {
-      "uri": "https://poke.uk1.littkai.co.uk",
+      "url": "https://pol1.ggtyler.dev",
       "CLOUDFLARE": false,
       "piwik": false,
       "proxy": false,
-      "region": "🇬🇧",
+      "region": "🇵🇱",
       "software": {
         "name": "poke",
         "version": "latest",
         "branch": "dev"
       }
     }
-  ],  [
-    "poke.uk2.littlekai.co.uk",
-    {
-      "uri": "https://poke.uk2.littlekai.co.uk",
-      "CLOUDFLARE": false,
-      "piwik": false,
-      "proxy": false,
-      "region": "🇬🇧",
-      "software": {
-        "name": "poke",
-        "version": "latest",
-        "branch": "dev"
-      }
-    }
-  ],  [
+  ],
+  [
     "poke.blahai.gay",
     {
-      "uri": "https://poke.blahai.gay/",
+      "url": "https://poke.blahai.gay/",
       "CLOUDFLARE": true,
       "piwik": false,
       "proxy": false,

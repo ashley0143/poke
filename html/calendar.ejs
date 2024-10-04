@@ -125,10 +125,11 @@
       </tbody>
     </table>
 
-    <div class="nav-links">
-      <a href="/calendar?date=<%= currentDate.toISOString() %>&month=<%= month - 1 < 0 ? 11 : month - 1 %>&year=<%= month - 1 < 0 ? year - 1 : year %>" class="button">Previous Month</a>
-      <a href="/calendar?date=<%= currentDate.toISOString() %>&month=<%= (month + 1) % 12 %>&year=<%= month + 1 > 11 ? year + 1 : year %>" class="button">Next Month</a>
-    </div>
+  <div class="nav-links">
+  <a href="/calendar?date=<%= new Date(currentDate.getFullYear(), month - 1, 1).toISOString() %>" class="button">Previous Month</a>
+  <a href="/calendar?date=<%= new Date(currentDate.getFullYear(), month + 1, 1).toISOString() %>" class="button">Next Month</a>
+</div>
+
   </div>
 </body>
 </html>

@@ -6,7 +6,6 @@
   <link rel="manifest" href="/manifest.json">
   <link href="css/yt-ukraine.svg" rel="icon">
   <title>Poke! Calendar</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta content="PokeCalendar" property="og:title">
   <meta content="Worlds first no js web calendar :3" property="twitter:description">
   <meta content="https://cdn.glitch.global/d68d17bb-f2c0-4bc3-993f-50902734f652/aa70111e-5bcd-4379-8b23-332a33012b78.image.png?v=1701898829884" property="og:image" /> 
@@ -26,8 +25,8 @@
       background-color: #333333;
       padding: 10px;
       display: flex;
-      justify-content: space-between; /* Aligns items on both ends */
-      align-items: center; /* Centers items vertically */
+      flex-direction: column; /* Stack items vertically on small screens */
+      align-items: center; /* Center items */
     }
 
     .navbar h1 {
@@ -39,6 +38,8 @@
       color: #bb86fc; /* Year text color */
       display: flex; /* Use flexbox for alignment */
       gap: 20px; /* Space between year elements */
+      flex-wrap: wrap; /* Allow wrapping on smaller screens */
+      justify-content: center; /* Center items */
     }
 
     .container {
@@ -72,6 +73,7 @@
       padding: 15px;
       text-align: center;
       border: 1px solid #333333;
+      font-size: 0.9em; /* Smaller font size for better fit */
     }
 
     .calendar-table th {
@@ -99,6 +101,30 @@
 
     .button:hover {
       background-color: #9c62f3;
+    }
+
+    /* Responsive styles */
+    @media (max-width: 768px) {
+      .navbar {
+        flex-direction: column; /* Stack navbar items vertically */
+        padding: 10px;
+      }
+
+      .calendar-table th, .calendar-table td {
+        padding: 10px; /* Reduced padding for smaller screens */
+        font-size: 0.8em; /* Smaller font size */
+      }
+
+      .month-title {
+        font-size: 1.2em; /* Smaller month title */
+      }
+
+      .button {
+        padding: 8px 15px; /* Smaller button size */
+        margin: 5px 0; /* Vertical spacing */
+        display: block; /* Stack buttons vertically */
+        width: 100%; /* Full width */
+      }
     }
   </style>
 </head>

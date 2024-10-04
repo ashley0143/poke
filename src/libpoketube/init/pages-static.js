@@ -198,6 +198,7 @@ app.get('/calendar', (req, res) => {
     currentDate: newDate,
     days,
     month: newMonth,
+    queryDate,
   });
 });
 

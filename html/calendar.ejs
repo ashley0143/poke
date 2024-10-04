@@ -15,117 +15,127 @@
 
   <style>
     body {
-      background-color: #121212;
-      color: #ffffff;
-      font-family: Arial, sans-serif;
-      margin: 0;
-    }
+  background-color: #121212;
+  color: #ffffff;
+  font-family: Arial, sans-serif;
+  margin: 0;
+}
 
-    .navbar {
-      background-color: #333333;
-      padding: 10px;
-      display: flex;
-      flex-direction: column; /* Stack items vertically on small screens */
-      align-items: center; /* Center items */
-    }
+.navbar {
+  background-color: #333333;
+  padding: 10px;
+  display: flex;
+  align-items: center; /* Center items vertically */
+  justify-content: space-between; /* Space items evenly */
+}
 
-    .navbar h1 {
-      margin: 0;
-      color: #bb86fc;
-    }
+.navbar h1 {
+  margin: 0;
+  color: #bb86fc;
+}
 
-    .navbar .years {
-      color: #bb86fc; /* Year text color */
-      display: flex; /* Use flexbox for alignment */
-      gap: 20px; /* Space between year elements */
-      flex-wrap: wrap; /* Allow wrapping on smaller screens */
-      justify-content: center; /* Center items */
-    }
+.navbar .years {
+  color: #bb86fc; /* Year text color */
+  display: flex; /* Use flexbox for alignment */
+  gap: 20px; /* Space between year elements */
+  flex-wrap: wrap; /* Allow wrapping on smaller screens */
+  justify-content: center; /* Center items on smaller screens */
+}
 
-    .container {
-      text-align: center;
-      padding: 20px;
-      background-color: #1e1e1e;
-      border-radius: 10px;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-      width: 90%;
-      max-width: 800px;
-      margin: auto;
-    }
+.container {
+  text-align: center;
+  padding: 20px;
+  background-color: #1e1e1e;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  width: 90%;
+  max-width: 800px;
+  margin: auto;
+}
 
-    h2, h3 {
-      color: #bb86fc;
-    }
+h2, h3 {
+  color: #bb86fc;
+  margin: 10px 0; /* Margin between h2 elements */
+}
 
-    .month-title {
-      font-size: 1.5em; /* Adjust the size as needed */
-      margin: 20px 0; /* Spacing above and below */
-      color: #bb86fc; /* Month title color */
-    }
+.month-title {
+  font-size: 1.5em; /* Adjust the size as needed */
+  margin: 20px 0; /* Spacing above and below */
+  color: #bb86fc; /* Month title color */
+}
 
-    .calendar-table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 20px;
-    }
+.calendar-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
 
-    .calendar-table th, .calendar-table td {
-      padding: 15px;
-      text-align: center;
-      border: 1px solid #333333;
-      font-size: 0.9em; /* Smaller font size for better fit */
-    }
+.calendar-table th, .calendar-table td {
+  padding: 15px;
+  text-align: center;
+  border: 1px solid #333333;
+  font-size: 0.9em; /* Smaller font size for better fit */
+}
 
-    .calendar-table th {
-      background-color: #333333;
-    }
+.calendar-table th {
+  background-color: #333333;
+}
 
-    .calendar-table td {
-      background-color: #2c2c2c;
-      color: #ffffff;
-    }
+.calendar-table td {
+  background-color: #2c2c2c;
+  color: #ffffff;
+}
 
-    .nav-links {
-      margin-top: 20px;
-    }
+.nav-links {
+  margin-top: 20px;
+}
 
-    .button {
-      text-decoration: none;
-      color: #ffffff;
-      background-color: #bb86fc;
-      padding: 10px 20px;
-      border-radius: 5px;
-      margin: 0 10px;
-      transition: background-color 0.3s;
-    }
+.button {
+  text-decoration: none;
+  color: #ffffff;
+  background-color: #bb86fc;
+  padding: 10px 20px;
+  border-radius: 5px;
+  margin: 0 10px;
+  transition: background-color 0.3s;
+}
 
-    .button:hover {
-      background-color: #9c62f3;
-    }
+.button:hover {
+  background-color: #9c62f3;
+}
 
-    /* Responsive styles */
-    @media (max-width: 768px) {
-      .navbar {
-        flex-direction: column; /* Stack navbar items vertically */
-        padding: 10px;
-      }
+/* Responsive styles */
+@media (max-width: 768px) {
+  .navbar {
+    flex-direction: column; /* Stack navbar items vertically on small screens */
+    align-items: center; /* Center items horizontally */
+  }
 
-      .calendar-table th, .calendar-table td {
-        padding: 10px; /* Reduced padding for smaller screens */
-        font-size: 0.8em; /* Smaller font size */
-      }
+  .container {
+    width: 100%; /* Full width on small screens */
+    height: 100vh; /* Full height of the viewport */
+    border-radius: 0; /* Remove border-radius for full-screen effect */
+    box-shadow: none; /* Remove shadow for a flatter design */
+    padding: 10px; /* Adjust padding for mobile */
+  }
 
-      .month-title {
-        font-size: 1.2em; /* Smaller month title */
-      }
+  .calendar-table th, .calendar-table td {
+    padding: 10px; /* Reduced padding for smaller screens */
+    font-size: 0.8em; /* Smaller font size */
+  }
 
-      .button {
-        padding: 8px 15px; /* Smaller button size */
-        margin: 5px 0; /* Vertical spacing */
-        display: block; /* Stack buttons vertically */
-        width: 100%; /* Full width */
-      }
-    }
+  .month-title {
+    font-size: 1.2em; /* Smaller month title */
+  }
+
+  .button {
+    padding: 8px 15px; /* Smaller button size */
+    margin: 5px 0; /* Vertical spacing */
+    display: block; /* Stack buttons vertically */
+    width: 100%; /* Full width */
+  }
+}
+
   </style>
 </head>
 <body>

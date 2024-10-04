@@ -6,91 +6,89 @@
   <link rel="manifest" href="/manifest.json">
   <link href="css/yt-ukraine.svg" rel="icon">
   <title>Poke! Calendar</title>
+  <style>
+    body {
+      background-color: #121212;
+      color: #ffffff;
+      font-family: Arial, sans-serif;
+      margin: 0;
+    }
+
+    .navbar {
+      background-color: #333333;
+      padding: 10px;
+      display: flex;
+      justify-content: space-between; /* Aligns items on both ends */
+      align-items: center; /* Centers items vertically */
+    }
+
+    .navbar h1 {
+      margin: 0;
+      color: #bb86fc;
+    }
+
+    .navbar .years {
+      color: #bb86fc; /* Year text color */
+      display: flex; /* Use flexbox for alignment */
+      gap: 20px; /* Space between year elements */
+    }
+
+    .container {
+      text-align: center;
+      padding: 20px;
+      background-color: #1e1e1e;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      width: 90%;
+      max-width: 800px;
+      margin: auto;
+    }
+
+    h2, h3 {
+      color: #bb86fc;
+    }
+
+    .calendar-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+
+    .calendar-table th, .calendar-table td {
+      padding: 15px;
+      text-align: center;
+      border: 1px solid #333333;
+    }
+
+    .calendar-table th {
+      background-color: #333333;
+    }
+
+    .calendar-table td {
+      background-color: #2c2c2c;
+      color: #ffffff;
+    }
+
+    .nav-links {
+      margin-top: 20px;
+    }
+
+    .button {
+      text-decoration: none;
+      color: #ffffff;
+      background-color: #bb86fc;
+      padding: 10px 20px;
+      border-radius: 5px;
+      margin: 0 10px;
+      transition: background-color 0.3s;
+    }
+
+    .button:hover {
+      background-color: #9c62f3;
+    }
+  </style>
 </head>
 <body>
-<style>
-body {
-  background-color: #121212;
-  color: #ffffff;
-  font-family: Arial, sans-serif;
-  margin: 0;
-}
-
-.container {
-  text-align: center;
-  padding: 20px;
-  background-color: #1e1e1e;
-  border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  width: 90%;
-  max-width: 800px;
-  margin: auto;
-}
-
-.navbar {
-  background-color: #333333;
-  padding: 10px;
-  display: flex;
-  justify-content: space-between; /* Aligns items on both ends */
-  align-items: center; /* Centers items vertically */
-}
-
-.navbar h1 {
-  margin: 0;
-  color: #bb86fc;
-}
-
-.navbar .years {
-  color: #bb86fc; /* Year text color */
-  display: flex; /* Use flexbox for alignment */
-  gap: 20px; /* Space between year elements */
-}
-
-h2, h3 {
-  color: #bb86fc;
-}
-
-.calendar-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-top: 20px;
-}
-
-.calendar-table th, .calendar-table td {
-  padding: 15px;
-  text-align: center;
-  border: 1px solid #333333;
-}
-
-.calendar-table th {
-  background-color: #333333;
-}
-
-.calendar-table td {
-  background-color: #2c2c2c;
-  color: #ffffff;
-}
-
-.nav-links {
-  margin-top: 20px;
-}
-
-.button {
-  text-decoration: none;
-  color: #ffffff;
-  background-color: #bb86fc;
-  padding: 10px 20px;
-  border-radius: 5px;
-  margin: 0 10px;
-  transition: background-color 0.3s;
-}
-
-.button:hover {
-  background-color: #9c62f3;
-}
-</style>
-
-<div class="container">
   <div class="navbar">
     <h1>Poke Calendar!! woaww</h1>
     <div class="years">
@@ -100,36 +98,37 @@ h2, h3 {
     </div>
   </div>
   
-  <table class="calendar-table">
-    <thead>
-      <tr>
-        <th>Sunday</th>
-        <th>Monday</th>
-        <th>Tuesday</th>
-        <th>Wednesday</th>
-        <th>Thursday</th>
-        <th>Friday</th>
-        <th>Saturday</th>
-      </tr>
-    </thead>
-    <tbody>
-      <% for (let i = 0; i < 6; i++) { %>
+  <div class="container">
+    <table class="calendar-table">
+      <thead>
         <tr>
-          <% for (let j = 0; j < 7; j++) { %>
-            <td>
-              <% const day = days[i * 7 + j]; %>
-              <%= day ? day.getDate() : '' %>
-            </td>
-          <% } %>
+          <th>Sunday</th>
+          <th>Monday</th>
+          <th>Tuesday</th>
+          <th>Wednesday</th>
+          <th>Thursday</th>
+          <th>Friday</th>
+          <th>Saturday</th>
         </tr>
-      <% } %>
-    </tbody>
-  </table>
+      </thead>
+      <tbody>
+        <% for (let i = 0; i < 6; i++) { %>
+          <tr>
+            <% for (let j = 0; j < 7; j++) { %>
+              <td>
+                <% const day = days[i * 7 + j]; %>
+                <%= day ? day.getDate() : '' %>
+              </td>
+            <% } %>
+          </tr>
+        <% } %>
+      </tbody>
+    </table>
 
-  <div class="nav-links">
-    <a href="/calendar?date=<%= currentDate.toISOString() %>&month=<%= month - 1 < 0 ? 11 : month - 1 %>&year=<%= month - 1 < 0 ? year - 1 : year %>" class="button">Previous Month</a>
-    <a href="/calendar?date=<%= currentDate.toISOString() %>&month=<%= (month + 1) % 12 %>&year=<%= month + 1 > 11 ? year + 1 : year %>" class="button">Next Month</a>
+    <div class="nav-links">
+      <a href="/calendar?date=<%= currentDate.toISOString() %>&month=<%= month - 1 < 0 ? 11 : month - 1 %>&year=<%= month - 1 < 0 ? year - 1 : year %>" class="button">Previous Month</a>
+      <a href="/calendar?date=<%= currentDate.toISOString() %>&month=<%= (month + 1) % 12 %>&year=<%= month + 1 > 11 ? year + 1 : year %>" class="button">Next Month</a>
+    </div>
   </div>
-</div>
 </body>
 </html>

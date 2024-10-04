@@ -168,31 +168,36 @@ module.exports = function (app, config, renderTemplate) {
 }
 
 app.get('/calendar', (req, res) => {
-   const queryDate = req.query.date ? new Date(req.query.date) : new Date();
-  
+  const queryDate = req.query.date ? new Date(req.query.date) : new Date();
+
   const year = queryDate.getFullYear();
-  const month = queryDate.getMonth();
+  const month = queryDate.getMonth(); // 0 (January) to 11 (December)
 
-  const firstDay = new Date(year, month, 1);
-  const firstDayWeekday = firstDay.getDay();
+  const monthOffset = parseInt(req.query.month) || 0; // Get month offset from query
+  const newDate = new Date(year, month + monthOffset, 1); // Adjust the month
+  const newYear = newDate.getFullYear();
+  const newMonth = newDate.getMonth();
 
-  const totalDays = new Date(year, month + 1, 0).getDate();
+  const firstDay = new Date(newYear, newMonth, 1);
+  const firstDayWeekday = firstDay.getDay(); // Day of the week (0-6)
+
+  const totalDays = new Date(newYear, newMonth + 1, 0).getDate();
 
   const days = Array.from({ length: 42 }, (_, i) => {
-    const day = new Date(year, month, i - firstDayWeekday + 1);
-    return (day.getMonth() === month) ? day : null;
+    const day = new Date(newYear, newMonth, i - firstDayWeekday + 1);
+    return (day.getMonth() === newMonth) ? day : null;
   });
 
-  const islamicYear = gregorianToIslamic(queryDate);
-  const persianYear = gregorianToPersian(queryDate);
+  const islamicYear = gregorianToIslamic(newDate);
+  const persianYear = gregorianToPersian(newDate);
 
   renderTemplate(res, req, "calendar.ejs", {
-    year,
+    year: newYear,
     islamicYear,
     persianYear,
-    currentDate: queryDate,
+    currentDate: newDate,
     days,
-    month,
+    month: newMonth,
   });
 });
 

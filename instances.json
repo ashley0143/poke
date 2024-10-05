@@ -11,7 +11,7 @@
       "region": "🇩🇪",
       "software": {
         "name": "poke",
-        "version": "lastest",
+        "version": "latest",
         "branch": "dev"
       }
     }
@@ -25,43 +25,15 @@
       "region": "🇺🇸",
       "software": {
         "name": "poke",
-        "version": "lastest",
-        "branch": "dev"
-      }
-    }
-  ],
-  [
-    "poke.ashley0143.xyz",
-    {
-      "uri": "https://poke.ashley0143.xyz",
-      "CLOUDFLARE": true,
-      "piwik": false,
-      "region": "🇺🇸",
-      "software": {
-        "name": "poke",
         "version": "latest",
         "branch": "dev"
       }
     }
   ],
   [
-    "poke.alphexo.dev",
+    "nyc1.poke.ggtyler.dev",
     {
-      "uri": "https://poke.alphexo.dev",
-      "CLOUDFLARE": true,
-      "piwik": false,
-      "region": "🇬🇧",
-      "software": {
-        "name": "poke",
-        "version": "latest",
-        "branch": "dev"
-      }
-    }
-  ],
-  [
-    "poke.ggtyler.dev",
-    {
-      "uri": "https://poke.ggtyler.dev",
+      "uri": "https://nyc1.poke.ggtyler.dev",
       "CLOUDFLARE": false,
       "piwik": false,
       "proxy": false,
@@ -82,41 +54,28 @@
       "proxy": false,
       "region": "🇺🇸",
       "software": {
-        "name": "poketube",
+        "name": "poke",
         "version": "latest",
         "branch": "dev"
       }
     }
   ],
   [
-    "poke.uk1.littkai.co.uk",
+    "pol1.poke.ggtyler.dev",
     {
-      "uri": "https://poke.uk1.littkai.co.uk",
+      "uri": "https://pol1.ggtyler.dev",
       "CLOUDFLARE": false,
       "piwik": false,
       "proxy": false,
-      "region": "🇬🇧",
+      "region": "🇵🇱",
       "software": {
         "name": "poke",
         "version": "latest",
         "branch": "dev"
       }
     }
-  ],  [
-    "poke.uk2.littlekai.co.uk",
-    {
-      "uri": "https://poke.uk2.littlekai.co.uk",
-      "CLOUDFLARE": false,
-      "piwik": false,
-      "proxy": false,
-      "region": "🇬🇧",
-      "software": {
-        "name": "poke",
-        "version": "latest",
-        "branch": "dev"
-      }
-    }
-  ],  [
+  ],
+  [
     "poke.blahai.gay",
     {
       "uri": "https://poke.blahai.gay/",

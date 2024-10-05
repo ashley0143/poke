@@ -16,23 +16,22 @@
     You should have received a copy of the GNU General Public License
     along with this program. If not, see https://www.gnu.org/licenses/.
 -->
-<!doctype html>
-
+ <!doctype html>
 <html lang="en">
-    <head>
-        <title>PokeTranslate</title>
-        <link rel="icon" href="/static/yt-ukraine.svg">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta content="PokeTranslate" property=og:title>
-        <meta content="Translate text - Anonymously!" property=twitter:description>
-        <meta content="https://cdn.glitch.global/d68d17bb-f2c0-4bc3-993f-50902734f652/aa70111e-5bcd-4379-8b23-332a33012b78.image.png?v=1701898829884" property="og:image"  /> 
-        <meta content=summary_large_image name=twitter:card>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <meta charset="UTF-8">
-        <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline'">
-         <meta name="referrer" content="no-referrer">
-        <link rel="manifest" href="/manifest.json">
-        <style>
+
+<head>
+    <title>PokeTranslate</title>
+    <link rel="icon" href="/static/yt-ukraine.svg">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta content="PokeTranslate" property=og:title>
+    <meta content="Translate text - Anonymously!" property=twitter:description>
+    <meta content="https://cdn.glitch.global/d68d17bb-f2c0-4bc3-993f-50902734f652/aa70111e-5bcd-4379-8b23-332a33012b78.image.png?v=1701898829884" property="og:image" />
+    <meta content=summary_large_image name=twitter:card>
+    <meta charset="UTF-8">
+    <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline'">
+    <meta name="referrer" content="no-referrer">
+    <link rel="manifest" href="/manifest.json">
+    <style>
         .center {
             text-align: center;
         }
@@ -41,43 +40,96 @@
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
+            margin: 10px 0;
         }
 
         .wrap.languages {
-            flex-wrap: nowrap;
-            margin-bottom: 20px;
-        }
-
-        #could_not_switch_languages_text {
-            color: red;
+            margin-bottom: 30px;
         }
 
         .item {
             width: 100%;
             height: 150px;
-            border-radius:1em;
+            border-radius: 0.5em;
         }
 
         .item-wrapper {
             display: flex;
-            flex-wrap: wrap;
             justify-content: center;
             width: 450px;
             margin: 5px 10px;
         }
 
-
-        .language,
-        .switch_languages {
-            display: flex;
+        button,
+        select,
+        input,
+        textarea {
+            border-radius: 1em;
+            padding: 10px;
+            background-color: #131618;
+            border: 2px solid #495057;
+            color: #f8f9fa;
         }
 
-        .language {
-            margin: 0px 10px;
+        body {
+            justify-content: center;
+            font-family: sans-serif;
+            background-color: #2c2f33;
+            color: #f8f9fa;
         }
 
-        .switch_languages {
-            margin: 0px 5px;
+        #translation-form {
+            background-color: #1f2023;
+            border-radius: 1em;
+            padding: 20px;
+            width: 90%;
+            max-width: 800px;
+            margin: auto;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+        }
+
+        h1 {
+            color: #5bc0de;
+            font-size: 2rem;
+        }
+
+        #definitions_and_translations {
+            display: grid;
+            width: 100%;
+            grid-template-areas: "definitions translations";
+            gap: 20px;
+        }
+
+        @media screen and (max-width: 1200px) {
+            #definitions_and_translations {
+                display: grid;
+                grid-template-areas:
+                    "definitions definitions"
+                    "translations translations";
+            }
+        }
+
+        div.definitions,
+        div.translations {
+            padding: 10px;
+            background-color: #3a3f44;
+            border-radius: 0.5em;
+        }
+
+        textarea:focus,
+        input:focus,
+        button:focus {
+            border-color: #478061;
+            outline: 1px solid #478061;
+        }
+
+        a {
+            color: #599bf6;
+        }
+
+        /* Additional styles to match the calendar page */
+        header {
+            margin-bottom: 20px;
         }
 
         #switchbutton {
@@ -86,164 +138,51 @@
 
         button {
             font-size: 1rem;
-            padding: 4px 10px;
-            border: 2px solid #888888;
         }
 
-        input,
-        select,
-        textarea {
-            width: 100%;
-            font-size: 1rem;
-            padding: 4px;
-            border: 2px solid #888888;
+        .center button {
+            margin-top: 15px;
         }
 
-        textarea {
-            resize: vertical;
-            height: 5rem;
-            font-family: sans-serif;
-            width: 100%;
+        /* Responsive design */
+        @media screen and (max-width: 768px) {
+            #translation-form {
+                padding: 10px;
+            }
+
+            .wrap {
+                flex-direction: column;
+            }
+
+            .item-wrapper {
+                width: 100%;
+            }
         }
+    </style>
 
-        input:focus,
-        select:focus,
-        textarea:focus,
-        button:focus {
-            border-color: #478061;
-            outline: 1px solid #478061;
-        }
-
-
+    <% if (isMobile) { %>
+    <style>
         body {
-            justify-content: center;
-            font-family: sans-serif;
+            overflow: auto;
         }
+    </style>
+    <% } %>
 
-        #definitions_and_translations {
-            display: grid;
-            margin: auto;
-            width: 1100px;
-            gap: 10px;
-            grid-template-areas: "definitions translations";
-
-        }
-
-        .def_type {
-            color: #007979;
-            text-transform: capitalize;
-        }
-
-        .syn {
-            color: #804700;
-        }
-
-        .syn_type {
-            color: #007979;
-        }
-
-        .use_in_sentence {
-            color: #009902;
-        }
-
-        .definitions li:not(:last-child) {
-          margin-bottom: 1rem;
-        }
-
-        @media screen and (max-width: 1200px) {
-            #definitions_and_translations {
-                display: grid;
-                width: 90vw;
-                grid-template-areas:
-                    "definitions definitions"
-                    "translations translations";
-            }
-        }
-
-
-        div.definitions {
-            grid-area: definitions;
-        }
-
-        div.translations {
-            grid-area: translations;
-        }
-
+    <% if (!isMobile) { %>
+    <style>
         body {
-                background-color: #212529;
-                color: #f8f9fa;
-            }
+            overflow: hidden;
+        }
+    </style>
+    <% } %>
+</head>
 
-        #could_not_switch_languages_text {
-                color: #F13333;
-            }
-
-        a:visited {
-                color: #9759f6;
-                text-decoration: none;
-            }
-
-        a {
-                color: #599bf6;
-                text-decoration: none;
-            }
-
-            input,
-            select,
-            button,
-            textarea {
-                background-color: #131618;
-                border-color: #495057;
-                color: #f8f9fa;
-            }
-
-            .def_type {
-                color: cyan;
-                text-transform: capitalize;
-            }
-
-            .syn {
-                color: burlywood;
-            }
-
-            .syn_type {
-                color: cyan;
-            }
-
-            .use_in_sentence {
-                color: yellow;
-            }
-        
-        </style>
-      
-        <% if (isMobile) { %>  
-<style>
-  body {
-  overflow: auto;
-  }
-</style>
-           <% } %> 
-
-        <% if (!isMobile) { %>  
-<style>
-  body {
-  overflow: hidden;
-  }
-</style>
-           <% } %> 
-    </head>
-
-    <body>
-<div style="border-radius: 3em;background: #1a1a1a;padding: 1em;display: flex;flex-direction: column;height: fit-content;align-self: center;margin-top: 6em;">
-        
-        <header class="center"><h1>PokeTranslate</h1></header>
- 
-                <form action="/translate" method="GET" id="translation-form">
-
-            <!-- from and to language -->
-            <div class="wrap languages">
-                <div class="language">
-                    
+<body>
+    <div id="translation-form">
+        <header class="center">
+            <h1>PokeTranslate</h1>
+        </header>
+             
                <% const languageOptions = [
   { code: 'autodetect', name: 'Autodetect' },
   { code: 'af', name: 'Afrikaans' },
@@ -307,7 +246,7 @@
   { code: 'km', name: 'Khmer' },
   { code: 'rw', name: 'Kinyarwanda' },
   { code: 'kok', name: 'Konkani' },
-  { code: 'ko', name: 'Korean' },
+  { code: 'ko', name: 'Korean (PROK)' },
   { code: 'kri', name: 'Krio' },
   { code: 'ku', name: 'Kurdish (Kurmanji)' },
   { code: 'sd', name: 'Sindhi' },
@@ -339,93 +278,71 @@
   { code: 'yi', name: 'Yiddish' },
   { code: 'yo', name: 'Yoruba' },
   { code: 'zu', name: 'Zulu' }
-]; %>
+]; %> 
+        <form action="/translate" method="GET" id="translation-form">
+            <!-- from and to language -->
+            <div class="wrap languages">
+                <div class="language">
+                    <select name="from_language" id="from_language">
+                        <% languageOptions.forEach(language => { %>
+                        <option value="<%= language.code %>" <%= language.code === (from_language || 'autodetect') ? 'selected' : '' %>>
+                            <%= language.name %>
+                        </option>
+                        <% }); %>
+                    </select>
 
-
-<!-- Source language select -->
-<select name="from_language" id="from_language" style="margin-right: 1em;border-radius: 1em;padding: 7px;" aria-label="Source language">
-   <% languageOptions.forEach(language => { %>
-    <option value="<%= language.code %>" <%= language.code === (from_language || 'autodetect') ? 'selected' : '' %>><%= language.name %></option>
-  <% }); %>
-</select>
-
-
-<!-- Target language select -->
-<select name="to_language" id="to_language"  style="margin-right: 1em;border-radius: 1em;padding: 7px;" aria-label="Target language">
-  <% languageOptions.slice(1).forEach(language => { %>
-    <option value="<%= language.code %>" <%= language.code === to_language ? 'selected' : '' %>><%= language.name %></option>
-  <% }); %>
-</select>
-
-                    
+                    <select name="to_language" id="to_language">
+                        <% languageOptions.slice(1).forEach(language => { %>
+                        <option value="<%= language.code %>" <%= language.code === to_language ? 'selected' : '' %>>
+                            <%= language.name %>
+                        </option>
+                        <% }); %>
+                    </select>
                 </div>
             </div>
-
-            
 
             <!-- text boxes -->
             <div class="wrap">
                 <div class="item-wrapper">
-                    <textarea autofocus class="item" id="input" name="input" dir="auto"  placeholder="<%- text %>"><%- text %>
-</textarea>
-                    </div>
-
-
+                    <textarea autofocus class="item" id="input" name="input" dir="auto" placeholder="<%- text %>">
+                        <%- text %>
+                    </textarea>
+                </div>
 
                 <div class="item-wrapper">
-                    <textarea id="output" class="translation item" dir="auto" placeholder="Translation" readonly> <%- translation %> </textarea>
-              </div>
+                    <textarea id="output" class="translation item" dir="auto" placeholder="Translation" readonly>
+                        <%- translation %>
+                    </textarea>
+                </div>
             </div>
-
-            <br>
 
             <div class="center">
-                <!-- translate button -->
-                <button type="submit" style="border-radius: 1em;padding: 7px;">Translate :3</button>
+                <button type="submit">Translate :3</button>
             </div>
-
-            <br>
-
-           
-
-            <br>
- 
-                
-
-                
-            </div>
-
         </form>
-            </div>
+    </div>
 
+    <script>
+        document.getElementById("input").addEventListener("keydown", function (event) {
+            if (event.keyCode === 13 && (event.metaKey || event.ctrlKey)) {
+                document.getElementById("translation-form").submit();
+            }
+        });
 
-        <br>
-        <br>
-        <br>
+        var input = document.getElementById("input");
+        var output = document.getElementById("output");
+        input.setAttribute("style", "height:" + output.scrollHeight + "px;overflow-y:scroll;");
+        output.setAttribute("style", "height:" + output.scrollHeight + "px;overflow-y:scroll;");
+        input.addEventListener("input", function (e) {
+            this.style.height = 150 + "px";
+            this.style.height = this.scrollHeight + "px";
+        });
+    </script>
+    <script src="/static/custom-css.js"></script>
+</body>
+
+</html>
+
+   
 
  
-
-        <script>
-            // @license magnet:?xt=urn:btih:0b31508aeb0634b347b8270c7bee4d411b5d4109&dn=agpl-3.0.txt AGPL-3.0
-            // this code submits the translation form when pressing Ctrl/Meta+Enter while focussed on the input text field
-            document.getElementById("input").addEventListener("keydown", function(event) {
-                if (event.keyCode === 13 && (event.metaKey || event.ctrlKey)) {
-                    document.getElementById("translation-form").submit();
-                }
-            });
-
-            // Auto resize textarea to fit words inside it without need to scroll -- Thanks to: https://stackoverflow.com/a/25621277
-            var input = document.getElementById("input");
-            var output = document.getElementById("output");
-            input.setAttribute("style", "height:" + output.scrollHeight + "px;overflow-y:scroll;");
-            output.setAttribute("style", "height:" + output.scrollHeight + "px;overflow-y:scroll;");
-            input.addEventListener("input", function(e) {
-                this.style.height = 150 + "px";
-                this.style.height = this.scrollHeight + "px";
-            });
-            
-            // @license-end
-        </script>
-     <script src="/static/custom-css.js"></script>
-    </body>
-</html>

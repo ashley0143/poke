@@ -45,20 +45,6 @@
     }
   ],
   [
-    "poke.alphexo.dev",
-    {
-      "url": "https://poke.alphexo.dev",
-      "CLOUDFLARE": true,
-      "piwik": false,
-      "region": "🇬🇧",
-      "software": {
-        "name": "poke",
-        "version": "latest",
-        "branch": "dev"
-      }
-    }
-  ],
-  [
     "nyc1.poke.ggtyler.dev",
     {
       "url": "https://nyc1.poke.ggtyler.dev",

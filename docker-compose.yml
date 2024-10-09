@@ -5,6 +5,6 @@ services:
     # image: codeberg.org/poketube/poke:arm64 # Works with ARM64/v8, not ARM64/v7
     restart: unless-stopped
     volumes:
-      - ./config.json:/poketube/config.json
+      - /config.json:/poketube/config.json
     ports:
       - "6003:6003"

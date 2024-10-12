@@ -87,10 +87,22 @@ class InnerTubePokeVidious {
 
     let desc = "";
     
+    const fetchWithRetry = async (url, options = {}, retries = 3) => {
+      for (let attempt = 0; attempt < retries; attempt++) {
+        const res = await fetch(url, options);
+        if (res.status === 500 && attempt < retries - 1) {
+          continue; // retry on 500
+        }
+        return res;
+      }
+      // If all retries fail, return last response
+      return null;
+    };
+
     try {
     const [invComments, videoInfo, videoData] = await Promise.all([
-      fetch(`${this.config.invapi}/comments/${v}?hl=${contentlang}&region=${contentregion}&h=${btoa(Date.now())}`).then((res) => res.text()),
-      fetch(`${this.config.invapi}/videos/${v}?hl=${contentlang}&region=${contentregion}&h=${btoa(Date.now())}`).then((res) => res.text()),
+      fetchWithRetry(`${this.config.invapi}/comments/${v}?hl=${contentlang}&region=${contentregion}&h=${btoa(Date.now())}`).then((res) => res.text()),
+      fetchWithRetry(`${this.config.invapi}/videos/${v}?hl=${contentlang}&region=${contentregion}&h=${btoa(Date.now())}`).then((res) => res.text()),
       curly
         .get(`${this.config.tubeApi}video?v=${v}`, {
           httpHeader: Object.entries(headers).map(([k, v]) => `${k}: ${v}`),

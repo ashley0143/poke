@@ -12,7 +12,7 @@
   if (!isValidYouTubeID(v) || isLetterSpam(v)) {
     reason = "Video not found >~<";
   } else {
-    reason = "youtube probably blocked poke or the api server is down :<";
+    reason = "trying again...";
   }
 %>
 
@@ -20,3 +20,4 @@
   error: "oops - loading failed :c",
   description: `${reason}`
 }) %>
+

@@ -6,7 +6,7 @@
     <img src="https://static.fsf.org/dbd/label/DRM-free%20label%20120.en.png" 
     alt="DRM Free" width="65" height="65" border="0" align="middle" />
   </a>
-  <p>PRIVACY APP OF YOUR DREAMS! :3</p>
+  <p>THE PRIVACY APP OF YOUR DREAMS! :3</p>
 </h1>
 
 <div align="center">
@@ -16,12 +16,9 @@
 <div align="center">
   <a href="#welcome">Welcome!</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="#features">Features</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="#no-non-free-codec-needed">No Non-Free Codec</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="#hosting-poke">Hosting</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="#poke-community">Community</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="#legal">Legal</a>
   <br><br>
-  <a href="https://status.poketube.fun" target="_blank">
-    <img width="170" src="https://api.netweak.com/status-badges/K2LY9" alt="Status Badge"/>
-  </a>
   <img src="https://raw.githubusercontent.com/vshymanskyy/StandWithUkraine/main/badges/StandWithUkraine.svg" alt="Stand with Ukraine">
   <a href="./LICENSE">
-    <img src="https://img.shields.io/badge/License-GPL--3-FF6666" alt="GPL-3 License">
+    <img src="https://img.shields.io/badge/License-GPL--3-FF6666" alt="GPL-3-or-later License">
   </a>
 </div>
 
@@ -29,7 +26,7 @@
 
 ## Welcome!
 
-Welcome to Poke (formerly PokeTube), the privacy-friendly YouTube front-end built with the InnerTube API! Imagine paying for YouTube Premium just to download videos - couldn't be us (literally).
+Welcome to Poke (formerly PokeTube), the privacy-friendly YouTube front-end built with the invidious API! Imagine paying for YouTube Premium just to download videos - couldn't be us (literally).
 
 ## Features
 
@@ -48,14 +45,16 @@ Poke uses OpenH264, which is free software! No non-free components included :3 V
 ### NodeJS
 
 1. **Install Packages**
-   - Fedora/RHEL: `$ sudo dnf install git make gcc libcurl nodejs python libcurl4 g++`
-   - Debian/Ubuntu: `$ sudo apt install git make gcc libcurl4-openssl-dev nodejs npm python g++`
+   - Fedora/RHEL GNU/linux: `$ sudo dnf install git make gcc libcurl nodejs python libcurl4 g++`
+   - Debian/Ubuntu GNU/linux: `$ sudo apt install git make gcc libcurl4-openssl-dev nodejs npm python g++`
+     
+     (we dont know if it works on non-gnu systems)
 
 2. **Clone Repo**
    - Codeberg: `$ git clone https://codeberg.org/ashley/poke.git`
    - GitHub: `$ git clone https://github.com/ashley0143/poke.git`
     
-    unoffical mirrors:
+   reccomended unoffical mirrors:
    - code.lgbt: `$ git clone https://code.lgbt/mirror/poke.git` [sync every 10mins]
    - git.lgbt: `$ git clone https://git.lgbt/mirror/poke.git` [sync every 10mins]
    - nin0git :`$ git clone https://git.nin0.dev/mirrors/poke.git` [sync every 10mins]
@@ -70,32 +69,21 @@ Poke uses OpenH264, which is free software! No non-free components included :3 V
 4. **Start Server**
    - `$ node server.js`
 
-   Congrats! PokeTube should now be running on `localhost:6003`! 🎉
-
-### Docker
-
-1. **Create Directory**
-   - `$ mkdir poketube && cd poketube`
-
-2. **Download Config**
-   - `$ curl -O https://codeberg.org/Ashley/poke/raw/branch/main/docker-compose.yml`
-
-3. **Run Poke**
-   - `$ docker compose up -d`
-
-   Congrats! PokeTube should now be running on `localhost:6003`! 🎉
-
+   Congrats! Poke should now be running on `localhost:6003`! 🎉
+ 
 ## Poke Community
 
 Join us on [Discord](https://discord.poketube.fun/) or [Matrix](https://matrix.to/#/#poke:vern.cc)! I promise we're cool! <3
 
- 
+or if u like fedi, we host [PokeSocial](https://social.poketube.fun) as well :3
 
 ## The Legal Stuff (boring tbh)
 the main parts of the project is Under GPL-3.0-OR-LATER :3
 
-see the each sections LICENSE tho!!
-Copyleft 2021-202x Poke Project
+see the each sections LICENSE tho!! 
+
+Copyleft 2021-202x Poke Project, mostly ashley0143 - poke does not support the ["source first"](https://sourcefirst.com/) or ["open source"](https://opensource.org) movement :3 - we support the free software movement (fsf.org)
+
 
 [Code Of conduct](https://codeberg.org/Ashley/poke/src/branch/main/CODE_OF_CONDUCT.md)
 

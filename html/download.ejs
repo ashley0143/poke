@@ -205,6 +205,7 @@ font-family:Ubuntu
     <div>
             <h3 style="font-family:'PokeTube Flex';font-weight:1000;white-space:yes;font-stretch: ultra-expanded;"> DOWNLOAD VIDEO / MUSIC</h3>
       <span>ID: <%=v%> -  <a href="/watch?v=<%=v%>"> Watch the video</a> </span>
+      <span> want more options? try <a href="https://cobalt.tools/">cobalt</a>!
 <hr>
 
        <div>
@@ -237,17 +238,9 @@ font-family:Ubuntu
 
       <div class="download-format" style="background: black;margin: 6px;border-radius: 14px;/*! text-align: center; */"><div style="font-family:&quot;PokeTube flex&quot;;font-stretch: ultra-expanded;font-weight: 700;"> 
                                                                                                  <% } %> 
-        3GPP 
-          </div>
-					<a style="color:#fff;font-family:Ubuntu" href="/api/video/download?v=<%=v%>&q=17">
-            <i class="fa-light fa-download"></i>
-						Download 
-					</a>
-				<br>
-				</div>
-      
+
            <div class="download-format" style="background: black;margin: 6px;border-radius: 14px;/*! text-align: center; */"><div style="font-family:&quot;PokeTube flex&quot;;font-stretch: ultra-expanded;font-weight: 700;"> 
-            MP4 (480p)
+            MP4 - 480p
           </div>
 					<a style="color:#fff;font-family:Ubuntu" href="/api/video/download?v=<%=v%>&q=18">
             <i class="fa-light fa-download"></i>
@@ -286,7 +279,117 @@ font-family:Ubuntu
 					</a>
 				<br>
 				</div>
-      
+       <div class="format-list" style="margin-top: -2em;">
+<h2>Video-Only formats</h2>
+
+<div class="download-format" style="background: black;margin: 6px;border-radius: 14px;">
+  <div style="font-family:'PokeTube flex';font-stretch: ultra-expanded;font-weight: 700;">144p - MP4</div>
+  <a style="color:#fff;font-family:Ubuntu" href="/api/video/download?v=<%=v%>&q=160&f=mp4">
+    <i class="fa-light fa-download"></i>
+    Download
+  </a>
+  <br>
+</div>
+
+<div class="download-format" style="background: black;margin: 6px;border-radius: 14px;">
+  <div style="font-family:'PokeTube flex';font-stretch: ultra-expanded;font-weight: 700;">144p - WEBM</div>
+  <a style="color:#fff;font-family:Ubuntu" href="/api/video/download?v=<%=v%>&q=278&f=webm">
+    <i class="fa-light fa-download"></i>
+    Download
+  </a>
+  <br>
+</div>
+
+<div class="download-format" style="background: black;margin: 6px;border-radius: 14px;">
+  <div style="font-family:'PokeTube flex';font-stretch: ultra-expanded;font-weight: 700;">240p - MP4</div>
+  <a style="color:#fff;font-family:Ubuntu" href="/api/video/download?v=<%=v%>&q=133&f=mp4">
+    <i class="fa-light fa-download"></i>
+    Download
+  </a>
+  <br>
+</div>
+
+<div class="download-format" style="background: black;margin: 6px;border-radius: 14px;">
+  <div style="font-family:'PokeTube flex';font-stretch: ultra-expanded;font-weight: 700;">240p - WEBM</div>
+  <a style="color:#fff;font-family:Ubuntu" href="/api/video/download?v=<%=v%>&q=242&f=webm">
+    <i class="fa-light fa-download"></i>
+    Download
+  </a>
+  <br>
+</div>
+
+<div class="download-format" style="background: black;margin: 6px;border-radius: 14px;">
+  <div style="font-family:'PokeTube flex';font-stretch: ultra-expanded;font-weight: 700;">360p - MP4</div>
+  <a style="color:#fff;font-family:Ubuntu" href="/api/video/download?v=<%=v%>&q=134&f=mp4">
+    <i class="fa-light fa-download"></i>
+    Download
+  </a>
+  <br>
+</div>
+
+<div class="download-format" style="background: black;margin: 6px;border-radius: 14px;">
+  <div style="font-family:'PokeTube flex';font-stretch: ultra-expanded;font-weight: 700;">360p - WEBM</div>
+  <a style="color:#fff;font-family:Ubuntu" href="/api/video/download?v=<%=v%>&q=243&f=webm">
+    <i class="fa-light fa-download"></i>
+    Download
+  </a>
+  <br>
+</div>
+
+<div class="download-format" style="background: black;margin: 6px;border-radius: 14px;">
+  <div style="font-family:'PokeTube flex';font-stretch: ultra-expanded;font-weight: 700;">480p - MP4</div>
+  <a style="color:#fff;font-family:Ubuntu" href="/api/video/download?v=<%=v%>&q=135&f=mp4">
+    <i class="fa-light fa-download"></i>
+    Download
+  </a>
+  <br>
+</div>
+
+<div class="download-format" style="background: black;margin: 6px;border-radius: 14px;">
+  <div style="font-family:'PokeTube flex';font-stretch: ultra-expanded;font-weight: 700;">480p - WEBM</div>
+  <a style="color:#fff;font-family:Ubuntu" href="/api/video/download?v=<%=v%>&q=244&f=webm">
+    <i class="fa-light fa-download"></i>
+    Download
+  </a>
+  <br>
+</div>
+
+<div class="download-format" style="background: black;margin: 6px;border-radius: 14px;">
+  <div style="font-family:'PokeTube flex';font-stretch: ultra-expanded;font-weight: 700;">720p - MP4</div>
+  <a style="color:#fff;font-family:Ubuntu" href="/api/video/download?v=<%=v%>&q=136&f=mp4">
+    <i class="fa-light fa-download"></i>
+    Download
+  </a>
+  <br>
+</div>
+
+<div class="download-format" style="background: black;margin: 6px;border-radius: 14px;">
+  <div style="font-family:'PokeTube flex';font-stretch: ultra-expanded;font-weight: 700;">720p - WEBM</div>
+  <a style="color:#fff;font-family:Ubuntu" href="/api/video/download?v=<%=v%>&q=247&f=webm">
+    <i class="fa-light fa-download"></i>
+    Download
+  </a>
+  <br>
+</div>
+
+<div class="download-format" style="background: black;margin: 6px;border-radius: 14px;">
+  <div style="font-family:'PokeTube flex';font-stretch: ultra-expanded;font-weight: 700;">1080p - MP4</div>
+  <a style="color:#fff;font-family:Ubuntu" href="/api/video/download?v=<%=v%>&q=137&f=mp4">
+    <i class="fa-light fa-download"></i>
+    Download
+  </a>
+  <br>
+</div>
+
+<div class="download-format" style="background: black;margin: 6px;border-radius: 14px;">
+  <div style="font-family:'PokeTube flex';font-stretch: ultra-expanded;font-weight: 700;">1080p - WEBM</div>
+  <a style="color:#fff;font-family:Ubuntu" href="/api/video/download?v=<%=v%>&q=248&f=webm">
+    <i class="fa-light fa-download"></i>
+    Download
+  </a>
+  <br>
+</div>
+
       <!-- ignore this -->
         <p style="visibility: hidden;">
  gfhefdhgrdfhdfshfgddfsfdgdfsds gfhefdhgrdfhdfshfgddfsfdgdfsds

@@ -135,6 +135,11 @@ module.exports = function (app, config, renderTemplate) {
       res.redirect("https://lite.duckduckgo.com/lite/?q=" + query);
     }
 
+
+    if (query && query.startsWith("Hey ChatGPT,") && query.length > 2) {
+      res.redirect("https://chatgpt.com/?q=" + query + "- sent using pokeAI features");
+    }
+
     if (!query) {
       return res.redirect("/");
     }

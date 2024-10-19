@@ -1,20 +1,21 @@
 <svg
-  width="35"
-  height="35"
-  viewBox="0 0 35 35"
+  width="16"
+  height="16"
+  viewBox="0 0 16 16"
   fill="none"
   xmlns="http://www.w3.org/2000/svg"
 >
   <style>
+    @media (prefers-color-scheme: dark) {
       .favicon-stroke {
         fill: #fff;
       }
       .favicon-bg {
         fill: #0d0d0d;
       }
-    
+    }
   </style>
-  <rect class="favicon-bg" width="35" height="35" rx="4" fill="white" />
+  <rect class="favicon-bg" width="16" height="16" rx="4" fill="white" />
   <g>
     <path
       class="favicon-stroke"

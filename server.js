@@ -75,10 +75,10 @@
   const sha384 = modules.hash;
   const rateLimit = require("express-rate-limit");
 
-  const limiter = rateLimit({
-    windowMs: 45 * 1000, // 45 Seconds
-    max: 886, // limit each IP to 866 requests per windowMs
-  });
+const limiter = rateLimit({
+    windowMs: 30 * 1000, // 30 second window
+    max: 200, // limit each IP to 200 requests per 30 seconds
+});
 
   var app = modules.express();
   app.use(limiter);

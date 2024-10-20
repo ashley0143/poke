@@ -86,7 +86,7 @@
     #623aa2 100%,
     #8e6f7e 100%
   );
-  --div-border-color: #7c44a0;
+  --div-border-color: #820eb8;
   --div-prim-bg: #1c1c1c;
   --div-second-bg: #1a1a1a;
   --div-transparent-bg: #0009;
@@ -414,7 +414,7 @@ a.avatar {
 }
 
 .subscribe-button {
-  color: red;
+  color: #ff0033;
   margin: auto;
   background: white;
   border-radius: 2em;
@@ -426,7 +426,7 @@ a.avatar {
   color: black !important;
   font-family: var(--text-font-primary);
   font-stretch: ultra-expanded;
-  font-weight: 900;
+  font-weight: 1000;
   text-decoration: none;
 }
 
@@ -497,7 +497,7 @@ a.avatar {
 }
 
 .video:hover > .thumbnail {
-  border: 1px var(--text-link) solid;
+  border: 1px #ff0033 solid;
   transition-duration: 150ms;
 }
 
@@ -599,6 +599,7 @@ a.avatar {
 
 .dropdown__item:hover {
   background-color: var(--chip-background-hover);
+  border-radius: 1em;
 }
 
 .dropdown__item:active {

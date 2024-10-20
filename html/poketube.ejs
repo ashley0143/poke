@@ -399,7 +399,7 @@ a[data-onclick="jump_to_time"] {
   <link href="/css/watch.main.css?v=9893448" rel=stylesheet>
   <link href="/css/watch-util.css?v=9893448" rel=stylesheet>
   <link href="/css/watch-navbar.css?v=9893448" rel=stylesheet>
-  <link href="/css/poketube.css?v=94648934774844" rel=stylesheet>
+  <link href="/css/poketube.css?v=945648934774844" rel=stylesheet>
 
   <!-- player -->
   <link href="/css/videojs-v8.16.0.css?v=5949545" rel="stylesheet" />
@@ -609,7 +609,7 @@ background-color: #0000;
     .new-button:hover {
      border: 2.1px solid;
      border-color: white;
-     box-shadow: 0 3px 14px #000;
+     box-shadow: 0 3px 14px #ffffffa8;
    }
    
    .comment-list.left-padding {
@@ -617,7 +617,7 @@ background-color: #0000;
    }
   
    .comment-list.left-padding:hover {
-  filter: drop-shadow(0 0 0.75rem #df00ff);
+  filter: drop-shadow(0 0 0.75rem #ff0033);
   transition-duration: 150ms;
    }
    
@@ -1475,13 +1475,13 @@ WIP!                                                 </a>
         } else if (percentage >= 50) {
             return 'orange';
         } else {
-            return 'red';
+            return '#ff0033';
         }
     };
 
     const getDislikePercentageColor = (percentage) => {
         if (percentage >= 50) {
-            return 'red';
+            return '#ff0033';
         } else if (percentage >= 20) {
             return 'orange';
         } else {
@@ -1511,7 +1511,7 @@ WIP!                                                 </a>
     };
 
     const userScoreLabel = getUserScoreLabel(userScore);
-    const userScoreColor = userScore >= 80 ? 'green' : userScore >= 50 ? 'orange' : 'red';
+    const userScoreColor = userScore >= 80 ? 'green' : userScore >= 50 ? 'orange' : '#ff0033';
 
     const userScoreClass = userScore >= 98.00 ? 'rainbow-gradient' : '';
     %>
@@ -1722,9 +1722,9 @@ WIP!                                                 </a>
 
 <div class="comments-class-or-something-i-cant-find-a-name-lol">
         <a id="comments-container"></a>
-<div style="text-align: center;margin-bottom: .5em;">
+<div style="text-align: left;margin-bottom: .5em;margin-left: 0.8em;">
                                                  <h5 style="font-family:var(--text-font-primary);font-weight:var(--text-header-weight);white-space:yes;font-stretch: ultra-expanded;margin-bottom: 11px;margin-top: 6px;padding-top: 10px;">
-                                                 YouTube Comments <span style="font-family: inter;font-weight: 900;text-transform: lowercase;margin: 1px;">- <% if (!isNaN(inv.commentCount)) { %> <%= inv.commentCount.toLocaleString() %> <% } else { %>  0 <% } %>  Comments </span>
+                    <% if (!isNaN(inv.commentCount)) { %> <%= inv.commentCount.toLocaleString() %> <% } else { %>  0 <% } %>  Comments </span>
                                                    </h5> 
                                                      
 <p style="padding: 0;margin: 0;font-family: 'PokeTube flex';margin-bottom: 10px;font-weight: 700;font-stretch: ultra-expanded;" class="loaded">

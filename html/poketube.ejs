@@ -166,12 +166,10 @@ border-radius: 10px;
   left: 0;
   width: 0%;
   height: 100%;
-  background-image: linear-gradient(to right, 
-    #55CDFC, 
-    #F7A8B8,   
-    #FFFFFF,  
-    #F7A8B8,   
-    #55CDFC   
+   background-image: linear-gradient(to right, 
+    #ff0045,    
+    #ff0e55,   
+    #ff1d79  
   );
   transition: width 0.5s ease-in-out;
 }
@@ -405,13 +403,24 @@ a[data-onclick="jump_to_time"] {
   <link href="/css/videojs-v8.16.0.css?v=5949545" rel="stylesheet" />
   <script src="/static/vjs.min.js?v=45959"></script>
   <style>
-  .vjs-play-progress {
+.vjs-play-progress {
   background-image: linear-gradient(to right, 
-    #FF0000,   
-    #FF69B4,  
-    #FFC0CB    
+    #ff0045,    
+    #ff0e55,   
+    #ff1d79  
   );
 }
+.vjs-control-bar {
+  background-color: #0007 !important;   
+}
+
+.vjs-remaining-time, 
+.vjs-fullscreen-control {
+  background-color: transparent !important;   
+    color: white;  
+
+}
+
 </style>
   <!-- en_us -->
   <script src="/static/player-base.js?v=21&lang=en_us&set=player_ias.vflset"> </script>

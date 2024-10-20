@@ -1,0 +1,10 @@
+[Unit]
+Description=Make yt anti-block Run every Minute
+
+[Timer]
+OnUnitActiveSec=1min
+Unit=yt-block-protect.service
+
+[Install]
+WantedBy=timers.target
+

@@ -1,0 +1,25 @@
+[Unit]
+Description=YouTube anti-block
+
+[Service]
+Type=simple
+ExecStart=/home/qt/globe/scripts/inv-restart-docker.sh
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

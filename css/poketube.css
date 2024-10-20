@@ -437,7 +437,7 @@ a.avatar {
   padding: 2px;
   border-radius: 3px;
   font-family: var(--text-font-primary);
-  font-stretch: 100%;
+  font-stretch: extra-expanded;
   font-weight: 600;
 }
 

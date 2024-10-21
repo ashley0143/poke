@@ -73,8 +73,8 @@
  
 :root {
   /* text */
-  --text-link: #0ab7f0;
-  --text-link-visited: #00c0ff;
+  --text-link: #f08;
+  --text-link-visited: #f08;
   --text-color: #ffffff;
   --text-font-primary: "PokeTube Flex";
   --text-header-weight: 1000;
@@ -86,7 +86,7 @@
     #623aa2 100%,
     #8e6f7e 100%
   );
-  --div-border-color: #820eb8;
+  --div-border-color: #df03a8;
   --div-prim-bg: #1c1c1c;
   --div-second-bg: #1a1a1a;
   --div-transparent-bg: #0009;

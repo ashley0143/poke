@@ -377,7 +377,7 @@ module.exports = function (app, config, renderTemplate) {
               lyrics: "",
             });
           } catch (err) {
-              res.status(502); 
+              res.status(500); 
               renderTemplate(res, req, "video-error.ejs", {
               v,
               err_reason:err

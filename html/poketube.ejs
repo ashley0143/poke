@@ -1417,28 +1417,6 @@ WIP!                                                 </a>
 
 <div class="video-sub-info description">
 
-     <%  if (Array.isArray(inv_vid?.keywords)) { %> 
-
-                            <div class="video-title" style="color:var(--text-color);font-family:var(--text-font-primary);;font-weight:var(--text-header-weight);font-stretch: extra-expanded;margin-top: 10px;margin-bottom: 10px;">Keywords</div>
-                      <div class="tags">
-          <% if (inv_vid?.keywords && inv_vid.keywords.length > 0) { %>
- <% inv_vid?.keywords.forEach(x => { %>
- <div class="tag">
-   <a href="/hashtag/<%=x %>" style="color:var(--text-color)">
-   <%=x %>
-     </a>
-   </div>
-         <% }) %>  
-
-  
-  <% } else { %>
-    <p style="margin:0">oh hey i think you lost your keywords <a href="/search?query=where+to+find+a+keywords">look how to find one</a></p> 
-    <%  } %>
-             </div>
-   
-   
-             <% } %>  
-		   
        <% if (inv_vid.descriptionHtml && inv_vid.descriptionHtml.trim() !== "" && inv_vid.descriptionHtml.trim() !== "<p></p>") { %>
     <details open="true" class="description-new">
 <% } else { %>
@@ -1586,7 +1564,70 @@ WIP!                                                 </a>
                                                 <a id="nerdy"></a>
 
                       </span>                              
+<style>
+.tag-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: flex-start;
+    max-height: 100px; 
+    overflow-y: auto;  
+    padding-right: 8px; 
+}
 
+.tag {
+    background-color: #444;
+    color: #fff;
+    padding: 6px 10px;
+    border-radius: 15px;
+    font-size: 12px;
+    font-weight: 500;
+    max-width: 150px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    transition: background-color 0.3s, box-shadow 0.3s;
+    cursor: pointer;
+}
+
+.tag:hover {
+    background-color: #555;
+    box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.tag-active {
+    background-color: #ff0077;
+    color: white;
+}
+
+.tag::before {
+    content: "#";
+    margin-right: 4px;
+    color: #bbb;
+}
+</style>
+     <%  if (Array.isArray(inv_vid?.keywords)) { %> 
+
+                            <div class="video-title" style="color:var(--text-color);font-family:var(--text-font-primary);;font-weight:var(--text-header-weight);font-stretch: extra-expanded;margin-top: 10px;margin-bottom: 10px;">Keywords</div>
+                      <div class="tag-container">
+          <% if (inv_vid?.keywords && inv_vid.keywords.length > 0) { %>
+ <% inv_vid?.keywords.forEach(x => { %>
+ <div class="tag">
+   <a href="/hashtag/<%=x %>" style="color:var(--text-color)">
+   <%=x %>
+     </a>
+   </div>
+         <% }) %>  
+
+  
+  <% } else { %>
+    <p style="margin:0">oh hey i think you lost your keywords <a href="/search?query=where+to+find+a+keywords">look how to find one</a></p> 
+    <%  } %>
+             </div>
+   
+   
+             <% } %>  
+		   
 
          
               

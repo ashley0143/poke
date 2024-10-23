@@ -41,7 +41,7 @@
   <% if (!e) { %>
 <meta content="<%=inv_vid.title%>" name=title>
 <meta content="<%=color%>" name="theme-color">
-<meta content="{canplayhd: true, redesign_feburary_2023:true, poke-rebrand:true, universe:2, ImmersiveAmbientMode:true, november2023_poke_rebrand:true, faster_load:true, AudioSyncV2:false, AudioSyncV3:true }" name="flags">
+<meta content="{canplayhd: true, redesign_feburary_2023:true, poke-rebrand:true, universe:2, ImmersiveAmbientMode:true, november2023_poke_rebrand:true, rebrand_2024:true, faster_load:true, AudioSyncV2:false, AudioSyncV3:true }" name="flags">
 <meta content="<%=k.Video.Channel.Name%>" name=twitter:author>
 <meta content="https://poketube.fun/watch?v=<%=inv_vid.videoId%>" name=twitter:url>
 <meta content="<%=inv_vid.title%> | Poke" name=twitter:title>
@@ -1228,6 +1228,7 @@ Offical Discord Server! :3
                  title="Non-Translated title : <%=inv_vid.title%>"
                <% } %> 
             > <%-k.Video.Title.replace(/\/channel\//g, "/channel?id=").replace(/https:\/\/youtube.com/g, ""); %> 
+
                  
 
              </div>
@@ -1416,6 +1417,27 @@ WIP!                                                 </a>
 
 <div class="video-sub-info description">
 
+     <%  if (Array.isArray(inv_vid?.keywords)) { %> 
+
+                            <div class="video-title" style="color:var(--text-color);font-family:var(--text-font-primary);;font-weight:var(--text-header-weight);font-stretch: extra-expanded;margin-top: 10px;margin-bottom: 10px;">Keywords</div>
+                      <div class="tags">
+          <% if (inv_vid?.keywords && inv_vid.keywords.length > 0) { %>
+ <% inv_vid?.keywords.forEach(x => { %>
+ <div class="tag">
+   <a href="/hashtag/<%=x %>" style="color:var(--text-color)">
+   <%=x %>
+     </a>
+   </div>
+         <% }) %>  
+
+  
+  <% } else { %>
+    <p style="margin:0">oh hey i think you lost your keywords <a href="/search?query=where+to+find+a+keywords">look how to find one</a></p> 
+    <%  } %>
+             </div>
+   
+   
+             <% } %>  
 		   
        <% if (inv_vid.descriptionHtml && inv_vid.descriptionHtml.trim() !== "" && inv_vid.descriptionHtml.trim() !== "<p></p>") { %>
     <details open="true" class="description-new">
@@ -1480,11 +1502,18 @@ WIP!                                                 </a>
  
                     <span>Views : <%=engagement.viewCount.toLocaleString()%> <br>
                         Genre: <%-inv_vid.genre %>  <br>
-<% if (date.includes("Premiered")) { %>
-    Premiered <%= date.replace("Premiered", "at") %> ^^ <br>
-<% } else { %>
-    Uploaded At <%= date %> ^^ <br>
-<% } %>
+                         <% if (inv_vid?.license) { %> 
+                         License: <%-inv_vid?.license %> 
+                         <% } else { %>
+                         License: Standard YouTube License
+                         <% } %>
+
+                         <% if (date.includes("Premiered")) { %>
+                         Premiered <%= date.replace("Premiered", "at") %> ^^ <br>
+                         <% } else { %>
+                         Uploaded At <%= date %> ^^ <br>
+                        <% } %>
+                        
                        <hr style="clear: both;display: none;border: none;border-bottom: 0.5px solid #2f2f2f;/*! width: 4.5em; */height: 0;">
                     warning: returnyoutubedislikes may not be accurate, this is just an estiment ehe :3  <br>
 
@@ -1560,27 +1589,6 @@ WIP!                                                 </a>
 
 
          
-     <%  if (Array.isArray(inv_vid?.keywords)) { %> 
-
-                            <div class="video-title" style="color:var(--text-color);font-family:var(--text-font-primary);;font-weight:var(--text-header-weight);font-stretch: extra-expanded;margin-top: 10px;margin-bottom: 10px;">Tags</div>
-                      <div class="tags">
-          <% if (inv_vid?.keywords && inv_vid.keywords.length > 0) { %>
- <% inv_vid?.keywords.forEach(x => { %>
- <div class="tag">
-   <a href="/hashtag/<%=x %>" style="color:var(--text-color)">
-   <%=x %>
-     </a>
-   </div>
-         <% }) %>  
-
-  
-  <% } else { %>
-    <p style="margin:0">oh hey i think you lost your tags <a href="/search?query=where+to+find+a+tag">look how to find one</a></p> 
-    <%  } %>
-             </div>
-   
-   
-             <% } %>  
               
   
                        

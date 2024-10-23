@@ -1565,29 +1565,32 @@ WIP!                                                 </a>
 
                       </span>                              
 <style>
+
 .tag-container {
     display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-    justify-content: flex-start;
-    max-height: 100px; 
-    overflow-y: auto;  
-    padding-right: 8px; 
+    gap: 8px; 
+
+    max-height: fit-content; 
+    overflow-x: auto;
+    white-space: nowrap;
+    padding-bottom: 8px; 
+    scrollbar-width: thin; 
 }
 
 .tag {
-    background-color: #444;
-    color: #fff;
-    padding: 6px 10px;
-    border-radius: 15px;
-    font-size: 12px;
+     color: #fff;
+    padding: 8px 16px; 
+    border-radius: 20px;
+    font-size: 14px; 
     font-weight: 500;
-    max-width: 150px;
+    max-width: none; 
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
     transition: background-color 0.3s, box-shadow 0.3s;
     cursor: pointer;
+    min-width: -moz-fit-content;
+    min-width: fit-content;
 }
 
 .tag:hover {
@@ -1605,6 +1608,7 @@ WIP!                                                 </a>
     margin-right: 4px;
     color: #bbb;
 }
+
 </style>
      <%  if (Array.isArray(inv_vid?.keywords)) { %> 
 

@@ -153,15 +153,17 @@ module.exports = function (app, config, renderTemplate) {
     try {
       const headers = {};
 
-      const xmlData = await fetch(
-        `${config.invapi}/search?q=${encodeURIComponent(
-          query
-        )}&page=${encodeURIComponent(
-          continuation
-        )}&date=${date}&type=${type}&duration=${duration}&sort=${sort}&hl=en+gb`
-      )
-        .then((res) => res.text())
-        .then((txt) => getJson(txt));
+let searchUrl;
+if (req.query.from === 'hashtag') {
+  searchUrl = `/hashtag/${encodeURIComponent(query)}`;
+} else {
+  searchUrl = `${config.invapi}/search?q=${encodeURIComponent(query)}&page=${encodeURIComponent(continuation)}&date=${date}&type=${type}&duration=${duration}&sort=${sort}&hl=en+gb`;
+}
+
+const xmlData = await fetch(searchUrl)
+  .then((res) => res.text())
+  .then((txt) => getJson(txt));
+
 
       renderTemplate(res, req, "search.ejs", {
         invresults: xmlData,

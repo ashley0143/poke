@@ -372,7 +372,7 @@ const YoutubeAPI = {
 
 // player base 
 const base_player = "https://www.youtube.com/s/player/a87a9450/player_ias.vflset/en_US/base.js"
-const style = document.createElement('style');
+const saa = document.createElement('style');
 style.innerHTML = `
 .vjs-play-progress {
   background-image: linear-gradient(to right, 
@@ -393,7 +393,7 @@ style.innerHTML = `
 }
 `;
 
-document.head.appendChild(style);
+document.head.appendChild(saa);
 
 window.pokePlayer = {
     ver:`20-a87a9450-vjs-${videojs.VERSION}`,

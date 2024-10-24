@@ -373,7 +373,7 @@ const YoutubeAPI = {
 // player base 
 const base_player = "https://www.youtube.com/s/player/a87a9450/player_ias.vflset/en_US/base.js"
 const saa = document.createElement('style');
-style.innerHTML = `
+saa.innerHTML = `
 .vjs-play-progress {
   background-image: linear-gradient(to right, 
     #ff0045,    

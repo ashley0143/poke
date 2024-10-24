@@ -155,7 +155,7 @@ module.exports = function (app, config, renderTemplate) {
 
 let searchUrl;
 if (req.query.from === 'hashtag') {
-  searchUrl = `/hashtag/${encodeURIComponent(query)}`;
+  searchUrl = `${config.invapi}/hashtag/${query}`;
 } else {
   searchUrl = `${config.invapi}/search?q=${encodeURIComponent(query)}&page=${encodeURIComponent(continuation)}&date=${date}&type=${type}&duration=${duration}&sort=${sort}&hl=en+gb`;
 }

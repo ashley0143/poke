@@ -10,6 +10,7 @@ document.addEventListener("DOMContentLoaded", () => {
         preload: 'auto',
     });
 
+
     // todo : remove this code lol
     const qua = new URLSearchParams(window.location.search).get("quality") || "";
     localStorage.setItem(`progress-${new URLSearchParams(window.location.search).get('v')}`, 0);
@@ -367,8 +368,32 @@ const YoutubeAPI = {
   }
 };
 
+
+
 // player base 
 const base_player = "https://www.youtube.com/s/player/a87a9450/player_ias.vflset/en_US/base.js"
+const style = document.createElement('style');
+style.innerHTML = `
+.vjs-play-progress {
+  background-image: linear-gradient(to right, 
+    #ff0045,    
+    #ff0e55,   
+    #ff1d79  
+  );
+}
+
+.vjs-control-bar {
+  border-radius: 16px;
+  background-color: #0007 !important; 
+}
+
+.vjs-remaining-time, 
+.vjs-fullscreen-control {
+  background-color: transparent !important;   
+}
+`;
+
+document.head.appendChild(style);
 
 window.pokePlayer = {
     ver:`20-a87a9450-vjs-${videojs.VERSION}`,

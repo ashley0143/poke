@@ -1025,7 +1025,7 @@ Offical Discord Server! :3
         <% } %>
       </noscript>
    
-      <video poster="<%- media_proxy_url %>/proxy?url=https://i.ytimg.com/vi/<%= inv_vid.videoId %>/hqdefault.jpg" class="video-js player video-ambient-container" id="video" style="border-radius: 16px; box-sizing: border-box; min-width: 100%; display: block;" preload onerror="showErrorCard(event)">
+      <video poster="<%- media_proxy_url %>/proxy?url=https://i.ytimg.com/vi/<%= inv_vid.videoId %>/hqdefault.jpg" class="video-js player video-ambient-container" id="video" style="border-radius: 16px; box-sizing: border-box; min-width: 100%; display: block;" preload onerror="setTimeout(function() { location.reload(); }, 5000);">
       <% if (isvidious) { %>
         <% if (!qua) { %>
 <% 
@@ -1036,10 +1036,10 @@ Offical Discord Server! :3
     }
   });
 %>
-<source src="<%=u%>/latest_version?id=<%=inv_vid.videoId%>&itag=<%=itag%>&local=true" type="video/mp4; codecs=&quot;avc1.64001F, mp4a.40.2&quot;" label="hd720" selected="true" onerror="showErrorCard(event)">
+<source src="<%=u%>/latest_version?id=<%=inv_vid.videoId%>&itag=<%=itag%>&local=true" type="video/mp4; codecs=&quot;avc1.64001F, mp4a.40.2&quot;" label="hd720" selected="true" onerror="setTimeout(function() { location.reload(); }, 5000);">
         <% } %>
         <% if (qua === "medium") { %>
-          <source src="<%=u%>/latest_version?id=<%=inv_vid.videoId%>&itag=18&local=true" type="video/mp4; codecs=&quot;avc1.64001F, mp4a.40.2&quot;" label="sd360" selected="true" onerror="showErrorCard(event)">
+          <source src="<%=u%>/latest_version?id=<%=inv_vid.videoId%>&itag=18&local=true" type="video/mp4; codecs=&quot;avc1.64001F, mp4a.40.2&quot;" label="sd360" selected="true" onerror="onerror="setTimeout(function() { location.reload(); }, 5000);"">
         <% } %>
       <% } %>
 

@@ -392,41 +392,11 @@ a[data-onclick="jump_to_time"] {
  
   <!-- css files -->
   <!-- these files are cached for 24 hours -->
-  <link href="/css/app-cdn.min.css?v=9893448" rel=stylesheet>
-  <link href="/css/app.main.css?v=446008" rel=stylesheet>
-  <link href="/css/watch.main.css?v=9893448" rel=stylesheet>
-  <link href="/css/watch-util.css?v=9893448" rel=stylesheet>
-  <link href="/css/watch-navbar.css?v=9893448" rel=stylesheet>
-  <link href="/css/poketube.css?v=9445645" rel=stylesheet>
+  <link href="/css/app-cdn.min.css?v=9893448" rel=stylesheet><link href="/css/app.main.css?v=446008" rel=stylesheet><link href="/css/watch.main.css?v=9893448" rel=stylesheet> <link href="/css/watch-util.css?v=9893448" rel=stylesheet><link href="/css/watch-navbar.css?v=9893448" rel=stylesheet><link href="/css/poketube.css?v=9445645" rel=stylesheet>
 
   <!-- player -->
   <link href="/css/videojs-v8.16.0.css?v=5949545" rel="stylesheet" />
-  <script src="/static/vjs.min.js?v=45959"></script>
-  <style>
-/*
-custom css for pokeVJS
-*/
-  .vjs-play-progress {
-  background-image: linear-gradient(to right, 
-    #ff0045,    
-    #ff0e55,   
-    #ff1d79  
-    );
-  }
-
-  .vjs-control-bar {
-    border-radius: 16px;
-    background-color: #0007 !important; 
-  }
-
-  .vjs-remaining-time, 
-  .vjs-fullscreen-control {
-  background-color: transparent !important;   
-
-}
-  </style>
-  <!-- en_us -->
-  <script src="/static/player-base.js?v=21&lang=en_us&set=player_ias.vflset"> </script>
+  <script src="/static/vjs.min.js?v=45959"></script><!-- custom video player for poke --><script src="/static/player-base.js?v=21_a&lang=en_us&set=player_ias.vflset"> </script>
 
   <!-- ICONS -->
   <!-- Font awesome pro -->
@@ -744,20 +714,6 @@ background-color: #0000;
 
 //--><!]]>
 </script>
-<ptd-app-iconfixer>
-<script>
- // Preload the icon image
-    var iconImage = new Image();
-    iconImage.src = "/css/yt-ukraine.svg";
-
-    // Wait for the icon image to load before showing it
-    iconImage.onload = function() {
-      var iconElement = document.querySelector('link[rel="icon"]');
-      iconElement.href = iconImage.src;
-      iconElement.type = "image/svg+xml";
-    };
-</script>    
-</ptd-app-iconfixer>
 <ptd-app-ejs>
 <div class="app" id="secret-theme" canHaveAmbientMode="true" style="color:var(--text-color)">
  <div id="loopedIndicator"></div>
@@ -1055,7 +1011,7 @@ Offical Discord Server! :3
 
 <% if (itag && !qua) { %>
   <audio id="aud" preload>
-    <source src="<%=u%>/latest_version?id=<%=inv_vid.videoId%>&itag=<%=itag%>&local=true" type="video/mp4" onerror="alert(event)"/>
+    <source src="<%=u%>/latest_version?id=<%=inv_vid.videoId%>&itag=<%=itag%>&local=true" type="video/mp4" onerror="setTimeout(function() { location.reload(); }, 5000);" />
   </audio>
 <% } else { %>
   <audio id="aud"></audio>

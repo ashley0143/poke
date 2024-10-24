@@ -5,7 +5,9 @@
         <meta content="#111111" name="theme-color" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no, viewport-fit=cover" />
         <meta name="darkreader-lock" />
+        <% if (description == "This helps protect our community. Learn more (TRYING AGAIN....)") { %> 
          <meta http-equiv="refresh" content="1"> 
+ <% } %>
         <link href="/css/yt-ukraine.svg?v=3" rel="icon" />
         <link rel="manifest" href="/manifest.json" />
         <style>
@@ -82,7 +84,14 @@
         </style>
     </head>
     <body>
+            <% if (description == "This helps protect our community. Learn more (TRYING AGAIN....)") { %> 
+
         <p id="abstract">502</p>
+          <% } else if (description !== "This helps protect our community. Learn more (TRYING AGAIN....)")   { %>
+         <p id="abstract">404</p>
+
+         <% } %>
+
         <div class="error">
             <h2><%=error%></h2>
             <p><%=description%></p>
@@ -90,8 +99,11 @@
         <div class="error-footer">
             <a href="https://codeberg.org/ashley/poke/issues/new/choose">Create issue</a>
             <a href="https://discord.poketube.fun">Report on our Discord</a>
+            <% if (description == "This helps protect our community. Learn more (TRYING AGAIN....)") { %> 
+
             <a href="https://github.com/iv-org/invidious/issues">See Invidious issues</a>
             <a href="">Refresh Page</a>
+                     <% } %>
         </div>
     </body>
 </html>

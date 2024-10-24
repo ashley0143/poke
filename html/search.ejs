@@ -984,7 +984,7 @@ no results found :c	u can try <a href="https://youtube.com/results?search_query=
 </div>
                                    <% } %>   
                                    
-<% (invresults?.results || invresults)?.forEach(x => { %> 
+<% (invresults?.results ? invresults.results : invresults)?.forEach(x => { %>
   <div class="video-list">
     <div class="video">
       <a href="/watch?v=<%= x.videoId %>"

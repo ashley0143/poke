@@ -12,12 +12,13 @@
   if (!isValidYouTubeID(v) || isLetterSpam(v)) {
     reason = "Video not found >~<";
   } else {
-    reason = "trying again...";
+    reason = "This helps protect our community. Learn more (TRYING AGAIN....)";
   }
 %>
 
 <%- include('./layouts/error-video.ejs', {
-  error: "oops - loading failed :c",
+  error: "loading failed :c",
   description: `${reason}`
 }) %>
+
 

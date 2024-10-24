@@ -335,23 +335,15 @@ speedOption.addEventListener("click", function() {
     var currentSpeed = video.playbackRate;
     var newSpeed = getNextSpeed(currentSpeed);
 
-    if (navigator.hardwareConcurrency < 3) {
-        var userChoice = confirm(
-            "Your system has less than 3 CPU cores ;_; Increasing the video speed will CPU usage and affect performance - Do u want to continue?"
-        );
-        
-        if (!userChoice) {
-            return; 
-        }
-    }
-
     video.playbackRate = newSpeed;
     document.getElementById("aud").playbackRate = newSpeed;
     speedOption.innerHTML = "<i class='fa-light fa-gauge'></i> Speed: " + newSpeed.toFixed(2) + "x";
 });
 
 function getNextSpeed(currentSpeed) {
-    if (currentSpeed === 2) {
+    var maxSpeed = (navigator.hardwareConcurrency < 3) ? 1 : 2; // Limit max speed based on CPU cores - for optimization 
+
+    if (currentSpeed === maxSpeed) {
         return 0.25;
     } else if (currentSpeed === 0.25) {
         return 0.5;
@@ -360,9 +352,10 @@ function getNextSpeed(currentSpeed) {
     } else if (currentSpeed === 0.75) {
         return 1;
     } else {
-        return 2;
+        return maxSpeed;
     }
 }
+
 
 const GoogleTranslateEndpoint = "https://translate.google.com/_/TranslateWebserverUi/data/batchexecute?rpcids=MkEWBc&rt=c"
 // @license-end

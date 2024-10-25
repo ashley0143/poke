@@ -162,7 +162,7 @@ const features = [
 
 const randomFeatures = features.sort(() => 0.5 - Math.random()).slice(0, 3);
 %>
-
+ <div class="new-feature-set">
   <% randomFeatures.forEach(feature => { %>
   <div class="feature-set">
 
@@ -171,7 +171,7 @@ const randomFeatures = features.sort(() => 0.5 - Math.random()).slice(0, 3);
       <p><%- feature.description %></p></div>
 
    <% }) %>
-
+</div> 
     <div class="adaptive-grid">
       <%- include('./partials/card', 
         icon_background='transparent',

@@ -166,9 +166,9 @@ const randomFeatures = features.sort(() => 0.5 - Math.random()).slice(0, 3);
 <div class="features-container">
   <% randomFeatures.forEach(feature => { %>
     <div class="feature">
-      <div class="feature-icon"><%= feature.icon %></div>
-      <h3><%= feature.title %></h3>
-      <p><%= feature.description %></p>
+      <div class="feature-icon"><%- feature.icon %></div>
+      <h3><%- feature.title %></h3>
+      <p><%- feature.description %></p>
     </div>
   <% }) %>
 </div>

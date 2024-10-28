@@ -21,7 +21,7 @@
 <!DOCTYPE html><html>
 <head>
     <title>Poke | Discover</title>
-    <link href=/css/yt-ukraine.svg?v=6 rel=icon>
+    <link href="/css/yt-ukraine.svg?v=6" rel=icon>
      <meta content=website property=og:type>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta content="Poke - Discover" property=og:title>
@@ -30,10 +30,11 @@
      <meta content=summary_large_image name=twitter:card>
       <link rel="manifest" href="/manifest.json">
 <meta name="darkreader-lock"> <!-- tells dark reader that the site has a dark theme and to turn itself off -->
-    <link href=/css/app-cdn.min.css rel=stylesheet>
-  <link href=/css/app-cdn.min.css rel=stylesheet>
-<link href=/css/app.main.css?v=44600 rel=stylesheet>
-<link href=/css/search.main.css?v=57 rel=stylesheet>
+    
+    <link href="/css/app-cdn.min.css" rel=stylesheet>
+  <link href="/css/app-cdn.min.css" rel=stylesheet>
+<link href="/css/app.main.css?v=44600" rel=stylesheet>
+<link href="/css/search.main.css?v=57" rel=stylesheet>
  <link href=/css/watch.main.css rel=stylesheet>
     <meta content="#1a1a1a" name="theme-color">
   </head>
@@ -85,7 +86,6 @@ summary:hover{
         color:#111111
     }
     
-    
     :root {
     --text-primary: #fff;
     --text-secondary: #fff;
@@ -134,14 +134,19 @@ summary:hover{
 }
 
 .progress-bar {
-  position: absolute;
+   position: absolute;
   top: 0;
   left: 0;
   width: 0%;
   height: 100%;
-  background-color: purple;
+   background-image: linear-gradient(to right, 
+    #ff0045,    
+    #ff0e55,   
+    #ff1d79  
+  );
   transition: width 0.5s ease-in-out;
 }
+
     .video > .info > .title {
   color: var(--text-primary) !important;
   font-weight: bold;
@@ -296,8 +301,9 @@ margin-left: auto;
   width: 100%;
 }
   .video-grid > .video:hover{
-border:solid;
+border:solid #ff0033;
 }                  
+
  .video-grid > .video {
   border-radius: 16px;
   background: black;
@@ -434,7 +440,7 @@ Popular Videos On Poke :3   </h1>
 
 
                                  
-<div class="video-grid" style="border-top-left-radius:2em;width: 80em;border-top-right-radius: 2em;border: solid 1px purple;">
+<div class="video-grid" style="border-top-left-radius:2em;width: 80em;border-top-right-radius: 2em;border: solid 1px #df03a8;">
    <% inv.forEach(x =>  { %>
 			<a href="/watch?v=<%- x.videoId %>" class="video canloadhd" data-author="<%- x.author %>" >
 				<div class="thumbnail" style="background-image: url('/vi/<%= x.videoId %>/hqdefault.jpg?sqp=-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLBy_x4UUHLNDZtJtH0PXeQGoRFTgw');border-radius: 10px;"><span class="video-length"><%- turntomins(x.lengthSeconds) %></span></div>
@@ -448,8 +454,7 @@ Popular Videos On Poke :3   </h1>
           
 
  		 	               <% }) %>   
-                       <p>u reached the end.... :sob: </p>
-                       
+                        
                                    </div>
                      		 	            
                                    </div>
@@ -460,9 +465,6 @@ Popular Videos On Poke :3   </h1>
    <script>
         // @license magnet:?xt=urn:btih:1f739d935676111cfff4b4693e3816e664797050&dn=gpl-3.0.txt GPL-3.0-or-later  
 
- if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('service-worker.js');
-  }
 
   document.addEventListener('DOMContentLoaded', function() {
   let bgs = document.querySelectorAll('[data-bg]');
@@ -556,7 +558,6 @@ element.addEventListener('mouseleave', () => {
 });
 
 element.addEventListener('wheel', (e) => {
-  // You can also handle mouse wheel events for kinetic scrolling
   // Adjust the scrollTop based on e.deltaY
   element.scrollTop += e.deltaY;
 });

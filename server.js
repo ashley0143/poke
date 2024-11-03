@@ -153,7 +153,6 @@ const limiter = rateLimit({
     "pika!",
     "fsf.org",
     "ssfffssfssfffaassssfsdf!",
-    "𝓯𝓻𝓮𝓪𝓴𝔂poke",
     "they not like us!",
     "to pimp a butterfly!",
     "king kunta!",

@@ -343,6 +343,7 @@ module.exports = function (app, config, renderTemplate) {
               media_proxy_url: mediaproxy,
               instagram,
               useragent: req.useragent,
+              config,
               verify,
               discord,
               turntomins,

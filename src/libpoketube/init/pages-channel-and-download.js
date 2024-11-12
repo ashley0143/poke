@@ -247,21 +247,25 @@ const xmlData = await fetch(searchUrl)
       };
 
       const apiUrl = config.invapi + "/channels/";
-      const channelUrl = `${apiUrl}${atob(
-        ChannelTabs.videos
-      )}/${ID}/?sort_by=${sort_by}${continuation}`;
-      const shortsUrl = `${apiUrl}${ID}/${atob(
-        ChannelTabs.shorts
-      )}?sort_by=${sort_by}${continuations}`;
-      const streamUrl = `${apiUrl}${ID}/${atob(
-        ChannelTabs.streams
-      )}?sort_by=${sort_by}${continuationl}`;
-      const communityUrl = `${apiUrl}${atob(
-        ChannelTabs.community
-      )}/${ID}/?hl=en-US`;
-      const PlaylistUrl = `${apiUrl}${atob(
-        ChannelTabs.playlist
-      )}/${ID}/?hl=en-US`;
+  const channelUrl = `${apiUrl}${ID}/${atob(
+  ChannelTabs.videos
+)}?sort_by=${sort_by}${continuation}`;
+
+const shortsUrl = `${apiUrl}${ID}/${atob(
+  ChannelTabs.shorts
+)}?sort_by=${sort_by}${continuation}`;
+
+const streamUrl = `${apiUrl}${ID}/${atob(
+  ChannelTabs.streams
+)}?sort_by=${sort_by}${continuation}`;
+
+const communityUrl = `${apiUrl}${ID}/${atob(
+  ChannelTabs.community
+)}?hl=en-US`;
+
+const playlistUrl = `${apiUrl}${ID}/${atob(
+  ChannelTabs.playlist
+)}?hl=en-US`;
 
       const channelINVUrl = `${apiUrl}${ID}/`;
 

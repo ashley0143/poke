@@ -275,10 +275,7 @@ const limiter = rateLimit({
         "Hey-there",
         "Do u wanna help poke? contributions are welcome :3 https://codeberg.org/Ashley/poke"
       );
-      res.header(
-        "splash",
-        random
-      );
+     
       res.header(
         "X-PokeTube-Youtube-Client-Version",
         innertube.innertube.CLIENT.clientVersion

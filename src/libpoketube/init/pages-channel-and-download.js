@@ -263,7 +263,7 @@ const communityUrl = `${apiUrl}${ID}/${atob(
   ChannelTabs.community
 )}?hl=en-US`;
 
-const playlistUrl = `${apiUrl}${ID}/${atob(
+const PlaylistUrl = `${apiUrl}${ID}/${atob(
   ChannelTabs.playlist
 )}?hl=en-US`;
 

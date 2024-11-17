@@ -1051,7 +1051,7 @@ font-weight: 1000;" href="/watch?v=<%= x.videoId %>" class="title max-lines-2"><
           <a href="/watch?v=<%= x.videoId %>"><span><%= x.viewCountText %></span> <span>•</span> <span><%= x.publishedText %></span></a>
           <div style="display: flex;margin-bottom: 6px;">
              <img src="<%= x.authorThumbnails[1].url %>" style="width: fit-content;height: 23px;border-radius: 1em;">
-     <a href="/channel?id=<%= x.authorId %>"><%= x.author %><% if (x?.authorVerified) { %> 
+     <a href="/channel?id=<%= x.authorId %>" style="margin:4px"><%= x.author %><% if (x?.authorVerified) { %> 
             <i class="icon ion ion-md-checkmark-circle" title="verified channel"></i><% } %></a>
             </div>
           <div style="display: inline-flex;flex-direction: row;min-width: 6em;gap: 4px;">

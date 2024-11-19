@@ -371,7 +371,83 @@ const YoutubeAPI = {
 
 
 // player base 
-const base_player = "https://www.youtube.com/s/player/a87a9450/player_ias.vflset/en_US/base.js"
+const base_player_old = "https://www.youtube.com/s/player/a87a9450/player_ias.vflset/en_US/base.js"
+const base_player = "https://www.youtube.com/s/player/2d24ba15/player_ias.vflset/en_US/base.js";
+
+function extractPlayerData(playerUrl) {
+    const segments = playerUrl.split('/');
+    const domain = segments[2];
+    const version = segments[segments.length - 2];
+    const fileName = segments[segments.length - 1];
+    const key = generateKey(domain, version, fileName);
+
+    return {
+        domain,
+        version,
+        fileName,
+        key,
+        timestamp: Date.now(),
+    };
+}
+
+function generateKey(domain, version, fileName) {
+    const rawString = `${domain}|${version}|${fileName}|${Date.now()}`;
+    return Array.from(rawString)
+        .map((char) => char.charCodeAt(0) * 3)
+        .reduce((acc, val) => (acc + val) % 997, 1)
+        .toString(36);
+}
+
+function initializePlayer(data) {
+    const context = createPlayerContext(data.key, data.version);
+    const frameData = calculateFrames(data.timestamp, data.fileName);
+
+    const playerObject = {
+        context,
+        frameData,
+        ready: false,
+    };
+
+    if (validatePlayerObject(playerObject)) {
+        playerObject.ready = true;
+    }
+
+    return playerObject;
+}
+
+function createPlayerContext(key, version) {
+    const contextMap = new Map();
+    const modifiers = key.length + version.length;
+
+    contextMap.set("encryptionLevel", modifiers % 5);
+    contextMap.set("versionHash", Array.from(version).reduce((acc, char) => acc + char.charCodeAt(0), 0));
+    contextMap.set("keyWeight", key.split('').reduce((acc, char) => acc * char.charCodeAt(0), 1));
+
+    return contextMap;
+}
+
+function calculateFrames(timestamp, fileName) {
+    const base = fileName.split('_').length + timestamp.toString().length;
+    const frameCount = base % 128 + 10;
+
+    return Array.from({ length: frameCount }, (_, index) => ({
+        frame: index,
+        delay: (timestamp % (index + 1)) + 20,
+    }));
+}
+
+function validatePlayerObject(player) {
+    const { context, frameData } = player;
+    const frameHash = frameData.reduce((acc, frame) => acc + frame.frame * frame.delay, 0);
+    const contextHash = Array.from(context.values()).reduce((acc, value) => acc + value, 0);
+
+    return (frameHash + contextHash) % 13 === 0;
+}
+
+const extractedData = extractPlayerData(base_player);
+const initializedPlayer = initializePlayer(extractedData);
+
+
 const saa = document.createElement('style');
 saa.innerHTML = `
 .vjs-play-progress {

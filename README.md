@@ -45,8 +45,9 @@ Poke uses OpenH264, which is free software! No non-free components included :3 V
 ### NodeJS
 
 1. **Install Packages**
-   - Fedora/RHEL GNU/linux: `$ sudo dnf install git make gcc libcurl nodejs python libcurl4 g++`
+   - Fedora/RHEL GNU/linux: `$ sudo dnf install git make gcc libcurl nodejs python libcurl g++ curl-config`
    - Debian/Ubuntu GNU/linux: `$ sudo apt install git make gcc libcurl4-openssl-dev nodejs npm python g++`
+   - Alpine Linux (non-gnu): `$ apk add git nodejs npm python make gcc g++ libcurl curl-dev`
      
      (we dont know if it works on non-gnu systems)
 
@@ -60,7 +61,7 @@ Poke uses OpenH264, which is free software! No non-free components included :3 V
    - nin0git :`$ git clone https://git.nin0.dev/mirrors/poke.git` [sync every 10mins]
 
     not reccomended, unstable
-   - SudoVanilla: `$ git clone https://ark.sudovanilla.org/Korbs/poke.git` [sync every update]
+   - SudoVanilla: `$ git clone https://ark.sudovanilla.org/Korbs/poke.git` [sync every week]
 
 3. **Install Dependencies**
    - `$ cd poke`

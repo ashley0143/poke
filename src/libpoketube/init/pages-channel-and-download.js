@@ -58,21 +58,21 @@ const ChannelTabs = {
 
 module.exports = function (app, config, renderTemplate) {
   app.get("/download", async (req, res) => {
-  try {
-    const v = req.query.v;
+    try {
+      const v = req.query.v;
 
-    const thumbnailUrl = `https://i.ytimg.com/vi/${v}/maxresdefault.jpg`;
-    const colors = await modules.getColors(thumbnailUrl);
-    const color = colors[0].hex();
+      const thumbnailUrl = `https://i.ytimg.com/vi/${v}/maxresdefault.jpg`;
+      const colors = await modules.getColors(thumbnailUrl);
+      const color = colors[0].hex();
 
-    renderTemplate(res, req, "download.ejs", {
-      v,
-      color,
-      isMobile: req.useragent.isMobile,
-    });
-  } catch (error) {
-    res.redirect("/");
-   }
+      renderTemplate(res, req, "download.ejs", {
+        v,
+        color,
+        isMobile: req.useragent.isMobile,
+      });
+    } catch (error) {
+      res.redirect("/");
+    }
   });
 
   app.get("/old/watch", async function (req, res) {
@@ -94,15 +94,15 @@ module.exports = function (app, config, renderTemplate) {
 
     var media_proxy = config.media_proxy;
 
-    if (req.useragent.source.includes("Pardus")) {
+    if (config.useragent.source.includes("Pardus")) {
       var media_proxy = "https://media-proxy.ashley0143.xyz";
     }
-    var uaos = req.useragent.os;
-    var IsOldWindows;
+    var uaos = config.useragent.os;
+    let IsOldWindows;
 
-    if (uaos == "Windows 7" && req.useragent.browser == "Firefox") {
+    if (uaos == "Windows 7" && config.useragent.browser == "Firefox") {
       IsOldWindows = true;
-    } else if (uaos == "Windows 8" && req.useragent.browser == "Firefox") {
+    } else if (uaos == "Windows 8" && config.useragent.browser == "Firefox") {
       IsOldWindows = true;
     } else {
       IsOldWindows = false;
@@ -135,7 +135,6 @@ module.exports = function (app, config, renderTemplate) {
       res.redirect("https://lite.duckduckgo.com/lite/?q=" + query);
     }
 
-
     if (query && query.startsWith("Hey ChatGPT,") && query.length > 2) {
       res.redirect("https://chatgpt.com/?q=" + query + "- sent using pokeAI features");
     }
@@ -153,17 +152,16 @@ module.exports = function (app, config, renderTemplate) {
     try {
       const headers = {};
 
-let searchUrl;
-if (req.query.from === 'hashtag') {
-  searchUrl = `${config.invapi}/hashtag/${query}?hl=en-gb`;
-} else {
-  searchUrl = `${config.invapi}/search?q=${encodeURIComponent(query)}&page=${encodeURIComponent(continuation)}&date=${date}&type=${type}&duration=${duration}&sort=${sort}&hl=en+gb`;
-}
+      let searchUrl;
+      if (req.query.from === 'hashtag') {
+        searchUrl = `${config.invapi}/hashtag/${query}?hl=en-gb`;
+      } else {
+        searchUrl = `${config.invapi}/search?q=${encodeURIComponent(query)}&page=${encodeURIComponent(continuation)}&date=${date}&type=${type}&duration=${duration}&sort=${sort}&hl=en+gb`;
+      }
 
-const xmlData = await fetch(searchUrl)
-  .then((res) => res.text())
-  .then((txt) => getJson(txt));
-
+      const xmlData = await fetch(searchUrl)
+        .then((res) => res.text())
+        .then((txt) => getJson(txt));
 
       renderTemplate(res, req, "search.ejs", {
         invresults: xmlData,
@@ -199,7 +197,7 @@ const xmlData = await fetch(searchUrl)
     try {
       var media_proxy = config.media_proxy;
 
-      if (req.useragent.source.includes("Pardus")) {
+      if (config.useragent.source.includes("Pardus")) {
         var media_proxy = "https://media-proxy.ashley0143.xyz";
       }
 
@@ -247,25 +245,25 @@ const xmlData = await fetch(searchUrl)
       };
 
       const apiUrl = config.invapi + "/channels/";
-  const channelUrl = `${apiUrl}${ID}/${atob(
-  ChannelTabs.videos
-)}?sort_by=${sort_by}${continuation}`;
+      const channelUrl = `${apiUrl}${ID}/${atob(
+        ChannelTabs.videos
+      )}?sort_by=${sort_by}${continuation}`;
 
-const shortsUrl = `${apiUrl}${ID}/${atob(
-  ChannelTabs.shorts
-)}?sort_by=${sort_by}${continuation}`;
+      const shortsUrl = `${apiUrl}${ID}/${atob(
+        ChannelTabs.shorts
+      )}?sort_by=${sort_by}${continuation}`;
 
-const streamUrl = `${apiUrl}${ID}/${atob(
-  ChannelTabs.streams
-)}?sort_by=${sort_by}${continuation}`;
+      const streamUrl = `${apiUrl}${ID}/${atob(
+        ChannelTabs.streams
+      )}?sort_by=${sort_by}${continuation}`;
 
-const communityUrl = `${apiUrl}${ID}/${atob(
-  ChannelTabs.community
-)}?hl=en-US`;
+      const communityUrl = `${apiUrl}${ID}/${atob(
+        ChannelTabs.community
+      )}?hl=en-US`;
 
-const PlaylistUrl = `${apiUrl}${ID}/${atob(
-  ChannelTabs.playlist
-)}?hl=en-US`;
+      const PlaylistUrl = `${apiUrl}${ID}/${atob(
+        ChannelTabs.playlist
+      )}?hl=en-US`;
 
       const channelINVUrl = `${apiUrl}${ID}/`;
 
@@ -280,22 +278,18 @@ const PlaylistUrl = `${apiUrl}${ID}/${atob(
         getChannelData(channelINVUrl),
       ]);
 
-     
-var bannedchannels = ["UC1okSIA8UEY8OqvtjGHFvzA", "UClsVg5LkK2COQRo1mVS4taA", "UCIr4vkCsn0tdTW2xZ1jRG1g"];
-var bypassQuery = "cG9rZXR1YmVjaGFubmVsYnlwYXNzbG9scGVvcGxldGhpbmt0aGlzaXNjZW5zb3JzaGlwLTQ1OTBh";
+      var bannedchannels = ["UC1okSIA8UEY8OqvtjGHFvzA", "UClsVg5LkK2COQRo1mVS4taA", "UCIr4vkCsn0tdTW2xZ1jRG1g"];
+      var bypassQuery = "cG9rZXR1YmVjaGFubmVsYnlwYXNzbG9scGVvcGxldGhpbmt0aGlzaXNjZW5zb3JzaGlwLTQ1OTBh";
 
-var bypassExists = req.query.bypass === bypassQuery;
-var tabExists = 'tab' in req.query;
-var continuationExists = 'continuation' in req.query;
+      var bypassExists = req.query.bypass === bypassQuery;
+      var tabExists = 'tab' in req.query;
+      var continuationExists = 'continuation' in req.query;
 
-
-if (bannedchannels.some(channel => channel === ID) && !bypassExists && !tabExists && !continuationExists) {
-    var cinv = {
-    error:`this channel may include disinformation. If you still wanna view content <a href="/channel?id=${ID}&bypass=${bypassQuery}">click here</a> to bypass this restriction.`
- }
-}
-
-
+      if (bannedchannels.some(channel => channel === ID) && !bypassExists && !tabExists && !continuationExists) {
+        var cinv = {
+          error: `this channel may include disinformation. If you still wanna view content <a href="/channel?id=${ID}&bypass=${bypassQuery}">click here</a> to bypass this restriction.`,
+        };
+      }
 
       function getThumbnailUrl(video) {
         const maxresDefaultThumbnail = video.videoThumbnails.find(
@@ -333,12 +327,10 @@ if (bannedchannels.some(channel => channel === ID) && !bypassExists && !tabExist
       );
       const dnoreplace = about?.Description.toString();
 
-
-
       let ChannelFirstVideoObject = {
-          subCountText: "0",
-          authorVerified: false,
-        };
+        subCountText: "0",
+        authorVerified: false,
+      };
 
       renderTemplate(res, req, "channel.ejs", {
         ID,
@@ -348,29 +340,17 @@ if (bannedchannels.some(channel => channel === ID) && !bypassExists && !tabExist
         j: boutJson,
         sort: sort_by,
         stream,
-        tj,
-        c,
+        description,
+        subscribers,
+        banner: c.banner,
+        logo: c.logo,
+        ctv: c.ctv,
         cinv,
-        convert,
-        turntomins,
-        pronoun,
-        media_proxy_url: media_proxy,
         dnoreplace,
-        getThumbnailUrl,
-        continuation,
-        wiki: "",
-        getFirstLine,
-        isMobile: req.useragent.isMobile,
-        about,
-        playlist,
-        subs:
-          typeof subscribers === "string"
-            ? subscribers.replace("subscribers", "")
-            : "None",
-        desc: dnoreplace === "[object Object]" ? "" : description,
+        media_proxy_url: media_proxy,
       });
     } catch (error) {
-      console.error("Failed to render channel page:", error);
+      console.log(error);
       res.redirect("/");
     }
   });

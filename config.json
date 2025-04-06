@@ -4,6 +4,7 @@
     "dislikes": "https://returnyoutubedislikeapi.com/votes?videoId=",
     "invchannel": "https://invid-api.poketube.fun/api/v1",
     "p_url":"https://p.poketube.fun",
+    "useragent":"PokeTube/2.0.0 (GNU/Linux; Android 14; Trisquel 11; poketube-vidious; like FreeTube)",
     "media_proxy": "https://image-proxy.poketube.fun",
     "videourl":"https://eu-proxy.poketube.fun",
     "email_main_url":"https://email-server.poketube.fun",

@@ -94,15 +94,15 @@ module.exports = function (app, config, renderTemplate) {
 
     var media_proxy = config.media_proxy;
 
-    if (config.useragent.source.includes("Pardus")) {
+    if (req.useragent.source.includes("Pardus")) {
       var media_proxy = "https://media-proxy.ashley0143.xyz";
     }
-    var uaos = config.useragent.os;
-    let IsOldWindows;
+    var uaos = req.useragent.os;
+    var IsOldWindows;
 
-    if (uaos == "Windows 7" && config.useragent.browser == "Firefox") {
+    if (uaos == "Windows 7" && req.useragent.browser == "Firefox") {
       IsOldWindows = true;
-    } else if (uaos == "Windows 8" && config.useragent.browser == "Firefox") {
+    } else if (uaos == "Windows 8" && req.useragent.browser == "Firefox") {
       IsOldWindows = true;
     } else {
       IsOldWindows = false;
@@ -159,7 +159,11 @@ module.exports = function (app, config, renderTemplate) {
         searchUrl = `${config.invapi}/search?q=${encodeURIComponent(query)}&page=${encodeURIComponent(continuation)}&date=${date}&type=${type}&duration=${duration}&sort=${sort}&hl=en+gb`;
       }
 
-      const xmlData = await fetch(searchUrl)
+      const xmlData = await fetch(searchUrl, {
+        headers: {
+          'User-Agent': config.useragent,
+        },
+      })
         .then((res) => res.text())
         .then((txt) => getJson(txt));
 
@@ -197,7 +201,7 @@ module.exports = function (app, config, renderTemplate) {
     try {
       var media_proxy = config.media_proxy;
 
-      if (config.useragent.source.includes("Pardus")) {
+      if (req.useragent.source.includes("Pardus")) {
         var media_proxy = "https://media-proxy.ashley0143.xyz";
       }
 
@@ -216,7 +220,11 @@ module.exports = function (app, config, renderTemplate) {
 
       try {
         // about
-        const bout = await fetch(config.tubeApi + `channel?id=${ID}&tab=about`);
+        const bout = await fetch(config.tubeApi + `channel?id=${ID}&tab=about`, {
+          headers: {
+            'User-Agent': config.useragent,
+          },
+        });
         const h = await bout.text();
         var boutJson = JSON.parse(modules.toJson(h));
       } catch {
@@ -236,7 +244,11 @@ module.exports = function (app, config, renderTemplate) {
 
       const getChannelData = async (url) => {
         try {
-          return await fetch(url)
+          return await fetch(url, {
+            headers: {
+              'User-Agent': config.useragent,
+            },
+          })
             .then((res) => res.text())
             .then((txt) => getJson(txt));
         } catch (error) {
@@ -287,7 +299,7 @@ module.exports = function (app, config, renderTemplate) {
 
       if (bannedchannels.some(channel => channel === ID) && !bypassExists && !tabExists && !continuationExists) {
         var cinv = {
-          error: `this channel may include disinformation. If you still wanna view content <a href="/channel?id=${ID}&bypass=${bypassQuery}">click here</a> to bypass this restriction.`,
+          error: `this channel may include disinformation. If you still wanna view content <a href="/channel?id=${ID}&bypass=${bypassQuery}">click here</a> to bypass this restriction.`
         };
       }
 
@@ -340,17 +352,28 @@ module.exports = function (app, config, renderTemplate) {
         j: boutJson,
         sort: sort_by,
         stream,
-        description,
-        subscribers,
-        banner: c.banner,
-        logo: c.logo,
-        ctv: c.ctv,
+        tj,
+        c,
         cinv,
-        dnoreplace,
+        convert,
+        turntomins,
+        pronoun,
         media_proxy_url: media_proxy,
+        dnoreplace,
+        getThumbnailUrl,
+        continuation,
+        wiki: "",
+        getFirstLine,
+        isMobile: req.useragent.isMobile,
+        about,
+        playlist,
+        subs: typeof subscribers === "string"
+          ? subscribers.replace("subscribers", "")
+          : "None",
+        desc: dnoreplace === "[object Object]" ? "" : description,
       });
     } catch (error) {
-      console.log(error);
+      console.error("Failed to render channel page:", error);
       res.redirect("/");
     }
   });

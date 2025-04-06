@@ -115,27 +115,22 @@ module.exports = function (app, config, renderTemplate) {
   app.get("/apps", function (req, res) {
     renderTemplate(res, req, "apps.ejs");
   });
-  app.get("/playlist", async function (req, res) {
-    const { fetch } = await import("undici");
-    if (!req.query.list) res.redirect("/");
-    if (req.useragent.isMobile) res.redirect("/");
 
-    const playlist = await fetch(
-      `${config.invapi}/playlists/${req.query.list}?hl=en-us`
-    );
+  const headers = { "User-Agent": config.useragent };
 
-    const p = getJson(await playlist.text());
-    var mediaproxy = config.media_proxy;
+app.get("/playlist", async function (req, res) {
+  if (!req.query.list) res.redirect("/");
+  if (req.useragent.isMobile) res.redirect("/");
+  const playlist = await fetch(`${config.invapi}/playlists/${req.query.list}?hl=en-us`, { headers });
+  const p = getJson(await playlist.text());
+  var mediaproxy = config.media_proxy;
+  if (req.useragent.source.includes("Pardus")) {
+    mediaproxy = "https://media-proxy.ashley0143.xyz";
+  }
+  renderTemplate(res, req, "playlist.ejs", { p, mediaproxy });
+});
 
-    if (req.useragent.source.includes("Pardus")) {
-      var mediaproxy = "https://media-proxy.ashley0143.xyz";
-    }
 
-    renderTemplate(res, req, "playlist.ejs", {
-      p,
-      mediaproxy,
-    });
-  });
 
   app.get("/license", function (req, res) {
     renderTemplate(res, req, "license.ejs");

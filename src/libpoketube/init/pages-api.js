@@ -96,7 +96,7 @@ module.exports = function (app, config, renderTemplate) {
     var q = "18";
     if (req.query.q) q = req.query.q;
 
-    const url = `https://eu-proxy.poketube.fun/latest_version?id=${v}&itag=${q}&local=true`;
+    const url = `${config.videourl}latest_version?id=${v}&itag=${q}&local=true`;
 
     res.redirect(url);
   });
@@ -108,7 +108,7 @@ module.exports = function (app, config, renderTemplate) {
     const l = req.query.h;
 
     try {
-      let url = `https://eu-proxy.poketube.fun/api/v1/captions/${id}?label=${l}`;
+      let url = `${config.videourl}/api/v1/captions/${id}?label=${l}`;
 
       let f = await fetch(url, {
         headers: headers, // Add headers to the fetch request

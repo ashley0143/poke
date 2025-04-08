@@ -2575,13 +2575,7 @@ a {
 
                                                                              <% } %>                
 
-      <% if (qua === "medium") { %>  
-
-                                                <source src="https://eu-proxy.poketube.fun/latest_version?id=<%=inv_vid.videoId%>&itag=18&local=true" type="video/mp4; codecs=&quot;avc1.64001F, mp4a.40.2&quot;" label="sd360" selected="true">
-        
-                                                                           <% } %>                
-
-                                      
+     
 
             
                 
@@ -2921,6 +2915,9 @@ font-size: 13px;margin:0;padding:0;white-space: nowrap;
         const userScoreColor = userScore >= 80 ? 'green' : userScore >= 50 ? 'orange' : 'red';
     %>      
  <div class="nerddd" style="background:#272727;padding: 5px;margin-top: 12px;border-radius: 11px;font-family: 'PokeTube Flex';font-stretch: extra-expanded;font-weight: 700;">
+           
+              <a href="https://chatgpt.com/?q=<%- inv_vid.description %>+Please+summarize+the+selection+using+precise+and+concise+language.+Use+headers+and+bulleted+lists+in+the+summary%2C+to+make+it+scannable.+Maintain+the+meaning+and+factual+accuracy.">SUMMERISE!</a>
+           
               <%-String(channelurlfixer(inv_vid.descriptionHtml)).replace(/\n/g, " <br> ").replace(/twitter\.com/g, "twitter.com").replace(/reddit\.com/g, "redlib.matthew.science") %>
                 
                

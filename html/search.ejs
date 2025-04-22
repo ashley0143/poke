@@ -964,21 +964,18 @@ function extractQueryFromUpsellMessage(message) {
 %>
 <% if (answer) { %>
 <div class="container" style="padding: 1em;">
-  <h2 style="font-family: 'PokeTube Flex'; font-size: large; text-align: left; font-stretch: ultra-expanded; font-weight: 1000; margin-bottom: -0.1em;">
+  <h2 style="font-family: 'PokeTube Flex'; font-size: large; text-align: left !important ; font-stretch: ultra-expanded; font-weight: 1000; margin-bottom: -0.1em;">
     Answer to ur question
   </h2>
-  <h2 style="font-family: 'PokeTube Flex'; font-size: large; text-align: right; font-stretch: ultra-expanded; font-weight: 1000; margin-bottom: -0.1em; margin-top: -1em;">
-    <i title="PokeInstant Answer! (not ai/LLM)" class="fa-light fa-sparkles"></i>
+  <h2 style="font-family: 'PokeTube Flex'; font-size: large; text-align: right !important; font-stretch: ultra-expanded; font-weight: 1000; margin-bottom: -0.1em; margin-top: -1em;">
+    <i title="PokeIntellagance! " class="fa-light fa-sparkles"></i>
   </h2>
   <span
     id="answer-text"
     style="
       display: block;
-      white-space: pre-wrap;
-      word-break: break-word;
       font-size: 7em;
-      margin-bottom: 3em;
-      margin-right: 7em;
+      
     "
   ><%= answer %></span>
   <button

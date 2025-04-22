@@ -494,7 +494,8 @@ video[counter].classList.add("shake");
 <% }) %>
 
           </div>				</fieldset></div>
-  <br> 			<div id="filters-apply"> <button type="submit" style="color:#fff;background:#333;padding:3px;border-radius:11px;margin-top: 6em;">Apply!</button></div>
+  <br> 			<div id="filters-apply">
+<button type="submit" style="color:#fff;background:#333;padding:6px;border-radius:9px;margin-top: 6em;border: 1px solid gray;">Apply!</button></div>
 
 			</div>
             </form></div>   </details></div>    
@@ -515,18 +516,13 @@ function isMathExpression(query) {
     return /^[0-9\s\+\-\*\/\.\x]+$/.test(query);
 }
 
-function evaluateMathExpression(expression) {
-    // twenyone
-    if (expression.replace(/\s+/g, '') === '9+10') {
-        return '21';
+if (/^[0-9\s+\-*/.x]+$/.test(query)) {
+        const expr = query.replace(/\s+/g, '');
+        answer = expr === '9+10' ? '21' : (() => {
+            try { return eval(expr); } catch { return 'Invalid Expression'; }
+        })();
+        return answer;
     }
-
-    try {
-        return eval(expression);
-    } catch (error) {
-        return 'Invalid Expression';
-    }
-}
 
 function getCurrentDate() {
     const now = new Date();
@@ -538,58 +534,138 @@ function getCurrentYear() {
 }
 
 function getTimeInTimezone(location) {
-    const timezones = {
-        "california": "America/Los_Angeles",
-        "new york": "America/New_York",
-        "chicago": "America/Chicago",
-        "denver": "America/Denver",
-        "phoenix": "America/Phoenix",
-        "anchorage": "America/Anchorage",
-        "honolulu": "Pacific/Honolulu",
-        "london": "Europe/London",
-        "paris": "Europe/Paris",
-        "berlin": "Europe/Berlin",
-        "madrid": "Europe/Madrid",
-        "rome": "Europe/Rome",
-        "moscow": "Europe/Moscow",
-        "athens": "Europe/Athens",
-        "sydney": "Australia/Sydney",
-        "melbourne": "Australia/Melbourne",
-        "brisbane": "Australia/Brisbane",
-        "perth": "Australia/Perth",
-        "tokyo": "Asia/Tokyo",
-        "osaka": "Asia/Osaka",
-        "seoul": "Asia/Seoul",
-        "beijing": "Asia/Shanghai",
-        "shanghai": "Asia/Shanghai",
-        "hong kong": "Asia/Hong_Kong",
-        "taipei": "Asia/Taipei",
-        "bangkok": "Asia/Bangkok",
-        "jakarta": "Asia/Jakarta",
-        "delhi": "Asia/Kolkata",
-        "mumbai": "Asia/Kolkata",
-        "kolkata": "Asia/Kolkata",
-        "karachi": "Asia/Karachi",
-        "lahore": "Asia/Karachi",
-        "dubai": "Asia/Dubai",
-        "abu dhabi": "Asia/Dubai",
-        "riyadh": "Asia/Riyadh",
-        "johannesburg": "Africa/Johannesburg",
-        "cairo": "Africa/Cairo",
-        "nairobi": "Africa/Nairobi",
-        "lagos": "Africa/Lagos",
-        "algiers": "Africa/Algiers",
-        "casablanca": "Africa/Casablanca",
-        "lisbon": "Europe/Lisbon",
-        "dublin": "Europe/Dublin",
-        "zurich": "Europe/Zurich",
-        "vienna": "Europe/Vienna",
-        "stockholm": "Europe/Stockholm",
-        "oslo": "Europe/Oslo",
-        "helsinki": "Europe/Helsinki"
-    };
+const tzMap = {
+    "california":           "America/Los_Angeles",
+    "new york":            "America/New_York",
+    "chicago":             "America/Chicago",
+    "denver":              "America/Denver",
+    "phoenix":             "America/Phoenix",
+    "anchorage":           "America/Anchorage",
+    "honolulu":            "Pacific/Honolulu",
+    "london":              "Europe/London",
+    "paris":               "Europe/Paris",
+    "berlin":              "Europe/Berlin",
+    "madrid":              "Europe/Madrid",
+    "rome":                "Europe/Rome",
+    "moscow":              "Europe/Moscow",
+    "athens":              "Europe/Athens",
+    "sydney":              "Australia/Sydney",
+    "melbourne":           "Australia/Melbourne",
+    "brisbane":            "Australia/Brisbane",
+    "perth":               "Australia/Perth",
+    "tokyo":               "Asia/Tokyo",
+    "osaka":               "Asia/Osaka",
+    "seoul":               "Asia/Seoul",
+    "beijing":             "Asia/Shanghai",
+    "shanghai":            "Asia/Shanghai",
+    "hong kong":           "Asia/Hong_Kong",
+    "taipei":              "Asia/Taipei",
+    "bangkok":             "Asia/Bangkok",
+    "jakarta":             "Asia/Jakarta",
+    "delhi":               "Asia/Kolkata",
+    "mumbai":              "Asia/Kolkata",
+    "karachi":             "Asia/Karachi",
+    "dubai":               "Asia/Dubai",
+    "abu dhabi":           "Asia/Dubai",
+    "riyadh":              "Asia/Riyadh",
+    "johannesburg":        "Africa/Johannesburg",
+    "cairo":               "Africa/Cairo",
+    "nairobi":             "Africa/Nairobi",
+    "lagos":               "Africa/Lagos",
+    "algiers":             "Africa/Algiers",
+    "casablanca":          "Africa/Casablanca",
+    "lisbon":              "Europe/Lisbon",
+    "dublin":              "Europe/Dublin",
+    "zurich":              "Europe/Zurich",
+    "vienna":              "Europe/Vienna",
+    "stockholm":           "Europe/Stockholm",
+    "oslo":                "Europe/Oslo",
+    "helsinki":            "Europe/Helsinki",
+    "prague":              "Europe/Prague",
+    "budapest":            "Europe/Budapest",
+    "warsaw":              "Europe/Warsaw",
+    "bucharest":           "Europe/Bucharest",
+    "sofia":               "Europe/Sofia",
+    "zagreb":              "Europe/Zagreb",
+    "belgrade":            "Europe/Belgrade",
+    "sarajevo":            "Europe/Sarajevo",
+    "podgorica":           "Europe/Podgorica",
+    "ljubljana":           "Europe/Ljubljana",
+    "tirana":              "Europe/Tirane",
+    "valletta":            "Europe/Malta",
+    "andorra la vella":    "Europe/Andorra",
+    "monaco":              "Europe/Monaco",
+    "luxembourg":          "Europe/Luxembourg",
+    "bratislava":          "Europe/Bratislava",
+    "vilnius":             "Europe/Vilnius",
+    "riga":                "Europe/Riga",
+    "tallinn":             "Europe/Tallinn",
+    "istanbul":            "Europe/Istanbul",
+    "jerusalem":           "Asia/Jerusalem",
+    "amman":               "Asia/Amman",
+    "beirut":              "Asia/Beirut",
+    "damascus":            "Asia/Damascus",
+    "baghdad":             "Asia/Baghdad",
+    "tehran":              "Asia/Tehran",
+    "islamabad":           "Asia/Karachi",
+    "kathmandu":           "Asia/Kathmandu",
+    "thimphu":             "Asia/Thimphu",
+    "dhaka":               "Asia/Dhaka",
+    "yangon":              "Asia/Yangon",
+    "hanoi":               "Asia/Ho_Chi_Minh",
+    "ho chi minh city":    "Asia/Ho_Chi_Minh",
+    "manila":              "Asia/Manila",
+    "singapore":           "Asia/Singapore",
+    "kuala lumpur":        "Asia/Kuala_Lumpur",
+    "colombo":             "Asia/Colombo",
+    "bagotville":          "America/Montreal",
+    "toronto":             "America/Toronto",
+    "vancouver":           "America/Vancouver",
+    "mexico city":         "America/Mexico_City",
+    "guadalajara":         "America/Mexico_City",
+    "monterrey":           "America/Monterrey",
+    "sao paulo":           "America/Sao_Paulo",
+    "buenos aires":        "America/Argentina/Buenos_Aires",
+    "santiago":            "America/Santiago",
+    "rio de janeiro":      "America/Sao_Paulo",
+    "caracas":             "America/Caracas",
+    "bogota":              "America/Bogota",
+    "lima":                "America/Lima",
+    "quito":               "America/Quito",
+    "georgetown":          "America/Guyana",
+    "paramaribo":          "America/Paramaribo",
+    "cayenne":             "America/Cayenne",
+    "kingston":            "America/Jamaica",
+    "port_of_spain":       "America/Port_of_Spain",
+    "st johns":            "America/St_Johns",
+    "midway":              "Pacific/Midway",
+    "apia":                "Pacific/Apia",
+    "nuku alofa":          "Pacific/Tongatapu",
+    "tarawa":              "Pacific/Tarawa",
+    "funafuti":            "Pacific/Funafuti",
+    "suva":                "Pacific/Fiji",
+    "chatham":             "Pacific/Chatham",
+    "pitcairn":            "Pacific/Pitcairn",
+    "galapagos":           "Pacific/Galapagos",
+    "easter island":       "Pacific/Easter",
+    "honiara":             "Pacific/Guadalcanal",
+    "port vila":           "Pacific/Efate",
+    "palikir":             "Pacific/Pohnpei",
+    "palau":               "Pacific/Palau",
+    "mcmurdo":             "Antarctica/McMurdo",
+    "rothera":             "Antarctica/Rothera",
+    "troll":               "Antarctica/Troll",
+    "davis":               "Antarctica/Davis",
+    "casey":               "Antarctica/Casey",
+    "mawson":              "Antarctica/Mawson",
+    "vostok":              "Antarctica/Vostok",
+    "syowa":               "Antarctica/Syowa",
+    "gmt":                 "Etc/GMT",
+    "utc":                 "UTC"
+};
 
-    const timezone = timezones[location.toLowerCase()];
+
+    const timezone = tzMap[location.toLowerCase()];
     if (!timezone) {
         return null;
     }
@@ -601,7 +677,166 @@ function getTimeInTimezone(location) {
 
 const query = q.toLowerCase().trim();
 let answer = '';
+// 19 utility functions
 
+function randomCompliment() {
+    const compliments = [
+        "You’re an awesome friend.",
+        "You light up the room.",
+        "You have a great sense of humor.",
+        "You make a difference.",
+        "You're like a ray of sunshine."
+    ];
+    return compliments[Math.floor(Math.random() * compliments.length)];
+}
+
+function randomEncouragement() {
+    const encourages = [
+        "Keep going—you’ve got this!",
+        "Don’t give up now!",
+        "Every step counts.",
+        "Believe in yourself.",
+        "You can do anything."
+    ];
+    return encourages[Math.floor(Math.random() * encourages.length)];
+}
+
+function base64Encode(str) {
+    return btoa(str);
+}
+
+function base64Decode(str) {
+    try {
+        return atob(str);
+    } catch {
+        return 'Invalid Base64';
+    }
+}
+
+function hexToDec(str) {
+    return parseInt(str.replace(/^0x/, ''), 16).toString();
+}
+
+function decToHex(num) {
+    return Number(num).toString(16);
+}
+
+function textToCharCodes(text) {
+    return text.split('').map(c => c.charCodeAt(0)).join(' ');
+}
+
+function charCodesToText(codes) {
+    return String.fromCharCode(...codes.split(/\s+/).map(n => +n));
+}
+
+function countWords(text) {
+    return text.trim().split(/\s+/).length;
+}
+
+function titleCase(text) {
+    return text
+        .split(' ')
+        .map(w => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase())
+        .join(' ');
+}
+
+function slugify(text) {
+    return text
+        .toLowerCase()
+        .trim()
+        .replace(/[^a-z0-9]+/g, '-')
+        .replace(/^-+|-+$/g, '');
+}
+
+function isPrime(n) {
+    n = Number(n);
+    if (n < 2) return false;
+    for (let i = 2; i <= Math.sqrt(n); i++) {
+        if (n % i === 0) return false;
+    }
+    return true;
+}
+
+function gcd(a, b) {
+    a = Math.abs(a); b = Math.abs(b);
+    while (b) [a, b] = [b, a % b];
+    return a;
+}
+
+function lcm(a, b) {
+    return Math.abs(a * b) / gcd(a, b);
+}
+
+function fibonacci(n) {
+    n = Number(n);
+    if (n < 2) return n;
+    let a = 0, b = 1;
+    for (let i = 2; i <= n; i++) [a, b] = [b, a + b];
+    return b;
+}
+
+function generatePassword(length = 8) {
+    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()';
+    let pw = '';
+    for (let i = 0; i < length; i++) {
+        pw += chars.charAt(Math.floor(Math.random() * chars.length));
+    }
+    return pw;
+}
+
+function daysUntil(dateStr) {
+    const now = new Date();
+    const then = new Date(dateStr);
+    const diff = then - now;
+    return diff > 0
+        ? Math.ceil(diff / (1000 * 60 * 60 * 24)) + ' days'
+        : 'Date passed';
+}
+
+function generateUUID() {
+    return ([1e7]+-1e3+-4e3+-8e3+-1e11).replace(
+        /[018]/g,
+        c => (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
+    );
+}
+
+function generateRandomString(length = 8) {
+    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    let s = '';
+    for (let i = 0; i < length; i++) {
+        s += chars.charAt(Math.floor(Math.random() * chars.length));
+    }
+    return s;
+}
+
+
+  const emojiMap = {
+    "grinning face":"😀","grin":"😁","smiley":"😃","smile":"😄","sweat smile":"😅",
+    "joy":"😂","rofl":"🤣","relaxed":"☺️","blush":"😊","innocent":"😇",
+    "slightly_smiling_face":"🙂","upside_down":"🙃","wink":"😉","relieved":"😌",
+    "heart eyes":"😍","kissing_heart":"😘","kissing":"😗","kissing_smiling_eyes":"😙",
+    "kissing_closed_eyes":"😚","yum":"😋","stuck out tongue":"😛","stuck out tongue wink":"😜",
+    "stuck out tongue closed eyes":"😝","money_mouth":"🤑","hug":"🤗","nerd":"🤓",
+    "sunglasses":"😎","star_struck":"🤩","thinking":"🤔","zipper_mouth":"🤐",
+    "raised_eyebrow":"🤨","neutral":"😐","expressionless":"😑","no_mouth":"😶",
+    "roll_eyes":"🙄","smirk":"😏","persevere":"😣","disappointed_relieved":"😥",
+    "cold_sweat":"😰","pensive":"😔","confused":"😕","worried":"😟","slightly_frowning":"🙁",
+    "frowning":"☹️","anguished":"😧","open_mouth":"😮","grimacing":"😬","hushed":"😯",
+    "astonished":"😲","flushed":"😳","pleading":"🥺","frowning2":"😦","anguished2":"😧",
+    "cry":"😢","disappointed":"😞","scream":"😱","fearful":"😨","tired_face":"😫",
+    "weary":"😩","triumph":"😤","angry":"😠","rage":"😡","poop":"💩","thumbsup":"👍",
+    "thumbsdown":"👎","clap":"👏","raised_hands":"🙌","pray":"🙏","muscle":"💪","eyes":"👀",
+    "ear":"👂","nose":"👃","tongue":"👅","lips":"👄","kiss":"💋","crown":"👑","womans hat":"👒",
+    "eyeglasses":"👓","necktie":"👔","shirt":"👕","jeans":"👖","dress":"👗","kimono":"👘",
+    "bikini":"👙","sandal":"👡","boot":"👢","mans shoe":"👞","high heel":"👠","sock":"🧦",
+    "gloves":"🧤","scarf":"🧣","tophat":"🎩","billed cap":"🧢","flag us":"🇺🇸","flag gb":"🇬🇧",
+    "flag ca":"🇨🇦","flag de":"🇩🇪","flag fr":"🇫🇷","flag es":"🇪🇸","flag it":"🇮🇹","flag jp":"🇯🇵",
+    "flag cn":"🇨🇳","flag in":"🇮🇳","flag br":"🇧🇷","flag ru":"🇷🇺","flag za":"🇿🇦","flag au":"🇦🇺",
+    "flag nz":"🇳🇿","flag ng":"🇳🇬","flag eg":"🇪🇬","flag ar":"🇦🇷","flag mx":"🇲🇽","flag kr":"🇰🇷",
+    "flag tr":"🇹🇷"
+};
+
+let m;
 if (isMathExpression(query)) {
     answer = evaluateMathExpression(query);
 } else if (query.includes('date') || query.includes('what date is it')) {
@@ -618,16 +853,64 @@ if (isMathExpression(query)) {
     const options = { weekday: 'long' };
     answer = now.toLocaleDateString(undefined, options);
 } else if (query.includes('u are cute') || query.includes('you are cute')) {
-    answer = "jifshfgdhjf >~< no u"
+    answer = "jifshfgdhjf >~< no u";
 } else if (query.includes('ur cute') || query.includes('your cute')) {
-    answer = "efkohgefgef >///< no u"
+    answer = "efkohgefgef >///< no u";
 } else if (query.includes('am i cute') || query.includes('am i a cutie?')) {
-    answer = "yesh :3 u are "
+    answer = "yesh :3 u are ";
 } else if (query.includes('am i a good girl') || query.includes('am i a good boy?')) {
-    answer = query.includes('girl') ? "yesh :3 u are a good girl" : "yesh :3 u are a good boy";
+    answer = query.includes('girl')
+        ? "yesh :3 u are a good girl"
+        : "yesh :3 u are a good boy";
 } else if (query.includes('ur hot') || query.includes('you are hot')) {
-    answer = "jrifyehgyerfgu9wdswgfsafgydwgbfwdfge >~< "
-} 
+    answer = "jrifyehgyerfgu9wdswgfsafgydwgbfwdfge >~< ";
+} else if (query.startsWith('emoji ')) {
+    const name = query.slice(6);
+    answer = emojiMap[name] || 'Unknown emoji';
+} else if (query.includes('compliment')) {
+    answer = randomCompliment();
+} else if (query.includes('encouragement') || query.includes('encourage me')) {
+    answer = randomEncouragement();
+} else if (query.startsWith('base64 encode ')) {
+    answer = base64Encode(query.slice(14));
+} else if (query.startsWith('base64 decode ')) {
+    answer = base64Decode(query.slice(14));
+} else if ((m = /0x[0-9a-f]+/i.exec(query))) {
+    answer = hexToDec(m[0]);
+} else if (query.match(/\d+\s+to\s+hex/i)) {
+    answer = decToHex(query.match(/\d+/)[0]);
+} else if (query.startsWith('char codes for ')) {
+    answer = textToCharCodes(query.slice(15));
+} else if (query.startsWith('text from codes ')) {
+    answer = charCodesToText(query.slice(16));
+} else if (query.startsWith('word count of ')) {
+    answer = countWords(query.slice(14)).toString();
+} else if (query.startsWith('titlecase ')) {
+    answer = titleCase(query.slice(10));
+} else if (query.startsWith('slugify ')) {
+    answer = slugify(query.slice(8));
+} else if (query.match(/\bprime\b/)) {
+    answer = isPrime(query.match(/\d+/)[0]) ? 'Yes' : 'No';
+} else if (query.includes('gcd of ')) {
+    const nums = query.match(/\d+/g);
+    answer = gcd(nums[0], nums[1]).toString();
+} else if (query.includes('lcm of ')) {
+    const nums = query.match(/\d+/g);
+    answer = lcm(nums[0], nums[1]).toString();
+} else if (query.match(/fib(?:onacci)?\s*\d+/i)) {
+    answer = fibonacci(query.match(/\d+/)[0]).toString();
+} else if (query.startsWith('generate password')) {
+    const n = query.match(/\d+/);
+    answer = generatePassword(n ? Number(n[0]) : undefined);
+} else if (query.includes('days until ')) {
+    answer = daysUntil(query.split('days until ')[1].trim());
+} else if (query.includes('uuid')) {
+    answer = generateUUID();
+} else if (query.startsWith('random string')) {
+    const n = query.match(/\d+/);
+    answer = generateRandomString(n ? Number(n[0]) : undefined);
+}
+
 
 const upsellMessages = [
     "[new] Try searching 'What's 4+4?'",
@@ -653,31 +936,89 @@ function extractQueryFromUpsellMessage(message) {
 %>
 %>
 <% if (answer) { %>
-<div class="container">
-    <h2 style="font-family: 'PokeTube Flex';font-size: large;text-align: left !important;font-stretch: ultra-expanded; font-weight: 1000; margin-bottom: -0.1em;">
-        Answer to ur question
-    </h2>
-    <h2 style="font-family: 'PokeTube Flex';font-size: large;text-align:  right !important;font-stretch: ultra-expanded; font-weight: 1000; margin-bottom: -0.1em;margin-top: -1em;"><i title="PokeInstant Anwser! (not ai/LLM)" class="fa-light fa-sparkles"></i></h2>
-    <span style="font-size: 7em; margin-bottom: 3em; text-align: left !important; margin-right: 7em;white-space: -moz-pre-wrap !important;white-space: -pre-wrap;white-space: -o-pre-wrap;white-space: pre-wrap;word-wrap: break-word;white-space: -webkit-pre-wrap;word-break: break-all;white-space: normal;"><%= answer %></span>
-</div>
+<section class="answer-block">
+  <header class="answer-header">
+    <h2 class="answer-title">Answer to ur question</h2>
+    <i class="fa-light fa-sparkles answer-icon"
+       title="PokeAI! "></i>
+  </header>
+  <pre class="answer-content"><%= answer %></pre>
+  <button class="copy-btn"
+          data-copy-text="<%= answer.replace(/"/g, '&quot;') %>">
+    <i class="fa-regular fa-copy"></i> Copy
+  </button>
+</section>
+
+<style>
+.answer-block {
+  background: #111;
+  color: #0f0;
+  padding: 1em;
+  border-radius: 0.5em;
+  margin: 2em 0;
+}
+.answer-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.answer-title {
+  font-family: 'PokeTube Flex', sans-serif;
+  font-size: 1.5rem;
+  margin: 0;
+}
+.answer-icon {
+  font-size: 1.5rem;
+  color: #fc0;
+}
+.answer-content {
+  white-space: pre-wrap;
+  word-break: break-word;
+  font-size: 2rem;
+  margin: 1em 0;
+}
+.copy-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5em;
+  background: #222;
+  color: #fff;
+  border: none;
+  padding: 0.5em 1em;
+  border-radius: 0.25em;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.copy-btn:hover {
+  background: #333;
+}
+.copy-btn:active {
+  background: #444;
+}
+.copy-btn i {
+  font-size: 1rem;
+}
+</style>
+
+<script>
+document.querySelectorAll('.copy-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const text = btn.getAttribute('data-copy-text');
+    navigator.clipboard.writeText(text).then(() => {
+      btn.textContent = 'Copied!';
+      setTimeout(() => {
+        btn.innerHTML = '<i class="fa-regular fa-copy"></i> Copy';
+      }, 1500);
+    });
+  });
+});
+</script>
+
 <% } else if (showUpsell) { %>
 
 <% } %>
-
-<% if (q == "ai" || q == "aibot" || q == "chatbot") { %>  
-<div class="container">
-    <h2 style="font-family: 'PokeTube Flex'; font-size: large; text-align: center !important; font-stretch: ultra-expanded; font-weight: 1000; margin-bottom: -0.1em;">
-        No, POKE Will Never Have "AI" —Because It Doesn't Need It
-    </h2>
-    <span style="margin-bottom: 3em; text-align: left !important; margin-right: 7em; white-space: pre-wrap; word-break: break-word;">
-         POKE doesn’t need "AI." There’s no good reason for a YouTube front end to include some gimmicky AI assistant. These days, "AI" just means slapping a ChatGPT wrapper on an app, calling it innovative, and hoping no one notices the lack of actual purpose. It’s the latest fad, sure, but POKE is about simplicity, privacy, and doing things right—not just joining tech trends for the sake of it.  
-        <br>
-        POKE is here to make watching videos smoother, not cluttered with unnecessary "features." Real value doesn’t come from chasing whatever big tech wants to sell you on. It’s about staying true to what actually helps users. So, yeah, no AI here, and honestly, no need for it. 
-        <br> 
-        If u really want a "chatbot" or "ai" : <a href="https://chatgpt.com/"> look at the chatgpt website </a> - (or search using the !ai bang - which is made by duckduckgo, not <a href="https://duckduckgo.com/duckduckgo-help-pages/features/bangs/">us</a>) 
-    </span>
-</div>
-<% } %>
+ 
 
 <!-- self harm -->
 <% 
@@ -1018,12 +1359,12 @@ font-weight: 1000;" href="/watch?v=<%= x.videoId %>" class="title max-lines-2"><
      <a href="/channel?id=<%= x.authorId %>"><%= x.author %><% if (x?.authorVerified) { %> 
             <i class="icon ion ion-md-checkmark-circle" title="verified channel"></i><% } %></a>
           <div style="display: inline-flex;flex-direction: row;min-width: 6em;gap: 4px;">
-            <a href="/download?v=<%= x.videoId %>" style="background: #333;width: 7.6em;border-radius: 18px;">
+            <a href="/download?v=<%= x.videoId %>" style="background: #333;width: 7.6em;border-radius: 8px;">
               <div style="display: flex;">
                 <i class="fa-light fa-download" style="display: flex;font-size: 16px;padding: 5px;border-radius: 18px;margin-left: 2px;"></i><span style="margin-top: 6px;">Download</span>
               </div>
             </a>
-            <a href="https://youtube.com/watch?v=<%= x.videoId %>" style="background: #333;width: 7.6em;border-radius: 18px;height: 2em;width: 12.5em;">
+            <a href="https://youtube.com/watch?v=<%= x.videoId %>" style="background: #333;width: 7.6em;border-radius: 8px;height: 2em;width: 12.5em;">
               <div style="display: flex;">
                 <i class="fa-brands fa-youtube" style="display: flex;font-size: 16px;padding: 5px;border-radius: 18px;margin-left: 2px;"></i><span style="margin-top: 6px;">Open on YouTube :/</span>
               </div>

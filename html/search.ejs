@@ -962,7 +962,7 @@ function extractQueryFromUpsellMessage(message) {
 }
 %>
 %>
- <% if (answer) { %>
+<% if (answer) { %>
 <div class="container" style="padding: 1em;">
   <h2 style="font-family: 'PokeTube Flex'; font-size: large; text-align: left !important; font-stretch: ultra-expanded; font-weight: 1000; margin-bottom: -0.1em;">
     Answer to ur question
@@ -977,7 +977,6 @@ function extractQueryFromUpsellMessage(message) {
       font-size: 7em;
       white-space: pre-wrap;
       word-break: break-word;
-      margin-bottom: 1em;
     "
   ><%= answer %></span>
   <div style="display: flex; gap: 1em;">
@@ -995,7 +994,7 @@ function extractQueryFromUpsellMessage(message) {
     >Copy</button>
     <button
       id="ask-btn"
-      style="font-size:1em;padding:0.5em 1em;"
+      style="font-size:1em; padding:0.5em 1em;"
     >Ask ChatGPT</button>
   </div>
 </div>
@@ -1010,10 +1009,21 @@ function extractQueryFromUpsellMessage(message) {
 </noscript>
 
 <style>
+  /* Rainbow border keyframes */
+  @keyframes rainbow-border {
+    0%   { border-color: red; }
+    16%  { border-color: orange; }
+    32%  { border-color: yellow; }
+    48%  { border-color: green; }
+    64%  { border-color: blue; }
+    80%  { border-color: indigo; }
+    100% { border-color: violet; }
+  }
+
   #ask-btn {
     background: linear-gradient(45deg, #6a11cb, #2575fc);
     color: #fff;
-    border: none;
+    border: 2px solid transparent;            /* base border */
     border-radius: 0.5em;
     padding: 0.6em 1.2em;
     cursor: pointer;
@@ -1023,6 +1033,7 @@ function extractQueryFromUpsellMessage(message) {
   #ask-btn:hover {
     transform: translateY(-2px);
     box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+    animation: rainbow-border 2s linear infinite;  /* apply rainbow */
   }
   #ask-btn:active {
     transform: translateY(0);

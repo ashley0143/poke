@@ -514,6 +514,7 @@ Web              </a>
  <% 
 
  const query = q.toLowerCase().trim();
+let answer = '';
 
 function isMathExpression(query) {
     return /^[0-9\s\+\-\*\/\.\x]+$/.test(query);
@@ -678,7 +679,6 @@ const tzMap = {
     return now.toLocaleTimeString('en-US', options);
 }
 
-let answer = '';
  
 function randomCompliment() {
     const compliments = [

@@ -1058,7 +1058,7 @@ function extractQueryFromUpsellMessage(message) {
   askBtn.addEventListener('click', () => {
     const userQuery = prompt('What would you like to ask ChatGPT?');
     if (userQuery) {
-      window.location.href = `https://chatgpt.com/chat?query=${encodeURIComponent(userQuery)}`;
+      window.location.href = `https://chatgpt.com/?q=${encodeURIComponent(userQuery)}`;
     }
   });
 })();

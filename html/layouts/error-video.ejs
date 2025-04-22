@@ -1,109 +1,131 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <title>Poke - <%=error%> !!!</title>
-        <meta content="#111111" name="theme-color" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no, viewport-fit=cover" />
-        <meta name="darkreader-lock" />
-        <% if (description == "This helps protect our community. Learn more (TRYING AGAIN....)") { %> 
-         <meta http-equiv="refresh" content="5"> 
- <% } %>
-        <link href="/css/yt-ukraine.svg?v=3" rel="icon" />
-        <link rel="manifest" href="/manifest.json" />
-        <style>
-            body {
-                margin: auto;
-                background: #111111;
-                color: white;
-                font-family: arial;
-                max-width: 600px;
-            }
-            body::before {
-                background: linear-gradient(0deg, rgba(115, 32, 67, 1), rgba(17, 17, 17, 1));
-                background-repeat: no-repeat;
-                content: "";
-                position: fixed;
-                bottom: 0px;
-                left: 0px;
-                width: 100%;
-                height: 100%;
-                z-index: -1;
-                pointer-events: none;
-                transition: 1s height;
-            }
+<head>
+    <title>Poke - <%= error %> !!!</title>
+    <meta content="#111111" name="theme-color" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no, viewport-fit=cover" />
+    <meta name="darkreader-lock" />
+    <link href="/css/yt-ukraine.svg?v=3" rel="icon" />
+    <link rel="manifest" href="/manifest.json" />
+    <style>
+        body {
+            margin: auto;
+            background: #111111;
+            color: white;
+            font-family: arial;
+            max-width: 600px;
+        }
+        body::before {
+            background: linear-gradient(0deg, rgba(115, 32, 67, 1), rgba(17, 17, 17, 1));
+            background-repeat: no-repeat;
+            content: "";
+            position: fixed;
+            bottom: 0px;
+            left: 0px;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            pointer-events: none;
+            transition: 1s height;
+        }
 
-            h2 {
-                font-size: 42px;
-            }
+        h2 {
+            font-size: 42px;
+        }
 
+        p#abstract {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 500px;
+            margin: 0px;
+            font-weight: bold;
+            opacity: 0.005;
+            pointer-events: none;
+            transition: 1s transform;
+        }
+
+        @media only screen and (max-width: 790px) {
             p#abstract {
-                position: fixed;
-                top: 50%;
-                left: 50%;
-                transform: translate(-50%, -50%);
-                font-size: 500px;
-                margin: 0px;
-                font-weight: bold;
-                opacity: 0.005;
-                pointer-events: none;
-                transition: 1s transform;
+                transform: translate(-50%, -50%) rotate(90deg) !important;
             }
+        }
 
-            @media only screen and (max-width: 790px) {
-                p#abstract {
-                    transform: translate(-50%, -50%) rotate(90deg) !important;
-                }
-            }
+        .error {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            cursor: default;
+            max-width: 600px;
+            width: 100%;
+        }
 
-            .error {
-                position: fixed;
-                top: 50%;
-                left: 50%;
-                transform: translate(-50%, -50%);
-                text-align: center;
-                cursor: default;
-                max-width: 600px;
-                width: 100%;
-            }
+        .error-footer {
+            position: fixed;
+            bottom: 24px;
+            width: 100%;
+            max-width: 600px;
+            text-align: center;
+        }
+        .error-footer a {
+            color: #ac8fa5;
+            text-decoration: none;
+            margin: 0px 12px;
+        }
+        .error-footer a:hover {
+            color: #d69cc8;
+        }
+        .countdown {
+            margin-top: 16px;
+            color: #ccc;
+            font-size: 14px;
+        }
+    </style>
 
-            .error-footer {
-                position: fixed;
-                bottom: 24px;
-                width: 100%;
-                max-width: 600px;
-                text-align: center;
+    <% if (description == "Error while communicating with Invidious companion: Error connecting to 'companion:8282': Connection refused") { %>
+    <script>
+        let seconds = 10;
+        function updateCountdown() {
+            const el = document.getElementById('countdown');
+            if (el) {
+                el.textContent = "Trying again in " + seconds + " seconds...";
             }
-            .error-footer a {
-                color: #ac8fa5;
-                text-decoration: none;
-                margin: 0px 12px;
+            if (seconds <= 0) {
+                location.reload();
+            } else {
+                seconds--;
+                setTimeout(updateCountdown, 1000);
             }
-            .error-footer a:hover {
-                color: #d69cc8;
-            }
-        </style>
-    </head>
-    <body>
-            <% if (description == "This helps protect our community. Learn more (TRYING AGAIN....)") { %> 
-
+        }
+        window.addEventListener('DOMContentLoaded', updateCountdown);
+    </script>
+    <% } %>
+</head>
+<body>
+    <% if (description == "Error while communicating with Invidious companion: Error connecting to 'companion:8282': Connection refused") { %>
         <p id="abstract">502</p>
-          <% } else if (description !== "This helps protect our community. Learn more (TRYING AGAIN....)")   { %>
-         <p id="abstract">404</p>
+    <% } else { %>
+        <p id="abstract">404</p>
+    <% } %>
 
-         <% } %>
+    <div class="error">
+        <h2><%= error %></h2>
+        <p><%= description %></p>
+        <% if (description == "Error while communicating with Invidious companion: Error connecting to 'companion:8282': Connection refused") { %>
+            <div class="countdown" id="countdown">Trying again in 10 seconds...</div>
+        <% } %>
+    </div>
 
-        <div class="error">
-            <h2><%=error%></h2>
-            <p><%=description%></p>
-        </div>
-        <div class="error-footer">
-            <a href="https://codeberg.org/ashley/poke/issues/new/choose">Create issue</a>
-            <a href="https://discord.poketube.fun">Report on our Discord</a>
-            <% if (description == "This helps protect our community. Learn more (TRYING AGAIN....)") { %> 
-
+    <div class="error-footer">
+        <a href="https://codeberg.org/ashley/poke/issues/new/choose">Create issue</a>
+        <a href="https://discord.poketube.fun">Report on our Discord</a>
+        <% if (description == "Error while communicating with Invidious companion: Error connecting to 'companion:8282': Connection refused") { %>
             <a href="https://github.com/iv-org/invidious/issues">See Invidious issues</a>
             <a href="">Refresh Page</a>
-                     <% } %>
-        </div>
-    </body>
+        <% } %>
+    </div>
+</body>
 </html>

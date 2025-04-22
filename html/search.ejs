@@ -811,7 +811,7 @@ function generateRandomString(length = 8) {
 }
 
 
-  const emojiMap = {
+ const emojiMap = {
     "grinning face":"😀","grin":"😁","smiley":"😃","smile":"😄","sweat smile":"😅",
     "joy":"😂","rofl":"🤣","relaxed":"☺️","blush":"😊","innocent":"😇",
     "slightly_smiling_face":"🙂","upside_down":"🙃","wink":"😉","relieved":"😌",
@@ -834,8 +834,29 @@ function generateRandomString(length = 8) {
     "flag ca":"🇨🇦","flag de":"🇩🇪","flag fr":"🇫🇷","flag es":"🇪🇸","flag it":"🇮🇹","flag jp":"🇯🇵",
     "flag cn":"🇨🇳","flag in":"🇮🇳","flag br":"🇧🇷","flag ru":"🇷🇺","flag za":"🇿🇦","flag au":"🇦🇺",
     "flag nz":"🇳🇿","flag ng":"🇳🇬","flag eg":"🇪🇬","flag ar":"🇦🇷","flag mx":"🇲🇽","flag kr":"🇰🇷",
-    "flag tr":"🇹🇷"
+    "flag tr":"🇹🇷",
+
+    //  animals
+    "dog face":"🐶","cat face":"🐱","mouse face":"🐭","hamster":"🐹","rabbit":"🐰",
+    "fox face":"🦊","bear face":"🐻","koala":"🐨","tiger face":"🐯","lion face":"🦁",
+    "cow face":"🐮","pig face":"🐷","frog face":"🐸","octopus":"🐙","monkey face":"🐵",
+    "chicken":"🐔","penguin":"🐧","bird":"🐦","baby chick":"🐤","hatching chick":"🐣",
+
+    //  nature
+    "sun":"☀️","moon":"🌙","star":"⭐️","cloud":"☁️","umbrella":"☂️","snowflake":"❄️",
+    "fire":"🔥","droplet":"💧","ocean":"🌊","volcano":"🌋","cactus":"🌵","palm tree":"🌴",
+    "evergreen tree":"🌲","deciduous tree":"🌳","fallen leaf":"🍂","maple leaf":"🍁",
+    "seedling":"🌱","flower":"🌸","rose":"🌹","sunflower":"🌻","blossom":"🌼",
+
+    //food
+    "grapes":"🍇","watermelon":"🍉","tangerine":"🍊","banana":"🍌","pineapple":"🍍",
+    "apple":"🍎","pear":"🍐","peach":"🍑","strawberry":"🍓","cherries":"🍒","mango":"🥭",
+    "lemon":"🍋","coffee":"☕️","tea":"🍵","beer":"🍺","wine glass":"🍷","cocktail":"🍸",
+    "tropical drink":"🍹","birthday cake":"🎂","pizza":"🍕","hamburger":"🍔","fries":"🍟",
+    "hot dog":"🌭","taco":"🌮","burrito":"🌯","popcorn":"🍿","chocolate bar":"🍫",
+    "candy":"🍬","lollipop":"🍭","honey pot":"🍯"
 };
+
 
 let m;
 if (isMathExpression(query)) {
@@ -865,9 +886,14 @@ if (isMathExpression(query)) {
         : "yesh :3 u are a good boy";
 } else if (query.includes('ur hot') || query.includes('you are hot')) {
     answer = "jrifyehgyerfgu9wdswgfsafgydwgbfwdfge >~< ";
-} else if (query.startsWith('emoji ')) {
-    const name = query.slice(6);
-    answer = emojiMap[name] || 'Unknown emoji';
+} else if (/^(?:emoji\s+(.+)|(.+)\s+emoji)$/.test(query)) {
+    const match = query.match(/^(?:emoji\s+(.+)|(.+)\s+emoji)$/);
+    let name = (match[1] || match[2]).trim().toLowerCase();
+    const keySpace = name.replace(/_/g, ' ');
+    const keyUnderscore = name.replace(/\s+/g, '_');
+    answer = emojiMap[keySpace] 
+          || emojiMap[keyUnderscore] 
+          || 'Unknown emoji';
 } else if (query.includes('compliment')) {
     answer = randomCompliment();
 } else if (query.includes('encouragement') || query.includes('encourage me')) {
@@ -937,84 +963,52 @@ function extractQueryFromUpsellMessage(message) {
 %>
 %>
 <% if (answer) { %>
-<section class="answer-block">
-  <header class="answer-header">
-    <h2 class="answer-title">Answer to ur question</h2>
-    <i class="fa-light fa-sparkles answer-icon"
-       title="PokeAI! "></i>
-  </header>
-  <pre class="answer-content"><%= answer %></pre>
-  <button class="copy-btn"
-          data-copy-text="<%= answer.replace(/"/g, '&quot;') %>">
-    <i class="fa-regular fa-copy"></i> Copy
-  </button>
-</section>
-
-<style>
-.answer-block {
-  background: #111;
-  color: #0f0;
-  padding: 1em;
-  border-radius: 0.5em;
-  margin: 2em 0;
-}
-.answer-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-.answer-title {
-  font-family: 'PokeTube Flex', sans-serif;
-  font-size: 1.5rem;
-  margin: 0;
-}
-.answer-icon {
-  font-size: 1.5rem;
-  color: #fc0;
-}
-.answer-content {
-  white-space: pre-wrap;
-  word-break: break-word;
-  font-size: 2rem;
-  margin: 1em 0;
-}
-.copy-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5em;
-  background: #222;
-  color: #fff;
-  border: none;
-  padding: 0.5em 1em;
-  border-radius: 0.25em;
-  font-size: 1rem;
-  cursor: pointer;
-  transition: background 0.2s;
-}
-.copy-btn:hover {
-  background: #333;
-}
-.copy-btn:active {
-  background: #444;
-}
-.copy-btn i {
-  font-size: 1rem;
-}
-</style>
+<div class="container" style="padding: 1em;">
+  <h2 style="font-family: 'PokeTube Flex'; font-size: large; text-align: left; font-stretch: ultra-expanded; font-weight: 1000; margin-bottom: -0.1em;">
+    Answer to ur question
+  </h2>
+  <h2 style="font-family: 'PokeTube Flex'; font-size: large; text-align: right; font-stretch: ultra-expanded; font-weight: 1000; margin-bottom: -0.1em; margin-top: -1em;">
+    <i title="PokeInstant Answer! (not ai/LLM)" class="fa-light fa-sparkles"></i>
+  </h2>
+  <span
+    id="answer-text"
+    style="
+      display: block;
+      white-space: pre-wrap;
+      word-break: break-word;
+      font-size: 7em;
+      margin-bottom: 3em;
+      margin-right: 7em;
+    "
+  ><%= answer %></span>
+  <button
+    id="copy-btn"
+    style="
+      font-size: 1em;
+      padding: 0.5em 1em;
+      cursor: pointer;
+      background: #222;
+      color: #fff;
+      border: none;
+      border-radius: 0.25em;
+    "
+  >Copy</button>
+</div>
 
 <script>
-document.querySelectorAll('.copy-btn').forEach(btn => {
+;(function() {
+  const btn = document.getElementById('copy-btn');
+  const textEl = document.getElementById('answer-text');
   btn.addEventListener('click', () => {
-    const text = btn.getAttribute('data-copy-text');
+    const text = textEl.innerText || textEl.textContent;
     navigator.clipboard.writeText(text).then(() => {
       btn.textContent = 'Copied!';
-      setTimeout(() => {
-        btn.innerHTML = '<i class="fa-regular fa-copy"></i> Copy';
-      }, 1500);
+      setTimeout(() => { btn.textContent = 'Copy'; }, 1500);
     });
   });
-});
+})();
 </script>
+
 
 <% } else if (showUpsell) { %>
 

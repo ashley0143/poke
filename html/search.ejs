@@ -962,54 +962,99 @@ function extractQueryFromUpsellMessage(message) {
 }
 %>
 %>
-<% if (answer) { %>
+ <% if (answer) { %>
 <div class="container" style="padding: 1em;">
-  <h2 style="font-family: 'PokeTube Flex'; font-size: large; text-align: left !important ; font-stretch: ultra-expanded; font-weight: 1000; margin-bottom: -0.1em;">
+  <h2 style="font-family: 'PokeTube Flex'; font-size: large; text-align: left !important; font-stretch: ultra-expanded; font-weight: 1000; margin-bottom: -0.1em;">
     Answer to ur question
   </h2>
   <h2 style="font-family: 'PokeTube Flex'; font-size: large; text-align: right !important; font-stretch: ultra-expanded; font-weight: 1000; margin-bottom: -0.1em; margin-top: -1em;">
-    <i title="PokeIntellagance! " class="fa-light fa-sparkles"></i>
+    <i title="PokeIntellagance!" class="fa-light fa-sparkles"></i>
   </h2>
   <span
     id="answer-text"
     style="
       display: block;
       font-size: 7em;
-      
+      white-space: pre-wrap;
+      word-break: break-word;
+      margin-bottom: 1em;
     "
   ><%= answer %></span>
-  <button
-    id="copy-btn"
-    style="
-      font-size: 1em;
-      padding: 0.5em 1em;
-      cursor: pointer;
-      background: #222;
-      color: #fff;
-      border: none;
-      border-radius: 0.25em;
-    "
-  >Copy</button>
+  <div style="display: flex; gap: 1em;">
+    <button
+      id="copy-btn"
+      style="
+        font-size: 1em;
+        padding: 0.5em 1em;
+        cursor: pointer;
+        background: #222;
+        color: #fff;
+        border: none;
+        border-radius: 0.25em;
+      "
+    >Copy</button>
+    <button
+      id="ask-btn"
+      style="font-size:1em;padding:0.5em 1em;"
+    >Ask ChatGPT</button>
+  </div>
 </div>
+
+<noscript>
+  <style>
+    #copy-btn,
+    #ask-btn {
+      display: none !important;
+    }
+  </style>
+</noscript>
+
+<style>
+  #ask-btn {
+    background: linear-gradient(45deg, #6a11cb, #2575fc);
+    color: #fff;
+    border: none;
+    border-radius: 0.5em;
+    padding: 0.6em 1.2em;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    transition: transform 0.1s ease, box-shadow 0.2s ease;
+  }
+  #ask-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+  }
+  #ask-btn:active {
+    transform: translateY(0);
+    box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+  }
+</style>
 
 <script>
 ;(function() {
-  const btn = document.getElementById('copy-btn');
-  const textEl = document.getElementById('answer-text');
-  btn.addEventListener('click', () => {
+  const copyBtn = document.getElementById('copy-btn');
+  const askBtn  = document.getElementById('ask-btn');
+  const textEl  = document.getElementById('answer-text');
+
+  copyBtn.addEventListener('click', () => {
     const text = textEl.innerText || textEl.textContent;
     navigator.clipboard.writeText(text).then(() => {
-      btn.textContent = 'Copied!';
-      setTimeout(() => { btn.textContent = 'Copy'; }, 1500);
+      copyBtn.textContent = 'Copied!';
+      setTimeout(() => { copyBtn.textContent = 'Copy'; }, 1500);
     });
+  });
+
+  askBtn.addEventListener('click', () => {
+    const userQuery = prompt('What would you like to ask ChatGPT?');
+    if (userQuery) {
+      window.location.href = `/chat?query=${encodeURIComponent(userQuery)}`;
+    }
   });
 })();
 </script>
-
-
 <% } else if (showUpsell) { %>
-
 <% } %>
+
  
 
 <!-- self harm -->

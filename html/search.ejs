@@ -424,7 +424,10 @@ video[counter].classList.add("shake");
       </div>          </div>
 
 
-            <div class=right>
+            <div class=right style="background: #333;
+  border-radius: 2em;
+  height: 49px;
+  margin-top: 5px;">
               
 <button title="Play/Pause Ambient music" class="a" id="audioButton" onclick="toggleAudio()">
   <i id="audioIcon" class="fas fa-pause"></i>
@@ -452,7 +455,7 @@ video[counter].classList.add("shake");
     <div id="filters-box"><form action="/search" method="get">
 			<input type="hidden" name="query" value="<%- q %>">
 			<input type="hidden" name="continuation" value="<%- continuation %>">
-			<div id="filters-flex" style="display: flex;gap: 18px;background: #111;border-radius: 1em;padding: 6px;width: fit-content;margin-left: auto;margin-right: auto;">				<div class="filter-column"><fieldset>
+			<div id="filters-flex" style="display: flex;gap: 18px;background: #111;border-radius: 1em;margin-top: 6px;padding: 6px;width: fit-content;margin-left: auto;margin-right: auto;">				<div class="filter-column"><fieldset>
 					<legend><div class="filter-name underlined">Upload date</div></legend>
 					<div class="filter-options">
 <% const selectedDate = date || "none"; %>
@@ -1444,12 +1447,12 @@ font-weight: 1000;" href="/watch?v=<%= x.videoId %>" class="title max-lines-2"><
             <i class="icon ion ion-md-checkmark-circle" title="verified channel"></i><% } %></a>
             </div>
           <div style="display: inline-flex;flex-direction: row;min-width: 6em;gap: 4px;">
-            <a href="/download?v=<%= x.videoId %>" style="background: #333;width: 7.6em;border-radius: 18px;">
+            <a href="/download?v=<%= x.videoId %>" style="background: #333;width: 7.6em;border-radius: 8px;">
               <div style="display: flex;">
                 <i class="fa-light fa-download" style="display: flex;font-size: 16px;padding: 5px;border-radius: 18px;margin-left: 2px;"></i><span style="margin-top: 6px;">Download</span>
               </div>
             </a>
-            <a href="https://youtube.com/watch?v=<%= x.videoId %>" style="background: #333;width: 7.6em;border-radius: 18px;height: 2em;width: 12.5em;">
+            <a href="https://youtube.com/watch?v=<%= x.videoId %>" style="background: #333;width: 7.6em;border-radius: 8px;height: 2em;width: 12.5em;">
               <div style="display: flex;">
                 <i class="fa-brands fa-youtube" style="display: flex;font-size: 16px;padding: 5px;border-radius: 18px;margin-left: 2px;"></i><span style="margin-top: 6px;">Open on YouTube :/</span>
               </div>

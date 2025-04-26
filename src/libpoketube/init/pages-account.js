@@ -1,22 +1,5 @@
-const {
-  fetcher,
-  core,
-  wiki,
-  musicInfo,
-  modules,
-  version,
-  initlog,
-  init,
-} = require("../libpoketube-initsys.js");
-const {
-  IsJsonString,
-  convert,
-  getFirstLine,
-  capitalizeFirstLetter,
-  turntomins,
-  getRandomInt,
-  getRandomArbitrary,
-} = require("../ptutils/libpt-coreutils.js");
+const { modules } = require("../libpoketube-initsys.js");
+
 
 var http = require("https");
 var ping = require("ping");

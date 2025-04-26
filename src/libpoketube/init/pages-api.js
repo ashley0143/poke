@@ -1,22 +1,4 @@
-const {
-  fetcher,
-  core,
-  wiki,
-  musicInfo,
-  modules,
-  version,
-  initlog,
-  init,
-} = require("../libpoketube-initsys.js");
-const {
-  IsJsonString,
-  convert,
-  getFirstLine,
-  capitalizeFirstLetter,
-  turntomins,
-  getRandomInt,
-  getRandomArbitrary,
-} = require("../ptutils/libpt-coreutils.js");
+const { modules, version } = require("../libpoketube-initsys.js");
 
 function getJson(str) {
   try {
@@ -29,21 +11,24 @@ function getJson(str) {
 const pkg = require("../../../package.json");
 const os = require('os');
 const cnf = require("../../../config.json");
-const innertube = require("../libpoketube-youtubei-objects.json");
-const { execSync } = require('child_process');
 
-const verfull = "v24.1906-sho-MAJOR_UPDATE-stable-dev-nonLTS-git-MTcxODc5NDY3NQ==";
-const versmol = "v24.1906-sho";
+
+const innertube = require("../libpoketube-youtubei-objects.json");
+
+const { execSync } = require('child_process'); // DO NOT ABBRV THIS :SOB:
+
+const verfull = "v25.2705-luna-MAJOR_UPDATE-stable-dev-nonLTS-git-MTc0NTcwNjc4MA==";
+const versmol = "v25.2705-luna";
 const branch = "dev/master";
-const codename = "sho";
-const versionnumber = "293";
-const relaseunixdate = "MTcxODc5NDY3NQ==";
-const updatequote = "pls fund vennie plush -Bims";
+const codename = "luna";
+const versionnumber = "294";
+const relaseunixdate = "MTc0NTcwNjc4MA==";
+const updatequote = "i created this world.....to feel some control...";
 
 module.exports = function (app, config, renderTemplate) {
 
   const headers = {
-    'User-Agent': config.useragent, // Set User-Agent from config
+    'User-Agent': config.useragent,  
   };
 
   app.get("/vi/:v/:t", async function (req, res) {
@@ -51,7 +36,7 @@ module.exports = function (app, config, renderTemplate) {
 
     let f = await modules.fetch(url + `?cachefixer=${btoa(Date.now())}`, {
       method: req.method,
-      headers: headers, // Add headers to the fetch request
+      headers: headers,
     });
 
     f.body.pipe(res);
@@ -62,7 +47,7 @@ module.exports = function (app, config, renderTemplate) {
 
     let f = await modules.fetch(url + `?cachefixer=${btoa(Date.now())}`, {
       method: req.method,
-      headers: headers, // Add headers to the fetch request
+      headers: headers,
     });
 
     f.body.pipe(res);
@@ -73,7 +58,7 @@ module.exports = function (app, config, renderTemplate) {
 
     let f = await modules.fetch(url + `?cachefixer=${btoa(Date.now())}`, {
       method: req.method,
-      headers: headers, // Add headers to the fetch request
+      headers: headers,
     });
 
     f.body.pipe(res);
@@ -84,7 +69,7 @@ module.exports = function (app, config, renderTemplate) {
 
     let f = await modules.fetch(url + `?cachefixer=${btoa(Date.now())}`, {
       method: req.method,
-      headers: headers, // Add headers to the fetch request
+      headers: headers, 
     });
 
     f.body.pipe(res);
@@ -111,7 +96,7 @@ module.exports = function (app, config, renderTemplate) {
       let url = `${config.videourl}/api/v1/captions/${id}?label=${l}`;
 
       let f = await fetch(url, {
-        headers: headers, // Add headers to the fetch request
+        headers: headers, 
       });
 
       const body = await f.text();
@@ -130,7 +115,7 @@ module.exports = function (app, config, renderTemplate) {
         const apiUrl = `https://ryd-proxy.kavin.rocks/votes/${id}&hash=d0550b6e28c8f93533a569c314d5b4e2`;
 
         const response = await fetch(apiUrl, {
-          headers: headers, // Add headers to the fetch request
+          headers: headers,
         });
 
         if (response.status === 400) {
@@ -273,7 +258,7 @@ module.exports = function (app, config, renderTemplate) {
 
     const invidious = await modules
       .fetch("https://invid-api.poketube.fun/bHj665PpYhUdPWuKPfZuQGoX/api/v1/stats", {
-        headers: headers, // Add headers to the fetch request
+        headers: headers, 
       })
       .then((res) => res.text())
       .then((txt) => getJson(txt));

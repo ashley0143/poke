@@ -1,1112 +1,429 @@
- <!--
-    This Source Code Form is subject to the terms of the GNU General Public License:
+<!--
+  This Source Code Form is subject to the terms of the GNU General Public License:
 
-    Copyright (C) 2021-2024 PokeTube (https://codeberg.org/Ashley/poketube)
-    
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
+  Copyright (C) 2021-2025 PokeTube (https://codeberg.org/Ashley/poketube)
 
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
+  This program is free software: you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation, either version 3 of the License, or
+  (at your option) any later version.
 
-    You should have received a copy of the GNU General Public License
-    along with this program. If not, see https://www.gnu.org/licenses/.
--->
-<% if (!game) { %> 
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
 
+  You should have received a copy of the GNU General Public License
+  along with this program. If not, see https://www.gnu.org/licenses/.
+--><!--//--><![CDATA[//><!--
+/**
+ * @licstart The following is the entire license notice for the JavaScript
+ * code in this page.
+ *
+ *  Copyright (C) 2021-2024 POKETUBE (https://codeberg.org/Ashley/poketube)
+ *
+ * The JavaScript code in this page is free software: you can redistribute
+ * it and/or modify it under the terms of the GNU General Public License
+ * (GNU GPL) as published by the Free Software Foundation, either version 3
+ * of the License, or (at your option) any later version.  The code is
+ * distributed WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU GPL
+ * for more details.
+ *
+ * As additional permission under GNU GPL version 3 section 7, you may
+ * distribute non-source (e.g., minimized or compacted) forms of that code
+ * without the copy of the GNU GPL normally required by section 4, provided
+ * you include this license notice and a URL through which recipients can
+ * access the Corresponding Source.
+ *
+ * @licend The above is the entire license notice for the JavaScript code
+ * in this page.
+ */
+
+//--><!]]>
+<% if (!game) { %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <link href="/css/yt-ukraine.svg?v=3" rel=icon>
+  <link href="/css/yt-ukraine.svg?v=4" rel="icon">
   <link rel="manifest" href="/manifest.json">
-  <meta content="▶▶ Poke Games" property=og:title>
-  <meta content="Do gaming on poke!" property=twitter:description>
- <meta content="https://cdn.glitch.global/d68d17bb-f2c0-4bc3-993f-50902734f652/aa70111e-5bcd-4379-8b23-332a33012b78.image.png?v=1701898829884" property="og:image"  />
-  <meta content="summary_large_image" name="twitter:card" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta property="og:title" content="▶▶ Poke Games Hub">
+  <meta property="twitter:description" content="Free software gaming on poke!">
+  <meta property="og:image" content="https://cdn.glitch.global/.../hub-image.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Poke! Games Hub</title>
   <style>
+    :root {
+      --bg-start: #2c3e50;
+      --bg-end:   #34495e;
+      --accent:   #ffabcc;
+      --card-bg:  rgba(255,255,255,0.1);
+      --card-hover: rgba(255,255,255,0.2);
+      --font-main: 'PokeTube Flex', sans-serif;
+    }
+    * { box-sizing: border-box; margin:0; padding:0; }
     body {
-      margin: 0;
-      font-family: 'PokeTube flex', sans-serif;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      min-height: 100vh;
-      background: linear-gradient(135deg, #2c3e50, #34495e);
+      font-family: var(--font-main);
+      background: linear-gradient(135deg, var(--bg-start), var(--bg-end));
       color: #fff;
+      display:flex; align-items:center; justify-content:center;
+      min-height:100vh;
     }
-
-    .container {
-      text-align: center;
-      padding: 20px;
+    h1 {
+      font-weight:900; font-stretch:ultra-expanded; font-style:italic;
+      color: var(--accent); text-align:center; margin-bottom:1rem;
     }
-    
-      h1 {
-      margin-top: 0;
-      font-weight: 1000;
-      font-stretch: ultra-expanded;
-      font-family: "Poketube flex";
-      font-style: italic;
-      color: #ffabcc;
-    }
-
     .game-container {
-      display: flex;
-      gap: 20px;
-      justify-content: center;
-      flex-wrap: wrap;
+      display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+      gap:1rem; width:90%; max-width:1000px;
     }
-
-    @font-face {
-    font-family: "PokeTube Flex";
-    src: url("https://p.poketube.fun/https://cdn.glitch.global/43b6691a-c8db-41d4-921c-8cf6aa0d9108/robotoflex.ttf?v=1668343428681");
-    font-style: normal;
-    font-stretch: 1% 800%;
-    font-display: swap;
-  }
-
     .game {
-      flex: 0 0 300px;
-      padding: 20px;
-      border: 2px solid #fff;
-      border-radius: 10px;
-      background: rgba(255, 255, 255, 0.1);
-      transition: background 0.3s ease;
-      text-decoration: none;
-      color: #fff;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
+      background: var(--card-bg);
+      border:2px solid #fff; border-radius:10px;
+      text-decoration:none; color:#fff; padding:1rem;
+      text-align:center; transition:background .3s;
     }
-
-    .game:hover {
-      background: rgba(255, 255, 255, 0.2);
-    }
-
-    canvas {
-      border: 1px solid #fff;
-      visibility: collapse;
-    }
-
-    .board {
-      display: grid;
-      grid-template-columns: repeat(3, 100px);
-      grid-gap: 5px;
-      margin-top: 20px;
-    }
-
-    .cell {
-      width: 100px;
-      height: 100px;
-      border: 1px solid #fff;
-      font-size: 2em;
-      cursor: pointer;
+    .game:hover { background: var(--card-hover); }
+    .game h2 { margin-bottom: .5rem; }
+    canvas, .board { display:none; }
+    @font-face {
+      font-family: var(--font-main);
+      src: url("https://p.poketube.fun/.../robotoflex.ttf");
+      font-display: swap;
     }
   </style>
-  <title>Gaming Hub</title>
 </head>
 <body>
-  <div class="container">
+  <div>
     <h1>Poke! Games Hub</h1>
-    
     <div class="game-container">
-      <a href="?game=snake" class="game">
-        <h2>Snake</h2>
-        <canvas id="snakeCanvas"></canvas>
-      </a>
-
-      <a href="?game=tic-tac-toe" class="game">
-        <h2>Tic-Tac-Toe</h2>
-        <div id="message"></div>
-        <div class="board" id="board"></div>
-      </a>
-
-      <a href="?game=sudoku" class="game">
-        <h2>Sudoku</h2>
-        <div id="sudokuMessage"></div>
-        <div class="board" id="sudokuBoard"></div>
-      </a>
-
-      <a href="?game=pong" class="game">
-        <h2>Ping-Pong</h2>
-        <div id="pingPongMessage"></div>
-        <div class="board" id="pingPongBoard"></div>
-      </a>
+      <a href="?game=snake" class="game"><h2>Snake</h2><canvas id="snakeCanvas"></canvas></a>
+      <a href="?game=tic-tac-toe" class="game"><h2>Tic-Tac-Toe</h2><div id="message"></div><div class="board" id="board"></div></a>
+      <a href="?game=sudoku" class="game"><h2>Sudoku</h2><div class="board" id="sudokuBoard"></div></a>
+      <a href="?game=pong" class="game"><h2>Ping-Pong</h2><canvas id="pongCanvas"></canvas></a>
+      <a href="?game=minesweeper" class="game"><h2>Minesweeper</h2><div class="board" id="minesweeperBoard"></div></a>
+      <a href="?game=breakout" class="game"><h2>Breakout</h2><canvas id="breakoutCanvas"></canvas></a>
     </div>
   </div>
-  <script src="/static/data-mobile.js?v=5459"></script>
+  <script src="/static/data-mobile.js?v=6000"></script>
 </body>
 </html>
-                                             		 	               <% } %>   
-<% if (game === "snake") { %> 
-  <!DOCTYPE html>
+<% } %>
+
+
+<% if (game === "snake") { %>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <link href="/css/yt-ukraine.svg?v=3" rel=icon>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="/css/yt-ukraine.svg?v=4" rel="icon">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Snake</title>
   <style>
-    html, body {
-      height: 100%;
-      margin: 0;
-      background: linear-gradient(135deg, #2c3e50, #34495e);
-      overflow: hidden;
-    }
-    canvas {
-      border: 1px solid #000;
-      display: block;
-      position: absolute;
-    }
+    html,body{margin:0;padding:0;background:linear-gradient(135deg,#2c3e50,#34495e);overflow:hidden;}
+    #snakeCanvas{display:block;border:1px solid #000;position:absolute;}
   </style>
-  <title>Snak</title>
 </head>
 <body>
-  <canvas id="snakeCanvas" width="400" height="400"></canvas>
- <script type="text/javascript">
-<!--//--><![CDATA[//><!--
-/**
- * @licstart The following is the entire license notice for the JavaScript
- * code in this page.
- *
- *  Copyright (C) 2021-2024 POKETUBE (https://codeberg.org/Ashley/poketube)
- *
- * The JavaScript code in this page is free software: you can redistribute
- * it and/or modify it under the terms of the GNU General Public License
- * (GNU GPL) as published by the Free Software Foundation, either version 3
- * of the License, or (at your option) any later version.  The code is
- * distributed WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU GPL
- * for more details.
- *
- * As additional permission under GNU GPL version 3 section 7, you may
- * distribute non-source (e.g., minimized or compacted) forms of that code
- * without the copy of the GNU GPL normally required by section 4, provided
- * you include this license notice and a URL through which recipients can
- * access the Corresponding Source.
- *
- * @licend The above is the entire license notice for the JavaScript code
- * in this page.
- */
-
-//--><!]]>
-</script>
+  <canvas id="snakeCanvas"></canvas>
   <script>
-    const canvas = document.getElementById("snakeCanvas");
-    const ctx = canvas.getContext("2d");
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-    // Initial snake position and size
-    let snake = [
-  { x: canvas.width / 2, y: canvas.height / 2 },
-  { x: canvas.width / 2, y: canvas.height / 2 + 10 },
-  { x: canvas.width / 2, y: canvas.height / 2 + 20 }
-];
-
-
-    let direction = "down"; // Initial direction
-
-    // Initial food position
-    let food = { x: 200, y: 200 };
-
-    function draw() {
-      // Clear the canvas
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-      // Draw the snake
-      ctx.fillStyle = "#00F";
-      snake.forEach(segment => {
-        ctx.fillRect(segment.x, segment.y, 10, 10);
-      });
-
-      // Draw the food
-      ctx.fillStyle = "#F00";
-      ctx.fillRect(food.x, food.y, 10, 10);
+    // GPL header omitted—see top of file
+    const canvas = document.getElementById('snakeCanvas');
+    const ctx = canvas.getContext('2d');
+    const scale = 20;
+    let snake = [{x:10,y:10}], dir={x:0,y:1}, food=randomFood();
+    function resize(){ 
+      canvas.width=Math.floor(window.innerWidth/scale)*scale;
+      canvas.height=Math.floor(window.innerHeight/scale)*scale;
     }
-
-    function move() {
-      const head = { ...snake[0] }; // Create a new object for the head
-
-      // Move the head based on the direction
-      if (direction === "up") head.y -= 10;
-      else if (direction === "down") head.y += 10;
-      else if (direction === "left") head.x -= 10;
-      else if (direction === "right") head.x += 10;
-
-      // Add the new head to the front of the snake
+    window.addEventListener('resize',resize);
+    resize();
+    function randomFood(){ return { x:Math.floor(Math.random()*(canvas.width/scale)), y:Math.floor(Math.random()*(canvas.height/scale)) }; }
+    function draw(){
+      ctx.clearRect(0,0,canvas.width,canvas.height);
+      ctx.fillStyle='#f00'; ctx.fillRect(food.x*scale,food.y*scale,scale,scale);
+      ctx.fillStyle='#00f'; snake.forEach(s=>ctx.fillRect(s.x*scale,s.y*scale,scale,scale));
+    }
+    function update(){
+      const head={x:snake[0].x+dir.x,y:snake[0].y+dir.y};
+      head.x=(head.x+(canvas.width/scale))%(canvas.width/scale);
+      head.y=(head.y+(canvas.height/scale))%(canvas.height/scale);
+      if(snake.some((seg,i)=>i&&seg.x===head.x&&seg.y===head.y)) return reset();
       snake.unshift(head);
-
-      // Check if the snake has eaten the food
-      if (head.x === food.x && head.y === food.y) {
-        // Generate new food
-        food.x = Math.floor(Math.random() * (canvas.width / 10)) * 10;
-        food.y = Math.floor(Math.random() * (canvas.height / 10)) * 10;
-      } else {
-        // If not eaten, remove the tail
-        snake.pop();
-      }
+      if(head.x===food.x&&head.y===food.y) food=randomFood(); else snake.pop();
     }
-function checkCollision() {
-  const head = snake[0];
-
-  // Check if the snake hits the walls
-  if (head.x < 0 || head.x >= canvas.width || head.y < 0 || head.y >= canvas.height) {
-    alert("Game Over!");
-    resetGame();
-  }
-
-  // Check if the snake collides with itself
-  for (let i = 1; i < snake.length; i++) {
-    if (head.x === snake[i].x && head.y === snake[i].y) {
-       resetGame();
-    }
-  }
-}
-
-function resetGame() {
-  const middleX = Math.floor(canvas.width / 2 / 10) * 10;
-  const middleY = Math.floor(canvas.height / 2 / 10) * 10;
-
-  snake = [
-    { x: middleX, y: middleY },
-    { x: middleX, y: middleY + 10 },
-    { x: middleX, y: middleY + 20 }
-  ];
-
-  direction = "down";
-
-  food = { x: 200, y: 200 };
-}
-
-    function gameLoop() {
-      move();
-      checkCollision();
-      draw();
-    }
-
-    // Set up keyboard event listeners
-    window.addEventListener("keydown", e => {
-      if (e.key === "ArrowUp" && direction !== "down") {
-        direction = "up";
-      } else if (e.key === "ArrowDown" && direction !== "up") {
-        direction = "down";
-      } else if (e.key === "ArrowLeft" && direction !== "right") {
-        direction = "left";
-      } else if (e.key === "ArrowRight" && direction !== "left") {
-        direction = "right";
+    function reset(){ snake=[{x:10,y:10}]; dir={x:0,y:1}; food=randomFood(); }
+    document.addEventListener('keydown',e=>{
+      if(e.key.startsWith('Arrow')){
+        const map={Up:[0,-1],Down:[0,1],Left:[-1,0],Right:[1,0]};
+        const [dx,dy]=map[e.key.replace('Arrow','')];
+        if(dx!==-dir.x&&dy!==-dir.y) dir={x:dx,y:dy};
       }
     });
-
-    // Set up touch controls
-    let touchStartX, touchStartY;
-
-    canvas.addEventListener("touchstart", function(event) {
-      touchStartX = event.touches[0].clientX;
-      touchStartY = event.touches[0].clientY;
-    });
-
-    canvas.addEventListener("touchmove", function(event) {
-      const touchEndX = event.touches[0].clientX;
-      const touchEndY = event.touches[0].clientY;
-
-      const dx = touchEndX - touchStartX;
-      const dy = touchEndY - touchStartY;
-
-      if (Math.abs(dx) > Math.abs(dy)) {
-        // Horizontal swipe
-        if (dx > 0 && direction !== "left") {
-          direction = "right";
-        } else if (dx < 0 && direction !== "right") {
-          direction = "left";
-        }
-      } else {
-        // Vertical swipe
-        if (dy > 0 && direction !== "up") {
-          direction = "down";
-        } else if (dy < 0 && direction !== "down") {
-          direction = "up";
-        }
-      }
-    });
-
-    // Set up the game loop
-    setInterval(gameLoop, 100);
+    setInterval(()=>{update();draw();},100);
   </script>
 </body>
 </html>
+<% } %>
 
-                                             		 	               <% } %>   
-<% if (game === "tic-tac-toe") { %> 
+
+<% if (game === "tic-tac-toe") { %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <link href="/css/yt-ukraine.svg?v=3" rel=icon>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <style>
-    body {
-      font-family: "Poketube flex", sans-serif;
-      text-align: center;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      height: 100vh;
-      background: linear-gradient(135deg, #2c3e50, #34495e);
-      margin: 0;
-    }
-    .container {
-      text-align: left;
-      margin-top: 20px;
-      margin-left: 20px;
-      color:#fff;
-    }
-    .board {
-      display: grid;
-      grid-template-columns: repeat(3, 100px);
-      grid-gap: 5px;
-      margin: 20px auto;
-    }
-    .cell {
-      width: 100px;
-      height: 100px;
-      border: 1px solid #ccc;
-      font-size: 2em;
-      cursor: pointer;
-    }
-    @font-face {
-    font-family: "PokeTube Flex";
-    src: url("https://p.poketube.fun/https://cdn.glitch.global/43b6691a-c8db-41d4-921c-8cf6aa0d9108/robotoflex.ttf?v=1668343428681");
-    font-style: normal;
-    font-stretch: 1% 800%;
-    font-display: swap;
-  }
-
-    .container > h1 {
-    font-weight: 1000;
-    font-stretch: ultra-expanded;
-    font-style: italic;
-  }
-  </style>
+  <link href="/css/yt-ukraine.svg?v=4" rel="icon">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Tic-Tac-Toe</title>
+  <style>
+    body{margin:0;font-family:'PokeTube Flex';display:flex;align-items:center;justify-content:center;height:100vh;background:linear-gradient(135deg,#2c3e50,#34495e);color:#fff;}
+    #board{display:grid;grid-template:repeat(3,100px)/repeat(3,100px);gap:5px;}
+    .cell{display:flex;align-items:center;justify-content:center;font-size:2em;background:#fff2;cursor:pointer;}
+    #message{text-align:center;margin-bottom:1rem;}
+  </style>
 </head>
 <body>
-  <div class="container">
-    <h1>Tic-Tac-Toe</h1>
-    <div id="message"></div>
-    <div class="board" id="board"></div>
+  <div>
+    <div id="message">Player X’s turn :3</div>
+    <div id="board"></div>
   </div>
-  <script type="text/javascript">
-<!--//--><![CDATA[//><!--
-/**
- * @licstart The following is the entire license notice for the JavaScript
- * code in this page.
- *
- *  Copyright (C) 2021-2024 POKETUBE (https://codeberg.org/Ashley/poketube)
- *
- * The JavaScript code in this page is free software: you can redistribute
- * it and/or modify it under the terms of the GNU General Public License
- * (GNU GPL) as published by the Free Software Foundation, either version 3
- * of the License, or (at your option) any later version.  The code is
- * distributed WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU GPL
- * for more details.
- *
- * As additional permission under GNU GPL version 3 section 7, you may
- * distribute non-source (e.g., minimized or compacted) forms of that code
- * without the copy of the GNU GPL normally required by section 4, provided
- * you include this license notice and a URL through which recipients can
- * access the Corresponding Source.
- *
- * @licend The above is the entire license notice for the JavaScript code
- * in this page.
- */
-
-//--><!]]>
-</script>
   <script>
-    const boardElement = document.getElementById("board");
-    const messageElement = document.getElementById("message");
-    let currentPlayer = "X";
-    let board = ["", "", "", "", "", "", "", "", ""];
-
-    function checkWinner() {
-      const winningCombinations = [
-        [0, 1, 2], [3, 4, 5], [6, 7, 8], // Rows
-        [0, 3, 6], [1, 4, 7], [2, 5, 8], // Columns
-        [0, 4, 8], [2, 4, 6]             // Diagonals
-      ];
-
-      for (const combination of winningCombinations) {
-        const [a, b, c] = combination;
-        if (board[a] && board[a] === board[b] && board[a] === board[c]) {
-          return board[a];
-        }
-      }
-
-      return null;
-    }
-
-    function checkDraw() {
-      return !board.includes("");
-    }
-
-    function handleClick(index) {
-      if (board[index] === "" && !checkWinner() && !checkDraw()) {
-        board[index] = currentPlayer;
-        renderBoard();
-        const winner = checkWinner();
-        if (winner) {
-          messageElement.textContent = `Player ${winner} won!!!!!! woaah`;
-        } else if (checkDraw()) {
-          messageElement.textContent = "It's a draw! oh welp >~<";
-        } else {
-          currentPlayer = currentPlayer === "X" ? "O" : "X";
-          messageElement.textContent = `Player ${currentPlayer}'s turn :3`;
-          if (currentPlayer === "O") {
-            setTimeout(makeComputerMove, 500); // AI waits for 0.5 second
-          }
-        }
-      }
-    }
-
-    function makeComputerMove() {
-     // Look for a winning move, then look to block player, otherwise, choose a random move
-      const winningMove = findWinningMove();
-      const blockingMove = findBlockingMove();
-
-      if (winningMove !== null) {
-        board[winningMove] = currentPlayer;
-      } else if (blockingMove !== null) {
-        board[blockingMove] = currentPlayer;
-      } else {
-        // Randomly choose an empty cell for the computer's move
-        const emptyCells = board.reduce((acc, value, index) => {
-          if (value === "") {
-            acc.push(index);
-          }
-          return acc;
-        }, []);
-
-        if (emptyCells.length > 0) {
-          const randomIndex = Math.floor(Math.random() * emptyCells.length);
-          const computerMove = emptyCells[randomIndex];
-          board[computerMove] = currentPlayer;
-        }
-      }
-
-      renderBoard();
-      const winner = checkWinner();
-      if (winner) {
-        messageElement.textContent = `Player ${winner} won!!!!!! woaah`;
-      } else if (checkDraw()) {
-        messageElement.textContent = "It's a draw! oh welp >~<";
-      } else {
-        currentPlayer = currentPlayer === "X" ? "O" : "X";
-        messageElement.textContent = `Player ${currentPlayer}'s turn :3`;
-      }
-    }
-
-    function findWinningMove() {
-      for (let i = 0; i < board.length; i++) {
-        if (board[i] === "") {
-          board[i] = currentPlayer;
-          if (checkWinner() === currentPlayer) {
-            board[i] = ""; // Reset the move
-            return i;
-          }
-          board[i] = ""; // Reset the move
-        }
-      }
-      return null;
-    }
-
-    function findBlockingMove() {
-      const opponent = currentPlayer === "X" ? "O" : "X";
-      for (let i = 0; i < board.length; i++) {
-        if (board[i] === "") {
-          board[i] = opponent;
-          if (checkWinner() === opponent) {
-            board[i] = ""; // Reset the move
-            return i;
-          }
-          board[i] = ""; // Reset the move
-        }
-      }
-      return null;
-    }
-
-    function renderBoard() {
-      boardElement.innerHTML = "";
-      board.forEach((value, index) => {
-        const cell = document.createElement("div");
-        cell.classList.add("cell");
-        cell.textContent = value;
-        cell.addEventListener("click", () => handleClick(index));
-        boardElement.appendChild(cell);
+    // GPL header omitted—see top of file
+    const boardEl=document.getElementById('board'), msgEl=document.getElementById('message');
+    let board=Array(9).fill(''), player='X';
+    function render(){
+      boardEl.innerHTML='';
+      board.forEach((v,i)=>{
+        const c=document.createElement('div');
+        c.className='cell'; c.textContent=v;
+        c.onclick=()=>move(i);
+        boardEl.append(c);
       });
     }
-
-    function resetGame() {
-      currentPlayer = "X";
-      board = ["", "", "", "", "", "", "", "", ""];
-      messageElement.textContent = `Player ${currentPlayer}'s turn :3`;
-      renderBoard();
-
-      // If AI is the starting player, make the first move
-      if (currentPlayer === "O") {
-        setTimeout(makeComputerMove, 500); // AI waits for 0.5 second
-      }
+    function move(i){
+      if(board[i]||win()||draw())return;
+      board[i]=player;
+      if(win()){ msgEl.textContent=`Player ${player} won!!!!!! woaah`; }
+      else if(draw()){ msgEl.textContent="It's a draw! oh welp >~<"; }
+      else{ player=player==='X'?'O':'X'; msgEl.textContent=`Player ${player}’s turn :3`; if(player==='O')setTimeout(ai,300); }
+      render();
     }
-
-    // Initial setup
-    resetGame();
+    function win(){ return [[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]].some(l=>l.every(i=>board[i]&&board[i]===board[l[0]])); }
+    function draw(){ return board.every(v=>v); }
+    function ai(){
+      const tryMv=p=>board.findIndex((v,i)=>!v&&(board[i]=p,win())&&(board[i]='',true));
+      let idx=tryMv('O')||tryMv('X');
+      if(idx<0) idx=board.map((v,i)=>v?'':i).filter(i=>i)[0];
+      move(idx);
+    }
+    render();
   </script>
 </body>
 </html>
+<% } %>
 
 
-                                             		 	               <% } %>   
-<% if (game === "pong") { %> 
-  <!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <link href="/css/yt-ukraine.svg?v=3" rel=icon>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <style>
-    body {
-      margin: 0;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: space-between;
-      height: 100vh;
-      background: linear-gradient(135deg, #2c3e50, #34495e);
-      color: #fff;
-      font-family: 'Arial', sans-serif;
-    }
-
-    canvas {
-      border: 1px solid #fff;
-    }
-
-    #controls {
-      margin-bottom: 20px;
-    }
-
-    #score {
-      position: absolute;
-      top: 10px;
-      left: 10px;
-    }
-  </style>
-  <title>Pong</title>
-</head>
-<body>
-  <canvas id="pongCanvas" width="800" height="400"></canvas>
-  <div id="controls">
-    <p>
-       U can press space to start owo
-    </p>
-    <p>Left Paddle Controls : W (Up) and S (Down)</p>
-    <p>Right Paddle Controls: Arrow Up (Up) and Arrow Down (Down)</p>
-  </div>
-  <script type="text/javascript">
-<!--//--><![CDATA[//><!--
-/**
- * @licstart The following is the entire license notice for the JavaScript
- * code in this page.
- *
- *  Copyright (C) 2021-2024 POKETUBE (https://codeberg.org/Ashley/poketube)
- *
- * The JavaScript code in this page is free software: you can redistribute
- * it and/or modify it under the terms of the GNU General Public License
- * (GNU GPL) as published by the Free Software Foundation, either version 3
- * of the License, or (at your option) any later version.  The code is
- * distributed WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU GPL
- * for more details.
- *
- * As additional permission under GNU GPL version 3 section 7, you may
- * distribute non-source (e.g., minimized or compacted) forms of that code
- * without the copy of the GNU GPL normally required by section 4, provided
- * you include this license notice and a URL through which recipients can
- * access the Corresponding Source.
- *
- * @licend The above is the entire license notice for the JavaScript code
- * in this page.
- */
-
-//--><!]]>
-</script>
-  <script>
- const canvas = document.getElementById("pongCanvas");
-    const ctx = canvas.getContext("2d");
-
-    const paddleWidth = 10;
-    const paddleHeight = 60;
-    const ballSize = 10;
-    const paddleSpeed = 5;
-    const maxScore = 5; // Adjust this to set the score threshold for game restart
-
-    let leftPaddleY = canvas.height / 2 - paddleHeight / 2;
-    let rightPaddleY = canvas.height / 2 - paddleHeight / 2;
-
-    let ballX = canvas.width / 2;
-    let ballY = canvas.height / 2;
-    let ballSpeedX = 0;
-    let ballSpeedY = 0;
-
-    let leftScore = 0;
-    let rightScore = 0;
-
-    let leftPaddleUp = false;
-    let leftPaddleDown = false;
-    let rightPaddleUp = false;
-    let rightPaddleDown = false;
-
-    let gameActive = false;
-
-    function drawPaddle(x, y) {
-      ctx.fillStyle = "#fff";
-      ctx.fillRect(x, y, paddleWidth, paddleHeight);
-    }
-
-    function drawBall() {
-      ctx.fillStyle = "#fff";
-      ctx.beginPath();
-      ctx.arc(ballX, ballY, ballSize, 0, Math.PI * 2);
-      ctx.fill();
-    }
-
-    function movePaddle() {
-      if (gameActive) {
-        document.addEventListener("keydown", function(event) {
-          switch (event.key) {
-            case "ArrowUp":
-              rightPaddleUp = true;
-              break;
-            case "ArrowDown":
-              rightPaddleDown = true;
-              break;
-            case "w":
-              leftPaddleUp = true;
-              break;
-            case "s":
-              leftPaddleDown = true;
-              break;
-          }
-        });
-
-        document.addEventListener("keyup", function(event) {
-          switch (event.key) {
-            case "ArrowUp":
-              rightPaddleUp = false;
-              break;
-            case "ArrowDown":
-              rightPaddleDown = false;
-              break;
-            case "w":
-              leftPaddleUp = false;
-              break;
-            case "s":
-              leftPaddleDown = false;
-              break;
-          }
-        });
-
-        if (leftPaddleUp && leftPaddleY > 0) leftPaddleY -= paddleSpeed;
-        if (leftPaddleDown && leftPaddleY < canvas.height - paddleHeight) leftPaddleY += paddleSpeed;
-
-        if (rightPaddleUp && rightPaddleY > 0) rightPaddleY -= paddleSpeed;
-        if (rightPaddleDown && rightPaddleY < canvas.height - paddleHeight) rightPaddleY += paddleSpeed;
-      }
-    }
-
-    function moveBall() {
-      if (gameActive) {
-        ballX += ballSpeedX;
-        ballY += ballSpeedY;
-
-        // Ball hits top or bottom
-        if (ballY < 0 || ballY > canvas.height) {
-          ballSpeedY = -ballSpeedY;
-        }
-
-        // Ball hits left paddle
-        if (ballX - ballSize < paddleWidth && ballY > leftPaddleY && ballY < leftPaddleY + paddleHeight) {
-          ballSpeedX = -ballSpeedX;
-        }
-
-        // Ball hits right paddle
-        if (ballX + ballSize > canvas.width - paddleWidth && ballY > rightPaddleY && ballY < rightPaddleY + paddleHeight) {
-          ballSpeedX = -ballSpeedX;
-        }
-
-        // Ball goes out of bounds
-        if (ballX < 0) {
-          // Right player scores
-          rightScore++;
-          checkGameOver();
-        }
-
-        if (ballX > canvas.width) {
-          // Left player scores
-          leftScore++;
-          checkGameOver();
-        }
-      }
-    }
-
-    function checkGameOver() {
-      if (leftScore >= maxScore || rightScore >= maxScore) {
-        resetGame();
-      } else {
-        resetBall();
-      }
-    }
-
-    function resetGame() {
-      leftScore = 0;
-      rightScore = 0;
-      resetBall();
-    }
-
-    function resetBall() {
-      ballX = canvas.width / 2;
-      ballY = canvas.height / 2;
-      ballSpeedX = 0;
-      ballSpeedY = 0;
-      gameActive = false;
-      setTimeout(() => {
-        ballSpeedX = Math.random() > 0.5 ? 5 : -5;
-        ballSpeedY = Math.random() > 0.5 ? 5 : -5;
-        gameActive = true;
-      }, 100);
-    }
-
-    function update() {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      drawPaddle(0, leftPaddleY);
-      drawPaddle(canvas.width - paddleWidth, rightPaddleY);
-      drawBall();
-      movePaddle();
-      moveBall();
-      drawScores();
-      requestAnimationFrame(update);
-    }
-
-    function drawScores() {
-      ctx.fillStyle = "#fff";
-      ctx.font = "20px Arial";
-      ctx.fillText("Left Player: " + leftScore, 20, 30);
-      ctx.fillText("Right Player: " + rightScore, canvas.width - 160, 30);
-    }
-
-    document.addEventListener("keydown", function(event) {
-      if (!gameActive && event.key === " ") {
-        resetGame();
-        ballSpeedX = Math.random() > 0.5 ? 5 : -5;
-        ballSpeedY = Math.random() > 0.5 ? 5 : -5;
-        gameActive = true;
-      }
-    });
-
-    // Touch controls
-    canvas.addEventListener("touchstart", function(event) {
-      if (!gameActive) {
-        resetGame();
-        ballSpeedX = Math.random() > 0.5 ? 5 : -5;
-        ballSpeedY = Math.random() > 0.5 ? 5 : -5;
-        gameActive = true;
-      }
-    });
-
-    canvas.addEventListener("touchmove", function(event) {
-      const touchY = event.touches[0].clientY - canvas.offsetTop;
-      if (touchY > leftPaddleY && touchY < leftPaddleY + paddleHeight) {
-        leftPaddleY = touchY - paddleHeight / 2;
-      }
-    });
-
-    update();
-  </script>
-</body>
-</html>
-
-
-                                             		 	               <% } %>   
-<% if (game === "sudoku") { %> 
+<% if (game === "sudoku") { %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <link href="/css/yt-ukraine.svg?v=3" rel=icon>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <style>
-    body {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      height: 100vh;
-      margin: 0;
-      background: linear-gradient(135deg, #2c3e50, #34495e);
-      font-family: 'Arial', sans-serif;
-    }
-
-    #sudoku-board {
-      display: grid;
-      grid-template-columns: repeat(9, 40px);
-      grid-template-rows: repeat(9, 40px);
-      grid-gap: 1px;
-    }
-
-    .cell {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 40px;
-      height: 40px;
-      font-size: 16px;
-      font-weight: bold;
-      cursor: pointer;
-      background-color: #ddd;
-      user-select: none;
-    }
-
-    .given {
-      background-color: #ccc;
-    }
-
-    .error {
-      background-color: #ffbaba;
-    }
-
-    #popup {
-      display: none;
-      border-radius: 1em;
-      position: fixed;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      padding: 20px;
-      background-color: #fff;
-      border: 1px solid #ccc;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-      z-index: 999;
-    }
-
-    #popup > button {
-      border: none;
-      background: gray;
-      border-radius: 3px;
-      color: #fff;
-      height: 4em;
-      width: 9em;
-    }
-
-    #overlay {
-      display: none;
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background-color: rgba(0, 0, 0, 0.5);
-      z-index: 998;
-    }
-  </style>
+  <link href="/css/yt-ukraine.svg?v=4" rel="icon">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Sudoku</title>
+  <style>
+    body{margin:0;display:flex;align-items:center;justify-content:center;height:100vh;background:linear-gradient(135deg,#2c3e50,#34495e);font-family:Arial;}
+    #sudokuBoard{display:grid;grid-template:repeat(9,40px)/repeat(9,40px);gap:1px;}
+    .cell{display:flex;align-items:center;justify-content:center;background:#ddd;font-weight:bold;cursor:pointer;user-select:none;}
+    .given{background:#ccc;} .error{background:#fbb;}
+    #overlay, #popup{display:none;position:fixed;width:100%;height:100%;}
+    #overlay{background:rgba(0,0,0,0.5);z-index:1;}
+    #popup{z-index:2;background:#fff;padding:2rem;border-radius:1em;top:50%;left:50%;transform:translate(-50%,-50%);}
+  </style>
 </head>
 <body>
-  <div id="sudoku-board"></div>
   <div id="overlay"></div>
-  <div id="popup">
-    <h2>U did a incorrect move :sob:</h2>
-    <p>Please enter a valid number (1-9)</p>
-    <button onclick="closePopup()">Oki</button>
-  </div>
-  <script type="text/javascript">
-<!--//--><![CDATA[//><!--
-/**
- * @licstart The following is the entire license notice for the JavaScript
- * code in this page.
- *
- *  Copyright (C) 2021-2024 POKETUBE (https://codeberg.org/Ashley/poketube)
- *
- * The JavaScript code in this page is free software: you can redistribute
- * it and/or modify it under the terms of the GNU General Public License
- * (GNU GPL) as published by the Free Software Foundation, either version 3
- * of the License, or (at your option) any later version.  The code is
- * distributed WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU GPL
- * for more details.
- *
- * As additional permission under GNU GPL version 3 section 7, you may
- * distribute non-source (e.g., minimized or compacted) forms of that code
- * without the copy of the GNU GPL normally required by section 4, provided
- * you include this license notice and a URL through which recipients can
- * access the Corresponding Source.
- *
- * @licend The above is the entire license notice for the JavaScript code
- * in this page.
- */
-
-//--><!]]>
-</script>
-  <script type="text/javascript">
-    function closePopup() {
-      document.getElementById('popup').style.display = 'none';
-      document.getElementById('overlay').style.display = 'none';
+  <div id="popup"><h2>U did a incorrect move :sob:</h2><button onclick="closePopup()">Oki</button></div>
+  <div id="sudokuBoard"></div>
+  <script>
+    // GPL header omitted—see top of file
+    const base=[[5,3,0,0,7,0,0,0,0],[6,0,0,1,9,5,0,0,0],[0,9,8,0,0,0,0,6,0],[8,0,0,0,6,0,0,0,3],[4,0,0,8,0,3,0,0,1],[7,0,0,0,2,0,0,0,6],[0,6,0,0,0,0,2,8,0],[0,0,0,4,1,9,0,0,5],[0,0,0,0,8,0,0,7,9]];
+    let board=JSON.parse(JSON.stringify(base));
+    const cont=document.getElementById('sudokuBoard'), pop=document.getElementById('popup'), ov=document.getElementById('overlay');
+    function closePopup(){pop.style.display=ov.style.display='none';}
+    function render(){
+      cont.innerHTML='';
+      board.forEach((r,ri)=>r.forEach((v,ci)=>{
+        const c=document.createElement('div');
+        c.className='cell'+(base[ri][ci]?' given':'');
+        c.textContent=v||'';
+        if(!base[ri][ci])c.onclick=()=>clickCell(ri,ci);
+        cont.append(c);
+      }));
     }
-
-    function showAlertPopup() {
-      document.getElementById('popup').style.display = 'block';
-      document.getElementById('overlay').style.display = 'block';
+    function clickCell(r,c){
+      const n=parseInt(prompt('Enter 1-9:'),10);
+      if(n>=1&&n<=9){board[r][c]=n; if(!valid()){showErr();board[r][c]=0;} render();}
     }
-
-    const initialBoard = [
-      [5, 3, 0, 0, 7, 0, 0, 0, 0],
-      [6, 0, 0, 1, 9, 5, 0, 0, 0],
-      [0, 9, 8, 0, 0, 0, 0, 6, 0],
-      [8, 0, 0, 0, 6, 0, 0, 0, 3],
-      [4, 0, 0, 8, 0, 3, 0, 0, 1],
-      [7, 0, 0, 0, 2, 0, 0, 0, 6],
-      [0, 6, 0, 0, 0, 0, 2, 8, 0],
-      [0, 0, 0, 4, 1, 9, 0, 0, 5],
-      [0, 0, 0, 0, 8, 0, 0, 7, 9]
-    ];
-
-    let board = JSON.parse(JSON.stringify(initialBoard)); // Deep copy to prevent mutation of the original board
-
-    function initializeBoard() {
-      const sudokuBoard = document.getElementById('sudoku-board');
-      board = generateRandomBoard(initialBoard);
-
-      for (let i = 0; i < 9; i++) {
-        for (let j = 0; j < 9; j++) {
-          const cell = document.createElement('div');
-          cell.className = 'cell';
-          cell.textContent = board[i][j] !== 0 ? board[i][j] : '';
-          cell.dataset.row = i;
-          cell.dataset.col = j;
-
-          if (board[i][j] !== 0) {
-            cell.classList.add('given');
-          }
-
-          cell.addEventListener('click', () => handleClick(i, j));
-          sudokuBoard.appendChild(cell);
+    function valid(){
+      for(let i=0;i<9;i++){
+        let rs=new Set(), cs=new Set();
+        for(let j=0;j<9;j++){
+          if(board[i][j]&&rs.has(board[i][j]))return false;
+          rs.add(board[i][j]);
+          if(board[j][i]&&cs.has(board[j][i]))return false;
+          cs.add(board[j][i]);
         }
       }
-    }
-
-    function generateRandomBoard(baseBoard) {
-      // Randomly shuffle rows and columns
-      const shuffledRows = shuffleArray(baseBoard);
-      const shuffledCols = transposeMatrix(shuffleArray(transposeMatrix(baseBoard)));
-
-      // Randomly remove some numbers
-      const modifiedBoard = removeNumbers(shuffledRows);
-
-      return modifiedBoard;
-    }
-
-    function shuffleArray(array) {
-      const newArray = array.slice();
-      for (let i = newArray.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
-      }
-      return newArray;
-    }
-
-    function transposeMatrix(matrix) {
-      return matrix[0].map((_, colIndex) => matrix.map(row => row[colIndex]));
-    }
-
-    function removeNumbers(board) {
-      const modifiedBoard = board.map(row => row.slice());
-      const emptyCount = Math.floor(Math.random() * 10) + 20; // Randomly choose 20 to 30 cells to be empty
-
-      for (let i = 0; i < emptyCount; i++) {
-        const row = Math.floor(Math.random() * 9);
-        const col = Math.floor(Math.random() * 9);
-        modifiedBoard[row][col] = 0;
-      }
-
-      return modifiedBoard;
-    }
-
-    function handleClick(row, col) {
-      const cell = document.querySelector(`.cell[data-row="${row}"][data-col="${col}"]`);
-
-      if (!cell.classList.contains('given')) {
-        const value = prompt('Enter a number (1-9):');
-        const parsedValue = parseInt(value, 10);
-
-        if (!isNaN(parsedValue) && parsedValue >= 1 && parsedValue <= 9) {
-          board[row][col] = parsedValue;
-          cell.textContent = parsedValue;
-
-          if (isBoardValid()) {
-            cell.classList.remove('error');
-          } else {
-            cell.classList.add('error');
-            showAlertPopup();
-          }
-        } else {
-          alert('Invalid input. Please enter a number between 1 and 9.');
+      for(let br=0;br<9;br+=3)for(let bc=0;bc<9;bc+=3){
+        let bs=new Set();
+        for(let r=br;r<br+3;r++)for(let c=bc;c<bc+3;c++){
+          if(board[r][c]&&bs.has(board[r][c]))return false;
+          bs.add(board[r][c]);
         }
       }
-    }
-
-    function isBoardValid() {
-      // Check rows and columns
-      for (let i = 0; i < 9; i++) {
-        const rowSet = new Set();
-        const colSet = new Set();
-
-        for (let j = 0; j < 9; j++) {
-          if (board[i][j] !== 0 && rowSet.has(board[i][j])) {
-            return false;
-          }
-          rowSet.add(board[i][j]);
-
-          if (board[j][i] !== 0 && colSet.has(board[j][i])) {
-            return false;
-          }
-          colSet.add(board[j][i]);
-        }
-      }
-
-      // Check 3x3 subgrids
-      for (let i = 0; i < 9; i += 3) {
-        for (let j = 0; j < 9; j += 3) {
-          const subgridSet = new Set();
-
-          for (let row = i; row < i + 3; row++) {
-            for (let col = j; col < j + 3; col++) {
-              if (board[row][col] !== 0 && subgridSet.has(board[row][col])) {
-                return false;
-              }
-              subgridSet.add(board[row][col]);
-            }
-          }
-        }
-      }
-
       return true;
     }
-
-    initializeBoard();
+    function showErr(){pop.style.display=ov.style.display='block';setTimeout(closePopup,1000);}
+    render();
   </script>
 </body>
 </html>
+<% } %>
 
-                                             		 	               <% } %>   
-                                               
+
+<% if (game === "pong") { %>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <link href="/css/yt-ukraine.svg?v=4" rel="icon">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Pong</title>
+  <style>
+    body{margin:0;font-family:Arial;background:linear-gradient(135deg,#2c3e50,#34495e);color:#fff;display:flex;justify-content:center;align-items:center;height:100vh;}
+    #pongCanvas{border:1px solid #fff;}
+    #score{position:absolute;top:10px;left:50%;transform:translateX(-50%);font-size:1.2em;}
+  </style>
+</head>
+<body>
+  <div id="score">0 : 0</div>
+  <canvas id="pongCanvas" width="800" height="400"></canvas>
+  <script>
+    // GPL header omitted—see top of file
+    const c=document.getElementById('pongCanvas'),ctx=c.getContext('2d');
+    let L=0,R=0,ball={x:400,y:200,vx:5,vy:3},p1=170,p2=170,P={w:10,h:60},max=5;
+    function draw(){ctx.clearRect(0,0,800,400);ctx.fillStyle='#fff';ctx.fillRect(0,p1,P.w,P.h);ctx.fillRect(800-P.w,p2,P.w,P.h);ctx.beginPath();ctx.arc(ball.x,ball.y,8,0,2*Math.PI);ctx.fill();document.getElementById('score').textContent=`${L} : ${R}`;}
+    function update(){
+      ball.x+=ball.vx;ball.y+=ball.vy;
+      if(ball.y<0||ball.y>400)ball.vy*=-1;
+      if(ball.x<P.w&&ball.y>p1&&ball.y<p1+P.h)ball.vx*=-1;
+      if(ball.x>800-P.w&&ball.y>p2&&ball.y<p2+P.h)ball.vx*=-1;
+      if(ball.x<0){R++;reset();}
+      if(ball.x>800){L++;reset();}
+      p1+=(ball.y-(p1+P.h/2))*0.02;
+    }
+    function reset(){ball={x:400,y:200,vx:5*(Math.random()>0.5?1:-1),vy:3*(Math.random()>0.5?1:-1)};if(L>=max||R>=max){L=R=0;}}
+    window.addEventListener('keydown',e=>{if(e.key==='w'&&p2>0)p2-=20;if(e.key==='s'&&p2<340)p2+=20;});
+    setInterval(()=>{update();draw();},1000/60);
+  </script>
+</body>
+</html>
+<% } %>
+
+
+<% if (game === "minesweeper") { %>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <link href="/css/yt-ukraine.svg?v=4" rel="icon">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Minesweeper</title>
+  <style>
+    body{margin:0;display:flex;justify-content:center;align-items:center;height:100vh;background:linear-gradient(135deg,#2c3e50,#34495e);font-family:Arial;color:#fff;}
+    #board{display:grid;grid-template:repeat(10,30px)/repeat(10,30px);gap:2px;}
+    .cell{width:30px;height:30px;background:#aaa;display:flex;align-items:center;justify-content:center;cursor:pointer;user-select:none;}
+    .revealed{background:#ddd;cursor:default;} .flag{background:#f22;}
+  </style>
+</head>
+<body>
+  <div id="board"></div>
+  <script>
+    // GPL header omitted—see top of file
+    const R=10,C=10,M=15,boardEl=document.getElementById('board');
+    let cells=[],mines=new Set();
+    function init(){
+      while(mines.size<M)mines.add(Math.floor(Math.random()*R*C));
+      for(let i=0;i<R*C;i++){
+        const d=document.createElement('div');d.className='cell';d.dataset.i=i;
+        d.oncontextmenu=e=>{e.preventDefault();d.classList.toggle('flag');};
+        d.onclick=()=>reveal(d);boardEl.append(d);cells.push(d);
+      }
+    }
+    function nbr(i){const a=[];const x=i%C,y=Math.floor(i/C);
+      for(let dy=-1;dy<=1;dy++)for(let dx=-1;dx<=1;dx++){
+        const nx=x+dx,ny=y+dy;
+        if(nx>=0&&nx<C&&ny>=0&&ny<R&&(dx||dy))a.push(ny*C+nx);
+      }return a;
+    }
+    function reveal(d){
+      const i=+d.dataset.i; if(d.classList.contains('flag')||d.classList.contains('revealed'))return;
+      d.classList.add('revealed');
+      if(mines.has(i)){d.textContent='💣';alert('Game Over!');reset();return;}
+      const cnt=nbr(i).filter(n=>mines.has(n)).length;
+      if(cnt)d.textContent=cnt; else nbr(i).forEach(n=>reveal(cells[n]));
+      if(cells.filter(c=>!c.classList.contains('revealed')).length===M){alert('You Win!');reset();}
+    }
+    function reset(){boardEl.innerHTML='';cells=[];mines.clear();init();}
+    init();
+  </script>
+</body>
+</html>
+<% } %>
+
+
+<% if (game === "breakout") { %>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <link href="/css/yt-ukraine.svg?v=4" rel="icon">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Breakout</title>
+  <style>
+    body{margin:0;display:flex;justify-content:center;align-items:center;height:100vh;background:linear-gradient(135deg,#2c3e50,#34495e);font-family:Arial;color:#fff;}
+    #breakoutCanvas{border:1px solid #fff;}
+  </style>
+</head>
+<body>
+  <canvas id="breakoutCanvas" width="800" height="400"></canvas>
+  <script>
+    // GPL header omitted—see top of file
+    const c=document.getElementById('breakoutCanvas'),ctx=c.getContext('2d');
+    const P={w:100,h:10,x:350,y:380},B={r:8,dx:4,dy:-4},br=[];let score=0;
+    for(let r=0;r<5;r++)for(let co=0;co<8;co++)br.push({x:co*100+35,y:r*30+30,alive:true});
+    document.addEventListener('mousemove',e=>P.x=Math.min(c.width-P.w,Math.max(0,e.clientX-c.offsetLeft-P.w/2)));
+    function draw(){
+      ctx.clearRect(0,0,c.width,c.height);
+      ctx.fillStyle='#fff';ctx.fillRect(P.x,P.y,P.w,P.h);
+      ctx.beginPath();ctx.arc(B.x,B.y,B.r,0,2*Math.PI);ctx.fill();
+      br.forEach(b=>b.alive&&(ctx.fillStyle='#09f',ctx.fillRect(b.x,b.y,90,20)));
+      ctx.fillText(`Score: ${score}`,10,c.height-10);
+    }
+    function update(){
+      B.x+=B.dx;B.y+=B.dy;
+      if(B.x<B.r||B.x>c.width-B.r)B.dx*=-1;
+      if(B.y<B.r)B.dy*=-1;
+      if(B.y>c.height)return alert('Game Over'),location.reload();
+      if(B.y+ B.r>P.y&&B.x>P.x&&B.x<P.x+P.w)B.dy*=-1;
+      br.forEach(b=>b.alive&&B.x>b.x&&B.x<b.x+90&&B.y>b.y&&B.y<b.y+20&&(B.dy*=-1,b.alive=false,score++));
+    }
+    function loop(){update();draw();requestAnimationFrame(loop);}
+    loop();
+  </script>
+</body>
+</html>
+<% } %>

@@ -175,13 +175,36 @@
 <head>
   <meta charset="UTF-8">
   <link href="/css/yt-ukraine.svg?v=4" rel="icon">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Tic-Tac-Toe</title>
   <style>
-    body{margin:0;font-family:'PokeTube Flex';display:flex;align-items:center;justify-content:center;height:100vh;background:linear-gradient(135deg,#2c3e50,#34495e);color:#fff;}
-    #board{display:grid;grid-template:repeat(3,100px)/repeat(3,100px);gap:5px;}
-    .cell{display:flex;align-items:center;justify-content:center;font-size:2em;background:#fff2;cursor:pointer;}
-    #message{text-align:center;margin-bottom:1rem;}
+    body {
+      margin: 0;
+      font-family: 'PokeTube Flex', sans-serif;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      background: linear-gradient(135deg, #2c3e50, #34495e);
+      color: #fff;
+    }
+    #board {
+      display: grid;
+      grid-template: repeat(3, 100px) / repeat(3, 100px);
+      gap: 5px;
+    }
+    .cell {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2em;
+      background: rgba(255,255,255,0.2);
+      cursor: pointer;
+    }
+    #message {
+      text-align: center;
+      margin-bottom: 1rem;
+    }
   </style>
 </head>
 <body>
@@ -191,34 +214,90 @@
   </div>
   <script>
     // GPL header omitted—see top of file
-    const boardEl=document.getElementById('board'), msgEl=document.getElementById('message');
-    let board=Array(9).fill(''), player='X';
-    function render(){
-      boardEl.innerHTML='';
-      board.forEach((v,i)=>{
-        const c=document.createElement('div');
-        c.className='cell'; c.textContent=v;
-        c.onclick=()=>move(i);
-        boardEl.append(c);
+    const boardEl = document.getElementById('board');
+    const msgEl   = document.getElementById('message');
+
+    let board = Array(9).fill('');
+    let currentPlayer = 'X';
+
+    function checkWin() {
+      const lines = [
+        [0,1,2],[3,4,5],[6,7,8],
+        [0,3,6],[1,4,7],[2,5,8],
+        [0,4,8],[2,4,6]
+      ];
+      return lines.some(l => l.every(i => board[i] && board[i] === board[l[0]]));
+    }
+
+    function checkDraw() {
+      return board.every(cell => cell);
+    }
+
+    function renderBoard() {
+      boardEl.innerHTML = '';
+      board.forEach((val, idx) => {
+        const cell = document.createElement('div');
+        cell.className = 'cell';
+        cell.textContent = val;
+        cell.onclick = () => handleMove(idx);
+        boardEl.append(cell);
       });
     }
-    function move(i){
-      if(board[i]||win()||draw())return;
-      board[i]=player;
-      if(win()){ msgEl.textContent=`Player ${player} won!!!!!! woaah`; }
-      else if(draw()){ msgEl.textContent="It's a draw! oh welp >~<"; }
-      else{ player=player==='X'?'O':'X'; msgEl.textContent=`Player ${player}’s turn :3`; if(player==='O')setTimeout(ai,300); }
-      render();
+
+    function handleMove(idx) {
+      if (board[idx] || checkWin() || checkDraw()) return;
+
+      board[idx] = currentPlayer;
+      renderBoard();
+
+      if (checkWin()) {
+        msgEl.textContent = `Player ${currentPlayer} won!!!!!! woaah`;
+      } else if (checkDraw()) {
+        msgEl.textContent = "It's a draw! oh welp >~<";
+      } else {
+        currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
+        msgEl.textContent = `Player ${currentPlayer}’s turn :3`;
+
+        if (currentPlayer === 'O') {
+          setTimeout(aiMove, 300);
+        }
+      }
     }
-    function win(){ return [[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]].some(l=>l.every(i=>board[i]&&board[i]===board[l[0]])); }
-    function draw(){ return board.every(v=>v); }
-    function ai(){
-      const tryMv=p=>board.findIndex((v,i)=>!v&&(board[i]=p,win())&&(board[i]='',true));
-      let idx=tryMv('O')||tryMv('X');
-      if(idx<0) idx=board.map((v,i)=>v?'':i).filter(i=>i)[0];
-      move(idx);
+
+    function aiMove() {
+      // 1) Try to win
+      for (let i = 0; i < 9; i++) {
+        if (!board[i]) {
+          board[i] = 'O';
+          if (checkWin()) {
+            handleMove(i);
+            return;
+          }
+          board[i] = '';
+        }
+      }
+      // 2) Block X
+      for (let i = 0; i < 9; i++) {
+        if (!board[i]) {
+          board[i] = 'X';
+          if (checkWin()) {
+            board[i] = 'O';
+            handleMove(i);
+            return;
+          }
+          board[i] = '';
+        }
+      }
+      // 3) Random
+      const empties = board
+        .map((v,i) => v === '' ? i : null)
+        .filter(i => i !== null);
+      const choice = empties[Math.floor(Math.random() * empties.length)];
+      handleMove(choice);
     }
-    render();
+
+    // Initial render
+    renderBoard();
   </script>
 </body>
 </html>

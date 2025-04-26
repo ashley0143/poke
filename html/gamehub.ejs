@@ -638,34 +638,145 @@
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Breakout</title>
   <style>
-    body{margin:0;display:flex;justify-content:center;align-items:center;height:100vh;background:linear-gradient(135deg,#2c3e50,#34495e);font-family:Arial;color:#fff;}
-    #breakoutCanvas{border:1px solid #fff;}
+    body {
+      margin: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background: linear-gradient(135deg,#2c3e50,#34495e);
+      font-family: Arial;
+      color: #fff;
+    }
+    #breakoutCanvas {
+      border: 1px solid #fff;
+    }
   </style>
 </head>
 <body>
   <canvas id="breakoutCanvas" width="800" height="400"></canvas>
   <script>
     // GPL header omitted—see top of file
-    const c=document.getElementById('breakoutCanvas'),ctx=c.getContext('2d');
-    const P={w:100,h:10,x:350,y:380},B={r:8,dx:4,dy:-4},br=[];let score=0;
-    for(let r=0;r<5;r++)for(let co=0;co<8;co++)br.push({x:co*100+35,y:r*30+30,alive:true});
-    document.addEventListener('mousemove',e=>P.x=Math.min(c.width-P.w,Math.max(0,e.clientX-c.offsetLeft-P.w/2)));
-    function draw(){
-      ctx.clearRect(0,0,c.width,c.height);
-      ctx.fillStyle='#fff';ctx.fillRect(P.x,P.y,P.w,P.h);
-      ctx.beginPath();ctx.arc(B.x,B.y,B.r,0,2*Math.PI);ctx.fill();
-      br.forEach(b=>b.alive&&(ctx.fillStyle='#09f',ctx.fillRect(b.x,b.y,90,20)));
-      ctx.fillText(`Score: ${score}`,10,c.height-10);
+
+    const c = document.getElementById('breakoutCanvas');
+    const ctx = c.getContext('2d');
+
+    // Paddle
+    const P = {
+      w: 100,
+      h: 10,
+      x: (c.width - 100) / 2,
+      y: c.height - 20
+    };
+
+    // Ball (now with x & y!)
+    const B = {
+      x: c.width / 2,
+      y: c.height / 2,
+      r: 8,
+      dx: 4,
+      dy: -4
+    };
+
+    // Bricks
+    const brickRow = 5;
+    const brickCol = 8;
+    const brickW = 90;
+    const brickH = 20;
+    const bricks = [];
+    let score = 0;
+
+    for (let row = 0; row < brickRow; row++) {
+      for (let col = 0; col < brickCol; col++) {
+        bricks.push({
+          x: col * (brickW + 10) + 20,
+          y: row * (brickH + 10) + 30,
+          alive: true
+        });
+      }
     }
-    function update(){
-      B.x+=B.dx;B.y+=B.dy;
-      if(B.x<B.r||B.x>c.width-B.r)B.dx*=-1;
-      if(B.y<B.r)B.dy*=-1;
-      if(B.y>c.height)return alert('Game Over'),location.reload();
-      if(B.y+ B.r>P.y&&B.x>P.x&&B.x<P.x+P.w)B.dy*=-1;
-      br.forEach(b=>b.alive&&B.x>b.x&&B.x<b.x+90&&B.y>b.y&&B.y<b.y+20&&(B.dy*=-1,b.alive=false,score++));
+
+    // Paddle follow mouse
+    document.addEventListener('mousemove', e => {
+      const rect = c.getBoundingClientRect();
+      P.x = Math.min(
+        c.width - P.w,
+        Math.max(0, e.clientX - rect.left - P.w / 2)
+      );
+    });
+
+    function draw() {
+      ctx.clearRect(0, 0, c.width, c.height);
+
+      // Draw paddle
+      ctx.fillStyle = '#fff';
+      ctx.fillRect(P.x, P.y, P.w, P.h);
+
+      // Draw ball
+      ctx.beginPath();
+      ctx.arc(B.x, B.y, B.r, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Draw bricks
+      bricks.forEach(b => {
+        if (b.alive) {
+          ctx.fillStyle = '#09f';
+          ctx.fillRect(b.x, b.y, brickW, brickH);
+        }
+      });
+
+      // Draw score
+      ctx.fillStyle = '#fff';
+      ctx.fillText(`Score: ${score}`, 10, c.height - 10);
     }
-    function loop(){update();draw();requestAnimationFrame(loop);}
+
+    function update() {
+      // Move ball
+      B.x += B.dx;
+      B.y += B.dy;
+
+      // Wall collisions
+      if (B.x - B.r < 0 || B.x + B.r > c.width) B.dx *= -1;
+      if (B.y - B.r < 0) B.dy *= -1;
+
+      // Bottom out
+      if (B.y - B.r > c.height) {
+        alert('Game Over!');
+        location.reload();
+      }
+
+      // Paddle collision
+      if (
+        B.y + B.r > P.y &&
+        B.x > P.x &&
+        B.x < P.x + P.w
+      ) {
+        B.dy *= -1;
+        B.y = P.y - B.r; // avoid sticking
+      }
+
+      // Brick collisions
+      bricks.forEach(b => {
+        if (
+          b.alive &&
+          B.x > b.x &&
+          B.x < b.x + brickW &&
+          B.y > b.y &&
+          B.y < b.y + brickH
+        ) {
+          B.dy *= -1;
+          b.alive = false;
+          score++;
+        }
+      });
+    }
+
+    function loop() {
+      update();
+      draw();
+      requestAnimationFrame(loop);
+    }
+
     loop();
   </script>
 </body>

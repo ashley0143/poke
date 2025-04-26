@@ -275,6 +275,7 @@ module.exports = function (app, config, renderTemplate) {
 
       latestCommitHash = stdout.trim();
     });
+const { useragent, ...configWithoutUA } = cnf;
 
     const response = {
       pt_version: {
@@ -287,7 +288,7 @@ module.exports = function (app, config, renderTemplate) {
       relaseunixdate,
       vernum: versionnumber,
       codename,
-      config: cnf,
+      config: configWithoutUA,
       system: {
         ram: `${roundedMemory} GB`,
         cpu: cpus[0].model,

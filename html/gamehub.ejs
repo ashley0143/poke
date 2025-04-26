@@ -56,13 +56,14 @@
   <title>Poke! Games Hub</title>
   <style>
     :root {
-      --bg-start: #2c3e50;
-      --bg-end:   #34495e;
-      --accent:   #ffabcc;
+      --bg-start: #1a1a2e;
+      --bg-end:   #16213e;
+      --accent:   #e94560;
       --font-main: 'PokeTube Flex', sans-serif;
       --card-bg:  rgba(255,255,255,0.1);
-      --card-border: rgba(255,255,255,0.6);
-      --card-hover: rgba(255,255,255,0.3);
+      --card-border: rgba(255,255,255,0.5);
+      --card-hover: rgba(255,255,255,0.2);
+      --shadow:   rgba(0,0,0,0.4);
     }
     * { box-sizing: border-box; margin:0; padding:0; }
     body {
@@ -76,114 +77,132 @@
       src: url("https://p.poketube.fun/.../robotoflex.ttf");
       font-display: swap;
     }
-    /* Animated emoji background */
+    /* Emoji particle background */
     .emoji-bg {
-      position: fixed;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      pointer-events: none;
-      display: flex;
-      flex-wrap: wrap;
-      align-content: start;
-      font-size: 2rem;
+      position: fixed; top:0; left:0;
+      width:100%; height:100%;
+      pointer-events:none;
+      z-index:0;
+      display:flex; flex-wrap: wrap; align-content:start;
+      font-size:2rem;
     }
     .emoji-bg span {
-      margin: 0.5rem;
-      opacity: 0.15;
-      animation: float 8s ease-in-out infinite alternate;
+      opacity:0.1;
+      margin:0.3rem;
+      animation: float var(--dur) ease-in-out infinite alternate;
     }
+    .emoji-bg span:nth-child(odd) { --dur:7s; }
+    .emoji-bg span:nth-child(even){ --dur:10s; }
     @keyframes float {
-      to { transform: translateY(-20px) rotate(10deg); }
+      to { transform: translateY(-25px) rotate(15deg); }
     }
-    /* Main content wrapper */
+    /* Main container */
     .wrapper {
-      position: relative;
-      z-index: 1;
-      max-width: 1000px;
-      margin: 2rem auto;
+      position: relative; z-index:1;
+      max-width: 1000px; margin: 3rem auto;
       padding: 2rem;
       background: var(--card-bg);
-      border-radius: 15px;
       border: 2px solid var(--card-border);
-      box-shadow: 0 8px 32px rgba(0,0,0,0.4);
-      backdrop-filter: blur(10px);
+      border-radius: 20px;
+      box-shadow: 0 8px 32px var(--shadow);
+      backdrop-filter: blur(12px);
+      animation: fadeIn 1s ease forwards;
+      opacity:0;
     }
+    @keyframes fadeIn { to { opacity:1; } }
     h1 {
-      font-weight: 900;
-      font-stretch: ultra-expanded;
-      font-style: italic;
-      color: var(--accent);
+      font-size: 3.5rem;
       text-align: center;
-      font-size: 3rem;
-      margin-bottom: 1.5rem;
-      text-shadow: 2px 2px 8px rgba(0,0,0,0.7);
+      margin-bottom: 2rem;
+      background: linear-gradient(90deg, #ff2e63, #08d9d6);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
     }
     .game-container {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-      gap: 1rem;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1.5rem;
     }
     .game {
-      background: rgba(255,255,255,0.2);
+      position: relative;
+      background: var(--card-bg);
       border: 2px solid var(--card-border);
-      border-radius: 12px;
-      text-decoration: none;
-      color: #fff;
-      padding: 1.5rem 1rem;
+      border-radius: 16px;
+      padding: 1.5rem;
       text-align: center;
-      transition: transform 0.2s, background 0.3s;
+      color: #fff;
+      text-decoration: none;
+      overflow: hidden;
+      transition: transform 0.3s, box-shadow 0.3s, background 0.3s;
+    }
+    .game::before {
+      content: '';
+      position: absolute; top:0; left:0; width:100%; height:100%;
+      background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.2), transparent 70%);
+      opacity:0; transition: opacity 0.3s;
     }
     .game:hover {
+      transform: translateY(-8px) rotate(-1deg);
+      box-shadow: 0 12px 48px var(--shadow);
       background: var(--card-hover);
-      transform: scale(1.05);
     }
+    .game:hover::before {
+      opacity:1;
+    }
+    .game .icon {
+      font-size: 3rem;
+      margin-bottom: 0.5rem;
+      animation: popIn 0.5s ease forwards;
+      opacity:0;
+    }
+    @keyframes popIn { to { opacity:1; transform: scale(1); } }
     .game h2 {
-      margin-bottom: 0.75rem;
-      font-size: 1.5rem;
-      text-shadow: 1px 1px 4px rgba(0,0,0,0.7);
+      font-size: 1.4rem;
+      margin-bottom: 0.3rem;
+      text-shadow: 1px 1px 4px var(--shadow);
     }
-    /* Hide canvas and boards until active */
-    canvas, .board { display: none; }
+    /* Hide unselected game UIs */
+    canvas, .board { display:none; }
   </style>
 </head>
 <body>
-   <div class="emoji-bg">
+  <div class="emoji-bg">
     <span>🎮</span><span>🕹️</span><span>👾</span><span>🎧</span><span>🖥️</span>
     <span>🎲</span><span>🏆</span><span>🎯</span><span>🔥</span><span>💥</span>
-    <span>🧩</span><span>🎮</span><span>🕹️</span><span>👾</span><span>🎧</span>
-    <span>🖥️</span><span>🎲</span><span>🏆</span><span>🎯</span><span>🔥</span>
-    <span>💥</span><span>🧩</span><span>🎮</span><span>🕹️</span><span>👾</span>
-    <span>🎧</span><span>🖥️</span><span>🎲</span><span>🏆</span><span>🎯</span>
+        <span>🧩</span><span>⭐</span><span>⚔️</span><span>🛡️</span><span>🚀</span>
+    <span>🧩</span><span>⭐</span><span>⚔️</span><span>🛡️</span><span>🚀</span>
+    <span>🎉</span><span>🌟</span><span>🎯</span><span>⚡</span><span>💣</span>
+    <span>🧩</span><span>⭐</span><span>⚔️</span><span>🛡️</span><span>🚀</span>
+    <span>🧩</span><span>⭐</span><span>⚔️</span><span>🛡️</span><span>🚀</span>
+    <span>🎉</span><span>🌟</span><span>🎯</span><span>⚡</span><span>💣</span>
   </div>
 
-  <!-- main hub -->
   <div class="wrapper">
     <h1>Poke! Games Hub</h1>
     <div class="game-container">
       <a href="?game=snake" class="game">
+        <div class="icon">🐍</div>
         <h2>Snake</h2>
-        <canvas id="snakeCanvas"></canvas>
       </a>
       <a href="?game=tic-tac-toe" class="game">
+        <div class="icon">❌⭕</div>
         <h2>Tic-Tac-Toe</h2>
-        <div id="message"></div>
-        <div class="board" id="board"></div>
       </a>
       <a href="?game=sudoku" class="game">
+        <div class="icon">🧮</div>
         <h2>Sudoku</h2>
-        <div class="board" id="sudokuBoard"></div>
       </a>
       <a href="?game=pong" class="game">
+        <div class="icon">🏓</div>
         <h2>Ping-Pong</h2>
-        <canvas id="pongCanvas"></canvas>
       </a>
       <a href="?game=minesweeper" class="game">
+        <div class="icon">💣</div>
         <h2>Minesweeper</h2>
-        <div class="board" id="minesweeperBoard"></div>
       </a>
       <a href="?game=breakout" class="game">
+        <div class="icon">🧱</div>
         <h2>Breakout</h2>
-        <canvas id="breakoutCanvas"></canvas>
       </a>
     </div>
   </div>
@@ -192,6 +211,7 @@
 </body>
 </html>
 <% } %>
+
 
 
 

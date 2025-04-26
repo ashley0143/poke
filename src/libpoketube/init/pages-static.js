@@ -256,7 +256,7 @@ app.get('/calendar', (req, res) => {
   });
 
 app.get("/game-hub", function (req, res) {
-  var gameslist = ["pong", "tic-tac-toe", "sudoku", "snake"];
+  var gameslist = ["pong", "tic-tac-toe", "sudoku", "snake", "breakout", "minesweeper"];
   var requestedGame = req.query.game;
 
   if (req.query.game && !gameslist.includes(requestedGame)) {

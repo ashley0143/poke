@@ -88,22 +88,20 @@
     <% const RESTART_MSG = "Poke is currently restarting - please wait 1-2 minutes.."; %>
     <% if (description === RESTART_MSG) { %>
     <script>
+        // Client-side reload logic
         let reloadCount = parseInt(localStorage.getItem('reloadCount') || '0', 10);
         reloadCount++;
         localStorage.setItem('reloadCount', reloadCount);
 
-         let seconds = reloadCount > 5 ? 30 : 10;
+        let seconds = reloadCount > 5 ? 30 : 10;
 
         function updateCountdown() {
             const el = document.getElementById('countdown');
             if (el) {
                 if (reloadCount > 5) {
-                    // Change description text after too many attempts
                     document.querySelector('.error p').textContent = "This is taking so long...";
-                    el.textContent = "Trying again in " + seconds + " seconds...";
-                } else {
-                    el.textContent = "Trying again in " + seconds + " seconds...";
                 }
+                el.textContent = "Trying again in " + seconds + " seconds...";
             }
             if (seconds <= 0) {
                 location.reload();
@@ -116,7 +114,8 @@
     </script>
     <% } else { %>
     <script>
-         localStorage.removeItem('reloadCount');
+        // Clear reload count on non-restart errors
+        localStorage.removeItem('reloadCount');
     </script>
     <% } %>
 </head>
@@ -131,7 +130,7 @@
         <h2><%= error %></h2>
         <p><%= description %></p>
         <% if (description === RESTART_MSG) { %>
-            <div class="countdown" id="countdown">Trying again in <%= parseInt(localStorage.getItem('reloadCount') || '1', 10) > 5 ? 30 : 10 %> seconds...</div>
+            <div class="countdown" id="countdown"></div>
         <% } %>
     </div>
 

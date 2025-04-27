@@ -241,54 +241,346 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <link href="/css/yt-ukraine.svg?v=4" rel="icon">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Snake</title>
+  <title>POKE SNAKE</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
   <style>
-    html,body{margin:0;padding:0;background:linear-gradient(135deg,#2c3e50,#34495e);overflow:hidden;}
-    #snakeCanvas{display:block;border:1px solid #000;position:absolute;}
+    html, body {
+      margin: 0; padding: 0;
+      background: #000;
+      font-family: 'Press Start 2P', monospace;
+      color: #0f0;
+      overflow: hidden;
+    }
+    #game-container { position: relative; width: 100vw; height: 100vh; }
+    /* Canvas */
+    #snakeCanvas {
+      background: #111;
+      display: block;
+      margin: auto;
+      image-rendering: pixelated;
+      border: 4px solid #0f0;
+      box-shadow: 0 0 20px #0f0;
+    }
+    /* Overlay Grid */
+    #overlay { position:absolute; top:0; left:0; width:100%; height:100%; pointer-events:none;
+      background: repeating-linear-gradient(transparent 0 2px, rgba(0,255,0,0.1) 2px 3px),
+                  repeating-linear-gradient(90deg, transparent 0 2px, rgba(0,255,0,0.1) 2px 3px);
+    }
+    /* Title & GameOver Screens */
+    .screen {
+      position:absolute; top:0; left:0; width:100%; height:100%;
+      background: rgba(0,0,0,0.8); display:flex;
+      flex-direction:column; align-items:center; justify-content:center;
+      z-index:100;
+      text-align:center;
+    }
+    .hidden { display: none; }
+    .screen h1 {
+      font-size: 48px;
+      margin: 0 0 16px;
+      white-space: nowrap;
+      text-shadow: 0 0 10px #0f0;
+    }
+    .screen p { font-size: 14px; margin: 4px 0; }
+    .screen button {
+      margin-top: 12px;
+      background: #0f0;
+      color: #000;
+      border: none;
+      padding: 8px 16px;
+      font-family: 'Press Start 2P', monospace;
+      cursor: pointer;
+    }
+    /* Scoreboard */
+    #scoreboard {
+      position:absolute; top:16px; left:16px;
+      z-index:50;
+      white-space: nowrap;
+      text-shadow:0 0 5px #0f0;
+    }
+    /* Settings Cog */
+    #settingsBtn {
+      position:absolute; top:16px; right:16px;
+      font-size:24px;
+      cursor:pointer;
+      z-index:50;
+      user-select:none;
+    }
+    /* Settings Modal */
+    #settingsModal {
+      position:absolute; top:50%; left:50%;
+      transform:translate(-50%,-50%);
+      background:#222; border:2px solid #0f0;
+      padding:16px; display:none; z-index:200;
+      width:auto;
+      height:auto;
+    }
+    #settingsModal h2 { margin-top:0; text-align:center; }
+    #settingsModal .section { margin-bottom:12px; }
+    #settingsModal label { display:block; font-size:12px; margin:6px 0; }
+    #settingsModal input[type="number"],
+    #settingsModal input[type="range"],
+    #settingsModal select {
+      width:100%; margin-top:4px;
+      background:#000; color:#0f0;
+      border:1px solid #0f0; font-family:inherit; font-size:12px;
+      padding:4px;
+    }
+    #settingsModal button { margin:8px 4px 0 0; }
   </style>
 </head>
 <body>
-  <canvas id="snakeCanvas"></canvas>
+  <div id="game-container">
+     <div id="titleScreen" class="screen">
+      <h1>POKE SNAKE</h1>
+      <p>Press Any Key to Start</p>
+    </div>
+     <div id="scoreboard">Score: 0  High: 0  Level: 1</div>
+    <div id="settingsBtn">⚙️</div>
+     <canvas id="snakeCanvas"></canvas>
+    <div id="overlay"></div>
+    
+    <!-- Game Over Screen -->
+    <div id="gameOverScreen" class="screen hidden">
+      <h1 id="gameOverText">GAME OVER!</h1>
+      <p>Press R to Retry</p>
+      <button id="backToTitle">Back to Title</button>
+    </div>
+    <!-- Settings Modal -->
+    <div id="settingsModal">
+      <h2>Settings</h2>
+      <div class="section">
+        <label>Speed
+          <select id="paramSpeed">
+            <option value="150">Slow</option>
+            <option value="100" selected>Normal</option>
+            <option value="50">Fast</option>
+          </select>
+        </label>
+        <label>Sound FX
+          <select id="paramSfx">
+            <option value="on" selected>On</option>
+            <option value="off">Off</option>
+          </select>
+        </label>
+      </div>
+      <div class="section">
+        <label>Start Length
+          <input type="number" id="paramStartLength" min="1" max="20" value="1">
+        </label>
+        <label>Wall Mode
+          <select id="paramWallMode">
+            <option value="kill" selected>Die on Hit</option>
+            <option value="wrap">Wrap Around</option>
+          </select>
+        </label>
+        <label>Grid Lines
+          <select id="paramGrid">
+            <option value="false" selected>Off</option>
+            <option value="true">On</option>
+          </select>
+        </label>
+      </div>
+      <div class="section">
+        <h3>Advanced Knobs</h3>
+        <label>SFX Volume
+          <input type="range" id="paramSfxVolume" min="0" max="1" step="0.1" value="1">
+        </label>
+        <label>Snake Head Color
+          <input type="color" id="paramHeadColor" value="#ffff00">
+        </label>
+        <label>Snake Body Color
+          <input type="color" id="paramBodyColor" value="#00ffff">
+        </label>
+      </div>
+      <button id="saveSettings">Save</button>
+      <button id="closeSettings">Close</button>
+    </div>
+  </div>
+
   <script>
-    // GPL header omitted—see top of file
-    const canvas = document.getElementById('snakeCanvas');
-    const ctx = canvas.getContext('2d');
-    const scale = 20;
-    let snake = [{x:10,y:10}], dir={x:0,y:1}, food=randomFood();
-    function resize(){ 
-      canvas.width=Math.floor(window.innerWidth/scale)*scale;
-      canvas.height=Math.floor(window.innerHeight/scale)*scale;
+    // Elements
+    const canvas = document.getElementById('snakeCanvas'), ctx = canvas.getContext('2d');
+    const titleScreen = document.getElementById('titleScreen');
+    const gameOverScreen = document.getElementById('gameOverScreen');
+    const gameOverText = document.getElementById('gameOverText');
+    const scoreboard = document.getElementById('scoreboard');
+    const settingsBtn = document.getElementById('settingsBtn');
+    const settingsModal = document.getElementById('settingsModal');
+    const saveBtn = document.getElementById('saveSettings');
+    const closeBtn = document.getElementById('closeSettings');
+    const backToTitle = document.getElementById('backToTitle');
+
+    // Params
+    let params = {
+      speed: 100,
+      sfx: true,
+      startLength: 1,
+      wallMode: 'kill',
+      grid: false,
+      sfxVolume: 1,
+      headColor: '#ffff00',
+      bodyColor: '#00ffff'
+    };
+
+    // Game state
+    let snake, dir, food, score, highScore = 0, level, gameInterval;
+    let state = 'start'; // 'start', 'playing', 'gameover'
+    const funnyMessages = [
+      "You got scaled!", "Snake bit ya!", "Sssorry, try again!", "Slither fail!", "Curveball!"
+    ];
+
+    function resizeCanvas() {
+      canvas.width = Math.floor(window.innerWidth / 20) * 20;
+      canvas.height = Math.floor(window.innerHeight / 20) * 20;
     }
-    window.addEventListener('resize',resize);
-    resize();
-    function randomFood(){ return { x:Math.floor(Math.random()*(canvas.width/scale)), y:Math.floor(Math.random()*(canvas.height/scale)) }; }
-    function draw(){
-      ctx.clearRect(0,0,canvas.width,canvas.height);
-      ctx.fillStyle='#f00'; ctx.fillRect(food.x*scale,food.y*scale,scale,scale);
-      ctx.fillStyle='#00f'; snake.forEach(s=>ctx.fillRect(s.x*scale,s.y*scale,scale,scale));
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
+
+    function initGame() {
+      // snake init
+      snake = [];
+      for (let i = 0; i < params.startLength; i++) {
+        snake.push({ x: 10, y: 10 + i });
+      }
+      dir = { x: 0, y: -1 };
+      pickFood();
+      score = 0;
+      level = 1;
+      updateScoreboard();
+      // start loop
+      clearInterval(gameInterval);
+      gameInterval = setInterval(gameLoop, params.speed);
     }
-    function update(){
-      const head={x:snake[0].x+dir.x,y:snake[0].y+dir.y};
-      head.x=(head.x+(canvas.width/scale))%(canvas.width/scale);
-      head.y=(head.y+(canvas.height/scale))%(canvas.height/scale);
-      if(snake.some((seg,i)=>i&&seg.x===head.x&&seg.y===head.y)) return reset();
+
+    function pickFood() {
+      const cols = canvas.width / 20, rows = canvas.height / 20;
+      food = { x: Math.floor(Math.random() * cols), y: Math.floor(Math.random() * rows) };
+    }
+
+    function drawGrid() {
+      if (!params.grid) return;
+      ctx.strokeStyle = 'rgba(0,255,0,0.2)';
+      for (let x = 0; x < canvas.width; x += 20) {
+        ctx.beginPath(); ctx.moveTo(x,0); ctx.lineTo(x,canvas.height); ctx.stroke();
+      }
+      for (let y = 0; y < canvas.height; y += 20) {
+        ctx.beginPath(); ctx.moveTo(0,y); ctx.lineTo(canvas.width,y); ctx.stroke();
+      }
+    }
+
+    function draw() {
+      ctx.fillStyle = '#111'; ctx.fillRect(0,0,canvas.width,canvas.height);
+      drawGrid();
+      // food
+      ctx.fillStyle = '#f00'; ctx.fillRect(food.x*20, food.y*20, 20, 20);
+      // snake
+      snake.forEach((seg,i) => {
+        ctx.fillStyle = i===0 ? params.headColor : params.bodyColor;
+        ctx.fillRect(seg.x*20, seg.y*20, 20, 20);
+      });
+    }
+
+    function playBeep(freq, duration) {
+      if (!params.sfx) return;
+      const ac = new (window.AudioContext || window.webkitAudioContext)();
+      const gain = ac.createGain();
+      gain.gain.value = params.sfxVolume;
+      const osc = ac.createOscillator();
+      osc.frequency.value = freq;
+      osc.connect(gain).connect(ac.destination);
+      osc.start(); osc.stop(ac.currentTime + duration);
+    }
+
+    function update() {
+      const head = { x: snake[0].x + dir.x, y: snake[0].y + dir.y };
+      const cols = canvas.width / 20, rows = canvas.height / 20;
+      // wall
+      if (params.wallMode === 'wrap') {
+        head.x = (head.x + cols) % cols;
+        head.y = (head.y + rows) % rows;
+      } else if (head.x < 0 || head.x >= cols || head.y < 0 || head.y >= rows) {
+        return endGame();
+      }
+      // self-collide
+      if (snake.some((s,i) => i>0 && s.x===head.x && s.y===head.y)) return endGame();
       snake.unshift(head);
-      if(head.x===food.x&&head.y===food.y) food=randomFood(); else snake.pop();
+      if (head.x===food.x && head.y===food.y) {
+        score++; if (score % 5 === 0) level++; updateScoreboard(); pickFood(); playBeep(440,0.1);
+      } else snake.pop();
     }
-    function reset(){ snake=[{x:10,y:10}]; dir={x:0,y:1}; food=randomFood(); }
-    document.addEventListener('keydown',e=>{
-      if(e.key.startsWith('Arrow')){
-        const map={Up:[0,-1],Down:[0,1],Left:[-1,0],Right:[1,0]};
-        const [dx,dy]=map[e.key.replace('Arrow','')];
-        if(dx!==-dir.x&&dy!==-dir.y) dir={x:dx,y:dy};
+
+    function gameLoop() {
+      update(); draw();
+    }
+
+    function endGame() {
+      clearInterval(gameInterval);
+      state = 'gameover';
+       gameOverText.textContent = funnyMessages[Math.floor(Math.random()*funnyMessages.length)];
+      gameOverScreen.classList.remove('hidden');
+    }
+
+    function updateScoreboard() {
+      highScore = Math.max(highScore, score);
+      scoreboard.textContent = `Score: ${score}  High: ${highScore}  Level: ${level}`;
+    }
+
+    // Event handlers
+    document.addEventListener('keydown', e => {
+      if (state === 'start') {
+        titleScreen.classList.add('hidden');
+        initGame(); state = 'playing';
+      } else if (state === 'playing') {
+        const M = { ArrowUp:[0,-1], ArrowDown:[0,1], ArrowLeft:[-1,0], ArrowRight:[1,0] };
+        if (M[e.key] && (M[e.key][0]!==-dir.x || M[e.key][1]!==-dir.y)) dir = { x: M[e.key][0], y: M[e.key][1] };
+      } else if (state === 'gameover') {
+        if (e.key.toLowerCase() === 'r') {
+          gameOverScreen.classList.add('hidden'); titleScreen.classList.remove('hidden'); state = 'start';
+        }
       }
     });
-    setInterval(()=>{update();draw();},100);
+
+    // Settings
+    settingsBtn.addEventListener('click', () => {
+      // pause
+      if (state === 'playing') clearInterval(gameInterval);
+      // populate
+      document.getElementById('paramSpeed').value = params.speed;
+      document.getElementById('paramSfx').value   = params.sfx ? 'on' : 'off';
+      document.getElementById('paramStartLength').value = params.startLength;
+      document.getElementById('paramWallMode').value    = params.wallMode;
+      document.getElementById('paramGrid').value        = params.grid;
+      document.getElementById('paramSfxVolume').value  = params.sfxVolume;
+      document.getElementById('paramHeadColor').value  = params.headColor;
+      document.getElementById('paramBodyColor').value  = params.bodyColor;
+      settingsModal.style.display = 'block';
+    });
+    closeBtn.addEventListener('click', () => {
+      settingsModal.style.display = 'none';
+      if (state === 'playing') gameInterval = setInterval(gameLoop, params.speed);
+    });
+    saveBtn.addEventListener('click', () => {
+      // save and reinit if playing
+      params.speed       = parseInt(document.getElementById('paramSpeed').value,10);
+      params.sfx         = document.getElementById('paramSfx').value === 'on';
+      params.startLength = parseInt(document.getElementById('paramStartLength').value,10);
+      params.wallMode    = document.getElementById('paramWallMode').value;
+      params.grid        = document.getElementById('paramGrid').value === 'true';
+      params.sfxVolume   = parseFloat(document.getElementById('paramSfxVolume').value);
+      params.headColor   = document.getElementById('paramHeadColor').value;
+      params.bodyColor   = document.getElementById('paramBodyColor').value;
+      settingsModal.style.display = 'none';
+      if (state === 'playing') initGame();
+    });
+    backToTitle.addEventListener('click', () => {
+      gameOverScreen.classList.add('hidden'); titleScreen.classList.remove('hidden'); state = 'start';
+    });
   </script>
 </body>
 </html>
+
 <% } %>
 
 

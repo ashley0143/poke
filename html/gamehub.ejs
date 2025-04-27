@@ -427,8 +427,8 @@
     // Game state
     let snake, dir, food, score, highScore = 0, level, gameInterval;
     let state = 'start'; // 'start', 'playing', 'gameover'
-    const funnyMessages = [
-      "You got scaled!", "Snake bit ya!", "Sssorry, try again!", "Slither fail!", "Curveball!"
+    const endMessages = [
+      "Skill issue!", "Snake bit ya!", "Sssorry, try again!",
     ];
 
     function resizeCanvas() {
@@ -518,7 +518,7 @@
     function endGame() {
       clearInterval(gameInterval);
       state = 'gameover';
-       gameOverText.textContent = funnyMessages[Math.floor(Math.random()*funnyMessages.length)];
+       gameOverText.textContent = endMessages[Math.floor(Math.random()*endMessages.length)];
       gameOverScreen.classList.remove('hidden');
     }
 

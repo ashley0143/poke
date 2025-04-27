@@ -85,7 +85,7 @@
         }
     </style>
 
-    <% if (description == "Poke is Switching VPN location right now - we dont know how long it will gonna take tho - it can be 10 minutes or 1 hour, its gonna retry until it founds a working server.") { %>
+    <% if (description == "Poke is currently restarting - please wait 1-2 minutes..") { %>
     <script>
         let seconds = 10;
         function updateCountdown() {
@@ -105,7 +105,7 @@
     <% } %>
 </head>
 <body>
-    <% if (description == "Poke is Switching VPN location right now - we dont know how long it will gonna take tho - it can be 10 minutes or 1 hour, its gonna retry until it founds a working server.") { %>
+    <% if (description == "Poke is currently restarting - please wait 1-2 minutes..") { %>
         <p id="abstract">502</p>
     <% } else { %>
         <p id="abstract">404</p>
@@ -114,7 +114,7 @@
     <div class="error">
         <h2><%= error %></h2>
         <p><%= description %></p>
-        <% if (description == "Poke is Switching VPN location right now - we dont know how long it will gonna take tho - it can be 10 minutes or 1 hour, its gonna retry until it founds a working server.") { %>
+        <% if (description == "Poke is currently restarting - please wait 1-2 minutes..") { %>
             <div class="countdown" id="countdown">Trying again in 10 seconds...</div>
         <% } %>
     </div>
@@ -122,7 +122,7 @@
     <div class="error-footer">
         <a href="https://codeberg.org/ashley/poke/issues/new/choose">Create issue</a>
         <a href="https://discord.poketube.fun">Report on our Discord</a>
-        <% if (description == "Poke is Switching VPN location right now - we dont know how long it will gonna take tho - it can be 10 minutes or 1 hour, its gonna retry until it founds a working server.") { %>
+        <% if (description == "Poke is currently restarting - please wait 1-2 minutes..") { %>
             <a href="https://github.com/iv-org/invidious/issues">See Invidious issues</a>
             <a href="">Refresh Page</a>
         <% } %>

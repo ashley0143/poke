@@ -85,13 +85,25 @@
         }
     </style>
 
-    <% if (description == "Poke is currently restarting - please wait 1-2 minutes..") { %>
+    <% const RESTART_MSG = "Poke is currently restarting - please wait 1-2 minutes.."; %>
+    <% if (description === RESTART_MSG) { %>
     <script>
-        let seconds = 10;
+        let reloadCount = parseInt(localStorage.getItem('reloadCount') || '0', 10);
+        reloadCount++;
+        localStorage.setItem('reloadCount', reloadCount);
+
+         let seconds = reloadCount > 5 ? 30 : 10;
+
         function updateCountdown() {
             const el = document.getElementById('countdown');
             if (el) {
-                el.textContent = "Trying again in " + seconds + " seconds...";
+                if (reloadCount > 5) {
+                    // Change description text after too many attempts
+                    document.querySelector('.error p').textContent = "This is taking so long...";
+                    el.textContent = "Trying again in " + seconds + " seconds...";
+                } else {
+                    el.textContent = "Trying again in " + seconds + " seconds...";
+                }
             }
             if (seconds <= 0) {
                 location.reload();
@@ -102,10 +114,14 @@
         }
         window.addEventListener('DOMContentLoaded', updateCountdown);
     </script>
+    <% } else { %>
+    <script>
+         localStorage.removeItem('reloadCount');
+    </script>
     <% } %>
 </head>
 <body>
-    <% if (description == "Poke is currently restarting - please wait 1-2 minutes..") { %>
+    <% if (description === RESTART_MSG) { %>
         <p id="abstract">502</p>
     <% } else { %>
         <p id="abstract">404</p>
@@ -114,15 +130,15 @@
     <div class="error">
         <h2><%= error %></h2>
         <p><%= description %></p>
-        <% if (description == "Poke is currently restarting - please wait 1-2 minutes..") { %>
-            <div class="countdown" id="countdown">Trying again in 10 seconds...</div>
+        <% if (description === RESTART_MSG) { %>
+            <div class="countdown" id="countdown">Trying again in <%= parseInt(localStorage.getItem('reloadCount') || '1', 10) > 5 ? 30 : 10 %> seconds...</div>
         <% } %>
     </div>
 
     <div class="error-footer">
         <a href="https://codeberg.org/ashley/poke/issues/new/choose">Create issue</a>
         <a href="https://discord.poketube.fun">Report on our Discord</a>
-        <% if (description == "Poke is currently restarting - please wait 1-2 minutes..") { %>
+        <% if (description === RESTART_MSG) { %>
             <a href="https://github.com/iv-org/invidious/issues">See Invidious issues</a>
             <a href="">Refresh Page</a>
         <% } %>

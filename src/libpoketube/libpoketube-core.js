@@ -11,7 +11,7 @@ const { curly } = require("node-libcurl");
 const getdislikes = require("../libpoketube/libpoketube-dislikes.js");
 const getColors = require("get-image-colors");
 const config = require("../../config.json");
-const { Innertube } = require("youtubei.js"); 
+const { Innertube } = require("youtubei.js"); // youtubei.js client
 
 class InnerTubePokeVidious {
   constructor(config) {
@@ -27,7 +27,6 @@ class InnerTubePokeVidious {
     this.useragent =
       config.useragent ||
       "PokeTube/2.0.0 (GNU/Linux; Android 14; Trisquel 11; poketube-vidious; like FreeTube)";
-    this.INNERTUBE_CONTEXT_CLIENT_VERSION = "1";
     this.region = "region=US";
     this.sqp =
       "-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLBy_x4UUHLNDZtJtH0PXeQGoRFTgw";
@@ -46,11 +45,12 @@ class InnerTubePokeVidious {
     return obj && "authorId" in obj;
   }
 
-   async _initYouTube() {
+  // Lazy-init the Innertube client
+  async _initYouTube() {
     if (!this.youtubeClient) {
       this.youtubeClient = await Innertube.create({
-        lang: this.language.split("=")[1],      // e.g. "en-US"
-        location: this.region.split("=")[1],    // e.g. "US"
+        lang: this.language.split("=")[1],   // "en-US"
+        location: this.region.split("=")[1], // "US"
       });
     }
     return this.youtubeClient;
@@ -58,7 +58,6 @@ class InnerTubePokeVidious {
 
   async getYouTubeApiVideo(f, v, contentlang, contentregion) {
     const { fetch } = await import("undici");
-
     if (v == null) return "Gib ID";
 
     if (this.cache[v] && Date.now() - this.cache[v].timestamp < 3600000) {
@@ -66,15 +65,12 @@ class InnerTubePokeVidious {
     }
 
     const headers = { "User-Agent": this.useragent };
-
-    // init youtubei.js
     const youtube = await this._initYouTube();
 
     try {
-      // fetch comments and details via youtubei.js, and legacy videoData via CURL
-      const [commentsResponse, details, videoData] = await Promise.all([
-        youtube.getComments(v),         
-        youtube.getDetails(v), 
+       const [commentsResponse, info, videoData] = await Promise.all([
+        youtube.getComments(v),
+        youtube.getInfo(v),
         curly
           .get(`${this.config.tubeApi}video?v=${v}`, {
             httpHeader: Object.entries(headers).map(
@@ -83,13 +79,11 @@ class InnerTubePokeVidious {
           })
           .then((res) => {
             const json = toJson(res.data);
-            const video = this.getJson(json);
-            return { json, video };
+            return { json, video: this.getJson(json) };
           }),
       ]);
 
-      // adapt to legacy fields
-      const vid = { ...details, authorId: details.channel_id };
+      const vid = { ...info, authorId: info.channel_id };
 
       let p = {};
       if (f === "true") {
@@ -111,7 +105,7 @@ class InnerTubePokeVidious {
           channel_uploads: p,
           engagement: fe.engagement,
           wiki: "",
-          desc: details.description,
+          desc: info.description,
           color: await getColors(
             `https://i.ytimg.com/vi/${v}/hqdefault.jpg?sqp=${this.sqp}`
           ).then((cols) => cols[0].hex()),
@@ -129,10 +123,9 @@ class InnerTubePokeVidious {
   }
 
   isvalidvideo(v) {
-    if (v != "assets" && v != "cdn-cgi" && v != "404") {
-      return /^([a-zA-Z0-9_-]{11})/.test(v);
-    }
-    return false;
+    return v !== "assets" && v !== "cdn-cgi" && v !== "404"
+      ? /^([a-zA-Z0-9_-]{11})/.test(v)
+      : false;
   }
 
   initError(args, error) {

@@ -19,15 +19,16 @@ class InnerTubePokeVidious {
     this.cache = {};
     this.language = "hl=en-US";
     this.region = "region=US";
-    this.sqp = "-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLBy_x4UUHLNDZtJtH0PXeQGoRFTgw";
-    this.useragent = config.useragent ||
+    this.sqp =
+      "-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLBy_x4UUHLNDZtJtH0PXeQGoRFTgw";
+    this.useragent =
+      config.useragent ||
       "PokeTube/2.0.0 (GNU/Linux; Android 14; Trisquel 11; poketube-vidious; like FreeTube)";
     this.youtubeClient = null;
   }
 
-  // Re-added helper so your callers can do INNERTUBE.isvalidvideo(v)
+  // Re-added helper so you can call INNERTUBE.isvalidvideo(v)
   isvalidvideo(id) {
-    // exactly 11-char YouTube IDs, not folder names
     return (
       id !== "assets" &&
       id !== "cdn-cgi" &&
@@ -39,15 +40,17 @@ class InnerTubePokeVidious {
   async _initYouTube() {
     if (!this.youtubeClient) {
       this.youtubeClient = await Innertube.create({
-        lang: this.language.split("=")[1],   // "en-US"
+        lang: this.language.split("=")[1], // "en-US"
         location: this.region.split("=")[1], // "US"
       });
     }
     return this.youtubeClient;
   }
 
+  // Safe-map thumbnails (empty array if undefined)
   _mapThumbnails(thumbnails) {
-    return thumbnails.map((t) => ({
+    const list = Array.isArray(thumbnails) ? thumbnails : [];
+    return list.map((t) => ({
       url: t.url,
       width: t.width,
       height: t.height,
@@ -58,8 +61,10 @@ class InnerTubePokeVidious {
     if (!videoId) return { error: "Gib ID" };
 
     // cache for 1h
-    if (this.cache[videoId] &&
-        Date.now() - this.cache[videoId].timestamp < 3_600_000) {
+    if (
+      this.cache[videoId] &&
+      Date.now() - this.cache[videoId].timestamp < 3_600_000
+    ) {
       return this.cache[videoId].result;
     }
 
@@ -70,15 +75,16 @@ class InnerTubePokeVidious {
       const [commentsData, info, legacy] = await Promise.all([
         youtube.getComments(videoId),
         youtube.getInfo(videoId),
-        curly.get(`${this.config.tubeApi}video?v=${videoId}`, {
-          httpHeader: Object.entries(headers).map(
-            ([k, v]) => `${k}: ${v}`
-          ),
-        }).then((res) => {
-          const json = toJson(res.data);
-          const parsed = JSON.parse(json);
-          return { json: parsed, video: parsed.video };
-        }),
+        curly
+          .get(`${this.config.tubeApi}video?v=${videoId}`, {
+            httpHeader: Object.entries(headers).map(
+              ([k, v]) => `${k}: ${v}`
+            ),
+          })
+          .then((res) => {
+            const parsed = JSON.parse(toJson(res.data));
+            return { json: parsed, video: parsed.video };
+          }),
       ]);
 
       const vid = info;
@@ -89,12 +95,15 @@ class InnerTubePokeVidious {
         error: vid.info?.reason || null,
 
         videoThumbnails: this._mapThumbnails(vid.thumbnails),
-        storyboards: vid.storyboards?.map((sb) => ({
-          url: sb.url,
-          width: sb.width,
-          height: sb.height,
-          mime: sb.mimeType,
-        })),
+        // safe default for storyboards
+        storyboards: Array.isArray(vid.storyboards)
+          ? vid.storyboards.map((sb) => ({
+              url: sb.url,
+              width: sb.width,
+              height: sb.height,
+              mime: sb.mimeType,
+            }))
+          : [],
 
         description: vid.description,
         descriptionHtml: vid.descriptionRenderers?.description,
@@ -157,13 +166,13 @@ class InnerTubePokeVidious {
 }
 
 module.exports = new InnerTubePokeVidious({
-  tubeApi:   "https://inner-api.poketube.fun/api/",
-  invapi:    "https://invid-api.poketube.fun/bHj665PpYhUdPWuKPfZuQGoX/api/v1",
+  tubeApi: "https://inner-api.poketube.fun/api/",
+  invapi: "https://invid-api.poketube.fun/bHj665PpYhUdPWuKPfZuQGoX/api/v1",
   invapi_alt:
     config.proxylocation === "EU"
       ? "https://invid-api.poketube.fun/api/v1"
       : "https://iv.ggtyler.dev/api/v1",
-  dislikes:  "https://returnyoutubedislikeapi.com/votes?videoId=",
-  t_url:     "https://t.poketube.fun/",
+  dislikes: "https://returnyoutubedislikeapi.com/votes?videoId=",
+  t_url: "https://t.poketube.fun/",
   useragent: config.useragent,
 });

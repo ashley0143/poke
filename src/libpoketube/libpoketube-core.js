@@ -11,41 +11,20 @@ const { curly } = require("node-libcurl");
 const getdislikes = require("../libpoketube/libpoketube-dislikes.js");
 const getColors = require("get-image-colors");
 const config = require("../../config.json");
-const { Innertube } = require("youtubei.js"); // youtubei.js client
+const { Innertube } = require("youtubei.js");
 
 class InnerTubePokeVidious {
   constructor(config) {
     this.config = config;
     this.cache = {};
     this.language = "hl=en-US";
-    this.param = "2AMB";
-    this.param_legacy = "CgIIAdgDAQ%3D%3D";
-    this.apikey = "AIzaSyAO_FJ2SlqU8Q4STEHLGCilw_Y9_11qcW8";
-    this.ANDROID_API_KEY = "AIzaSyA8eiZmM1FaDVjRy-df2KTyQ_vz_yYM39w";
-    this.ANDROID_APP_VERSION = "19.14.42";
-    this.ANDROID_VERSION = "13";
-    this.useragent =
-      config.useragent ||
-      "PokeTube/2.0.0 (GNU/Linux; Android 14; Trisquel 11; poketube-vidious; like FreeTube)";
     this.region = "region=US";
-    this.sqp =
-      "-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLBy_x4UUHLNDZtJtH0PXeQGoRFTgw";
+    this.sqp = "-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLBy_x4UUHLNDZtJtH0PXeQGoRFTgw";
+    this.useragent = config.useragent ||
+      "PokeTube/2.0.0 (GNU/Linux; Android 14; Trisquel 11; poketube-vidious; like FreeTube)";
     this.youtubeClient = null;
   }
 
-  getJson(str) {
-    try {
-      return JSON.parse(str);
-    } catch {
-      return null;
-    }
-  }
-
-  checkUnexistingObject(obj) {
-    return obj && "authorId" in obj;
-  }
-
-  // Lazy-init the Innertube client
   async _initYouTube() {
     if (!this.youtubeClient) {
       this.youtubeClient = await Innertube.create({
@@ -56,93 +35,122 @@ class InnerTubePokeVidious {
     return this.youtubeClient;
   }
 
-  async getYouTubeApiVideo(f, v, contentlang, contentregion) {
-    const { fetch } = await import("undici");
-    if (v == null) return "Gib ID";
+  // Helper to map thumbnails to {url,width,height}
+  _mapThumbnails(thumbnails) {
+    return thumbnails.map((t) => ({
+      url: t.url,
+      width: t.width,
+      height: t.height,
+    }));
+  }
 
-    if (this.cache[v] && Date.now() - this.cache[v].timestamp < 3600000) {
-      return this.cache[v].result;
+  // The one unified method
+  async getYouTubeApiVideo(f, videoId, contentlang, contentregion) {
+    if (!videoId) return { error: "Gib ID" };
+
+    // cache for 1h
+    if (this.cache[videoId] &&
+        Date.now() - this.cache[videoId].timestamp < 3_600_000) {
+      return this.cache[videoId].result;
     }
 
     const headers = { "User-Agent": this.useragent };
     const youtube = await this._initYouTube();
 
     try {
-       const [commentsResponse, info, videoData] = await Promise.all([
-        youtube.getComments(v),
-        youtube.getInfo(v),
-        curly
-          .get(`${this.config.tubeApi}video?v=${v}`, {
-            httpHeader: Object.entries(headers).map(
-              ([k, val]) => `${k}: ${val}`
-            ),
-          })
-          .then((res) => {
-            const json = toJson(res.data);
-            return { json, video: this.getJson(json) };
-          }),
+      // fetch:
+      const [ commentsData, info, legacy ] = await Promise.all([
+        youtube.getComments(videoId),     // raw comments from yt
+        youtube.getInfo(videoId),         // raw info from yt
+        curly.get(`${this.config.tubeApi}video?v=${videoId}`, {
+          httpHeader: Object.entries(headers).map(([k,v]) => `${k}: ${v}`)
+        }).then(res => {
+          const json = toJson(res.data);
+          return { json: JSON.parse(json), video: JSON.parse(json).video };
+        }),
       ]);
 
-      const vid = { ...info, authorId: info.channel_id };
+      // Invidious-style JSON:
+      const vid = info;
+      const resp = {
+        type: vid.type,
+        title: vid.title,
+        videoId: vid.id,
+        error: vid.info?.reason || null,
 
-      let p = {};
-      if (f === "true") {
-        const uploadsRes = await fetch(
-          `${this.config.invapi}/channels/${vid.authorId}?hl=${contentlang}&region=${contentregion}`,
-          { headers }
-        );
-        p = await uploadsRes.json();
-      }
+        videoThumbnails: this._mapThumbnails(vid.thumbnails),
+        storyboards: vid.storyboards?.map(sb => ({
+          url: sb.url,
+          width: sb.width,
+          height: sb.height,
+          mime: sb.mimeType
+        })),
 
-      const fe = await getdislikes(v);
+        description: vid.description,
+        descriptionHtml: vid.descriptionRenderers?.description,
+        published: Math.floor(new Date(vid.uploadDate).getTime() / 1000),
+        publishedText: vid.publishedText,
+        keywords: vid.keywords,
 
-      this.cache[v] = {
-        result: {
-          json: videoData.json,
-          video: videoData.video,
-          vid,
-          comments: commentsResponse,
-          channel_uploads: p,
-          engagement: fe.engagement,
-          wiki: "",
-          desc: info.description,
-          color: await getColors(
-            `https://i.ytimg.com/vi/${v}/hqdefault.jpg?sqp=${this.sqp}`
-          ).then((cols) => cols[0].hex()),
-          color2: await getColors(
-            `https://i.ytimg.com/vi/${v}/hqdefault.jpg?sqp=${this.sqp}`
-          ).then((cols) => cols[1].hex()),
-        },
-        timestamp: Date.now(),
+        viewCount: vid.viewCount,
+        likeCount: vid.likes,
+        dislikeCount: 0,
+
+        paid: vid.isPaid,
+        premium: vid.isPremium,
+        isFamilyFriendly: vid.isFamilySafe,
+        allowedRegions: vid.availableCountries,
+        genre: vid.genre,
+        genreUrl: vid.genreUrl,
+
+        author: vid.author,
+        authorId: vid.channelId,
+        authorUrl: `/channel/${vid.channelId}`,
+        authorVerified: vid.isVerified,
+        authorThumbnails: this._mapThumbnails(vid.authorThumbnails),
+        subCountText: vid.subscriberCountText,
+
+        lengthSeconds: vid.lengthSeconds,
+        allowRatings: vid.isRatingsEnabled,
+        rating: 0,
+        isListed: !vid.isUnlisted,
+        liveNow: vid.isLive,
+        isPostLiveDvr: vid.isPostLiveDvr,
+        isUpcoming: vid.upcoming,
+
+        premiereTimestamp: vid.premiereTimestamp
+          ? Math.floor(new Date(vid.premiereTimestamp).getTime() / 1000)
+          : null,
+
+        // keep legacy fields too:
+        json: legacy.json,
+        video: legacy.video,
+        comments: commentsData,
+        engagement: (await getdislikes(videoId)).engagement,
+        wiki: "",
+        channel_uploads: f === "true"
+          ? (await fetch(`${this.config.invapi}/channels/${vid.channelId}?hl=${contentlang}&region=${contentregion}`, { headers }))
+              .then(r => r.json())
+          : {}
       };
 
-      return this.cache[v].result;
-    } catch (error) {
-      this.initError("Error getting video", error);
+      this.cache[videoId] = { result: resp, timestamp: Date.now() };
+      return resp;
+
+    } catch (err) {
+      console.error("[LIBPT CORE ERROR] Error getting video", err);
+      return { error: err.message };
     }
-  }
-
-  isvalidvideo(v) {
-    return v !== "assets" && v !== "cdn-cgi" && v !== "404"
-      ? /^([a-zA-Z0-9_-]{11})/.test(v)
-      : false;
-  }
-
-  initError(args, error) {
-    console.error("[LIBPT CORE ERROR] " + args, error);
   }
 }
 
-const pokeTubeApiCore = new InnerTubePokeVidious({
-  tubeApi: "https://inner-api.poketube.fun/api/",
-  invapi: "https://invid-api.poketube.fun/bHj665PpYhUdPWuKPfZuQGoX/api/v1",
-  invapi_alt:
-    config.proxylocation === "EU"
-      ? "https://invid-api.poketube.fun/api/v1"
-      : "https://iv.ggtyler.dev/api/v1",
-  dislikes: "https://returnyoutubedislikeapi.com/votes?videoId=",
-  t_url: "https://t.poketube.fun/",
+module.exports = new InnerTubePokeVidious({
+  tubeApi:   "https://inner-api.poketube.fun/api/",
+  invapi:    "https://invid-api.poketube.fun/bHj665PpYhUdPWuKPfZuQGoX/api/v1",
+  invapi_alt: config.proxylocation === "EU"
+    ? "https://invid-api.poketube.fun/api/v1"
+    : "https://iv.ggtyler.dev/api/v1",
+  dislikes:  "https://returnyoutubedislikeapi.com/votes?videoId=",
+  t_url:     "https://t.poketube.fun/",
   useragent: config.useragent,
 });
-
-module.exports = pokeTubeApiCore;

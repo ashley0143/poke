@@ -25,6 +25,17 @@ class InnerTubePokeVidious {
     this.youtubeClient = null;
   }
 
+  // Re-added helper so your callers can do INNERTUBE.isvalidvideo(v)
+  isvalidvideo(id) {
+    // exactly 11-char YouTube IDs, not folder names
+    return (
+      id !== "assets" &&
+      id !== "cdn-cgi" &&
+      id !== "404" &&
+      /^([A-Za-z0-9_-]{11})$/.test(id)
+    );
+  }
+
   async _initYouTube() {
     if (!this.youtubeClient) {
       this.youtubeClient = await Innertube.create({
@@ -35,7 +46,6 @@ class InnerTubePokeVidious {
     return this.youtubeClient;
   }
 
-  // Helper to map thumbnails to {url,width,height}
   _mapThumbnails(thumbnails) {
     return thumbnails.map((t) => ({
       url: t.url,
@@ -44,7 +54,6 @@ class InnerTubePokeVidious {
     }));
   }
 
-  // The one unified method
   async getYouTubeApiVideo(f, videoId, contentlang, contentregion) {
     if (!videoId) return { error: "Gib ID" };
 
@@ -58,19 +67,20 @@ class InnerTubePokeVidious {
     const youtube = await this._initYouTube();
 
     try {
-      // fetch:
-      const [ commentsData, info, legacy ] = await Promise.all([
-        youtube.getComments(videoId),     // raw comments from yt
-        youtube.getInfo(videoId),         // raw info from yt
+      const [commentsData, info, legacy] = await Promise.all([
+        youtube.getComments(videoId),
+        youtube.getInfo(videoId),
         curly.get(`${this.config.tubeApi}video?v=${videoId}`, {
-          httpHeader: Object.entries(headers).map(([k,v]) => `${k}: ${v}`)
-        }).then(res => {
+          httpHeader: Object.entries(headers).map(
+            ([k, v]) => `${k}: ${v}`
+          ),
+        }).then((res) => {
           const json = toJson(res.data);
-          return { json: JSON.parse(json), video: JSON.parse(json).video };
+          const parsed = JSON.parse(json);
+          return { json: parsed, video: parsed.video };
         }),
       ]);
 
-      // Invidious-style JSON:
       const vid = info;
       const resp = {
         type: vid.type,
@@ -79,11 +89,11 @@ class InnerTubePokeVidious {
         error: vid.info?.reason || null,
 
         videoThumbnails: this._mapThumbnails(vid.thumbnails),
-        storyboards: vid.storyboards?.map(sb => ({
+        storyboards: vid.storyboards?.map((sb) => ({
           url: sb.url,
           width: sb.width,
           height: sb.height,
-          mime: sb.mimeType
+          mime: sb.mimeType,
         })),
 
         description: vid.description,
@@ -122,21 +132,23 @@ class InnerTubePokeVidious {
           ? Math.floor(new Date(vid.premiereTimestamp).getTime() / 1000)
           : null,
 
-        // keep legacy fields too:
+        // legacy fields
         json: legacy.json,
         video: legacy.video,
         comments: commentsData,
         engagement: (await getdislikes(videoId)).engagement,
         wiki: "",
-        channel_uploads: f === "true"
-          ? (await fetch(`${this.config.invapi}/channels/${vid.channelId}?hl=${contentlang}&region=${contentregion}`, { headers }))
-              .then(r => r.json())
-          : {}
+        channel_uploads:
+          f === "true"
+            ? await fetch(
+                `${this.config.invapi}/channels/${vid.channelId}?hl=${contentlang}&region=${contentregion}`,
+                { headers }
+              ).then((r) => r.json())
+            : {},
       };
 
       this.cache[videoId] = { result: resp, timestamp: Date.now() };
       return resp;
-
     } catch (err) {
       console.error("[LIBPT CORE ERROR] Error getting video", err);
       return { error: err.message };
@@ -147,9 +159,10 @@ class InnerTubePokeVidious {
 module.exports = new InnerTubePokeVidious({
   tubeApi:   "https://inner-api.poketube.fun/api/",
   invapi:    "https://invid-api.poketube.fun/bHj665PpYhUdPWuKPfZuQGoX/api/v1",
-  invapi_alt: config.proxylocation === "EU"
-    ? "https://invid-api.poketube.fun/api/v1"
-    : "https://iv.ggtyler.dev/api/v1",
+  invapi_alt:
+    config.proxylocation === "EU"
+      ? "https://invid-api.poketube.fun/api/v1"
+      : "https://iv.ggtyler.dev/api/v1",
   dislikes:  "https://returnyoutubedislikeapi.com/votes?videoId=",
   t_url:     "https://t.poketube.fun/",
   useragent: config.useragent,

@@ -11,7 +11,7 @@ const { curly } = require("node-libcurl");
 const getdislikes = require("../libpoketube/libpoketube-dislikes.js");
 const getColors = require("get-image-colors");
 const config = require("../../config.json");
-const { Innertube } = require("youtubei.js");
+const { Innertube, InnertubeError } = require("youtubei.js");
 
 class InnerTubePokeVidious {
   constructor(config) {
@@ -19,15 +19,12 @@ class InnerTubePokeVidious {
     this.cache = {};
     this.language = "hl=en-US";
     this.region = "region=US";
-    this.sqp =
-      "-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLBy_x4UUHLNDZtJtH0PXeQGoRFTgw";
-    this.useragent =
-      config.useragent ||
+    this.sqp = "-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLBy_x4UUHLNDZtJtH0PXeQGoRFTgw";
+    this.useragent = config.useragent ||
       "PokeTube/2.0.0 (GNU/Linux; Android 14; Trisquel 11; poketube-vidious; like FreeTube)";
     this.youtubeClient = null;
   }
 
-  // Re-added helper so you can call INNERTUBE.isvalidvideo(v)
   isvalidvideo(id) {
     return (
       id !== "assets" &&
@@ -40,14 +37,13 @@ class InnerTubePokeVidious {
   async _initYouTube() {
     if (!this.youtubeClient) {
       this.youtubeClient = await Innertube.create({
-        lang: this.language.split("=")[1], // "en-US"
-        location: this.region.split("=")[1], // "US"
+        lang: this.language.split("=")[1],
+        location: this.region.split("=")[1],
       });
     }
     return this.youtubeClient;
   }
 
-  // Safe-map thumbnails (empty array if undefined)
   _mapThumbnails(thumbnails) {
     const list = Array.isArray(thumbnails) ? thumbnails : [];
     return list.map((t) => ({
@@ -58,9 +54,11 @@ class InnerTubePokeVidious {
   }
 
   async getYouTubeApiVideo(f, videoId, contentlang, contentregion) {
-    if (!videoId) return { error: "Gib ID" };
+    if (!videoId) {
+      return { error: "Gib ID" };
+    }
 
-    // cache for 1h
+    // 1h cache
     if (
       this.cache[videoId] &&
       Date.now() - this.cache[videoId].timestamp < 3_600_000
@@ -71,97 +69,117 @@ class InnerTubePokeVidious {
     const headers = { "User-Agent": this.useragent };
     const youtube = await this._initYouTube();
 
+    let info, commentsData;
+
+    // Try youtubei.js first, but fallback to invapi on any InnertubeError
     try {
-      const [commentsData, info, legacy] = await Promise.all([
+      [commentsData, info] = await Promise.all([
         youtube.getComments(videoId),
         youtube.getInfo(videoId),
-        curly
-          .get(`${this.config.tubeApi}video?v=${videoId}`, {
-            httpHeader: Object.entries(headers).map(
-              ([k, v]) => `${k}: ${v}`
-            ),
-          })
-          .then((res) => {
-            const parsed = JSON.parse(toJson(res.data));
-            return { json: parsed, video: parsed.video };
-          }),
       ]);
-
-      const vid = info;
-      const resp = {
-        type: vid.type,
-        title: vid.title,
-        videoId: vid.id,
-        error: vid.info?.reason || null,
-
-        videoThumbnails: this._mapThumbnails(vid.thumbnails),
-        // safe default for storyboards
-        storyboards: Array.isArray(vid.storyboards)
-          ? vid.storyboards.map((sb) => ({
-              url: sb.url,
-              width: sb.width,
-              height: sb.height,
-              mime: sb.mimeType,
-            }))
-          : [],
-
-        description: vid.description,
-        descriptionHtml: vid.descriptionRenderers?.description,
-        published: Math.floor(new Date(vid.uploadDate).getTime() / 1000),
-        publishedText: vid.publishedText,
-        keywords: vid.keywords,
-
-        viewCount: vid.viewCount,
-        likeCount: vid.likes,
-        dislikeCount: 0,
-
-        paid: vid.isPaid,
-        premium: vid.isPremium,
-        isFamilyFriendly: vid.isFamilySafe,
-        allowedRegions: vid.availableCountries,
-        genre: vid.genre,
-        genreUrl: vid.genreUrl,
-
-        author: vid.author,
-        authorId: vid.channelId,
-        authorUrl: `/channel/${vid.channelId}`,
-        authorVerified: vid.isVerified,
-        authorThumbnails: this._mapThumbnails(vid.authorThumbnails),
-        subCountText: vid.subscriberCountText,
-
-        lengthSeconds: vid.lengthSeconds,
-        allowRatings: vid.isRatingsEnabled,
-        rating: 0,
-        isListed: !vid.isUnlisted,
-        liveNow: vid.isLive,
-        isPostLiveDvr: vid.isPostLiveDvr,
-        isUpcoming: vid.upcoming,
-
-        premiereTimestamp: vid.premiereTimestamp
-          ? Math.floor(new Date(vid.premiereTimestamp).getTime() / 1000)
-          : null,
-
-        // legacy fields
-        json: legacy.json,
-        video: legacy.video,
-        comments: commentsData,
-        engagement: (await getdislikes(videoId)).engagement,
-        wiki: "",
-        channel_uploads:
-          f === "true"
-            ? await fetch(
-                `${this.config.invapi}/channels/${vid.channelId}?hl=${contentlang}&region=${contentregion}`,
-                { headers }
-              ).then((r) => r.json())
-            : {},
-      };
-
-      this.cache[videoId] = { result: resp, timestamp: Date.now() };
-      return resp;
     } catch (err) {
-      console.error("[LIBPT CORE ERROR] Error getting video", err);
-      return { error: err.message };
+      if (err instanceof InnertubeError) {
+        console.warn("[YOUTUBEJS] fallback to invapi due to:", err.message);
+        // comments fallback
+        commentsData = { comments: [], comment_count: 0 };
+        try {
+          const c = await fetch(
+            `${this.config.invapi}/comments/${videoId}?hl=${contentlang}&region=${contentregion}`,
+            { headers }
+          );
+          commentsData = await c.json();
+        } catch {} 
+        // info fallback
+        try {
+          const v = await fetch(
+            `${this.config.invapi}/videos/${videoId}?hl=${contentlang}&region=${contentregion}`,
+            { headers }
+          );
+          info = (await v.json()).video || {};
+        } catch {
+          info = {};
+        }
+      } else {
+        throw err;
+      }
     }
+
+    // legacy curl
+    const legacy = await curly
+      .get(`${this.config.tubeApi}video?v=${videoId}`, {
+        httpHeader: Object.entries(headers).map(([k, v]) => `${k}: ${v}`),
+      })
+      .then((res) => {
+        const parsed = JSON.parse(toJson(res.data));
+        return { json: parsed, video: parsed.video };
+      });
+
+    // build response (same as before)
+    const vid = info;
+    const resp = {
+      type: vid.type,
+      title: vid.title,
+      videoId: vid.id,
+      error: vid.info?.reason || null,
+      videoThumbnails: this._mapThumbnails(vid.thumbnails),
+      storyboards: Array.isArray(vid.storyboards)
+        ? vid.storyboards.map((sb) => ({
+            url: sb.url,
+            width: sb.width,
+            height: sb.height,
+            mime: sb.mimeType,
+          }))
+        : [],
+      description: vid.description,
+      descriptionHtml: vid.descriptionRenderers?.description,
+      published: vid.uploadDate
+        ? Math.floor(new Date(vid.uploadDate).getTime() / 1000)
+        : null,
+      publishedText: vid.publishedText,
+      keywords: vid.keywords,
+      viewCount: vid.viewCount,
+      likeCount: vid.likes,
+      dislikeCount: 0,
+      paid: vid.isPaid,
+      premium: vid.isPremium,
+      isFamilyFriendly: vid.isFamilySafe,
+      allowedRegions: vid.availableCountries,
+      genre: vid.genre,
+      genreUrl: vid.genreUrl,
+      author: vid.author,
+      authorId: vid.channelId,
+      authorUrl: `/channel/${vid.channelId}`,
+      authorVerified: vid.isVerified,
+      authorThumbnails: this._mapThumbnails(vid.authorThumbnails),
+      subCountText: vid.subscriberCountText,
+      lengthSeconds: vid.lengthSeconds,
+      allowRatings: vid.isRatingsEnabled,
+      rating: 0,
+      isListed: !vid.isUnlisted,
+      liveNow: vid.isLive,
+      isPostLiveDvr: vid.isPostLiveDvr,
+      isUpcoming: vid.upcoming,
+      premiereTimestamp: vid.premiereTimestamp
+        ? Math.floor(new Date(vid.premiereTimestamp).getTime() / 1000)
+        : null,
+
+      // legacy
+      json: legacy.json,
+      video: legacy.video,
+      comments: commentsData,
+      engagement: (await getdislikes(videoId)).engagement,
+      wiki: "",
+      channel_uploads:
+        f === "true"
+          ? await fetch(
+              `${this.config.invapi}/channels/${vid.channelId}?hl=${contentlang}&region=${contentregion}`,
+              { headers }
+            ).then((r) => r.json())
+          : {},
+    };
+
+    this.cache[videoId] = { result: resp, timestamp: Date.now() };
+    return resp;
   }
 }
 

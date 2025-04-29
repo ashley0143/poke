@@ -35,7 +35,7 @@
     "activitypub-express": "^4.4.1",
     "duck-duck-scrape": "^2.2.5",
     "google-it": "^1.6.4",
-     "youtubei.js": "^9.3.0"
+     "youtubei.js": "^13.4.0"
   },
   "engines": {
     "node": ">=18"

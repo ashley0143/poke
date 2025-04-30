@@ -78,6 +78,18 @@
     });
   }
 
+  function locateAndUpdate() {
+    if (!navigator.geolocation) {
+      alert('Geolocation is not supported by your browser.');
+      return;
+    }
+    navigator.geolocation.getCurrentPosition(
+      pos => updateMap(pos.coords.latitude, pos.coords.longitude),
+      err => alert('Unable to retrieve location: ' + err.message),
+      { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
+    );
+  }
+
   function _0x4f2a(){
     const bbox = _0x99f2(0);
     const base = _0x99f2(1);
@@ -138,7 +150,7 @@
     <input id="searchBox" type="text" placeholder="Search anywhere..." style="padding:6px 10px;width:100%;font-size:14px;border:1px solid #ccc;border-radius:6px">
     <ul id="suggestions" style="list-style:none;margin:6px 0 0;padding:0;max-height:180px;overflow:auto;background:#fff;border:1px solid #ccc;border-radius:6px;display:none;position:relative;z-index:10000;"></ul>
     <div style="margin-top:10px;display:flex;gap:6px;flex-wrap:wrap">
-      <button type="button" style="flex:1;padding:4px 6px;font-size:12px" onclick="navigator.geolocation.getCurrentPosition(p=>updateMap(p.coords.latitude, p.coords.longitude))">📍 Locate</button>
+      <button type="button" style="flex:1;padding:4px 6px;font-size:12px" onclick="locateAndUpdate()">📍 Locate</button>
       <button type="button" style="flex:1;padding:4px 6px;font-size:12px" onclick="copyCoordinates()">📋 Copy Link</button>
       <button type="button" style="flex:1;padding:4px 6px;font-size:12px" onclick="location.reload()">🔁 Reset</button>
     </div>

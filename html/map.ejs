@@ -79,21 +79,16 @@
   }
 
   function locateAndUpdate() {
-    const locateBtn = document.getElementById('locate-btn');
-    locateBtn.textContent = '⏳ Locating...';
     if (!navigator.geolocation) {
       alert('Geolocation is not supported by your browser.');
-      locateBtn.textContent = '📍 Locate';
       return;
     }
     navigator.geolocation.getCurrentPosition(
       pos => {
         updateMap(pos.coords.latitude, pos.coords.longitude);
-        locateBtn.textContent = '📍 Locate';
       },
       err => {
         alert('Unable to retrieve location: ' + err.message);
-        locateBtn.textContent = '📍 Locate';
       },
       { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
     );
@@ -215,11 +210,12 @@
 
   const branding = document.createElement('div');
   branding.textContent = 'PokeMaps';
-  branding.style = 'position:fixed;bottom:10px;left:10px;padding:6px 10px;font-size:16px;font-weight:500;background:rgba(0,0,0,0.6);color:white;border-radius:6px;font-family:sans-serif;backdrop-filter:blur(6px);z-index:9999;';
+  branding.style = 'position:absolute;bottom:10px;left:10px;padding:6px 10px;font-size:16px;font-weight:500;background:rgba(0,0,0,0.6);color:white;border-radius:6px;font-family:sans-serif;backdrop-filter:blur(6px);z-index:9999;pointer-events:none';
   document.body.appendChild(branding);
 
   _0x4f2a();
 })();
+
 </script><script src="/static/data-mobile.js"></script>
 </body>
 </html>

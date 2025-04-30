@@ -229,7 +229,7 @@ module.exports = function (app, config, renderTemplate) {
 
     let f = await modules.fetch(url, {
       method: req.method,
-      headers: headers, // Add headers to the fetch request
+      headers: headers, 
     });
 
     f.body.pipe(res);
@@ -321,7 +321,7 @@ const { useragent, ...configWithoutUA } = cnf;
       const url = `https://raw.githubusercontent.com/ashley0143/poke/main/instances.json`;
 
       let f = await fetch(url, {
-        headers: headers, // Add headers to the fetch request
+        headers: headers, 
       })
         .then((res) => res.text())
         .then((json) => JSON.parse(json));

@@ -79,13 +79,22 @@
   }
 
   function locateAndUpdate() {
+    const locateBtn = document.getElementById('locate-btn');
+    locateBtn.textContent = '⏳ Locating...';
     if (!navigator.geolocation) {
       alert('Geolocation is not supported by your browser.');
+      locateBtn.textContent = '📍 Locate';
       return;
     }
     navigator.geolocation.getCurrentPosition(
-      pos => updateMap(pos.coords.latitude, pos.coords.longitude),
-      err => alert('Unable to retrieve location: ' + err.message),
+      pos => {
+        updateMap(pos.coords.latitude, pos.coords.longitude);
+        locateBtn.textContent = '📍 Locate';
+      },
+      err => {
+        alert('Unable to retrieve location: ' + err.message);
+        locateBtn.textContent = '📍 Locate';
+      },
       { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
     );
   }
@@ -145,18 +154,19 @@
   }
 
   const form = document.createElement('form');
-  form.style = 'position:absolute;top:10px;right:10px;z-index:9999;background:#fff;padding:10px 12px;border-radius:12px;box-shadow:0 4px 10px rgba(0,0,0,0.15);font-family:sans-serif;min-width:260px;';
+  form.style = 'position:absolute;top:10px;right:10px;z-index:9999;background:rgba(0,0,0,0.5);backdrop-filter:blur(12px);padding:10px 12px;border-radius:12px;box-shadow:0 4px 10px rgba(0,0,0,0.4);font-family:sans-serif;min-width:220px;';
   form.innerHTML = `
-    <input id="searchBox" type="text" placeholder="Search anywhere..." style="padding:6px 10px;width:100%;font-size:14px;border:1px solid #ccc;border-radius:6px">
-    <ul id="suggestions" style="list-style:none;margin:6px 0 0;padding:0;max-height:180px;overflow:auto;background:#fff;border:1px solid #ccc;border-radius:6px;display:none;position:relative;z-index:10000;"></ul>
+    <input id="searchBox" type="text" placeholder="Search..." style="padding:6px 10px;width:180px;font-size:14px;border:1px solid #444;border-radius:6px;background:#222;color:#fff">
+    <ul id="suggestions" style="list-style:none;margin:6px 0 0;padding:0;max-height:180px;overflow:auto;background:#111;border:1px solid #333;border-radius:6px;display:none;position:relative;z-index:10000;color:#fff;"></ul>
     <div style="margin-top:10px;display:flex;gap:6px;flex-wrap:wrap">
-      <button type="button" style="flex:1;padding:4px 6px;font-size:12px" onclick="locateAndUpdate()">📍 Locate</button>
-      <button type="button" style="flex:1;padding:4px 6px;font-size:12px" onclick="copyCoordinates()">📋 Copy Link</button>
-      <button type="button" style="flex:1;padding:4px 6px;font-size:12px" onclick="location.reload()">🔁 Reset</button>
+      <button id="locate-btn" type="button" style="flex:1;padding:4px 6px;font-size:12px;background:#333;color:#fff;border:none;border-radius:6px">📍 Locate</button>
+      <button type="button" style="flex:1;padding:4px 6px;font-size:12px;background:#333;color:#fff;border:none;border-radius:6px" onclick="copyCoordinates()">📋 Copy</button>
+      <button type="button" style="flex:1;padding:4px 6px;font-size:12px;background:#333;color:#fff;border:none;border-radius:6px" onclick="location.reload()">🔁 Reset</button>
     </div>
   `;
 
   document.body.appendChild(form);
+  document.getElementById('locate-btn').addEventListener('click', locateAndUpdate);
 
   const input = form.querySelector('#searchBox');
   const suggestions = form.querySelector('#suggestions');
@@ -171,7 +181,7 @@
         data.forEach(place => {
           const li = document.createElement('li');
           li.textContent = place.display_name;
-          li.style = 'padding:6px 10px;cursor:pointer;border-bottom:1px solid #eee;font-size:13px';
+          li.style = 'padding:6px 10px;cursor:pointer;border-bottom:1px solid #222;font-size:13px;background:#111';
           li.addEventListener('click', () => {
             input.value = place.display_name;
             suggestions.style.display = 'none';
@@ -195,6 +205,18 @@
         }
       });
   });
+
+  const fab = document.createElement('button');
+  fab.textContent = '+';
+  fab.style = 'position:fixed;bottom:20px;right:20px;width:48px;height:48px;font-size:24px;background:#111;color:#fff;border:none;border-radius:50%;box-shadow:0 2px 10px rgba(0,0,0,0.4);cursor:pointer;z-index:9999';
+  fab.title = 'More Tools';
+  fab.onclick = () => alert('More features coming soon!');
+  document.body.appendChild(fab);
+
+  const branding = document.createElement('div');
+  branding.textContent = 'PokeMaps';
+  branding.style = 'position:fixed;bottom:10px;left:10px;padding:6px 10px;font-size:16px;font-weight:500;background:rgba(0,0,0,0.6);color:white;border-radius:6px;font-family:sans-serif;backdrop-filter:blur(6px);z-index:9999;';
+  document.body.appendChild(branding);
 
   _0x4f2a();
 })();

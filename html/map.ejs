@@ -44,6 +44,141 @@
 
 //--><!]]>
 </script>
-<script src="/static/maps.js?v=8"></script><script src="/static/data-mobile.js"></script>
+<script >(function(){
+  const _0x5a3c=[
+    "P2Jib3g9LTE2NS43NjE3MTg3NTAwMDAwMyUyQy0zLjg2NDI1NDYxNTcyMTM5NiUyQzMwLjQxMDE1NjI1MDAwMDAwNCUyQzcyLjQ0ODc5MTU1NzMwNjcyJmxheWVyPW1hcG5paw==",
+    "aHR0cHM6Ly93d3cub3BlbnN0cmVldG1hcC5vcmcvZXhwb3J0L2VtYmVkLmh0bWw=",
+    "d3d3Lm9wZW5zdHJlZXRtYXAub3Jn"
+  ];
+
+  function _0x99f2(i){ return atob(_0x5a3c[i]); }
+
+  function _0x4f2a(){
+    const bbox = _0x99f2(0);
+    const base = _0x99f2(1);
+    const url = base + bbox;
+    const iframe = document.querySelector('iframe');
+    if (!iframe) return setTimeout(_0x4f2a, 100);
+    iframe.src = url;
+
+    iframe.addEventListener('load',()=>{
+      try {
+        const doc = iframe.contentDocument || iframe.contentWindow.document;
+        Array.from(doc.querySelectorAll('a')).forEach(a=>a.addEventListener('click',_linkHandler));
+        Array.from(doc.querySelectorAll('*')).forEach(el=>{
+          const bg = el.style.backgroundImage;
+          if(bg.includes('//dka575ofm4ao0.cloudfront.net')){
+            el.style.backgroundImage = bg.replace(/\/\/dka575ofm4ao0\.cloudfront\.net/g,
+              m=>`https://p.poketube.fun/https://dka575ofm4ao0.cloudfront.net`);
+          }
+        });
+      } catch(e) {
+        console.warn('Cross-origin access denied, skipping DOM manipulation.');
+      }
+    });
+
+    window.history = new Proxy(window.history,{
+      get(target, prop){
+        if(prop === 'pushState') return (...args)=>{
+          const iframe = document.querySelector('iframe');
+          if(iframe && args[2]) iframe.src = args[2];
+          return target.pushState.apply(target, args);
+        };
+        return Reflect.get(target, prop);
+      }
+    });
+
+    window.addEventListener('popstate',()=>{
+      const iframe = document.querySelector('iframe');
+      if (iframe) iframe.src = location.href;
+    });
+  }
+
+  function _linkHandler(e){
+    const h = e.target.href;
+    const iframe = document.querySelector('iframe');
+    if(!iframe) return;
+    if(h.includes(_0x99f2(2))){
+      e.preventDefault();
+      iframe.src = h;
+      window.history.pushState({}, '', h);
+    } else {
+      window.location.href = h;
+    }
+  }
+
+  const form = document.createElement('form');
+  form.style = 'position:absolute;top:10px;right:10px;z-index:9999;background:#fff;padding:10px 12px;border-radius:12px;box-shadow:0 4px 10px rgba(0,0,0,0.15);font-family:sans-serif;min-width:260px;';
+  form.innerHTML = `
+    <input id="searchBox" type="text" placeholder="Search anywhere..." style="padding:6px 10px;width:100%;font-size:14px;border:1px solid #ccc;border-radius:6px">
+    <ul id="suggestions" style="list-style:none;margin:6px 0 0;padding:0;max-height:180px;overflow:auto;background:#fff;border:1px solid #ccc;border-radius:6px;display:none;position:relative;z-index:10000;"></ul>
+    <div style="margin-top:10px;display:flex;gap:6px;flex-wrap:wrap">
+      <button type="button" style="flex:1;padding:4px 6px;font-size:12px" onclick="navigator.geolocation.getCurrentPosition(p=>alert('Lat:'+p.coords.latitude+'\nLon:'+p.coords.longitude))">📍 Locate</button>
+      <button type="button" style="flex:1;padding:4px 6px;font-size:12px" onclick="alert('Layer switcher coming soon!')">🗺️ Layers</button>
+      <button type="button" style="flex:1;padding:4px 6px;font-size:12px" onclick="location.reload()">🔁 Reset</button>
+    </div>
+  `;
+
+  document.body.appendChild(form);
+
+  const input = form.querySelector('#searchBox');
+  const suggestions = form.querySelector('#suggestions');
+
+  input.addEventListener('input', () => {
+    const query = input.value.trim();
+    if (!query) return suggestions.style.display = 'none';
+    fetch(`https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(query)}&format=json&limit=5`)
+      .then(res => res.json())
+      .then(data => {
+        suggestions.innerHTML = '';
+        data.forEach(place => {
+          const li = document.createElement('li');
+          li.textContent = place.display_name;
+          li.style = 'padding:6px 10px;cursor:pointer;border-bottom:1px solid #eee;font-size:13px';
+          li.addEventListener('click', () => {
+            input.value = place.display_name;
+            suggestions.style.display = 'none';
+            form.dispatchEvent(new Event('submit'));
+          });
+          suggestions.appendChild(li);
+        });
+        suggestions.style.display = 'block';
+      });
+  });
+
+  form.addEventListener('submit', e => {
+    e.preventDefault();
+    const q = input.value.trim();
+    if(!q) return;
+    const marker = document.getElementById('map-marker');
+    if (marker) marker.remove();
+    fetch(`https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(q)}&format=json&limit=1`)
+      .then(res => res.json())
+      .then(data => {
+        if(data[0]){
+          const lat = parseFloat(data[0].lat);
+          const lon = parseFloat(data[0].lon);
+          const delta = 0.25;
+          const bbox = `?bbox=${lon-delta},${lat-delta},${lon+delta},${lat+delta}&layer=mapnik`;
+          const newURL = _0x99f2(1) + bbox;
+          const iframe = document.querySelector('iframe');
+          if (iframe) {
+            iframe.src = newURL;
+            window.history.pushState({}, '', newURL);
+          }
+
+          const marker = document.createElement('div');
+          marker.id = 'map-marker';
+          marker.style = 'position:absolute;width:20px;height:20px;background:red;border-radius:50%;transform:translate(-50%,-50%);z-index:9998;pointer-events:none';
+          marker.style.left = '50%';
+          marker.style.top = '50%';
+          document.body.appendChild(marker);
+        }
+      });
+  });
+
+  _0x4f2a();
+})();
+</script><script src="/static/data-mobile.js"></script>
 </body>
 </html>

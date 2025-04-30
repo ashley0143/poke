@@ -16,14 +16,14 @@
     You should have received a copy of the GNU General Public License
     along with this program. If not, see https://www.gnu.org/licenses/.
 -->
- <!doctype html>
+
 <% const languageOptions = [
   { code: 'autodetect', name: 'Autodetect' },
   { code: 'af', name: 'Afrikaans' },
   { code: 'sq', name: 'Albanian' },
   { code: 'am', name: 'Amharic' },
   { code: 'ar', name: 'Arabic' },
-  { code: 'hy', name: 'Armenian' }, 
+  { code: 'hy', name: 'Armenian' },
   { code: 'as', name: 'Assamese' },
   { code: 'ay', name: 'Aymara' },
   { code: 'az', name: 'Azerbaijani' },
@@ -117,7 +117,7 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <title>PokeTranslate</title>
+<title>PokeTranslate</title>
     <link rel="icon" href="/static/yt-ukraine.svg">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta content="PokeTranslate" property=og:title>
@@ -130,7 +130,7 @@
     <link rel="manifest" href="/manifest.json">
    <link href="https://fonts.bunny.net/css?family=poppins:400,500,600" rel="stylesheet">
    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-
+   
   <style>
     :root {
       --accent-1: #ff6b6b;
@@ -146,7 +146,7 @@
     body {
       font-family:'Poppins',sans-serif;
       background: var(--bg-light);
-      color: #fff; /* all text white */
+      color: #fff;
       display:flex; align-items:center; justify-content:center;
       min-height:100vh; padding:20px;
       transition: background var(--transition), color var(--transition);
@@ -172,7 +172,6 @@
       }
     }
 
-    /* Blobs */
     .blob {
       position:absolute; width:300px; height:300px;
       background: linear-gradient(45deg,var(--accent-1),var(--accent-2));
@@ -202,12 +201,10 @@
     @media (prefers-reduced-motion: no-preference) {
       header h1 {
         font-size:2.4rem; font-weight:600; letter-spacing:1.5px;
-        background: conic-gradient(
-          red, orange, yellow, green, blue, indigo, violet, red
-        );
-        background-size: 300%;
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
+        background: conic-gradient(red,orange,yellow,green,blue,indigo,violet,red);
+        background-size:300%;
+        -webkit-background-clip:text;
+        -webkit-text-fill-color:transparent;
         animation: rainbow 4s linear infinite;
       }
       @keyframes rainbow {
@@ -216,30 +213,23 @@
         100% { background-position: 0%   50%; }
       }
     }
-
-    /* Static white title when reduced-motion is set */
     @media (prefers-reduced-motion: reduce) {
       header h1 {
         font-size:2.4rem; font-weight:600; letter-spacing:1.5px;
-        color: #fff;
+        color:#fff;
       }
     }
 
     form { position:relative; z-index:2; }
-    .language-bar {
-      display:flex; align-items:center; gap:12px; padding:16px 24px;
-    }
+    .language-bar { display:flex; align-items:center; gap:12px; padding:16px 24px; }
     .language-select { flex:1; }
     .language-select select {
       width:100%; padding:14px 18px; border-radius:var(--radius);
       border:1px solid rgba(255,255,255,0.5); background:transparent;
-      font-size:1rem; appearance:none; cursor:pointer;
-      color:#fff;
+      font-size:1rem; appearance:none; cursor:pointer; color:#fff;
       transition:border-color var(--transition);
     }
-    .language-select select:focus {
-      border-color: var(--accent-1); outline:none;
-    }
+    .language-select select:focus { border-color:var(--accent-1); outline:none; }
     .swap-button {
       font-size:2rem; color:var(--accent-1); text-decoration:none;
       transition:transform var(--transition),color var(--transition);
@@ -264,39 +254,28 @@
       line-height:1.5; background:rgba(255,255,255,0.2); color:#fff;
       transition:border-color var(--transition),box-shadow var(--transition);
     }
-    .panel textarea::placeholder {
-      color: rgba(255,255,255,0.7);
-    }
+    .panel textarea::placeholder { color:rgba(255,255,255,0.7); }
     @media (prefers-color-scheme: dark) {
-      .panel textarea {
-        background:rgba(20,20,25,0.5);
-      }
+      .panel textarea { background:rgba(20,20,25,0.5); }
     }
     .panel textarea:focus {
-      border-color: var(--accent-1);
-      box-shadow: 0 0 8px var(--accent-1);
-      outline: none;
+      border-color:var(--accent-1);
+      box-shadow:0 0 8px var(--accent-1);
+      outline:none;
     }
 
-    .actions {
-      display:flex; justify-content:center; padding-bottom:24px;
-    }
+    .actions { display:flex; justify-content:center; padding-bottom:24px; }
     .actions button {
       padding:16px 36px; font-size:1.1rem; font-weight:600; border:none;
       border-radius:var(--radius); cursor:pointer;
       background:linear-gradient(60deg,var(--accent-1),var(--accent-2));
       background-size:200% 200%; animation:gradientAnimation 6s ease infinite;
-      color: #fff;
-      box-shadow:0 4px 14px rgba(0,0,0,0.2);
+      color:#fff; box-shadow:0 4px 14px rgba(0,0,0,0.2);
       transition:transform var(--transition),opacity var(--transition);
     }
-    .actions button:hover {
-      transform:scale(1.03); opacity:0.9;
-    }
+    .actions button:hover { transform:scale(1.03); opacity:0.9; }
 
-    @media (max-width:768px) {
-      .panels { grid-template-columns:1fr; }
-    }
+    @media (max-width:768px) { .panels { grid-template-columns:1fr; } }
   </style>
 </head>
 <body>
@@ -353,30 +332,65 @@
   </div>
 
   <script>
-    (function(){
-      const swapBtn = document.getElementById('swapBtn');
-      if(swapBtn){
-        swapBtn.addEventListener('click', function(e){
-          e.preventDefault();
-          const from = document.getElementById('from_language');
-          const to   = document.getElementById('to_language');
-          const inp  = document.getElementById('input');
-          const out  = document.getElementById('output');
-          [from.value, to.value] = [to.value, from.value];
-          [inp.value, out.value] = [out.value, inp.value];
-        });
-      }
-      document.querySelectorAll('textarea').forEach(el=>{
-        const resize = ()=>{ el.style.height='auto'; el.style.height=el.scrollHeight+'px'; };
-        el.addEventListener('input', resize);
-        resize();
+  (function(){
+    // swap button
+    const swapBtn = document.getElementById('swapBtn');
+    if(swapBtn){
+      swapBtn.addEventListener('click', function(e){
+        e.preventDefault();
+        const from = document.getElementById('from_language');
+        const to   = document.getElementById('to_language');
+        const inp  = document.getElementById('input');
+        const out  = document.getElementById('output');
+        [from.value, to.value] = [to.value, from.value];
+        [inp.value, out.value] = [out.value, inp.value];
       });
-    })();
+    }
+
+    // auto-resize all textareas
+    document.querySelectorAll('textarea').forEach(el=>{
+      const resize = ()=>{ el.style.height='auto'; el.style.height=el.scrollHeight+'px'; };
+      el.addEventListener('input', resize);
+      resize();
+    });
+
+    // live-translate if JS available
+    if(window.fetch){
+      const from  = document.getElementById('from_language');
+      const to    = document.getElementById('to_language');
+      const input = document.getElementById('input');
+      const output= document.getElementById('output');
+      let timer;
+
+      function translateNow(){
+        const q = new URLSearchParams({
+          from_language: from.value,
+          to_language: to.value,
+          input: input.value
+        });
+        fetch(`/translate?${q}`)
+          .then(r => r.text())
+          .then(html => {
+            const doc = new DOMParser().parseFromString(html, 'text/html');
+            const newOut = doc.getElementById('output');
+            if(newOut){
+              output.value = newOut.value;
+              output.dispatchEvent(new Event('input'));
+            }
+          })
+          .catch(() => {/* ignore */});
+      }
+
+      // debounce on typing
+      input.addEventListener('input', ()=>{
+        clearTimeout(timer);
+        timer = setTimeout(translateNow, 500);
+      });
+      // re-translate on language change
+      from.addEventListener('change', translateNow);
+      to.addEventListener('change', translateNow);
+    }
+  })();
   </script>
 </body>
 </html>
-
-
-   
-
- 

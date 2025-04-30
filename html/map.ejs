@@ -44,7 +44,7 @@
 
 //--><!]]>
 </script>
-<script >(function(){
+<script>(function(){
   const _0x5a3c=[
     "P2Jib3g9LTE2NS43NjE3MTg3NTAwMDAwMyUyQy0zLjg2NDI1NDYxNTcyMTM5NiUyQzMwLjQxMDE1NjI1MDAwMDAwNCUyQzcyLjQ0ODc5MTU1NzMwNjcyJmxheWVyPW1hcG5paw==",
     "aHR0cHM6Ly93d3cub3BlbnN0cmVldG1hcC5vcmcvZXhwb3J0L2VtYmVkLmh0bWw=",
@@ -52,6 +52,31 @@
   ];
 
   function _0x99f2(i){ return atob(_0x5a3c[i]); }
+
+  function updateMap(lat, lon) {
+    const delta = 0.25;
+    const bbox = `?bbox=${lon-delta},${lat-delta},${lon+delta},${lat+delta}&layer=mapnik`;
+    const newURL = _0x99f2(1) + bbox;
+    const iframe = document.querySelector('iframe');
+    if (iframe) {
+      iframe.src = newURL;
+      window.history.pushState({}, '', newURL);
+    }
+    const marker = document.getElementById('map-marker');
+    if (marker) marker.remove();
+    const newMarker = document.createElement('div');
+    newMarker.id = 'map-marker';
+    newMarker.style = 'position:absolute;width:20px;height:20px;background:red;border-radius:50%;transform:translate(-50%,-50%);z-index:9998;pointer-events:none;left:50%;top:50%';
+    document.body.appendChild(newMarker);
+  }
+
+  function copyCoordinates() {
+    const marker = document.getElementById('map-marker');
+    if (!marker) return alert('No coordinates to copy.');
+    navigator.clipboard.writeText(window.location.href).then(() => {
+      alert('Current map link copied to clipboard!');
+    });
+  }
 
   function _0x4f2a(){
     const bbox = _0x99f2(0);
@@ -113,8 +138,8 @@
     <input id="searchBox" type="text" placeholder="Search anywhere..." style="padding:6px 10px;width:100%;font-size:14px;border:1px solid #ccc;border-radius:6px">
     <ul id="suggestions" style="list-style:none;margin:6px 0 0;padding:0;max-height:180px;overflow:auto;background:#fff;border:1px solid #ccc;border-radius:6px;display:none;position:relative;z-index:10000;"></ul>
     <div style="margin-top:10px;display:flex;gap:6px;flex-wrap:wrap">
-      <button type="button" style="flex:1;padding:4px 6px;font-size:12px" onclick="navigator.geolocation.getCurrentPosition(p=>alert('Lat:'+p.coords.latitude+'\nLon:'+p.coords.longitude))">📍 Locate</button>
-      <button type="button" style="flex:1;padding:4px 6px;font-size:12px" onclick="alert('Layer switcher coming soon!')">🗺️ Layers</button>
+      <button type="button" style="flex:1;padding:4px 6px;font-size:12px" onclick="navigator.geolocation.getCurrentPosition(p=>updateMap(p.coords.latitude, p.coords.longitude))">📍 Locate</button>
+      <button type="button" style="flex:1;padding:4px 6px;font-size:12px" onclick="copyCoordinates()">📋 Copy Link</button>
       <button type="button" style="flex:1;padding:4px 6px;font-size:12px" onclick="location.reload()">🔁 Reset</button>
     </div>
   `;
@@ -138,7 +163,7 @@
           li.addEventListener('click', () => {
             input.value = place.display_name;
             suggestions.style.display = 'none';
-            form.dispatchEvent(new Event('submit'));
+            updateMap(parseFloat(place.lat), parseFloat(place.lon));
           });
           suggestions.appendChild(li);
         });
@@ -150,29 +175,11 @@
     e.preventDefault();
     const q = input.value.trim();
     if(!q) return;
-    const marker = document.getElementById('map-marker');
-    if (marker) marker.remove();
     fetch(`https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(q)}&format=json&limit=1`)
       .then(res => res.json())
       .then(data => {
         if(data[0]){
-          const lat = parseFloat(data[0].lat);
-          const lon = parseFloat(data[0].lon);
-          const delta = 0.25;
-          const bbox = `?bbox=${lon-delta},${lat-delta},${lon+delta},${lat+delta}&layer=mapnik`;
-          const newURL = _0x99f2(1) + bbox;
-          const iframe = document.querySelector('iframe');
-          if (iframe) {
-            iframe.src = newURL;
-            window.history.pushState({}, '', newURL);
-          }
-
-          const marker = document.createElement('div');
-          marker.id = 'map-marker';
-          marker.style = 'position:absolute;width:20px;height:20px;background:red;border-radius:50%;transform:translate(-50%,-50%);z-index:9998;pointer-events:none';
-          marker.style.left = '50%';
-          marker.style.top = '50%';
-          document.body.appendChild(marker);
+          updateMap(parseFloat(data[0].lat), parseFloat(data[0].lon));
         }
       });
   });

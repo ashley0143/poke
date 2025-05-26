@@ -21,8 +21,8 @@ class InnerTubePokeVidious {
     this.param_legacy = "CgIIAdgDAQ%3D%3D"
     this.apikey = "AIzaSyAO_FJ2SlqU8Q4STEHLGCilw_Y9_11qcW8"
     this.ANDROID_API_KEY = "AIzaSyA8eiZmM1FaDVjRy-df2KTyQ_vz_yYM39w"
-    this.ANDROID_APP_VERSION = "19.14.42"
-    this.ANDROID_VERSION = "13"
+    this.ANDROID_APP_VERSION = "20.20.41" // https://www.apkmirror.com/apk/google-inc/youtube/youtube-20-20-41-release/
+    this.ANDROID_VERSION = "16" // https://en.wikipedia.org/wiki/Android_version_history
     this.useragent = config.useragent || "PokeTube/2.0.0 (GNU/Linux; Android 14; Trisquel 11; poketube-vidious; like FreeTube)"
     this.INNERTUBE_CONTEXT_CLIENT_VERSION = "1"
     this.region = "region=US";

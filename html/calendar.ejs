@@ -4,184 +4,196 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="manifest" href="/manifest.json">
-  <link href="css/yt-ukraine.svg" rel="icon">
+  <link rel="icon" href="css/yt-ukraine.svg" type="image/svg+xml">
+  <meta name="theme-color" content="#101010">
+  <meta name="description" content="Poke! Calendar — Sleek, zero-JS dark calendar">
+  <meta property="og:title" content="Poke! Calendar">
+  <meta property="og:description" content="Navigate months seamlessly with a minimalist dark glass UI—no JavaScript needed.">
+  <meta property="og:image" content="https://cdn.glitch.global/d68d17bb-f2c0-4bc3-993f-50902734f652/aa70111e-5bcd-4379-8b23-332a33012b78.image.png?v=1701898829884">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://yourdomain.com/calendar">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@PokeCalendar">
+  <meta name="twitter:creator" content="@YourHandle">
+  <meta name="twitter:title" content="Poke! Calendar">
+  <meta name="twitter:image" content="https://cdn.glitch.global/d68d17bb-f2c0-4bc3-993f-50902734f652/aa70111e-5bcd-4379-8b23-332a33012b78.image.png?v=1701898829884">
+
   <title>Poke! Calendar</title>
-  <meta content="PokeCalendar" property="og:title">
-  <meta content="Worlds first no js web calendar :3" property="twitter:description">
-  <meta content="https://cdn.glitch.global/d68d17bb-f2c0-4bc3-993f-50902734f652/aa70111e-5bcd-4379-8b23-332a33012b78.image.png?v=1701898829884" property="og:image" /> 
-  <meta content=summary_large_image name=twitter:card>
-  <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline'">
-  <meta name="referrer" content="no-referrer">
 
   <style>
+    /* Color Palette */
+    :root {
+      --bg: #101010;
+      --panel: #1a1a1a;
+      --border: #2a2a2a;
+      --accent: #bb86fc;
+      --accent-light: #ce9eff;
+      --text: #e0e0e0;
+      --today: #3700b3;
+      --weekend: #121212;
+    }
+
+    /* Global Reset */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     body {
-  background-color: #121212;
-  color: #ffffff;
-  font-family: Arial, sans-serif;
-  margin: 0;
-}
+      background: var(--bg) url('/css/background.jpg') center/cover fixed no-repeat;
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      line-height: 1.5;
+      min-height: 100vh;
+    }
+    body::before {
+      content: '';
+      position: fixed; inset: 0;
+      background: inherit;
+      filter: blur(16px) brightness(0.4);
+      z-index: -1;
+    }
 
-.navbar {
-  background-color: #333333;
-  padding: 10px;
-  display: flex;
-  align-items: center; /* Center items vertically */
-  justify-content: space-between; /* Space items evenly */
-}
+    /* Navbar */
+    .navbar {
+      position: sticky; top: 0;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1rem 2rem;
+      background: rgba(26,26,26,0.8);
+      border-bottom: 1px solid var(--border);
+    }
+    .navbar img { width: 8em; height: auto; }
+    .years {
+      display: flex; gap: 1.5rem; flex-wrap: wrap;
+    }
+    .years h2 {
+      font-size: 0.95rem; color: var(--accent);
+    }
 
-.navbar h1 {
-  margin: 0;
-  color: #bb86fc;
-}
+    /* Main Panel */
+    .container {
+      width: 90%; max-width: 900px;
+      margin: 2rem auto;
+      padding: 2rem;
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+    }
 
-.navbar .years {
-  color: #bb86fc; /* Year text color */
-  display: flex; /* Use flexbox for alignment */
-  gap: 20px; /* Space between year elements */
-  flex-wrap: wrap; /* Allow wrapping on smaller screens */
-  justify-content: center; /* Center items on smaller screens */
-}
+    /* Header */
+    .header-row {
+      display: flex; flex-wrap: wrap;
+      align-items: center; justify-content: space-between;
+      margin-bottom: 1.5rem;
+    }
+    .month-title {
+      font-size: 2rem; color: var(--accent);
+    }
+    .month-picker {
+      padding: 0.4rem 0.8rem;
+      font-size: 1rem;
+      color: var(--text);
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+    }
+    .month-button {
+      margin-left: 0.5rem;
+      padding: 0.5rem 1rem;
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
 
-.container {
-  text-align: center;
-  padding: 20px;
-  background-color: #1e1e1e;
-  border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  width: 90%;
-  max-width: 800px;
-  margin: auto;
-}
+    /* Calendar Table */
+    .calendar-table {
+      width: 100%; border-collapse: collapse; table-layout: fixed;
+    }
+    .calendar-table th, .calendar-table td {
+      padding: 1rem; border: 1px solid var(--border);
+      text-align: center;
+    }
+    .calendar-table th {
+      background: var(--panel);
+      color: var(--accent-light);
+      font-weight: 500;
+    }
+    .calendar-table td {
+      background: var(--panel);
+      color: var(--text);
+    }
+    .calendar-table td:nth-child(1),
+    .calendar-table td:nth-child(7) {
+      background: var(--weekend);
+    }
+    .calendar-table td.today {
+      background: var(--today);
+      color: #fff;
+      border-color: var(--accent);
+    }
 
-h2, h3 {
-  color: #bb86fc;
-  margin: 10px 0; /* Margin between h2 elements */
-}
+    /* Navigation Buttons */
+    .nav-links {
+      display: flex; justify-content: center; gap: 1rem;
+      margin-top: 2rem;
+    }
+    .button {
+      padding: 0.75rem 1.5rem;
+      background: var(--accent);
+      color: #fff;
+      text-decoration: none;
+      border-radius: 8px;
+      border: 1px solid var(--accent-light);
+      cursor: pointer;
+      font-weight: 500;
+    }
 
-.month-title {
-  font-size: 1.5em; /* Adjust the size as needed */
-  margin: 20px 0; /* Spacing above and below */
-  color: #bb86fc; /* Month title color */
-}
-
-.calendar-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-top: 20px;
-}
-
-.calendar-table th, .calendar-table td {
-  padding: 15px;
-  text-align: center;
-  border: 1px solid #333333;
-  font-size: 0.9em; /* Smaller font size for better fit */
-}
-
-.calendar-table th {
-  background-color: #333333;
-}
-
-.calendar-table td {
-  background-color: #2c2c2c;
-  color: #ffffff;
-}
-
-.nav-links {
-  margin-top: 20px;
-}
-
-.button {
-  text-decoration: none;
-  color: #ffffff;
-  background-color: #bb86fc;
-  padding: 10px 20px;
-  border-radius: 5px;
-  margin: 0 10px;
-  transition: background-color 0.3s;
-}
-
-.button:hover {
-  background-color: #9c62f3;
-}
-
-/* Responsive styles */
-@media (max-width: 768px) {
-  .navbar {
-    flex-direction: column; /* Stack navbar items vertically on small screens */
-    align-items: center; /* Center items horizontally */
-  }
-
-  .container {
-    width: 100%; /* Full width on small screens */
-    height: 100vh; /* Full height of the viewport */
-    border-radius: 0; /* Remove border-radius for full-screen effect */
-    box-shadow: none; /* Remove shadow for a flatter design */
-    padding: 10px; /* Adjust padding for mobile */
-  }
-
-  .calendar-table th, .calendar-table td {
-    padding: 10px; /* Reduced padding for smaller screens */
-    font-size: 0.8em; /* Smaller font size */
-  }
-
-  .month-title {
-    font-size: 1.2em; /* Smaller month title */
-  }
-
-  .button {
-    padding: 8px 15px; /* Smaller button size */
-    margin: 5px 0; /* Vertical spacing */
-    display: block; /* Stack buttons vertically */
-    width: 100%; /* Full width */
-  }
-}
-
+    /* Responsive */
+    @media (max-width: 768px) {
+      .container { padding: 1rem; }
+      .month-title { font-size: 1.5rem; margin-bottom: 1rem; }
+      .calendar-table th, .calendar-table td { padding: 0.75rem; font-size: 0.85rem; }
+      .nav-links { flex-direction: column; }
+      .button { width: 100%; }
+    }
   </style>
 </head>
 <body>
   <div class="navbar">
-    <a class="class" href="/143" style="font-family: Inter, sans-serif; color: #fff">
-      <img style="transform: scale(1.3); padding-left: 0.9em; width: 8.5em; display: block; margin-left: auto; margin-right: auto;" src="/css/logo-poke.svg?v=5">
-    </a>    
+    <a href="/143"><img src="/css/logo-poke.svg?v=5" alt="Poke Calendar Logo"></a>
     <div class="years">
       <h2>Gregorian Year: <%= year %></h2>
       <h2>Islamic Year: <%= islamicYear %></h2>
       <h2>Persian Year: <%= persianYear %></h2>
     </div>
   </div>
-  
-  <div class="container" style="margin-top: 1em;">
-    <h2 class="month-title"><%= queryDate.toLocaleString('default', { month: 'long' }) %> <%= year %></h2> <!-- Month and Year Display -->
+
+  <div class="container">
+    <div class="header-row">
+      <h2 class="month-title"><%= queryDate.toLocaleString('default', { month: 'long' }) %> <%= year %></h2>
+      <form action="/calendar" method="get" style="display:flex; align-items:center;">
+        <input type="month" name="date" value="<%= currentDate.toISOString().slice(0,7) %>" class="month-picker">
+        <button type="submit" class="month-button">Go</button>
+      </form>
+    </div>
 
     <table class="calendar-table">
       <thead>
         <tr>
-          <th>Sunday</th>
-          <th>Monday</th>
-          <th>Tuesday</th>
-          <th>Wednesday</th>
-          <th>Thursday</th>
-          <th>Friday</th>
-          <th>Saturday</th>
+          <th>Sun</th><th>Mon</th><th>Tue</th><th>Wed</th><th>Thu</th><th>Fri</th><th>Sat</th>
         </tr>
       </thead>
       <tbody>
-        <% for (let i = 0; i < 6; i++) { %>
-          <tr>
-            <% for (let j = 0; j < 7; j++) { %>
-              <td>
-                <% const day = days[i * 7 + j]; %>
-                <%= day ? day.getDate() : '' %>
-              </td>
-            <% } %>
-          </tr>
-        <% } %>
+        <% days.forEach((day, idx) => { %>
+          <% if (idx % 7 === 0) { %><tr><% } %>
+            <% const isToday = day && day.toDateString() === currentDate.toDateString(); %>
+            <td class="<%= isToday ? 'today' : '' %>"><%= day ? day.getDate() : '' %></td>
+          <% if (idx % 7 === 6) { %></tr><% } %>
+        <% }); %>
       </tbody>
     </table>
 
     <div class="nav-links">
-      <a href="/calendar?date=<%= new Date(currentDate.getFullYear(), month - 1, 1).toISOString() %>" class="button">Previous Month</a>
-      <a href="/calendar?date=<%= new Date(currentDate.getFullYear(), month + 1, 1).toISOString() %>" class="button">Next Month</a>
+      <a href="/calendar?date=<%= new Date(year, month - 1, 1).toISOString() %>" class="button">← Prev</a>
+      <a href="/calendar?date=<%= new Date(year, month + 1, 1).toISOString() %>" class="button">Next →</a>
     </div>
   </div>
 </body>

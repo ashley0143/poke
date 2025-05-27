@@ -21,7 +21,6 @@
   <title>Poke! Calendar</title>
 
   <style>
-    /* Color Palette */
     :root {
       --bg: #101010;
       --panel: #1a1a1a;
@@ -32,15 +31,13 @@
       --today: #3700b3;
       --weekend: #121212;
     }
-
-    /* Global Reset */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     body {
       background: var(--bg) url('/css/background.jpg') center/cover fixed no-repeat;
       color: var(--text);
       font-family: 'Inter', sans-serif;
-      line-height: 1.5;
       min-height: 100vh;
+      line-height: 1.5;
     }
     body::before {
       content: '';
@@ -49,8 +46,6 @@
       filter: blur(16px) brightness(0.4);
       z-index: -1;
     }
-
-    /* Navbar */
     .navbar {
       position: sticky; top: 0;
       display: flex; align-items: center; justify-content: space-between;
@@ -58,15 +53,9 @@
       background: rgba(26,26,26,0.8);
       border-bottom: 1px solid var(--border);
     }
-    .navbar img { width: 8em; height: auto; }
-    .years {
-      display: flex; gap: 1.5rem; flex-wrap: wrap;
-    }
-    .years h2 {
-      font-size: 0.95rem; color: var(--accent);
-    }
-
-    /* Main Panel */
+    .navbar img { width: 8em; }
+    .years { display: flex; gap: 1.5rem; flex-wrap: wrap; }
+    .years h2 { font-size: 0.95rem; color: var(--accent); }
     .container {
       width: 90%; max-width: 900px;
       margin: 2rem auto;
@@ -75,16 +64,12 @@
       border: 1px solid var(--border);
       border-radius: 12px;
     }
-
-    /* Header */
     .header-row {
       display: flex; flex-wrap: wrap;
       align-items: center; justify-content: space-between;
       margin-bottom: 1.5rem;
     }
-    .month-title {
-      font-size: 2rem; color: var(--accent);
-    }
+    .month-title { font-size: 2rem; color: var(--accent); }
     .month-picker {
       padding: 0.4rem 0.8rem;
       font-size: 1rem;
@@ -102,8 +87,6 @@
       border-radius: 8px;
       cursor: pointer;
     }
-
-    /* Calendar Table */
     .calendar-table {
       width: 100%; border-collapse: collapse; table-layout: fixed;
     }
@@ -125,12 +108,10 @@
       background: var(--weekend);
     }
     .calendar-table td.today {
-      background: var(--today);
+      background: var(--today) !important;
       color: #fff;
       border-color: var(--accent);
     }
-
-    /* Navigation Buttons */
     .nav-links {
       display: flex; justify-content: center; gap: 1rem;
       margin-top: 2rem;
@@ -145,11 +126,9 @@
       cursor: pointer;
       font-weight: 500;
     }
-
-    /* Responsive */
     @media (max-width: 768px) {
       .container { padding: 1rem; }
-      .month-title { font-size: 1.5rem; margin-bottom: 1rem; }
+      .month-title { font-size: 1.5rem; }
       .calendar-table th, .calendar-table td { padding: 0.75rem; font-size: 0.85rem; }
       .nav-links { flex-direction: column; }
       .button { width: 100%; }
@@ -165,7 +144,6 @@
       <h2>Persian Year: <%= persianYear %></h2>
     </div>
   </div>
-
   <div class="container">
     <div class="header-row">
       <h2 class="month-title"><%= queryDate.toLocaleString('default', { month: 'long' }) %> <%= year %></h2>
@@ -174,7 +152,6 @@
         <button type="submit" class="month-button">Go</button>
       </form>
     </div>
-
     <table class="calendar-table">
       <thead>
         <tr>
@@ -184,13 +161,16 @@
       <tbody>
         <% days.forEach((day, idx) => { %>
           <% if (idx % 7 === 0) { %><tr><% } %>
-            <% const isToday = day && day.toDateString() === currentDate.toDateString(); %>
+            <% const today = new Date(); %>
+            <% const isToday = day &&
+               day.getDate() === today.getDate() &&
+               day.getMonth() === today.getMonth() &&
+               day.getFullYear() === today.getFullYear(); %>
             <td class="<%= isToday ? 'today' : '' %>"><%= day ? day.getDate() : '' %></td>
           <% if (idx % 7 === 6) { %></tr><% } %>
         <% }); %>
       </tbody>
     </table>
-
     <div class="nav-links">
       <a href="/calendar?date=<%= new Date(year, month - 1, 1).toISOString() %>" class="button">← Prev</a>
       <a href="/calendar?date=<%= new Date(year, month + 1, 1).toISOString() %>" class="button">Next →</a>

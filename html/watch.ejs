@@ -2914,6 +2914,21 @@ font-size: 13px;margin:0;padding:0;white-space: nowrap;
  <div class="nerddd" style="background:#272727;padding: 5px;margin-top: 12px;border-radius: 11px;font-family: 'PokeTube Flex';font-stretch: extra-expanded;font-weight: 700;">
            
            
+<a
+  href="https://chatgpt.com/?q=${encodeURIComponent(
+    `<%- inv_vid.description %>` +
+    ' Please summarize the selection using precise and concise language. ' +
+    'Use headers and bulleted lists in the summary, to make it scannable. ' +
+    'Maintain the meaning and factual accuracy.'
+  )}"
+  target="_blank"
+  rel="noopener noreferrer"
+  aria-label="Summarise the video description"
+  class="ai-button"
+>
+  Summarise!
+</a>
+
               <%-String(channelurlfixer(inv_vid.descriptionHtml)).replace(/\n/g, " <br> ").replace(/twitter\.com/g, "twitter.com").replace(/reddit\.com/g, "redlib.matthew.science") %>
                 
                <style>
@@ -2933,8 +2948,7 @@ font-size: 13px;margin:0;padding:0;white-space: nowrap;
   }
 
   .ai-button {
-    display: inline-block;
-    padding: 0.75rem 1.5rem;
+     padding: 0.75rem 1.5rem;
      font-size: 1.1rem;
     letter-spacing: 0.05em;
     text-transform: uppercase;
@@ -2960,20 +2974,6 @@ font-size: 13px;margin:0;padding:0;white-space: nowrap;
   }
 </style>
 
-<a
-  href="https://chatgpt.com/?q=${encodeURIComponent(
-    <%- inv_vid.description %> +
-    ' Please summarize the selection using precise and concise language. ' +
-    'Use headers and bulleted lists in the summary, to make it scannable. ' +
-    'Maintain the meaning and factual accuracy.'
-  )}"
-  target="_blank"
-  rel="noopener noreferrer"
-  aria-label="Summarise the video description"
-  class="ai-button"
->
-  Summarise!
-</a>
 
                     
  <div class="video-title" style="color:var(--text-color);font-family:var(--text-font-primary);;font-weight:var(--text-header-weight);font-stretch: extra-expanded;margin-top: 10px;margin-bottom: 10px;">Rating! :3</div>

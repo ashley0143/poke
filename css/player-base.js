@@ -1,7 +1,7 @@
 // in the beginning.... god made mrrprpmnaynayaynaynayanyuwuuuwmauwnwanwaumawp :p
 var _yt_player = videojs;
 
-document.addEventListener("DOMContentLoaded", () => {
+ document.addEventListener("DOMContentLoaded", () => {
     // video.js 8 init - source can be seen in https://poketube.fun/static/vjs.min.js or the vjs.min.js file 
     const video = videojs('video', {
         controls: true,
@@ -14,7 +14,10 @@ document.addEventListener("DOMContentLoaded", () => {
     const vidKey = new URLSearchParams(window.location.search).get('v');
     localStorage.setItem(`progress-${vidKey}`, 0);
 
+    // raw media elements
+    const videoEl = document.getElementById('video');
     const audio = document.getElementById('aud');
+
     const audioSrc = audio.getAttribute('src');
     const vidSrcObj = video.src();
     const videoSrc = Array.isArray(vidSrcObj) ? vidSrcObj[0].src : vidSrcObj;
@@ -153,9 +156,9 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     if (qua !== "medium") {
-        // attach retry & ready markers
-        attachRetry(audio, audioSrc,   () => { audioReady = true; });
-        attachRetry(video.tech().el(), videoSrc, () => { videoReady = true; });
+        // attach retry & ready markers to the real elements
+        attachRetry(audio,    audioSrc, () => { audioReady = true; });
+        attachRetry(videoEl,  videoSrc, () => { videoReady = true; });
 
         // Sync when playback starts
         video.on('play', () => {
@@ -215,6 +218,7 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 });
+
 
 
 // hai!! if ur asking why are they here - its for smth in the future!!!!!!

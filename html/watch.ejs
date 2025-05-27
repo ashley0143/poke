@@ -3480,9 +3480,9 @@ document.addEventListener('DOMContentLoaded', () => {
   if ('mediaSession' in navigator) {
     // Set metadata
     navigator.mediaSession.metadata = new MediaMetadata({
-      title: "<%= inv_vid.title %>",
+      title: "<%- inv_vid.title %>",
       artist: "<%= video?.Channel?.Name || k.Video.Channel.Name %>",
-      album: "PokeTube",
+      album: "Poke",
       artwork: [
         {
           src: "https://i.ytimg.com/vi/<%=inv_vid.videoId%>/maxresdefault.jpg",

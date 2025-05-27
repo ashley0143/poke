@@ -20,7 +20,6 @@ document.addEventListener("DOMContentLoaded", () => {
     const videoSrc = Array.isArray(vidSrcObj) ? vidSrcObj[0].src : vidSrcObj;
 
     let audioReady = false, videoReady = false;
-    let audioRetried = false, videoRetried = false;
     let syncInterval = null;
 
     // pauses and syncs the video when the seek is finished :3
@@ -98,45 +97,65 @@ document.addEventListener("DOMContentLoaded", () => {
             });
 
             navigator.mediaSession.setActionHandler('play', () => {
-                video.play();
-                audio.play();
+                video.play(); audio.play();
             });
             navigator.mediaSession.setActionHandler('pause', () => {
-                video.pause();
-                audio.pause();
+                video.pause(); audio.pause();
             });
-            navigator.mediaSession.setActionHandler('seekbackward', (details) => {
-                const skip = details.seekOffset || 10;
+            navigator.mediaSession.setActionHandler('seekbackward', ({ seekOffset }) => {
+                const skip = seekOffset || 10;
                 video.currentTime(video.currentTime() - skip);
                 audio.currentTime -= skip;
             });
-            navigator.mediaSession.setActionHandler('seekforward', (details) => {
-                const skip = details.seekOffset || 10;
+            navigator.mediaSession.setActionHandler('seekforward', ({ seekOffset }) => {
+                const skip = seekOffset || 10;
                 video.currentTime(video.currentTime() + skip);
                 audio.currentTime += skip;
             });
-            navigator.mediaSession.setActionHandler('seekto', (details) => {
-                if (details.fastSeek && 'fastSeek' in audio) {
-                    audio.fastSeek(details.seekTime);
-                } else {
-                    audio.currentTime = details.seekTime;
-                }
-                video.currentTime(details.seekTime);
+            navigator.mediaSession.setActionHandler('seekto', ({ seekTime, fastSeek }) => {
+                if (fastSeek && 'fastSeek' in audio) audio.fastSeek(seekTime);
+                else audio.currentTime = seekTime;
+                video.currentTime(seekTime);
             });
             navigator.mediaSession.setActionHandler('stop', () => {
-                video.pause();
-                audio.pause();
-                video.currentTime(0);
-                audio.currentTime = 0;
+                video.pause(); audio.pause();
+                video.currentTime(0); audio.currentTime = 0;
                 clearSyncLoop();
             });
         }
     }
 
+    // ** DESKTOP MEDIA-KEY FALLBACK **
+    document.addEventListener('keydown', e => {
+        switch (e.code) {
+            case 'AudioPlay':
+            case 'MediaPlayPause':
+                if (video.paused()) { video.play(); audio.play(); }
+                else            { video.pause(); audio.pause(); }
+                break;
+
+            case 'AudioPause':
+                video.pause(); audio.pause();
+                break;
+
+            case 'AudioNext':
+            case 'MediaTrackNext':
+                const tFwd = video.currentTime() + 10;
+                video.currentTime(tFwd); audio.currentTime += 10;
+                break;
+
+            case 'AudioPrevious':
+            case 'MediaTrackPrevious':
+                const tBwd = video.currentTime() - 10;
+                video.currentTime(tBwd); audio.currentTime -= 10;
+                break;
+        }
+    });
+
     if (qua !== "medium") {
         // attach retry & ready markers
-        attachRetry(audio, audioSrc, () => { audioReady = true; });
-        attachRetry(video.el(), videoSrc, () => { videoReady = true; }); // video.el() gives the HTMLVideoElement
+        attachRetry(audio, audioSrc,   () => { audioReady = true; });
+        attachRetry(video.tech().el(), videoSrc, () => { videoReady = true; });
 
         // Sync when playback starts
         video.on('play', () => {
@@ -196,6 +215,7 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 });
+
 
 // hai!! if ur asking why are they here - its for smth in the future!!!!!!
 

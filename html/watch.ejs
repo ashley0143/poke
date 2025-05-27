@@ -2913,11 +2913,68 @@ font-size: 13px;margin:0;padding:0;white-space: nowrap;
     %>      
  <div class="nerddd" style="background:#272727;padding: 5px;margin-top: 12px;border-radius: 11px;font-family: 'PokeTube Flex';font-stretch: extra-expanded;font-weight: 700;">
            
-              <a href="https://chatgpt.com/?q=<%- inv_vid.description %>+Please+summarize+the+selection+using+precise+and+concise+language.+Use+headers+and+bulleted+lists+in+the+summary%2C+to+make+it+scannable.+Maintain+the+meaning+and+factual+accuracy.">SUMMERISE!</a>
            
               <%-String(channelurlfixer(inv_vid.descriptionHtml)).replace(/\n/g, " <br> ").replace(/twitter\.com/g, "twitter.com").replace(/reddit\.com/g, "redlib.matthew.science") %>
                 
-               
+               <style>
+   @keyframes gradientAnimation {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+
+   @keyframes glow {
+    0%, 100% {
+      box-shadow: 0 0 15px rgba(0,255,255,0.7), inset 0 0 10px rgba(0,255,255,0.3);
+    }
+    50% {
+      box-shadow: 0 0 25px rgba(0,255,255,1), inset 0 0 15px rgba(0,255,255,0.5);
+    }
+  }
+
+  .ai-button {
+    display: inline-block;
+    padding: 0.75rem 1.5rem;
+     font-size: 1.1rem;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: #ffffff;
+    text-decoration: none;
+    background: linear-gradient(
+      90deg,
+      hsla(235, 21%, 21%, 1) 0%,
+      hsla(194, 41%, 22%, 1) 50%,
+      hsla(174, 48%, 20%, 1) 100%
+    );
+    background-size: 300% 300%;
+    animation: gradientAnimation 6s ease infinite, glow 2s ease-in-out infinite;
+    border-radius: 2rem;
+    border: none;
+    box-shadow: 0 0 15px rgba(0,255,255,0.7), inset 0 0 10px rgba(0,255,255,0.3);
+    transition: box-shadow 0.2s ease;
+  }
+
+  .ai-button:hover {
+     box-shadow: 0 0 20px rgba(0,255,255,1), inset 0 0 15px rgba(0,255,255,0.5);
+    opacity: 0.9;
+  }
+</style>
+
+<a
+  href="https://chatgpt.com/?q=${encodeURIComponent(
+    <%- inv_vid.description %> +
+    ' Please summarize the selection using precise and concise language. ' +
+    'Use headers and bulleted lists in the summary, to make it scannable. ' +
+    'Maintain the meaning and factual accuracy.'
+  )}"
+  target="_blank"
+  rel="noopener noreferrer"
+  aria-label="Summarise the video description"
+  class="ai-button"
+>
+  Summarise!
+</a>
+
                     
  <div class="video-title" style="color:var(--text-color);font-family:var(--text-font-primary);;font-weight:var(--text-header-weight);font-stretch: extra-expanded;margin-top: 10px;margin-bottom: 10px;">Rating! :3</div>
 

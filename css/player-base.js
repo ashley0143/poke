@@ -19,8 +19,8 @@ document.addEventListener("DOMContentLoaded", () => {
     const vidSrcObj = video.src();
     const videoSrc = Array.isArray(vidSrcObj) ? vidSrcObj[0].src : vidSrcObj;
 
-    // flags to know which loaded first
     let audioReady = false, videoReady = false;
+    let audioRetried = false, videoRetried = false;
     let syncInterval = null;
 
     // pauses and syncs the video when the seek is finished :3
@@ -68,60 +68,23 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
-    // retry loader for an HTMLMediaElement
-    function loadWithRetryMedia(elm, src, onLoad, onError, maxRetries = Infinity, delay = 1000) {
-        let attempts = 0;
-        function attempt() {
-            attempts++;
-            elm.src = src;
-            elm.load();
+    // simple one-time retry on error
+    function attachRetry(elm, src, markReady) {
+        elm.addEventListener('loadeddata', () => {
+            markReady();
+            tryStart();
+        }, { once: true });
 
-            function cleanup() {
-                elm.removeEventListener('loadeddata', handleLoad);
-                elm.removeEventListener('error', handleError);
+        elm.addEventListener('error', () => {
+            // only retry once, and only if we have a valid src
+            if (!elm._didRetry && src) {
+                elm._didRetry = true;
+                elm.src = src;
+                elm.load();
+            } else {
+                console.error(`${elm.tagName} failed to load.`);
             }
-            function handleLoad() {
-                cleanup();
-                onLoad();
-            }
-            function handleError() {
-                cleanup();
-                if (attempts < maxRetries) setTimeout(attempt, delay);
-                else onError();
-            }
-
-            elm.addEventListener('loadeddata', handleLoad, { once: true });
-            elm.addEventListener('error', handleError, { once: true });
-        }
-        attempt();
-    }
-
-    // retry loader for Video.js player
-    function loadWithRetryVideoJS(player, src, onLoad, onError, maxRetries = Infinity, delay = 1000) {
-        let attempts = 0;
-        function attempt() {
-            attempts++;
-            player.src({ src, type: 'video/mp4' });
-            player.load();
-
-            function cleanup() {
-                player.off('loadeddata', handleLoad);
-                player.off('error', handleError);
-            }
-            function handleLoad() {
-                cleanup();
-                onLoad();
-            }
-            function handleError() {
-                cleanup();
-                if (attempts < maxRetries) setTimeout(attempt, delay);
-                else onError();
-            }
-
-            player.one('loadeddata', handleLoad);
-            player.one('error', handleError);
-        }
-        attempt();
+        }, { once: true });
     }
 
     // le volume :3
@@ -145,12 +108,12 @@ document.addEventListener("DOMContentLoaded", () => {
             navigator.mediaSession.setActionHandler('seekbackward', (details) => {
                 const skip = details.seekOffset || 10;
                 video.currentTime(video.currentTime() - skip);
-                audio.currentTime = audio.currentTime - skip;
+                audio.currentTime -= skip;
             });
             navigator.mediaSession.setActionHandler('seekforward', (details) => {
                 const skip = details.seekOffset || 10;
                 video.currentTime(video.currentTime() + skip);
-                audio.currentTime = audio.currentTime + skip;
+                audio.currentTime += skip;
             });
             navigator.mediaSession.setActionHandler('seekto', (details) => {
                 if (details.fastSeek && 'fastSeek' in audio) {
@@ -171,19 +134,9 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     if (qua !== "medium") {
-        // 1) load audio with retry
-        loadWithRetryMedia(
-            audio, audioSrc,
-            () => { audioReady = true; tryStart(); },
-            () => console.error("Audio failed to load after retries.")
-        );
-
-        // 2) load video with retry
-        loadWithRetryVideoJS(
-            video, videoSrc,
-            () => { videoReady = true; tryStart(); },
-            () => console.error("Video failed to load after retries.")
-        );
+        // attach retry & ready markers
+        attachRetry(audio, audioSrc, () => { audioReady = true; });
+        attachRetry(video.el(), videoSrc, () => { videoReady = true; }); // video.el() gives the HTMLVideoElement
 
         // Sync when playback starts
         video.on('play', () => {
@@ -243,8 +196,6 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 });
-
-
 
 // hai!! if ur asking why are they here - its for smth in the future!!!!!!
 

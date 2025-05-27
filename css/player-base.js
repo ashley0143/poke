@@ -1,123 +1,249 @@
 // in the beginning.... god made mrrprpmnaynayaynaynayanyuwuuuwmauwnwanwaumawp :p
-var _yt_player= videojs;
+var _yt_player = videojs;
 
 document.addEventListener("DOMContentLoaded", () => {
-
-	// video.js 8 init - source can be seen in https://poketube.fun/static/vjs.min.js or the vjs.min.js file 
+    // video.js 8 init - source can be seen in https://poketube.fun/static/vjs.min.js or the vjs.min.js file 
     const video = videojs('video', {
         controls: true,
-        autoplay: false, 
-        preload: 'auto',
+        autoplay: false,
+        preload: 'auto'
     });
-
 
     // todo : remove this code lol
     const qua = new URLSearchParams(window.location.search).get("quality") || "";
-    localStorage.setItem(`progress-${new URLSearchParams(window.location.search).get('v')}`, 0);
+    const vidKey = new URLSearchParams(window.location.search).get('v');
+    localStorage.setItem(`progress-${vidKey}`, 0);
 
- // syncs stuff if used in HD mode
+    const audio = document.getElementById('aud');
+    const audioSrc = audio.getAttribute('src');
+    const vidSrcObj = video.src();
+    const videoSrc = Array.isArray(vidSrcObj) ? vidSrcObj[0].src : vidSrcObj;
+
+    // flags to know which loaded first
+    let audioReady = false, videoReady = false;
+    let syncInterval = null;
+
+    // pauses and syncs the video when the seek is finished :3
+    function clearSyncLoop() {
+        if (syncInterval) {
+            clearInterval(syncInterval);
+            syncInterval = null;
+            audio.playbackRate = 1;
+        }
+    }
+
+    // drift-compensation loop for micro-sync
+    function startSyncLoop() {
+        clearSyncLoop();
+        syncInterval = setInterval(() => {
+            const vt = video.currentTime();
+            const at = audio.currentTime;
+            const delta = vt - at;
+
+            // large drift → jump
+            if (Math.abs(delta) > 0.5) {
+                audio.currentTime = vt;
+                audio.playbackRate = 1;
+            }
+            // micro drift → adjust rate
+            else if (Math.abs(delta) > 0.05) {
+                audio.playbackRate = 1 + delta * 0.1;
+            } else {
+                audio.playbackRate = 1;
+            }
+        }, 300);
+    }
+
+    // align start when both are ready
+    function tryStart() {
+        if (audioReady && videoReady) {
+            const t = video.currentTime();
+            if (Math.abs(audio.currentTime - t) > 0.1) {
+                audio.currentTime = t;
+            }
+            video.play();
+            audio.play();
+            startSyncLoop();
+            setupMediaSession();
+        }
+    }
+
+    // retry loader for an HTMLMediaElement
+    function loadWithRetryMedia(elm, src, onLoad, onError, maxRetries = Infinity, delay = 1000) {
+        let attempts = 0;
+        function attempt() {
+            attempts++;
+            elm.src = src;
+            elm.load();
+
+            function cleanup() {
+                elm.removeEventListener('loadeddata', handleLoad);
+                elm.removeEventListener('error', handleError);
+            }
+            function handleLoad() {
+                cleanup();
+                onLoad();
+            }
+            function handleError() {
+                cleanup();
+                if (attempts < maxRetries) setTimeout(attempt, delay);
+                else onError();
+            }
+
+            elm.addEventListener('loadeddata', handleLoad, { once: true });
+            elm.addEventListener('error', handleError, { once: true });
+        }
+        attempt();
+    }
+
+    // retry loader for Video.js player
+    function loadWithRetryVideoJS(player, src, onLoad, onError, maxRetries = Infinity, delay = 1000) {
+        let attempts = 0;
+        function attempt() {
+            attempts++;
+            player.src({ src, type: 'video/mp4' });
+            player.load();
+
+            function cleanup() {
+                player.off('loadeddata', handleLoad);
+                player.off('error', handleError);
+            }
+            function handleLoad() {
+                cleanup();
+                onLoad();
+            }
+            function handleError() {
+                cleanup();
+                if (attempts < maxRetries) setTimeout(attempt, delay);
+                else onError();
+            }
+
+            player.one('loadeddata', handleLoad);
+            player.one('error', handleError);
+        }
+        attempt();
+    }
+
+    // le volume :3
+    function setupMediaSession() {
+        if ('mediaSession' in navigator) {
+            navigator.mediaSession.metadata = new MediaMetadata({
+                title: document.title || 'Video',
+                artist: '',
+                album: '',
+                artwork: []
+            });
+
+            navigator.mediaSession.setActionHandler('play', () => {
+                video.play();
+                audio.play();
+            });
+            navigator.mediaSession.setActionHandler('pause', () => {
+                video.pause();
+                audio.pause();
+            });
+            navigator.mediaSession.setActionHandler('seekbackward', (details) => {
+                const skip = details.seekOffset || 10;
+                video.currentTime(video.currentTime() - skip);
+                audio.currentTime = audio.currentTime - skip;
+            });
+            navigator.mediaSession.setActionHandler('seekforward', (details) => {
+                const skip = details.seekOffset || 10;
+                video.currentTime(video.currentTime() + skip);
+                audio.currentTime = audio.currentTime + skip;
+            });
+            navigator.mediaSession.setActionHandler('seekto', (details) => {
+                if (details.fastSeek && 'fastSeek' in audio) {
+                    audio.fastSeek(details.seekTime);
+                } else {
+                    audio.currentTime = details.seekTime;
+                }
+                video.currentTime(details.seekTime);
+            });
+            navigator.mediaSession.setActionHandler('stop', () => {
+                video.pause();
+                audio.pause();
+                video.currentTime(0);
+                audio.currentTime = 0;
+                clearSyncLoop();
+            });
+        }
+    }
+
     if (qua !== "medium") {
-        const audio = document.getElementById('aud');
+        // 1) load audio with retry
+        loadWithRetryMedia(
+            audio, audioSrc,
+            () => { audioReady = true; tryStart(); },
+            () => console.error("Audio failed to load after retries.")
+        );
 
-        const syncVolume = () => {
-            audio.volume = video.volume();
-        };
-
-        const syncVolumeWithVideo = () => {
-            video.volume(audio.volume);
-        };
-
-        // we check if a video is buffered 
-        const checkAudioBuffer = () => {
-            const buffered = audio.buffered;
-            const bufferedEnd = buffered.length > 0 ? buffered.end(buffered.length - 1) : 0;
-            return audio.currentTime <= bufferedEnd;
-        };
-
-        const isVideoBuffered = () => {
-            const buffered = video.buffered();
-            return buffered.length > 0 && buffered.end(buffered.length - 1) >= video.currentTime();
-        };
-
-        // pauses and syncs the video when the seek is finnished :3
-        const handleSeek = () => {
-            video.pause();
-            audio.pause();
-
-            if (Math.abs(video.currentTime() - audio.currentTime) > 0.3) {
-                audio.currentTime = video.currentTime();
-            }
-
-            if (!checkAudioBuffer()) {
-                audio.addEventListener('canplay', () => {
-                    if (video.paused && isVideoBuffered()) {
-                        video.play();
-                        audio.play();
-                    }
-                }, { once: true });
-            }
-        };
-
-        const handleBufferingComplete = () => {
-            if (Math.abs(video.currentTime() - audio.currentTime) > 0.3) {
-                audio.currentTime = video.currentTime();
-            }
-        };
+        // 2) load video with retry
+        loadWithRetryVideoJS(
+            video, videoSrc,
+            () => { videoReady = true; tryStart(); },
+            () => console.error("Video failed to load after retries.")
+        );
 
         // Sync when playback starts
         video.on('play', () => {
+            if (!syncInterval) startSyncLoop();
             if (Math.abs(video.currentTime() - audio.currentTime) > 0.3) {
                 audio.currentTime = video.currentTime();
             }
-
-            if (isVideoBuffered()) {
-                audio.play();
-            }
+            if (audioReady) audio.play();
         });
 
         video.on('pause', () => {
             audio.pause();
+            clearSyncLoop();
         });
 
-        video.on('seeking', handleSeek);
+        // pauses and syncs on seek
+        video.on('seeking', () => {
+            audio.pause();
+            clearSyncLoop();
+            if (Math.abs(video.currentTime() - audio.currentTime) > 0.3) {
+                audio.currentTime = video.currentTime();
+            }
+        });
 
         video.on('seeked', () => {
-            if (isVideoBuffered()) {
-                video.play();
-            }
-            audio.play();
+            if (audioReady) audio.play();
+            if (!syncInterval) startSyncLoop();
         });
 
-        // le volume :3
-        video.on('volumechange', syncVolume);
-        audio.addEventListener('volumechange', syncVolumeWithVideo);
+        // volume sync
+        video.on('volumechange', () => {
+            audio.volume = video.volume();
+        });
+        audio.addEventListener('volumechange', () => {
+            video.volume(audio.volume);
+        });
 
         // Detects when video or audio finishes buffering
-        video.on('canplaythrough', handleBufferingComplete);
-        audio.addEventListener('canplaythrough', handleBufferingComplete);
-
-        // media control events
-        document.addEventListener('play', (e) => {
-            if (e.target === video) {
-                audio.play();
+        video.on('canplaythrough', () => {
+            if (Math.abs(video.currentTime() - audio.currentTime) > 0.3) {
+                audio.currentTime = video.currentTime();
+            }
+        });
+        audio.addEventListener('canplaythrough', () => {
+            if (Math.abs(video.currentTime() - audio.currentTime) > 0.3) {
+                audio.currentTime = video.currentTime();
             }
         });
 
-        document.addEventListener('pause', (e) => {
-            if (e.target === video) {
-                audio.pause();
-            }
-        });
-       
-	   // pause if it becomes full screen :3
+        // pause if it becomes full screen :3
         document.addEventListener('fullscreenchange', () => {
             if (!document.fullscreenElement) {
                 video.pause();
                 audio.pause();
+                clearSyncLoop();
             }
         });
     }
 });
+
 
 
 // hai!! if ur asking why are they here - its for smth in the future!!!!!!

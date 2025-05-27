@@ -1,7 +1,6 @@
 // in the beginning.... god made mrrprpmnaynayaynaynayanyuwuuuwmauwnwanwaumawp :p
 var _yt_player = videojs;
-
- document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", () => {
     // video.js 8 init - source can be seen in https://poketube.fun/static/vjs.min.js or the vjs.min.js file 
     const video = videojs('video', {
         controls: true,
@@ -172,6 +171,18 @@ var _yt_player = videojs;
         video.on('pause', () => {
             audio.pause();
             clearSyncLoop();
+        });
+
+        // pause audio when video is buffering :3
+        video.on('waiting', () => {
+            audio.pause();
+            clearSyncLoop();
+        });
+
+        // resume audio when video resumes
+        video.on('playing', () => {
+            if (audioReady) audio.play();
+            if (!syncInterval) startSyncLoop();
         });
 
         // pauses and syncs on seek

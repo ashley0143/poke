@@ -1,0 +1,804 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pokepad</title>
+    <meta property="og:title" content="PokePad">
+  <meta property="og:description" content="E2EE notepad">
+  <meta property="og:image" content="https://cdn.glitch.global/d68d17bb-f2c0-4bc3-993f-50902734f652/aa70111e-5bcd-4379-8b23-332a33012b78.image.png?v=1701898829884">
+  <meta property="og:type" content="website">
+  <style>
+    /* Root colors */
+    :root {
+      --bg: #0f0f17;
+      --container-bg: rgba(30, 30, 47, 0.6);
+      --surface: rgba(20, 20, 35, 0.4);
+      --text: #e0e0e0;
+      --accent: #8a2be2;
+      --border: #444458;
+      --btn-bg: rgba(60, 60, 80, 0.7);
+      --btn-hover: rgba(70, 70, 100, 0.8);
+      --error: #f66;
+      --success: #8f8;
+      --tab-hover: rgba(100, 100, 120, 0.8);
+      --tab-active-bg: rgba(10, 10, 15, 0.9);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      min-height: 100vh;
+      background: var(--bg);
+      color: var(--text);
+      font-family: Arial, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 1rem;
+    }
+     #container {
+      width: 100%;
+      max-width: 900px;
+      background: var(--container-bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      backdrop-filter: blur(12px);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.5);
+      position: relative;
+    }
+
+     header {
+      width: 100%;
+      background: var(--surface);
+      backdrop-filter: blur(8px);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.75rem 1rem;
+      border-bottom: 1px solid var(--border);
+    }
+    header .title {
+      font-size: 1.5rem;
+      color: var(--accent);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    header .title svg {
+      width: 24px;
+      height: 24px;
+      fill: var(--accent);
+    }
+    header .e2ee {
+      font-size: 0.9rem;
+      padding: 0.25rem 0.5rem;
+      background: var(--btn-bg);
+      border-radius: 4px;
+      border: 1px solid var(--border);
+      cursor: pointer;
+    }
+
+     #e2eePopup {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: var(--container-bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      backdrop-filter: blur(12px);
+      padding: 1rem;
+      max-width: 300px;
+      display: none;
+      z-index: 10;
+    }
+    #e2eePopup p {
+      font-size: 0.9rem;
+      margin-bottom: 0.75rem;
+    }
+    #e2eePopup button {
+      background: var(--accent);
+      border: none;
+      border-radius: 4px;
+      color: #fff;
+      padding: 0.5rem 1rem;
+      cursor: pointer;
+      font-size: 0.9rem;
+    }
+
+     #tabBar {
+      display: flex;
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      overflow-x: auto;
+      white-space: nowrap;
+    }
+    .tab {
+      display: flex;
+      align-items: center;
+      padding: 0.5rem 0.75rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: 0.95rem;
+      border-right: 1px solid var(--border);
+      color: var(--text);
+      background: var(--surface);
+      transition: background 0.2s, color 0.2s;
+      position: relative;
+      flex-shrink: 0;
+    }
+    .tab:hover {
+      background: var(--tab-hover);
+    }
+    .tab.active {
+      background: var(--tab-active-bg);
+      color: var(--accent);
+      border-bottom: 2px solid var(--accent);
+    }
+    .tab .title-text {
+      margin-right: 0.5rem;
+    }
+    .tab .icon-btn {
+      background: transparent;
+      border: none;
+      color: var(--text);
+      cursor: pointer;
+      padding: 0;
+      margin-left: 0.25rem;
+      display: flex;
+      align-items: center;
+    }
+    .tab .icon-btn:hover {
+      color: var(--accent);
+    }
+    .tab[data-dragging="true"] {
+      opacity: 0.5;
+    }
+
+     #editor {
+      flex: 1;
+      background: rgba(20, 20, 35, 0.3);
+      backdrop-filter: blur(8px);
+      padding: 1rem;
+      overflow-y: auto;
+      min-height: 300px;
+      color: var(--text);
+    }
+    #editor:empty:before {
+      content: attr(data-placeholder);
+      color: #888;
+    }
+    #editor:focus {
+      outline: 2px solid var(--accent);
+    }
+
+     #toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      padding: 0.75rem 1rem;
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+    }
+    .tool-btn {
+      background: var(--btn-bg);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      color: var(--text);
+      padding: 0.5rem;
+      cursor: pointer;
+      font-size: 0.9rem;
+      transition: background 0.2s;
+      display: flex;
+      align-items: center;
+    }
+    .tool-btn svg {
+      width: 18px;
+      height: 18px;
+      fill: var(--text);
+      margin-right: 0.3rem;
+    }
+    .tool-btn:hover {
+      background: var(--btn-hover);
+    }
+
+     #controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      padding: 0.75rem 1rem;
+      background: var(--surface);
+      border-top: 1px solid var(--border);
+    }
+    #controls input[type="password"] {
+      flex: 1;
+      padding: 0.5rem;
+      font-size: 1rem;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      background: rgba(20, 20, 35, 0.6);
+      color: var(--text);
+    }
+    #controls .action-btn {
+      background: var(--btn-bg);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      color: var(--text);
+      padding: 0.5rem 1rem;
+      cursor: pointer;
+      font-size: 0.95rem;
+      transition: background 0.2s;
+    }
+    #controls .action-btn:hover {
+      background: var(--btn-hover);
+    }
+    #message {
+      padding: 0.5rem 1rem;
+      font-size: 0.9rem;
+      min-height: 1.2em;
+    }
+    #message.error {
+      color: var(--error);
+    }
+    #message.success {
+      color: var(--success);
+    }
+
+     #fileInput {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <div id="container">
+    <!-- Header with icon and E2EE label -->
+    <header>
+      <div class="title">
+        <!-- Lock SVG -->
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path d="M12 2C9.238 2 7 4.238 7 7v3H6a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-9a2 2 0 0 0-2-2h-1V7c0-2.762-2.238-5-5-5zm-3 5c0-1.654 1.346-3 3-3s3 1.346 3 3v3H9V7zm-1 5h8v7H8v-7z"/>
+        </svg>
+        Pokepad
+      </div>
+      <div class="e2ee" id="e2eeLabel">End-to-End Encrypted</div>
+    </header>
+
+    <!-- E2EE Info Popup -->
+    <div id="e2eePopup">
+      <p><strong>End-to-End Encryption (E2EE)</strong></p>
+      <p>All notes are encrypted locally before being saved. Only you (and anyone you share your password with) can decrypt and read your notes. No unencrypted data ever leaves your browser.</p>
+      <button id="e2eeCloseBtn">Close</button>
+    </div>
+
+    <!-- Tab bar -->
+    <div id="tabBar"></div>
+
+    <!-- Formatting toolbar -->
+    <div id="toolbar">
+      <!-- Bold -->
+      <button class="tool-btn" data-cmd="bold" title="Bold (Ctrl+B)">
+        <svg viewBox="0 0 24 24"><path d="M15.6 10.79c.75-.54 1.4-1.31 1.85-2.18.46-.87.7-1.86.7-2.93 0-1.07-.24-2.06-.7-2.93-.46-.87-1.1-1.64-1.85-2.18-.81-.59-1.77-.89-2.77-.89h-5v16h5c1 0 1.96-.3 2.77-.89.75-.54 1.4-1.31 1.85-2.18.46-.87.7-1.86.7-2.93 0-1.07-.24-2.06-.7-2.93zM11 4h1.5c.74 0 1.44.26 2 .72.56.46 1.01 1.11 1.28 1.8.27.69.42 1.45.42 2.22 0 .77-.15 1.53-.42 2.22-.27.69-.72 1.34-1.28 1.8-.56.46-1.26.72-2 .72h-1.5V4zm1.5 12H11c-.74 0-1.44-.26-2-.72-.56-.46-1.01-1.11-1.28-1.8-.27-.69-.42-1.45-.42-2.22 0-.77.15-1.53.42-2.22.27-.69.72-1.34 1.28-1.8.56-.46 1.26-.72 2-.72h1.5v9z"/></svg>
+        <span>Bold</span>
+      </button>
+      <!-- Italic -->
+      <button class="tool-btn" data-cmd="italic" title="Italic (Ctrl+I)">
+        <svg viewBox="0 0 24 24"><path d="M10 4v3h2.21l-3.42 10H6v3h8v-3h-2.21l3.42-10H18V4z"/></svg>
+        <span>Italic</span>
+      </button>
+      <!-- Underline -->
+      <button class="tool-btn" data-cmd="underline" title="Underline (Ctrl+U)">
+        <svg viewBox="0 0 24 24"><path d="M12 17c3.31 0 6-2.69 6-6V4h-2v7c0 2.21-1.79 4-4 4s-4-1.79-4-4V4H6v7c0 3.31 2.69 6 6 6zm-5 2v2h10v-2H7z"/></svg>
+        <span>Underline</span>
+      </button>
+      <!-- Strikethrough -->
+      <button class="tool-btn" data-cmd="strikeThrough" title="Strikethrough">
+        <svg viewBox="0 0 24 24"><path d="M10 19v-2H5.41L9 13.41 7.59 12 2 17.59V19h8zm4 0h8v-2h-5.59L15 13.41 13.59 12 8 17.59V19h6zM21 11h-8V9h8v2z"/></svg>
+        <span>Strike</span>
+      </button>
+      <!-- Unordered List -->
+      <button class="tool-btn" data-cmd="insertUnorderedList" title="Bullet List">
+        <svg viewBox="0 0 24 24"><path d="M4 10.5c.83 0 1.5-.67 1.5-1.5S4.83 7.5 4 7.5 2.5 8.17 2.5 9 3.17 10.5 4 10.5zm0 5c.83 0 1.5-.67 1.5-1.5S4.83 12.5 4 12.5 2.5 13.17 2.5 14 3.17 15.5 4 15.5zm0 5c.83 0 1.5-.67 1.5-1.5S4.83 17.5 4 17.5 2.5 18.17 2.5 19 3.17 20.5 4 20.5zM7 9h14v2H7V9zm0 5h14v2H7v-2zm0 5h14v2H7v-2z"/></svg>
+        <span>Bullets</span>
+      </button>
+      <!-- Ordered List -->
+      <button class="tool-btn" data-cmd="insertOrderedList" title="Numbered List">
+        <svg viewBox="0 0 24 24"><path d="M4 10h2v1H4v2h2v1H4v2h4v-1H6v-2h2v-1H4v-2zm0-4h4v1H6v2h2v1H4v2h4v1H4v2h6v-1H6v-2h2v-1H4v-2zm0 10h12v-1H4v-2h2v-1H4v-2h4v-1H4V6h6V5H4v2h4v1H4v2h4v1H4v2z"/></svg>
+        <span>Numbers</span>
+      </button>
+      <!-- Align Left -->
+      <button class="tool-btn" data-cmd="justifyLeft" title="Align Left">
+        <svg viewBox="0 0 24 24"><path d="M3 5h18v2H3V5zm0 4h12v2H3V9zm0 4h18v2H3v-2zm0 4h12v2H3v-2z"/></svg>
+        <span>Left</span>
+      </button>
+      <!-- Align Center -->
+      <button class="tool-btn" data-cmd="justifyCenter" title="Align Center">
+        <svg viewBox="0 0 24 24"><path d="M3 5h18v2H3V5zm3 4h12v2H6V9zm3 4h18v2H9v-2zm3 4h12v2H12v-2z"/></svg>
+        <span>Center</span>
+      </button>
+      <!-- Align Right -->
+      <button class="tool-btn" data-cmd="justifyRight" title="Align Right">
+        <svg viewBox="0 0 24 24"><path d="M3 5h18v2H3V5zm6 4h12v2H9V9zm6 4h18v2H15v-2zm6 4h12v2h-12v-2z"/></svg>
+        <span>Right</span>
+      </button>
+      <!-- Text Color -->
+      <button class="tool-btn" id="colorPickerBtn" title="Text Color">
+        <svg viewBox="0 0 24 24"><path d="M15.55 14.52L9.48 4.5H7.03l6.07 10.02c.18.3.28.64.28 1 0 1.1-.9 2-2 2s-2-.9-2-2H7c0 1.66 1.34 3 3 3s3-1.34 3-3c0-.61-.22-1.17-.58-1.6zM12 2C8.13 2 5 5.13 5 9c0 1.66.58 3.18 1.55 4.38L12 22l5.45-8.62C18.42 12.18 19 10.66 19 9c0-3.87-3.13-7-7-7z"/></svg>
+        <span>Color</span>
+      </button>
+      <input type="color" id="colorPicker" style="display:none" />
+      <!-- Insert Link -->
+      <button class="tool-btn" data-cmd="createLink" title="Insert Link">
+        <svg viewBox="0 0 24 24"><path d="M3.9 12c0-1.17.44-2.27 1.24-3.06l3.34-3.34c1.65-1.65 4.33-1.65 5.98 0 1.65 1.65 1.65 4.33 0 5.98l-1.06 1.06-1.41-1.41 1.06-1.06c.88-.88.88-2.31 0-3.19-.88-.88-2.31-.88-3.19 0l-3.34 3.34c-.88.88-.88 2.31 0 3.19.88.88 2.31.88 3.19 0l1.06-1.06 1.41 1.41-1.06 1.06c-1.65 1.65-4.33 1.65-5.98 0C4.34 14.27 3.9 13.17 3.9 12zm16.2 0c0 1.17-.44 2.27-1.24 3.06l-3.34 3.34c-1.65 1.65-4.33 1.65-5.98 0-1.65-1.65-1.65-4.33 0-5.98l1.06-1.06 1.41 1.41-1.06 1.06c-.88.88-.88 2.31 0 3.19.88.88 2.31.88 3.19 0l3.34-3.34c.88-.88.88-2.31 0-3.19-.88-.88-2.31-.88-3.19 0l-1.06 1.06-1.41-1.41 1.06-1.06c1.65-1.65 4.33-1.65 5.98 0 1.65 1.65 1.65 4.33 0 5.98z"/></svg>
+        <span>Link</span>
+      </button>
+      <!-- Unlink -->
+      <button class="tool-btn" data-cmd="unlink" title="Remove Link">
+        <svg viewBox="0 0 24 24"><path d="M12.71 11.29l-1.42 1.42L10 11.42l-1.29 1.29-1.42-1.42L8.58 10 7.29 8.71l1.42-1.42L10 8.58l1.29-1.29 1.42 1.42L11.42 10l1.29 1.29zM17.65 6.35l-1.41 1.41 1.41 1.41L19.06 7.76l-1.41-1.41zm-11.3 11.3l-1.41 1.41 1.41 1.41 1.41-1.41-1.41-1.41z"/></svg>
+        <span>Unlink</span>
+      </button>
+    </div>
+
+    <div id="editor" contenteditable="true" spellcheck="false" data-placeholder="Type your notes here..."></div>
+
+    <div id="controls">
+      <input type="password" id="password" placeholder="Password" />
+      <button class="action-btn" id="saveBtn">Download&nbsp;Encrypted</button>
+      <button class="action-btn" id="loadBtn">Decrypt&nbsp;&amp;&nbsp;Load</button>
+      <button class="action-btn" id="uploadBtn">Upload&nbsp;Encrypted&nbsp;File</button>
+      <input type="file" id="fileInput" accept=".json" />
+    </div>
+
+    <div id="message"></div>
+  </div>
+
+  <script>
+    let notes = [];
+    let currentTabId = null;
+    let tabCounter = 0;
+    let dragSrcId = null;
+
+    const STORAGE_KEY = 'pokepadEncrypted';
+    const PLAIN_KEY = 'pokepadPlain';
+    const tabBar = document.getElementById('tabBar');
+    const editor = document.getElementById('editor');
+    const passwordInput = document.getElementById('password');
+    const saveBtn = document.getElementById('saveBtn');
+    const loadBtn = document.getElementById('loadBtn');
+    const uploadBtn = document.getElementById('uploadBtn');
+    const fileInput = document.getElementById('fileInput');
+    const messageDiv = document.getElementById('message');
+    const toolbarButtons = document.querySelectorAll('#toolbar .tool-btn');
+    const e2eeLabel = document.getElementById('e2eeLabel');
+    const e2eePopup = document.getElementById('e2eePopup');
+    const e2eeCloseBtn = document.getElementById('e2eeCloseBtn');
+    const colorPicker = document.getElementById('colorPicker');
+    const colorPickerBtn = document.getElementById('colorPickerBtn');
+
+    // On load: attempt to load plain data so tabs persist
+    window.addEventListener('DOMContentLoaded', () => {
+      const storedPlain = localStorage.getItem(PLAIN_KEY);
+      if (storedPlain) {
+        try {
+          const parsedPlain = JSON.parse(storedPlain);
+          if (parsedPlain.notes && Array.isArray(parsedPlain.notes)) {
+            notes = parsedPlain.notes;
+            tabCounter = notes.length ? Math.max(...notes.map(n => n.id)) + 1 : 0;
+            currentTabId = parsedPlain.currentTabId != null
+              ? parsedPlain.currentTabId
+              : notes[0]?.id;
+            renderTabs();
+            if (currentTabId != null) {
+              const curr = notes.find(n => n.id === currentTabId);
+              editor.innerHTML = curr ? curr.content : '';
+            }
+            return;
+          }
+        } catch {}
+      }
+      // If no plain data, create default tab
+      createNewTab();
+      setInterval(savePlain, 10000);
+    });
+
+    function createNewTab(name = null, content = '') {
+      const id = tabCounter++;
+      const defaultName = name || `Note ${id + 1}`;
+      notes.push({ id, name: defaultName, content });
+      switchToTab(id);
+      renderTabs();
+      savePlain();
+    }
+
+    function renderTabs() {
+      tabBar.innerHTML = '';
+      notes.forEach((note) => {
+        const tabEl = document.createElement('div');
+        tabEl.className = 'tab' + (note.id === currentTabId ? ' active' : '');
+        tabEl.setAttribute('draggable', 'true');
+        tabEl.dataset.id = note.id;
+
+        const titleSpan = document.createElement('span');
+        titleSpan.className = 'title-text';
+        titleSpan.textContent = note.name;
+        tabEl.appendChild(titleSpan);
+
+        const renameBtn = document.createElement('span');
+        renameBtn.className = 'icon-btn';
+        renameBtn.textContent = '✎';
+        renameBtn.title = 'Rename tab';
+        renameBtn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          promptRename(note.id, titleSpan);
+        });
+        tabEl.appendChild(renameBtn);
+
+        const closeBtn = document.createElement('span');
+        closeBtn.className = 'icon-btn';
+        closeBtn.textContent = '×';
+        closeBtn.title = 'Close tab';
+        closeBtn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          closeTab(note.id);
+        });
+        tabEl.appendChild(closeBtn);
+
+        tabEl.addEventListener('click', () => switchToTab(note.id));
+
+        tabEl.addEventListener('dragstart', tabDragStart);
+        tabEl.addEventListener('dragover', tabDragOver);
+        tabEl.addEventListener('drop', tabDrop);
+        tabEl.addEventListener('dragend', tabDragEnd);
+
+        tabBar.appendChild(tabEl);
+      });
+
+      const newTabEl = document.createElement('div');
+      newTabEl.className = 'tab';
+      newTabEl.textContent = '+';
+      newTabEl.title = 'Add new tab';
+      newTabEl.addEventListener('click', () => createNewTab());
+      tabBar.appendChild(newTabEl);
+    }
+
+    function switchToTab(id) {
+      if (currentTabId !== null) {
+        const currentNote = notes.find(n => n.id === currentTabId);
+        if (currentNote) currentNote.content = editor.innerHTML;
+      }
+      currentTabId = id;
+      const nextNote = notes.find(n => n.id === id);
+      editor.innerHTML = nextNote ? nextNote.content : '';
+      renderTabs();
+      clearMessage();
+      editor.focus();
+      savePlain();
+    }
+
+    function promptRename(id, titleSpan) {
+      const note = notes.find(n => n.id === id);
+      if (!note) return;
+      const input = document.createElement('input');
+      input.type = 'text';
+      input.value = note.name;
+      input.style.fontSize = '0.95rem';
+      input.style.background = 'rgba(20,20,35,0.6)';
+      input.style.color = 'var(--text)';
+      input.style.border = '1px solid var(--border)';
+      input.style.borderRadius = '4px';
+      input.style.padding = '2px 4px';
+      titleSpan.replaceWith(input);
+      input.focus();
+      input.select();
+      input.addEventListener('blur', () => {
+        const newName = input.value.trim();
+        if (newName) note.name = newName;
+        renderTabs();
+        savePlain();
+      });
+      input.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') input.blur();
+      });
+    }
+
+    function closeTab(id) {
+      const idx = notes.findIndex(n => n.id === id);
+      if (idx === -1) return;
+      const wasActive = (id === currentTabId);
+      notes.splice(idx, 1);
+      if (notes.length === 0) {
+        tabCounter = 0;
+        notes = [];
+        createNewTab();
+        return;
+      }
+      if (wasActive) {
+        const newIdx = idx > 0 ? idx - 1 : 0;
+        switchToTab(notes[newIdx].id);
+      } else {
+        renderTabs();
+        savePlain();
+      }
+    }
+
+    function tabDragStart(e) {
+      dragSrcId = Number(e.currentTarget.dataset.id);
+      e.currentTarget.dataset.dragging = 'true';
+    }
+    function tabDragOver(e) {
+      e.preventDefault();
+      const targetId = Number(e.currentTarget.dataset.id);
+      if (dragSrcId === targetId) return;
+      const srcIndex = notes.findIndex(n => n.id === dragSrcId);
+      const tgtIndex = notes.findIndex(n => n.id === targetId);
+      notes.splice(tgtIndex, 0, notes.splice(srcIndex, 1)[0]);
+      renderTabs();
+    }
+    function tabDrop(e) {
+      e.stopPropagation();
+      savePlain();
+    }
+    function tabDragEnd(e) {
+      delete e.currentTarget.dataset.dragging;
+    }
+
+    // Save editor changes
+    editor.addEventListener('input', () => {
+      if (currentTabId !== null) {
+        const note = notes.find(n => n.id === currentTabId);
+        if (note) note.content = editor.innerHTML;
+      }
+      savePlain();
+    });
+
+    function savePlain() {
+      if (currentTabId !== null) {
+        const currentNote = notes.find(n => n.id === currentTabId);
+        if (currentNote) currentNote.content = editor.innerHTML;
+      }
+      const payload = { notes, currentTabId };
+      localStorage.setItem(PLAIN_KEY, JSON.stringify(payload));
+    }
+
+    async function getKeyMaterial(password) {
+      const encoder = new TextEncoder();
+      return crypto.subtle.importKey(
+        'raw',
+        encoder.encode(password),
+        'PBKDF2',
+        false,
+        ['deriveKey']
+      );
+    }
+
+    async function deriveKey(password, salt) {
+      const keyMaterial = await getKeyMaterial(password);
+      return crypto.subtle.deriveKey(
+        { name: 'PBKDF2', salt: salt, iterations: 150000, hash: 'SHA-256' },
+        keyMaterial,
+        { name: 'AES-GCM', length: 256 },
+        false,
+        ['encrypt', 'decrypt']
+      );
+    }
+
+    function arrayBufferToBase64(buffer) {
+      const bytes = new Uint8Array(buffer);
+      let binary = '';
+      for (let b of bytes) {
+        binary += String.fromCharCode(b);
+      }
+      return btoa(binary);
+    }
+
+    function base64ToArrayBuffer(base64) {
+      const binary = atob(base64);
+      const bytes = new Uint8Array(binary.length);
+      for (let i = 0; i < binary.length; i++) {
+        bytes[i] = binary.charCodeAt(i);
+      }
+      return bytes.buffer;
+    }
+
+    async function encryptData(plainText, password) {
+      const encoder = new TextEncoder();
+      const salt = crypto.getRandomValues(new Uint8Array(16));
+      const iv = crypto.getRandomValues(new Uint8Array(12));
+      const key = await deriveKey(password, salt);
+      const cipherBuffer = await crypto.subtle.encrypt(
+        { name: 'AES-GCM', iv: iv },
+        key,
+        encoder.encode(plainText)
+      );
+      return {
+        salt: arrayBufferToBase64(salt.buffer),
+        iv: arrayBufferToBase64(iv.buffer),
+        data: arrayBufferToBase64(cipherBuffer)
+      };
+    }
+
+    async function decryptData(encryptedObj, password) {
+      const salt = base64ToArrayBuffer(encryptedObj.salt);
+      const iv = base64ToArrayBuffer(encryptedObj.iv);
+      const cipherBuffer = base64ToArrayBuffer(encryptedObj.data);
+      const key = await deriveKey(password, salt);
+      try {
+        const decryptedBuffer = await crypto.subtle.decrypt(
+          { name: 'AES-GCM', iv: iv },
+          key,
+          cipherBuffer
+        );
+        const decoder = new TextDecoder();
+        return decoder.decode(decryptedBuffer);
+      } catch {
+        throw new Error('Decryption failed. Wrong password or corrupted data.');
+      }
+    }
+
+    saveBtn.addEventListener('click', async () => {
+      clearMessage();
+      const pw = passwordInput.value;
+      if (!pw) {
+        showMessage('Please enter a password before downloading.', 'error');
+        return;
+      }
+      if (currentTabId !== null) {
+        const currentNote = notes.find(n => n.id === currentTabId);
+        if (currentNote) currentNote.content = editor.innerHTML;
+      }
+      savePlain();
+      const payload = { notes, currentTabId };
+      const jsonString = JSON.stringify(payload);
+      try {
+        const encrypted = await encryptData(jsonString, pw);
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(encrypted));
+        const downloadObj = JSON.stringify(encrypted);
+        const blob = new Blob([downloadObj], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        const timestamp = new Date().toISOString().slice(0,19).replace(/[:T]/g, '-');
+        a.download = `pokepad_${timestamp}.json`;
+        a.href = url;
+        a.click();
+        URL.revokeObjectURL(url);
+        showMessage('Encrypted file ready to download.', 'success');
+      } catch {
+        showMessage('Error during encryption. Try again.', 'error');
+      }
+    });
+
+    uploadBtn.addEventListener('click', () => { clearMessage(); fileInput.click(); });
+
+    fileInput.addEventListener('change', () => {
+      const file = fileInput.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = async (e) => {
+        clearMessage();
+        const pw = passwordInput.value;
+        if (!pw) {
+          showMessage('Enter password to decrypt uploaded file.', 'error');
+          return;
+        }
+        try {
+          const encryptedObj = JSON.parse(e.target.result);
+          const decryptedText = await decryptData(encryptedObj, pw);
+          const parsed = JSON.parse(decryptedText);
+          if (!parsed.notes || !Array.isArray(parsed.notes)) {
+            showMessage('Invalid file format.', 'error');
+            return;
+          }
+          notes = parsed.notes.map(n => ({ id: n.id, name: n.name, content: n.content }));
+          tabCounter = notes.length ? Math.max(...notes.map(n => n.id)) + 1 : 0;
+          currentTabId = parsed.currentTabId != null ? parsed.currentTabId : (notes[0]?.id);
+          renderTabs();
+          if (currentTabId != null) {
+            const curr = notes.find(n => n.id === currentTabId);
+            editor.innerHTML = curr ? curr.content : '';
+          } else if (notes[0]) {
+            currentTabId = notes[0].id;
+            editor.innerHTML = notes[0].content;
+          }
+          savePlain();
+          showMessage('Decryption successful! Notes loaded.', 'success');
+        } catch {
+          showMessage('Failed to decrypt or parse file.', 'error');
+        }
+      };
+      reader.readAsText(file);
+      fileInput.value = '';
+    });
+
+    loadBtn.addEventListener('click', async () => {
+      clearMessage();
+      const pw = passwordInput.value;
+      if (!pw) {
+        showMessage('Enter password to decrypt stored data.', 'error');
+        return;
+      }
+      const stored = localStorage.getItem(STORAGE_KEY);
+      if (!stored) {
+        showMessage('No locally stored data found.', 'error');
+        return;
+      }
+      try {
+        const encryptedObj = JSON.parse(stored);
+        const decryptedText = await decryptData(encryptedObj, pw);
+        const parsed = JSON.parse(decryptedText);
+        if (!parsed.notes || !Array.isArray(parsed.notes)) {
+          showMessage('Invalid local data format.', 'error');
+          return;
+        }
+        notes = parsed.notes.map(n => ({ id: n.id, name: n.name, content: n.content }));
+        tabCounter = notes.length ? Math.max(...notes.map(n => n.id)) + 1 : 0;
+        currentTabId = parsed.currentTabId != null ? parsed.currentTabId : (notes[0]?.id);
+        renderTabs();
+        if (currentTabId != null) {
+          const curr = notes.find(n => n.id === currentTabId);
+          editor.innerHTML = curr ? curr.content : '';
+        } else if (notes[0]) {
+          currentTabId = notes[0].id;
+          editor.innerHTML = notes[0].content;
+        }
+        showMessage('Decryption successful! Notes loaded from localStorage.', 'success');
+        savePlain();
+      } catch {
+        showMessage('Decryption failed or data corrupted.', 'error');
+      }
+    });
+
+     window.addEventListener('keydown', (e) => {
+      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 's') {
+        e.preventDefault();
+        showMessage('PokePad autosaves :3 ', 'success');
+      }
+    });
+
+     toolbarButtons.forEach(btn => {
+      const cmd = btn.getAttribute('data-cmd');
+      btn.addEventListener('click', () => {
+        if (cmd === 'createLink') {
+          const url = prompt('Enter the URL:', 'https://');
+          if (url) document.execCommand(cmd, false, url);
+        } else {
+          document.execCommand(cmd, false, null);
+        }
+        editor.focus();
+      });
+    });
+
+    colorPickerBtn.addEventListener('click', () => {
+      colorPicker.click();
+    });
+    colorPicker.addEventListener('input', () => {
+      document.execCommand('foreColor', false, colorPicker.value);
+      editor.focus();
+    });
+
+     e2eeLabel.addEventListener('click', () => {
+      e2eePopup.style.display = 'block';
+    });
+    e2eeCloseBtn.addEventListener('click', () => {
+      e2eePopup.style.display = 'none';
+    });
+
+     function showMessage(text, type) {
+      messageDiv.textContent = text;
+      messageDiv.className = type;
+      setTimeout(() => {
+        if (messageDiv.textContent === text) clearMessage();
+      }, 4000);
+    }
+    function clearMessage() {
+      messageDiv.textContent = '';
+      messageDiv.className = '';
+    }
+  </script>
+</body>
+</html>

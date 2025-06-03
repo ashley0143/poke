@@ -82,24 +82,24 @@ module.exports = function (app, config, renderTemplate) {
     renderTemplate(res, req, "rewind.ejs");
   });
 
+app.get("/notepad", function (req, res) {
+    renderTemplate(res, req, "pokepad.ejs");
+  });
+
   app.get("/translate", async function (req, res) {
     const { fetch } = await import("undici");
 
     const api_url = "https://simplytranslate.org/api/translate";
 
-    // Fetch translation data
-    const translationResponse = await fetch(
+     const translationResponse = await fetch(
       `${api_url}?from=${req.query.from_language}&to=${req.query.to_language}&text=${req.query.input}&engine=google`
     );
 
-    // Check if the request was successful (status code 200)
-    const translationData = await translationResponse.json();
+     const translationData = await translationResponse.json();
 
-    // Extract translated_text from the response
-    const translatedText = translationData.translated_text;
+     const translatedText = translationData.translated_text;
 
-    // Render the template with the translated text
-    renderTemplate(res, req, "translate.ejs", {
+     renderTemplate(res, req, "translate.ejs", {
       translation: translatedText,
       text: req.query.input || "enter text here",
       from_language: req.query.from_language,

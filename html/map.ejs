@@ -22,12 +22,14 @@
     .search{position:relative;flex:1;min-width:0}
     .search input{width:100%;padding:12px 14px;border-radius:12px;border:1px solid var(--border);background:var(--surface);color:#fff;outline:none}
     .search input:focus{border-color:#444;box-shadow:0 0 0 3px color-mix(in oklab, var(--accent) 20%, transparent)}
-    .suggest{position:absolute;top:calc(100% + 6px);left:0;right:0;max-height:42vh;overflow:auto;margin:0;padding:6px 0;list-style:none;border:1px solid var(--border);border-radius:12px;background:var(--surface);display:none}
+    .suggest{position:absolute;top:calc(100% + 6px);left:0;right:0;max-height:42vh;overflow:auto;margin:0;padding:30px 0 6px;list-style:none;border:1px solid var(--border);border-radius:12px;background:var(--surface);display:none}
     .suggest li{padding:10px 12px;cursor:pointer;border-top:1px solid #111;display:flex;gap:8px;align-items:center}
     .suggest li:first-child{border-top:none}
     .suggest li.active{background:#141414}
     .suggest .pill{font-size:11px;border:1px solid #333;border-radius:999px;padding:2px 6px;opacity:.85}
     .suggest mark{background:transparent;color:var(--accent);font-weight:600}
+    .suggest .closer{position:sticky;top:0;display:flex;justify-content:flex-end;padding:6px;border-bottom:1px solid #111;background:linear-gradient(#0b0b0b, #0b0b0b)}
+    .suggest .closer button{border:1px solid #444;background:#161616;color:#fff;border-radius:10px;padding:6px 8px;cursor:pointer}
     .iconbtn{border:0;border-radius:10px;background:#222;color:#fff;padding:10px 12px;min-width:44px}
     .mapwrap{position:relative;height:calc(var(--vh) - 56px);overflow:hidden}
     iframe#map{position:absolute;inset:0;border:0;width:100%;height:100%}
@@ -67,14 +69,30 @@
     .settings input[type="color"]{width:42px;height:32px;border:0;background:none}
     .settings textarea{width:100%;min-height:120px;border-radius:10px;border:1px solid var(--border);background:#0a0a0a;color:#eee;padding:8px;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
     .settings .about{font-size:13px;opacity:.92;line-height:1.5}
-    .desktop .bar{grid-column:2}
-    .desktop .app{grid-template-columns:320px 1fr;grid-template-rows:auto 1fr}
-    .desktop .sidebar{position:fixed;left:0;top:0;bottom:0;width:320px;background:var(--panel);border-right:1px solid var(--border);display:flex;flex-direction:column;gap:10px;padding:12px;z-index:9}
-    .desktop .sidegroup{border:1px solid #222;border-radius:12px;overflow:hidden}
-    .desktop .sidegroup header{padding:10px 12px;border-bottom:1px solid #222;font-weight:600}
-    .desktop .sidegroup .row{display:flex;gap:8px;align-items:center;padding:8px 12px;border-top:1px solid #111}
+
+    /* Desktop+Simplified layout */
+    .desktop .app{grid-template-columns:auto 1fr;grid-template-rows:auto 1fr}
+    .desktop .left{position:fixed;left:0;top:0;bottom:0;width:320px;display:flex;flex-direction:column;background:var(--panel);border-right:1px solid var(--border);z-index:9;transition:width .2s ease}
+    .desktop .left .left-head{display:flex;align-items:center;gap:8px;padding:10px;border-bottom:1px solid #222}
+    .desktop .left .left-head strong{flex:1}
+    .desktop .left .group{border-bottom:1px solid #111;padding:10px}
+    .desktop .left .group h4{margin:0 0 6px 0;font-size:13px;opacity:.9}
+    .desktop .left .row{display:flex;gap:8px;align-items:center;margin:6px 0}
+    .desktop .left .row .select,.desktop .left .row .iconbtn{flex:1}
+    .desktop .left .mini{width:64px}
+    .desktop .left.mini .label-hide{display:none}
+    .desktop .left.mini .group{padding:10px 6px}
+    .desktop .left.mini .left-head strong{display:none}
+    .desktop .bar{grid-column:2;gap:10px}
     .desktop .mapwrap{grid-column:2}
     .desktop .menu,.desktop .pins,.desktop .settings{display:none !important}
+
+    /* Pro mode density */
+    body.pro .left{width:360px}
+    body.pro .suggest{max-height:60vh}
+    body.pro .bar{padding:6px var(--pad)}
+    body.pro .search input{padding:10px 12px}
+
     @media (min-width:768px){ .bar{padding:10px 14px} .brand{font-size:20px} }
     @media (prefers-reduced-motion:reduce){ *{animation:none !important;transition:none !important} }
   </style>
@@ -86,7 +104,9 @@
         <form id="form" autocomplete="off">
           <input id="q" type="text" inputmode="search" placeholder="Search places, or paste lat,lon…" aria-autocomplete="list" aria-expanded="false" aria-controls="suggestions" />
         </form>
-        <ul id="suggestions" class="suggest" role="listbox"></ul>
+        <ul id="suggestions" class="suggest" role="listbox">
+          <li class="closer" aria-hidden="true"><button id="closeSuggestBtn" type="button" title="Close suggestions">✕</button></li>
+        </ul>
       </div>
       <button class="iconbtn" id="locate" title="Locate">📍</button>
       <button class="iconbtn" id="menuBtn" title="Menu">⋯</button>
@@ -178,6 +198,7 @@
             <option value="light">Light</option>
           </select>
         </div>
+        <div class="row"><label><input type="checkbox" id="proMode"> Pro Mode (advanced UI)</label></div>
       </div>
     </div>
 
@@ -227,12 +248,10 @@
       <div class="section" data-sec="about">
         <div class="about">
           <p><strong>What is this?</strong> PokeMaps Public Beta is a lightweight viewer for exploring and sharing map positions with quick pin management. It focuses on speed, privacy-friendly defaults, and portability of links.</p>
-          
           <p><strong>Map credits:</strong> © <a href="https://www.openstreetmap.org/" target="_blank" rel="noopener">OpenStreetMap.org</a> contributors. Tiles/data from the OSM community. <em>Powered by openstreetmap.org.</em></p>
           <p><strong>Important disclaimer:</strong> Geographic names, boundaries, labels, and depictions may be incomplete, outdated, or disputed. Displayed borders and place names are for reference only and must not be interpreted as statements of recognition or endorsement. The map does <em>not</em> reflect the politics of the Poke project nor the opinions of its contributors. Always verify critical details independently.</p>
           <p><strong>Privacy & usage:</strong> If you enable location, your browser may share approximate GPS/Wi-Fi data with the page via standard Web APIs. Search uses public OSM services (subject to their policies and rate limits).</p>
           <p><strong>Interoperability:</strong> A convenience action is provided to open the same view in Google Maps for satellite imagery. This is not recommended and may have different data policies.</p>
-        
         </div>
       </div>
     </div>
@@ -248,7 +267,7 @@
     const LIMITS={deltaMin:0.01, deltaMax:45};
 
     const S=sel=>document.querySelector(sel);
-    const map=S("#map"), q=S("#q"), sug=S("#suggestions");
+    const map=S("#map"), q=S("#q"), sug=S("#suggestions"), closeSuggestBtn=S("#closeSuggestBtn");
     const locateBtn=S("#locate"), menuBtn=S("#menuBtn"), menu=S("#menu"), closeMenu=S("#closeMenu");
     const layerSel=S("#layer"), followBtn=S("#follow"), resetBtn=S("#reset"), shareBtn=S("#share");
     const copyBtn=S("#copy"), copyCoordsBtn=S("#copycoords"), openBtn=S("#openosm"), openGmapsBtn=S("#openGmaps");
@@ -264,6 +283,7 @@
     const coordPrecEl=S("#coordPrec");
     const coordPrecVal=S("#coordPrecVal");
     const themeModeEl=S("#themeMode");
+    const proModeEl=S("#proMode");
 
     const markerEl=S("#marker"), markerVisibleEl=S("#markerVisible"), markerSizeEl=S("#markerSize"), markerSizeVal=S("#markerSizeVal"),
           markerColorEl=S("#markerColor"), markerRingEl=S("#markerRing"), ringWidthEl=S("#ringWidth"), ringWidthVal=S("#ringWidthVal"),
@@ -273,7 +293,7 @@
     const accentColorEl=S("#accentColor"), accentResetEl=S("#accentReset");
     const customCSSEl=S("#customCSS"), applyCSSEl=S("#applyCSS"), clearCSSEl=S("#clearCSS");
 
-    const PREFS_KEY="pokemaps_prefs_v5";
+    const PREFS_KEY="pokemaps_prefs_v6";
     const LS_PINS="pokemaps_pins_v1";
     const LS_SEARCH="pokemaps_search_hist_v1";
 
@@ -282,7 +302,7 @@
     const prefs=loadPrefs(); applyPrefs();
 
     const isDesktop=()=> matchMedia("(min-width: 1024px)").matches && matchMedia("(pointer: fine)").matches;
-    const applyDesktopClass=()=>{ document.body.classList.toggle("desktop", isDesktop()) };
+    const applyDesktopClass=()=>{ document.body.classList.toggle("desktop", isDesktop()); if(isDesktop()) ensureDesktopPanel() };
     applyDesktopClass(); addEventListener("resize",applyDesktopClass,{passive:true});
 
     const setVH=()=>{const vh=window.innerHeight*0.01;document.documentElement.style.setProperty("--vh",`${vh*100}px`)};
@@ -314,7 +334,6 @@
     };
     const gmapsURL=({lat,lon,delta})=>{
       const z = deltaToZoom(clampDelta(delta));
-      // 3D/earth-ish param toggles are brittle; open at center and let user tap Satellite.
       return `https://www.google.com/maps/@${lat.toFixed(6)},${lon.toFixed(6)},${Math.max(3,Math.min(20,z))}z`;
     };
 
@@ -349,7 +368,7 @@
 
     const updateCoordsFast=()=>{
       if(!prefs.showCoords) return;
-      const s=coordString()+` · Δ ${state.delta.toFixed(4)} · ${state.layer}`;
+      const s=coordString()+` · Δ ${state.delta.toFixed(4)} · ${state.layer}${document.body.classList.contains("pro")?" · z "+deltaToZoom(state.delta):""}`;
       if(s!==lastCoordsStr){ coordsEl.textContent=s; lastCoordsStr=s }
     };
 
@@ -410,21 +429,20 @@
 
     const renderSuggest=(items, term="")=>{
       if(!sug) return;
-      sug.innerHTML="";
+      sug.querySelectorAll("li:not(.closer)").forEach(n=>n.remove());
       if(!items.length){ sug.style.display="none"; q.setAttribute("aria-expanded","false"); activeIndex=-1; return }
       items.forEach((it,i)=>{
         const li=document.createElement("li");
         li.role="option"; li.id="opt"+i;
         li.innerHTML=`<span class="pill">${it.type}</span><span class="txt">${highlight(it.label,term)}</span>`;
-        li.addEventListener("mousedown",e=>{ e.preventDefault(); chooseItem(it) }); // mousedown prevents blur-flicker
+        li.addEventListener("mousedown",e=>{ e.preventDefault(); chooseItem(it) });
         sug.appendChild(li);
       });
       sug.style.display="block"; q.setAttribute("aria-expanded","true");
     };
 
     const hideSuggest=(force=false)=>{
-      if(force){ sug.style.display="none"; q.setAttribute("aria-expanded","false"); sug.innerHTML=""; activeIndex=-1; return }
-      // Do not auto-hide while typing; we only hide on explicit actions (Esc/click outside/submit)
+      if(force){ sug.style.display="none"; q.setAttribute("aria-expanded","false"); activeIndex=-1; sug.querySelectorAll("li:not(.closer)").forEach(n=>n.remove()); return }
       sug.style.display="none"; q.setAttribute("aria-expanded","false"); activeIndex=-1;
     };
 
@@ -448,7 +466,6 @@
         const data=await r.json();
         renderSuggest(data.map(p=>({type:"place",label:p.display_name,lat:+p.lat,lon:+p.lon,raw:p})), term);
       }catch(e){
-        // Keep the box open with history on errors instead of flickering closed
         const hist=loadSearchHist();
         renderSuggest(hist.map(x=>({type:"history",label:x})), "");
       }
@@ -465,7 +482,6 @@
       }catch{}
     };
 
-    // --- Suggestion UX (no flicker) ---
     q.addEventListener("input",e=>{
       const v=e.target.value;
       if(v===lastQuery) return;
@@ -478,7 +494,6 @@
       else { searchPlaces(q.value) }
     });
 
-    // remove blur auto-hide that caused flicker; we close on outside click/Esc instead
     document.addEventListener("click",e=>{
       const within = e.target.closest(".search") || e.target.closest("#suggestions");
       if(!within) hideSuggest(true);
@@ -488,7 +503,7 @@
       const visible = sug.style.display==="block";
       if(e.key==="Escape"){ hideSuggest(true); return }
       if(!visible) return;
-      const items=[...sug.querySelectorAll("li")];
+      const items=[...sug.querySelectorAll("li:not(.closer)")];
       if(!items.length) return;
       if(e.key==="ArrowDown"){ e.preventDefault(); activeIndex=(activeIndex+1)%items.length; activate(items) }
       if(e.key==="ArrowUp"){ e.preventDefault(); activeIndex=(activeIndex-1+items.length)%items.length; activate(items) }
@@ -499,7 +514,8 @@
 
     S("#form").addEventListener("submit",async e=>{ e.preventDefault(); await searchNow(q.value); hideSuggest(true) });
 
-    // Quick actions (Menu)
+    closeSuggestBtn?.addEventListener("click",()=>hideSuggest(true));
+
     quickNear.onclick=locate;
     quickClear.onclick=()=>{ q.value=""; searchPlaces(""); q.focus() };
 
@@ -513,7 +529,6 @@
     openBtn.onclick=()=>window.open(osmViewURL(state), "_blank");
     openGmapsBtn.onclick=()=>window.open(gmapsURL(state), "_blank");
 
-    // Pins
     const loadPins=()=>{ try{ return JSON.parse(localStorage.getItem(LS_PINS)||"[]") }catch{ return [] } };
     const savePins=(pins)=>{ localStorage.setItem(LS_PINS, JSON.stringify(pins.slice(0,100))) };
     const renderPins=()=>{
@@ -540,19 +555,18 @@
     showpins.onclick=()=>{ renderPins(); pinsPane.style.display="block" };
     closepins.onclick=()=>{ pinsPane.style.display="none" };
 
-    // Panels
     menuBtn.onclick=()=>{ if(isDesktop()) return; menu.style.display="block" };
     closeMenu.onclick=()=>{ menu.style.display="none" };
     opensettings.onclick=()=>{ if(isDesktop()) return; settings.style.display="block" };
     closesettings.onclick=()=>{ settings.style.display="none" };
 
-    // Prefs -> UI
     toggleCoords.checked = !!prefs.showCoords;
     coordsEl.style.display = prefs.showCoords ? "block" : "none";
     coordFmtEl.value = prefs.coordFmt || "dec";
     coordPrecEl.value = prefs.prec ?? 6;
     coordPrecVal.textContent = String(prefs.prec ?? 6);
     themeModeEl.value = prefs.theme || "auto";
+    proModeEl.checked = !!prefs.pro;
 
     autoFollowEl.checked = !!prefs.autoFollow;
     shareDeltaEl.checked = prefs.includeDelta!==false;
@@ -578,7 +592,6 @@
       b.onclick=()=>{ const t=b.getAttribute("data-t"); const sec=document.querySelector(`.settings .section[data-sec="${t}"]`); sec.style.display=sec.style.display==="block"?"none":"block" }
     });
 
-    // Pref listeners
     markerVisibleEl.onchange=()=>{ markerEl.classList.toggle("hidden", !markerVisibleEl.checked); prefs.markerHidden = !markerVisibleEl.checked; savePrefs() };
     markerSizeEl.oninput=()=>{ document.documentElement.style.setProperty("--marker-size", markerSizeEl.value+"px"); markerSizeVal.textContent=markerSizeEl.value+"px"; prefs.markerSize=+markerSizeEl.value; savePrefs() };
     markerColorEl.oninput=()=>{ document.documentElement.style.setProperty("--marker-color", markerColorEl.value); prefs.markerColor=markerColorEl.value; savePrefs() };
@@ -593,6 +606,7 @@
     shareDeltaEl.onchange=()=>{ prefs.includeDelta = shareDeltaEl.checked; savePrefs() };
     confirmDeleteEl.onchange=()=>{ prefs.confirmDelete = confirmDeleteEl.checked; savePrefs() };
     themeModeEl.onchange=()=>{ prefs.theme = themeModeEl.value; applyTheme(prefs.theme); savePrefs() };
+    proModeEl.onchange=()=>{ prefs.pro = proModeEl.checked; applyPro(prefs.pro); savePrefs() };
 
     accentColorEl.oninput=()=>{ setAccent(accentColorEl.value); prefs.accent=accentColorEl.value; savePrefs() };
     accentResetEl.onclick=()=>{ const def="#0ea5e9"; accentColorEl.value=def; setAccent(def); prefs.accent=def; savePrefs() };
@@ -610,6 +624,7 @@
       if(e.key.toLowerCase()==="2"){ e.preventDefault(); setLayer("cyclemap") }
       if(e.key.toLowerCase()==="3"){ e.preventDefault(); setLayer("transportmap") }
       if(e.key.toLowerCase()==="4"){ e.preventDefault(); setLayer("hot") }
+      if(e.key==="/"){ e.preventDefault(); q.focus() }
       if(e.key==="Escape"){ menu.style.display="none"; settings.style.display="none"; pinsPane.style.display="none"; hideSuggest(true) }
     });
 
@@ -631,18 +646,28 @@
       applyMarkerStyle(prefs.markerStyle||"dot");
       setAccent(prefs.accent||"#0ea5e9");
       applyTheme(prefs.theme||"auto");
+      applyPro(!!prefs.pro);
     }
     function applyMarkerStyle(style){ markerEl.classList.toggle("crosshair", style==="crosshair") }
     function setAccent(hex){ document.documentElement.style.setProperty("--accent",hex); themeColorMeta?.setAttribute("content",hex) }
 
-    // Theme (no heavy theming—just hint)
     function applyTheme(mode){
       if(mode==="dark"){ document.documentElement.style.colorScheme="dark" }
       else if(mode==="light"){ document.documentElement.style.colorScheme="light" }
-      else { document.documentElement.style.colorScheme="" } // auto
+      else { document.documentElement.style.colorScheme="" }
     }
 
-    // PWA manifest (runtime-injected, no service worker)
+    function applyPro(on){
+      document.body.classList.toggle("pro", !!on);
+      if(on){
+        coordsEl.style.display = "block";
+        prefs.showCoords = true;
+        toggleCoords.checked = true;
+      }else{
+        coordsEl.style.display = prefs.showCoords ? "block" : "none";
+      }
+    }
+
     (function injectManifest(){
       const manifest={
         name:"PokeMaps Public Beta",
@@ -651,9 +676,7 @@
         display:"standalone",
         background_color:"#000000",
         theme_color:getComputedStyle(document.documentElement).getPropertyValue("--accent").trim() || "#0ea5e9",
-        icons:[
-          { src:"/css/yt-ukraine.svg", sizes:"any", type:"image/svg+xml", purpose:"any" }
-        ]
+        icons:[{ src:"/css/yt-ukraine.svg", sizes:"any", type:"image/svg+xml", purpose:"any" }]
       };
       const blob=new Blob([JSON.stringify(manifest)],{type:"application/manifest+json"});
       const url=URL.createObjectURL(blob);
@@ -662,91 +685,103 @@
       document.head.appendChild(link);
     })();
 
-    // Custom CSS injector
     function applyUserCSS(css){
       let tag=document.getElementById("user-css");
       if(!tag){ tag=document.createElement("style"); tag.id="user-css"; document.head.appendChild(tag) }
       tag.textContent=css||"";
     }
 
-    // Init navigation
     parseURL(); apply(false);
     const urlHasLat = new URLSearchParams(location.search).has("lat");
     if(!urlHasLat){ locate() }
     if(prefs.autoFollow) startFollow();
 
-    // Desktop sidebar
-    if(isDesktop()) buildDesktopSidebar();
-    function buildDesktopSidebar(){
-      const side=document.createElement("div"); side.className="sidebar";
-      side.innerHTML=`
-        <div class="sidegroup">
-          <header>Layers</header>
+    if(isDesktop()) ensureDesktopPanel();
+
+    function ensureDesktopPanel(){
+      if(document.querySelector(".left")) return;
+      const left=document.createElement("aside"); left.className="left";
+      left.innerHTML=`
+        <div class="left-head">
+          <button class="iconbtn" id="toggleMini" title="Collapse/Expand">⟷</button>
+          <strong>PokeMaps</strong>
+          <button class="iconbtn" id="openSettingsDesk" title="Settings">⚙</button>
+        </div>
+        <div class="group">
+          <h4 class="label-hide">Layers</h4>
           <div class="row"><select class="select" id="d_layer">
             <option value="mapnik">Standard</option>
             <option value="cyclemap">Cycle</option>
             <option value="transportmap">Transport</option>
             <option value="hot">Humanitarian</option>
           </select></div>
-          <div class="row"><button class="iconbtn" id="d_openosm">Open in OSM</button><button class="iconbtn" id="d_copy">Copy Link</button></div>
+          <div class="row">
+            <button class="iconbtn" id="d_copy" title="Copy link">📋</button>
+            <button class="iconbtn" id="d_openosm" title="Open in OSM">🌐</button>
+            <button class="iconbtn" id="d_gmaps" title="Open in Google Maps">🛰️</button>
+          </div>
         </div>
-        <div class="sidegroup">
-          <header>Location</header>
-          <div class="row"><label><input type="checkbox" id="d_autofollow"> Auto-follow on load</label></div>
-          <div class="row"><button class="iconbtn" id="d_locate">Locate</button><button class="iconbtn" id="d_follow">Follow</button></div>
-          <div class="row"><button class="iconbtn" id="d_reset">Reset</button><button class="iconbtn" id="d_share">Share</button></div>
-          <div class="row"><button class="iconbtn" id="d_near">Near me</button><button class="iconbtn" id="d_clear">Clear search</button></div>
+        <div class="group">
+          <h4 class="label-hide">Location</h4>
+          <div class="row"><button class="iconbtn" id="d_locate">📍 Locate</button><button class="iconbtn" id="d_follow">🛰️ Follow</button></div>
+          <div class="row"><button class="iconbtn" id="d_reset">🔁 Reset</button><button class="iconbtn" id="d_share">🔗 Share</button></div>
+          <div class="row"><button class="iconbtn" id="d_near">Near me</button><button class="iconbtn" id="d_clear">Clear</button></div>
         </div>
-        <div class="sidegroup">
-          <header>Marker</header>
-          <div class="row"><label>Visible</label><input type="checkbox" id="d_markerv"></div>
-          <div class="row"><label>Style</label><select class="select" id="d_style"><option value="dot">Dot</option><option value="crosshair">Crosshair</option></select></div>
-          <div class="row"><label>Size</label><input type="range" id="d_ms" min="8" max="64"><span id="d_msv"></span></div>
-          <div class="row"><label>Color</label><input type="color" id="d_mc"></div>
-          <div class="row"><label>Glow</label><input type="checkbox" id="d_mr"></div>
-          <div class="row"><label>Ring width</label><input type="range" id="d_rw" min="0" max="16"><span id="d_rwv"></span></div>
+        <div class="group">
+          <h4 class="label-hide">Marker</h4>
+          <div class="row"><label class="label-hide">Visible</label><input type="checkbox" id="d_markerv"></div>
+          <div class="row"><select class="select" id="d_style"><option value="dot">Dot</option><option value="crosshair">Crosshair</option></select></div>
+          <div class="row"><input type="range" id="d_ms" min="8" max="64"><span id="d_msv" class="label-hide"></span></div>
+          <div class="row"><input type="color" id="d_mc"></div>
+          <div class="row"><input type="checkbox" id="d_mr"> <span class="label-hide">Glow</span></div>
+          <div class="row"><input type="range" id="d_rw" min="0" max="16"><span id="d_rwv" class="label-hide"></span></div>
         </div>
-        <div class="sidegroup">
-          <header>Coordinates</header>
-          <div class="row"><label>Always show</label><input type="checkbox" id="d_showc"></div>
-          <div class="row"><select class="select" id="d_fmt"><option value="dec">DD (Decimal)</option><option value="dms">DMS</option></select><button class="iconbtn" id="d_copyc">Copy</button></div>
-          <div class="row"><label>Precision</label><input type="range" id="d_prec" min="0" max="8"><span id="d_precv"></span></div>
+        <div class="group">
+          <h4 class="label-hide">Coords</h4>
+          <div class="row"><input type="checkbox" id="d_showc"> <span class="label-hide">Always show</span></div>
+          <div class="row"><select class="select" id="d_fmt"><option value="dec">DD</option><option value="dms">DMS</option></select><button class="iconbtn" id="d_copyc">📐</button></div>
+          <div class="row"><input type="range" id="d_prec" min="0" max="8"><span id="d_precv" class="label-hide"></span></div>
         </div>
-        <div class="sidegroup">
-          <header>Links</header>
-          <div class="row"><button class="iconbtn" id="d_gmaps">Google Maps (not recommended)</button></div>
+        <div class="group">
+          <h4 class="label-hide">Pins</h4>
+          <div class="row"><button class="iconbtn" id="d_pins">📒 Pins</button><button class="iconbtn" id="d_save">⭐ Save</button></div>
         </div>
-        <div class="sidegroup">
-          <header>About</header>
-          <div class="row"><small>Powered by openstreetmap.org • Data © OSM contributors • Public Beta</small></div>
+        <div class="group">
+          <h4 class="label-hide">Pro</h4>
+          <div class="row"><button class="iconbtn" id="d_pro">${prefs.pro?"Pro: ON":"Pro: OFF"}</button></div>
         </div>
       `;
-      document.body.appendChild(side);
+      document.body.appendChild(left);
 
-      const d_layer=side.querySelector("#d_layer");
-      side.querySelector("#d_openosm").onclick=()=>window.open(osmViewURL(state),"_blank");
-      side.querySelector("#d_copy").onclick=copyLink;
-      side.querySelector("#d_locate").onclick=locate;
-      side.querySelector("#d_follow").onclick=toggleFollow;
-      side.querySelector("#d_reset").onclick=reset;
-      side.querySelector("#d_share").onclick=shareLink;
-      side.querySelector("#d_near").onclick=locate;
-      side.querySelector("#d_clear").onclick=()=>{ q.value=""; q.focus(); searchPlaces("") };
-      side.querySelector("#d_gmaps").onclick=()=>window.open(gmapsURL(state), "_blank");
-      d_layer.value=state.layer;
-      d_layer.onchange=()=>setLayer(d_layer.value);
+      const toggleMini=left.querySelector("#toggleMini");
+      const openSettingsDesk=left.querySelector("#openSettingsDesk");
+      const d_layer=left.querySelector("#d_layer");
+      left.querySelector("#d_openosm").onclick=()=>window.open(osmViewURL(state),"_blank");
+      left.querySelector("#d_copy").onclick=copyLink;
+      left.querySelector("#d_locate").onclick=locate;
+      left.querySelector("#d_follow").onclick=toggleFollow;
+      left.querySelector("#d_reset").onclick=reset;
+      left.querySelector("#d_share").onclick=shareLink;
+      left.querySelector("#d_near").onclick=locate;
+      left.querySelector("#d_clear").onclick=()=>{ q.value=""; q.focus(); searchPlaces("") };
+      left.querySelector("#d_gmaps").onclick=()=>window.open(gmapsURL(state), "_blank");
+      left.querySelector("#d_copyc").onclick=copyCoords;
+      left.querySelector("#d_pins").onclick=()=>{ renderPins(); pinsPane.style.display="block" };
+      left.querySelector("#d_save").onclick=()=>savepin.click();
 
-      const d_markerv=side.querySelector("#d_markerv");
-      const d_style=side.querySelector("#d_style");
-      const d_ms=side.querySelector("#d_ms"), d_msv=side.querySelector("#d_msv");
-      const d_mc=side.querySelector("#d_mc");
-      const d_mr=side.querySelector("#d_mr");
-      const d_rw=side.querySelector("#d_rw"), d_rwv=side.querySelector("#d_rwv");
-      const d_showc=side.querySelector("#d_showc");
-      const d_fmt=side.querySelector("#d_fmt");
-      const d_copyc=side.querySelector("#d_copyc");
-      const d_autofollow=side.querySelector("#d_autofollow");
-      const d_prec=side.querySelector("#d_prec"), d_precv=side.querySelector("#d_precv");
+      const d_markerv=left.querySelector("#d_markerv");
+      const d_style=left.querySelector("#d_style");
+      const d_ms=left.querySelector("#d_ms"), d_msv=left.querySelector("#d_msv");
+      const d_mc=left.querySelector("#d_mc");
+      const d_mr=left.querySelector("#d_mr");
+      const d_rw=left.querySelector("#d_rw"), d_rwv=left.querySelector("#d_rwv");
+      const d_showc=left.querySelector("#d_showc");
+      const d_fmt=left.querySelector("#d_fmt");
+      const d_autofollow=null;
+      const d_prec=left.querySelector("#d_prec"), d_precv=left.querySelector("#d_precv");
+      const d_pro=left.querySelector("#d_pro");
+
+      d_layer.value=state.layer; d_layer.onchange=()=>setLayer(d_layer.value);
 
       d_markerv.checked=!prefs.markerHidden;
       d_style.value=prefs.markerStyle||"dot";
@@ -756,7 +791,6 @@
       d_rw.value=ringWidthEl.value; d_rwv.textContent=d_rw.value+"px";
       d_showc.checked=!!prefs.showCoords;
       d_fmt.value=prefs.coordFmt||"dec";
-      d_autofollow.checked=!!prefs.autoFollow;
       d_prec.value=prefs.prec??6; d_precv.textContent=String(prefs.prec??6);
 
       d_markerv.onchange=()=>{ markerVisibleEl.checked=d_markerv.checked; markerVisibleEl.onchange() };
@@ -767,53 +801,19 @@
       d_rw.oninput=()=>{ ringWidthEl.value=d_rw.value; ringWidthEl.oninput(); d_rwv.textContent=d_rw.value+"px" };
       d_showc.onchange=()=>{ toggleCoords.checked=d_showc.checked; toggleCoords.onchange() };
       d_fmt.onchange=()=>{ coordFmtEl.value=d_fmt.value; coordFmtEl.onchange() };
-      d_copyc.onclick=copyCoords;
-      d_autofollow.onchange=()=>{ autoFollowEl.checked=d_autofollow.checked; autoFollowEl.onchange() };
       d_prec.oninput=()=>{ coordPrecEl.value=d_prec.value; coordPrecEl.oninput(); d_precv.textContent=d_prec.value };
+
+      openSettingsDesk.onclick=()=>{ alert("Settings are simplified on desktop. Use left panel controls. Mobile modal settings remain available.") };
+
+      toggleMini.onclick=()=>{ left.classList.toggle("mini") };
+
+      d_pro.onclick=()=>{ prefs.pro = !prefs.pro; savePrefs(); applyPro(prefs.pro); d_pro.textContent = prefs.pro ? "Pro: ON" : "Pro: OFF" };
     }
 
-    function tickCoords(){ updateCoordsFast(); setTimeout(tickCoords,120) } // fast enough, less CPU
+    function tickCoords(){ updateCoordsFast(); setTimeout(tickCoords,120) }
     tickCoords();
-// Create floating X button above the search bar
-const bar = document.querySelector(".bar");
-if (bar) {
-  const closeSearch = document.createElement("button");
-  closeSearch.textContent = "✕";
-  closeSearch.title = "Close search";
-  closeSearch.style.position = "absolute";
-  closeSearch.style.top = "-10px";
-  closeSearch.style.right = "-10px";
-  closeSearch.style.background = "#222";
-  closeSearch.style.color = "#fff";
-  closeSearch.style.border = "1px solid #444";
-  closeSearch.style.borderRadius = "50%";
-  closeSearch.style.width = "28px";
-  closeSearch.style.height = "28px";
-  closeSearch.style.cursor = "pointer";
-  closeSearch.style.zIndex = "999";
 
-  // attach to search container
-  const searchDiv = document.querySelector(".search");
-  searchDiv.style.position = "relative";
-  searchDiv.appendChild(closeSearch);
-
-  closeSearch.addEventListener("click", () => {
-  
-    document.querySelector("#suggestions").style.display = "none";
-  });
-
-  // shortcut to re-open with `/`
-  document.addEventListener("keydown", e => {
-    if (e.key === "/") {
-      if (searchDiv.style.display === "none") {
-        searchDiv.style.display = "flex";
-        document.querySelector("#q").focus();
-        e.preventDefault();
-      }
-    }
-  });
-}
-  })();
+   })();
   </script>
   <script src="/static/data-mobile.js" defer></script>
 </body>

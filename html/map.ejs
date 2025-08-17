@@ -1,221 +1,197 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+  <meta charset="utf-8" />
   <title>PokeMaps Beta</title>
-  <link href="/css/yt-ukraine.svg" rel="icon" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <meta name="color-scheme" content="dark light" />
+  <link rel="icon" href="/css/yt-ukraine.svg" />
   <style>
-    div {
-      display: none;
+    :root{--vh:100vh;--pad:12px;--radius:14px;--fg:#fff;--bg:rgba(0,0,0,.6);--glass:blur(12px)}
+    *{box-sizing:border-box}
+    html,body{height:100%;margin:0}
+    body{background:#000;font:14px/1.4 ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Arial;color:var(--fg)}
+    .app{position:fixed;inset:0;display:grid;grid-template-rows:auto 1fr}
+    .bar{position:relative;z-index:5;display:flex;gap:8px;align-items:center;padding:8px var(--pad);backdrop-filter:var(--glass);-webkit-backdrop-filter:var(--glass);background:var(--bg)}
+    .search{position:relative;flex:1;min-width:0}
+    .search input{width:100%;padding:10px 12px;border-radius:10px;border:1px solid #333;background:#111;color:#fff;outline:none}
+    .suggest{position:absolute;top: calc(100% + 6px);left:0;right:0;max-height:42vh;overflow:auto;margin:0;padding:6px 0;list-style:none;border:1px solid #333;border-radius:10px;background:#0b0b0b;display:none}
+    .suggest li{padding:10px 12px;cursor:pointer;border-top:1px solid #111}
+    .suggest li:first-child{border-top:none}
+    .suggest li:active{background:#1a1a1a}
+    .btns{display:flex;gap:8px;white-space:nowrap}
+    .btn{border:0;border-radius:10px;background:#222;color:#fff;padding:10px 12px}
+    .mapwrap{position:relative;height:calc(var(--vh) - 56px);overflow:hidden}
+    iframe#map{position:absolute;inset:0;border:0;width:100%;height:100%}
+    .marker{position:absolute;left:50%;top:50%;width:20px;height:20px;border-radius:50%;transform:translate(-50%,-50%);background:#e53935;box-shadow:0 0 0 3px rgba(229,57,53,.35);z-index:3;pointer-events:none}
+    .brand{position:absolute;bottom:10px;left:10px;padding:6px 10px;font-size:18px;font-weight:600;background:var(--bg);backdrop-filter:var(--glass);-webkit-backdrop-filter:var(--glass);border-radius:10px;z-index:4;pointer-events:none}
+    .fab{position:fixed;right:16px;bottom:16px;z-index:6;width:56px;height:56px;border-radius:50%;border:0;background:#111;color:#fff;box-shadow:0 6px 18px rgba(0,0,0,.45);font-size:28px;line-height:0}
+    @media (min-width: 768px){
+      .bar{padding:10px 14px}
+      .brand{font-size:20px}
+    }
+    @media (prefers-reduced-motion: reduce){
+      *{animation:none !important;transition:none !important}
     }
   </style>
 </head>
 <body>
-  <p>
-    loading..... please wait lol
-  </p>
-  <iframe id="myFrame" style="width: 100%; height: 100%; top: 0px; bottom: 0px; left: 0px; right: 0px; position: fixed; border: none; margin: 0; padding: 0; overflow: auto;"></iframe>
- 
- 
-    <script type="text/javascript">
-<!--//--><![CDATA[//><!-- 
-/**
- * @licstart The following is the entire license notice for the JavaScript
- * code in this page.
- *
- *  Copyright (C) 2021-2025 POKETUBE (https://github.com/iamashley0/poketube)
- *
- * The JavaScript code in this page is free software: you can redistribute
- * it and/or modify it under the terms of the GNU General Public License
- * (GNU GPL) as published by the Free Software Foundation, either version 3
- * of the License, or (at your option) any later version.  The code is
- * distributed WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU GPL
- * for more details.
- *
- * As additional permission under GNU GPL version 3 section 7, you may
- * distribute non-source (e.g., minimized or compacted) forms of that code
- * without the copy of the GNU GPL normally required by section 4, provided
- * you include this license notice and a URL through which recipients can
- * access the Corresponding Source.
- *
- * @licend The above is the entire license notice for the JavaScript code
- * in this page.
- */
-
-//--><!]]>
-</script>
-<script>(function(){
-  const _0x5a3c=[
-    "P2Jib3g9LTE2NS43NjE3MTg3NTAwMDAwMyUyQy0zLjg2NDI1NDYxNTcyMTM5NiUyQzMwLjQxMDE1NjI1MDAwMDAwNCUyQzcyLjQ0ODc5MTU1NzMwNjcyJmxheWVyPW1hcG5paw==",
-    "aHR0cHM6Ly93d3cub3BlbnN0cmVldG1hcC5vcmcvZXhwb3J0L2VtYmVkLmh0bWw=",
-    "d3d3Lm9wZW5zdHJlZXRtYXAub3Jn"
-  ];
-
-  function _0x99f2(i){ return atob(_0x5a3c[i]); }
-
-  function updateMap(lat, lon) {
-    const delta = 0.25;
-    const bbox = `?bbox=${lon-delta},${lat-delta},${lon+delta},${lat+delta}&layer=mapnik`;
-    const newURL = _0x99f2(1) + bbox;
-    const iframe = document.querySelector('iframe');
-    if (iframe) {
-      iframe.src = newURL;
-      window.history.pushState({}, '', newURL);
-    }
-    const marker = document.getElementById('map-marker');
-    if (marker) marker.remove();
-    const newMarker = document.createElement('div');
-    newMarker.id = 'map-marker';
-    newMarker.style = 'position:absolute;width:20px;height:20px;background:red;border-radius:50%;transform:translate(-50%,-50%);z-index:9998;pointer-events:none;left:50%;top:50%';
-    document.body.appendChild(newMarker);
-  }
-
-  function copyCoordinates() {
-    const marker = document.getElementById('map-marker');
-    if (!marker) return alert('No coordinates to copy.');
-    navigator.clipboard.writeText(window.location.href).then(() => {
-      alert('Current map link copied to clipboard!');
-    });
-  }
-
-  function locateAndUpdate() {
-    if (!navigator.geolocation) {
-      alert('Geolocation is not supported by your browser.');
-      return;
-    }
-    navigator.geolocation.getCurrentPosition(
-      pos => {
-        updateMap(pos.coords.latitude, pos.coords.longitude);
-      },
-      err => {
-        alert('Unable to retrieve location: ' + err.message);
-      },
-      { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
-    );
-  }
-
-  function _0x4f2a(){
-    const bbox = _0x99f2(0);
-    const base = _0x99f2(1);
-    const url = base + bbox;
-    const iframe = document.querySelector('iframe');
-    if (!iframe) return setTimeout(_0x4f2a, 100);
-    iframe.src = url;
-
-    iframe.addEventListener('load',()=>{
-      try {
-        const doc = iframe.contentDocument || iframe.contentWindow.document;
-        Array.from(doc.querySelectorAll('a')).forEach(a=>a.addEventListener('click',_linkHandler));
-        Array.from(doc.querySelectorAll('*')).forEach(el=>{
-          const bg = el.style.backgroundImage;
-          if(bg.includes('//dka575ofm4ao0.cloudfront.net')){
-            el.style.backgroundImage = bg.replace(/\/\/dka575ofm4ao0\.cloudfront\.net/g,
-              m=>`https://p.poketube.fun/https://dka575ofm4ao0.cloudfront.net`);
-          }
-        });
-      } catch(e) {
-        console.warn('Cross-origin access denied, skipping DOM manipulation.');
-      }
-    });
-
-    window.history = new Proxy(window.history,{
-      get(target, prop){
-        if(prop === 'pushState') return (...args)=>{
-          const iframe = document.querySelector('iframe');
-          if(iframe && args[2]) iframe.src = args[2];
-          return target.pushState.apply(target, args);
-        };
-        return Reflect.get(target, prop);
-      }
-    });
-
-    window.addEventListener('popstate',()=>{
-      const iframe = document.querySelector('iframe');
-      if (iframe) iframe.src = location.href;
-    });
-  }
-
-  function _linkHandler(e){
-    const h = e.target.href;
-    const iframe = document.querySelector('iframe');
-    if(!iframe) return;
-    if(h.includes(_0x99f2(2))){
-      e.preventDefault();
-      iframe.src = h;
-      window.history.pushState({}, '', h);
-    } else {
-      window.location.href = h;
-    }
-  }
-
-  const form = document.createElement('form');
-  form.style = 'position:absolute;top:10px;right:10px;z-index:9999;background:rgba(0,0,0,0.5);backdrop-filter:blur(12px);padding:10px 12px;border-radius:12px;box-shadow:0 4px 10px rgba(0,0,0,0.4);font-family:sans-serif;min-width:220px;';
-  form.innerHTML = `
-    <input id="searchBox" type="text" placeholder="Search..." style="padding:6px 10px;width:180px;font-size:14px;border:1px solid #444;border-radius:6px;background:#222;color:#fff">
-    <ul id="suggestions" style="list-style:none;margin:6px 0 0;padding:0;max-height:180px;overflow:auto;background:#111;border:1px solid #333;border-radius:6px;display:none;position:relative;z-index:10000;color:#fff;"></ul>
-    <div style="margin-top:10px;display:flex;gap:6px;flex-wrap:wrap">
-      <button id="locate-btn" type="button" style="flex:1;padding:4px 6px;font-size:12px;background:#333;color:#fff;border:none;border-radius:6px">📍 Locate</button>
-      <button type="button" style="flex:1;padding:4px 6px;font-size:12px;background:#333;color:#fff;border:none;border-radius:6px" onclick="copyCoordinates()">📋 Copy</button>
-      <button type="button" style="flex:1;padding:4px 6px;font-size:12px;background:#333;color:#fff;border:none;border-radius:6px" onclick="location.reload()">🔁 Reset</button>
+  <div class="app" id="app">
+    <div class="bar">
+      <div class="search">
+        <form id="form" autocomplete="off">
+          <input id="q" type="text" inputmode="search" placeholder="Search places…" aria-autocomplete="list" aria-expanded="false" aria-controls="suggestions" />
+        </form>
+        <ul id="suggestions" class="suggest" role="listbox"></ul>
+      </div>
+      <div class="btns">
+        <button class="btn" id="locate" type="button">📍 Locate</button>
+        <button class="btn" id="copy" type="button">📋 Copy</button>
+        <button class="btn" id="reset" type="button">🔁 Reset</button>
+      </div>
     </div>
-  `;
 
-  document.body.appendChild(form);
-  document.getElementById('locate-btn').addEventListener('click', locateAndUpdate);
+    <div class="mapwrap" id="mapwrap">
+      <iframe id="map" title="Map"></iframe>
+      <div class="marker" aria-hidden="true"></div>
+      <div class="brand">PokeMaps</div>
+    </div>
+  </div>
 
-  const input = form.querySelector('#searchBox');
-  const suggestions = form.querySelector('#suggestions');
+  <button class="fab" id="fab" title="More Tools">+</button>
 
-  input.addEventListener('input', () => {
-    const query = input.value.trim();
-    if (!query) return suggestions.style.display = 'none';
-    fetch(`https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(query)}&format=json&limit=5`)
-      .then(res => res.json())
-      .then(data => {
-        suggestions.innerHTML = '';
-        data.forEach(place => {
-          const li = document.createElement('li');
-          li.textContent = place.display_name;
-          li.style = 'padding:6px 10px;cursor:pointer;border-bottom:1px solid #222;font-size:13px;background:#111';
-          li.addEventListener('click', () => {
-            input.value = place.display_name;
-            suggestions.style.display = 'none';
-            updateMap(parseFloat(place.lat), parseFloat(place.lon));
-          });
-          suggestions.appendChild(li);
-        });
-        suggestions.style.display = 'block';
-      });
-  });
+  <script>
+    ;(()=> {
+      const OSM_EMBED="https://www.openstreetmap.org/export/embed.html"
+      const OSM_HOST="www.openstreetmap.org"
+      const NOMINATIM="https://nominatim.openstreetmap.org/search"
+      const LAYER="mapnik"
+      const DEFAULT={lat:30.41015625,lon:72.44879155730672,delta:.25}
+      const S=sel=>document.querySelector(sel)
+      const map=S("#map"), wrap=S("#mapwrap"), q=S("#q"), sug=S("#suggestions")
+      const locateBtn=S("#locate"), copyBtn=S("#copy"), resetBtn=S("#reset"), fab=S("#fab")
+      let aborter=null, lastQuery="", state={lat:DEFAULT.lat,lon:DEFAULT.lon,delta:DEFAULT.delta}
 
-  form.addEventListener('submit', e => {
-    e.preventDefault();
-    const q = input.value.trim();
-    if(!q) return;
-    fetch(`https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(q)}&format=json&limit=1`)
-      .then(res => res.json())
-      .then(data => {
-        if(data[0]){
-          updateMap(parseFloat(data[0].lat), parseFloat(data[0].lon));
+      const setVH=()=>{const vh=window.innerHeight*0.01;document.documentElement.style.setProperty("--vh",`${vh*100}px`)}
+      setVH(); addEventListener("resize",()=>{setVH()},{passive:true})
+
+      const clamp=(n,min,max)=>Math.min(Math.max(n,min),max)
+      const cleanStr=s=>s.replace(/\s+/g," ").trim()
+      const bboxFrom=(lat,lon,d)=>({
+        left:(lon-d).toFixed(6),
+        bottom:(lat-d).toFixed(6),
+        right:(lon+d).toFixed(6),
+        top:(lat+d).toFixed(6)
+      })
+      const embedURL=({lat,lon,delta})=>{
+        const b=bboxFrom(lat,lon,delta)
+        return `${OSM_EMBED}?bbox=${b.left}%2C${b.bottom}%2C${b.right}%2C${b.top}&layer=${encodeURIComponent(LAYER)}`
+      }
+      const appURL=({lat,lon,delta})=>{
+        const p=new URLSearchParams({lat:lat.toFixed(6),lon:lon.toFixed(6),delta:delta.toFixed(4)})
+        return `${location.origin}${location.pathname}?${p.toString()}`
+      }
+      const parseURL=()=>{
+        const sp=new URLSearchParams(location.search)
+        const lat=parseFloat(sp.get("lat")), lon=parseFloat(sp.get("lon")), delta=parseFloat(sp.get("delta"))
+        if(Number.isFinite(lat)&&Number.isFinite(lon)) state.lat=clamp(lat,-90,90), state.lon=clamp(lon,-180,180)
+        if(Number.isFinite(delta)&&delta>0&&delta<45) state.delta=delta
+      }
+
+      const apply=push=>{
+        map.src=embedURL(state)
+        if(push) history.pushState(state,"",appURL(state))
+      }
+
+      const centerOn=(lat,lon,{push=true}={})=>{
+        state.lat=clamp(lat,-90,90)
+        state.lon=clamp(lon,-180,180)
+        apply(push)
+      }
+
+      const reset=()=>{
+        state={...DEFAULT}
+        q.value=""
+        sug.style.display="none"; q.setAttribute("aria-expanded","false")
+        apply(true)
+      }
+
+      const copyLink=async()=>{
+        try{
+          await navigator.clipboard.writeText(appURL(state))
+          alert("Map link copied!")
+        }catch{ alert("Could not copy.")}
+      }
+
+      const locate=()=>{
+        if(!("geolocation" in navigator)){ alert("Geolocation not supported."); return }
+        navigator.geolocation.getCurrentPosition(
+          pos=>centerOn(pos.coords.latitude,pos.coords.longitude,{push:true}),
+          err=>alert("Unable to retrieve location: "+err.message),
+          {enableHighAccuracy:true,timeout:10000,maximumAge:0}
+        )
+      }
+
+      const debounced=(fn,ms=250)=>{let t;return(...a)=>{clearTimeout(t);t=setTimeout(()=>fn(...a),ms)}}
+      const searchPlaces=debounced(async term=>{
+        term=cleanStr(term); if(!term){sug.style.display="none"; q.setAttribute("aria-expanded","false"); return}
+        if(aborter) aborter.abort()
+        aborter=new AbortController()
+        try{
+          const url=`${NOMINATIM}?q=${encodeURIComponent(term)}&format=json&limit=7&addressdetails=0&accept-language=en`
+          const r=await fetch(url,{signal:aborter.signal,headers:{}}) 
+          if(!r.ok) throw new Error("HTTP "+r.status)
+          const data=await r.json()
+          sug.innerHTML=""
+          data.forEach((p,i)=>{
+            const li=document.createElement("li")
+            li.role="option"; li.id="opt"+i
+            li.textContent=p.display_name
+            li.onclick=()=>{ q.value=p.display_name; sug.style.display="none"; q.setAttribute("aria-expanded","false"); centerOn(parseFloat(p.lat),parseFloat(p.lon),{push:true}) }
+            sug.appendChild(li)
+          })
+          sug.style.display=data.length?"block":"none"; q.setAttribute("aria-expanded", String(!!data.length))
+        }catch(e){
+          if(e.name!=="AbortError"){ sug.style.display="none"; q.setAttribute("aria-expanded","false") }
         }
-      });
-  });
+      },200)
 
-  const fab = document.createElement('button');
-  fab.textContent = '+';
-  fab.style = 'position:fixed;bottom:20px;right:20px;width:48px;height:48px;font-size:24px;background:#111;color:#fff;border:none;border-radius:50%;box-shadow:0 2px 10px rgba(0,0,0,0.4);cursor:pointer;z-index:9999';
-  fab.title = 'More Tools';
-  fab.onclick = () => alert('More features coming soon!');
-  document.body.appendChild(fab);
+      q.addEventListener("input",e=>{
+        const v=e.target.value
+        if(v===lastQuery) return
+        lastQuery=v
+        searchPlaces(v)
+      },{passive:true})
 
-  const branding = document.createElement('div');
-  branding.textContent = 'PokeMaps';
-  branding.style = 'position: absolute; bottom: 10px; left: 10px; padding: 6px 10px; font-size: 31px; font-weight: 500; background: rgba(0, 0, 0, 0.6); color: white; border-radius: 6px; font-family: sans-serif; backdrop-filter: blur(6px); z-index: 9999; pointer-events: none;display: block;';
-  document.body.appendChild(branding);
+      S("#form").addEventListener("submit",async e=>{
+        e.preventDefault()
+        const term=cleanStr(q.value); if(!term) return
+        try{
+          const r=await fetch(`${NOMINATIM}?q=${encodeURIComponent(term)}&format=json&limit=1`)
+          const d=await r.json()
+          if(d[0]) centerOn(parseFloat(d[0].lat),parseFloat(d[0].lon),{push:true})
+        }catch{}
+      })
 
-  _0x4f2a();
-})();
+      locateBtn.onclick=locate
+      copyBtn.onclick=copyLink
+      resetBtn.onclick=reset
+      fab.onclick=()=>alert("More features coming soon!")
 
-</script><script src="/static/data-mobile.js"></script>
+      addEventListener("popstate",e=>{
+        if(e.state && typeof e.state.lat==="number"){ state=e.state; apply(false) }
+        else { parseURL(); apply(false) }
+      })
+
+      addEventListener("click",e=>{
+        const t=e.target
+        if(t.tagName==="A" && t.href.includes(OSM_HOST)){ e.preventDefault(); map.src=t.href; history.pushState(state,"",t.href) }
+      },{capture:true})
+
+      parseURL(); apply(false)
+    })();
+  </script>
+
+  <script src="/static/data-mobile.js" defer></script>
 </body>
 </html>

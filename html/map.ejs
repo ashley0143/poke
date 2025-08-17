@@ -17,11 +17,12 @@
     body{background:#000;font:14px/1.4 ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Arial;color:var(--fg)}
     .app{position:fixed;inset:0;display:grid;grid-template-rows:auto 1fr}
     .bar{position:relative;z-index:5;display:flex;gap:8px;align-items:center;padding:8px var(--pad);
-      backdrop-filter:var(--glass);-webkit-backdrop-filter:var(--glass);background:var(--bg)}
+      backdrop-filter:var(--glass);-webkit-backdrop-filter:var(--glass);background:var(--bg);
+      overflow:visible} /* ensure suggestions can overflow the bar */
     .search{position:relative;flex:1;min-width:0}
     .search input{width:100%;padding:12px 14px;border-radius:12px;border:1px solid #333;background:#0b0b0b;color:#fff;outline:none}
     .search input:focus{border-color:#444;box-shadow:0 0 0 3px rgba(14,165,233,.15)}
-    .suggest{position:absolute;top: calc(100% + 6px);left:0;right:0;max-height:42vh;overflow:auto;margin:0;padding:6px 0;list-style:none;border:1px solid #333;border-radius:12px;background:#0b0b0b;display:none}
+    .suggest{position:absolute;top: calc(100% + 6px);left:0;right:0;max-height:42vh;overflow:auto;margin:0;padding:6px 0;list-style:none;border:1px solid #333;border-radius:12px;background:#0b0b0b;display:none;z-index:9999} /* on top of everything */
     .suggest li{padding:10px 12px;cursor:pointer;border-top:1px solid #111;display:flex;gap:8px;align-items:center}
     .suggest li:first-child{border-top:none}
     .suggest li.active{background:#141414}
@@ -102,7 +103,7 @@
     .desktop .menu,.desktop .pins,.desktop .settings{display:none !important}
 
     @media (min-width:768px){ .bar{padding:10px 14px} .brand{font-size:20px} }
-    @media (prefers-reduced-motion:reduce){ *{animation:none !important;transition:none !important} }
+    @media (prefers-reduced-motion:reduce){ *{animation:none !important;transition:none !重要} }
   </style>
 </head>
 <body>
@@ -226,8 +227,8 @@
       <div class="section" data-sec="about">
         <div class="about">
           <p><strong>PokeMaps Public Beta</strong> is a lightweight map viewer designed for quick sharing of locations and simple pin management. This beta is still evolving; features and behavior may change at any time, and bugs are expected.</p>
-          <p><strong>Map credits:</strong> © <a href="https://www.openstreetmap.org/" target="_blank" rel="noopener">OpenStreetMap.org</a> contributors. Map tiles and data are provided by the OpenStreetMap community. “Powered by openstreetmap.org”.</p>
-          <p><strong>Disclaimer:</strong> The geographic data shown here is compiled from community-contributed sources and third-party services. Boundaries, names, designations, and tagging may be incomplete, outdated, or disputed. Displayed borders and labels do <em>not</em> imply endorsement or acceptance of any political status. The map does not reflect the politics of the Poke project nor the opinions of its contributors. Always verify critical information from multiple sources before making decisions.</p>
+          <p><strong>Map credits:</strong> © <a href="https://www.openstreetmap.org/" target="_blank" rel="noopener">OpenStreetMap.org</a> contributors. Map tiles and data are provided by the OpenStreetMap community. Powered by openstreetmap.org.</p>
+          <p><strong>Disclaimer:</strong> The geographic data shown here is compiled from community-contributed sources and third-party services. Boundaries, names, designations, and tagging may be incomplete, outdated, or disputed. Displayed borders and labels do <em>not</em> imply endorsement or acceptance of any political status. The map does not reflect the politics of the Poke project nor the opinions of the contributors. Always verify critical information from multiple sources before making decisions.</p>
           <p><strong>Privacy & usage:</strong> Location features depend on your browser’s permissions. Geocoding/search is performed via public OSM services and is subject to their rate limits and policies.</p>
           <p><strong>Feedback:</strong> Since this is a beta, user feedback helps shape the roadmap. If something breaks, resets, or behaves oddly, that’s expected during Public Beta.</p>
         </div>
@@ -443,6 +444,9 @@
         const li=document.createElement("li")
         li.role="option"; li.id="opt"+i
         li.innerHTML=`<span class="pill">${it.type}</span><span class="txt">${highlight(it.label,term)}</span>`
+        // Use mousedown/touchstart so we select before the input blurs
+        li.onmousedown=(e)=>{ e.preventDefault(); chooseItem(it) }
+        li.ontouchstart=(e)=>{ e.preventDefault(); chooseItem(it) }
         li.onclick=()=> chooseItem(it)
         sug.appendChild(li)
       })
@@ -483,7 +487,7 @@
       const items=[...sug.querySelectorAll("li")]
       if(e.key==="ArrowDown"){ e.preventDefault(); activeIndex=(activeIndex+1)%items.length; activate(items) }
       if(e.key==="ArrowUp"){ e.preventDefault(); activeIndex=(activeIndex-1+items.length)%items.length; activate(items) }
-      if(e.key==="Enter"){ e.preventDefault(); if(activeIndex>=0) items[activeIndex].click(); else searchNow(q.value) }
+      if(e.key==="Enter"){ e.preventDefault(); if(activeIndex>=0) items[activeIndex].dispatchEvent(new Event('mousedown')); else searchNow(q.value) }
       if(e.key==="Escape"){ hideSuggest() }
     })
 

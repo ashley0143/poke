@@ -5,24 +5,24 @@
   <title>PokeMaps Public Beta</title>
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
   <meta name="color-scheme" content="dark light" />
+  <meta name="theme-color" content="#0ea5e9" id="themeColorMeta"/>
   <link rel="icon" href="/css/yt-ukraine.svg" />
   <style>
     :root{
       --vh:100vh;--pad:12px;--radius:14px;--fg:#fff;--bg:rgba(0,0,0,.6);--glass:blur(12px);
       --marker-size:20px;--marker-color:#e53935;--marker-ring:rgba(229,57,53,.35);--ring-width:3px;
-      --panel:rgba(0,0,0,.85);--accent:#0ea5e9;--chip:#111;--chipb:#222;--tip:#888
+      --panel:rgba(0,0,0,.85);--accent:#0ea5e9;--chip:#111;--chipb:#222;--tip:#888;
+      --surface:#0b0b0b;--border:#333
     }
     *{box-sizing:border-box}
     html,body{height:100%;margin:0}
-    body{background:#000;font:14px/1.4 ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Arial;color:var(--fg)}
+    body{background:#000;color:var(--fg);font:14px/1.4 ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Arial}
     .app{position:fixed;inset:0;display:grid;grid-template-rows:auto 1fr}
-    .bar{position:relative;z-index:5;display:flex;gap:8px;align-items:center;padding:8px var(--pad);
-      backdrop-filter:var(--glass);-webkit-backdrop-filter:var(--glass);background:var(--bg);
-      overflow:visible} /* ensure suggestions can overflow the bar */
+    .bar{position:relative;z-index:5;display:flex;gap:8px;align-items:center;padding:8px var(--pad);backdrop-filter:var(--glass);-webkit-backdrop-filter:var(--glass);background:var(--bg)}
     .search{position:relative;flex:1;min-width:0}
-    .search input{width:100%;padding:12px 14px;border-radius:12px;border:1px solid #333;background:#0b0b0b;color:#fff;outline:none}
-    .search input:focus{border-color:#444;box-shadow:0 0 0 3px rgba(14,165,233,.15)}
-    .suggest{position:absolute;top: calc(100% + 6px);left:0;right:0;max-height:42vh;overflow:auto;margin:0;padding:6px 0;list-style:none;border:1px solid #333;border-radius:12px;background:#0b0b0b;display:none;z-index:9999} /* on top of everything */
+    .search input{width:100%;padding:12px 14px;border-radius:12px;border:1px solid var(--border);background:var(--surface);color:#fff;outline:none}
+    .search input:focus{border-color:#444;box-shadow:0 0 0 3px color-mix(in oklab, var(--accent) 20%, transparent)}
+    .suggest{position:absolute;top:calc(100% + 6px);left:0;right:0;max-height:42vh;overflow:auto;margin:0;padding:6px 0;list-style:none;border:1px solid var(--border);border-radius:12px;background:var(--surface);display:none}
     .suggest li{padding:10px 12px;cursor:pointer;border-top:1px solid #111;display:flex;gap:8px;align-items:center}
     .suggest li:first-child{border-top:none}
     .suggest li.active{background:#141414}
@@ -31,79 +31,52 @@
     .iconbtn{border:0;border-radius:10px;background:#222;color:#fff;padding:10px 12px;min-width:44px}
     .mapwrap{position:relative;height:calc(var(--vh) - 56px);overflow:hidden}
     iframe#map{position:absolute;inset:0;border:0;width:100%;height:100%}
-    .marker{
-      position:absolute;left:50%;top:50%;
-      width:var(--marker-size);height:var(--marker-size);
-      border-radius:50%;transform:translate(-50%,-50%);
-      background:var(--marker-color);
-      box-shadow:0 0 0 var(--ring-width) var(--marker-ring);
-      z-index:3;pointer-events:none
-    }
+    .marker{position:absolute;left:50%;top:50%;width:var(--marker-size);height:var(--marker-size);border-radius:50%;transform:translate(-50%,-50%);background:var(--marker-color);box-shadow:0 0 0 var(--ring-width) var(--marker-ring);z-index:3;pointer-events:none}
     .marker.hidden{display:none}
     .marker.crosshair{background:transparent;border-radius:0;box-shadow:0 0 0 var(--ring-width) var(--marker-ring)}
-    .marker.crosshair::before,
-    .marker.crosshair::after{content:"";position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);background:var(--marker-color)}
+    .marker.crosshair::before,.marker.crosshair::after{content:"";position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);background:var(--marker-color)}
     .marker.crosshair::before{width:calc(var(--marker-size) * 1.6);height:2px}
     .marker.crosshair::after{width:2px;height:calc(var(--marker-size) * 1.6)}
-    .marker.crosshair .dot{display:none}
     .marker .dot{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:calc(var(--marker-size) * .35);height:calc(var(--marker-size) * .35);background:var(--marker-color);border-radius:50%}
-
-    .brand{position:absolute;bottom:10px;left:10px;padding:6px 10px;font-size:18px;font-weight:600;
-      background:var(--bg);backdrop-filter:var(--glass);-webkit-backdrop-filter:var(--glass);
-      border-radius:10px;z-index:4;pointer-events:none}
-
+    .brand{position:absolute;bottom:10px;left:10px;padding:6px 10px;font-size:18px;font-weight:600;background:var(--bg);backdrop-filter:var(--glass);-webkit-backdrop-filter:var(--glass);border-radius:10px;z-index:4;pointer-events:none}
     .dock{position:absolute;left:10px;bottom:52px;z-index:7;display:flex;flex-direction:column;gap:8px}
     .dock button{border:0;border-radius:10px;background:#111;color:#fff;padding:8px 10px}
-
-    .coords{position:absolute;bottom:10px;right:10px;z-index:5;padding:6px 10px;border-radius:10px;
-      background:var(--bg);backdrop-filter:var(--glass);-webkit-backdrop-filter:var(--glass);
-      border:1px solid #333;display:none;min-width:260px;text-align:right;
-      font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","DejaVu Sans Mono",monospace}
-
-    .menu{position:fixed;top:56px;right:10px;z-index:8;min-width:290px;max-width:92vw;
-      background:var(--panel);backdrop-filter:var(--glass);-webkit-backdrop-filter:var(--glass);
-      border:1px solid #333;border-radius:12px;display:none;overflow:hidden}
+    .coords{position:absolute;bottom:10px;right:10px;z-index:5;padding:6px 10px;border-radius:10px;background:var(--bg);backdrop-filter:var(--glass);-webkit-backdrop-filter:var(--glass);border:1px solid var(--border);display:none;min-width:260px;text-align:right;font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","DejaVu Sans Mono",monospace}
+    .menu{position:fixed;top:56px;right:10px;z-index:8;min-width:290px;max-width:92vw;background:var(--panel);backdrop-filter:var(--glass);-webkit-backdrop-filter:var(--glass);border:1px solid var(--border);border-radius:12px;display:none;overflow:hidden}
     .menu header{display:flex;justify-content:space-between;align-items:center;padding:10px 12px;border-bottom:1px solid #222}
     .menu .row{display:flex;gap:8px;align-items:center;padding:8px 12px;border-top:1px solid #111;flex-wrap:wrap}
     .menu .row:first-of-type{border-top:0}
     .menu .row button,.menu .row select,.menu .row input{flex:1}
-    .select{appearance:none;-webkit-appearance:none;border:1px solid #333;background:#111;color:#fff;border-radius:10px;padding:10px 12px}
-
-    .pins{position:fixed;left:10px;bottom:110px;z-index:8;min-width:260px;max-width:92vw;max-height:50vh;overflow:auto;background:var(--panel);backdrop-filter:var(--glass);-webkit-backdrop-filter:var(--glass);border:1px solid #333;border-radius:12px;display:none}
+    .select{appearance:none;-webkit-appearance:none;border:1px solid var(--border);background:#111;color:#fff;border-radius:10px;padding:10px 12px}
+    .pins{position:fixed;left:10px;bottom:110px;z-index:8;min-width:260px;max-width:92vw;max-height:50vh;overflow:auto;background:var(--panel);backdrop-filter:var(--glass);-webkit-backdrop-filter:var(--glass);border:1px solid var(--border);border-radius:12px;display:none}
     .pins header{display:flex;justify-content:space-between;align-items:center;padding:8px 10px;border-bottom:1px solid #222}
     .pins ul{list-style:none;margin:0;padding:0}
     .pins li{display:flex;flex-direction:column;gap:8px;padding:10px;border-top:1px solid #111}
-    .pins li:first-child{border-top:none}
     .pins .row{display:flex;gap:8px;flex-wrap:wrap}
     .tag{display:inline-block;font-size:12px;opacity:.8}
-
-    .settings{position:fixed;left:10px;bottom:110px;z-index:8;min-width:320px;max-width:92vw;background:var(--panel);backdrop-filter:var(--glass);-webkit-backdrop-filter:var(--glass);border:1px solid #333;border-radius:12px;display:none}
+    .settings{position:fixed;left:10px;bottom:110px;z-index:8;min-width:320px;max-width:92vw;background:var(--panel);backdrop-filter:var(--glass);-webkit-backdrop-filter:var(--glass);border:1px solid var(--border);border-radius:12px;display:none}
     .settings header{display:flex;justify-content:space-between;align-items:center;padding:8px 10px;border-bottom:1px solid #222}
     .settings .badge{font-size:11px;opacity:.8;border:1px solid #444;border-radius:999px;padding:2px 8px;margin-left:8px}
     .settings .group{border-top:1px solid #111}
-    .settings .group:first-of-type{border-top:0}
     .settings .ghead{display:flex;justify-content:space-between;align-items:center;padding:10px 12px}
-    .settings .ghead button{background:#111;border:1px solid #333;border-radius:8px;padding:6px 10px}
+    .settings .ghead button{background:#111;border:1px solid var(--border);border-radius:8px;padding:6px 10px}
     .settings .section{display:none;padding:10px 12px;border-top:1px solid #111}
     .settings .row{display:flex;gap:10px;align-items:center;padding:8px 0}
     .settings label{flex:1}
     .settings input[type="range"]{flex:1}
     .settings input[type="color"]{width:42px;height:32px;border:0;background:none}
+    .settings textarea{width:100%;min-height:120px;border-radius:10px;border:1px solid var(--border);background:#0a0a0a;color:#eee;padding:8px;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
     .settings .about{font-size:13px;opacity:.92;line-height:1.5}
-    .settings .about p{margin:8px 0}
-
     .desktop .bar{grid-column:2}
     .desktop .app{grid-template-columns:320px 1fr;grid-template-rows:auto 1fr}
-    .desktop .sidebar{position:fixed;left:0;top:0;bottom:0;width:320px;background:var(--panel);border-right:1px solid #333;display:flex;flex-direction:column;gap:10px;padding:12px;z-index:9}
+    .desktop .sidebar{position:fixed;left:0;top:0;bottom:0;width:320px;background:var(--panel);border-right:1px solid var(--border);display:flex;flex-direction:column;gap:10px;padding:12px;z-index:9}
     .desktop .sidegroup{border:1px solid #222;border-radius:12px;overflow:hidden}
     .desktop .sidegroup header{padding:10px 12px;border-bottom:1px solid #222;font-weight:600}
     .desktop .sidegroup .row{display:flex;gap:8px;align-items:center;padding:8px 12px;border-top:1px solid #111}
-    .desktop .sidegroup .row:first-of-type{border-top:0}
     .desktop .mapwrap{grid-column:2}
     .desktop .menu,.desktop .pins,.desktop .settings{display:none !important}
-
     @media (min-width:768px){ .bar{padding:10px 14px} .brand{font-size:20px} }
-    @media (prefers-reduced-motion:reduce){ *{animation:none !important;transition:none !重要} }
+    @media (prefers-reduced-motion:reduce){ *{animation:none !important;transition:none !important} }
   </style>
 </head>
 <body>
@@ -165,9 +138,13 @@
     </div>
 
     <div class="row">
-      <a class="iconbtn" id="osmTerms" href="https://wiki.osmfoundation.org/wiki/Terms_of_Use" target="_blank" rel="noopener">OSM Terms</a>
-      <a class="iconbtn" id="osmCopyright" href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">Copyright</a>
-      <a class="iconbtn" id="nominatimPolicy" href="https://operations.osmfoundation.org/policies/nominatim/" target="_blank" rel="noopener">Nominatim Policy</a>
+      <button class="iconbtn" id="openGmaps">🛰️ Google Maps (not recommended)</button>
+    </div>
+
+    <div class="row">
+      <a class="iconbtn" href="https://wiki.osmfoundation.org/wiki/Terms_of_Use" target="_blank" rel="noopener">OSM Terms</a>
+      <a class="iconbtn" href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">Copyright</a>
+      <a class="iconbtn" href="https://operations.osmfoundation.org/policies/nominatim/" target="_blank" rel="noopener">Nominatim Policy</a>
     </div>
   </div>
 
@@ -194,6 +171,13 @@
           </select>
         </div>
         <div class="row"><label>Coordinate precision</label><input type="range" id="coordPrec" min="0" max="8" step="1" value="6"><span id="coordPrecVal">6</span></div>
+        <div class="row"><label>Theme</label>
+          <select id="themeMode" class="select">
+            <option value="auto">Auto</option>
+            <option value="dark">Dark</option>
+            <option value="light">Light</option>
+          </select>
+        </div>
       </div>
     </div>
 
@@ -219,6 +203,22 @@
       <div class="section" data-sec="view">
         <div class="row"><label><input type="checkbox" id="shareDelta" checked> Include Δ in shared links</label></div>
         <div class="row"><label><input type="checkbox" id="confirmDelete" checked> Confirm before deleting pins</label></div>
+        <div class="row"><label>Accent color</label><input type="color" id="accentColor" value="#0ea5e9"><button class="iconbtn" id="accentReset">Reset</button></div>
+      </div>
+    </div>
+
+    <div class="group">
+      <div class="ghead"><div><strong>Custom CSS</strong></div><button data-t="css">Toggle</button></div>
+      <div class="section" data-sec="css">
+        <div class="row" style="flex-direction:column;align-items:stretch">
+          <textarea id="customCSS" placeholder="/* Write CSS that will be injected into the page. Example:
+.brand{font-weight:800}
+*/"></textarea>
+          <div style="display:flex;gap:8px;margin-top:8px">
+            <button class="iconbtn" id="applyCSS">Apply</button>
+            <button class="iconbtn" id="clearCSS">Clear</button>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -226,11 +226,13 @@
       <div class="ghead"><div><strong>About PokeMaps (Public Beta)</strong></div><button data-t="about">Toggle</button></div>
       <div class="section" data-sec="about">
         <div class="about">
-          <p><strong>PokeMaps Public Beta</strong> is a lightweight map viewer designed for quick sharing of locations and simple pin management. This beta is still evolving; features and behavior may change at any time, and bugs are expected.</p>
-          <p><strong>Map credits:</strong> © <a href="https://www.openstreetmap.org/" target="_blank" rel="noopener">OpenStreetMap.org</a> contributors. Map tiles and data are provided by the OpenStreetMap community. Powered by openstreetmap.org.</p>
-          <p><strong>Disclaimer:</strong> The geographic data shown here is compiled from community-contributed sources and third-party services. Boundaries, names, designations, and tagging may be incomplete, outdated, or disputed. Displayed borders and labels do <em>not</em> imply endorsement or acceptance of any political status. The map does not reflect the politics of the Poke project nor the opinions of the contributors. Always verify critical information from multiple sources before making decisions.</p>
-          <p><strong>Privacy & usage:</strong> Location features depend on your browser’s permissions. Geocoding/search is performed via public OSM services and is subject to their rate limits and policies.</p>
-          <p><strong>Feedback:</strong> Since this is a beta, user feedback helps shape the roadmap. If something breaks, resets, or behaves oddly, that’s expected during Public Beta.</p>
+          <p><strong>What is this?</strong> PokeMaps Public Beta is a lightweight viewer for exploring and sharing map positions with quick pin management. It focuses on speed, privacy-friendly defaults, and portability of links.</p>
+          <p><strong>Status:</strong> Public Beta — features may change, settings may reset, and bugs are expected.</p>
+          <p><strong>Map credits:</strong> © <a href="https://www.openstreetmap.org/" target="_blank" rel="noopener">OpenStreetMap.org</a> contributors. Tiles/data from the OSM community. <em>Powered by openstreetmap.org.</em></p>
+          <p><strong>Important disclaimer:</strong> Geographic names, boundaries, labels, and depictions may be incomplete, outdated, or disputed. Displayed borders and place names are for reference only and must not be interpreted as statements of recognition or endorsement. The map does <em>not</em> reflect the politics of the Poke project nor the opinions of its contributors. Always verify critical details independently.</p>
+          <p><strong>Privacy & usage:</strong> If you enable location, your browser may share approximate GPS/Wi-Fi data with the page via standard Web APIs. Search uses public OSM services (subject to their policies and rate limits).</p>
+          <p><strong>Interoperability:</strong> A convenience action is provided to open the same view in Google Maps for satellite imagery. This is not recommended and may have different data policies.</p>
+          <p><strong>PWA:</strong> An installable manifest is provided at runtime. Without a service worker, offline is not supported, but you can still add it to your home screen or app list.</p>
         </div>
       </div>
     </div>
@@ -238,125 +240,125 @@
 
   <script>
   ;(()=> {
-    const OSM_EMBED="https://www.openstreetmap.org/export/embed.html"
-    const OSM_VIEW ="https://www.openstreetmap.org"
-    const NOMINATIM="https://nominatim.openstreetmap.org/search"
-    const LAYERS=["mapnik","cyclemap","transportmap","hot"]
-    const DEFAULT={lat:30.410156,lon:72.448792,delta:.25,layer:"mapnik"}
-    const LIMITS={deltaMin:0.01, deltaMax:45}
-    const S=sel=>document.querySelector(sel)
-    const map=S("#map"), q=S("#q"), sug=S("#suggestions")
-    const locateBtn=S("#locate"), menuBtn=S("#menuBtn"), menu=S("#menu"), closeMenu=S("#closeMenu")
-    const layerSel=S("#layer"), followBtn=S("#follow"), resetBtn=S("#reset"), shareBtn=S("#share")
-    const copyBtn=S("#copy"), copyCoordsBtn=S("#copycoords"), openBtn=S("#openosm")
-    const pinsPane=S("#pins"), pinlist=S("#pinlist"), showpins=S("#showpins"), closepins=S("#closepins"), savepin=S("#savepin")
-    const opensettings=S("#opensettings"), settings=S("#settings"), closesettings=S("#closesettings")
-    const coordsEl=S("#coords")
-    const quickNear=S("#quick-near"), quickClear=S("#quick-clear")
+    const OSM_EMBED="https://www.openstreetmap.org/export/embed.html";
+    const OSM_VIEW ="https://www.openstreetmap.org";
+    const NOMINATIM="https://nominatim.openstreetmap.org/search";
+    const LAYERS=["mapnik","cyclemap","transportmap","hot"];
+    const DEFAULT={lat:30.410156,lon:72.448792,delta:.25,layer:"mapnik"};
+    const LIMITS={deltaMin:0.01, deltaMax:45};
 
-    const autoFollowEl=S("#autoFollow")
-    const toggleCoords=S("#toggleCoords")
-    const coordFmtEl=S("#coordFmt")
-    const coordPrecEl=S("#coordPrec")
-    const coordPrecVal=S("#coordPrecVal")
+    const S=sel=>document.querySelector(sel);
+    const map=S("#map"), q=S("#q"), sug=S("#suggestions");
+    const locateBtn=S("#locate"), menuBtn=S("#menuBtn"), menu=S("#menu"), closeMenu=S("#closeMenu");
+    const layerSel=S("#layer"), followBtn=S("#follow"), resetBtn=S("#reset"), shareBtn=S("#share");
+    const copyBtn=S("#copy"), copyCoordsBtn=S("#copycoords"), openBtn=S("#openosm"), openGmapsBtn=S("#openGmaps");
+    const pinsPane=S("#pins"), pinlist=S("#pinlist"), showpins=S("#showpins"), closepins=S("#closepins"), savepin=S("#savepin");
+    const opensettings=S("#opensettings"), settings=S("#settings"), closesettings=S("#closesettings");
+    const coordsEl=S("#coords");
+    const quickNear=S("#quick-near"), quickClear=S("#quick-clear");
+    const themeColorMeta=S("#themeColorMeta");
 
-    const markerEl=S("#marker"), markerVisibleEl=S("#markerVisible"), markerSizeEl=S("#markerSize"), markerSizeVal=S("#markerSizeVal"), markerColorEl=S("#markerColor"), markerRingEl=S("#markerRing"), ringWidthEl=S("#ringWidth"), ringWidthVal=S("#ringWidthVal"), markerStyleEl=S("#markerStyle")
+    const autoFollowEl=S("#autoFollow");
+    const toggleCoords=S("#toggleCoords");
+    const coordFmtEl=S("#coordFmt");
+    const coordPrecEl=S("#coordPrec");
+    const coordPrecVal=S("#coordPrecVal");
+    const themeModeEl=S("#themeMode");
 
-    const shareDeltaEl=S("#shareDelta"), confirmDeleteEl=S("#confirmDelete")
+    const markerEl=S("#marker"), markerVisibleEl=S("#markerVisible"), markerSizeEl=S("#markerSize"), markerSizeVal=S("#markerSizeVal"),
+          markerColorEl=S("#markerColor"), markerRingEl=S("#markerRing"), ringWidthEl=S("#ringWidth"), ringWidthVal=S("#ringWidthVal"),
+          markerStyleEl=S("#markerStyle");
 
-    const PREFS_KEY="pokemaps_prefs_v4"
-    const LS_PINS="pokemaps_pins_v1"
-    const LS_SEARCH="pokemaps_search_hist_v1"
+    const shareDeltaEl=S("#shareDelta"), confirmDeleteEl=S("#confirmDelete");
+    const accentColorEl=S("#accentColor"), accentResetEl=S("#accentReset");
+    const customCSSEl=S("#customCSS"), applyCSSEl=S("#applyCSS"), clearCSSEl=S("#clearCSS");
 
-    let aborter=null, lastQuery="", watchId=null, activeIndex=-1, lastCoordsStr=""
+    const PREFS_KEY="pokemaps_prefs_v5";
+    const LS_PINS="pokemaps_pins_v1";
+    const LS_SEARCH="pokemaps_search_hist_v1";
 
-    let state={...DEFAULT}
-    const prefs=loadPrefs()
-    applyPrefs()
+    let aborter=null, lastQuery="", watchId=null, activeIndex=-1, lastCoordsStr="";
+    let state={...DEFAULT};
+    const prefs=loadPrefs(); applyPrefs();
 
-    const isDesktop=()=> matchMedia("(min-width: 1024px)").matches && matchMedia("(pointer: fine)").matches
-    const applyDesktopClass=()=>{ document.body.classList.toggle("desktop", isDesktop()) }
-    applyDesktopClass()
-    addEventListener("resize",()=>applyDesktopClass(),{passive:true})
+    const isDesktop=()=> matchMedia("(min-width: 1024px)").matches && matchMedia("(pointer: fine)").matches;
+    const applyDesktopClass=()=>{ document.body.classList.toggle("desktop", isDesktop()) };
+    applyDesktopClass(); addEventListener("resize",applyDesktopClass,{passive:true});
 
-    const setVH=()=>{const vh=window.innerHeight*0.01;document.documentElement.style.setProperty("--vh",`${vh*100}px`)}
-    setVH(); addEventListener("resize",()=>{setVH()},{passive:true})
+    const setVH=()=>{const vh=window.innerHeight*0.01;document.documentElement.style.setProperty("--vh",`${vh*100}px`)};
+    setVH(); addEventListener("resize",setVH,{passive:true});
 
-    const clamp=(n,min,max)=>Math.min(Math.max(n,min),max)
-    const clampDelta=d=>clamp(d, LIMITS.deltaMin, LIMITS.deltaMax)
-    const cleanStr=s=>s.replace(/\s+/g," ").trim()
+    const clamp=(n,min,max)=>Math.min(Math.max(n,min),max);
+    const clampDelta=d=>clamp(d, LIMITS.deltaMin, LIMITS.deltaMax);
+    const cleanStr=s=>s.replace(/\s+/g," ").trim();
 
-    const bboxFrom=(lat,lon,d)=>({
-      left:(lon-d).toFixed(6),
-      bottom:(lat-d).toFixed(6),
-      right:(lon+d).toFixed(6),
-      top:(lat+d).toFixed(6)
-    })
+    const bboxFrom=(lat,lon,d)=>({left:(lon-d).toFixed(6),bottom:(lat-d).toFixed(6),right:(lon+d).toFixed(6),top:(lat+d).toFixed(6)});
     const embedURL=({lat,lon,delta,layer})=>{
-      const b=bboxFrom(lat,lon,clampDelta(delta))
-      const lyr = LAYERS.includes(layer)?layer:DEFAULT.layer
-      return `${OSM_EMBED}?bbox=${b.left}%2C${b.bottom}%2C${b.right}%2C${b.top}&layer=${encodeURIComponent(lyr)}`
-    }
+      const b=bboxFrom(lat,lon,clampDelta(delta));
+      const lyr = LAYERS.includes(layer)?layer:DEFAULT.layer;
+      return `${OSM_EMBED}?bbox=${b.left}%2C${b.bottom}%2C${b.right}%2C${b.top}&layer=${encodeURIComponent(lyr)}`;
+    };
     const appURL=({lat,lon,delta,layer})=>{
       const p=new URLSearchParams({
         lat:lat.toFixed(prefs.prec??6),
         lon:lon.toFixed(prefs.prec??6),
         delta:(prefs.includeDelta!==false?clampDelta(delta).toFixed(4):undefined),
-        layer:layer
-      })
-      if(p.get("delta")==="undefined") p.delete("delta")
-      return `${location.origin}${location.pathname}?${p.toString()}`
-    }
+        layer
+      });
+      if(p.get("delta")==="undefined") p.delete("delta");
+      return `${location.origin}${location.pathname}?${p.toString()}`;
+    };
     const osmViewURL=({lat,lon,delta,layer})=>{
-      const z = deltaToZoom(clampDelta(delta))
-      return `${OSM_VIEW}/?mlat=${lat.toFixed(6)}&mlon=${lon.toFixed(6)}#map=${z}/${lat.toFixed(6)}/${lon.toFixed(6)}&layers=${layer}`
-    }
+      const z = deltaToZoom(clampDelta(delta));
+      return `${OSM_VIEW}/?mlat=${lat.toFixed(6)}&mlon=${lon.toFixed(6)}#map=${z}/${lat.toFixed(6)}/${lon.toFixed(6)}&layers=${layer}`;
+    };
+    const gmapsURL=({lat,lon,delta})=>{
+      const z = deltaToZoom(clampDelta(delta));
+      // 3D/earth-ish param toggles are brittle; open at center and let user tap Satellite.
+      return `https://www.google.com/maps/@${lat.toFixed(6)},${lon.toFixed(6)},${Math.max(3,Math.min(20,z))}z`;
+    };
 
     const parseURL=()=>{
-      const sp=new URLSearchParams(location.search)
-      const lat=parseFloat(sp.get("lat")), lon=parseFloat(sp.get("lon")), delta=parseFloat(sp.get("delta"))
-      const layer=sp.get("layer")
-      if(Number.isFinite(lat)&&Number.isFinite(lon)) state.lat=clamp(lat,-90,90), state.lon=clamp(lon,-180,180)
-      if(Number.isFinite(delta)&&delta>0) state.delta=clampDelta(delta)
-      if(layer && LAYERS.includes(layer)) state.layer=layer
-      if(layerSel) layerSel.value=state.layer
-    }
+      const sp=new URLSearchParams(location.search);
+      const lat=parseFloat(sp.get("lat")), lon=parseFloat(sp.get("lon")), delta=parseFloat(sp.get("delta"));
+      const layer=sp.get("layer");
+      if(Number.isFinite(lat)&&Number.isFinite(lon)) state.lat=clamp(lat,-90,90), state.lon=clamp(lon,-180,180);
+      if(Number.isFinite(delta)&&delta>0) state.delta=clampDelta(delta);
+      if(layer && LAYERS.includes(layer)) state.layer=layer;
+      if(layerSel) layerSel.value=state.layer;
+    };
 
     const apply=(push)=>{
-      map.src=embedURL(state)
-      if(push) history.pushState(state,"",appURL(state))
-    }
+      map.src=embedURL(state);
+      if(push) history.pushState(state,"",appURL(state));
+    };
 
     const toDMS=(v,isLat)=>{
-      const dir=isLat?(v>=0?"N":"S"):(v>=0?"E":"W")
-      const av=Math.abs(v); const d=Math.floor(av); const m=Math.floor((av-d)*60); const s=((av-d)*60 - m)*60
-      return `${d}°${m}′${s.toFixed(2)}″ ${dir}`
-    }
+      const dir=isLat?(v>=0?"N":"S"):(v>=0?"E":"W");
+      const av=Math.abs(v); const d=Math.floor(av); const m=Math.floor((av-d)*60); const s=((av-d)*60 - m)*60;
+      return `${d}°${m}′${s.toFixed(2)}″ ${dir}`;
+    };
 
     const coordString=()=>{
-      const fmt=prefs.coordFmt||"dec"
-      const pr=prefs.prec??6
-      const dec=`${state.lat.toFixed(pr)}, ${state.lon.toFixed(pr)}`
-      const dms=toDMS(state.lat,true)+" "+toDMS(state.lon,false)
-      return fmt==="dms"?dms:dec
-    }
+      const fmt=prefs.coordFmt||"dec";
+      const pr=prefs.prec??6;
+      const dec=`${state.lat.toFixed(pr)}, ${state.lon.toFixed(pr)}`;
+      const dms=toDMS(state.lat,true)+" "+toDMS(state.lon,false);
+      return fmt==="dms"?dms:dec;
+    };
 
     const updateCoordsFast=()=>{
-      if(!prefs.showCoords) return
-      const s=coordString()+` · Δ ${state.delta.toFixed(4)} · ${state.layer}`
+      if(!prefs.showCoords) return;
+      const s=coordString()+` · Δ ${state.delta.toFixed(4)} · ${state.layer}`;
       if(s!==lastCoordsStr){ coordsEl.textContent=s; lastCoordsStr=s }
-    }
+    };
 
-    const centerOn=(lat,lon,{push=true}={})=>{
-      state.lat=clamp(lat,-90,90)
-      state.lon=clamp(lon,-180,180)
-      apply(push)
-    }
-    const setLayer=(layer)=>{ state.layer = LAYERS.includes(layer)?layer:DEFAULT.layer; apply(true) }
-    const setDelta=(delta,{push=true}={})=>{ state.delta = clampDelta(delta); apply(push) }
+    const centerOn=(lat,lon,{push=true}={})=>{ state.lat=clamp(lat,-90,90); state.lon=clamp(lon,-180,180); apply(push) };
+    const setLayer=(layer)=>{ state.layer = LAYERS.includes(layer)?layer:DEFAULT.layer; apply(true) };
+    const setDelta=(delta,{push=true}={})=>{ state.delta = clampDelta(delta); apply(push) };
 
-    const zoomToDelta=z=>Math.min(LIMITS.deltaMax, Math.max(LIMITS.deltaMin, Math.pow(2, (10 - z)) * 0.02))
-    const deltaToZoom=d=>Math.round(10 - Math.log2(d/0.02))
+    const zoomToDelta=z=>Math.min(LIMITS.deltaMax, Math.max(LIMITS.deltaMin, Math.pow(2,(10 - z)) * 0.02));
+    const deltaToZoom=d=>Math.round(10 - Math.log2(d/0.02));
 
     const locate=()=>{
       if(!("geolocation" in navigator)){ alert("Geolocation not supported."); return }
@@ -365,227 +367,241 @@
         err=>alert("Unable to retrieve location: "+err.message),
         {enableHighAccuracy:true,timeout:10000,maximumAge:0}
       )
-    }
+    };
     const startFollow=()=>{
       if(!("geolocation" in navigator)){ alert("Geolocation not supported."); return }
-      if(watchId!==null) return
-      followBtn && (followBtn.textContent="🛰️ Following")
+      if(watchId!==null) return;
+      followBtn && (followBtn.textContent="🛰️ Following");
       watchId = navigator.geolocation.watchPosition(
         pos=>{ centerOn(pos.coords.latitude,pos.coords.longitude,{push:false}) },
         _=>stopFollow(),
         {enableHighAccuracy:true,timeout:15000,maximumAge:1000}
       )
-    }
-    const stopFollow=()=>{
-      if(watchId!==null){ navigator.geolocation.clearWatch(watchId); watchId=null }
-      followBtn && (followBtn.textContent="🛰️ Follow")
-    }
-    const toggleFollow=()=> watchId===null ? startFollow() : stopFollow()
+    };
+    const stopFollow=()=>{ if(watchId!==null){ navigator.geolocation.clearWatch(watchId); watchId=null } ; followBtn && (followBtn.textContent="🛰️ Follow") };
+    const toggleFollow=()=> watchId===null ? startFollow() : stopFollow();
 
-    const copyLink=async()=>{ try{ await navigator.clipboard.writeText(appURL(state)); alert("Link copied!") }catch{ alert("Could not copy.") } }
-    const copyCoords=async()=>{
-      const msg= coordString()
-      try{ await navigator.clipboard.writeText(msg); alert("Coordinates copied!") }catch{ alert(msg) }
-    }
-    const shareLink=async()=>{ const url = appURL(state); if(navigator.share){ try{ await navigator.share({title:"PokeMaps Public Beta", url}) }catch{} } else { copyLink() } }
-    const reset=()=>{ stopFollow(); state={...DEFAULT}; q.value=""; hideSuggest(); layerSel && (layerSel.value=state.layer); apply(true) }
+    const copyLink=async()=>{ try{ await navigator.clipboard.writeText(appURL(state)); alert("Link copied!") }catch{ alert("Could not copy.") } };
+    const copyCoords=async()=>{ const msg=coordString(); try{ await navigator.clipboard.writeText(msg); alert("Coordinates copied!") }catch{ alert(msg) } };
+    const shareLink=async()=>{ const url = appURL(state); if(navigator.share){ try{ await navigator.share({title:"PokeMaps Public Beta", url}) }catch{} } else { copyLink() } };
+    const reset=()=>{ stopFollow(); state={...DEFAULT}; q.value=""; hideSuggest(true); layerSel && (layerSel.value=state.layer); apply(true) };
 
-    const debounced=(fn,ms=250)=>{let t;return(...a)=>{clearTimeout(t);t=setTimeout(()=>fn(...a),ms)}}
+    const debounced=(fn,ms=250)=>{let t;return(...a)=>{clearTimeout(t);t=setTimeout(()=>fn(...a),ms)}};
 
     const parseCoordInput=(str)=>{
-      str=str.trim()
-      const m=str.match(/^\s*([+-]?\d+(?:\.\d+)?)\s*[, ]\s*([+-]?\d+(?:\.\d+)?)\s*$/)
-      if(!m) return null
-      const lat=parseFloat(m[1]), lon=parseFloat(m[2])
-      if(!Number.isFinite(lat)||!Number.isFinite(lon)) return null
-      if(Math.abs(lat)>90||Math.abs(lon)>180) return null
-      return {lat,lon}
-    }
+      str=str.trim();
+      const m=str.match(/^\s*([+-]?\d+(?:\.\d+)?)\s*[, ]\s*([+-]?\d+(?:\.\d+)?)\s*$/);
+      if(!m) return null;
+      const lat=parseFloat(m[1]), lon=parseFloat(m[2]);
+      if(!Number.isFinite(lat)||!Number.isFinite(lon)) return null;
+      if(Math.abs(lat)>90||Math.abs(lon)>180) return null;
+      return {lat,lon};
+    };
 
     const highlight=(text,term)=>{
-      term=term.trim()
-      if(!term) return text
-      const esc=term.replace(/[.*+?^${}()|[\]\\]/g,"\\$&")
-      return text.replace(new RegExp(esc,"ig"),m=>`<mark>${m}</mark>`)
-    }
+      term=term.trim(); if(!term) return text;
+      const esc=term.replace(/[.*+?^${}()|[\]\\]/g,"\\$&");
+      return text.replace(new RegExp(esc,"ig"),m=>`<mark>${m}</mark>`);
+    };
 
-    const loadSearchHist=()=>{ try{ return JSON.parse(localStorage.getItem(LS_SEARCH)||"[]") }catch{ return [] } }
-    const saveSearchHist=(arr)=>{ localStorage.setItem(LS_SEARCH, JSON.stringify(arr.slice(0,12))) }
-    const pushSearchHist=(label)=>{ const h=loadSearchHist(); const i=h.indexOf(label); if(i!==-1) h.splice(i,1); h.unshift(label); saveSearchHist(h) }
-
-    const searchPlaces=debounced(async term=>{
-      term=cleanStr(term)
-      activeIndex=-1
-      if(!term){
-        const hist=loadSearchHist()
-        renderSuggest(hist.map(x=>({type:"history",label:x})))
-        return
-      }
-      const coord=parseCoordInput(term)
-      if(coord){
-        renderSuggest([{type:"coords",label:`${coord.lat}, ${coord.lon}`, lat:coord.lat, lon:coord.lon}])
-        return
-      }
-      if(aborter) aborter.abort()
-      aborter=new AbortController()
-      try{
-        const url=`${NOMINATIM}?q=${encodeURIComponent(term)}&format=json&limit=8&addressdetails=0&accept-language=en`
-        const r=await fetch(url,{signal:aborter.signal})
-        if(!r.ok) throw new Error("HTTP "+r.status)
-        const data=await r.json()
-        renderSuggest(data.map(p=>({type:"place",label:p.display_name,lat:+p.lat,lon:+p.lon,raw:p})), term)
-      }catch(e){ hideSuggest() }
-    },140)
+    const loadSearchHist=()=>{ try{ return JSON.parse(localStorage.getItem(LS_SEARCH)||"[]") }catch{ return [] } };
+    const saveSearchHist=(arr)=>{ localStorage.setItem(LS_SEARCH, JSON.stringify(arr.slice(0,12))) };
+    const pushSearchHist=(label)=>{ const h=loadSearchHist(); const i=h.indexOf(label); if(i!==-1) h.splice(i,1); h.unshift(label); saveSearchHist(h) };
 
     const renderSuggest=(items, term="")=>{
-      sug.innerHTML=""
-      if(!items.length){ hideSuggest(); return }
+      if(!sug) return;
+      sug.innerHTML="";
+      if(!items.length){ sug.style.display="none"; q.setAttribute("aria-expanded","false"); activeIndex=-1; return }
       items.forEach((it,i)=>{
-        const li=document.createElement("li")
-        li.role="option"; li.id="opt"+i
-        li.innerHTML=`<span class="pill">${it.type}</span><span class="txt">${highlight(it.label,term)}</span>`
-        // Use mousedown/touchstart so we select before the input blurs
-        li.onmousedown=(e)=>{ e.preventDefault(); chooseItem(it) }
-        li.ontouchstart=(e)=>{ e.preventDefault(); chooseItem(it) }
-        li.onclick=()=> chooseItem(it)
-        sug.appendChild(li)
-      })
-      sug.style.display="block"; q.setAttribute("aria-expanded","true")
-    }
-    const hideSuggest=()=>{ sug.style.display="none"; q.setAttribute("aria-expanded","false"); sug.innerHTML=""; activeIndex=-1 }
+        const li=document.createElement("li");
+        li.role="option"; li.id="opt"+i;
+        li.innerHTML=`<span class="pill">${it.type}</span><span class="txt">${highlight(it.label,term)}</span>`;
+        li.addEventListener("mousedown",e=>{ e.preventDefault(); chooseItem(it) }); // mousedown prevents blur-flicker
+        sug.appendChild(li);
+      });
+      sug.style.display="block"; q.setAttribute("aria-expanded","true");
+    };
+
+    const hideSuggest=(force=false)=>{
+      if(force){ sug.style.display="none"; q.setAttribute("aria-expanded","false"); sug.innerHTML=""; activeIndex=-1; return }
+      // Do not auto-hide while typing; we only hide on explicit actions (Esc/click outside/submit)
+      sug.style.display="none"; q.setAttribute("aria-expanded","false"); activeIndex=-1;
+    };
 
     const chooseItem=(it)=>{
       if(it.type==="history"){ q.value=it.label; searchNow(it.label); return }
-      if(it.type==="coords"){ centerOn(it.lat,it.lon,{push:true}); pushSearchHist(it.label); hideSuggest(); return }
-      if(it.type==="place"){ q.value=it.label; centerOn(it.lat,it.lon,{push:true}); pushSearchHist(it.label); hideSuggest(); return }
-    }
+      if(it.type==="coords"){ centerOn(it.lat,it.lon,{push:true}); pushSearchHist(it.label); hideSuggest(true); return }
+      if(it.type==="place"){ q.value=it.label; centerOn(it.lat,it.lon,{push:true}); pushSearchHist(it.label); hideSuggest(true); return }
+    };
+
+    const searchPlaces=debounced(async term=>{
+      term=cleanStr(term); activeIndex=-1;
+      if(!term){ const hist=loadSearchHist(); renderSuggest(hist.map(x=>({type:"history",label:x}))); return }
+      const coord=parseCoordInput(term);
+      if(coord){ renderSuggest([{type:"coords",label:`${coord.lat}, ${coord.lon}`, lat:coord.lat, lon:coord.lon}]); return }
+
+      if(aborter) aborter.abort(); aborter=new AbortController();
+      try{
+        const url=`${NOMINATIM}?q=${encodeURIComponent(term)}&format=json&limit=8&addressdetails=0&accept-language=en`;
+        const r=await fetch(url,{signal:aborter.signal});
+        if(!r.ok) throw new Error("HTTP "+r.status);
+        const data=await r.json();
+        renderSuggest(data.map(p=>({type:"place",label:p.display_name,lat:+p.lat,lon:+p.lon,raw:p})), term);
+      }catch(e){
+        // Keep the box open with history on errors instead of flickering closed
+        const hist=loadSearchHist();
+        renderSuggest(hist.map(x=>({type:"history",label:x})), "");
+      }
+    },140);
 
     const searchNow=async term=>{
-      term=cleanStr(term); if(!term) return
-      const coord=parseCoordInput(term)
+      term=cleanStr(term); if(!term) return;
+      const coord=parseCoordInput(term);
       if(coord){ centerOn(coord.lat,coord.lon,{push:true}); pushSearchHist(`${coord.lat}, ${coord.lon}`); return }
       try{
-        const r=await fetch(`${NOMINATIM}?q=${encodeURIComponent(term)}&format=json&limit=1`)
-        const d=await r.json()
+        const r=await fetch(`${NOMINATIM}?q=${encodeURIComponent(term)}&format=json&limit=1`);
+        const d=await r.json();
         if(d[0]){ centerOn(parseFloat(d[0].lat),parseFloat(d[0].lon),{push:true}); pushSearchHist(term) }
       }catch{}
-    }
+    };
 
+    // --- Suggestion UX (no flicker) ---
     q.addEventListener("input",e=>{
-      const v=e.target.value
-      if(v===lastQuery) return
-      lastQuery=v
-      searchPlaces(v)
-    },{passive:true})
+      const v=e.target.value;
+      if(v===lastQuery) return;
+      lastQuery=v;
+      searchPlaces(v);
+    },{passive:true});
 
-    q.addEventListener("focus",()=>{ if(!q.value){ const hist=loadSearchHist(); renderSuggest(hist.map(x=>({type:"history",label:x}))) }})
-    q.addEventListener("blur",()=>{ setTimeout(hideSuggest,150) })
+    q.addEventListener("focus",()=>{
+      if(!q.value){ const hist=loadSearchHist(); renderSuggest(hist.map(x=>({type:"history",label:x}))) }
+      else { searchPlaces(q.value) }
+    });
+
+    // remove blur auto-hide that caused flicker; we close on outside click/Esc instead
+    document.addEventListener("click",e=>{
+      const within = e.target.closest(".search") || e.target.closest("#suggestions");
+      if(!within) hideSuggest(true);
+    });
 
     q.addEventListener("keydown",e=>{
-      const vis=sug.style.display==="block"
-      if(!vis) return
-      const items=[...sug.querySelectorAll("li")]
+      const visible = sug.style.display==="block";
+      if(e.key==="Escape"){ hideSuggest(true); return }
+      if(!visible) return;
+      const items=[...sug.querySelectorAll("li")];
+      if(!items.length) return;
       if(e.key==="ArrowDown"){ e.preventDefault(); activeIndex=(activeIndex+1)%items.length; activate(items) }
       if(e.key==="ArrowUp"){ e.preventDefault(); activeIndex=(activeIndex-1+items.length)%items.length; activate(items) }
-      if(e.key==="Enter"){ e.preventDefault(); if(activeIndex>=0) items[activeIndex].dispatchEvent(new Event('mousedown')); else searchNow(q.value) }
-      if(e.key==="Escape"){ hideSuggest() }
-    })
+      if(e.key==="Enter"){ e.preventDefault(); if(activeIndex>=0) items[activeIndex].dispatchEvent(new MouseEvent("mousedown")); else searchNow(q.value) }
+    });
 
-    const activate=(items)=>{
-      items.forEach(x=>x.classList.remove("active"))
-      if(activeIndex>=0){ items[activeIndex].classList.add("active"); items[activeIndex].scrollIntoView({block:"nearest"}) }
-    }
+    const activate=(items)=>{ items.forEach(x=>x.classList.remove("active")); if(activeIndex>=0){ items[activeIndex].classList.add("active"); items[activeIndex].scrollIntoView({block:"nearest"}) } };
 
-    S("#form").addEventListener("submit",async e=>{
-      e.preventDefault()
-      await searchNow(q.value)
-    })
+    S("#form").addEventListener("submit",async e=>{ e.preventDefault(); await searchNow(q.value); hideSuggest(true) });
 
-    // Quick actions from Menu
-    quickNear.onclick=()=>locate()
-    quickClear.onclick=()=>{ q.value=""; hideSuggest(); q.focus() }
+    // Quick actions (Menu)
+    quickNear.onclick=locate;
+    quickClear.onclick=()=>{ q.value=""; searchPlaces(""); q.focus() };
 
-    locateBtn.onclick=locate
-    layerSel && (layerSel.onchange=()=>setLayer(layerSel.value))
-    followBtn && (followBtn.onclick=toggleFollow)
-    resetBtn.onclick=reset
-    shareBtn.onclick=shareLink
-    copyBtn.onclick=copyLink
-    copyCoordsBtn.onclick=copyCoords
-    openBtn.onclick=()=>{ window.open(osmViewURL(state), "_blank") }
+    locateBtn.onclick=locate;
+    layerSel && (layerSel.onchange=()=>setLayer(layerSel.value));
+    followBtn && (followBtn.onclick=toggleFollow);
+    resetBtn.onclick=reset;
+    shareBtn.onclick=shareLink;
+    copyBtn.onclick=copyLink;
+    copyCoordsBtn.onclick=copyCoords;
+    openBtn.onclick=()=>window.open(osmViewURL(state), "_blank");
+    openGmapsBtn.onclick=()=>window.open(gmapsURL(state), "_blank");
 
-    const loadPins=()=>{ try{ return JSON.parse(localStorage.getItem(LS_PINS)||"[]") }catch{ return [] } }
-    const savePins=(pins)=>{ localStorage.setItem(LS_PINS, JSON.stringify(pins.slice(0,100))) }
+    // Pins
+    const loadPins=()=>{ try{ return JSON.parse(localStorage.getItem(LS_PINS)||"[]") }catch{ return [] } };
+    const savePins=(pins)=>{ localStorage.setItem(LS_PINS, JSON.stringify(pins.slice(0,100))) };
     const renderPins=()=>{
-      const pins=loadPins()
-      pinlist.innerHTML=""
+      const pins=loadPins();
+      pinlist.innerHTML="";
       if(!pins.length){ const li=document.createElement("li"); li.textContent="No pins yet."; pinlist.appendChild(li); return }
       pins.forEach((p,idx)=>{
-        const li=document.createElement("li")
-        const head=document.createElement("div")
-        head.innerHTML=`<strong>${p.name}</strong><div class="tag">${p.lat.toFixed(5)}, ${p.lon.toFixed(5)} · ${p.layer}</div>`
-        const actions=document.createElement("div"); actions.className="row"
-        const go=btn("Go",()=>{ pinsPane.style.display="none"; state.lat=p.lat; state.lon=p.lon; state.delta=p.delta; state.layer=p.layer; layerSel && (layerSel.value=p.layer); apply(true) })
-        const share=btn("Share",async()=>{ const url=appURL(p); if(navigator.share){ try{ await navigator.share({title:"PokeMaps Public Beta",url}) }catch{} } else { try{ await navigator.clipboard.writeText(url); alert("Link copied!") }catch{} } })
-        const copyc=btn("Copy Coords",()=>navigator.clipboard.writeText(`${p.lat.toFixed(6)},${p.lon.toFixed(6)}`).then(()=>alert("Copied!")))
-        const ren=btn("Rename",()=>{ const nv=prompt("New name:", p.name||""); if(nv!==null){ const arr=loadPins(); arr[idx].name=(nv||"").trim()||new Date().toLocaleString(); savePins(arr); renderPins() } })
-        const del=btn("Del",()=>{ if(confirmDeleteEl.checked){ if(!confirm("Delete pin?")) return } const arr=loadPins(); arr.splice(idx,1); savePins(arr); renderPins() })
-        actions.append(go,share,copyc,ren,del)
-        li.append(head,actions)
-        pinlist.appendChild(li)
-      })
-    }
-    function btn(t,fn){ const b=document.createElement("button"); b.textContent=t; b.className="iconbtn"; b.onclick=fn; return b }
-    const nameFromState=()=> q.value?.trim() || new Date().toLocaleString()
-    savepin.onclick=()=>{ const pins=loadPins(); pins.unshift({name:nameFromState(), lat:state.lat, lon:state.lon, delta:state.delta, layer:state.layer}); savePins(pins); renderPins(); pinsPane.style.display="block" }
-    showpins.onclick=()=>{ renderPins(); pinsPane.style.display="block" }
-    closepins.onclick=()=>{ pinsPane.style.display="none" }
+        const li=document.createElement("li");
+        const head=document.createElement("div");
+        head.innerHTML=`<strong>${p.name}</strong><div class="tag">${p.lat.toFixed(5)}, ${p.lon.toFixed(5)} · ${p.layer}</div>`;
+        const actions=document.createElement("div"); actions.className="row";
+        const go=button("Go",()=>{ pinsPane.style.display="none"; state.lat=p.lat; state.lon=p.lon; state.delta=p.delta; state.layer=p.layer; layerSel && (layerSel.value=p.layer); apply(true) });
+        const share=button("Share",async()=>{ const url=appURL(p); if(navigator.share){ try{ await navigator.share({title:"PokeMaps Public Beta",url}) }catch{} } else { try{ await navigator.clipboard.writeText(url); alert("Link copied!") }catch{} } });
+        const copyc=button("Copy Coords",()=>navigator.clipboard.writeText(`${p.lat.toFixed(6)},${p.lon.toFixed(6)}`).then(()=>alert("Copied!")));
+        const ren=button("Rename",()=>{ const nv=prompt("New name:", p.name||""); if(nv!==null){ const arr=loadPins(); arr[idx].name=(nv||"").trim()||new Date().toLocaleString(); savePins(arr); renderPins() } });
+        const del=button("Del",()=>{ if(confirmDeleteEl.checked){ if(!confirm("Delete pin?")) return } const arr=loadPins(); arr.splice(idx,1); savePins(arr); renderPins() });
+        actions.append(go,share,copyc,ren,del);
+        li.append(head,actions); pinlist.appendChild(li);
+      });
+    };
+    function button(t,fn){ const b=document.createElement("button"); b.textContent=t; b.className="iconbtn"; b.onclick=fn; return b }
+    const nameFromState=()=> q.value?.trim() || new Date().toLocaleString();
+    savepin.onclick=()=>{ const pins=loadPins(); pins.unshift({name:nameFromState(), lat:state.lat, lon:state.lon, delta:state.delta, layer:state.layer}); savePins(pins); renderPins(); pinsPane.style.display="block" };
+    showpins.onclick=()=>{ renderPins(); pinsPane.style.display="block" };
+    closepins.onclick=()=>{ pinsPane.style.display="none" };
 
-    menuBtn.onclick=()=>{ if(isDesktop()) return; menu.style.display="block" }
-    closeMenu.onclick=()=>{ menu.style.display="none" }
-    opensettings.onclick=()=>{ if(isDesktop()) return; settings.style.display="block" }
-    closesettings.onclick=()=>{ settings.style.display="none" }
+    // Panels
+    menuBtn.onclick=()=>{ if(isDesktop()) return; menu.style.display="block" };
+    closeMenu.onclick=()=>{ menu.style.display="none" };
+    opensettings.onclick=()=>{ if(isDesktop()) return; settings.style.display="block" };
+    closesettings.onclick=()=>{ settings.style.display="none" };
 
-    toggleCoords.checked = !!prefs.showCoords
-    coordsEl.style.display = prefs.showCoords ? "block" : "none"
-    coordFmtEl.value = prefs.coordFmt || "dec"
-    coordPrecEl.value = prefs.prec ?? 6
-    coordPrecVal.textContent = String(prefs.prec ?? 6)
+    // Prefs -> UI
+    toggleCoords.checked = !!prefs.showCoords;
+    coordsEl.style.display = prefs.showCoords ? "block" : "none";
+    coordFmtEl.value = prefs.coordFmt || "dec";
+    coordPrecEl.value = prefs.prec ?? 6;
+    coordPrecVal.textContent = String(prefs.prec ?? 6);
+    themeModeEl.value = prefs.theme || "auto";
 
-    autoFollowEl.checked = !!prefs.autoFollow
-    shareDeltaEl.checked = prefs.includeDelta!==false
-    confirmDeleteEl.checked = prefs.confirmDelete!==false
+    autoFollowEl.checked = !!prefs.autoFollow;
+    shareDeltaEl.checked = prefs.includeDelta!==false;
+    confirmDeleteEl.checked = prefs.confirmDelete!==false;
 
-    markerVisibleEl.checked = !prefs.markerHidden
-    markerSizeEl.value = prefs.markerSize || 20
-    markerSizeVal.textContent = markerSizeEl.value + "px"
-    markerColorEl.value = prefs.markerColor || "#e53935"
-    markerRingEl.checked = prefs.markerRing !== false
-    ringWidthEl.value = prefs.ringWidth != null ? prefs.ringWidth : 3
-    ringWidthVal.textContent = ringWidthEl.value + "px"
-    markerStyleEl.value = prefs.markerStyle || "dot"
-    applyMarkerStyle(markerStyleEl.value)
+    markerVisibleEl.checked = !prefs.markerHidden;
+    markerSizeEl.value = prefs.markerSize || 20;
+    markerSizeVal.textContent = markerSizeEl.value + "px";
+    markerColorEl.value = prefs.markerColor || "#e53935";
+    markerRingEl.checked = prefs.markerRing !== false;
+    ringWidthEl.value = prefs.ringWidth != null ? prefs.ringWidth : 3;
+    ringWidthVal.textContent = ringWidthEl.value + "px";
+    markerStyleEl.value = prefs.markerStyle || "dot";
+    applyMarkerStyle(markerStyleEl.value);
+
+    accentColorEl.value = prefs.accent || "#0ea5e9";
+    setAccent(prefs.accent || "#0ea5e9");
+
+    customCSSEl.value = prefs.userCSS || "";
+    applyUserCSS(prefs.userCSS||"");
 
     document.querySelectorAll(".settings .ghead button").forEach(b=>{
       b.onclick=()=>{ const t=b.getAttribute("data-t"); const sec=document.querySelector(`.settings .section[data-sec="${t}"]`); sec.style.display=sec.style.display==="block"?"none":"block" }
-    })
+    });
 
-    markerVisibleEl.onchange=()=>{ markerEl.classList.toggle("hidden", !markerVisibleEl.checked); prefs.markerHidden = !markerVisibleEl.checked; savePrefs() }
-    markerSizeEl.oninput=()=>{ document.documentElement.style.setProperty("--marker-size", markerSizeEl.value+"px"); markerSizeVal.textContent=markerSizeEl.value+"px"; prefs.markerSize=+markerSizeEl.value; savePrefs() }
-    markerColorEl.oninput=()=>{ document.documentElement.style.setProperty("--marker-color", markerColorEl.value); prefs.markerColor=markerColorEl.value; savePrefs() }
-    markerRingEl.onchange=()=>{ document.documentElement.style.setProperty("--marker-ring", markerRingEl.checked ? "rgba(229,57,53,.35)" : "transparent"); prefs.markerRing = markerRingEl.checked; savePrefs() }
-    ringWidthEl.oninput=()=>{ document.documentElement.style.setProperty("--ring-width", ringWidthEl.value+"px"); ringWidthVal.textContent=ringWidthEl.value+"px"; prefs.ringWidth=+ringWidthEl.value; savePrefs() }
-    markerStyleEl.onchange=()=>{ applyMarkerStyle(markerStyleEl.value); prefs.markerStyle=markerStyleEl.value; savePrefs() }
+    // Pref listeners
+    markerVisibleEl.onchange=()=>{ markerEl.classList.toggle("hidden", !markerVisibleEl.checked); prefs.markerHidden = !markerVisibleEl.checked; savePrefs() };
+    markerSizeEl.oninput=()=>{ document.documentElement.style.setProperty("--marker-size", markerSizeEl.value+"px"); markerSizeVal.textContent=markerSizeEl.value+"px"; prefs.markerSize=+markerSizeEl.value; savePrefs() };
+    markerColorEl.oninput=()=>{ document.documentElement.style.setProperty("--marker-color", markerColorEl.value); prefs.markerColor=markerColorEl.value; savePrefs() };
+    markerRingEl.onchange=()=>{ document.documentElement.style.setProperty("--marker-ring", markerRingEl.checked ? "rgba(229,57,53,.35)" : "transparent"); prefs.markerRing = markerRingEl.checked; savePrefs() };
+    ringWidthEl.oninput=()=>{ document.documentElement.style.setProperty("--ring-width", ringWidthEl.value+"px"); ringWidthVal.textContent=ringWidthEl.value+"px"; prefs.ringWidth=+ringWidthEl.value; savePrefs() };
+    markerStyleEl.onchange=()=>{ applyMarkerStyle(markerStyleEl.value); prefs.markerStyle=markerStyleEl.value; savePrefs() };
 
-    toggleCoords.onchange=()=>{ prefs.showCoords = toggleCoords.checked; coordsEl.style.display = prefs.showCoords ? "block" : "none"; savePrefs() }
-    coordFmtEl.onchange=()=>{ prefs.coordFmt = coordFmtEl.value; savePrefs() }
-    coordPrecEl.oninput=()=>{ prefs.prec = +coordPrecEl.value; coordPrecVal.textContent=String(prefs.prec); savePrefs() }
-    autoFollowEl.onchange=()=>{ prefs.autoFollow = autoFollowEl.checked; savePrefs() }
-    shareDeltaEl.onchange=()=>{ prefs.includeDelta = shareDeltaEl.checked; savePrefs() }
-    confirmDeleteEl.onchange=()=>{ prefs.confirmDelete = confirmDeleteEl.checked; savePrefs() }
+    toggleCoords.onchange=()=>{ prefs.showCoords = toggleCoords.checked; coordsEl.style.display = prefs.showCoords ? "block" : "none"; savePrefs() };
+    coordFmtEl.onchange=()=>{ prefs.coordFmt = coordFmtEl.value; savePrefs() };
+    coordPrecEl.oninput=()=>{ prefs.prec = +coordPrecEl.value; coordPrecVal.textContent=String(prefs.prec); savePrefs() };
+    autoFollowEl.onchange=()=>{ prefs.autoFollow = autoFollowEl.checked; savePrefs() };
+    shareDeltaEl.onchange=()=>{ prefs.includeDelta = shareDeltaEl.checked; savePrefs() };
+    confirmDeleteEl.onchange=()=>{ prefs.confirmDelete = confirmDeleteEl.checked; savePrefs() };
+    themeModeEl.onchange=()=>{ prefs.theme = themeModeEl.value; applyTheme(prefs.theme); savePrefs() };
+
+    accentColorEl.oninput=()=>{ setAccent(accentColorEl.value); prefs.accent=accentColorEl.value; savePrefs() };
+    accentResetEl.onclick=()=>{ const def="#0ea5e9"; accentColorEl.value=def; setAccent(def); prefs.accent=def; savePrefs() };
+
+    applyCSSEl.onclick=()=>{ const css=customCSSEl.value||""; prefs.userCSS=css; applyUserCSS(css); savePrefs() };
+    clearCSSEl.onclick=()=>{ customCSSEl.value=""; prefs.userCSS=""; applyUserCSS(""); savePrefs() };
 
     addEventListener("keydown",(e)=>{
-      if(e.target.matches("input, textarea")) return
+      if(e.target.matches("input, textarea")) return;
       if(e.key.toLowerCase()==="l"){ e.preventDefault(); locate() }
       if(e.key.toLowerCase()==="s"){ e.preventDefault(); savepin.click() }
       if(e.key.toLowerCase()==="h"){ e.preventDefault(); toggleFollow() }
@@ -594,40 +610,75 @@
       if(e.key.toLowerCase()==="2"){ e.preventDefault(); setLayer("cyclemap") }
       if(e.key.toLowerCase()==="3"){ e.preventDefault(); setLayer("transportmap") }
       if(e.key.toLowerCase()==="4"){ e.preventDefault(); setLayer("hot") }
-      if(e.key==="Escape"){ menu.style.display="none"; settings.style.display="none"; pinsPane.style.display="none" }
-    })
+      if(e.key==="Escape"){ menu.style.display="none"; settings.style.display="none"; pinsPane.style.display="none"; hideSuggest(true) }
+    });
 
     addEventListener("popstate",e=>{
-      stopFollow()
+      stopFollow();
       if(e.state && typeof e.state.lat==="number"){ state=e.state; layerSel && (layerSel.value=state.layer); apply(false) }
       else { parseURL(); layerSel && (layerSel.value=state.layer); apply(false) }
-    })
+    });
 
     function loadPrefs(){ try{ return JSON.parse(localStorage.getItem(PREFS_KEY)||"{}") }catch{ return {} } }
     function savePrefs(){ localStorage.setItem(PREFS_KEY, JSON.stringify(prefs)) }
+
     function applyPrefs(){
-      if(prefs.markerSize) document.documentElement.style.setProperty("--marker-size", prefs.markerSize+"px")
-      if(prefs.markerColor) document.documentElement.style.setProperty("--marker-color", prefs.markerColor)
-      document.documentElement.style.setProperty("--marker-ring", (prefs.markerRing===false) ? "transparent" : "rgba(229,57,53,.35)")
-      document.documentElement.style.setProperty("--ring-width", (prefs.ringWidth!=null?prefs.ringWidth:3)+"px")
-      if(prefs.markerHidden) markerEl.classList.add("hidden")
-      applyMarkerStyle(prefs.markerStyle||"dot")
+      if(prefs.markerSize) document.documentElement.style.setProperty("--marker-size", prefs.markerSize+"px");
+      if(prefs.markerColor) document.documentElement.style.setProperty("--marker-color", prefs.markerColor);
+      document.documentElement.style.setProperty("--marker-ring", (prefs.markerRing===false) ? "transparent" : "rgba(229,57,53,.35)");
+      document.documentElement.style.setProperty("--ring-width", (prefs.ringWidth!=null?prefs.ringWidth:3)+"px");
+      if(prefs.markerHidden) markerEl.classList.add("hidden");
+      applyMarkerStyle(prefs.markerStyle||"dot");
+      setAccent(prefs.accent||"#0ea5e9");
+      applyTheme(prefs.theme||"auto");
     }
-    function applyMarkerStyle(style){
-      markerEl.classList.toggle("crosshair", style==="crosshair")
+    function applyMarkerStyle(style){ markerEl.classList.toggle("crosshair", style==="crosshair") }
+    function setAccent(hex){ document.documentElement.style.setProperty("--accent",hex); themeColorMeta?.setAttribute("content",hex) }
+
+    // Theme (no heavy theming—just hint)
+    function applyTheme(mode){
+      if(mode==="dark"){ document.documentElement.style.colorScheme="dark" }
+      else if(mode==="light"){ document.documentElement.style.colorScheme="light" }
+      else { document.documentElement.style.colorScheme="" } // auto
     }
 
-    parseURL()
-    apply(false)
+    // PWA manifest (runtime-injected, no service worker)
+    (function injectManifest(){
+      const manifest={
+        name:"PokeMaps Public Beta",
+        short_name:"PokeMaps",
+        start_url: location.pathname,
+        display:"standalone",
+        background_color:"#000000",
+        theme_color:getComputedStyle(document.documentElement).getPropertyValue("--accent").trim() || "#0ea5e9",
+        icons:[
+          { src:"/css/yt-ukraine.svg", sizes:"any", type:"image/svg+xml", purpose:"any" }
+        ]
+      };
+      const blob=new Blob([JSON.stringify(manifest)],{type:"application/manifest+json"});
+      const url=URL.createObjectURL(blob);
+      const link=document.createElement("link");
+      link.rel="manifest"; link.href=url;
+      document.head.appendChild(link);
+    })();
 
-    const urlHasLat = new URLSearchParams(location.search).has("lat")
+    // Custom CSS injector
+    function applyUserCSS(css){
+      let tag=document.getElementById("user-css");
+      if(!tag){ tag=document.createElement("style"); tag.id="user-css"; document.head.appendChild(tag) }
+      tag.textContent=css||"";
+    }
+
+    // Init navigation
+    parseURL(); apply(false);
+    const urlHasLat = new URLSearchParams(location.search).has("lat");
     if(!urlHasLat){ locate() }
-    if(prefs.autoFollow) startFollow()
+    if(prefs.autoFollow) startFollow();
 
-    if(isDesktop()) buildDesktopSidebar()
-
+    // Desktop sidebar
+    if(isDesktop()) buildDesktopSidebar();
     function buildDesktopSidebar(){
-      const side=document.createElement("div"); side.className="sidebar"
+      const side=document.createElement("div"); side.className="sidebar";
       side.innerHTML=`
         <div class="sidegroup">
           <header>Layers</header>
@@ -638,7 +689,6 @@
             <option value="hot">Humanitarian</option>
           </select></div>
           <div class="row"><button class="iconbtn" id="d_openosm">Open in OSM</button><button class="iconbtn" id="d_copy">Copy Link</button></div>
-          <div class="row"><a class="iconbtn" href="https://wiki.osmfoundation.org/wiki/Terms_of_Use" target="_blank" rel="noopener">OSM Terms</a><a class="iconbtn" href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">Copyright</a></div>
         </div>
         <div class="sidegroup">
           <header>Location</header>
@@ -663,75 +713,68 @@
           <div class="row"><label>Precision</label><input type="range" id="d_prec" min="0" max="8"><span id="d_precv"></span></div>
         </div>
         <div class="sidegroup">
-          <header>Pins</header>
-          <div class="row"><label><input type="checkbox" id="d_confirm"> Confirm delete</label></div>
-          <div class="row"><button class="iconbtn" id="d_pins">Open Pins</button><button class="iconbtn" id="d_savepin">Save Pin</button></div>
+          <header>Links</header>
+          <div class="row"><button class="iconbtn" id="d_gmaps">Google Maps (not recommended)</button></div>
         </div>
         <div class="sidegroup">
           <header>About</header>
           <div class="row"><small>Powered by openstreetmap.org • Data © OSM contributors • Public Beta</small></div>
         </div>
-      `
-      document.body.appendChild(side)
-      const d_layer=side.querySelector("#d_layer")
-      side.querySelector("#d_openosm").onclick=()=>window.open(osmViewURL(state),"_blank")
-      side.querySelector("#d_copy").onclick=copyLink
-      side.querySelector("#d_locate").onclick=locate
-      side.querySelector("#d_follow").onclick=toggleFollow
-      side.querySelector("#d_reset").onclick=reset
-      side.querySelector("#d_share").onclick=shareLink
-      side.querySelector("#d_near").onclick=locate
-      side.querySelector("#d_clear").onclick=()=>{ q.value=""; q.focus() }
-      d_layer.value=state.layer
-      d_layer.onchange=()=>setLayer(d_layer.value)
+      `;
+      document.body.appendChild(side);
 
-      const d_markerv=side.querySelector("#d_markerv")
-      const d_style=side.querySelector("#d_style")
-      const d_ms=side.querySelector("#d_ms"), d_msv=side.querySelector("#d_msv")
-      const d_mc=side.querySelector("#d_mc")
-      const d_mr=side.querySelector("#d_mr")
-      const d_rw=side.querySelector("#d_rw"), d_rwv=side.querySelector("#d_rwv")
-      const d_showc=side.querySelector("#d_showc")
-      const d_fmt=side.querySelector("#d_fmt")
-      const d_copyc=side.querySelector("#d_copyc")
-      const d_pins=side.querySelector("#d_pins")
-      const d_savepin=side.querySelector("#d_savepin")
-      const d_autofollow=side.querySelector("#d_autofollow")
-      const d_prec=side.querySelector("#d_prec"), d_precv=side.querySelector("#d_precv")
-      const d_confirm=side.querySelector("#d_confirm")
+      const d_layer=side.querySelector("#d_layer");
+      side.querySelector("#d_openosm").onclick=()=>window.open(osmViewURL(state),"_blank");
+      side.querySelector("#d_copy").onclick=copyLink;
+      side.querySelector("#d_locate").onclick=locate;
+      side.querySelector("#d_follow").onclick=toggleFollow;
+      side.querySelector("#d_reset").onclick=reset;
+      side.querySelector("#d_share").onclick=shareLink;
+      side.querySelector("#d_near").onclick=locate;
+      side.querySelector("#d_clear").onclick=()=>{ q.value=""; q.focus(); searchPlaces("") };
+      side.querySelector("#d_gmaps").onclick=()=>window.open(gmapsURL(state), "_blank");
+      d_layer.value=state.layer;
+      d_layer.onchange=()=>setLayer(d_layer.value);
 
-      d_markerv.checked=!prefs.markerHidden
-      d_style.value=prefs.markerStyle||"dot"
-      d_ms.value=markerSizeEl.value; d_msv.textContent=d_ms.value+"px"
-      d_mc.value=markerColorEl.value
-      d_mr.checked=markerRingEl.checked
-      d_rw.value=ringWidthEl.value; d_rwv.textContent=d_rw.value+"px"
-      d_showc.checked=!!prefs.showCoords
-      d_fmt.value=prefs.coordFmt||"dec"
-      d_autofollow.checked=!!prefs.autoFollow
-      d_prec.value=prefs.prec??6; d_precv.textContent=String(prefs.prec??6)
-      d_confirm.checked=prefs.confirmDelete!==false
+      const d_markerv=side.querySelector("#d_markerv");
+      const d_style=side.querySelector("#d_style");
+      const d_ms=side.querySelector("#d_ms"), d_msv=side.querySelector("#d_msv");
+      const d_mc=side.querySelector("#d_mc");
+      const d_mr=side.querySelector("#d_mr");
+      const d_rw=side.querySelector("#d_rw"), d_rwv=side.querySelector("#d_rwv");
+      const d_showc=side.querySelector("#d_showc");
+      const d_fmt=side.querySelector("#d_fmt");
+      const d_copyc=side.querySelector("#d_copyc");
+      const d_autofollow=side.querySelector("#d_autofollow");
+      const d_prec=side.querySelector("#d_prec"), d_precv=side.querySelector("#d_precv");
 
-      d_markerv.onchange=()=>{ markerVisibleEl.checked=d_markerv.checked; markerVisibleEl.onchange() }
-      d_style.onchange=()=>{ markerStyleEl.value=d_style.value; markerStyleEl.onchange() }
-      d_ms.oninput=()=>{ markerSizeEl.value=d_ms.value; markerSizeEl.oninput(); d_msv.textContent=d_ms.value+"px" }
-      d_mc.oninput=()=>{ markerColorEl.value=d_mc.value; markerColorEl.oninput() }
-      d_mr.onchange=()=>{ markerRingEl.checked=d_mr.checked; markerRingEl.onchange() }
-      d_rw.oninput=()=>{ ringWidthEl.value=d_rw.value; ringWidthEl.oninput(); d_rwv.textContent=d_rw.value+"px" }
-      d_showc.onchange=()=>{ toggleCoords.checked=d_showc.checked; toggleCoords.onchange() }
-      d_fmt.onchange=()=>{ coordFmtEl.value=d_fmt.value; coordFmtEl.onchange() }
-      d_copyc.onclick=copyCoords
-      d_pins.onclick=()=>{ renderPins(); pinsPane.style.display="block" }
-      d_savepin.onclick=()=>savepin.click()
-      d_autofollow.onchange=()=>{ autoFollowEl.checked=d_autofollow.checked; autoFollowEl.onchange() }
-      d_prec.oninput=()=>{ coordPrecEl.value=d_prec.value; coordPrecEl.oninput(); d_precv.textContent=d_prec.value }
-      d_confirm.onchange=()=>{ confirmDeleteEl.checked=d_confirm.checked; confirmDeleteEl.onchange() }
+      d_markerv.checked=!prefs.markerHidden;
+      d_style.value=prefs.markerStyle||"dot";
+      d_ms.value=markerSizeEl.value; d_msv.textContent=d_ms.value+"px";
+      d_mc.value=markerColorEl.value;
+      d_mr.checked=markerRingEl.checked;
+      d_rw.value=ringWidthEl.value; d_rwv.textContent=d_rw.value+"px";
+      d_showc.checked=!!prefs.showCoords;
+      d_fmt.value=prefs.coordFmt||"dec";
+      d_autofollow.checked=!!prefs.autoFollow;
+      d_prec.value=prefs.prec??6; d_precv.textContent=String(prefs.prec??6);
+
+      d_markerv.onchange=()=>{ markerVisibleEl.checked=d_markerv.checked; markerVisibleEl.onchange() };
+      d_style.onchange=()=>{ markerStyleEl.value=d_style.value; markerStyleEl.onchange() };
+      d_ms.oninput=()=>{ markerSizeEl.value=d_ms.value; markerSizeEl.oninput(); d_msv.textContent=d_ms.value+"px" };
+      d_mc.oninput=()=>{ markerColorEl.value=d_mc.value; markerColorEl.oninput() };
+      d_mr.onchange=()=>{ markerRingEl.checked=d_mr.checked; markerRingEl.onchange() };
+      d_rw.oninput=()=>{ ringWidthEl.value=d_rw.value; ringWidthEl.oninput(); d_rwv.textContent=d_rw.value+"px" };
+      d_showc.onchange=()=>{ toggleCoords.checked=d_showc.checked; toggleCoords.onchange() };
+      d_fmt.onchange=()=>{ coordFmtEl.value=d_fmt.value; coordFmtEl.onchange() };
+      d_copyc.onclick=copyCoords;
+      d_autofollow.onchange=()=>{ autoFollowEl.checked=d_autofollow.checked; autoFollowEl.onchange() };
+      d_prec.oninput=()=>{ coordPrecEl.value=d_prec.value; coordPrecEl.oninput(); d_precv.textContent=d_prec.value };
     }
 
-    function tickCoords(){ updateCoordsFast(); setTimeout(tickCoords,1) }
-    tickCoords()
+    function tickCoords(){ updateCoordsFast(); setTimeout(tickCoords,120) } // fast enough, less CPU
+    tickCoords();
 
-    function applyMarkerStyle(style){ markerEl.classList.toggle("crosshair", style==="crosshair") }
   })();
   </script>
   <script src="/static/data-mobile.js" defer></script>

@@ -2189,444 +2189,83 @@ if (/[?&]autoplay=/.test(location.search)) {
                <% if(!IsOldWindows) { %>
 
 <script>
- 
-(() => {
-  "use strict";
+const AMvideo = document.getElementById("video")
+const oddCanvas = document.getElementById("ambient-canvas-1")
+const evenCanvas = document.getElementById("ambient-canvas-2")
+const oddCtx = oddCanvas.getContext("2d")
+const evenCtx = evenCanvas.getContext("2d")
 
-  // --- Element refs
-  const AMvideo = document.getElementById("video");
-  const oddCanvas = document.getElementById("ambient-canvas-1");
-  const evenCanvas = document.getElementById("ambient-canvas-2");
+const frameIntervalMs = 998
+const canvasOpacity = "0.4"
 
-  if (!AMvideo || !oddCanvas || !evenCanvas) {
-    // Hard stop if essentials are missing
-    console.warn("[Ambient] Missing #video or ambient canvases.");
-    return;
+let intervalId
+let oddFrame = true
+let numWorkers = navigator.hardwareConcurrency || 4
+let workers = []
+
+const drawFrame = (workerId) => {
+  if (workers[workerId].oddFrame) {
+    workers[workerId].ctx.drawImage(AMvideo, 0, 0, workers[workerId].canvas.width, workers[workerId].canvas.height)
+    transitionToOddCanvas(workerId)
+  } else {
+    workers[workerId].ctx.drawImage(AMvideo, 0, 0, workers[workerId].canvas.width, workers[workerId].canvas.height)
+    transitionToEvenCanvas(workerId)
+  }
+  workers[workerId].oddFrame = !workers[workerId].oddFrame
+};
+
+const transitionToOddCanvas = (workerId) => {
+  workers[workerId].canvas.style.opacity = canvasOpacity
+  workers[(workerId + 1) % numWorkers].canvas.style.opacity = "0"
+}
+
+const transitionToEvenCanvas = (workerId) => {
+  workers[workerId].canvas.style.opacity = canvasOpacity
+  workers[(workerId - 1 + numWorkers) % numWorkers].canvas.style.opacity = "0"
+}
+
+const drawStart = () => {
+  for (let i = 0; i < numWorkers; i++) {
+    workers[i] = {
+      canvas: i % 2 === 0 ? oddCanvas : evenCanvas,
+      ctx: i % 2 === 0 ? oddCtx : evenCtx,
+      oddFrame: i % 2 === 0
+    }
+    workers[i].canvas.style.transition = `opacity ${frameIntervalMs / numWorkers}ms`
+    intervalId = window.setInterval(() => drawFrame(i), frameIntervalMs / numWorkers)
+  }
+}
+
+const drawPause = () => {
+  if (intervalId) window.clearInterval(intervalId)
+}
+
+const init = () => {
+  // Fixes an issue where Firefox/Chromium fails to load ambient mode and doesn't load it.
+  video.pause(); video.play(); 
+  // DO NOT REMOVE
+
+  // Check if ambient mode should load
+  if (numWorkers < 2 || window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    return; 
   }
 
-  // --- Ctx + constants
-  const oddCtx = oddCanvas.getContext("2d", { alpha: true, desynchronized: true });
-  const evenCtx = evenCanvas.getContext("2d", { alpha: true, desynchronized: true });
+  AMvideo.addEventListener("play", drawStart, false)
+  AMvideo.addEventListener("pause", drawPause, false)
+  AMvideo.addEventListener("ended", drawPause, false)
+}
 
-  if (!oddCtx || !evenCtx) {
-    console.warn("[Ambient] 2D canvas context not available.");
-    return;
-  }
 
-  // Base target update interval (ms) — ~1s cadence by default
-  const BASE_INTERVAL_MS = 998;
+const cleanup = () => {
+  AMvideo.removeEventListener("play", drawStart)
+  AMvideo.removeEventListener("pause", drawPause)
+  AMvideo.removeEventListener("ended", drawPause)
+  drawPause();
+}
 
-  // Opacity of the active ambient canvas
-  const CANVAS_OPACITY = 0.4;
+window.addEventListener("load", init)
+window.addEventListener("unload", cleanup)
 
-  // Internal state
-  let running = false;
-  let useAmbient = false;
-  let useRaf = true; // Prefer rAF with throttling
-  let rafId = 0;
-  let lastDrawMs = 0;
-  let targetIntervalMs = BASE_INTERVAL_MS;
-  let oddFrame = true;
-  let aborter = null; // AbortController for all listeners
-  let resizeObserver = null;
-  let battery = null;
-
-  // --- Helpers: safe feature checks
-  const getHardwareThreads = () => {
-    const hc = navigator.hardwareConcurrency || 2;
-    return Math.max(2, Math.min(8, hc)); // clamp 2..8
-  };
-
-  const getDeviceMemoryGB = () => {
-    // Not supported everywhere; treat as mid if unknown
-    const mem = navigator.deviceMemory;
-    return typeof mem === "number" ? mem : 4;
-  };
-
-  const connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
-  const saveData = !!(connection && connection.saveData);
-
-  const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  const isLowMem = getDeviceMemoryGB() <= 2;
-  const isVeryLowMem = getDeviceMemoryGB() <= 1;
-
-  const isLowEndDevice =
-    isVeryLowMem ||
-    (isLowMem && getHardwareThreads() <= 4) ||
-    (saveData && getHardwareThreads() <= 4);
-
-  // These influence throttling, not a hard disable:
-  const prefersLowRefresh = window.matchMedia("(prefers-reduced-transparency: reduce)").matches;
-
-  // Try BatteryManager (optional; ignore if unavailable)
-  const initBattery = async () => {
-    try {
-      if (navigator.getBattery) {
-        battery = await navigator.getBattery();
-      }
-    } catch {}
-  };
-
-  // --- Ambient eligibility checks
-  const canUseAmbient = () => {
-    // 1) Motion & data saving
-    if (prefersReducedMotion) return false;
-    if (saveData) return false;
-
-    // 2) Low-end devices
-    if (isLowEndDevice) return false;
-
-    // 3) Visibility / focus
-    if (document.visibilityState !== "visible") return false;
-
-    // 4) Video readiness
-    // Have something we can draw: HAVE_CURRENT_DATA (2) or better
-    if (!AMvideo.readyState || AMvideo.readyState < 2) return false;
-
-    // 5) Dimensions must be non-zero
-    const vw = AMvideo.videoWidth;
-    const vh = AMvideo.videoHeight;
-    if (!vw || !vh) return false;
-
-    // 6) Cross-origin taint check (best-effort)
-    // If crossOrigin is set and video is from another origin without CORS,
-    // drawing to canvas taints it. We won't immediately fail, but we can test once.
-    // We'll do a small try-catch on first draw to decide. (Handled in drawOnceTaintTest)
-
-    // 7) Optional battery consideration: don’t run when on battery saver & low level
-    if (battery && battery.level !== undefined) {
-      const lowLevel = battery.level <= 0.15; // 15%
-      if (lowLevel && !battery.charging) return false;
-    }
-
-    return true;
-  };
-
-  // --- Canvas sizing
-  const setCanvasSizes = () => {
-    // Match canvas to video’s rendered box (for speed) rather than full video resolution.
-    // This is cheaper while still giving nice blur/ambient effect.
-    const vb = AMvideo.getBoundingClientRect();
-    const width = Math.max(1, Math.floor(vb.width));
-    const height = Math.max(1, Math.floor(vb.height));
-
-    if (oddCanvas.width !== width || oddCanvas.height !== height) {
-      oddCanvas.width = width;
-      oddCanvas.height = height;
-    }
-    if (evenCanvas.width !== width || evenCanvas.height !== height) {
-      evenCanvas.width = width;
-      evenCanvas.height = height;
-    }
-  };
-
-  // --- Style priming
-  const primeCanvasStyles = () => {
-    const durMs = Math.max(120, Math.min(600, targetIntervalMs)); // keep transitions responsive
-    oddCanvas.style.transition = `opacity ${durMs}ms linear`;
-    evenCanvas.style.transition = `opacity ${durMs}ms linear`;
-    oddCanvas.style.willChange = "opacity, transform";
-    evenCanvas.style.willChange = "opacity, transform";
-
-    // ensure base visibility state
-    oddCanvas.style.opacity = "0";
-    evenCanvas.style.opacity = "0";
-    oddCanvas.style.pointerEvents = "none";
-    evenCanvas.style.pointerEvents = "none";
-  };
-
-  // --- Draw logic
-  const active = () => (oddFrame ? oddCanvas : evenCanvas);
-  const activeCtx = () => (oddFrame ? oddCtx : evenCtx);
-  const inactive = () => (oddFrame ? evenCanvas : oddCanvas);
-
-  let taintChecked = false;
-  let canDrawToCanvas = true;
-
-  const drawOnceTaintTest = () => {
-    if (taintChecked) return;
-    taintChecked = true;
-    try {
-      activeCtx().drawImage(AMvideo, 0, 0, active().width, active().height);
-      // If tainted, getImageData will throw. We won’t call it every time; just once:
-      activeCtx().getImageData(0, 0, 1, 1);
-    } catch (e) {
-      console.warn("[Ambient] Canvas tainted (likely CORS). Disabling ambient mode.", e);
-      canDrawToCanvas = false;
-    }
-  };
-
-  const doDraw = (nowMs) => {
-    if (!running || !useAmbient || !canDrawToCanvas) return;
-
-    // Throttle by interval
-    const elapsed = nowMs - lastDrawMs;
-    if (elapsed < targetIntervalMs) return;
-
-    lastDrawMs = nowMs;
-
-    // Sync canvases to current on-screen video box size
-    setCanvasSizes();
-
-    // First-time taint probe (if needed)
-    drawOnceTaintTest();
-    if (!canDrawToCanvas) return;
-
-    // Draw frame
-    const ctx = activeCtx();
-    try {
-      ctx.clearRect(0, 0, active().width, active().height);
-      ctx.drawImage(AMvideo, 0, 0, active().width, active().height);
-    } catch (e) {
-      // Some browsers may glitch while seeking—skip this cycle.
-      return;
-    }
-
-    // Crossfade
-    active().style.opacity = String(CANVAS_OPACITY);
-    inactive().style.opacity = "0";
-
-    // Flip buffer
-    oddFrame = !oddFrame;
-  };
-
-  // --- Scheduler
-  const tick = (t) => {
-    doDraw(typeof t === "number" ? t : performance.now());
-    rafId = requestAnimationFrame(tick);
-  };
-
-  const startRaf = () => {
-    if (rafId) cancelAnimationFrame(rafId);
-    rafId = requestAnimationFrame(tick);
-  };
-
-  let intervalId = 0;
-  const startInterval = () => {
-    if (intervalId) clearInterval(intervalId);
-    intervalId = setInterval(() => doDraw(performance.now()), Math.max(120, targetIntervalMs));
-  };
-
-  const stopAllTimers = () => {
-    if (rafId) cancelAnimationFrame(rafId);
-    rafId = 0;
-    if (intervalId) clearInterval(intervalId);
-    intervalId = 0;
-  };
-
-  // --- Dynamic throttling based on conditions
-  const recomputeInterval = () => {
-    // Base
-    let ms = BASE_INTERVAL_MS;
-
-    // Heavier throttling on low-end or when tab not focused/visible
-    if (document.visibilityState !== "visible") ms *= 3;
-
-    // If playbackRate is faster, we can slightly speed up updates (but keep it cheap)
-    const rate = AMvideo.playbackRate || 1;
-    ms = ms / Math.min(2, Math.max(0.5, rate)); // clamp 0.5..2 impact
-
-    // If user prefers low transparency or connection is constrained, slow a bit
-    if (prefersLowRefresh) ms *= 1.25;
-    if (saveData) ms *= 1.5;
-
-    // If battery is low (and not charging), slow updates
-    if (battery && !battery.charging && battery.level !== undefined && battery.level < 0.25) {
-      ms *= 1.5;
-    }
-
-    // Clamp bounds
-    targetIntervalMs = Math.max(180, Math.min(2000, Math.floor(ms)));
-
-    // Update CSS transitions to feel consistent with cadence
-    primeCanvasStyles();
-
-    // Restart timer flavor as needed
-    stopAllTimers();
-    if (useRaf) startRaf();
-    else startInterval();
-  };
-
-  // --- Start/stop ambient
-  const startAmbient = () => {
-    if (running) return;
-    running = true;
-
-    // Choose scheduler: rAF for smoothness, fallback to setInterval if rAF stutters
-    useRaf = true;
-
-    setCanvasSizes();
-    primeCanvasStyles();
-    recomputeInterval();
-  };
-
-  const stopAmbient = () => {
-    running = false;
-    stopAllTimers();
-    oddCanvas.style.opacity = "0";
-    evenCanvas.style.opacity = "0";
-  };
-
-  // --- Visibility & page lifecycle
-  const onVisibility = () => {
-    if (!useAmbient) return;
-    if (document.visibilityState !== "visible") {
-      stopAllTimers(); // we’ll resume on visible
-    } else {
-      recomputeInterval();
-    }
-  };
-
-  const onFocus = () => {
-    if (!useAmbient) return;
-    recomputeInterval();
-  };
-
-  const onBlur = () => {
-    if (!useAmbient) return;
-    // More conservative on blur
-    stopAllTimers();
-    startInterval();
-  };
-
-  // --- Video event handlers
-  const onPlay = () => {
-    // Video warmed?
-    if (AMvideo.readyState < 2) return;
-
-    // Check if ambient allowed
-    useAmbient = canUseAmbient();
-    if (!useAmbient) {
-      stopAmbient();
-      return;
-    }
-
-    startAmbient();
-  };
-
-  const onPauseOrEnd = () => {
-    stopAmbient();
-  };
-
-  const onStalledOrWaiting = () => {
-    // If buffer stalls, pause ambient to avoid redundant work
-    stopAllTimers();
-  };
-
-  const onCanPlay = () => {
-    if (AMvideo.paused) return;
-    // Re-enable ambient if eligible
-    useAmbient = canUseAmbient();
-    if (useAmbient) {
-      startAmbient();
-    }
-  };
-
-  const onRateChange = () => {
-    if (!useAmbient) return;
-    recomputeInterval();
-  };
-
-  const onResize = () => {
-    if (!useAmbient) return;
-    setCanvasSizes();
-  };
-
-  // Observe the video’s box to react to layout changes (cheaper than window resize in many cases)
-  const attachResizeObserver = () => {
-    if (window.ResizeObserver) {
-      resizeObserver = new ResizeObserver(() => setCanvasSizes());
-      resizeObserver.observe(AMvideo);
-    } else {
-      window.addEventListener("resize", onResize, { passive: true, signal: aborter.signal });
-    }
-  };
-
-  // --- Public-ish init/cleanup
-  const init = async () => {
-    // Autoplay nudge for some browsers (original note retained)
-    try {
-      AMvideo.pause();
-      AMvideo.play().catch(() => {}); // ignore autoplay policy errors
-    } catch {}
-
-    // Battery (optional)
-    await initBattery();
-
-    // Early exit if ambient is definitely not allowed up front
-    if (!canUseAmbient()) {
-      useAmbient = false;
-    }
-
-    aborter = new AbortController();
-
-    // Video listeners
-    AMvideo.addEventListener("play", onPlay, { signal: aborter.signal });
-    AMvideo.addEventListener("pause", onPauseOrEnd, { signal: aborter.signal });
-    AMvideo.addEventListener("ended", onPauseOrEnd, { signal: aborter.signal });
-    AMvideo.addEventListener("stalled", onStalledOrWaiting, { signal: aborter.signal });
-    AMvideo.addEventListener("waiting", onStalledOrWaiting, { signal: aborter.signal });
-    AMvideo.addEventListener("canplay", onCanPlay, { signal: aborter.signal });
-    AMvideo.addEventListener("ratechange", onRateChange, { signal: aborter.signal });
-    AMvideo.addEventListener("loadedmetadata", () => {
-      // Recheck sizes & eligibility once we know video dims
-      setCanvasSizes();
-      useAmbient = canUseAmbient();
-    }, { signal: aborter.signal });
-
-    // Page listeners
-    document.addEventListener("visibilitychange", onVisibility, { signal: aborter.signal });
-    window.addEventListener("focus", onFocus, { signal: aborter.signal });
-    window.addEventListener("blur", onBlur, { signal: aborter.signal });
-
-    // Connection changes (data saver toggled, etc.)
-    if (connection && connection.addEventListener) {
-      connection.addEventListener("change", () => {
-        // Recompute eligibility + interval
-        const eligible = canUseAmbient();
-        if (!eligible) stopAmbient();
-        else if (running) recomputeInterval();
-      }, { signal: aborter.signal });
-    }
-
-    // Battery listeners (optional)
-    if (battery) {
-      battery.addEventListener("levelchange", () => {
-        if (!useAmbient) return;
-        recomputeInterval();
-      }, { signal: aborter.signal });
-      battery.addEventListener("chargingchange", () => {
-        if (!useAmbient) return;
-        recomputeInterval();
-      }, { signal: aborter.signal });
-    }
-
-    // Resize observation
-    attachResizeObserver();
-
-    // If video is already playing when we load, kick off
-    if (!AMvideo.paused && AMvideo.readyState >= 2) {
-      onPlay();
-    }
-  };
-
-  const cleanup = () => {
-    stopAmbient();
-    if (aborter) {
-      aborter.abort();
-      aborter = null;
-    }
-    if (resizeObserver) {
-      try { resizeObserver.disconnect(); } catch {}
-      resizeObserver = null;
-    }
-  };
-
-  // --- Boot
-  window.addEventListener("load", init, { once: true });
-  window.addEventListener("unload", cleanup, { once: true });
-})();
- 
 
 </script>
 <style>

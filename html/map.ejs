@@ -9,14 +9,13 @@
   <style>
     :root{
       --vh:100vh;--pad:12px;--radius:14px;--fg:#fff;--bg:rgba(0,0,0,.6);--glass:blur(12px);
-      --marker-size:20px;--marker-color:#e53935;--marker-ring:rgba(229,57,53,.35);--ring-w:3px;
-      --panel-w:320px;
+      --marker-size:20px;--marker-color:#e53935;--marker-ring:rgba(229,57,53,.35);
+      --panel:rgba(0,0,0,.85)
     }
     *{box-sizing:border-box}
     html,body{height:100%;margin:0}
     body{background:#000;font:14px/1.4 ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Arial;color:var(--fg)}
     .app{position:fixed;inset:0;display:grid;grid-template-rows:auto 1fr}
-    /* Top bar (mobile + desktop) */
     .bar{position:relative;z-index:5;display:flex;gap:8px;align-items:center;padding:8px var(--pad);
       backdrop-filter:var(--glass);-webkit-backdrop-filter:var(--glass);background:var(--bg)}
     .search{position:relative;flex:1;min-width:0}
@@ -29,42 +28,32 @@
     .mapwrap{position:relative;height:calc(var(--vh) - 56px);overflow:hidden}
     iframe#map{position:absolute;inset:0;border:0;width:100%;height:100%}
 
-    /* Center cursor (kept absolutely centered) */
     .marker{position:absolute;left:50%;top:50%;width:var(--marker-size);height:var(--marker-size);
       border-radius:50%;transform:translate(-50%,-50%);background:var(--marker-color);
-      box-shadow:0 0 0 var(--ring-w) var(--marker-ring);z-index:3;pointer-events:none}
+      box-shadow:0 0 0 3px var(--marker-ring);z-index:3;pointer-events:none}
     .marker.hidden{display:none}
-    .marker.crosshair{background:transparent;border-radius:0;box-shadow:none}
-    .marker.crosshair::before,.marker.crosshair::after{
-      content:"";position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
-      background:var(--marker-color)
-    }
-    .marker.crosshair::before{width:2px;height:100vh;opacity:.7}
-    .marker.crosshair::after{height:2px;width:100vw;opacity:.7}
 
-    /* Brand & bottom-left action stack */
     .brand{position:absolute;bottom:10px;left:10px;padding:6px 10px;font-size:18px;font-weight:600;
       background:var(--bg);backdrop-filter:var(--glass);-webkit-backdrop-filter:var(--glass);
       border-radius:10px;z-index:4;pointer-events:none}
-    .brandstack{position:absolute;left:10px;bottom:52px;z-index:5;display:flex;flex-direction:column;gap:6px}
-    .brandstack button{border:0;border-radius:10px;background:#111;color:#fff;padding:8px 10px;text-align:left}
 
-    /* Coords pill */
+    .dock{position:absolute;left:10px;bottom:52px;z-index:7;display:flex;flex-direction:column;gap:8px}
+    .dock button{border:0;border-radius:10px;background:#111;color:#fff;padding:8px 10px}
+
     .coords{position:absolute;bottom:10px;right:10px;z-index:5;padding:6px 10px;border-radius:10px;
       background:var(--bg);backdrop-filter:var(--glass);-webkit-backdrop-filter:var(--glass);
-      border:1px solid #333;display:none;min-width:200px;text-align:right}
+      border:1px solid #333;display:none;min-width:220px;text-align:right}
 
-    /* Mobile menus */
-    .menu{position:fixed;top:56px;right:10px;z-index:8;min-width:230px;max-width:90vw;
-      background:rgba(0,0,0,.85);backdrop-filter:var(--glass);-webkit-backdrop-filter:var(--glass);
+    .menu{position:fixed;top:56px;right:10px;z-index:8;min-width:260px;max-width:92vw;
+      background:var(--panel);backdrop-filter:var(--glass);-webkit-backdrop-filter:var(--glass);
       border:1px solid #333;border-radius:12px;display:none;overflow:hidden}
     .menu header{display:flex;justify-content:space-between;align-items:center;padding:10px 12px;border-bottom:1px solid #222}
     .menu .row{display:flex;gap:8px;align-items:center;padding:8px 12px;border-top:1px solid #111}
     .menu .row:first-of-type{border-top:0}
-    .menu .row button,.menu .row select{flex:1}
+    .menu .row button,.menu .row select,.menu .row input{flex:1}
     .select{appearance:none;-webkit-appearance:none;border:1px solid #333;background:#111;color:#fff;border-radius:10px;padding:10px 12px}
 
-    .pins{position:fixed;inset:auto 10px 80px auto;right:10px;z-index:8;min-width:220px;max-width:90vw;max-height:50vh;overflow:auto;background:rgba(0,0,0,.75);backdrop-filter:var(--glass);-webkit-backdrop-filter:var(--glass);border:1px solid #333;border-radius:12px;display:none}
+    .pins{position:fixed;left:10px;bottom:110px;z-index:8;min-width:240px;max-width:92vw;max-height:50vh;overflow:auto;background:var(--panel);backdrop-filter:var(--glass);-webkit-backdrop-filter:var(--glass);border:1px solid #333;border-radius:12px;display:none}
     .pins header{display:flex;justify-content:space-between;align-items:center;padding:8px 10px;border-bottom:1px solid #222}
     .pins ul{list-style:none;margin:0;padding:0}
     .pins li{display:flex;justify-content:space-between;gap:8px;align-items:center;padding:10px;border-top:1px solid #111}
@@ -72,8 +61,8 @@
     .pins .row{display:flex;gap:8px}
     .tag{display:inline-block;font-size:12px;opacity:.8}
 
-    .settings{position:fixed;inset:auto 10px 80px auto;left:10px;z-index:8;min-width:260px;max-width:92vw;
-      background:rgba(0,0,0,.85);backdrop-filter:var(--glass);-webkit-backdrop-filter:var(--glass);
+    .settings{position:fixed;left:10px;bottom:110px;z-index:8;min-width:280px;max-width:92vw;
+      background:var(--panel);backdrop-filter:var(--glass);-webkit-backdrop-filter:var(--glass);
       border:1px solid #333;border-radius:12px;display:none}
     .settings header{display:flex;justify-content:space-between;align-items:center;padding:8px 10px;border-bottom:1px solid #222}
     .settings .row{display:flex;gap:10px;align-items:center;padding:10px;border-top:1px solid #111}
@@ -82,22 +71,15 @@
     .settings input[type="range"]{flex:1}
     .settings input[type="color"]{width:42px;height:32px;border:0;background:none}
 
-    /* DESKTOP PRO UI */
-    .desk{display:none}
-    @media (min-width: 1024px){
-      .app{grid-template-rows:auto 1fr}
-      .desk{display:grid;grid-template-columns:var(--panel-w) 1fr;position:fixed;inset:56px 0 0 0}
-      .desk .panel{position:relative;z-index:6;height:100%;overflow:auto;background:rgba(0,0,0,.65);
-        border-right:1px solid #333;backdrop-filter:var(--glass);-webkit-backdrop-filter:var(--glass)}
-      .panel .section{padding:12px;border-bottom:1px solid #222}
-      .panel h4{margin:0 0 8px 0;font-size:13px;opacity:.9}
-      .panel .row{display:flex;gap:8px;align-items:center;margin:6px 0}
-      .panel .row > *{flex:1}
-      .panel .small{font-size:12px;opacity:.8}
-      .panel .inline{display:flex;gap:8px;align-items:center}
-      .mapwrap{height:100%}
-      .menu,.settings,.pins{ /* still used, but desktop has panel so keep hidden until invoked */ }
-    }
+    .desktop .bar{grid-column:2}
+    .desktop .app{grid-template-columns:320px 1fr;grid-template-rows:auto 1fr}
+    .desktop .sidebar{position:fixed;left:0;top:0;bottom:0;width:320px;background:var(--panel);border-right:1px solid #333;display:flex;flex-direction:column;gap:10px;padding:12px;z-index:9}
+    .desktop .sidegroup{border:1px solid #222;border-radius:12px;overflow:hidden}
+    .desktop .sidegroup header{padding:10px 12px;border-bottom:1px solid #222;font-weight:600}
+    .desktop .sidegroup .row{display:flex;gap:8px;align-items:center;padding:8px 12px;border-top:1px solid #111}
+    .desktop .sidegroup .row:first-of-type{border-top:0}
+    .desktop .mapwrap{grid-column:2}
+    .desktop .menu,.desktop .pins,.desktop .settings{display:none !important}
 
     @media (min-width:768px){ .bar{padding:10px 14px} .brand{font-size:20px} }
     @media (prefers-reduced-motion:reduce){ *{animation:none !important;transition:none !important} }
@@ -105,7 +87,6 @@
 </head>
 <body>
   <div class="app" id="app">
-    <!-- TOP BAR -->
     <div class="bar">
       <div class="search">
         <form id="form" autocomplete="off">
@@ -117,119 +98,34 @@
       <button class="iconbtn" id="menuBtn" title="Menu">⋯</button>
     </div>
 
-    <!-- DESKTOP LAYOUT WRAPPER -->
-    <div class="desk" id="desk">
-      <aside class="panel" id="panel">
-        <div class="section">
-          <h4>Layer</h4>
-          <select class="select" id="layer">
-            <option value="mapnik">Standard</option>
-            <option value="cyclemap">Cycle</option>
-            <option value="transportmap">Transport</option>
-            <option value="hot">Humanitarian</option>
-          </select>
-        </div>
+    <div class="mapwrap" id="mapwrap">
+      <iframe id="map" title="Map"></iframe>
+      <div id="marker" class="marker" aria-hidden="true"></div>
 
-        <div class="section">
-          <h4>View</h4>
-          <div class="row">
-            <label class="inline small"><input type="checkbox" id="autoFollow"> Auto follow</label>
-            <label class="inline small"><input type="checkbox" id="alwaysCoords"> Always coords</label>
-          </div>
-          <div class="row">
-            <label class="inline small">Coord format</label>
-            <select class="select" id="coordFmt">
-              <option value="dd">DD (12.3456, -7.8901)</option>
-              <option value="dms">DMS (12°20'44"N)</option>
-            </select>
-          </div>
-          <div class="row">
-            <label class="inline small">Delta</label>
-            <input type="range" id="deltaRange" min="0.01" max="8" step="0.01">
-          </div>
-          <div class="row">
-            <button class="iconbtn" id="copy">📋 Copy Link</button>
-            <button class="iconbtn" id="copycoords">📐 Coords</button>
-          </div>
-          <div class="row">
-            <button class="iconbtn" id="share">🔗 Share</button>
-            <button class="iconbtn" id="openosm">🌐 Open OSM</button>
-          </div>
-          <div class="row">
-            <button class="iconbtn" id="follow">🛰️ Follow</button>
-            <button class="iconbtn" id="reset">🔁 Reset</button>
-          </div>
-        </div>
-
-        <div class="section">
-          <h4>Marker</h4>
-          <div class="row"><label>Visible</label><input type="checkbox" id="markerVisible" checked></div>
-          <div class="row"><label>Style</label>
-            <select class="select" id="markerStyle">
-              <option value="dot">Dot</option>
-              <option value="crosshair">Crosshair</option>
-            </select>
-          </div>
-          <div class="row"><label>Size</label><input type="range" id="markerSize" min="8" max="48" step="1"><span id="markerSizeVal" class="small"></span></div>
-          <div class="row"><label>Color</label><input type="color" id="markerColor"></div>
-          <div class="row"><label>Ring</label><input type="checkbox" id="markerRing" checked></div>
-          <div class="row"><label>Ring width</label><input type="range" id="ringWidth" min="0" max="10" step="1"></div>
-        </div>
-
-        <div class="section">
-          <h4>Pins</h4>
-          <div class="row">
-            <button class="iconbtn" id="savepin_side">⭐ Save current</button>
-            <button class="iconbtn" id="showpins_side">📒 Show pins</button>
-          </div>
-          <div class="small">Tip: press <b>S</b> to save.</div>
-        </div>
-      </aside>
-
-      <div class="mapwrap" id="mapwrap_desk">
-        <iframe id="map" title="Map (Desktop)"></iframe>
-        <div id="marker" class="marker" aria-hidden="true"></div>
-        <!-- bottom-left stack over brand -->
-        <div class="brandstack">
-          <button id="savepin">⭐ Save Pin</button>
-          <button id="showpins">📒 Pins</button>
-          <button id="opensettings">⚙ Settings</button>
-        </div>
-        <div class="brand">PokeMaps</div>
-        <div class="coords" id="coords"></div>
-      </div>
-    </div>
-
-    <!-- MOBILE MAP (shown when .desk hidden) -->
-    <div class="mapwrap" id="mapwrap_mob">
-      <iframe id="map_m" title="Map (Mobile)"></iframe>
-      <div id="marker_m" class="marker" aria-hidden="true"></div>
-
-      <div class="brandstack">
-        <button id="savepin_m">⭐ Save Pin</button>
-        <button id="showpins_m">📒 Pins</button>
-        <button id="opensettings_m">⚙ Settings</button>
-      </div>
       <div class="brand">PokeMaps</div>
-      <div class="coords" id="coords_m"></div>
+      <div class="dock">
+        <button id="savepin">⭐ Save Pin</button>
+        <button id="showpins" title="Show saved pins">📒 Pins</button>
+        <button id="opensettings" title="Marker & display settings">⚙ Settings</button>
+      </div>
+
+      <div class="coords" id="coords"></div>
     </div>
   </div>
 
-  <!-- MOBILE MENU SHEETS -->
   <div class="menu" id="menu">
     <header><strong>Menu</strong><button class="iconbtn" id="closeMenu" title="Close">✕</button></header>
-    <div class="row"><select class="select" id="layer_m">
+    <div class="row"><select class="select" id="layer">
       <option value="mapnik">Standard</option>
       <option value="cyclemap">Cycle</option>
       <option value="transportmap">Transport</option>
       <option value="hot">Humanitarian</option>
     </select></div>
-    <div class="row"><button class="iconbtn" id="follow_m">🛰️ Follow</button><button class="iconbtn" id="reset_m">🔁 Reset</button></div>
-    <div class="row"><button class="iconbtn" id="copy_m">📋 Copy Link</button><button class="iconbtn" id="copycoords_m">📐 Coords</button></div>
-    <div class="row"><button class="iconbtn" id="share_m">🔗 Share</button><button class="iconbtn" id="openosm_m">🌐 Open OSM</button></div>
+    <div class="row"><button class="iconbtn" id="follow">🛰️ Follow</button><button class="iconbtn" id="reset">🔁 Reset</button></div>
+    <div class="row"><button class="iconbtn" id="copy">📋 Copy Link</button><button class="iconbtn" id="copycoords">📐 Coords</button></div>
+    <div class="row"><button class="iconbtn" id="share">🔗 Share</button><button class="iconbtn" id="openosm">🌐 Open OSM</button></div>
   </div>
 
-  <!-- SHARED PINS + SETTINGS (reused on both) -->
   <div class="pins" id="pins">
     <header>
       <strong>Saved Pins</strong>
@@ -241,202 +137,118 @@
   <div class="settings" id="settings">
     <header><strong>Display & Marker</strong><button id="closesettings" class="iconbtn">✕</button></header>
     <div class="row"><label><input type="checkbox" id="toggleCoords"> Always show coordinates</label></div>
-    <div class="row"><label>Coord format</label>
-      <select class="select" id="coordFmt_m">
-        <option value="dd">DD</option>
-        <option value="dms">DMS</option>
-      </select>
-    </div>
-    <div class="row"><label>Marker visible</label><input type="checkbox" id="markerVisible_m" checked></div>
-    <div class="row"><label>Marker style</label>
-      <select class="select" id="markerStyle_m">
-        <option value="dot">Dot</option>
-        <option value="crosshair">Crosshair</option>
-      </select>
-    </div>
-    <div class="row"><label>Marker size</label><input type="range" id="markerSize_m" min="8" max="48" step="1" value="20"><span id="markerSizeVal_m">20px</span></div>
-    <div class="row"><label>Marker color</label><input type="color" id="markerColor_m" value="#e53935"></div>
-    <div class="row"><label>Ring glow</label><input type="checkbox" id="markerRing_m" checked></div>
-    <div class="row"><label>Ring width</label><input type="range" id="ringWidth_m" min="0" max="10" step="1" value="3"></div>
+    <div class="row"><label>Marker visible</label><input type="checkbox" id="markerVisible" checked></div>
+    <div class="row"><label>Marker size</label><input type="range" id="markerSize" min="8" max="48" step="1" value="20"><span id="markerSizeVal">20px</span></div>
+    <div class="row"><label>Marker color</label><input type="color" id="markerColor" value="#e53935"></div>
+    <div class="row"><label>Ring glow</label><input type="checkbox" id="markerRing" checked></div>
   </div>
 
   <script>
-    ;(()=>{
-      // ---- constants
+    ;(()=> {
       const OSM_EMBED="https://www.openstreetmap.org/export/embed.html"
       const OSM_VIEW ="https://www.openstreetmap.org"
       const NOMINATIM="https://nominatim.openstreetmap.org/search"
       const LAYERS=["mapnik","cyclemap","transportmap","hot"]
       const DEFAULT={lat:30.410156,lon:72.448792,delta:.25,layer:"mapnik"}
       const LIMITS={deltaMin:0.01, deltaMax:45}
+      const S=sel=>document.querySelector(sel)
+
+      const map=S("#map"), q=S("#q"), sug=S("#suggestions")
+      const locateBtn=S("#locate"), menuBtn=S("#menuBtn"), menu=S("#menu"), closeMenu=S("#closeMenu")
+      const layerSel=S("#layer"), followBtn=S("#follow"), resetBtn=S("#reset"), shareBtn=S("#share")
+      const copyBtn=S("#copy"), copyCoordsBtn=S("#copycoords"), openBtn=S("#openosm")
+      const pinsPane=S("#pins"), pinlist=S("#pinlist"), showpins=S("#showpins"), closepins=S("#closepins"), savepin=S("#savepin")
+      const opensettings=S("#opensettings"), settings=S("#settings"), closesettings=S("#closesettings")
+      const toggleCoords=S("#toggleCoords"), coordsEl=S("#coords")
+      const markerEl=S("#marker"), markerVisibleEl=S("#markerVisible"), markerSizeEl=S("#markerSize"), markerSizeVal=S("#markerSizeVal"), markerColorEl=S("#markerColor"), markerRingEl=S("#markerRing")
+
       const PREFS_KEY="pokemaps_prefs_v2"
       const LS_PINS="pokemaps_pins_v1"
 
-      const S = sel => document.querySelector(sel)
-      const mQ = window.matchMedia('(min-width:1024px) and (pointer:fine)')
-      const isDesktop = () => mQ.matches
-
-      // dynamic 100vh fix
-      const setVH=()=>{const vh=window.innerHeight*0.01;document.documentElement.style.setProperty("--vh",`${vh*100}px`)}
-      setVH(); addEventListener("resize",()=>setVH(),{passive:true})
-
-      // elements (both)
-      const app = S('#app')
-      const barLocate = S('#locate')
-      const menuBtn = S('#menuBtn')
-      const menu = S('#menu')
-      const closeMenu = S('#closeMenu')
-
-      // desktop bits
-      const desk = S('#desk')
-      const map_d = S('#map')
-      const marker_d = S('#marker')
-      const coords_d = S('#coords')
-      const layerSel_d = S('#layer')
-      const autoFollow = S('#autoFollow')
-      const alwaysCoords = S('#alwaysCoords')
-      const coordFmt_d = S('#coordFmt')
-      const deltaRange = S('#deltaRange')
-      const followBtn_d = S('#follow')
-      const resetBtn_d = S('#reset')
-      const copyBtn_d = S('#copy')
-      const copyCoordsBtn_d = S('#copycoords')
-      const shareBtn_d = S('#share')
-      const openBtn_d = S('#openosm')
-
-      // desktop marker controls
-      const markVisible_d = S('#markerVisible')
-      const markerStyle_d = S('#markerStyle')
-      const markerSize_d = S('#markerSize')
-      const markerSizeVal_d = S('#markerSizeVal')
-      const markerColor_d = S('#markerColor')
-      const markerRing_d = S('#markerRing')
-      const ringWidth_d = S('#ringWidth')
-
-      // desktop pins shortcuts
-      const savepin_side = S('#savepin_side')
-      const showpins_side = S('#showpins_side')
-
-      // mobile bits
-      const map_m = S('#map_m')
-      const marker_m = S('#marker_m')
-      const coords_m = S('#coords_m')
-      const layerSel_m = S('#layer_m')
-      const followBtn_m = S('#follow_m')
-      const resetBtn_m = S('#reset_m')
-      const copyBtn_m = S('#copy_m')
-      const copyCoordsBtn_m = S('#copycoords_m')
-      const shareBtn_m = S('#share_m')
-      const openBtn_m = S('#openosm_m')
-
-      // mobile brand stack actions
-      const savepin_m = S('#savepin_m')
-      const showpins_m = S('#showpins_m')
-      const opensettings_m = S('#opensettings_m')
-
-      // shared sheets
-      const pinsPane = S('#pins'), pinlist = S('#pinlist'), closepins = S('#closepins')
-      const settings = S('#settings'), closesettings = S('#closesettings')
-
-      // mobile settings fields
-      const toggleCoords = S('#toggleCoords')
-      const coordFmt_m = S('#coordFmt_m')
-      const markerVisible_m = S('#markerVisible_m')
-      const markerStyle_m = S('#markerStyle_m')
-      const markerSize_m = S('#markerSize_m')
-      const markerSizeVal_m = S('#markerSizeVal_m')
-      const markerColor_m = S('#markerColor_m')
-      const markerRing_m = S('#markerRing_m')
-      const ringWidth_m = S('#ringWidth_m')
-
-      // common pins buttons stacked above brand (desktop area)
-      const savepin_btn = S('#savepin')
-      const showpins_btn = S('#showpins')
-      const opensettings_btn = S('#opensettings')
-
-      // state
-      let aborter=null,lastQuery=""
-      let watchId=null
+      let aborter=null, lastQuery="", watchId=null
       let state={...DEFAULT}
-      let prefs = loadPrefs()
+      const prefs=loadPrefs()
+      applyPrefs()
 
-      // helpers
+      const isDesktop=()=> matchMedia("(min-width: 1024px)").matches && matchMedia("(pointer: fine)").matches
+      const applyDesktopClass=()=>{ document.body.classList.toggle("desktop", isDesktop()) }
+      applyDesktopClass()
+      addEventListener("resize",()=>applyDesktopClass(),{passive:true})
+
+      const setVH=()=>{const vh=window.innerHeight*0.01;document.documentElement.style.setProperty("--vh",`${vh*100}px`)}
+      setVH(); addEventListener("resize",()=>{setVH()},{passive:true})
+
       const clamp=(n,min,max)=>Math.min(Math.max(n,min),max)
-      const clampDelta=d=>clamp(d,LIMITS.deltaMin,LIMITS.deltaMax)
+      const clampDelta=d=>clamp(d, LIMITS.deltaMin, LIMITS.deltaMax)
       const cleanStr=s=>s.replace(/\s+/g," ").trim()
-      const bboxFrom=(lat,lon,d)=>({left:(lon-d).toFixed(6),bottom:(lat-d).toFixed(6),right:(lon+d).toFixed(6),top:(lat+d).toFixed(6)})
+
+      const bboxFrom=(lat,lon,d)=>({
+        left:(lon-d).toFixed(6),
+        bottom:(lat-d).toFixed(6),
+        right:(lon+d).toFixed(6),
+        top:(lat+d).toFixed(6)
+      })
       const embedURL=({lat,lon,delta,layer})=>{
         const b=bboxFrom(lat,lon,clampDelta(delta))
         const lyr = LAYERS.includes(layer)?layer:DEFAULT.layer
         return `${OSM_EMBED}?bbox=${b.left}%2C${b.bottom}%2C${b.right}%2C${b.top}&layer=${encodeURIComponent(lyr)}`
       }
       const appURL=({lat,lon,delta,layer})=>{
-        const p=new URLSearchParams({lat:lat.toFixed(6),lon:lon.toFixed(6),delta:clampDelta(delta).toFixed(4),layer})
+        const p=new URLSearchParams({
+          lat:lat.toFixed(6),
+          lon:lon.toFixed(6),
+          delta:clampDelta(delta).toFixed(4),
+          layer:layer
+        })
         return `${location.origin}${location.pathname}?${p.toString()}`
       }
       const osmViewURL=({lat,lon,delta,layer})=>{
         const z = deltaToZoom(clampDelta(delta))
         return `${OSM_VIEW}/?mlat=${lat.toFixed(6)}&mlon=${lon.toFixed(6)}#map=${z}/${lat.toFixed(6)}/${lon.toFixed(6)}&layers=${layer}`
       }
-      const deltaToZoom=d=>Math.round(10 - Math.log2(d/0.02))
 
-      function parseURL(){
+      const parseURL=()=>{
         const sp=new URLSearchParams(location.search)
         const lat=parseFloat(sp.get("lat")), lon=parseFloat(sp.get("lon")), delta=parseFloat(sp.get("delta"))
         const layer=sp.get("layer")
         if(Number.isFinite(lat)&&Number.isFinite(lon)) state.lat=clamp(lat,-90,90), state.lon=clamp(lon,-180,180)
         if(Number.isFinite(delta)&&delta>0) state.delta=clampDelta(delta)
         if(layer && LAYERS.includes(layer)) state.layer=layer
+        layerSel.value=state.layer
       }
 
-      function ensureLayouts(){
-        // toggle which map & marker are active
-        const desktop = isDesktop()
-        desk.style.display = desktop ? 'grid' : 'none'
-        S('#mapwrap_mob').style.display = desktop ? 'none' : 'block'
-      }
-
-      function currentMapEl(){ return isDesktop()? map_d : map_m }
-      function currentMarkerEl(){ return isDesktop()? marker_d : marker_m }
-      function currentCoordsEl(){ return isDesktop()? coords_d : coords_m }
-      function currentLayerSel(){ return isDesktop()? layerSel_d : layerSel_m }
-
-      function apply(push){
-        const iframe = currentMapEl()
-        iframe.src = embedURL(state)
+      const apply=(push)=>{
+        map.src=embedURL(state)
         if(push) history.pushState(state,"",appURL(state))
         if(prefs.showCoords) updateCoords()
       }
 
-      function centerOn(lat,lon,{push=true}={}){
+      const updateCoords=()=>{
+        const fmt=prefs.coordFmt||"dec"
+        const dec=`${state.lat.toFixed(6)}, ${state.lon.toFixed(6)}`
+        const dms=toDMS(state.lat,true)+" "+toDMS(state.lon,false)
+        const txt=(fmt==="dms"?dms:dec)+` · Δ ${state.delta.toFixed(4)} · ${state.layer}`
+        coordsEl.textContent = txt
+      }
+
+      const toDMS=(v,isLat)=>{
+        const dir=isLat?(v>=0?"N":"S"):(v>=0?"E":"W")
+        const av=Math.abs(v); const d=Math.floor(av); const m=Math.floor((av-d)*60); const s=((av-d)*60 - m)*60
+        return `${d}°${m}′${s.toFixed(2)}″ ${dir}`
+      }
+
+      const centerOn=(lat,lon,{push=true}={})=>{
         state.lat=clamp(lat,-90,90)
         state.lon=clamp(lon,-180,180)
         apply(push)
       }
+      const setLayer=(layer)=>{ state.layer = LAYERS.includes(layer)?layer:DEFAULT.layer; apply(true) }
+      const setDelta=(delta,{push=true}={})=>{ state.delta = clampDelta(delta); apply(push) }
 
-      function setLayer(layer){ state.layer = LAYERS.includes(layer)?layer:DEFAULT.layer; apply(true) }
-      function setDelta(delta,{push=true}={}){ state.delta = clampDelta(delta); apply(push) }
+      const zoomToDelta=z=>Math.min(LIMITS.deltaMax, Math.max(LIMITS.deltaMin, Math.pow(2, (10 - z)) * 0.02))
+      const deltaToZoom=d=>Math.round(10 - Math.log2(d/0.02))
 
-      function updateCoords(){
-        const el = currentCoordsEl()
-        const txt = formatCoords(state.lat, state.lon, prefs.coordFmt || 'dd')
-        el.textContent = `${txt} · Δ ${state.delta.toFixed(4)} · ${state.layer}`
-      }
-
-      function formatCoords(lat,lon,fmt){
-        if(fmt==='dms'){
-          const dms=(v,latlon)=> {
-            const a=Math.abs(v), d=Math.floor(a), m=Math.floor((a-d)*60), s=((a-d)*60 - m)*60
-            const hemi = latlon==='lat' ? (v>=0?'N':'S') : (v>=0?'E':'W')
-            return `${d}°${m}'${s.toFixed(2)}"${hemi}`
-          }
-          return `${dms(lat,'lat')}, ${dms(lon,'lon')}`
-        }
-        return `${lat.toFixed(6)}, ${lon.toFixed(6)}`
-      }
-
-      // geolocation
-      function locate(){
+      const locate=()=>{
         if(!("geolocation" in navigator)){ alert("Geolocation not supported."); return }
         navigator.geolocation.getCurrentPosition(
           pos=>centerOn(pos.coords.latitude,pos.coords.longitude,{push:true}),
@@ -444,40 +256,32 @@
           {enableHighAccuracy:true,timeout:10000,maximumAge:0}
         )
       }
-      function startFollow(){
+      const startFollow=()=>{
         if(!("geolocation" in navigator)){ alert("Geolocation not supported."); return }
         if(watchId!==null) return
-        (isDesktop()?followBtn_d:followBtn_m).textContent="🛰️ Following"
+        followBtn.textContent="🛰️ Following"
         watchId = navigator.geolocation.watchPosition(
           pos=>{ centerOn(pos.coords.latitude,pos.coords.longitude,{push:false}); if(prefs.showCoords) updateCoords() },
           _=>stopFollow(),
           {enableHighAccuracy:true,timeout:15000,maximumAge:1000}
         )
       }
-      function stopFollow(){
+      const stopFollow=()=>{
         if(watchId!==null){ navigator.geolocation.clearWatch(watchId); watchId=null }
-        if(followBtn_d) followBtn_d.textContent="🛰️ Follow"
-        if(followBtn_m) followBtn_m.textContent="🛰️ Follow"
+        followBtn.textContent="🛰️ Follow"
       }
       const toggleFollow=()=> watchId===null ? startFollow() : stopFollow()
 
-      // copy/share
-      async function copyLink(){ try{ await navigator.clipboard.writeText(appURL(state)); alert("Link copied!") }catch{ alert("Could not copy.") } }
-      async function copyCoords(){
-        const coords = prefs.coordFmt==='dms'
-          ? formatCoords(state.lat,state.lon,'dms')
-          : `${state.lat.toFixed(6)},${state.lon.toFixed(6)}`
-        try{ await navigator.clipboard.writeText(coords); alert("Coordinates copied!") }catch{ alert(coords) }
+      const copyLink=async()=>{ try{ await navigator.clipboard.writeText(appURL(state)); alert("Link copied!") }catch{ alert("Could not copy.") } }
+      const copyCoords=async()=>{
+        const fmt=prefs.coordFmt||"dec"
+        const msg= fmt==="dms" ? (toDMS(state.lat,true)+" "+toDMS(state.lon,false)) : `${state.lat.toFixed(6)},${state.lon.toFixed(6)}`
+        try{ await navigator.clipboard.writeText(msg); alert("Coordinates copied!") }catch{ alert(msg) }
       }
-      async function shareLink(){
-        const url = appURL(state)
-        if(navigator.share){ try{ await navigator.share({title:"PokeMaps", url}) }catch{} }
-        else { copyLink() }
-      }
+      const shareLink=async()=>{ const url = appURL(state); if(navigator.share){ try{ await navigator.share({title:"PokeMaps", url}) }catch{} } else { copyLink() } }
+      const reset=()=>{ stopFollow(); state={...DEFAULT}; q.value=""; sug.style.display="none"; q.setAttribute("aria-expanded","false"); layerSel.value=state.layer; apply(true) }
 
-      // search
       const debounced=(fn,ms=250)=>{let t;return(...a)=>{clearTimeout(t);t=setTimeout(()=>fn(...a),ms)}}
-      const q = S('#q'), sug = S('#suggestions')
       const searchPlaces=debounced(async term=>{
         term=cleanStr(term); if(!term){sug.style.display="none"; q.setAttribute("aria-expanded","false"); return}
         if(aborter) aborter.abort()
@@ -500,6 +304,7 @@
           if(e.name!=="AbortError"){ sug.style.display="none"; q.setAttribute("aria-expanded","false") }
         }
       },200)
+
       q.addEventListener("input",e=>{
         const v=e.target.value
         if(v===lastQuery) return
@@ -516,84 +321,15 @@
         }catch{}
       })
 
-      // menus & panels
-      menuBtn.onclick=()=> menu.style.display="block"
-      closeMenu.onclick=()=> menu.style.display="none"
+      locateBtn.onclick=locate
+      layerSel.onchange=()=>setLayer(layerSel.value)
+      followBtn.onclick=toggleFollow
+      resetBtn.onclick=reset
+      shareBtn.onclick=shareLink
+      copyBtn.onclick=copyLink
+      copyCoordsBtn.onclick=copyCoords
+      openBtn.onclick=()=>{ window.open(osmViewURL(state), "_blank") }
 
-      // map control bindings (desktop & mobile variants)
-      function bindCommon(){
-        // locate
-        barLocate.onclick=locate
-
-        // desktop
-        if(layerSel_d){
-          layerSel_d.onchange=()=>setLayer(layerSel_d.value)
-          deltaRange.min = String(LIMITS.deltaMin)
-          deltaRange.max = "8"
-          deltaRange.step = "0.01"
-          deltaRange.oninput=()=> setDelta(parseFloat(deltaRange.value),{push:false})
-          followBtn_d.onclick=toggleFollow
-          resetBtn_d.onclick=()=>{ stopFollow(); resetState() }
-          copyBtn_d.onclick=copyLink
-          copyCoordsBtn_d.onclick=copyCoords
-          shareBtn_d.onclick=shareLink
-          openBtn_d.onclick=()=>window.open(osmViewURL(state),"_blank")
-
-          // marker desktop
-          markVisible_d.onchange=()=>{ toggleMarker(markVisible_d.checked) }
-          markerStyle_d.onchange=()=>{ setMarkerStyle(markerStyle_d.value) }
-          markerSize_d.oninput=()=>{ setMarkerSize(+markerSize_d.value); markerSizeVal_d.textContent=markerSize_d.value+"px" }
-          markerColor_d.oninput=()=> setMarkerColor(markerColor_d.value)
-          markerRing_d.onchange=()=> setRing(markerRing_d.checked)
-          ringWidth_d.oninput=()=> setRingWidth(+ringWidth_d.value)
-
-          // pins
-          savepin_side.onclick=savePin
-          showpins_side.onclick=()=>{ renderPins(); pinsPane.style.display="block" }
-        }
-
-        // mobile menu
-        if(layerSel_m){
-          layerSel_m.onchange=()=>setLayer(layerSel_m.value)
-          followBtn_m.onclick=toggleFollow
-          resetBtn_m.onclick=()=>{ stopFollow(); resetState() }
-          copyBtn_m.onclick=copyLink
-          copyCoordsBtn_m.onclick=copyCoords
-          shareBtn_m.onclick=shareLink
-          openBtn_m.onclick=()=>window.open(osmViewURL(state),"_blank")
-        }
-
-        // brand stack buttons (both layouts)
-        ;[savepin_btn, savepin_m].forEach(b=> b && (b.onclick=savePin))
-        ;[showpins_btn, showpins_m].forEach(b=> b && (b.onclick=()=>{ renderPins(); pinsPane.style.display="block" }))
-        ;[opensettings_btn, opensettings_m].forEach(b=> b && (b.onclick=()=>{ syncMobileSettingsFromPrefs(); settings.style.display="block" }))
-        closepins.onclick=()=> pinsPane.style.display="none"
-        closesettings.onclick=()=> settings.style.display="none"
-
-        // mobile settings handlers
-        toggleCoords.onchange=()=>{ prefs.showCoords = toggleCoords.checked; persistPrefs(); updateCoordsVisibility() }
-        coordFmt_m.onchange=()=>{ prefs.coordFmt = coordFmt_m.value; persistPrefs(); if(prefs.showCoords) updateCoords() }
-        markerVisible_m.onchange=()=>{ toggleMarker(markerVisible_m.checked) }
-        markerStyle_m.onchange=()=>{ setMarkerStyle(markerStyle_m.value) }
-        markerSize_m.oninput=()=>{ setMarkerSize(+markerSize_m.value); markerSizeVal_m.textContent=markerSize_m.value+"px" }
-        markerColor_m.oninput=()=> setMarkerColor(markerColor_m.value)
-        markerRing_m.onchange=()=> setRing(markerRing_m.checked)
-        ringWidth_m.oninput=()=> setRingWidth(+ringWidth_m.value)
-
-        // top toggles (desktop panel)
-        alwaysCoords.onchange=()=>{ prefs.showCoords = alwaysCoords.checked; persistPrefs(); updateCoordsVisibility() }
-        autoFollow.onchange=()=>{ prefs.autoFollow = autoFollow.checked; persistPrefs() }
-        coordFmt_d.onchange=()=>{ prefs.coordFmt = coordFmt_d.value; persistPrefs(); if(prefs.showCoords) updateCoords() }
-      }
-
-      function resetState(){
-        state={...DEFAULT}
-        currentLayerSel().value=state.layer
-        apply(true)
-        syncSliders()
-      }
-
-      // pins
       const loadPins=()=>{ try{ return JSON.parse(localStorage.getItem(LS_PINS)||"[]") }catch{ return [] } }
       const savePins=(pins)=>{ localStorage.setItem(LS_PINS, JSON.stringify(pins.slice(0,100))) }
       const renderPins=()=>{
@@ -608,7 +344,7 @@
           left.appendChild(title)
           const right=document.createElement("div"); right.className="row"
           const go=document.createElement("button"); go.textContent="Go"; go.className="iconbtn"
-          go.onclick=()=>{ pinsPane.style.display="none"; state.lat=p.lat; state.lon=p.lon; state.delta=p.delta; state.layer=p.layer; currentLayerSel().value=p.layer; apply(true); syncSliders() }
+          go.onclick=()=>{ pinsPane.style.display="none"; state.lat=p.lat; state.lon=p.lon; state.delta=p.delta; state.layer=p.layer; layerSel.value=p.layer; apply(true) }
           const share=document.createElement("button"); share.textContent="Share"; share.className="iconbtn"
           share.onclick=async()=>{ const url=appURL(p); if(navigator.share){ try{ await navigator.share({title:p.name,url}) }catch{} } else { try{ await navigator.clipboard.writeText(url); alert("Link copied!") }catch{} } }
           const del=document.createElement("button"); del.textContent="Del"; del.className="iconbtn"
@@ -619,140 +355,143 @@
         })
       }
       const nameFromState=()=> q.value?.trim() || new Date().toLocaleString()
-      function savePin(){
-        const pins=loadPins()
-        pins.unshift({name:nameFromState(), lat:state.lat, lon:state.lon, delta:state.delta, layer:state.layer})
-        savePins(pins); renderPins(); pinsPane.style.display="block"
-      }
+      savepin.onclick=()=>{ const pins=loadPins(); pins.unshift({name:nameFromState(), lat:state.lat, lon:state.lon, delta:state.delta, layer:state.layer}); savePins(pins); renderPins(); pinsPane.style.display="block" }
+      showpins.onclick=()=>{ renderPins(); pinsPane.style.display="block" }
+      closepins.onclick=()=>{ pinsPane.style.display="none" }
 
-      // prefs
+      menuBtn.onclick=()=>{ if(isDesktop()) return; menu.style.display="block" }
+      closeMenu.onclick=()=>{ menu.style.display="none" }
+      opensettings.onclick=()=>{ if(isDesktop()) return; settings.style.display="block" }
+      closesettings.onclick=()=>{ settings.style.display="none" }
+
+      toggleCoords.checked = !!prefs.showCoords
+      coordsEl.style.display = prefs.showCoords ? "block" : "none"
+
+      markerVisibleEl.checked = !prefs.markerHidden
+      markerSizeEl.value = prefs.markerSize || 20
+      markerSizeVal.textContent = markerSizeEl.value + "px"
+      markerColorEl.value = prefs.markerColor || "#e53935"
+      markerRingEl.checked = prefs.markerRing !== false
+
+      markerVisibleEl.onchange=()=>{ markerEl.classList.toggle("hidden", !markerVisibleEl.checked); prefs.markerHidden = !markerVisibleEl.checked; savePrefs() }
+      markerSizeEl.oninput=()=>{ document.documentElement.style.setProperty("--marker-size", markerSizeEl.value+"px"); markerSizeVal.textContent=markerSizeEl.value+"px"; prefs.markerSize=+markerSizeEl.value; savePrefs() }
+      markerColorEl.oninput=()=>{ document.documentElement.style.setProperty("--marker-color", markerColorEl.value); prefs.markerColor=markerColorEl.value; savePrefs() }
+      markerRingEl.onchange=()=>{ document.documentElement.style.setProperty("--marker-ring", markerRingEl.checked ? "rgba(229,57,53,.35)" : "transparent"); prefs.markerRing = markerRingEl.checked; savePrefs() }
+      toggleCoords.onchange=()=>{ prefs.showCoords = toggleCoords.checked; coordsEl.style.display = prefs.showCoords ? "block" : "none"; if(prefs.showCoords) updateCoords(); savePrefs() }
+
+      addEventListener("keydown",(e)=>{
+        if(e.target.matches("input, textarea")) return
+        if(e.key.toLowerCase()==="l"){ e.preventDefault(); locate() }
+        if(e.key.toLowerCase()==="s"){ e.preventDefault(); savepin.click() }
+        if(e.key.toLowerCase()==="h"){ e.preventDefault(); toggleFollow() }
+        if(e.key.toLowerCase()==="r"){ e.preventDefault(); reset() }
+        if(e.key.toLowerCase()==="1"){ e.preventDefault(); setLayer("mapnik") }
+        if(e.key.toLowerCase()==="2"){ e.preventDefault(); setLayer("cyclemap") }
+        if(e.key.toLowerCase()==="3"){ e.preventDefault(); setLayer("transportmap") }
+        if(e.key.toLowerCase()==="4"){ e.preventDefault(); setLayer("hot") }
+        if(e.key==="[" ){ e.preventDefault(); setDelta(state.delta*0.75,{push:true}) }
+        if(e.key==="]" ){ e.preventDefault(); setDelta(state.delta*1.25,{push:true}) }
+        if(e.key==="Escape"){ menu.style.display="none"; settings.style.display="none"; pinsPane.style.display="none" }
+      })
+
+      addEventListener("popstate",e=>{
+        stopFollow()
+        if(e.state && typeof e.state.lat==="number"){ state=e.state; layerSel.value=state.layer; apply(false) }
+        else { parseURL(); layerSel.value=state.layer; apply(false) }
+      })
+
       function loadPrefs(){ try{ return JSON.parse(localStorage.getItem(PREFS_KEY)||"{}") }catch{ return {} } }
-      function persistPrefs(){ localStorage.setItem(PREFS_KEY, JSON.stringify(prefs)) }
-
-      // marker apply
-      function toggleMarker(visible){
-        const m = currentMarkerEl()
-        if(!m) return
-        m.classList.toggle('hidden', !visible)
-        prefs.markerHidden = !visible; persistPrefs()
-      }
-      function setMarkerStyle(style){
-        prefs.markerStyle = style; persistPrefs()
-        // swap classes on both markers so switching layout keeps style
-        ;[marker_d, marker_m].forEach(m=>{
-          if(!m) return
-          m.classList.toggle('crosshair', style==='crosshair')
-        })
-      }
-      function setMarkerSize(px){
-        document.documentElement.style.setProperty('--marker-size', px+'px')
-        prefs.markerSize = px; persistPrefs()
-      }
-      function setMarkerColor(hex){
-        document.documentElement.style.setProperty('--marker-color', hex)
-        prefs.markerColor = hex; persistPrefs()
-      }
-      function setRing(on){
-        document.documentElement.style.setProperty('--marker-ring', on ? 'rgba(229,57,53,.35)' : 'transparent')
-        prefs.markerRing = on; persistPrefs()
-      }
-      function setRingWidth(px){
-        document.documentElement.style.setProperty('--ring-w', px+'px')
-        prefs.ringWidth = px; persistPrefs()
-      }
-
-      function updateCoordsVisibility(){
-        const show = !!prefs.showCoords
-        ;[coords_d, coords_m].forEach(el=>{ if(el) el.style.display = show ? 'block' : 'none' })
-        if(show) updateCoords()
-      }
-
-      function syncMobileSettingsFromPrefs(){
-        // reflect prefs into mobile settings sheet
-        toggleCoords.checked = !!prefs.showCoords
-        coordFmt_m.value = prefs.coordFmt || 'dd'
-        markerVisible_m.checked = !(prefs.markerHidden)
-        markerStyle_m.value = prefs.markerStyle || 'dot'
-        markerSize_m.value = prefs.markerSize || 20
-        markerSizeVal_m.textContent = (prefs.markerSize||20) + "px"
-        markerColor_m.value = prefs.markerColor || '#e53935'
-        markerRing_m.checked = prefs.markerRing !== false
-        ringWidth_m.value = prefs.ringWidth ?? 3
-      }
-      function syncDesktopControlsFromPrefs(){
-        if(layerSel_d) layerSel_d.value = state.layer
-        if(alwaysCoords) alwaysCoords.checked = !!prefs.showCoords
-        if(autoFollow) autoFollow.checked = !!prefs.autoFollow
-        if(coordFmt_d) coordFmt_d.value = prefs.coordFmt || 'dd'
-        if(markerStyle_d) markerStyle_d.value = prefs.markerStyle || 'dot'
-        if(markVisible_d) markVisible_d.checked = !(prefs.markerHidden)
-        if(markerSize_d){ markerSize_d.value = prefs.markerSize || 20; markerSizeVal_d.textContent = (prefs.markerSize||20)+"px" }
-        if(markerColor_d) markerColor_d.value = prefs.markerColor || '#e53935'
-        if(markerRing_d) markerRing_d.checked = prefs.markerRing !== false
-        if(ringWidth_d) ringWidth_d.value = prefs.ringWidth ?? 3
-        if(deltaRange) deltaRange.value = state.delta
-      }
+      function savePrefs(){ localStorage.setItem(PREFS_KEY, JSON.stringify(prefs)) }
       function applyPrefs(){
         if(prefs.markerSize) document.documentElement.style.setProperty("--marker-size", prefs.markerSize+"px")
         if(prefs.markerColor) document.documentElement.style.setProperty("--marker-color", prefs.markerColor)
         document.documentElement.style.setProperty("--marker-ring", (prefs.markerRing===false) ? "transparent" : "rgba(229,57,53,.35)")
-        document.documentElement.style.setProperty("--ring-w", (prefs.ringWidth??3)+"px")
-        ;[marker_d, marker_m].forEach(m=>{
-          if(!m) return
-          if(prefs.markerHidden) m.classList.add("hidden"); else m.classList.remove("hidden")
-          m.classList.toggle('crosshair', (prefs.markerStyle||'dot')==='crosshair')
-        })
-      }
-      function syncSliders(){
-        if(deltaRange) deltaRange.value = state.delta
+        if(prefs.markerHidden) markerEl.classList.add("hidden")
       }
 
-      // keyboard
-      addEventListener("keydown",(e)=>{
-        if(e.target.matches("input, textarea")) return
-        if(e.key.toLowerCase()==="l"){ e.preventDefault(); locate() }
-        if(e.key.toLowerCase()==="s"){ e.preventDefault(); savePin() }
-        if(e.key==="Escape"){ menu.style.display="none"; settings.style.display="none"; pinsPane.style.display="none" }
-      })
-
-      // history
-      addEventListener("popstate",e=>{
-        stopFollow()
-        if(e.state && typeof e.state.lat==="number"){ state=e.state; currentLayerSel().value=state.layer; apply(false); syncSliders() }
-        else { parseURL(); currentLayerSel().value=state.layer; apply(false); syncSliders() }
-      })
-
-      // keep marker *exactly* centered even if visual viewport changes
-      const keepCenter=()=>{
-        // left/top 50% with translate already keeps it centered; force reflow on resize/orientation
-        const m = currentMarkerEl()
-        if(m){ m.style.left='50%'; m.style.top='50%'; m.style.transform='translate(-50%,-50%)' }
-      }
-      addEventListener('resize', keepCenter, {passive:true})
-      addEventListener('orientationchange', keepCenter)
-      const ro = new ResizeObserver(keepCenter)
-      ro.observe(S('#mapwrap_mob'))
-      if(S('#mapwrap_desk')) ro.observe(S('#mapwrap_desk'))
-
-      // init
-      ensureLayouts()
-      mQ.addEventListener?.('change', ()=>{ ensureLayouts(); apply(false); updateCoordsVisibility(); syncDesktopControlsFromPrefs(); })
       parseURL()
-      applyPrefs()
-      bindCommon()
-      currentLayerSel().value=state.layer
       apply(false)
-      syncDesktopControlsFromPrefs()
-      updateCoordsVisibility()
       if(!new URLSearchParams(location.search).has("lat")) locate()
-      if(prefs.autoFollow) startFollow()
+      if(prefs.showCoords) updateCoords()
 
-      // expose tiny utils to window for debug (optional)
-      // window.pokeState = state
+      if(isDesktop()) buildDesktopSidebar()
 
+      function buildDesktopSidebar(){
+        const side=document.createElement("div"); side.className="sidebar"
+        side.innerHTML=`
+          <div class="sidegroup">
+            <header>Layers</header>
+            <div class="row"><select class="select" id="d_layer">
+              <option value="mapnik">Standard</option>
+              <option value="cyclemap">Cycle</option>
+              <option value="transportmap">Transport</option>
+              <option value="hot">Humanitarian</option>
+            </select></div>
+            <div class="row"><button class="iconbtn" id="d_openosm">Open in OSM</button><button class="iconbtn" id="d_copy">Copy Link</button></div>
+          </div>
+          <div class="sidegroup">
+            <header>Location</header>
+            <div class="row"><button class="iconbtn" id="d_locate">Locate</button><button class="iconbtn" id="d_follow">Follow</button></div>
+            <div class="row"><button class="iconbtn" id="d_reset">Reset</button><button class="iconbtn" id="d_share">Share</button></div>
+          </div>
+          <div class="sidegroup">
+            <header>Marker</header>
+            <div class="row"><label>Visible</label><input type="checkbox" id="d_markerv"></div>
+            <div class="row"><label>Size</label><input type="range" id="d_ms" min="8" max="48" value="${markerSizeEl.value}"><span id="d_msv">${markerSizeEl.value}px</span></div>
+            <div class="row"><label>Color</label><input type="color" id="d_mc" value="${markerColorEl.value}"></div>
+            <div class="row"><label>Glow</label><input type="checkbox" id="d_mr" ${markerRingEl.checked?"checked":""}></div>
+          </div>
+          <div class="sidegroup">
+            <header>Coords</header>
+            <div class="row"><label>Show</label><input type="checkbox" id="d_showc" ${prefs.showCoords?"checked":""}></div>
+            <div class="row"><select class="select" id="d_fmt">
+              <option value="dec"${(prefs.coordFmt||"dec")==="dec"?" selected":""}>Decimal</option>
+              <option value="dms"${(prefs.coordFmt||"dec")==="dms"?" selected":""}>DMS</option>
+            </select><button class="iconbtn" id="d_copyc">Copy</button></div>
+          </div>
+          <div class="sidegroup">
+            <header>View</header>
+            <div class="row"><button class="iconbtn" id="d_dminus">Δ −</button><button class="iconbtn" id="d_dplus">Δ +</button></div>
+            <div class="row"><button class="iconbtn" id="d_pins">Pins</button><button class="iconbtn" id="d_savepin">Save Pin</button></div>
+          </div>
+        `
+        document.body.appendChild(side)
+        const d_layer=side.querySelector("#d_layer")
+        d_layer.value=state.layer
+        d_layer.onchange=()=>setLayer(d_layer.value)
+        side.querySelector("#d_openosm").onclick=()=>window.open(osmViewURL(state),"_blank")
+        side.querySelector("#d_copy").onclick=copyLink
+        side.querySelector("#d_locate").onclick=locate
+        side.querySelector("#d_follow").onclick=toggleFollow
+        side.querySelector("#d_reset").onclick=reset
+        side.querySelector("#d_share").onclick=shareLink
+        const d_markerv=side.querySelector("#d_markerv")
+        d_markerv.checked = !prefs.markerHidden
+        const d_ms=side.querySelector("#d_ms"), d_msv=side.querySelector("#d_msv")
+        const d_mc=side.querySelector("#d_mc")
+        const d_mr=side.querySelector("#d_mr")
+        const d_showc=side.querySelector("#d_showc")
+        const d_fmt=side.querySelector("#d_fmt")
+        const d_copyc=side.querySelector("#d_copyc")
+        const d_dminus=side.querySelector("#d_dminus")
+        const d_dplus=side.querySelector("#d_dplus")
+        const d_pins=side.querySelector("#d_pins")
+        const d_savepin=side.querySelector("#d_savepin")
+
+        d_markerv.onchange=()=>{ markerVisibleEl.checked=d_markerv.checked; markerVisibleEl.onchange() }
+        d_ms.oninput=()=>{ markerSizeEl.value=d_ms.value; markerSizeEl.oninput(); d_msv.textContent=d_ms.value+"px" }
+        d_mc.oninput=()=>{ markerColorEl.value=d_mc.value; markerColorEl.oninput() }
+        d_mr.onchange=()=>{ markerRingEl.checked=d_mr.checked; markerRingEl.onchange() }
+        d_showc.onchange=()=>{ toggleCoords.checked=d_showc.checked; toggleCoords.onchange() }
+        d_fmt.onchange=()=>{ prefs.coordFmt=d_fmt.value; savePrefs(); if(prefs.showCoords) updateCoords() }
+        d_copyc.onclick=copyCoords
+        d_dminus.onclick=()=>setDelta(state.delta*0.75,{push:true})
+        d_dplus.onclick=()=>setDelta(state.delta*1.25,{push:true})
+        d_pins.onclick=()=>{ renderPins(); pinsPane.style.display="block" }
+        d_savepin.onclick=()=>savepin.click()
+      }
     })();
   </script>
-
   <script src="/static/data-mobile.js" defer></script>
 </body>
 </html>

@@ -792,32 +792,25 @@ if (bar) {
   closeSearch.style.cursor = "pointer";
   closeSearch.style.zIndex = "999";
 
-// Add floating X on the suggestions (places) div
-const sugg = document.querySelector(".suggest");
-if (sugg) {
-  const closeBtn = document.createElement("button");
-  closeBtn.textContent = "✕";
-  closeBtn.title = "Clear suggestions";
+  // attach to search container
+  const searchDiv = document.querySelector(".search");
+  searchDiv.style.position = "relative";
+  searchDiv.appendChild(closeSearch);
 
-  // Style: float top-right, no background
-  Object.assign(closeBtn.style, {
-    position: "absolute",
-    top: "6px",
-    right: "8px",
-    border: "none",
-    background: "none",
-    color: "#fff",
-    fontSize: "18px",
-    cursor: "pointer",
-    zIndex: "10"
+  closeSearch.addEventListener("click", () => {
+  
+    document.querySelector("#suggestions").style.display = "none";
   });
 
-  sugg.style.position = "relative"; // anchor button inside
-  sugg.appendChild(closeBtn);
-
-  closeBtn.addEventListener("click", () => {
-    // just clear the list items, keep div visible
-    sugg.querySelectorAll("li").forEach(li => li.remove());
+  // shortcut to re-open with `/`
+  document.addEventListener("keydown", e => {
+    if (e.key === "/") {
+      if (searchDiv.style.display === "none") {
+        searchDiv.style.display = "flex";
+        document.querySelector("#q").focus();
+        e.preventDefault();
+      }
+    }
   });
 }
   })();

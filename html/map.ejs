@@ -9,7 +9,7 @@
   <style>
     :root{
       --vh:100vh;--pad:12px;--radius:14px;--fg:#fff;--bg:rgba(0,0,0,.6);--glass:blur(12px);
-      --marker-size:20px;--marker-color:#e53935;--marker-ring:rgba(229,57,53,.35);
+      --marker-size:20px;--marker-color:#e53935;--marker-ring:rgba(229,57,53,.35);--ring-width:3px;
       --panel:rgba(0,0,0,.85)
     }
     *{box-sizing:border-box}
@@ -28,21 +28,46 @@
     .mapwrap{position:relative;height:calc(var(--vh) - 56px);overflow:hidden}
     iframe#map{position:absolute;inset:0;border:0;width:100%;height:100%}
 
-    .marker{position:absolute;left:50%;top:50%;width:var(--marker-size);height:var(--marker-size);
-      border-radius:50%;transform:translate(-50%,-50%);background:var(--marker-color);
-      box-shadow:0 0 0 3px var(--marker-ring);z-index:3;pointer-events:none}
+    /* Marker (dot by default) */
+    .marker{
+      position:absolute;left:50%;top:50%;
+      width:var(--marker-size);height:var(--marker-size);
+      border-radius:50%;transform:translate(-50%,-50%);
+      background:var(--marker-color);
+      box-shadow:0 0 0 var(--ring-width) var(--marker-ring);
+      z-index:3;pointer-events:none
+    }
     .marker.hidden{display:none}
+
+    /* Crosshair variant */
+    .marker.crosshair{
+      background:transparent;border-radius:0;box-shadow:0 0 0 var(--ring-width) var(--marker-ring);
+    }
+    .marker.crosshair::before,
+    .marker.crosshair::after{
+      content:"";position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
+      background:var(--marker-color)
+    }
+    .marker.crosshair::before{width:calc(var(--marker-size) * 1.6);height:2px}
+    .marker.crosshair::after{width:2px;height:calc(var(--marker-size) * 1.6)}
+    .marker.crosshair .dot{display:none}
+    .marker .dot{
+      position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
+      width:calc(var(--marker-size) * .35);height:calc(var(--marker-size) * .35);
+      background:var(--marker-color);border-radius:50%;
+    }
 
     .brand{position:absolute;bottom:10px;left:10px;padding:6px 10px;font-size:18px;font-weight:600;
       background:var(--bg);backdrop-filter:var(--glass);-webkit-backdrop-filter:var(--glass);
       border-radius:10px;z-index:4;pointer-events:none}
 
+    /* Bottom-left dock above PokeMaps */
     .dock{position:absolute;left:10px;bottom:52px;z-index:7;display:flex;flex-direction:column;gap:8px}
     .dock button{border:0;border-radius:10px;background:#111;color:#fff;padding:8px 10px}
 
     .coords{position:absolute;bottom:10px;right:10px;z-index:5;padding:6px 10px;border-radius:10px;
       background:var(--bg);backdrop-filter:var(--glass);-webkit-backdrop-filter:var(--glass);
-      border:1px solid #333;display:none;min-width:220px;text-align:right}
+      border:1px solid #333;display:none;min-width:240px;text-align:right}
 
     .menu{position:fixed;top:56px;right:10px;z-index:8;min-width:260px;max-width:92vw;
       background:var(--panel);backdrop-filter:var(--glass);-webkit-backdrop-filter:var(--glass);
@@ -53,15 +78,15 @@
     .menu .row button,.menu .row select,.menu .row input{flex:1}
     .select{appearance:none;-webkit-appearance:none;border:1px solid #333;background:#111;color:#fff;border-radius:10px;padding:10px 12px}
 
-    .pins{position:fixed;left:10px;bottom:110px;z-index:8;min-width:240px;max-width:92vw;max-height:50vh;overflow:auto;background:var(--panel);backdrop-filter:var(--glass);-webkit-backdrop-filter:var(--glass);border:1px solid #333;border-radius:12px;display:none}
+    .pins{position:fixed;left:10px;bottom:110px;z-index:8;min-width:260px;max-width:92vw;max-height:50vh;overflow:auto;background:var(--panel);backdrop-filter:var(--glass);-webkit-backdrop-filter:var(--glass);border:1px solid #333;border-radius:12px;display:none}
     .pins header{display:flex;justify-content:space-between;align-items:center;padding:8px 10px;border-bottom:1px solid #222}
     .pins ul{list-style:none;margin:0;padding:0}
-    .pins li{display:flex;justify-content:space-between;gap:8px;align-items:center;padding:10px;border-top:1px solid #111}
+    .pins li{display:flex;flex-direction:column;gap:8px;padding:10px;border-top:1px solid #111}
     .pins li:first-child{border-top:none}
-    .pins .row{display:flex;gap:8px}
+    .pins .row{display:flex;gap:8px;flex-wrap:wrap}
     .tag{display:inline-block;font-size:12px;opacity:.8}
 
-    .settings{position:fixed;left:10px;bottom:110px;z-index:8;min-width:280px;max-width:92vw;
+    .settings{position:fixed;left:10px;bottom:110px;z-index:8;min-width:300px;max-width:92vw;
       background:var(--panel);backdrop-filter:var(--glass);-webkit-backdrop-filter:var(--glass);
       border:1px solid #333;border-radius:12px;display:none}
     .settings header{display:flex;justify-content:space-between;align-items:center;padding:8px 10px;border-bottom:1px solid #222}
@@ -71,6 +96,7 @@
     .settings input[type="range"]{flex:1}
     .settings input[type="color"]{width:42px;height:32px;border:0;background:none}
 
+    /* Desktop variant */
     .desktop .bar{grid-column:2}
     .desktop .app{grid-template-columns:320px 1fr;grid-template-rows:auto 1fr}
     .desktop .sidebar{position:fixed;left:0;top:0;bottom:0;width:320px;background:var(--panel);border-right:1px solid #333;display:flex;flex-direction:column;gap:10px;padding:12px;z-index:9}
@@ -100,7 +126,9 @@
 
     <div class="mapwrap" id="mapwrap">
       <iframe id="map" title="Map"></iframe>
-      <div id="marker" class="marker" aria-hidden="true"></div>
+
+      <!-- Center marker stays perfectly centered -->
+      <div id="marker" class="marker" aria-hidden="true"><div class="dot"></div></div>
 
       <div class="brand">PokeMaps</div>
       <div class="dock">
@@ -113,6 +141,7 @@
     </div>
   </div>
 
+  <!-- Mobile overlay panels -->
   <div class="menu" id="menu">
     <header><strong>Menu</strong><button class="iconbtn" id="closeMenu" title="Close">✕</button></header>
     <div class="row"><select class="select" id="layer">
@@ -136,11 +165,27 @@
 
   <div class="settings" id="settings">
     <header><strong>Display & Marker</strong><button id="closesettings" class="iconbtn">✕</button></header>
+
+    <div class="row"><label><input type="checkbox" id="autoFollow"> Auto-follow on load</label></div>
     <div class="row"><label><input type="checkbox" id="toggleCoords"> Always show coordinates</label></div>
+    <div class="row"><label>Coordinates format</label>
+      <select id="coordFmt" class="select">
+        <option value="dec">DD (Decimal)</option>
+        <option value="dms">DMS</option>
+      </select>
+    </div>
+
     <div class="row"><label>Marker visible</label><input type="checkbox" id="markerVisible" checked></div>
+    <div class="row"><label>Marker style</label>
+      <select id="markerStyle" class="select">
+        <option value="dot">Dot</option>
+        <option value="crosshair">Crosshair</option>
+      </select>
+    </div>
     <div class="row"><label>Marker size</label><input type="range" id="markerSize" min="8" max="48" step="1" value="20"><span id="markerSizeVal">20px</span></div>
     <div class="row"><label>Marker color</label><input type="color" id="markerColor" value="#e53935"></div>
     <div class="row"><label>Ring glow</label><input type="checkbox" id="markerRing" checked></div>
+    <div class="row"><label>Ring width</label><input type="range" id="ringWidth" min="0" max="12" step="1" value="3"><span id="ringWidthVal">3px</span></div>
   </div>
 
   <script>
@@ -160,9 +205,11 @@
       const pinsPane=S("#pins"), pinlist=S("#pinlist"), showpins=S("#showpins"), closepins=S("#closepins"), savepin=S("#savepin")
       const opensettings=S("#opensettings"), settings=S("#settings"), closesettings=S("#closesettings")
       const toggleCoords=S("#toggleCoords"), coordsEl=S("#coords")
-      const markerEl=S("#marker"), markerVisibleEl=S("#markerVisible"), markerSizeEl=S("#markerSize"), markerSizeVal=S("#markerSizeVal"), markerColorEl=S("#markerColor"), markerRingEl=S("#markerRing")
+      const autoFollowEl=S("#autoFollow")
+      const coordFmtEl=S("#coordFmt")
+      const markerEl=S("#marker"), markerVisibleEl=S("#markerVisible"), markerSizeEl=S("#markerSize"), markerSizeVal=S("#markerSizeVal"), markerColorEl=S("#markerColor"), markerRingEl=S("#markerRing"), ringWidthEl=S("#ringWidth"), ringWidthVal=S("#ringWidthVal"), markerStyleEl=S("#markerStyle")
 
-      const PREFS_KEY="pokemaps_prefs_v2"
+      const PREFS_KEY="pokemaps_prefs_v3"
       const LS_PINS="pokemaps_pins_v1"
 
       let aborter=null, lastQuery="", watchId=null
@@ -214,7 +261,7 @@
         if(Number.isFinite(lat)&&Number.isFinite(lon)) state.lat=clamp(lat,-90,90), state.lon=clamp(lon,-180,180)
         if(Number.isFinite(delta)&&delta>0) state.delta=clampDelta(delta)
         if(layer && LAYERS.includes(layer)) state.layer=layer
-        layerSel.value=state.layer
+        if(layerSel) layerSel.value=state.layer
       }
 
       const apply=(push)=>{
@@ -259,7 +306,7 @@
       const startFollow=()=>{
         if(!("geolocation" in navigator)){ alert("Geolocation not supported."); return }
         if(watchId!==null) return
-        followBtn.textContent="🛰️ Following"
+        followBtn && (followBtn.textContent="🛰️ Following")
         watchId = navigator.geolocation.watchPosition(
           pos=>{ centerOn(pos.coords.latitude,pos.coords.longitude,{push:false}); if(prefs.showCoords) updateCoords() },
           _=>stopFollow(),
@@ -268,7 +315,7 @@
       }
       const stopFollow=()=>{
         if(watchId!==null){ navigator.geolocation.clearWatch(watchId); watchId=null }
-        followBtn.textContent="🛰️ Follow"
+        followBtn && (followBtn.textContent="🛰️ Follow")
       }
       const toggleFollow=()=> watchId===null ? startFollow() : stopFollow()
 
@@ -279,7 +326,7 @@
         try{ await navigator.clipboard.writeText(msg); alert("Coordinates copied!") }catch{ alert(msg) }
       }
       const shareLink=async()=>{ const url = appURL(state); if(navigator.share){ try{ await navigator.share({title:"PokeMaps", url}) }catch{} } else { copyLink() } }
-      const reset=()=>{ stopFollow(); state={...DEFAULT}; q.value=""; sug.style.display="none"; q.setAttribute("aria-expanded","false"); layerSel.value=state.layer; apply(true) }
+      const reset=()=>{ stopFollow(); state={...DEFAULT}; q.value=""; sug.style.display="none"; q.setAttribute("aria-expanded","false"); layerSel && (layerSel.value=state.layer); apply(true) }
 
       const debounced=(fn,ms=250)=>{let t;return(...a)=>{clearTimeout(t);t=setTimeout(()=>fn(...a),ms)}}
       const searchPlaces=debounced(async term=>{
@@ -322,14 +369,15 @@
       })
 
       locateBtn.onclick=locate
-      layerSel.onchange=()=>setLayer(layerSel.value)
-      followBtn.onclick=toggleFollow
+      layerSel && (layerSel.onchange=()=>setLayer(layerSel.value))
+      followBtn && (followBtn.onclick=toggleFollow)
       resetBtn.onclick=reset
       shareBtn.onclick=shareLink
       copyBtn.onclick=copyLink
       copyCoordsBtn.onclick=copyCoords
       openBtn.onclick=()=>{ window.open(osmViewURL(state), "_blank") }
 
+      /* Pins */
       const loadPins=()=>{ try{ return JSON.parse(localStorage.getItem(LS_PINS)||"[]") }catch{ return [] } }
       const savePins=(pins)=>{ localStorage.setItem(LS_PINS, JSON.stringify(pins.slice(0,100))) }
       const renderPins=()=>{
@@ -338,46 +386,57 @@
         if(!pins.length){ const li=document.createElement("li"); li.textContent="No pins yet."; pinlist.appendChild(li); return }
         pins.forEach((p,idx)=>{
           const li=document.createElement("li")
-          const left=document.createElement("div"); left.className="row"
-          const title=document.createElement("div")
-          title.innerHTML=`<strong>${p.name}</strong><div class="tag">${p.lat.toFixed(5)}, ${p.lon.toFixed(5)} · ${p.layer}</div>`
-          left.appendChild(title)
-          const right=document.createElement("div"); right.className="row"
-          const go=document.createElement("button"); go.textContent="Go"; go.className="iconbtn"
-          go.onclick=()=>{ pinsPane.style.display="none"; state.lat=p.lat; state.lon=p.lon; state.delta=p.delta; state.layer=p.layer; layerSel.value=p.layer; apply(true) }
-          const share=document.createElement("button"); share.textContent="Share"; share.className="iconbtn"
-          share.onclick=async()=>{ const url=appURL(p); if(navigator.share){ try{ await navigator.share({title:p.name,url}) }catch{} } else { try{ await navigator.clipboard.writeText(url); alert("Link copied!") }catch{} } }
-          const del=document.createElement("button"); del.textContent="Del"; del.className="iconbtn"
-          del.onclick=()=>{ const arr=loadPins(); arr.splice(idx,1); savePins(arr); renderPins() }
-          right.append(go,share,del)
-          li.append(left,right)
+          const head=document.createElement("div")
+          head.innerHTML=`<strong>${p.name}</strong><div class="tag">${p.lat.toFixed(5)}, ${p.lon.toFixed(5)} · ${p.layer}</div>`
+          const actions=document.createElement("div"); actions.className="row"
+          const go=btn("Go",()=>{ pinsPane.style.display="none"; state.lat=p.lat; state.lon=p.lon; state.delta=p.delta; state.layer=p.layer; layerSel && (layerSel.value=p.layer); apply(true) })
+          const share=btn("Share",async()=>{ const url=appURL(p); if(navigator.share){ try{ await navigator.share({title:p.name,url}) }catch{} } else { try{ await navigator.clipboard.writeText(url); alert("Link copied!") }catch{} } })
+          const copyc=btn("Copy Coords",()=>navigator.clipboard.writeText(`${p.lat.toFixed(6)},${p.lon.toFixed(6)}`).then(()=>alert("Copied!")))
+          const ren=btn("Rename",()=>{ const nv=prompt("New name:", p.name||""); if(nv!==null){ const arr=loadPins(); arr[idx].name=(nv||"").trim()||new Date().toLocaleString(); savePins(arr); renderPins() } })
+          const del=btn("Del",()=>{ const arr=loadPins(); arr.splice(idx,1); savePins(arr); renderPins() })
+          actions.append(go,share,copyc,ren,del)
+          li.append(head,actions)
           pinlist.appendChild(li)
         })
       }
+      function btn(t,fn){ const b=document.createElement("button"); b.textContent=t; b.className="iconbtn"; b.onclick=fn; return b }
       const nameFromState=()=> q.value?.trim() || new Date().toLocaleString()
       savepin.onclick=()=>{ const pins=loadPins(); pins.unshift({name:nameFromState(), lat:state.lat, lon:state.lon, delta:state.delta, layer:state.layer}); savePins(pins); renderPins(); pinsPane.style.display="block" }
       showpins.onclick=()=>{ renderPins(); pinsPane.style.display="block" }
       closepins.onclick=()=>{ pinsPane.style.display="none" }
 
+      /* Panels open/close (disabled on desktop where sidebar exists) */
       menuBtn.onclick=()=>{ if(isDesktop()) return; menu.style.display="block" }
       closeMenu.onclick=()=>{ menu.style.display="none" }
       opensettings.onclick=()=>{ if(isDesktop()) return; settings.style.display="block" }
       closesettings.onclick=()=>{ settings.style.display="none" }
 
+      /* Prefs -> UI sync */
       toggleCoords.checked = !!prefs.showCoords
       coordsEl.style.display = prefs.showCoords ? "block" : "none"
+      coordFmtEl.value = prefs.coordFmt || "dec"
+      autoFollowEl.checked = !!prefs.autoFollow
 
       markerVisibleEl.checked = !prefs.markerHidden
       markerSizeEl.value = prefs.markerSize || 20
       markerSizeVal.textContent = markerSizeEl.value + "px"
       markerColorEl.value = prefs.markerColor || "#e53935"
       markerRingEl.checked = prefs.markerRing !== false
+      ringWidthEl.value = prefs.ringWidth != null ? prefs.ringWidth : 3
+      ringWidthVal.textContent = ringWidthEl.value + "px"
+      markerStyleEl.value = prefs.markerStyle || "dot"
+      applyMarkerStyle(markerStyleEl.value)
 
       markerVisibleEl.onchange=()=>{ markerEl.classList.toggle("hidden", !markerVisibleEl.checked); prefs.markerHidden = !markerVisibleEl.checked; savePrefs() }
       markerSizeEl.oninput=()=>{ document.documentElement.style.setProperty("--marker-size", markerSizeEl.value+"px"); markerSizeVal.textContent=markerSizeEl.value+"px"; prefs.markerSize=+markerSizeEl.value; savePrefs() }
       markerColorEl.oninput=()=>{ document.documentElement.style.setProperty("--marker-color", markerColorEl.value); prefs.markerColor=markerColorEl.value; savePrefs() }
       markerRingEl.onchange=()=>{ document.documentElement.style.setProperty("--marker-ring", markerRingEl.checked ? "rgba(229,57,53,.35)" : "transparent"); prefs.markerRing = markerRingEl.checked; savePrefs() }
+      ringWidthEl.oninput=()=>{ document.documentElement.style.setProperty("--ring-width", ringWidthEl.value+"px"); ringWidthVal.textContent=ringWidthEl.value+"px"; prefs.ringWidth=+ringWidthEl.value; savePrefs() }
+      markerStyleEl.onchange=()=>{ applyMarkerStyle(markerStyleEl.value); prefs.markerStyle=markerStyleEl.value; savePrefs() }
+
       toggleCoords.onchange=()=>{ prefs.showCoords = toggleCoords.checked; coordsEl.style.display = prefs.showCoords ? "block" : "none"; if(prefs.showCoords) updateCoords(); savePrefs() }
+      coordFmtEl.onchange=()=>{ prefs.coordFmt = coordFmtEl.value; savePrefs(); if(prefs.showCoords) updateCoords() }
+      autoFollowEl.onchange=()=>{ prefs.autoFollow = autoFollowEl.checked; savePrefs() }
 
       addEventListener("keydown",(e)=>{
         if(e.target.matches("input, textarea")) return
@@ -389,15 +448,13 @@
         if(e.key.toLowerCase()==="2"){ e.preventDefault(); setLayer("cyclemap") }
         if(e.key.toLowerCase()==="3"){ e.preventDefault(); setLayer("transportmap") }
         if(e.key.toLowerCase()==="4"){ e.preventDefault(); setLayer("hot") }
-        if(e.key==="[" ){ e.preventDefault(); setDelta(state.delta*0.75,{push:true}) }
-        if(e.key==="]" ){ e.preventDefault(); setDelta(state.delta*1.25,{push:true}) }
         if(e.key==="Escape"){ menu.style.display="none"; settings.style.display="none"; pinsPane.style.display="none" }
       })
 
       addEventListener("popstate",e=>{
         stopFollow()
-        if(e.state && typeof e.state.lat==="number"){ state=e.state; layerSel.value=state.layer; apply(false) }
-        else { parseURL(); layerSel.value=state.layer; apply(false) }
+        if(e.state && typeof e.state.lat==="number"){ state=e.state; layerSel && (layerSel.value=state.layer); apply(false) }
+        else { parseURL(); layerSel && (layerSel.value=state.layer); apply(false) }
       })
 
       function loadPrefs(){ try{ return JSON.parse(localStorage.getItem(PREFS_KEY)||"{}") }catch{ return {} } }
@@ -406,14 +463,25 @@
         if(prefs.markerSize) document.documentElement.style.setProperty("--marker-size", prefs.markerSize+"px")
         if(prefs.markerColor) document.documentElement.style.setProperty("--marker-color", prefs.markerColor)
         document.documentElement.style.setProperty("--marker-ring", (prefs.markerRing===false) ? "transparent" : "rgba(229,57,53,.35)")
+        document.documentElement.style.setProperty("--ring-width", (prefs.ringWidth!=null?prefs.ringWidth:3)+"px")
         if(prefs.markerHidden) markerEl.classList.add("hidden")
+        applyMarkerStyle(prefs.markerStyle||"dot")
+      }
+      function applyMarkerStyle(style){
+        markerEl.classList.toggle("crosshair", style==="crosshair")
+        markerEl.classList.toggle("dotstyle", style==="dot")
       }
 
       parseURL()
       apply(false)
-      if(!new URLSearchParams(location.search).has("lat")) locate()
-      if(prefs.showCoords) updateCoords()
 
+      // initial location logic
+      const urlHasLat = new URLSearchParams(location.search).has("lat")
+      if(!urlHasLat){ locate() }
+      if(prefs.showCoords) updateCoords()
+      if(prefs.autoFollow) startFollow()
+
+      /* Desktop sidebar build */
       if(isDesktop()) buildDesktopSidebar()
 
       function buildDesktopSidebar(){
@@ -431,64 +499,91 @@
           </div>
           <div class="sidegroup">
             <header>Location</header>
+            <div class="row">
+              <label><input type="checkbox" id="d_autofollow"> Auto-follow on load</label>
+            </div>
             <div class="row"><button class="iconbtn" id="d_locate">Locate</button><button class="iconbtn" id="d_follow">Follow</button></div>
             <div class="row"><button class="iconbtn" id="d_reset">Reset</button><button class="iconbtn" id="d_share">Share</button></div>
           </div>
           <div class="sidegroup">
             <header>Marker</header>
             <div class="row"><label>Visible</label><input type="checkbox" id="d_markerv"></div>
-            <div class="row"><label>Size</label><input type="range" id="d_ms" min="8" max="48" value="${markerSizeEl.value}"><span id="d_msv">${markerSizeEl.value}px</span></div>
-            <div class="row"><label>Color</label><input type="color" id="d_mc" value="${markerColorEl.value}"></div>
-            <div class="row"><label>Glow</label><input type="checkbox" id="d_mr" ${markerRingEl.checked?"checked":""}></div>
+            <div class="row"><label>Style</label>
+              <select class="select" id="d_style">
+                <option value="dot">Dot</option>
+                <option value="crosshair">Crosshair</option>
+              </select>
+            </div>
+            <div class="row"><label>Size</label><input type="range" id="d_ms" min="8" max="48"><span id="d_msv"></span></div>
+            <div class="row"><label>Color</label><input type="color" id="d_mc"></div>
+            <div class="row"><label>Glow</label><input type="checkbox" id="d_mr"></div>
+            <div class="row"><label>Ring width</label><input type="range" id="d_rw" min="0" max="12"><span id="d_rwv"></span></div>
           </div>
           <div class="sidegroup">
-            <header>Coords</header>
-            <div class="row"><label>Show</label><input type="checkbox" id="d_showc" ${prefs.showCoords?"checked":""}></div>
+            <header>Coordinates</header>
+            <div class="row"><label>Always show</label><input type="checkbox" id="d_showc"></div>
             <div class="row"><select class="select" id="d_fmt">
-              <option value="dec"${(prefs.coordFmt||"dec")==="dec"?" selected":""}>Decimal</option>
-              <option value="dms"${(prefs.coordFmt||"dec")==="dms"?" selected":""}>DMS</option>
+              <option value="dec">DD (Decimal)</option>
+              <option value="dms">DMS</option>
             </select><button class="iconbtn" id="d_copyc">Copy</button></div>
           </div>
           <div class="sidegroup">
-            <header>View</header>
-            <div class="row"><button class="iconbtn" id="d_dminus">Δ −</button><button class="iconbtn" id="d_dplus">Δ +</button></div>
-            <div class="row"><button class="iconbtn" id="d_pins">Pins</button><button class="iconbtn" id="d_savepin">Save Pin</button></div>
+            <header>View & Pins</header>
+            <div class="row"><button class="iconbtn" id="d_pins">Open Pins</button><button class="iconbtn" id="d_savepin">Save Pin</button></div>
           </div>
         `
         document.body.appendChild(side)
         const d_layer=side.querySelector("#d_layer")
-        d_layer.value=state.layer
-        d_layer.onchange=()=>setLayer(d_layer.value)
-        side.querySelector("#d_openosm").onclick=()=>window.open(osmViewURL(state),"_blank")
-        side.querySelector("#d_copy").onclick=copyLink
-        side.querySelector("#d_locate").onclick=locate
-        side.querySelector("#d_follow").onclick=toggleFollow
-        side.querySelector("#d_reset").onclick=reset
-        side.querySelector("#d_share").onclick=shareLink
+        const d_openosm=side.querySelector("#d_openosm")
+        const d_copy=side.querySelector("#d_copy")
+        const d_locate=side.querySelector("#d_locate")
+        const d_follow=side.querySelector("#d_follow")
+        const d_reset=side.querySelector("#d_reset")
+        const d_share=side.querySelector("#d_share")
         const d_markerv=side.querySelector("#d_markerv")
-        d_markerv.checked = !prefs.markerHidden
+        const d_style=side.querySelector("#d_style")
         const d_ms=side.querySelector("#d_ms"), d_msv=side.querySelector("#d_msv")
         const d_mc=side.querySelector("#d_mc")
         const d_mr=side.querySelector("#d_mr")
+        const d_rw=side.querySelector("#d_rw"), d_rwv=side.querySelector("#d_rwv")
         const d_showc=side.querySelector("#d_showc")
         const d_fmt=side.querySelector("#d_fmt")
         const d_copyc=side.querySelector("#d_copyc")
-        const d_dminus=side.querySelector("#d_dminus")
-        const d_dplus=side.querySelector("#d_dplus")
         const d_pins=side.querySelector("#d_pins")
         const d_savepin=side.querySelector("#d_savepin")
+        const d_autofollow=side.querySelector("#d_autofollow")
+
+        d_layer.value=state.layer
+        d_layer.onchange=()=>setLayer(d_layer.value)
+        d_openosm.onclick=()=>window.open(osmViewURL(state),"_blank")
+        d_copy.onclick=copyLink
+        d_locate.onclick=locate
+        d_follow.onclick=toggleFollow
+        d_reset.onclick=reset
+        d_share.onclick=shareLink
+
+        d_markerv.checked = !prefs.markerHidden
+        d_style.value = prefs.markerStyle || "dot"
+        d_ms.value = markerSizeEl.value; d_msv.textContent = d_ms.value+"px"
+        d_mc.value = markerColorEl.value
+        d_mr.checked = markerRingEl.checked
+        d_rw.value = ringWidthEl.value; d_rwv.textContent = d_rw.value+"px"
+        d_showc.checked = !!prefs.showCoords
+        d_fmt.value = prefs.coordFmt || "dec"
+        d_autofollow.checked = !!prefs.autoFollow
 
         d_markerv.onchange=()=>{ markerVisibleEl.checked=d_markerv.checked; markerVisibleEl.onchange() }
+        d_style.onchange=()=>{ markerStyleEl.value=d_style.value; markerStyleEl.onchange() }
         d_ms.oninput=()=>{ markerSizeEl.value=d_ms.value; markerSizeEl.oninput(); d_msv.textContent=d_ms.value+"px" }
         d_mc.oninput=()=>{ markerColorEl.value=d_mc.value; markerColorEl.oninput() }
         d_mr.onchange=()=>{ markerRingEl.checked=d_mr.checked; markerRingEl.onchange() }
+        d_rw.oninput=()=>{ ringWidthEl.value=d_rw.value; ringWidthEl.oninput(); d_rwv.textContent=d_rw.value+"px" }
         d_showc.onchange=()=>{ toggleCoords.checked=d_showc.checked; toggleCoords.onchange() }
-        d_fmt.onchange=()=>{ prefs.coordFmt=d_fmt.value; savePrefs(); if(prefs.showCoords) updateCoords() }
+        d_fmt.onchange=()=>{ coordFmtEl.value=d_fmt.value; coordFmtEl.onchange() }
         d_copyc.onclick=copyCoords
-        d_dminus.onclick=()=>setDelta(state.delta*0.75,{push:true})
-        d_dplus.onclick=()=>setDelta(state.delta*1.25,{push:true})
         d_pins.onclick=()=>{ renderPins(); pinsPane.style.display="block" }
         d_savepin.onclick=()=>savepin.click()
+        d_autofollow.onchange=()=>{ autoFollowEl.checked=d_autofollow.checked; autoFollowEl.onchange() }
       }
     })();
   </script>

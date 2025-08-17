@@ -22,14 +22,18 @@
     .search{position:relative;flex:1;min-width:0}
     .search input{width:100%;padding:12px 14px;border-radius:12px;border:1px solid var(--border);background:var(--surface);color:#fff;outline:none}
     .search input:focus{border-color:#444;box-shadow:0 0 0 3px color-mix(in oklab, var(--accent) 20%, transparent)}
-    .suggest{position:absolute;top:calc(100% + 6px);left:0;right:0;max-height:42vh;overflow:auto;margin:0;padding:30px 0 6px;list-style:none;border:1px solid var(--border);border-radius:12px;background:var(--surface);display:none}
+
+    /* Suggestions with sticky head + close button */
+    .suggest{position:absolute;top:calc(100% + 6px);left:0;right:0;max-height:46vh;overflow:auto;margin:0;padding:0;list-style:none;border:1px solid var(--border);border-radius:12px;background:var(--surface);display:none}
+    .suggest .head{position:sticky;top:0;background:#0d0d0d;border-bottom:1px solid #1a1a1a;padding:6px 8px;display:flex;justify-content:space-between;align-items:center;z-index:1}
+    .suggest .head strong{font-size:12px;opacity:.8}
+    .suggest .head button{border:0;border-radius:8px;background:#1a1a1a;color:#fff;padding:6px 8px;cursor:pointer}
     .suggest li{padding:10px 12px;cursor:pointer;border-top:1px solid #111;display:flex;gap:8px;align-items:center}
     .suggest li:first-child{border-top:none}
     .suggest li.active{background:#141414}
     .suggest .pill{font-size:11px;border:1px solid #333;border-radius:999px;padding:2px 6px;opacity:.85}
     .suggest mark{background:transparent;color:var(--accent);font-weight:600}
-    .suggest .closer{position:sticky;top:0;display:flex;justify-content:flex-end;padding:6px;border-bottom:1px solid #111;background:linear-gradient(#0b0b0b, #0b0b0b)}
-    .suggest .closer button{border:1px solid #444;background:#161616;color:#fff;border-radius:10px;padding:6px 8px;cursor:pointer}
+
     .iconbtn{border:0;border-radius:10px;background:#222;color:#fff;padding:10px 12px;min-width:44px}
     .mapwrap{position:relative;height:calc(var(--vh) - 56px);overflow:hidden}
     iframe#map{position:absolute;inset:0;border:0;width:100%;height:100%}
@@ -44,6 +48,8 @@
     .dock{position:absolute;left:10px;bottom:52px;z-index:7;display:flex;flex-direction:column;gap:8px}
     .dock button{border:0;border-radius:10px;background:#111;color:#fff;padding:8px 10px}
     .coords{position:absolute;bottom:10px;right:10px;z-index:5;padding:6px 10px;border-radius:10px;background:var(--bg);backdrop-filter:var(--glass);-webkit-backdrop-filter:var(--glass);border:1px solid var(--border);display:none;min-width:260px;text-align:right;font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","DejaVu Sans Mono",monospace}
+
+    /* Popovers (mobile/tablet) */
     .menu{position:fixed;top:56px;right:10px;z-index:8;min-width:290px;max-width:92vw;background:var(--panel);backdrop-filter:var(--glass);-webkit-backdrop-filter:var(--glass);border:1px solid var(--border);border-radius:12px;display:none;overflow:hidden}
     .menu header{display:flex;justify-content:space-between;align-items:center;padding:10px 12px;border-bottom:1px solid #222}
     .menu .row{display:flex;gap:8px;align-items:center;padding:8px 12px;border-top:1px solid #111;flex-wrap:wrap}
@@ -55,7 +61,7 @@
     .pins ul{list-style:none;margin:0;padding:0}
     .pins li{display:flex;flex-direction:column;gap:8px;padding:10px;border-top:1px solid #111}
     .pins .row{display:flex;gap:8px;flex-wrap:wrap}
-    .tag{display:inline-block;font-size:12px;opacity:.8}
+
     .settings{position:fixed;left:10px;bottom:110px;z-index:8;min-width:320px;max-width:92vw;background:var(--panel);backdrop-filter:var(--glass);-webkit-backdrop-filter:var(--glass);border:1px solid var(--border);border-radius:12px;display:none}
     .settings header{display:flex;justify-content:space-between;align-items:center;padding:8px 10px;border-bottom:1px solid #222}
     .settings .badge{font-size:11px;opacity:.8;border:1px solid #444;border-radius:999px;padding:2px 8px;margin-left:8px}
@@ -70,28 +76,22 @@
     .settings textarea{width:100%;min-height:120px;border-radius:10px;border:1px solid var(--border);background:#0a0a0a;color:#eee;padding:8px;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
     .settings .about{font-size:13px;opacity:.92;line-height:1.5}
 
-    /* Desktop+Simplified layout */
-    .desktop .app{grid-template-columns:auto 1fr;grid-template-rows:auto 1fr}
-    .desktop .left{position:fixed;left:0;top:0;bottom:0;width:320px;display:flex;flex-direction:column;background:var(--panel);border-right:1px solid var(--border);z-index:9;transition:width .2s ease}
-    .desktop .left .left-head{display:flex;align-items:center;gap:8px;padding:10px;border-bottom:1px solid #222}
-    .desktop .left .left-head strong{flex:1}
-    .desktop .left .group{border-bottom:1px solid #111;padding:10px}
-    .desktop .left .group h4{margin:0 0 6px 0;font-size:13px;opacity:.9}
-    .desktop .left .row{display:flex;gap:8px;align-items:center;margin:6px 0}
-    .desktop .left .row .select,.desktop .left .row .iconbtn{flex:1}
-    .desktop .left .mini{width:64px}
-    .desktop .left.mini .label-hide{display:none}
-    .desktop .left.mini .group{padding:10px 6px}
-    .desktop .left.mini .left-head strong{display:none}
-    .desktop .bar{grid-column:2;gap:10px}
+    /* Desktop layout — simplified & clean */
+    .desktop .bar{grid-column:2}
+    .desktop .app{grid-template-columns:320px 1fr;grid-template-rows:auto 1fr}
+    .desktop .sidebar{position:fixed;left:0;top:0;bottom:0;width:320px;background:var(--panel);border-right:1px solid var(--border);display:flex;flex-direction:column;gap:12px;padding:12px;z-index:9}
+    .desktop .sidecard{border:1px solid #222;border-radius:12px;overflow:hidden}
+    .desktop .sidecard header{padding:10px 12px;border-bottom:1px solid #222;font-weight:600;display:flex;justify-content:space-between;align-items:center}
+    .desktop .sidecard .row{display:flex;gap:8px;align-items:center;padding:8px 12px;border-top:1px solid #111}
+    .desktop .sidecard .row:first-of-type{border-top:0}
+    .desktop .sidecard .hint{font-size:12px;opacity:.75;padding:8px 12px}
     .desktop .mapwrap{grid-column:2}
+    /* Suppress popovers on desktop (sidebar replaces them) */
     .desktop .menu,.desktop .pins,.desktop .settings{display:none !important}
 
-    /* Pro mode density */
-    body.pro .left{width:360px}
-    body.pro .suggest{max-height:60vh}
-    body.pro .bar{padding:6px var(--pad)}
-    body.pro .search input{padding:10px 12px}
+    /* Pro detail rows subtly toned down */
+    .pro-only{display:none;}
+    .pro-enabled .pro-only{display:flex;}
 
     @media (min-width:768px){ .bar{padding:10px 14px} .brand{font-size:20px} }
     @media (prefers-reduced-motion:reduce){ *{animation:none !important;transition:none !important} }
@@ -105,7 +105,10 @@
           <input id="q" type="text" inputmode="search" placeholder="Search places, or paste lat,lon…" aria-autocomplete="list" aria-expanded="false" aria-controls="suggestions" />
         </form>
         <ul id="suggestions" class="suggest" role="listbox">
-          <li class="closer" aria-hidden="true"><button id="closeSuggestBtn" type="button" title="Close suggestions">✕</button></li>
+          <li class="head" aria-hidden="true">
+            <strong>Suggestions</strong>
+            <button type="button" id="closeSuggestBtn" title="Close suggestions">✕</button>
+          </li>
         </ul>
       </div>
       <button class="iconbtn" id="locate" title="Locate">📍</button>
@@ -125,9 +128,9 @@
     </div>
   </div>
 
+  <!-- Mobile/Tablet popover menu -->
   <div class="menu" id="menu">
     <header><strong>Menu</strong><button class="iconbtn" id="closeMenu" title="Close">✕</button></header>
-
     <div class="row">
       <select class="select" id="layer">
         <option value="mapnik">Standard</option>
@@ -136,31 +139,25 @@
         <option value="hot">Humanitarian</option>
       </select>
     </div>
-
     <div class="row">
       <button class="iconbtn" id="follow">🛰️ Follow</button>
       <button class="iconbtn" id="reset">🔁 Reset</button>
     </div>
-
     <div class="row">
       <button class="iconbtn" id="quick-near">📍 Near me</button>
       <button class="iconbtn" id="quick-clear">🧹 Clear search</button>
     </div>
-
     <div class="row">
       <button class="iconbtn" id="copy">📋 Copy Link</button>
       <button class="iconbtn" id="copycoords">📐 Coords</button>
     </div>
-
     <div class="row">
       <button class="iconbtn" id="share">🔗 Share</button>
       <button class="iconbtn" id="openosm">🌐 Open OSM</button>
     </div>
-
     <div class="row">
       <button class="iconbtn" id="openGmaps">🛰️ Google Maps (not recommended)</button>
     </div>
-
     <div class="row">
       <a class="iconbtn" href="https://wiki.osmfoundation.org/wiki/Terms_of_Use" target="_blank" rel="noopener">OSM Terms</a>
       <a class="iconbtn" href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">Copyright</a>
@@ -168,6 +165,7 @@
     </div>
   </div>
 
+  <!-- Mobile/Tablet pins popover -->
   <div class="pins" id="pins">
     <header>
       <strong>Saved Pins</strong>
@@ -176,6 +174,7 @@
     <ul id="pinlist"></ul>
   </div>
 
+  <!-- Mobile/Tablet settings popover -->
   <div class="settings" id="settings">
     <header><strong>Settings</strong> <span class="badge">Beta</span><button id="closesettings" class="iconbtn">✕</button></header>
 
@@ -198,7 +197,6 @@
             <option value="light">Light</option>
           </select>
         </div>
-        <div class="row"><label><input type="checkbox" id="proMode"> Pro Mode (advanced UI)</label></div>
       </div>
     </div>
 
@@ -251,7 +249,7 @@
           <p><strong>Map credits:</strong> © <a href="https://www.openstreetmap.org/" target="_blank" rel="noopener">OpenStreetMap.org</a> contributors. Tiles/data from the OSM community. <em>Powered by openstreetmap.org.</em></p>
           <p><strong>Important disclaimer:</strong> Geographic names, boundaries, labels, and depictions may be incomplete, outdated, or disputed. Displayed borders and place names are for reference only and must not be interpreted as statements of recognition or endorsement. The map does <em>not</em> reflect the politics of the Poke project nor the opinions of its contributors. Always verify critical details independently.</p>
           <p><strong>Privacy & usage:</strong> If you enable location, your browser may share approximate GPS/Wi-Fi data with the page via standard Web APIs. Search uses public OSM services (subject to their policies and rate limits).</p>
-          <p><strong>Interoperability:</strong> A convenience action is provided to open the same view in Google Maps for satellite imagery. This is not recommended and may have different data policies.</p>
+          <p><strong>Interoperability:</strong> A convenience action is provided to open the same view in Google Maps for satellite imagery (not recommended) and may have different data policies.</p>
         </div>
       </div>
     </div>
@@ -267,7 +265,8 @@
     const LIMITS={deltaMin:0.01, deltaMax:45};
 
     const S=sel=>document.querySelector(sel);
-    const map=S("#map"), q=S("#q"), sug=S("#suggestions"), closeSuggestBtn=S("#closeSuggestBtn");
+    const map=S("#map"), q=S("#q"), sug=S("#suggestions");
+    const closeSuggestBtn=S("#closeSuggestBtn");
     const locateBtn=S("#locate"), menuBtn=S("#menuBtn"), menu=S("#menu"), closeMenu=S("#closeMenu");
     const layerSel=S("#layer"), followBtn=S("#follow"), resetBtn=S("#reset"), shareBtn=S("#share");
     const copyBtn=S("#copy"), copyCoordsBtn=S("#copycoords"), openBtn=S("#openosm"), openGmapsBtn=S("#openGmaps");
@@ -283,7 +282,6 @@
     const coordPrecEl=S("#coordPrec");
     const coordPrecVal=S("#coordPrecVal");
     const themeModeEl=S("#themeMode");
-    const proModeEl=S("#proMode");
 
     const markerEl=S("#marker"), markerVisibleEl=S("#markerVisible"), markerSizeEl=S("#markerSize"), markerSizeVal=S("#markerSizeVal"),
           markerColorEl=S("#markerColor"), markerRingEl=S("#markerRing"), ringWidthEl=S("#ringWidth"), ringWidthVal=S("#ringWidthVal"),
@@ -293,6 +291,7 @@
     const accentColorEl=S("#accentColor"), accentResetEl=S("#accentReset");
     const customCSSEl=S("#customCSS"), applyCSSEl=S("#applyCSS"), clearCSSEl=S("#clearCSS");
 
+    /* Pro mode */
     const PREFS_KEY="pokemaps_prefs_v6";
     const LS_PINS="pokemaps_pins_v1";
     const LS_SEARCH="pokemaps_search_hist_v1";
@@ -302,7 +301,7 @@
     const prefs=loadPrefs(); applyPrefs();
 
     const isDesktop=()=> matchMedia("(min-width: 1024px)").matches && matchMedia("(pointer: fine)").matches;
-    const applyDesktopClass=()=>{ document.body.classList.toggle("desktop", isDesktop()); if(isDesktop()) ensureDesktopPanel() };
+    const applyDesktopClass=()=>{ document.body.classList.toggle("desktop", isDesktop()) };
     applyDesktopClass(); addEventListener("resize",applyDesktopClass,{passive:true});
 
     const setVH=()=>{const vh=window.innerHeight*0.01;document.documentElement.style.setProperty("--vh",`${vh*100}px`)};
@@ -368,7 +367,7 @@
 
     const updateCoordsFast=()=>{
       if(!prefs.showCoords) return;
-      const s=coordString()+` · Δ ${state.delta.toFixed(4)} · ${state.layer}${document.body.classList.contains("pro")?" · z "+deltaToZoom(state.delta):""}`;
+      const s=coordString()+` · Δ ${state.delta.toFixed(4)} · ${state.layer}`;
       if(s!==lastCoordsStr){ coordsEl.textContent=s; lastCoordsStr=s }
     };
 
@@ -429,7 +428,10 @@
 
     const renderSuggest=(items, term="")=>{
       if(!sug) return;
-      sug.querySelectorAll("li:not(.closer)").forEach(n=>n.remove());
+      // keep the sticky head; rebuild the rest
+      const head = sug.querySelector(".head");
+      sug.innerHTML="";
+      if(head) sug.appendChild(head);
       if(!items.length){ sug.style.display="none"; q.setAttribute("aria-expanded","false"); activeIndex=-1; return }
       items.forEach((it,i)=>{
         const li=document.createElement("li");
@@ -442,7 +444,7 @@
     };
 
     const hideSuggest=(force=false)=>{
-      if(force){ sug.style.display="none"; q.setAttribute("aria-expanded","false"); activeIndex=-1; sug.querySelectorAll("li:not(.closer)").forEach(n=>n.remove()); return }
+      if(force){ sug.style.display="none"; q.setAttribute("aria-expanded","false"); activeIndex=-1; return }
       sug.style.display="none"; q.setAttribute("aria-expanded","false"); activeIndex=-1;
     };
 
@@ -482,6 +484,7 @@
       }catch{}
     };
 
+    // Suggestion UX
     q.addEventListener("input",e=>{
       const v=e.target.value;
       if(v===lastQuery) return;
@@ -499,11 +502,13 @@
       if(!within) hideSuggest(true);
     });
 
+    closeSuggestBtn?.addEventListener("click",()=>hideSuggest(true));
+
     q.addEventListener("keydown",e=>{
       const visible = sug.style.display==="block";
       if(e.key==="Escape"){ hideSuggest(true); return }
       if(!visible) return;
-      const items=[...sug.querySelectorAll("li:not(.closer)")];
+      const items=[...sug.querySelectorAll("li")].filter(li=>!li.classList.contains("head"));
       if(!items.length) return;
       if(e.key==="ArrowDown"){ e.preventDefault(); activeIndex=(activeIndex+1)%items.length; activate(items) }
       if(e.key==="ArrowUp"){ e.preventDefault(); activeIndex=(activeIndex-1+items.length)%items.length; activate(items) }
@@ -514,21 +519,21 @@
 
     S("#form").addEventListener("submit",async e=>{ e.preventDefault(); await searchNow(q.value); hideSuggest(true) });
 
-    closeSuggestBtn?.addEventListener("click",()=>hideSuggest(true));
-
-    quickNear.onclick=locate;
-    quickClear.onclick=()=>{ q.value=""; searchPlaces(""); q.focus() };
+    // Quick actions (Menu)
+    quickNear && (quickNear.onclick=locate);
+    quickClear && (quickClear.onclick=()=>{ q.value=""; searchPlaces(""); q.focus() });
 
     locateBtn.onclick=locate;
     layerSel && (layerSel.onchange=()=>setLayer(layerSel.value));
     followBtn && (followBtn.onclick=toggleFollow);
-    resetBtn.onclick=reset;
-    shareBtn.onclick=shareLink;
-    copyBtn.onclick=copyLink;
-    copyCoordsBtn.onclick=copyCoords;
-    openBtn.onclick=()=>window.open(osmViewURL(state), "_blank");
-    openGmapsBtn.onclick=()=>window.open(gmapsURL(state), "_blank");
+    resetBtn && (resetBtn.onclick=reset);
+    shareBtn && (shareBtn.onclick=shareLink);
+    copyBtn && (copyBtn.onclick=copyLink);
+    copyCoordsBtn && (copyCoordsBtn.onclick=copyCoords);
+    openBtn && (openBtn.onclick=()=>window.open(osmViewURL(state), "_blank"));
+    openGmapsBtn && (openGmapsBtn.onclick=()=>window.open(gmapsURL(state), "_blank"));
 
+    // Pins
     const loadPins=()=>{ try{ return JSON.parse(localStorage.getItem(LS_PINS)||"[]") }catch{ return [] } };
     const savePins=(pins)=>{ localStorage.setItem(LS_PINS, JSON.stringify(pins.slice(0,100))) };
     const renderPins=()=>{
@@ -555,18 +560,19 @@
     showpins.onclick=()=>{ renderPins(); pinsPane.style.display="block" };
     closepins.onclick=()=>{ pinsPane.style.display="none" };
 
+    // Panels (mobile/tablet only; desktop has sidebar)
     menuBtn.onclick=()=>{ if(isDesktop()) return; menu.style.display="block" };
-    closeMenu.onclick=()=>{ menu.style.display="none" };
+    closeMenu && (closeMenu.onclick=()=>{ menu.style.display="none" });
     opensettings.onclick=()=>{ if(isDesktop()) return; settings.style.display="block" };
     closesettings.onclick=()=>{ settings.style.display="none" };
 
+    // Prefs -> UI
     toggleCoords.checked = !!prefs.showCoords;
     coordsEl.style.display = prefs.showCoords ? "block" : "none";
     coordFmtEl.value = prefs.coordFmt || "dec";
     coordPrecEl.value = prefs.prec ?? 6;
     coordPrecVal.textContent = String(prefs.prec ?? 6);
     themeModeEl.value = prefs.theme || "auto";
-    proModeEl.checked = !!prefs.pro;
 
     autoFollowEl.checked = !!prefs.autoFollow;
     shareDeltaEl.checked = prefs.includeDelta!==false;
@@ -592,6 +598,7 @@
       b.onclick=()=>{ const t=b.getAttribute("data-t"); const sec=document.querySelector(`.settings .section[data-sec="${t}"]`); sec.style.display=sec.style.display==="block"?"none":"block" }
     });
 
+    // Pref listeners
     markerVisibleEl.onchange=()=>{ markerEl.classList.toggle("hidden", !markerVisibleEl.checked); prefs.markerHidden = !markerVisibleEl.checked; savePrefs() };
     markerSizeEl.oninput=()=>{ document.documentElement.style.setProperty("--marker-size", markerSizeEl.value+"px"); markerSizeVal.textContent=markerSizeEl.value+"px"; prefs.markerSize=+markerSizeEl.value; savePrefs() };
     markerColorEl.oninput=()=>{ document.documentElement.style.setProperty("--marker-color", markerColorEl.value); prefs.markerColor=markerColorEl.value; savePrefs() };
@@ -606,7 +613,6 @@
     shareDeltaEl.onchange=()=>{ prefs.includeDelta = shareDeltaEl.checked; savePrefs() };
     confirmDeleteEl.onchange=()=>{ prefs.confirmDelete = confirmDeleteEl.checked; savePrefs() };
     themeModeEl.onchange=()=>{ prefs.theme = themeModeEl.value; applyTheme(prefs.theme); savePrefs() };
-    proModeEl.onchange=()=>{ prefs.pro = proModeEl.checked; applyPro(prefs.pro); savePrefs() };
 
     accentColorEl.oninput=()=>{ setAccent(accentColorEl.value); prefs.accent=accentColorEl.value; savePrefs() };
     accentResetEl.onclick=()=>{ const def="#0ea5e9"; accentColorEl.value=def; setAccent(def); prefs.accent=def; savePrefs() };
@@ -646,7 +652,8 @@
       applyMarkerStyle(prefs.markerStyle||"dot");
       setAccent(prefs.accent||"#0ea5e9");
       applyTheme(prefs.theme||"auto");
-      applyPro(!!prefs.pro);
+      // apply pro mode class on body
+      document.body.classList.toggle("pro-enabled", !!prefs.proMode);
     }
     function applyMarkerStyle(style){ markerEl.classList.toggle("crosshair", style==="crosshair") }
     function setAccent(hex){ document.documentElement.style.setProperty("--accent",hex); themeColorMeta?.setAttribute("content",hex) }
@@ -657,17 +664,7 @@
       else { document.documentElement.style.colorScheme="" }
     }
 
-    function applyPro(on){
-      document.body.classList.toggle("pro", !!on);
-      if(on){
-        coordsEl.style.display = "block";
-        prefs.showCoords = true;
-        toggleCoords.checked = true;
-      }else{
-        coordsEl.style.display = prefs.showCoords ? "block" : "none";
-      }
-    }
-
+    // PWA manifest (runtime-injected, no service worker)
     (function injectManifest(){
       const manifest={
         name:"PokeMaps Public Beta",
@@ -676,7 +673,7 @@
         display:"standalone",
         background_color:"#000000",
         theme_color:getComputedStyle(document.documentElement).getPropertyValue("--accent").trim() || "#0ea5e9",
-        icons:[{ src:"/css/yt-ukraine.svg", sizes:"any", type:"image/svg+xml", purpose:"any" }]
+        icons:[ { src:"/css/yt-ukraine.svg", sizes:"any", type:"image/svg+xml", purpose:"any" } ]
       };
       const blob=new Blob([JSON.stringify(manifest)],{type:"application/manifest+json"});
       const url=URL.createObjectURL(blob);
@@ -685,135 +682,182 @@
       document.head.appendChild(link);
     })();
 
+    // Custom CSS injector
     function applyUserCSS(css){
       let tag=document.getElementById("user-css");
       if(!tag){ tag=document.createElement("style"); tag.id="user-css"; document.head.appendChild(tag) }
       tag.textContent=css||"";
     }
 
+    // Init navigation
     parseURL(); apply(false);
     const urlHasLat = new URLSearchParams(location.search).has("lat");
     if(!urlHasLat){ locate() }
     if(prefs.autoFollow) startFollow();
 
-    if(isDesktop()) ensureDesktopPanel();
-
-    function ensureDesktopPanel(){
-      if(document.querySelector(".left")) return;
-      const left=document.createElement("aside"); left.className="left";
-      left.innerHTML=`
-        <div class="left-head">
-          <button class="iconbtn" id="toggleMini" title="Collapse/Expand">⟷</button>
-          <strong>PokeMaps</strong>
-          <button class="iconbtn" id="openSettingsDesk" title="Settings">⚙</button>
-        </div>
-        <div class="group">
-          <h4 class="label-hide">Layers</h4>
+    // Desktop sidebar builder (clean, with Pro toggle)
+    if(isDesktop()) buildDesktopSidebar();
+    function buildDesktopSidebar(){
+      const side=document.createElement("div"); side.className="sidebar";
+      side.innerHTML=`
+        <div class="sidecard">
+          <header>
+            <span>Overview</span>
+            <label style="font-weight:400;font-size:12px;display:flex;align-items:center;gap:6px;">
+              <input type="checkbox" id="pro_toggle" ${prefs.proMode?'checked':''}/> Pro
+            </label>
+          </header>
+          <div class="row"><input id="d_searchmirror" type="text" placeholder="Search or lat,lon…" class="select" style="width:100%;background:#111;border:1px solid var(--border);border-radius:10px;padding:10px 12px"></div>
           <div class="row"><select class="select" id="d_layer">
             <option value="mapnik">Standard</option>
             <option value="cyclemap">Cycle</option>
             <option value="transportmap">Transport</option>
             <option value="hot">Humanitarian</option>
           </select></div>
-          <div class="row">
-            <button class="iconbtn" id="d_copy" title="Copy link">📋</button>
-            <button class="iconbtn" id="d_openosm" title="Open in OSM">🌐</button>
-            <button class="iconbtn" id="d_gmaps" title="Open in Google Maps">🛰️</button>
+          <div class="row"><button class="iconbtn" id="d_locate">Locate</button><button class="iconbtn" id="d_follow">Follow</button><button class="iconbtn" id="d_reset">Reset</button></div>
+          <div class="row"><button class="iconbtn" id="d_copy">Copy Link</button><button class="iconbtn" id="d_copyc">Copy Coords</button></div>
+          <div class="row"><button class="iconbtn" id="d_osm">Open in OSM</button><button class="iconbtn" id="d_gmaps">Google Maps</button></div>
+          <div class="hint">Tip: / to focus search • 1–4 change layers • S save pin • R reset</div>
+        </div>
+
+        <div class="sidecard">
+          <header>Marker</header>
+          <div class="row"><label style="flex:1">Visible</label><input type="checkbox" id="d_markerv"></div>
+          <div class="row"><label style="flex:1">Style</label><select class="select" id="d_style"><option value="dot">Dot</option><option value="crosshair">Crosshair</option></select></div>
+          <div class="row"><label style="flex:1">Size</label><input type="range" id="d_ms" min="8" max="64"><span id="d_msv"></span></div>
+          <div class="row"><label style="flex:1">Color</label><input type="color" id="d_mc"></div>
+          <div class="row pro-only"><label style="flex:1">Glow</label><input type="checkbox" id="d_mr"></div>
+          <div class="row pro-only"><label style="flex:1">Ring width</label><input type="range" id="d_rw" min="0" max="16"><span id="d_rwv"></span></div>
+        </div>
+
+        <div class="sidecard">
+          <header>Pins</header>
+          <div class="row"><button class="iconbtn" id="d_save">Save current</button><button class="iconbtn" id="d_showpins">Manage</button></div>
+          <div class="row" id="d_pinpeek" style="flex-direction:column;align-items:stretch;gap:6px">
+            <small style="opacity:.75">Recent:</small>
+            <div id="d_pinlistmini" style="display:flex;flex-direction:column;gap:6px"></div>
           </div>
         </div>
-        <div class="group">
-          <h4 class="label-hide">Location</h4>
-          <div class="row"><button class="iconbtn" id="d_locate">📍 Locate</button><button class="iconbtn" id="d_follow">🛰️ Follow</button></div>
-          <div class="row"><button class="iconbtn" id="d_reset">🔁 Reset</button><button class="iconbtn" id="d_share">🔗 Share</button></div>
-          <div class="row"><button class="iconbtn" id="d_near">Near me</button><button class="iconbtn" id="d_clear">Clear</button></div>
+
+        <div class="sidecard">
+          <header>Display</header>
+          <div class="row"><label style="flex:1">Always show coords</label><input type="checkbox" id="d_showc"></div>
+          <div class="row"><select class="select" id="d_fmt"><option value="dec">DD (Decimal)</option><option value="dms">DMS</option></select></div>
+          <div class="row pro-only"><label style="flex:1">Precision</label><input type="range" id="d_prec" min="0" max="8"><span id="d_precv"></span></div>
+          <div class="row"><label style="flex:1">Accent</label><input type="color" id="d_accent"><button class="iconbtn" id="d_accent_reset">Reset</button></div>
+          <div class="row pro-only"><button class="iconbtn" id="d_share">Share</button><button class="iconbtn" id="d_copy2">Copy Link</button></div>
         </div>
-        <div class="group">
-          <h4 class="label-hide">Marker</h4>
-          <div class="row"><label class="label-hide">Visible</label><input type="checkbox" id="d_markerv"></div>
-          <div class="row"><select class="select" id="d_style"><option value="dot">Dot</option><option value="crosshair">Crosshair</option></select></div>
-          <div class="row"><input type="range" id="d_ms" min="8" max="64"><span id="d_msv" class="label-hide"></span></div>
-          <div class="row"><input type="color" id="d_mc"></div>
-          <div class="row"><input type="checkbox" id="d_mr"> <span class="label-hide">Glow</span></div>
-          <div class="row"><input type="range" id="d_rw" min="0" max="16"><span id="d_rwv" class="label-hide"></span></div>
+
+        <div class="sidecard pro-only">
+          <header>Custom CSS</header>
+          <div class="row" style="flex-direction:column;align-items:stretch">
+            <textarea id="d_usercss" style="width:100%;min-height:100px;border-radius:10px;border:1px solid var(--border);background:#0a0a0a;color:#eee;padding:8px;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace" placeholder="/* Your CSS here */"></textarea>
+            <div style="display:flex;gap:8px;margin-top:8px">
+              <button class="iconbtn" id="d_applycss">Apply</button>
+              <button class="iconbtn" id="d_clearcss">Clear</button>
+            </div>
+          </div>
         </div>
-        <div class="group">
-          <h4 class="label-hide">Coords</h4>
-          <div class="row"><input type="checkbox" id="d_showc"> <span class="label-hide">Always show</span></div>
-          <div class="row"><select class="select" id="d_fmt"><option value="dec">DD</option><option value="dms">DMS</option></select><button class="iconbtn" id="d_copyc">📐</button></div>
-          <div class="row"><input type="range" id="d_prec" min="0" max="8"><span id="d_precv" class="label-hide"></span></div>
-        </div>
-        <div class="group">
-          <h4 class="label-hide">Pins</h4>
-          <div class="row"><button class="iconbtn" id="d_pins">📒 Pins</button><button class="iconbtn" id="d_save">⭐ Save</button></div>
-        </div>
-        <div class="group">
-          <h4 class="label-hide">Pro</h4>
-          <div class="row"><button class="iconbtn" id="d_pro">${prefs.pro?"Pro: ON":"Pro: OFF"}</button></div>
+
+        <div class="sidecard">
+          <header>About</header>
+          <div class="row"><small>Powered by openstreetmap.org • Data © OSM contributors • Public Beta</small></div>
         </div>
       `;
-      document.body.appendChild(left);
+      document.body.appendChild(side);
 
-      const toggleMini=left.querySelector("#toggleMini");
-      const openSettingsDesk=left.querySelector("#openSettingsDesk");
-      const d_layer=left.querySelector("#d_layer");
-      left.querySelector("#d_openosm").onclick=()=>window.open(osmViewURL(state),"_blank");
-      left.querySelector("#d_copy").onclick=copyLink;
-      left.querySelector("#d_locate").onclick=locate;
-      left.querySelector("#d_follow").onclick=toggleFollow;
-      left.querySelector("#d_reset").onclick=reset;
-      left.querySelector("#d_share").onclick=shareLink;
-      left.querySelector("#d_near").onclick=locate;
-      left.querySelector("#d_clear").onclick=()=>{ q.value=""; q.focus(); searchPlaces("") };
-      left.querySelector("#d_gmaps").onclick=()=>window.open(gmapsURL(state), "_blank");
-      left.querySelector("#d_copyc").onclick=copyCoords;
-      left.querySelector("#d_pins").onclick=()=>{ renderPins(); pinsPane.style.display="block" };
-      left.querySelector("#d_save").onclick=()=>savepin.click();
+      // Mirror search
+      const d_searchmirror=side.querySelector("#d_searchmirror");
+      d_searchmirror.value=q.value||"";
+      d_searchmirror.addEventListener("input",()=>{ q.value=d_searchmirror.value; q.dispatchEvent(new Event("input",{bubbles:true})) });
 
-      const d_markerv=left.querySelector("#d_markerv");
-      const d_style=left.querySelector("#d_style");
-      const d_ms=left.querySelector("#d_ms"), d_msv=left.querySelector("#d_msv");
-      const d_mc=left.querySelector("#d_mc");
-      const d_mr=left.querySelector("#d_mr");
-      const d_rw=left.querySelector("#d_rw"), d_rwv=left.querySelector("#d_rwv");
-      const d_showc=left.querySelector("#d_showc");
-      const d_fmt=left.querySelector("#d_fmt");
-      const d_autofollow=null;
-      const d_prec=left.querySelector("#d_prec"), d_precv=left.querySelector("#d_precv");
-      const d_pro=left.querySelector("#d_pro");
+      // Pro toggle
+      const proToggle=side.querySelector("#pro_toggle");
+      const updatePro=()=>{ prefs.proMode = proToggle.checked; savePrefs(); document.body.classList.toggle("pro-enabled", !!prefs.proMode) };
+      proToggle.addEventListener("change",updatePro);
+      document.body.classList.toggle("pro-enabled", !!prefs.proMode);
 
-      d_layer.value=state.layer; d_layer.onchange=()=>setLayer(d_layer.value);
+      const d_layer=side.querySelector("#d_layer");
+      side.querySelector("#d_osm").onclick=()=>window.open(osmViewURL(state),"_blank");
+      side.querySelector("#d_copy").onclick=copyLink;
+      side.querySelector("#d_copy2").onclick=copyLink;
+      side.querySelector("#d_share").onclick=shareLink;
+      side.querySelector("#d_locate").onclick=locate;
+      side.querySelector("#d_follow").onclick=toggleFollow;
+      side.querySelector("#d_reset").onclick=reset;
+      side.querySelector("#d_gmaps").onclick=()=>window.open(gmapsURL(state), "_blank");
+      d_layer.value=state.layer;
+      d_layer.onchange=()=>setLayer(d_layer.value);
+
+      // Marker group
+      const d_markerv=side.querySelector("#d_markerv");
+      const d_style=side.querySelector("#d_style");
+      const d_ms=side.querySelector("#d_ms"), d_msv=side.querySelector("#d_msv");
+      const d_mc=side.querySelector("#d_mc");
+      const d_mr=side.querySelector("#d_mr");
+      const d_rw=side.querySelector("#d_rw"), d_rwv=side.querySelector("#d_rwv");
 
       d_markerv.checked=!prefs.markerHidden;
       d_style.value=prefs.markerStyle||"dot";
       d_ms.value=markerSizeEl.value; d_msv.textContent=d_ms.value+"px";
       d_mc.value=markerColorEl.value;
-      d_mr.checked=markerRingEl.checked;
-      d_rw.value=ringWidthEl.value; d_rwv.textContent=d_rw.value+"px";
-      d_showc.checked=!!prefs.showCoords;
-      d_fmt.value=prefs.coordFmt||"dec";
-      d_prec.value=prefs.prec??6; d_precv.textContent=String(prefs.prec??6);
+      d_mr && (d_mr.checked=markerRingEl.checked);
+      d_rw && (d_rw.value=ringWidthEl.value, d_rwv.textContent=d_rw.value+"px");
 
       d_markerv.onchange=()=>{ markerVisibleEl.checked=d_markerv.checked; markerVisibleEl.onchange() };
       d_style.onchange=()=>{ markerStyleEl.value=d_style.value; markerStyleEl.onchange() };
       d_ms.oninput=()=>{ markerSizeEl.value=d_ms.value; markerSizeEl.oninput(); d_msv.textContent=d_ms.value+"px" };
       d_mc.oninput=()=>{ markerColorEl.value=d_mc.value; markerColorEl.oninput() };
-      d_mr.onchange=()=>{ markerRingEl.checked=d_mr.checked; markerRingEl.onchange() };
-      d_rw.oninput=()=>{ ringWidthEl.value=d_rw.value; ringWidthEl.oninput(); d_rwv.textContent=d_rw.value+"px" };
+      d_mr && (d_mr.onchange=()=>{ markerRingEl.checked=d_mr.checked; markerRingEl.onchange() });
+      d_rw && (d_rw.oninput=()=>{ ringWidthEl.value=d_rw.value; ringWidthEl.oninput(); d_rwv.textContent=d_rw.value+"px" });
+
+      // Pins mini
+      const d_save=side.querySelector("#d_save");
+      const d_showpins=side.querySelector("#d_showpins");
+      const d_pinlistmini=side.querySelector("#d_pinlistmini");
+      d_save.onclick=()=>savepin.click();
+      d_showpins.onclick=()=>{ renderPins(); pinsPane.style.display="block" };
+
+      const renderPinsMini=()=>{
+        d_pinlistmini.innerHTML="";
+        const pins=loadPins().slice(0,6);
+        if(!pins.length){ d_pinlistmini.innerHTML='<small style="opacity:.6">No pins yet.</small>'; return }
+        pins.forEach((p,idx)=>{
+          const row=document.createElement("div");
+          row.style.display="flex"; row.style.gap="6px"; row.style.alignItems="center"; row.style.justifyContent="space-between";
+          const txt=document.createElement("div");
+          txt.innerHTML=`<strong style="font-size:12px">${p.name}</strong><br><span style="opacity:.7;font-size:11px">${p.lat.toFixed(5)}, ${p.lon.toFixed(5)}</span>`;
+          const go=document.createElement("button"); go.className="iconbtn"; go.textContent="Go"; go.onclick=()=>{ state.lat=p.lat; state.lon=p.lon; state.delta=p.delta; state.layer=p.layer; layerSel && (layerSel.value=p.layer); apply(true) };
+          row.append(txt,go); d_pinlistmini.appendChild(row);
+        });
+      };
+      renderPinsMini();
+
+      // Display group
+      const d_showc=side.querySelector("#d_showc");
+      const d_fmt=side.querySelector("#d_fmt");
+      const d_prec=side.querySelector("#d_prec"), d_precv=side.querySelector("#d_precv");
+      const d_accent=side.querySelector("#d_accent"), d_accent_reset=side.querySelector("#d_accent_reset");
+      d_showc.checked=!!prefs.showCoords;
+      d_fmt.value=prefs.coordFmt||"dec";
+      d_prec && (d_prec.value=prefs.prec??6, d_precv.textContent=String(prefs.prec??6));
+      d_accent.value=prefs.accent||"#0ea5e9";
       d_showc.onchange=()=>{ toggleCoords.checked=d_showc.checked; toggleCoords.onchange() };
       d_fmt.onchange=()=>{ coordFmtEl.value=d_fmt.value; coordFmtEl.onchange() };
-      d_prec.oninput=()=>{ coordPrecEl.value=d_prec.value; coordPrecEl.oninput(); d_precv.textContent=d_prec.value };
+      d_prec && (d_prec.oninput=()=>{ coordPrecEl.value=d_prec.value; coordPrecEl.oninput(); d_precv.textContent=d_prec.value });
+      d_accent.oninput=()=>{ accentColorEl.value=d_accent.value; accentColorEl.oninput() };
+      d_accent_reset.onclick=()=>{ accentResetEl.click(); d_accent.value=accentColorEl.value };
 
-      openSettingsDesk.onclick=()=>{ alert("Settings are simplified on desktop. Use left panel controls. Mobile modal settings remain available.") };
-
-      toggleMini.onclick=()=>{ left.classList.toggle("mini") };
-
-      d_pro.onclick=()=>{ prefs.pro = !prefs.pro; savePrefs(); applyPro(prefs.pro); d_pro.textContent = prefs.pro ? "Pro: ON" : "Pro: OFF" };
+      // Custom CSS
+      const d_usercss=side.querySelector("#d_usercss");
+      const d_applycss=side.querySelector("#d_applycss");
+      const d_clearcss=side.querySelector("#d_clearcss");
+      if(d_usercss){ d_usercss.value=prefs.userCSS||""; d_applycss.onclick=()=>applyCSSEl.onclick(); d_clearcss.onclick=()=>clearCSSEl.onclick() }
     }
 
     function tickCoords(){ updateCoordsFast(); setTimeout(tickCoords,120) }
     tickCoords();
-
-   })();
+  })();
   </script>
   <script src="/static/data-mobile.js" defer></script>
 </body>

@@ -93,12 +93,12 @@
         reloadCount++;
         localStorage.setItem('reloadCount', reloadCount);
 
-        let seconds = reloadCount > 5 ? 30 : 10;
+        let seconds = reloadCount > 8 ? 30 : 10;
 
         function updateCountdown() {
             const el = document.getElementById('countdown');
             if (el) {
-                if (reloadCount > 5) {
+                if (reloadCount > 8) {
                     document.querySelector('.error p').textContent = "This is taking so long...";
                 }
                 el.textContent = "Trying again in " + seconds + " seconds...";
@@ -110,7 +110,7 @@
                 setTimeout(updateCountdown, 1000);
             }
         }
-        window.addEventListener('DOMContentLoaded', updateCountdown);
+        window.addEventListener('DOMContentLoaded', updateCountdown); 
     </script>
     <% } else { %>
     <script>

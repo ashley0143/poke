@@ -774,7 +774,37 @@
 
     function tickCoords(){ updateCoordsFast(); setTimeout(tickCoords,120) } // fast enough, less CPU
     tickCoords();
+// Add a close (X) button inside the search bar
+const searchBox = document.querySelector(".search");
+if (searchBox) {
+  const closeBtn = document.createElement("button");
+  closeBtn.textContent = "✕";
+  closeBtn.className = "closebtn";
+  closeBtn.title = "Close search";
+  searchBox.appendChild(closeBtn);
 
+  closeBtn.addEventListener("click", () => {
+    const form = document.querySelector("#form");
+    const input = document.querySelector("#q");
+    const sugg = document.querySelector("#suggestions");
+
+    input.value = "";
+    sugg.style.display = "none";
+    form.style.display = "none"; // hides the search bar
+  });
+}
+
+// Allow reopening search bar with `/` key
+document.addEventListener("keydown", e => {
+  if (e.key === "/") {
+    const form = document.querySelector("#form");
+    if (form && form.style.display === "none") {
+      form.style.display = "block";
+      document.querySelector("#q").focus();
+      e.preventDefault();
+    }
+  }
+});
   })();
   </script>
   <script src="/static/data-mobile.js" defer></script>

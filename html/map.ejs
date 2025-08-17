@@ -19,13 +19,26 @@
     .suggest li{padding:10px 12px;cursor:pointer;border-top:1px solid #111}
     .suggest li:first-child{border-top:none}
     .suggest li:active{background:#1a1a1a}
-    .btns{display:flex;gap:8px;white-space:nowrap}
+    .btns{display:flex;gap:8px;white-space:nowrap;align-items:center}
     .btn{border:0;border-radius:10px;background:#222;color:#fff;padding:10px 12px}
+    .select{appearance:none;-webkit-appearance:none;border:1px solid #333;background:#111;color:#fff;border-radius:10px;padding:10px 30px 10px 12px;position:relative}
     .mapwrap{position:relative;height:calc(var(--vh) - 56px);overflow:hidden}
     iframe#map{position:absolute;inset:0;border:0;width:100%;height:100%}
     .marker{position:absolute;left:50%;top:50%;width:20px;height:20px;border-radius:50%;transform:translate(-50%,-50%);background:#e53935;box-shadow:0 0 0 3px rgba(229,57,53,.35);z-index:3;pointer-events:none}
     .brand{position:absolute;bottom:10px;left:10px;padding:6px 10px;font-size:18px;font-weight:600;background:var(--bg);backdrop-filter:var(--glass);-webkit-backdrop-filter:var(--glass);border-radius:10px;z-index:4;pointer-events:none}
     .fab{position:fixed;right:16px;bottom:16px;z-index:6;width:56px;height:56px;border-radius:50%;border:0;background:#111;color:#fff;box-shadow:0 6px 18px rgba(0,0,0,.45);font-size:28px;line-height:0}
+    .zoom{position:absolute;right:10px;top:70px;z-index:7;display:flex;flex-direction:column;gap:8px}
+    .zoom button{width:40px;height:40px;border-radius:10px;border:0;background:#111;color:#fff}
+    .pane{position:absolute;left:10px;top:70px;z-index:7;display:flex;flex-direction:column;gap:8px}
+    .pane button{border:0;border-radius:10px;background:#111;color:#fff;padding:8px 10px}
+    .pins{position:fixed;inset:auto 10px 80px auto;right:10px;z-index:8;min-width:220px;max-width:90vw;max-height:50vh;overflow:auto;background:rgba(0,0,0,.75);backdrop-filter:var(--glass);-webkit-backdrop-filter:var(--glass);border:1px solid #333;border-radius:12px;display:none}
+    .pins header{display:flex;justify-content:space-between;align-items:center;padding:8px 10px;border-bottom:1px solid #222}
+    .pins ul{list-style:none;margin:0;padding:0}
+    .pins li{display:flex;justify-content:space-between;gap:8px;align-items:center;padding:10px;border-top:1px solid #111}
+    .pins li:first-child{border-top:none}
+    .pins .row{display:flex;gap:8px}
+    .tag{display:inline-block;font-size:12px;opacity:.8}
+    .kbd{font:12px ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;background:#171717;border:1px solid #333;border-radius:6px;padding:2px 6px}
     @media (min-width: 768px){
       .bar{padding:10px 14px}
       .brand{font-size:20px}
@@ -45,8 +58,18 @@
         <ul id="suggestions" class="suggest" role="listbox"></ul>
       </div>
       <div class="btns">
-        <button class="btn" id="locate" type="button">📍 Locate</button>
+        <select class="select" id="layer" title="Map layer">
+          <option value="mapnik">Standard</option>
+          <option value="cyclemap">Cycle</option>
+          <option value="transportmap">Transport</option>
+          <option value="hot">Humanitarian</option>
+        </select>
+        <button class="btn" id="locate" type="button" title="Locate (L)">📍 Locate</button>
+        <button class="btn" id="follow" type="button" title="Follow me (F)">🛰️ Follow</button>
         <button class="btn" id="copy" type="button">📋 Copy</button>
+        <button class="btn" id="copycoords" type="button">📐 Coords</button>
+        <button class="btn" id="share" type="button">🔗 Share</button>
+        <button class="btn" id="openosm" type="button">🌐 Open</button>
         <button class="btn" id="reset" type="button">🔁 Reset</button>
       </div>
     </div>
@@ -55,50 +78,90 @@
       <iframe id="map" title="Map"></iframe>
       <div class="marker" aria-hidden="true"></div>
       <div class="brand">PokeMaps</div>
+      <div class="zoom">
+        <button id="zin" title="Zoom in (+)">+</button>
+        <button id="zout" title="Zoom out (-)">−</button>
+      </div>
+      <div class="pane">
+        <button id="savepin" title="Save current view (S)">⭐ Save</button>
+        <button id="showpins" title="Show saved pins">📒 Pins</button>
+      </div>
     </div>
   </div>
 
-  <button class="fab" id="fab" title="More Tools">+</button>
+  <div class="pins" id="pins">
+    <header>
+      <strong>Saved Pins</strong>
+      <button id="closepins" class="btn" type="button">✕</button>
+    </header>
+    <ul id="pinlist"></ul>
+  </div>
+
+  <button class="fab" id="fab" title="Quick help">?</button>
 
   <script>
     ;(()=> {
       const OSM_EMBED="https://www.openstreetmap.org/export/embed.html"
-      const OSM_HOST="www.openstreetmap.org"
+      const OSM_VIEW ="https://www.openstreetmap.org"
       const NOMINATIM="https://nominatim.openstreetmap.org/search"
-      const LAYER="mapnik"
-      const DEFAULT={lat:30.41015625,lon:72.44879155730672,delta:.25}
+      const LAYERS=["mapnik","cyclemap","transportmap","hot"]
+      const DEFAULT={lat:30.410156,lon:72.448792,delta:.25,layer:"mapnik"}
+      const LIMITS={deltaMin:0.01, deltaMax:45}
       const S=sel=>document.querySelector(sel)
       const map=S("#map"), wrap=S("#mapwrap"), q=S("#q"), sug=S("#suggestions")
-      const locateBtn=S("#locate"), copyBtn=S("#copy"), resetBtn=S("#reset"), fab=S("#fab")
-      let aborter=null, lastQuery="", state={lat:DEFAULT.lat,lon:DEFAULT.lon,delta:DEFAULT.delta}
+      const locateBtn=S("#locate"), followBtn=S("#follow"), copyBtn=S("#copy"), copyCoordsBtn=S("#copycoords")
+      const shareBtn=S("#share"), resetBtn=S("#reset"), fab=S("#fab"), layerSel=S("#layer"), openBtn=S("#openosm")
+      const zin=S("#zin"), zout=S("#zout"), savepin=S("#savepin"), showpins=S("#showpins"), pinsPane=S("#pins")
+      const pinlist=S("#pinlist"), closepins=S("#closepins")
+      let aborter=null, lastQuery="", watchId=null
+      let state={...DEFAULT}
 
       const setVH=()=>{const vh=window.innerHeight*0.01;document.documentElement.style.setProperty("--vh",`${vh*100}px`)}
       setVH(); addEventListener("resize",()=>{setVH()},{passive:true})
 
       const clamp=(n,min,max)=>Math.min(Math.max(n,min),max)
       const cleanStr=s=>s.replace(/\s+/g," ").trim()
+      const clampDelta=d=>clamp(d, LIMITS.deltaMin, LIMITS.deltaMax)
+
       const bboxFrom=(lat,lon,d)=>({
         left:(lon-d).toFixed(6),
         bottom:(lat-d).toFixed(6),
         right:(lon+d).toFixed(6),
         top:(lat+d).toFixed(6)
       })
-      const embedURL=({lat,lon,delta})=>{
-        const b=bboxFrom(lat,lon,delta)
-        return `${OSM_EMBED}?bbox=${b.left}%2C${b.bottom}%2C${b.right}%2C${b.top}&layer=${encodeURIComponent(LAYER)}`
+
+      const embedURL=({lat,lon,delta,layer})=>{
+        const b=bboxFrom(lat,lon,clampDelta(delta))
+        const lyr = LAYERS.includes(layer)?layer:DEFAULT.layer
+        return `${OSM_EMBED}?bbox=${b.left}%2C${b.bottom}%2C${b.right}%2C${b.top}&layer=${encodeURIComponent(lyr)}`
       }
-      const appURL=({lat,lon,delta})=>{
-        const p=new URLSearchParams({lat:lat.toFixed(6),lon:lon.toFixed(6),delta:delta.toFixed(4)})
+
+      const appURL=({lat,lon,delta,layer})=>{
+        const p=new URLSearchParams({
+          lat:lat.toFixed(6),
+          lon:lon.toFixed(6),
+          delta:clampDelta(delta).toFixed(4),
+          layer:layer
+        })
         return `${location.origin}${location.pathname}?${p.toString()}`
       }
+
+      const osmViewURL=({lat,lon,delta,layer})=>{
+        const z = deltaToZoom(clampDelta(delta))
+        return `${OSM_VIEW}/?mlat=${lat.toFixed(6)}&mlon=${lon.toFixed(6)}#map=${z}/${lat.toFixed(6)}/${lon.toFixed(6)}&layers=${layer}`
+      }
+
       const parseURL=()=>{
         const sp=new URLSearchParams(location.search)
         const lat=parseFloat(sp.get("lat")), lon=parseFloat(sp.get("lon")), delta=parseFloat(sp.get("delta"))
+        const layer=sp.get("layer")
         if(Number.isFinite(lat)&&Number.isFinite(lon)) state.lat=clamp(lat,-90,90), state.lon=clamp(lon,-180,180)
-        if(Number.isFinite(delta)&&delta>0&&delta<45) state.delta=delta
+        if(Number.isFinite(delta)&&delta>0) state.delta=clampDelta(delta)
+        if(layer && LAYERS.includes(layer)) state.layer=layer
+        layerSel.value=state.layer
       }
 
-      const apply=push=>{
+      const apply=(push)=>{
         map.src=embedURL(state)
         if(push) history.pushState(state,"",appURL(state))
       }
@@ -109,18 +172,50 @@
         apply(push)
       }
 
+      const setLayer=(layer)=>{
+        state.layer = LAYERS.includes(layer)?layer:DEFAULT.layer
+        apply(true)
+      }
+
+      const setDelta=(delta,{push=true}={})=>{
+        state.delta = clampDelta(delta)
+        apply(push)
+      }
+
+      // Zoom helpers: approximate mapping between delta and "zoom like"
+      const zoomToDelta=z=>Math.min(LIMITS.deltaMax, Math.max(LIMITS.deltaMin, Math.pow(2, (10 - z)) * 0.02))
+      const deltaToZoom=d=>Math.round(10 - Math.log2(d/0.02))
+
+      const zoomIn = ()=> setDelta(state.delta*0.5,{push:true})
+      const zoomOut= ()=> setDelta(state.delta*2,{push:true})
+
       const reset=()=>{
+        stopFollow()
         state={...DEFAULT}
         q.value=""
         sug.style.display="none"; q.setAttribute("aria-expanded","false")
+        layerSel.value=state.layer
         apply(true)
       }
 
       const copyLink=async()=>{
-        try{
-          await navigator.clipboard.writeText(appURL(state))
-          alert("Map link copied!")
-        }catch{ alert("Could not copy.")}
+        try{ await navigator.clipboard.writeText(appURL(state)); alert("Link copied!") }
+        catch{ alert("Could not copy.") }
+      }
+
+      const copyCoords=async()=>{
+        const coords = `${state.lat.toFixed(6)},${state.lon.toFixed(6)}`
+        try{ await navigator.clipboard.writeText(coords); alert("Coordinates copied!") }
+        catch{ alert(coords) }
+      }
+
+      const shareLink=async()=>{
+        const url = appURL(state)
+        if(navigator.share){
+          try{ await navigator.share({title:"PokeMaps", url}) }catch{}
+        }else{
+          copyLink()
+        }
       }
 
       const locate=()=>{
@@ -132,6 +227,27 @@
         )
       }
 
+      const startFollow=()=>{
+        if(!("geolocation" in navigator)){ alert("Geolocation not supported."); return }
+        if(watchId!==null) return
+        followBtn.textContent="🛰️ Following"
+        watchId = navigator.geolocation.watchPosition(
+          pos=>centerOn(pos.coords.latitude,pos.coords.longitude,{push:false}),
+          _=>stopFollow(),
+          {enableHighAccuracy:true,timeout:15000,maximumAge:1000}
+        )
+      }
+
+      const stopFollow=()=>{
+        if(watchId!==null){
+          navigator.geolocation.clearWatch(watchId)
+          watchId=null
+        }
+        followBtn.textContent="🛰️ Follow"
+      }
+
+      const toggleFollow=()=> watchId===null ? startFollow() : stopFollow()
+
       const debounced=(fn,ms=250)=>{let t;return(...a)=>{clearTimeout(t);t=setTimeout(()=>fn(...a),ms)}}
       const searchPlaces=debounced(async term=>{
         term=cleanStr(term); if(!term){sug.style.display="none"; q.setAttribute("aria-expanded","false"); return}
@@ -139,7 +255,7 @@
         aborter=new AbortController()
         try{
           const url=`${NOMINATIM}?q=${encodeURIComponent(term)}&format=json&limit=7&addressdetails=0&accept-language=en`
-          const r=await fetch(url,{signal:aborter.signal,headers:{}}) 
+          const r=await fetch(url,{signal:aborter.signal})
           if(!r.ok) throw new Error("HTTP "+r.status)
           const data=await r.json()
           sug.innerHTML=""
@@ -174,21 +290,84 @@
       })
 
       locateBtn.onclick=locate
+      followBtn.onclick=toggleFollow
       copyBtn.onclick=copyLink
+      copyCoordsBtn.onclick=copyCoords
+      shareBtn.onclick=shareLink
       resetBtn.onclick=reset
-      fab.onclick=()=>alert("More features coming soon!")
+      layerSel.onchange=()=>setLayer(layerSel.value)
+      openBtn.onclick=()=>{ window.open(osmViewURL(state), "_blank") }
+      zin.onclick=zoomIn
+      zout.onclick=zoomOut
 
-      addEventListener("popstate",e=>{
-        if(e.state && typeof e.state.lat==="number"){ state=e.state; apply(false) }
-        else { parseURL(); apply(false) }
+      // Pins (localStorage)
+      const LS_KEY = "pokemaps_pins_v1"
+      const loadPins=()=>{ try{ return JSON.parse(localStorage.getItem(LS_KEY)||"[]") }catch{ return [] } }
+      const savePins=(pins)=>{ localStorage.setItem(LS_KEY, JSON.stringify(pins.slice(0,100))) }
+      const renderPins=()=>{
+        const pins=loadPins()
+        pinlist.innerHTML=""
+        if(!pins.length){
+          const li=document.createElement("li"); li.textContent="No pins yet."; pinlist.appendChild(li); return
+        }
+        pins.forEach((p,idx)=>{
+          const li=document.createElement("li")
+          const left=document.createElement("div"); left.className="row"
+          const title=document.createElement("div")
+          title.innerHTML=`<strong>${p.name}</strong><div class="tag">${p.lat.toFixed(5)}, ${p.lon.toFixed(5)} · ${p.layer}</div>`
+          left.appendChild(title)
+          const right=document.createElement("div"); right.className="row"
+          const go=document.createElement("button"); go.textContent="Go"; go.onclick=()=>{ pinsPane.style.display="none"; state.lat=p.lat; state.lon=p.lon; state.delta=p.delta; state.layer=p.layer; layerSel.value=p.layer; apply(true) }
+          const share=document.createElement("button"); share.textContent="Share"; share.onclick=async()=>{ const url=appURL(p); if(navigator.share){ try{ await navigator.share({title:p.name,url}) }catch{} } else { try{ await navigator.clipboard.writeText(url); alert("Link copied!") }catch{} } }
+          const del=document.createElement("button"); del.textContent="Del"; del.onclick=()=>{ const arr=loadPins(); arr.splice(idx,1); savePins(arr); renderPins() }
+          ;[go,share,del].forEach(b=>{b.className="btn"; right.appendChild(b)})
+          li.appendChild(left); li.appendChild(right)
+          pinlist.appendChild(li)
+        })
+      }
+      const nameFromState=()=> q.value?.trim() || new Date().toLocaleString()
+      savepin.onclick=()=>{
+        const pins=loadPins()
+        pins.unshift({name:nameFromState(), lat:state.lat, lon:state.lon, delta:state.delta, layer:state.layer})
+        savePins(pins); renderPins()
+        pinsPane.style.display="block"
+      }
+      showpins.onclick=()=>{ renderPins(); pinsPane.style.display="block" }
+      closepins.onclick=()=>{ pinsPane.style.display="none" }
+
+      // Keyboard shortcuts
+      addEventListener("keydown",(e)=>{
+        if(e.target.matches("input, textarea")) return
+        if(e.key==="+"){ e.preventDefault(); zoomIn() }
+        if(e.key==="-"){ e.preventDefault(); zoomOut() }
+        if(e.key.toLowerCase()==="l"){ e.preventDefault(); locate() }
+        if(e.key.toLowerCase()==="f"){ e.preventDefault(); toggleFollow() }
+        if(e.key.toLowerCase()==="s"){ e.preventDefault(); savepin.click() }
       })
 
-      addEventListener("click",e=>{
-        const t=e.target
-        if(t.tagName==="A" && t.href.includes(OSM_HOST)){ e.preventDefault(); map.src=t.href; history.pushState(state,"",t.href) }
-      },{capture:true})
+      // History + deep link
+      addEventListener("popstate",e=>{
+        stopFollow()
+        if(e.state && typeof e.state.lat==="number"){ state=e.state; layerSel.value=state.layer; apply(false) }
+        else { parseURL(); layerSel.value=state.layer; apply(false) }
+      })
 
-      parseURL(); apply(false)
+      // Help
+      fab.onclick=()=>alert(
+`Quick keys:
+  + / - : zoom
+  L     : locate once
+  F     : toggle follow
+  S     : save pin
+Layer, share, copy link/coords, "Open" = openstreetmap.org view.`)
+
+      // Init: parse URL, then auto-locate only if no coords in URL.
+      parseURL()
+      apply(false)
+      if(!new URLSearchParams(location.search).has("lat")){
+        // Auto-locate on first load if permission is granted/asked
+        locate()
+      }
     })();
   </script>
 

@@ -221,7 +221,7 @@ module.exports = function (app, config, renderTemplate) {
     INNERTUBE.getYouTubeApiVideo(f, v, contentlang, contentregion).then(
       (data) => {
         try {
-          const k = data?.video;
+          const k = " ";
           const channel_uploads = data?.channel_uploads;
           const json = data?.json;
           const engagement = data?.engagement;

@@ -1,4 +1,3 @@
- 
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -13,7 +12,10 @@
       --vh:100vh;--pad:12px;--radius:14px;--fg:#fff;--bg:rgba(0,0,0,.6);--glass:blur(12px);
       --marker-size:20px;--marker-color:#e53935;--marker-ring:rgba(229,57,53,.35);--ring-width:3px;
       --panel:rgba(0,0,0,.85);--accent:#0ea5e9;--chip:#111;--chipb:#222;--tip:#888;
-      --surface:#0b0b0b;--border:#333
+      --surface:#0b0b0b;--border:#333;
+      --sidew:320px; /* resizable desktop sidebar width */
+      --sidew-min:260px;
+      --sidew-max:560px;
     }
     *{box-sizing:border-box}
     html,body{height:100%;margin:0}
@@ -77,17 +79,27 @@
     .settings textarea{width:100%;min-height:120px;border-radius:10px;border:1px solid var(--border);background:#0a0a0a;color:#eee;padding:8px;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
     .settings .about{font-size:13px;opacity:.92;line-height:1.5}
 
-    /* Desktop layout — simplified & clean */
+    /* Desktop layout — resizable, scrollable sidebar */
     .desktop .bar{grid-column:2}
-    .desktop .app{grid-template-columns:320px 1fr;grid-template-rows:auto 1fr}
-    .desktop .sidebar{position:fixed;left:0;top:0;bottom:0;width:320px;background:var(--panel);border-right:1px solid var(--border);display:flex;flex-direction:column;gap:12px;padding:12px;z-index:9}
+    .desktop .app{grid-template-columns:var(--sidew) 1fr;grid-template-rows:auto 1fr}
+    .desktop .sidebar{position:fixed;left:0;top:0;bottom:0;width:var(--sidew);background:var(--panel);border-right:1px solid var(--border);display:flex;flex-direction:column;gap:12px;padding:12px;z-index:9;overflow:auto}
     .desktop .sidecard{border:1px solid #222;border-radius:12px;overflow:hidden}
     .desktop .sidecard header{padding:10px 12px;border-bottom:1px solid #222;font-weight:600;display:flex;justify-content:space-between;align-items:center}
     .desktop .sidecard .row{display:flex;gap:8px;align-items:center;padding:8px 12px;border-top:1px solid #111}
     .desktop .sidecard .row:first-of-type{border-top:0}
     .desktop .sidecard .hint{font-size:12px;opacity:.75;padding:8px 12px}
     .desktop .mapwrap{grid-column:2}
-    /* Suppress popovers on desktop (sidebar replaces them) */
+
+    /* Sidebar resizer */
+    .desktop .resizer{position:fixed;left:calc(var(--sidew));top:0;bottom:0;width:6px;cursor:col-resize;z-index:10;background:transparent}
+    .desktop .resizer::after{content:"";position:absolute;right:0;top:40px;bottom:40px;width:2px;background:rgba(255,255,255,.08)}
+
+    /* Hide floating buttons on desktop (they exist in the sidebar) */
+    .desktop .dock,
+    .desktop #menuBtn,
+    .desktop #locate{ display:none !important }
+
+    /* Suppress mobile popovers on desktop (sidebar replaces them) */
     .desktop .menu,.desktop .pins,.desktop .settings{display:none !important}
 
     /* Pro detail rows subtly toned down */
@@ -292,8 +304,7 @@
     const accentColorEl=S("#accentColor"), accentResetEl=S("#accentReset");
     const customCSSEl=S("#customCSS"), applyCSSEl=S("#applyCSS"), clearCSSEl=S("#clearCSS");
 
-    /* Pro mode */
-    const PREFS_KEY="pokemaps_prefs_v6";
+    const PREFS_KEY="pokemaps_prefs_v7";
     const LS_PINS="pokemaps_pins_v1";
     const LS_SEARCH="pokemaps_search_hist_v1";
 
@@ -302,7 +313,7 @@
     const prefs=loadPrefs(); applyPrefs();
 
     const isDesktop=()=> matchMedia("(min-width: 1024px)").matches && matchMedia("(pointer: fine)").matches;
-    const applyDesktopClass=()=>{ document.body.classList.toggle("desktop", isDesktop()) };
+    const applyDesktopClass=()=>{ document.body.classList.toggle("desktop", isDesktop()); if(isDesktop()) ensureDesktopSidebar(); else removeDesktopSidebar() };
     applyDesktopClass(); addEventListener("resize",applyDesktopClass,{passive:true});
 
     const setVH=()=>{const vh=window.innerHeight*0.01;document.documentElement.style.setProperty("--vh",`${vh*100}px`)};
@@ -419,7 +430,7 @@
 
     const highlight=(text,term)=>{
       term=term.trim(); if(!term) return text;
-      const esc=term.replace(/[.*+?^${}()|[\]\\]/g,"\\$&");
+      const esc=term.replace(/[.*+?^${}()|[\\]\\\\]/g,"\\\\$&");
       return text.replace(new RegExp(esc,"ig"),m=>`<mark>${m}</mark>`);
     };
 
@@ -429,7 +440,6 @@
 
     const renderSuggest=(items, term="")=>{
       if(!sug) return;
-      // keep the sticky head; rebuild the rest
       const head = sug.querySelector(".head");
       sug.innerHTML="";
       if(head) sug.appendChild(head);
@@ -557,15 +567,15 @@
     };
     function button(t,fn){ const b=document.createElement("button"); b.textContent=t; b.className="iconbtn"; b.onclick=fn; return b }
     const nameFromState=()=> q.value?.trim() || new Date().toLocaleString();
-    savepin.onclick=()=>{ const pins=loadPins(); pins.unshift({name:nameFromState(), lat:state.lat, lon:state.lon, delta:state.delta, layer:state.layer}); savePins(pins); renderPins(); pinsPane.style.display="block" };
-    showpins.onclick=()=>{ renderPins(); pinsPane.style.display="block" };
-    closepins.onclick=()=>{ pinsPane.style.display="none" };
+    savepin && (savepin.onclick=()=>{ const pins=loadPins(); pins.unshift({name:nameFromState(), lat:state.lat, lon:state.lon, delta:state.delta, layer:state.layer}); savePins(pins); renderPins(); pinsPane.style.display="block" });
+    showpins && (showpins.onclick=()=>{ renderPins(); pinsPane.style.display="block" });
+    closepins && (closepins.onclick=()=>{ pinsPane.style.display="none" });
 
     // Panels (mobile/tablet only; desktop has sidebar)
     menuBtn.onclick=()=>{ if(isDesktop()) return; menu.style.display="block" };
     closeMenu && (closeMenu.onclick=()=>{ menu.style.display="none" });
-    opensettings.onclick=()=>{ if(isDesktop()) return; settings.style.display="block" };
-    closesettings.onclick=()=>{ settings.style.display="none" };
+    opensettings && (opensettings.onclick=()=>{ if(isDesktop()) return; settings.style.display="block" });
+    closesettings && (closesettings.onclick=()=>{ settings.style.display="none" });
 
     // Prefs -> UI
     toggleCoords.checked = !!prefs.showCoords;
@@ -624,7 +634,7 @@
     addEventListener("keydown",(e)=>{
       if(e.target.matches("input, textarea")) return;
       if(e.key.toLowerCase()==="l"){ e.preventDefault(); locate() }
-      if(e.key.toLowerCase()==="s"){ e.preventDefault(); savepin.click() }
+      if(e.key.toLowerCase()==="s"){ e.preventDefault(); savepin?.click() }
       if(e.key.toLowerCase()==="h"){ e.preventDefault(); toggleFollow() }
       if(e.key.toLowerCase()==="r"){ e.preventDefault(); reset() }
       if(e.key.toLowerCase()==="1"){ e.preventDefault(); setLayer("mapnik") }
@@ -653,7 +663,7 @@
       applyMarkerStyle(prefs.markerStyle||"dot");
       setAccent(prefs.accent||"#0ea5e9");
       applyTheme(prefs.theme||"auto");
-      // apply pro mode class on body
+      if(prefs.sideW) document.documentElement.style.setProperty("--sidew", clamp(prefs.sideW, getMinSide(), getMaxSide()) + "px");
       document.body.classList.toggle("pro-enabled", !!prefs.proMode);
     }
     function applyMarkerStyle(style){ markerEl.classList.toggle("crosshair", style==="crosshair") }
@@ -696,11 +706,22 @@
     if(!urlHasLat){ locate() }
     if(prefs.autoFollow) startFollow();
 
-    // Desktop sidebar builder (clean, with Pro toggle)
-    if(isDesktop()) buildDesktopSidebar();
+    /* ===== Desktop sidebar: build once, resizable + scrollable ===== */
+    let sideBuilt=false, sideEl=null, resizerEl=null;
+    function ensureDesktopSidebar(){
+      if(sideBuilt) return;
+      buildDesktopSidebar();
+      sideBuilt=true;
+    }
+    function removeDesktopSidebar(){
+      if(!sideBuilt) return;
+      sideEl?.remove(); resizerEl?.remove();
+      sideEl=null; resizerEl=null; sideBuilt=false;
+    }
+
     function buildDesktopSidebar(){
-      const side=document.createElement("div"); side.className="sidebar";
-      side.innerHTML=`
+      sideEl=document.createElement("div"); sideEl.className="sidebar";
+      sideEl.innerHTML=`
         <div class="sidecard">
           <header>
             <span>Overview</span>
@@ -715,10 +736,10 @@
             <option value="transportmap">Transport</option>
             <option value="hot">Humanitarian</option>
           </select></div>
-          <div class="row"><button class="iconbtn" id="d_locate">Locate</button><button class="iconbtn" id="d_follow">Follow</button><button class="iconbtn" id="d_reset">Reset</button></div>
+          <div class="row"><button class="iconbtn" id="d_locate">Near me</button><button class="iconbtn" id="d_follow">Follow</button><button class="iconbtn" id="d_reset">Reset</button></div>
           <div class="row"><button class="iconbtn" id="d_copy">Copy Link</button><button class="iconbtn" id="d_copyc">Copy Coords</button></div>
-          <div class="row"><button class="iconbtn" id="d_osm">Open in OSM</button><button class="iconbtn" id="d_gmaps">Google Maps</button></div>
-          <div class="hint">Tip: / to focus search • 1–4 change layers • S save pin • R reset</div>
+          <div class="row"><button class="iconbtn" id="d_share">Share</button><button class="iconbtn" id="d_osm">Open in OSM</button><button class="iconbtn" id="d_gmaps">Google Maps</button></div>
+          <div class="hint">Tip: / focus • 1–4 layers • S save pin • R reset</div>
         </div>
 
         <div class="sidecard">
@@ -746,7 +767,6 @@
           <div class="row"><select class="select" id="d_fmt"><option value="dec">DD (Decimal)</option><option value="dms">DMS</option></select></div>
           <div class="row pro-only"><label style="flex:1">Precision</label><input type="range" id="d_prec" min="0" max="8"><span id="d_precv"></span></div>
           <div class="row"><label style="flex:1">Accent</label><input type="color" id="d_accent"><button class="iconbtn" id="d_accent_reset">Reset</button></div>
-          <div class="row pro-only"><button class="iconbtn" id="d_share">Share</button><button class="iconbtn" id="d_copy2">Copy Link</button></div>
         </div>
 
         <div class="sidecard pro-only">
@@ -765,38 +785,44 @@
           <div class="row"><small>Powered by openstreetmap.org • Data © OSM contributors • Public Beta</small></div>
         </div>
       `;
-      document.body.appendChild(side);
+      document.body.appendChild(sideEl);
+
+      // Resizer
+      resizerEl=document.createElement("div");
+      resizerEl.className="resizer";
+      document.body.appendChild(resizerEl);
+      initResizer();
 
       // Mirror search
-      const d_searchmirror=side.querySelector("#d_searchmirror");
+      const d_searchmirror=sideEl.querySelector("#d_searchmirror");
       d_searchmirror.value=q.value||"";
       d_searchmirror.addEventListener("input",()=>{ q.value=d_searchmirror.value; q.dispatchEvent(new Event("input",{bubbles:true})) });
 
       // Pro toggle
-      const proToggle=side.querySelector("#pro_toggle");
+      const proToggle=sideEl.querySelector("#pro_toggle");
       const updatePro=()=>{ prefs.proMode = proToggle.checked; savePrefs(); document.body.classList.toggle("pro-enabled", !!prefs.proMode) };
       proToggle.addEventListener("change",updatePro);
       document.body.classList.toggle("pro-enabled", !!prefs.proMode);
 
-      const d_layer=side.querySelector("#d_layer");
-      side.querySelector("#d_osm").onclick=()=>window.open(osmViewURL(state),"_blank");
-      side.querySelector("#d_copy").onclick=copyLink;
-      side.querySelector("#d_copy2").onclick=copyLink;
-      side.querySelector("#d_share").onclick=shareLink;
-      side.querySelector("#d_locate").onclick=locate;
-      side.querySelector("#d_follow").onclick=toggleFollow;
-      side.querySelector("#d_reset").onclick=reset;
-      side.querySelector("#d_gmaps").onclick=()=>window.open(gmapsURL(state), "_blank");
+      const d_layer=sideEl.querySelector("#d_layer");
+      sideEl.querySelector("#d_osm").onclick=()=>window.open(osmViewURL(state),"_blank");
+      sideEl.querySelector("#d_copy").onclick=copyLink;
+      sideEl.querySelector("#d_copyc").onclick=copyCoords;
+      sideEl.querySelector("#d_share").onclick=shareLink;
+      sideEl.querySelector("#d_locate").onclick=locate;
+      sideEl.querySelector("#d_follow").onclick=toggleFollow;
+      sideEl.querySelector("#d_reset").onclick=reset;
+      sideEl.querySelector("#d_gmaps").onclick=()=>window.open(gmapsURL(state), "_blank");
       d_layer.value=state.layer;
       d_layer.onchange=()=>setLayer(d_layer.value);
 
       // Marker group
-      const d_markerv=side.querySelector("#d_markerv");
-      const d_style=side.querySelector("#d_style");
-      const d_ms=side.querySelector("#d_ms"), d_msv=side.querySelector("#d_msv");
-      const d_mc=side.querySelector("#d_mc");
-      const d_mr=side.querySelector("#d_mr");
-      const d_rw=side.querySelector("#d_rw"), d_rwv=side.querySelector("#d_rwv");
+      const d_markerv=sideEl.querySelector("#d_markerv");
+      const d_style=sideEl.querySelector("#d_style");
+      const d_ms=sideEl.querySelector("#d_ms"), d_msv=sideEl.querySelector("#d_msv");
+      const d_mc=sideEl.querySelector("#d_mc");
+      const d_mr=sideEl.querySelector("#d_mr");
+      const d_rw=sideEl.querySelector("#d_rw"), d_rwv=sideEl.querySelector("#d_rwv");
 
       d_markerv.checked=!prefs.markerHidden;
       d_style.value=prefs.markerStyle||"dot";
@@ -813,17 +839,17 @@
       d_rw && (d_rw.oninput=()=>{ ringWidthEl.value=d_rw.value; ringWidthEl.oninput(); d_rwv.textContent=d_rw.value+"px" });
 
       // Pins mini
-      const d_save=side.querySelector("#d_save");
-      const d_showpins=side.querySelector("#d_showpins");
-      const d_pinlistmini=side.querySelector("#d_pinlistmini");
-      d_save.onclick=()=>savepin.click();
+      const d_save=sideEl.querySelector("#d_save");
+      const d_showpins=sideEl.querySelector("#d_showpins");
+      const d_pinlistmini=sideEl.querySelector("#d_pinlistmini");
+      d_save.onclick=()=>savepin?.click();
       d_showpins.onclick=()=>{ renderPins(); pinsPane.style.display="block" };
 
       const renderPinsMini=()=>{
         d_pinlistmini.innerHTML="";
         const pins=loadPins().slice(0,6);
         if(!pins.length){ d_pinlistmini.innerHTML='<small style="opacity:.6">No pins yet.</small>'; return }
-        pins.forEach((p,idx)=>{
+        pins.forEach((p)=>{
           const row=document.createElement("div");
           row.style.display="flex"; row.style.gap="6px"; row.style.alignItems="center"; row.style.justifyContent="space-between";
           const txt=document.createElement("div");
@@ -835,10 +861,10 @@
       renderPinsMini();
 
       // Display group
-      const d_showc=side.querySelector("#d_showc");
-      const d_fmt=side.querySelector("#d_fmt");
-      const d_prec=side.querySelector("#d_prec"), d_precv=side.querySelector("#d_precv");
-      const d_accent=side.querySelector("#d_accent"), d_accent_reset=side.querySelector("#d_accent_reset");
+      const d_showc=sideEl.querySelector("#d_showc");
+      const d_fmt=sideEl.querySelector("#d_fmt");
+      const d_prec=sideEl.querySelector("#d_prec"), d_precv=sideEl.querySelector("#d_precv");
+      const d_accent=sideEl.querySelector("#d_accent"), d_accent_reset=sideEl.querySelector("#d_accent_reset");
       d_showc.checked=!!prefs.showCoords;
       d_fmt.value=prefs.coordFmt||"dec";
       d_prec && (d_prec.value=prefs.prec??6, d_precv.textContent=String(prefs.prec??6));
@@ -848,12 +874,35 @@
       d_prec && (d_prec.oninput=()=>{ coordPrecEl.value=d_prec.value; coordPrecEl.oninput(); d_precv.textContent=d_prec.value });
       d_accent.oninput=()=>{ accentColorEl.value=d_accent.value; accentColorEl.oninput() };
       d_accent_reset.onclick=()=>{ accentResetEl.click(); d_accent.value=accentColorEl.value };
+    }
 
-      // Custom CSS
-      const d_usercss=side.querySelector("#d_usercss");
-      const d_applycss=side.querySelector("#d_applycss");
-      const d_clearcss=side.querySelector("#d_clearcss");
-      if(d_usercss){ d_usercss.value=prefs.userCSS||""; d_applycss.onclick=()=>applyCSSEl.onclick(); d_clearcss.onclick=()=>clearCSSEl.onclick() }
+    function getMinSide(){ return parseInt(getComputedStyle(document.documentElement).getPropertyValue('--sidew-min'))||260 }
+    function getMaxSide(){ return Math.max(380, Math.min(window.innerWidth*0.6, parseInt(getComputedStyle(document.documentElement).getPropertyValue('--sidew-max'))||560)) }
+
+    function initResizer(){
+      let dragging=false, startX=0, startW=0;
+      const onPointerDown=(e)=>{
+        dragging=true; startX=e.clientX; startW=parseInt(getComputedStyle(document.documentElement).getPropertyValue('--sidew'))||320;
+        document.body.style.userSelect="none";
+      };
+      const onPointerMove=(e)=>{
+        if(!dragging) return;
+        const dx=e.clientX-startX;
+        const newW=clamp(startW+dx, getMinSide(), getMaxSide());
+        document.documentElement.style.setProperty("--sidew", newW+"px");
+        prefs.sideW=newW; savePrefs();
+      };
+      const onPointerUp=()=>{ dragging=false; document.body.style.userSelect="" };
+
+      resizerEl.addEventListener("mousedown",onPointerDown);
+      window.addEventListener("mousemove",onPointerMove);
+      window.addEventListener("mouseup",onPointerUp);
+      // Touch
+      resizerEl.addEventListener("touchstart",e=>onPointerDown(e.touches[0]));
+      window.addEventListener("touchmove",e=>onPointerMove(e.touches[0]));
+      window.addEventListener("touchend",onPointerUp);
+      // keep width within limits on resize
+      window.addEventListener("resize",()=>{ const w=parseInt(getComputedStyle(document.documentElement).getPropertyValue('--sidew'))||320; const clamped=clamp(w,getMinSide(),getMaxSide()); if(clamped!==w){ document.documentElement.style.setProperty('--sidew',clamped+'px'); prefs.sideW=clamped; savePrefs(); } }, {passive:true});
     }
 
     function tickCoords(){ updateCoordsFast(); setTimeout(tickCoords,120) }
@@ -863,5 +912,3 @@
   <script src="/static/data-mobile.js" defer></script>
 </body>
 </html>
-
- 

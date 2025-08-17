@@ -42,10 +42,10 @@
 <meta content="<%=inv_vid.title%>" name=title>
 <meta content="<%=color%>" name="theme-color">
 <meta content="{canplayhd: true, redesign_feburary_2023:true, poke-rebrand:true, universe:2, ImmersiveAmbientMode:true, november2023_poke_rebrand:true, rebrand_2024:true, faster_load:true, AudioSyncV2:false, AudioSyncV3:true }" name="flags">
-<meta content="<%=k.Video.Channel.Name%>" name=twitter:author>
+<meta content="<%=inv_vid.author%>" name=twitter:author>
 <meta content="https://poketube.fun/watch?v=<%=inv_vid.videoId%>" name=twitter:url>
 <meta content="<%=inv_vid.title%> | Poke" name=twitter:title>
-<meta content="Watch this <%- turntomins(inv_vid.lengthSeconds) || "LIVE"%> long video from <%=k.Video.Channel.Name%> On Poke! 
+<meta content="Watch this <%- turntomins(inv_vid.lengthSeconds) || "LIVE"%> long video from <%=inv_vid.author%> On Poke! 
 👍 <%=convert(engagement.likes)%> | 👎 <%=convert(engagement.dislikes)%> | 📈 <%=convert(engagement.viewCount)%> Views 🗓️ <%= date.replace("Premiered", " ") %> 💬 <% if (!isNaN(inv.commentCount)) { %><%= inv.commentCount.toLocaleString() %>
 <% } else { %>
  0
@@ -420,7 +420,7 @@ button:hover, a:hover {
 
 <!-- css files end -->
 
-<% if (k.Video.Channel.Name == "7clouds") { %> 
+<% if (inv_vid.title == "7clouds") { %> 
 <style>
  @font-face {
   font-family: 'Edo SZ';
@@ -739,7 +739,7 @@ background-color: #0000;
     <nav>
                   <div class=left>
 
-<% if (k.Video.Channel.Name !== "twenty one pilots") { %> 
+<% if (inv_vid.author !== "twenty one pilots") { %> 
  
               <a title="Poke Homepage" class="class" href="/143" style=font-family:Inter,sans-serif;color:var(--text-color)>  <img  style="transform: scale(1.3);padding-left:0.9em;width: 8.5em;display: block;margin-left: auto;margin-right: auto;" src="/css/logo-poke.svg?v=5"></a>
                                      		 	                    
@@ -773,7 +773,7 @@ if your domain matches this code you are probably in poketube.fun owo:3
                                                          <% } %>   
  
  
-<% if (k.Video.Channel.Name === "twenty one pilots") { %> 
+<% if (inv_vid.author === "twenty one pilots") { %> 
  
 <a title="Poke Homepage" class="class" href="/143" style="font-family:Inter,sans-serif;color:var(--text-color);display: flex;">  <img style="transform: scale(1.3);padding-left:0.9em;width: 8.5em;display: block;margin-left: auto;margin-right: auto;" src="/css/logo-poke.svg?v=5">
                 <img src="/css/red-tape.png?v=5" style="opacity: 0.9;height: 41px;margin-left: -10em;"></a>
@@ -830,7 +830,7 @@ if your domain matches this code you are probably in poketube.fun owo:3
  <p id="fetch-count">
                    </p>
  
-             <a class="settings-icon" href="<%= config.mastodon_client_url %>/share?text=watch+<%=inv_vid.title%>+by+<%=k.Video.Channel.Name%>+on+Poke!+%0Ahttps://<%= hostname %>/watch?v=<%=inv_vid.videoId%>"><i  class="fa-brands fa-mastodon"></i>
+             <a class="settings-icon" href="<%= config.mastodon_client_url %>/share?text=watch+<%=inv_vid.title%>+by+<%=inv_vid.author%>+on+Poke!+%0Ahttps://<%= hostname %>/watch?v=<%=inv_vid.videoId%>"><i  class="fa-brands fa-mastodon"></i>
 </a>
         
       <a class="settings-icon" href="/customize"><i  class="fa-light fa-brush"></i>
@@ -845,7 +845,7 @@ if your domain matches this code you are probably in poketube.fun owo:3
   			
     
 			<div class="dropdown__menu" style="right: -1em;">
-      	<a href="<%= config.mastodon_client_url %>/share?text=watch+<%=inv_vid.title%>+by+<%=k.Video.Channel.Name%>+on+Poke!+%0Ahttps://<%= hostname %>/watch?v=<%=inv_vid.videoId%>" style="text-decoration: none;" class="dropdown__item">
+      	<a href="<%= config.mastodon_client_url %>/share?text=watch+<%=inv_vid.title%>+by+<%=inv_vid.author%>+on+Poke!+%0Ahttps://<%= hostname %>/watch?v=<%=inv_vid.videoId%>" style="text-decoration: none;" class="dropdown__item">
                             <i  class="fa-brands fa-mastodon"></i>
                       Share On <%= config.mastodon_client_server_name	%>!
         </a>
@@ -1154,7 +1154,7 @@ Offical Discord Server! :3
        Proxy : tube-proxy.poketube.fun - refresh the page to change the proxy location<br>
                           <% } %>   
        Date : <%- Date.now() %> - <%- useragent.os.replace("Linux", "GNU/Linux") %> on <%- useragent.browser %> <br>
-                                                       <% if (k.Video.Channel.id != "UCBQZwaNPFfJ1gZ1fLZpAEGw") { %> 
+                                                       <% if (inv_vid.authorId != "UCBQZwaNPFfJ1gZ1fLZpAEGw") { %> 
 
                                                   <% if (isvidious) { %>
 
@@ -1166,7 +1166,7 @@ Offical Discord Server! :3
                                                                               <% } %>   
                                                                               <% } %>   
 
-                                                <% if (k.Video.Channel.id == "UCBQZwaNPFfJ1gZ1fLZpAEGw") { %> 
+                                                <% if (inv_vid.authorId == "UCBQZwaNPFfJ1gZ1fLZpAEGw") { %> 
        Mystery text :  <%=btoa(Date.now() + "dmaorg.info/found/15398642_14/clancy.html" + inv_vid.videoId) %>  <br>                                   
                                                                               <% } %>   
 
@@ -1187,17 +1187,17 @@ Offical Discord Server! :3
         	<div class="video-info-panel gradient">  
                                                                                         <% } %>   
 
-            <% if (k.Video.Channel.Name == "7clouds") { %> 
+            <% if (inv_vid.author == "7clouds") { %> 
             <div class="video-title t" style="font-family: 'Edo SZ', sans-serif !important;font-weight:bold;line-break: auto;max-width: max-content;margin: 0;margin-bottom: 0;padding: 0;"
                                                    		 	               <% } %> 
-<% if (k.Video.Channel.Name !== "7clouds") { %> 
+<% if (inv_vid.author !== "7clouds") { %> 
                           <div class="video-title t" style="font-family:inter;font-weight:bold;line-break: auto;max-width: max-content;margin: 0;margin-bottom: 0;padding: 0;"
                                                    		 	               <% } %> 
 
-                                <% if (inv_vid?.title !== k.Video.Title) { %>
+                                <% if (inv_vid?.title !== inv_vid.title) { %>
                  title="Non-Translated title : <%=inv_vid.title%>"
                <% } %> 
-            > <%-k.Video.Title.replace(/\/channel\//g, "/channel?id=").replace(/https:\/\/youtube.com/g, ""); %> 
+            > <%-inv_vid.title.replace(/\/channel\//g, "/channel?id=").replace(/https:\/\/youtube.com/g, ""); %> 
 
                  
 
@@ -1227,12 +1227,12 @@ Offical Discord Server! :3
                <div class="video-chnl-info-pill"  name="chnl">
   <a name="chnl"></a>
 
-				<a href="/channel?id=<%=video?.Channel.id || k.Video.Channel.id%>@youtube.com" class="avatar">
-					<img loading="lazy" src="/avatars/<%= k.Video.Channel.Avatar[1].$t.replace("https://yt3.ggpht.com/", "") %>" %>">
+				<a href="/channel?id=<%=video?.Channel.id || inv_vid.authorId%>@youtube.com" class="avatar">
+					<img loading="lazy" src="/avatars/<%= inv_vid.authorThumbnails[1].url.replace("https://yt3.ggpht.com/", "") %>" %>">
 				</a>
 				<div class="name" >
 <div style="display: flex;flex-direction: row;max-width: 119px;">
-						<a title="<%=k.Video.Channel.Name%> " href="/channel?id=<%=video?.Channel.id || k.Video.Channel.id%>@youtube.com" class="video-info-pill-channelname">  <%=k.Video.Channel.Name%> 
+						<a title="<%=inv_vid.author%> " href="/channel?id=<%=video?.Channel.id || inv_vid.authorId%>@youtube.com" class="video-info-pill-channelname">  <%=inv_vid.author%> 
                </a>   
                                        <% if (inv_vid?.authorVerified) { %> 
                    <div>
@@ -1245,7 +1245,7 @@ Offical Discord Server! :3
                
                               
 <div class="subscriber-count" style="word-wrap: initial;word-break: break-all;display: block ruby;">
-          <%= k.Video.Channel.subscriberCount.replace("subscribers", "Subs") %>
+          <%= inv_vid.subCountText.replace("subscribers", "Subs") %>
  				</div>
                
 
@@ -1813,17 +1813,14 @@ WIP!                                                 </a>
 <div class="recommended-list" align="center">
      <% if (universe) { %>  
 
-            <% if (k.Video.Channel.Name == "7clouds") { %> 
+            <% if (inv_vid.author == "7clouds") { %> 
             <div class="video-title t" style="font-family: 'Edo SZ', sans-serif !important;font-weight:bold;line-break: auto;max-width: max-content;margin: 0;margin-bottom: 0;padding: 0;"
                                                    		 	               <% } %> 
-<% if (k.Video.Channel.Name !== "7clouds") { %> 
+<% if (inv_vid.author !== "7clouds") { %> 
                           <div class="video-title t" style="font-family:inter;font-weight:bold;line-break: auto;max-width: max-content;margin: 0;margin-bottom: 0;padding: 0;"
                                                    		 	               <% } %> 
-
-                                <% if (inv_vid?.title !== k.Video.Title) { %>
-                 title="Non-Translated title : <%=inv_vid.title%>"
-               <% } %> 
-            > <%-k.Video.Title.replace(/\/channel\//g, "/channel?id=").replace(/https:\/\/youtube.com/g, ""); %> 
+ 
+            > <%-inv_vid.title.replace(/\/channel\//g, "/channel?id=").replace(/https:\/\/youtube.com/g, ""); %> 
                  
 
              </div>        
@@ -1859,7 +1856,7 @@ Recommended Videos
     </a>
                
              <div style="background:var(--chip-background-hover)" class="tag">
-              Uploaded by <%=k.Video.Channel.Name%>
+              Uploaded by <%=inv_vid.author%>
                </div>
                
 
@@ -2171,7 +2168,7 @@ if (/[?&]autoplay=/.test(location.search)) {
 	
 	if (userID) {
 	    // If user ID exists in localStorage, set the href attribute
-	    anchor.href = `/api/set-channel-subs?ID=${userID}&channelName=<%=k.Video.Channel.Name%>&avatar=<%- media_proxy_url %>/proxy?url=<%= k.Video.Channel.Avatar[1].$t %>&channelID=<%=video?.Channel.id || k.Video.Channel.id %>`;
+	    anchor.href = `/api/set-channel-subs?ID=${userID}&channelName=<%=inv_vid.author%>&avatar=<%- media_proxy_url %>/proxy?url=<%= k.Video.Channel.Avatar[1].$t %>&channelID=<%=video?.Channel.id || inv_vid.authorId %>`;
 	} else {
 	     anchor.href = "/account-create"
 	 } 
@@ -2392,11 +2389,11 @@ window.addEventListener("unload", cleanup)
   <% if (!e) { %>
 <meta content="<%=inv_vid.title%>" name=title>
 <meta content="<%=color%>" name="theme-color">
-<meta content="<%= video?.Channel?.Name || k.Video.Channel.Name%>" name=twitter:author>
+<meta content="<%= video?.Channel?.Name || inv_vid.author%>" name=twitter:author>
 <meta content=@youtube name=twitter:site>
 <meta content="https://poketube.fun/watch?v=<%=inv_vid.videoId%>" name=twitter:url>
 <meta content="<%=inv_vid.title%> - PokeTube" name=twitter:title>
-<meta content="mobile this video by <%= video?.Channel?.Name || k.Video.Channel.Name%> On PokeTube. The YouTube front-end that doesnt track you!" property=twitter:description>
+<meta content="mobile this video by <%= video?.Channel?.Name || inv_vid.author%> On PokeTube. The YouTube front-end that doesnt track you!" property=twitter:description>
 <meta content="https://i.ytimg.com/vi/<%=inv_vid.videoId%>/maxresdefault.jpg" property=og:image>
 <meta content=summary_large_image name=twitter:card>
 <link href="https://poketube.fun/watch?v=<%=inv_vid.videoId%>" itemprop=url>
@@ -2622,16 +2619,16 @@ font-size: 13px;margin:0;padding:0;white-space: nowrap;
 					<div class="channel-info" style="border: none;padding: 10px;background: #0009;border-radius: 15px;margin-left: 6px;margin-right: 12px;" name="chnl">
                
 				<a class="avatar">
-					<img src=" <%- proxyurl %>/<%= k.Video.Channel.Avatar[1].$t %>">
+					<img src=" <%- proxyurl %>/<%= inv_vid.authorThumbnails[1].url %>">
 				</a>
               
 				<div class="name" style="font-family:var(--text-font-primary);font-weight:var(--text-header-weight);">
 		  <div>
-             <a href="/channel?id=<%=k.Video.Channel.id%>" style="color:#fff;max-width: 7.8em;" class="max-lines-1">
-               <%=k.Video.Channel.Name%></a>   
+             <a href="/channel?id=<%=inv_vid.authorId%>" style="color:#fff;max-width: 7.8em;" class="max-lines-1">
+               <%=inv_vid.author%></a>   
          
 		<div class="subscriber-count" style="write-space:nowraap">
-          <%= k.Video.Channel.subscriberCount.replace("subscribers", "Subs") %>
+          <%= inv_vid.subCountText.replace("subscribers", "Subs") %>
  				</div>
               </div>
 				</div>
@@ -2719,7 +2716,7 @@ font-size: 13px;margin:0;padding:0;white-space: nowrap;
                 </div>
                 </a>
 
-              <a class="new-button" style="color:#fff" href="<%= config.mastodon_client_url %>/share?text=watch+<%=inv_vid.title%>+by+<%=k.Video.Channel.Name%>+on+Poke!+%0Ahttps://<%= hostname %>/watch?v=<%=inv_vid.videoId%>">   
+              <a class="new-button" style="color:#fff" href="<%= config.mastodon_client_url %>/share?text=watch+<%=inv_vid.title%>+by+<%=inv_vid.author%>+on+Poke!+%0Ahttps://<%= hostname %>/watch?v=<%=inv_vid.videoId%>">   
                                             <div class="pill-button">
 
             <i class="fa-brands fa-mastodon"></i>
@@ -3082,18 +3079,18 @@ font-size: 13px;margin:0;padding:0;white-space: nowrap;
        <div class="video-title" style="color:var(--text-color);font-family:var(--text-font-primary);;font-weight:var(--text-header-weight);font-stretch: extra-expanded;margin-top: 10px;margin-bottom: 10px;">Uploader</div>
 
 <div class="channel-info" name="chnl" style="padding: 0;border: none;margin-bottom:8px">
-  <a href="/channel?id=<%=video?.Channel.id || k.Video.Channel.id%>" class="avatar">
+  <a href="/channel?id=<%=video?.Channel.id || inv_vid.authorId%>" class="avatar">
 					<img src=" <%= k.Video.Channel.Avatar[1].$t %>">
 				</a>
 				<div class="name" style="font-family:var(--text-font-primary);font-weight:var(--text-header-weight);">
 		  <div>
-						<a style="color:#fff" href="/channel?id=<%=k.Video.Channel.id%>" >  <%=k.Video.Channel.Name%></a>   
+						<a style="color:#fff" href="/channel?id=<%=inv_vid.authorId%>" >  <%=inv_vid.author%></a>   
                           </div>
 				</div>
 		 
  			</div>
     <div style="color:#fff;border:solid 0.5px gray;background: #0009;width: fit-content;padding: 5px;border-radius: 4px;height:2em">
-  <a href="/channel?id=<%=video?.Channel.id || k.Video.Channel.id%>" >
+  <a href="/channel?id=<%=video?.Channel.id || inv_vid.authorId%>" >
     View Channel
  				</a>  </div>
   
@@ -3492,7 +3489,7 @@ More Epic options owo~
 								<a href="/watch?v=<%= x.id %>&m=f" class="title max-lines-2"><%= x.Title %></a>
                    <% } %>
 								<div>
-               <a class="max-lines-2" style="color:#fff"  href="/channel?id=<%= video?.Channel.id || k.Video.Channel.id%>"><%= video?.Channel?.Name || k.Video.Channel.Name %></a>
+               <a class="max-lines-2" style="color:#fff"  href="/channel?id=<%= video?.Channel.id || inv_vid.authorId%>"><%= video?.Channel?.Name || inv_vid.author %></a>
 									<div>  
  <%= x.uploadedAt %>  </div>
 								</div>
@@ -3563,7 +3560,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Set metadata
     navigator.mediaSession.metadata = new MediaMetadata({
       title: "<%- inv_vid.title %>",
-      artist: "<%= video?.Channel?.Name || k.Video.Channel.Name %>",
+      artist: "<%= video?.Channel?.Name || inv_vid.author %>",
       album: "Poke",
       artwork: [
         {
@@ -3699,7 +3696,7 @@ var userID = localStorage.getItem("UserID");
 
 if (userID) {
     // If user ID exists in localStorage, set the href attribute
-    anchor.href = `/api/set-channel-subs?ID=${userID}&channelName=<%=k.Video.Channel.Name%>&avatar=<%- proxyurl %>/<%= k.Video.Channel.Avatar[1].$t %>&channelID=<%=video?.Channel.id || k.Video.Channel.id %>`;
+    anchor.href = `/api/set-channel-subs?ID=${userID}&channelName=<%=inv_vid.author%>&avatar=<%- proxyurl %>/<%= k.Video.Channel.Avatar[1].$t %>&channelID=<%=video?.Channel.id || inv_vid.authorId %>`;
 } else {
     // If user ID doesn't exist in localStorage, you can handle it as needed
     anchor.href = "/account-create"

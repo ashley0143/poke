@@ -6,7 +6,6 @@
  * Please don't remove this comment while sharing this code.
  */
 
-const { toJson } = require("xml2json");
 const { curly } = require("node-libcurl");
 const getdislikes = require("../libpoketube/libpoketube-dislikes.js");
 const getColors = require("get-image-colors");
@@ -231,26 +230,6 @@ class InnerTubePokeVidious {
     return ["#0ea5e9", "#111827"];
   }
 
-  async curlGetWithRetry(url, httpHeader, outerSignal) {
-    let lastErr = null;
-    for (let i = 0; i <= 4; i++) {
-      if (outerSignal?.aborted) throw outerSignal.reason || new Error("aborted");
-      try {
-        const res = await curly.get(url, {
-          httpHeader,
-          timeoutMs: 12000,
-          connectTimeoutMs: 6000,
-        });
-        const code = res?.statusCode;
-        if (code >= 200 && code < 300 && res?.data) return res;
-        if (!this.shouldRetryStatus(code)) return res;
-      } catch (e) { lastErr = e; }
-      await this.wait(this.backoff(i, 160, 8000));
-    }
-    if (lastErr) throw lastErr;
-    throw new Error("curlGetWithRetry failed");
-  }
-
   isvalidvideo(v) {
     if (v != "assets" && v != "cdn-cgi" && v != "404") return /^([a-zA-Z0-9_-]{11})$/.test(v);
     return false;
@@ -264,7 +243,6 @@ class InnerTubePokeVidious {
     }
     const cached = this.cache.get(v);
     if (cached && Date.now() - cached.timestamp < 3600000) return cached.result;
-    const headers = { "User-Agent": this.useragent };
     const bases = [this.config.invapi, this.config.invapi_alt];
     const b64ts = Buffer.from(String(Date.now())).toString("base64");
     const q = `hl=${contentlang}&region=${contentregion}&h=${b64ts}`;

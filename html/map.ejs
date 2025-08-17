@@ -8,120 +8,66 @@
   <meta name="theme-color" content="#0ea5e9" id="themeColorMeta"/>
   <link rel="icon" href="/css/yt-ukraine.svg" />
   <style>
-    :root {
-      --vh: 100vh; --pad: 12px; --radius: 14px;
-      --fg: #fff; --bg: rgba(0,0,0,.6); --glass: blur(12px);
-      --marker-size: 20px; --marker-color: #e53935;
-      --marker-ring: rgba(229,57,53,.35); --ring-width: 3px;
-      --panel: rgba(0,0,0,.85); --accent: #0ea5e9;
-      --chip:#111; --chipb:#222; --tip:#888;
-      --surface:#0b0b0b; --border:#333;
+    :root{
+      --vh:100vh;--pad:12px;--radius:14px;--fg:#fff;--bg:rgba(0,0,0,.6);--glass:blur(12px);
+      --marker-size:20px;--marker-color:#e53935;--marker-ring:rgba(229,57,53,.35);--ring-width:3px;
+      --panel:rgba(0,0,0,.85);--accent:#0ea5e9;--chip:#111;--chipb:#222;--tip:#888;
+      --surface:#0b0b0b;--border:#333
     }
-    * { box-sizing: border-box }
-    html,body { height:100%; margin:0 }
-    body {
-      background:#000; color:var(--fg);
-      font:14px/1.4 ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Arial;
-    }
+    *{box-sizing:border-box}
+    html,body{height:100%;margin:0}
+    body{background:#000;color:var(--fg);font:14px/1.4 ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Arial}
+    .app{position:fixed;inset:0;display:grid;grid-template-rows:auto 1fr}
+    .bar{position:relative;z-index:5;display:flex;gap:8px;align-items:center;padding:8px var(--pad);backdrop-filter:var(--glass);-webkit-backdrop-filter:var(--glass);background:var(--bg)}
+    .search{position:relative;flex:1;min-width:0}
+    .search input{width:100%;padding:12px 14px;border-radius:12px;border:1px solid var(--border);background:var(--surface);color:#fff;outline:none}
+    .search input:focus{border-color:#444;box-shadow:0 0 0 3px color-mix(in oklab, var(--accent) 20%, transparent)}
 
-    .app { position:fixed; inset:0; display:grid; grid-template-rows:auto 1fr }
+    /* Suggestions */
+    .suggest{position:absolute;top:calc(100% + 6px);left:0;right:0;max-height:46vh;overflow:auto;margin:0;padding:0;list-style:none;border:1px solid var(--border);border-radius:12px;background:var(--surface);display:none}
+    .suggest .head{position:sticky;top:0;background:#0d0d0d;border-bottom:1px solid #1a1a1a;padding:6px 8px;display:flex;justify-content:space-between;align-items:center;z-index:1}
+    .suggest .head strong{font-size:12px;opacity:.8}
+    .suggest .head button{border:0;border-radius:8px;background:#1a1a1a;color:#fff;padding:6px 8px;cursor:pointer}
+    .suggest li{padding:10px 12px;cursor:pointer;border-top:1px solid #111;display:flex;gap:8px;align-items:center}
+    .suggest li:first-child{border-top:none}
+    .suggest li.active{background:#141414}
+    .suggest .pill{font-size:11px;border:1px solid #333;border-radius:999px;padding:2px 6px;opacity:.85}
+    .suggest mark{background:transparent;color:var(--accent);font-weight:600}
 
-    /* Top search + bar */
-    .bar {
-      position:relative; z-index:5; display:flex; gap:8px; align-items:center;
-      padding:8px var(--pad); backdrop-filter:var(--glass);
-      -webkit-backdrop-filter:var(--glass); background:var(--bg);
-    }
-    .search { position:relative; flex:1; min-width:0 }
-    .search input {
-      width:100%; padding:12px 14px; border-radius:12px;
-      border:1px solid var(--border); background:var(--surface);
-      color:#fff; outline:none;
-    }
-    .search input:focus {
-      border-color:#444;
-      box-shadow:0 0 0 3px color-mix(in oklab,var(--accent) 20%,transparent)
-    }
+    .iconbtn{border:0;border-radius:10px;background:#222;color:#fff;padding:10px 12px;min-width:44px}
+    .mapwrap{position:relative;height:calc(var(--vh) - 56px);overflow:hidden}
+    iframe#map{position:absolute;inset:0;border:0;width:100%;height:100%}
+    .marker{position:absolute;left:50%;top:50%;width:var(--marker-size);height:var(--marker-size);border-radius:50%;transform:translate(-50%,-50%);background:var(--marker-color);box-shadow:0 0 0 var(--ring-width) var(--marker-ring);z-index:3;pointer-events:none}
+    .marker.hidden{display:none}
+    .marker.crosshair{background:transparent;border-radius:0;box-shadow:0 0 0 var(--ring-width) var(--marker-ring)}
+    .marker.crosshair::before,.marker.crosshair::after{content:"";position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);background:var(--marker-color)}
+    .marker.crosshair::before{width:calc(var(--marker-size) * 1.6);height:2px}
+    .marker.crosshair::after{width:2px;height:calc(var(--marker-size) * 1.6)}
+    .marker .dot{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:calc(var(--marker-size) * .35);height:calc(var(--marker-size) * .35);background:var(--marker-color);border-radius:50%}
+    .brand{position:absolute;bottom:10px;left:10px;padding:6px 10px;font-size:18px;font-weight:600;background:var(--bg);backdrop-filter:var(--glass);-webkit-backdrop-filter:var(--glass);border-radius:10px;z-index:4;pointer-events:none}
+    .dock{position:absolute;left:10px;bottom:52px;z-index:7;display:flex;flex-direction:column;gap:8px}
+    .dock button{border:0;border-radius:10px;background:#111;color:#fff;padding:8px 10px}
+    .coords{position:absolute;bottom:10px;right:10px;z-index:5;padding:6px 10px;border-radius:10px;background:var(--bg);backdrop-filter:var(--glass);-webkit-backdrop-filter:var(--glass);border:1px solid var(--border);display:none;min-width:260px;text-align:right;font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","DejaVu Sans Mono",monospace}
 
-    /* Suggestion dropdown */
-    .suggest {
-      position:absolute; top:calc(100% + 6px); left:0; right:0;
-      max-height:46vh; overflow:auto; margin:0; padding:0;
-      list-style:none; border:1px solid var(--border);
-      border-radius:12px; background:var(--surface); display:none
-    }
-    .suggest .head {
-      position:sticky; top:0; background:#0d0d0d;
-      border-bottom:1px solid #1a1a1a; padding:6px 8px;
-      display:flex; justify-content:space-between; align-items:center; z-index:1
-    }
-    .suggest li {
-      padding:10px 12px; cursor:pointer; border-top:1px solid #111;
-      display:flex; gap:8px; align-items:center
-    }
-    .suggest li.active { background:#141414 }
-    .suggest .pill {
-      font-size:11px; border:1px solid #333;
-      border-radius:999px; padding:2px 6px; opacity:.85
-    }
-    .suggest mark { background:transparent; color:var(--accent); font-weight:600 }
+    /* Popovers (for mobile) */
+    .menu,.pins,.settings{position:fixed;z-index:8;min-width:280px;max-width:92vw;background:var(--panel);backdrop-filter:var(--glass);-webkit-backdrop-filter:var(--glass);border:1px solid var(--border);border-radius:12px;display:none;overflow:hidden}
+    .menu{top:56px;right:10px}
+    .pins{left:10px;bottom:110px;max-height:50vh;overflow:auto}
+    .settings{left:10px;bottom:110px;max-width:92vw}
+    .menu header,.pins header,.settings header{display:flex;justify-content:space-between;align-items:center;padding:8px 10px;border-bottom:1px solid #222}
+    .menu .row,.pins .row,.settings .row{display:flex;gap:8px;align-items:center;padding:8px 12px;flex-wrap:wrap}
+    .pins ul{list-style:none;margin:0;padding:0}
+    .pins li{display:flex;flex-direction:column;gap:8px;padding:10px;border-top:1px solid #111}
+    .settings .group{border-top:1px solid #111}
+    .settings .ghead{display:flex;justify-content:space-between;align-items:center;padding:10px 12px}
+    .settings .section{display:none;padding:10px 12px;border-top:1px solid #111}
 
-    /* Map wrapper */
-    .mapwrap { position:relative; height:calc(var(--vh) - 56px); overflow:hidden }
-    iframe#map { position:absolute; inset:0; border:0; width:100%; height:100% }
-    .marker {
-      position:absolute; left:50%; top:50%; width:var(--marker-size); height:var(--marker-size);
-      border-radius:50%; transform:translate(-50%,-50%);
-      background:var(--marker-color);
-      box-shadow:0 0 0 var(--ring-width) var(--marker-ring);
-      z-index:3; pointer-events:none
-    }
-    .marker.hidden { display:none }
-    .marker.crosshair { background:transparent; border-radius:0;
-      box-shadow:0 0 0 var(--ring-width) var(--marker-ring)
-    }
-    .marker .dot {
-      position:absolute; left:50%; top:50%; transform:translate(-50%,-50%);
-      width:calc(var(--marker-size) * .35); height:calc(var(--marker-size) * .35);
-      background:var(--marker-color); border-radius:50%
-    }
-
-    /* Brand + dock */
-    .brand {
-      position:absolute; bottom:10px; left:10px; padding:6px 10px;
-      font-size:18px; font-weight:600; background:var(--bg);
-      backdrop-filter:var(--glass); -webkit-backdrop-filter:var(--glass);
-      border-radius:10px; z-index:4; pointer-events:none
-    }
-    .dock {
-      position:absolute; left:10px; bottom:52px; z-index:7;
-      display:flex; flex-direction:column; gap:8px
-    }
-    .dock button {
-      border:0; border-radius:10px; background:#111; color:#fff; padding:8px 10px
-    }
-
-    .coords {
-      position:absolute; bottom:10px; right:10px; z-index:5;
-      padding:6px 10px; border-radius:10px; background:var(--bg);
-      backdrop-filter:var(--glass); -webkit-backdrop-filter:var(--glass);
-      border:1px solid var(--border); display:none;
-      min-width:260px; text-align:right;
-      font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,"Liberation Mono",monospace
-    }
-
-    /* Sidebar for desktop */
-    .desktop .app { grid-template-columns:340px 1fr; grid-template-rows:auto 1fr }
-    .desktop .bar { grid-column:2 }
-    .desktop .sidebar {
-      position:fixed; left:0; top:0; bottom:0; width:340px;
-      background:var(--panel); border-right:1px solid var(--border);
-      display:flex; flex-direction:column; gap:12px; padding:12px; z-index:9
-    }
-    .desktop .mapwrap { grid-column:2 }
-
-    /* hide mobile menus when desktop */
-    .desktop .menu,.desktop .pins,.desktop .settings { display:none !important }
+    /* Desktop layout */
+    .desktop .app{grid-template-columns:320px 1fr;grid-template-rows:auto 1fr}
+    .desktop .bar{grid-column:2}
+    .desktop .sidebar{position:fixed;left:0;top:0;bottom:0;width:320px;background:var(--panel);border-right:1px solid var(--border);display:flex;flex-direction:column;gap:12px;padding:12px;z-index:9}
+    .desktop .mapwrap{grid-column:2}
+    .desktop .menu,.desktop .pins,.desktop .settings{display:none !important}
 
     @media (min-width:768px){ .bar{padding:10px 14px} .brand{font-size:20px} }
   </style>
@@ -131,15 +77,12 @@
     <div class="bar">
       <div class="search">
         <form id="form" autocomplete="off">
-          <input id="q" type="text" inputmode="search"
-                 placeholder="Search places, or paste lat,lon…"
-                 aria-autocomplete="list" aria-expanded="false"
-                 aria-controls="suggestions" />
+          <input id="q" type="text" inputmode="search" placeholder="Search places, or paste lat,lon…" aria-autocomplete="list" aria-expanded="false" aria-controls="suggestions" />
         </form>
         <ul id="suggestions" class="suggest" role="listbox">
           <li class="head" aria-hidden="true">
             <strong>Suggestions</strong>
-            <button type="button" id="closeSuggestBtn" title="Close">✕</button>
+            <button type="button" id="closeSuggestBtn" title="Close suggestions">✕</button>
           </li>
         </ul>
       </div>
@@ -149,245 +92,254 @@
 
     <div class="mapwrap" id="mapwrap">
       <iframe id="map" title="Map"></iframe>
-      <div id="marker" class="marker"><div class="dot"></div></div>
+      <div id="marker" class="marker" aria-hidden="true"><div class="dot"></div></div>
       <div class="brand">PokeMaps Public Beta</div>
       <div class="dock">
         <button id="savepin">⭐ Save Pin</button>
-        <button id="showpins">📒 Pins</button>
-        <button id="opensettings">⚙ Settings</button>
+        <button id="showpins" title="Show saved pins">📒 Pins</button>
+        <button id="opensettings" title="Marker & display settings">⚙ Settings</button>
       </div>
       <div class="coords" id="coords"></div>
     </div>
   </div>
 
-  <!-- Mobile menus -->
-  <div class="menu" id="menu"></div>
-  <div class="pins" id="pins"></div>
-  <div class="settings" id="settings"></div>
+  <!-- Mobile/Tablet popovers -->
+  <div class="menu" id="menu">
+    <header><strong>Menu</strong><button class="iconbtn" id="closeMenu" title="Close">✕</button></header>
+    <div class="row"><select class="select" id="layer">
+      <option value="mapnik">Standard</option>
+      <option value="cyclemap">Cycle</option>
+      <option value="transportmap">Transport</option>
+      <option value="hot">Humanitarian</option>
+    </select></div>
+    <div class="row"><button class="iconbtn" id="follow">🛰️ Follow</button><button class="iconbtn" id="reset">🔁 Reset</button></div>
+    <div class="row"><button class="iconbtn" id="quick-near">📍 Near me</button><button class="iconbtn" id="quick-clear">🧹 Clear</button></div>
+    <div class="row"><button class="iconbtn" id="copy">📋 Copy Link</button><button class="iconbtn" id="copycoords">📐 Coords</button></div>
+    <div class="row"><button class="iconbtn" id="share">🔗 Share</button><button class="iconbtn" id="openosm">🌐 Open OSM</button></div>
+    <div class="row"><button class="iconbtn" id="openGmaps">🛰️ Google Maps (not recommended)</button></div>
+  </div>
+
+  <div class="pins" id="pins">
+    <header><strong>Saved Pins</strong><button id="closepins" class="iconbtn" type="button">✕</button></header>
+    <ul id="pinlist"></ul>
+  </div>
+
+  <div class="settings" id="settings">
+    <header><strong>Settings</strong><span class="badge">Beta</span><button id="closesettings" class="iconbtn">✕</button></header>
+   </div>
+
+  <script src="/static/data-mobile.js" defer></script>
  
-
  <script>
- (()=> {
-  const OSM_EMBED="https://www.openstreetmap.org/export/embed.html";
-  const OSM_VIEW ="https://www.openstreetmap.org";
-  const NOMINATIM="https://nominatim.openstreetmap.org/search";
-  const LAYERS=["mapnik","cyclemap","transportmap","hot"];
-  const DEFAULT={lat:30.410156,lon:72.448792,delta:.25,layer:"mapnik"};
-  const LIMITS={deltaMin:0.01, deltaMax:45};
+ (() => {
+  const $ = s => document.querySelector(s);
+  const $$ = s => [...document.querySelectorAll(s)];
 
-  const S=sel=>document.querySelector(sel);
-  const map=S("#map"), q=S("#q"), sug=S("#suggestions");
-  const closeSuggestBtn=S("#closeSuggestBtn");
-  const locateBtn=S("#locate"), menuBtn=S("#menuBtn"), menu=S("#menu");
-  const pinsPane=S("#pins"), showpins=S("#showpins"), savepin=S("#savepin");
-  const opensettings=S("#opensettings"), settings=S("#settings");
-  const coordsEl=S("#coords");
-  const themeColorMeta=S("#themeColorMeta");
-  const markerEl=S("#marker");
+  const isDesktop = () => matchMedia("(min-width:1024px)").matches && matchMedia("(pointer: fine)").matches;
+  const applyVH = () => document.documentElement.style.setProperty("--vh", `${window.innerHeight}px`);
+  const setClass = () => document.body.classList.toggle("desktop", isDesktop());
 
-  const PREFS_KEY="pokemaps_prefs_v6";
-  const LS_PINS="pokemaps_pins_v1";
-  const LS_SEARCH="pokemaps_search_hist_v1";
+  // DOM elements
+  const q = $("#q"), sug = $("#suggestions"), closeBtn = $("#closeSuggestBtn");
+  const locateBtn = $("#locate"), menuBtn = $("#menuBtn"), menu = $("#menu"), closeMenu = $("#closeMenu");
+  const settings = $("#settings"), opensettings = $("#opensettings"), closesettings = $("#closesettings");
+  const map = $("#map"), marker = $("#marker"), coords = $("#coords");
+  const pinlist = $("#pinlist"), pinsPane = $("#pins"), showpins = $("#showpins"), savepin = $("#savepin"), closepins = $("#closepins");
+  const markerStyleSel = $("#markerStyle"), markerVisible = $("#markerVisible");
 
-  let aborter=null, lastQuery="", watchId=null, activeIndex=-1, lastCoordsStr="";
-  let state={...DEFAULT};
-  const prefs=loadPrefs(); applyPrefs();
+  // Core state
+  const DEFAULT = { lat: 30.410156, lon: 72.448792, delta: 0.25, layer: "mapnik" };
+  const LAYERS = ["mapnik", "cyclemap", "transportmap", "hot"];
+  const state = { ...DEFAULT };
 
-  const isDesktop=()=> matchMedia("(min-width: 1024px)").matches && matchMedia("(pointer: fine)").matches;
-  const applyDesktopClass=()=>{ document.body.classList.toggle("desktop", isDesktop()) };
-  applyDesktopClass(); addEventListener("resize",applyDesktopClass,{passive:true});
+  let watchId = null;
+  let suggestions = [];
 
-  const setVH=()=>{const vh=window.innerHeight*0.01;document.documentElement.style.setProperty("--vh",`${vh*100}px`)};
-  setVH(); addEventListener("resize",setVH,{passive:true});
+  // Init
+  applyVH();
+  setClass();
+  window.addEventListener("resize", () => { applyVH(); setClass(); }, { passive: true });
 
-  const clamp=(n,min,max)=>Math.min(Math.max(n,min),max);
-  const clampDelta=d=>clamp(d, LIMITS.deltaMin, LIMITS.deltaMax);
-
-  const bboxFrom=(lat,lon,d)=>({left:(lon-d).toFixed(6),bottom:(lat-d).toFixed(6),right:(lon+d).toFixed(6),top:(lat+d).toFixed(6)});
-  const embedURL=({lat,lon,delta,layer})=>{
-    const b=bboxFrom(lat,lon,clampDelta(delta));
-    const lyr = LAYERS.includes(layer)?layer:DEFAULT.layer;
-    return `${OSM_EMBED}?bbox=${b.left}%2C${b.bottom}%2C${b.right}%2C${b.top}&layer=${encodeURIComponent(lyr)}`;
-  };
-  const appURL=({lat,lon,delta,layer})=>{
-    const p=new URLSearchParams({
-      lat:lat.toFixed(prefs.prec??6),
-      lon:lon.toFixed(prefs.prec??6),
-      delta:(prefs.includeDelta!==false?clampDelta(delta).toFixed(4):undefined),
-      layer
-    });
-    if(p.get("delta")==="undefined") p.delete("delta");
-    return `${location.origin}${location.pathname}?${p.toString()}`;
-  };
-  const osmViewURL=({lat,lon,delta,layer})=>{
-    const z = deltaToZoom(clampDelta(delta));
-    return `${OSM_VIEW}/?mlat=${lat.toFixed(6)}&mlon=${lon.toFixed(6)}#map=${z}/${lat.toFixed(6)}/${lon.toFixed(6)}&layers=${layer}`;
-  };
-  const gmapsURL=({lat,lon,delta})=>{
-    const z = deltaToZoom(clampDelta(delta));
-    return `https://www.google.com/maps/@${lat.toFixed(6)},${lon.toFixed(6)},${Math.max(3,Math.min(20,z))}z`;
+  const embed = ({ lat, lon, delta, layer }) => {
+    const b = delta || 0.25;
+    const l = layer || "mapnik";
+    return `https://www.openstreetmap.org/export/embed.html?bbox=${lon - b},${lat - b},${lon + b},${lat + b}&layer=${l}`;
   };
 
-  const parseURL=()=>{
-    const sp=new URLSearchParams(location.search);
-    const lat=parseFloat(sp.get("lat")), lon=parseFloat(sp.get("lon")), delta=parseFloat(sp.get("delta"));
-    const layer=sp.get("layer");
-    if(Number.isFinite(lat)&&Number.isFinite(lon)) state.lat=clamp(lat,-90,90), state.lon=clamp(lon,-180,180);
-    if(Number.isFinite(delta)&&delta>0) state.delta=clampDelta(delta);
-    if(layer && LAYERS.includes(layer)) state.layer=layer;
+  const apply = () => {
+    map.src = embed(state);
+    updateCoords();
   };
 
-  const apply=(push)=>{
-    map.src=embedURL(state);
-    if(push) history.pushState(state,"",appURL(state));
+  const updateCoords = () => {
+    coords.textContent = `${state.lat.toFixed(6)}, ${state.lon.toFixed(6)} · Δ ${state.delta.toFixed(4)} · ${state.layer}`;
   };
 
-  const toDMS=(v,isLat)=>{
-    const dir=isLat?(v>=0?"N":"S"):(v>=0?"E":"W");
-    const av=Math.abs(v); const d=Math.floor(av); const m=Math.floor((av-d)*60); const s=((av-d)*60 - m)*60;
-    return `${d}°${m}′${s.toFixed(2)}″ ${dir}`;
-  };
+  // Suggest logic
+  const renderSuggest = items => {
+    if (!sug) return;
+    sug.style.display = items.length ? "block" : "none";
+    q.setAttribute("aria-expanded", items.length ? "true" : "false");
 
-  const coordString=()=>{
-    const fmt=prefs.coordFmt||"dec";
-    const pr=prefs.prec??6;
-    const dec=`${state.lat.toFixed(pr)}, ${state.lon.toFixed(pr)}`;
-    const dms=toDMS(state.lat,true)+" "+toDMS(state.lon,false);
-    return fmt==="dms"?dms:dec;
-  };
-
-  const updateCoordsFast=()=>{
-    if(!prefs.showCoords) return;
-    const s=coordString()+` · Δ ${state.delta.toFixed(4)} · ${state.layer}`;
-    if(s!==lastCoordsStr){ coordsEl.textContent=s; lastCoordsStr=s }
-  };
-
-  const centerOn=(lat,lon,{push=true}={})=>{ state.lat=clamp(lat,-90,90); state.lon=clamp(lon,-180,180); apply(push) };
-  const setLayer=(layer)=>{ state.layer = LAYERS.includes(layer)?layer:DEFAULT.layer; apply(true) };
-  const setDelta=(delta,{push=true}={})=>{ state.delta = clampDelta(delta); apply(push) };
-
-  const zoomToDelta=z=>Math.min(LIMITS.deltaMax, Math.max(LIMITS.deltaMin, Math.pow(2,(10 - z)) * 0.02));
-  const deltaToZoom=d=>Math.round(10 - Math.log2(d/0.02));
-
-  const locate=()=>{
-    if(!("geolocation" in navigator)){ alert("Geolocation not supported."); return }
-    navigator.geolocation.getCurrentPosition(
-      pos=>centerOn(pos.coords.latitude,pos.coords.longitude,{push:true}),
-      err=>alert("Unable to retrieve location: "+err.message),
-      {enableHighAccuracy:true,timeout:10000,maximumAge:0}
-    )
-  };
-
-  const reset=()=>{ state={...DEFAULT}; q.value=""; hideSuggest(true); apply(true) };
-
-  const debounced=(fn,ms=250)=>{let t;return(...a)=>{clearTimeout(t);t=setTimeout(()=>fn(...a),ms)}};
-
-  const parseCoordInput=(str)=>{
-    str=str.trim();
-    const m=str.match(/^\s*([+-]?\d+(?:\.\d+)?)\s*[, ]\s*([+-]?\d+(?:\.\d+)?)\s*$/);
-    if(!m) return null;
-    const lat=parseFloat(m[1]), lon=parseFloat(m[2]);
-    if(!Number.isFinite(lat)||!Number.isFinite(lon)) return null;
-    if(Math.abs(lat)>90||Math.abs(lon)>180) return null;
-    return {lat,lon};
-  };
-
-  const highlight=(text,term)=>{
-    term=term.trim(); if(!term) return text;
-    const esc=term.replace(/[.*+?^${}()|[\]\\]/g,"\\$&");
-    return text.replace(new RegExp(esc,"ig"),m=>`<mark>${m}</mark>`);
-  };
-
-  const loadSearchHist=()=>{ try{ return JSON.parse(localStorage.getItem(LS_SEARCH)||"[]") }catch{ return [] } };
-  const saveSearchHist=(arr)=>{ localStorage.setItem(LS_SEARCH, JSON.stringify(arr.slice(0,12))) };
-
-  const renderSuggest=(items, term="")=>{
     const head = sug.querySelector(".head");
-    sug.innerHTML=""; if(head) sug.appendChild(head);
-    if(!items.length){ sug.style.display="none"; q.setAttribute("aria-expanded","false"); activeIndex=-1; return }
-    items.forEach((it,i)=>{
-      const li=document.createElement("li");
-      li.role="option"; li.id="opt"+i;
-      li.innerHTML=`<span class="pill">${it.type}</span><span class="txt">${highlight(it.label,term)}</span>`;
-      li.addEventListener("mousedown",e=>{ e.preventDefault(); chooseItem(it) });
+    sug.innerHTML = "";
+    if (head) sug.appendChild(head);
+
+    items.forEach((item, i) => {
+      const li = document.createElement("li");
+      li.innerHTML = `<span class="pill">${item.type}</span><span>${item.label}</span>`;
+      li.addEventListener("mousedown", e => {
+        e.preventDefault();
+        chooseItem(item);
+      });
       sug.appendChild(li);
     });
-    sug.style.display="block"; q.setAttribute("aria-expanded","true");
-  };
-  const hideSuggest=()=>{ sug.style.display="none"; q.setAttribute("aria-expanded","false"); activeIndex=-1 };
-
-  const chooseItem=(it)=>{
-    if(it.type==="coords"){ centerOn(it.lat,it.lon,{push:true}); saveSearchHist([it.label]); hideSuggest(); return }
-    if(it.type==="place"){ q.value=it.label; centerOn(it.lat,it.lon,{push:true}); hideSuggest(); return }
   };
 
-  const searchPlaces=debounced(async term=>{
-    term=term.trim(); activeIndex=-1;
-    if(!term){ renderSuggest(loadSearchHist().map(x=>({type:"history",label:x}))); return }
-    const coord=parseCoordInput(term);
-    if(coord){ renderSuggest([{type:"coords",label:`${coord.lat}, ${coord.lon}`, lat:coord.lat, lon:coord.lon}]); return }
-    if(aborter) aborter.abort(); aborter=new AbortController();
-    try{
-      const url=`${NOMINATIM}?q=${encodeURIComponent(term)}&format=json&limit=8`;
-      const r=await fetch(url,{signal:aborter.signal}); if(!r.ok) throw new Error();
-      const data=await r.json();
-      renderSuggest(data.map(p=>({type:"place",label:p.display_name,lat:+p.lat,lon:+p.lon})), term);
-    }catch{ renderSuggest([]) }
-  },140);
+  const chooseItem = item => {
+    if (item.lat && item.lon) {
+      state.lat = item.lat;
+      state.lon = item.lon;
+      apply();
+    }
+    sug.style.display = "none";
+  };
 
-  q.addEventListener("input",e=>{ const v=e.target.value; if(v!==lastQuery){ lastQuery=v; searchPlaces(v) } });
-  q.addEventListener("focus",()=>{ if(!q.value) renderSuggest(loadSearchHist().map(x=>({type:"history",label:x}))) });
-  closeSuggestBtn.addEventListener("click",()=>hideSuggest());
+  const search = async query => {
+    if (!query) {
+      renderSuggest([]);
+      return;
+    }
 
-  document.addEventListener("click",e=>{ if(!e.target.closest(".search")&&!e.target.closest("#suggestions")) hideSuggest() });
+    const coord = parseCoords(query);
+    if (coord) {
+      renderSuggest([{ type: "coords", label: `${coord.lat}, ${coord.lon}`, ...coord }]);
+      return;
+    }
 
-  S("#form").addEventListener("submit",async e=>{ e.preventDefault(); hideSuggest() });
+    const url = `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(query)}&format=json&limit=6`;
+    const res = await fetch(url);
+    const data = await res.json();
 
-  locateBtn.onclick=locate;
-  menuBtn.onclick=()=>{ if(!isDesktop()) menu.style.display="block" };
-  showpins.onclick=()=>{ pinsPane.style.display="block" };
-  savepin.onclick=()=>alert("Pin saved (demo)");
-  opensettings.onclick=()=>{ if(!isDesktop()) settings.style.display="block" };
+    suggestions = data.map(d => ({
+      type: "place",
+      label: d.display_name,
+      lat: parseFloat(d.lat),
+      lon: parseFloat(d.lon),
+    }));
+    renderSuggest(suggestions);
+  };
 
-  // prefs
-  function loadPrefs(){ try{ return JSON.parse(localStorage.getItem(PREFS_KEY)||"{}") }catch{ return {} } }
-  function savePrefs(){ localStorage.setItem(PREFS_KEY, JSON.stringify(prefs)) }
-  function applyPrefs(){ setAccent(prefs.accent||"#0ea5e9"); }
-  function setAccent(hex){ document.documentElement.style.setProperty("--accent",hex); themeColorMeta?.setAttribute("content",hex) }
+  const parseCoords = s => {
+    const m = s.trim().match(/^([+-]?\d+(\.\d+)?),\s*([+-]?\d+(\.\d+)?)$/);
+    if (m) return { lat: parseFloat(m[1]), lon: parseFloat(m[3]) };
+    return null;
+  };
 
-  // build sidebar on desktop
-  if(isDesktop()) buildSidebar();
-  function buildSidebar(){
-    const side=document.createElement("div");
-    side.className="sidebar";
-    side.innerHTML=`
-      <div style="display:flex;flex-direction:column;gap:10px">
-        <input id="d_search" type="text" placeholder="Search or lat,lon…" style="padding:10px;border-radius:8px;background:#111;color:#fff;border:1px solid var(--border)">
-        <select id="d_layer" style="padding:10px;border-radius:8px;background:#111;color:#fff;border:1px solid var(--border)">
-          <option value="mapnik">Standard</option>
-          <option value="cyclemap">Cycle</option>
-          <option value="transportmap">Transport</option>
-          <option value="hot">Humanitarian</option>
-        </select>
-        <button id="d_locate" class="iconbtn">📍 Locate</button>
-        <button id="d_reset" class="iconbtn">🔁 Reset</button>
-        <button id="d_gmaps" class="iconbtn">🌐 Google Maps</button>
-      </div>
-    `;
-    document.body.appendChild(side);
-    side.querySelector("#d_search").addEventListener("input",e=>{
-      q.value=e.target.value; q.dispatchEvent(new Event("input",{bubbles:true}))
+  // Events
+  q?.addEventListener("input", e => search(e.target.value));
+  q?.addEventListener("focus", () => search(q.value));
+  closeBtn?.addEventListener("click", () => { sug.style.display = "none"; });
+
+  document.addEventListener("click", e => {
+    if (!e.target.closest(".search") && !e.target.closest("#suggestions")) {
+      sug.style.display = "none";
+    }
+  });
+
+  // Marker prefs
+  markerVisible?.addEventListener("change", () => {
+    marker.classList.toggle("hidden", !markerVisible.checked);
+  });
+
+  markerStyleSel?.addEventListener("change", () => {
+    const val = markerStyleSel.value;
+    marker.classList.toggle("crosshair", val === "crosshair");
+  });
+
+  // Geo
+  const locate = () => {
+    if (!navigator.geolocation) return alert("Geolocation unsupported");
+    navigator.geolocation.getCurrentPosition(pos => {
+      const { latitude: lat, longitude: lon } = pos.coords;
+      state.lat = lat;
+      state.lon = lon;
+      apply();
+    }, err => alert("Location error: " + err.message));
+  };
+
+  const follow = () => {
+    if (watchId) return;
+    watchId = navigator.geolocation.watchPosition(pos => {
+      state.lat = pos.coords.latitude;
+      state.lon = pos.coords.longitude;
+      apply();
     });
-    side.querySelector("#d_locate").onclick=locate;
-    side.querySelector("#d_reset").onclick=reset;
-    side.querySelector("#d_layer").onchange=e=>setLayer(e.target.value);
-    side.querySelector("#d_gmaps").onclick=()=>window.open(gmapsURL(state),"_blank");
-  }
+  };
 
-  parseURL(); apply(false);
-  function tickCoords(){ updateCoordsFast(); setTimeout(tickCoords,200) }
-  tickCoords();
+  const stopFollow = () => {
+    if (!watchId) return;
+    navigator.geolocation.clearWatch(watchId);
+    watchId = null;
+  };
+
+  // Buttons
+  locateBtn?.addEventListener("click", locate);
+  menuBtn?.addEventListener("click", () => menu.style.display = "block");
+  closeMenu?.addEventListener("click", () => menu.style.display = "none");
+  opensettings?.addEventListener("click", () => settings.style.display = "block");
+  closesettings?.addEventListener("click", () => settings.style.display = "none");
+
+  // Pins
+  const LS_PINS = "pokemaps_pins_v1";
+  const savePins = pins => localStorage.setItem(LS_PINS, JSON.stringify(pins.slice(0, 100)));
+  const loadPins = () => JSON.parse(localStorage.getItem(LS_PINS) || "[]");
+
+  const renderPins = () => {
+    const pins = loadPins();
+    pinlist.innerHTML = "";
+    if (!pins.length) {
+      const li = document.createElement("li");
+      li.textContent = "No pins yet.";
+      pinlist.appendChild(li);
+      return;
+    }
+
+    pins.forEach((p, i) => {
+      const li = document.createElement("li");
+      li.innerHTML = `<strong>${p.name}</strong><small>${p.lat.toFixed(5)}, ${p.lon.toFixed(5)}</small>`;
+      li.addEventListener("click", () => {
+        state.lat = p.lat;
+        state.lon = p.lon;
+        state.layer = p.layer;
+        apply();
+        pinsPane.style.display = "none";
+      });
+      pinlist.appendChild(li);
+    });
+  };
+
+  savepin?.addEventListener("click", () => {
+    const pins = loadPins();
+    pins.unshift({ name: new Date().toLocaleString(), lat: state.lat, lon: state.lon, layer: state.layer });
+    savePins(pins);
+    renderPins();
+    pinsPane.style.display = "block";
+  });
+
+  showpins?.addEventListener("click", () => {
+    renderPins();
+    pinsPane.style.display = "block";
+  });
+
+  closepins?.addEventListener("click", () => {
+    pinsPane.style.display = "none";
+  });
+
+  // Load
+  apply();
 })();
-</script>
-</body>
+ </script>
+ 
+ </body>
 </html>

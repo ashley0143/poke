@@ -381,6 +381,7 @@ module.exports = function (app, config, renderTemplate) {
               v,
               err_reason:err
             });
+            console.log(err)
           }
         } catch (error) {
           console.error(error);

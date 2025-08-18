@@ -67,42 +67,112 @@ All complaints will be reviewed and investigated promptly and fairly.
 All community leaders are obligated to respect the privacy and security of the
 reporter of any incident.
 
-## Additional Terms for Poketube
-**TL;DR**: You are encouraged not to edit or remove these terms from Poketube. While you have the freedom to make changes in your Poketube fork, if you choose to modify this document, please refrain from using the title "Poketube Code of Conduct." Everyone can copy and share this document as is, but making changes is allowed with the aforementioned condition. If your chosen alternative code of conduct doesn't include provisions against hate speech, inappropriate behavior, anti-immigrant sentiments, far-right, or authoritarian content, it's not recommended.
+Additional TERMS
 
-1. Definitions
 
-- **"Alternative Code of Conduct"**: This refers to a code of conduct other than the Contributor Covenant Code of Conduct.
 
-- **"Free Software"**: The definition of "free software" is in accordance with the GNU GPL version 3. You can find a complete copy of it in the LICENSE file.
 
-- **Hate Speech**: Hate speech includes any communication, whether written, spoken, or expressed in any form, that promotes discrimination, hostility, or violence against individuals or groups based on attributes such as race, ethnicity, gender, religion, or other protected characteristics.
 
-- **Inappropriate Behavior**: Inappropriate behavior encompasses actions or expressions that create an unwelcome, hostile, or offensive environment for others, such as harassment, intimidation, or bullying.
 
-- **Authoritarianism**: Authoritarianism is characterized by an emphasis on strong central authority, limited individual freedoms, and restrictions on democratic processes. Content or behavior that promotes authoritarian principles, suppresses freedom of speech, individual rights, or democratic values is strongly discouraged.
+# Poke Project Code of Conduct  
+*(also referred to as the “Poke Code of Conduct,” “Poketube Code of Conduct,” “Poke Project Code of Conduct,” or “Poketube Project Code of Conduct,” and collectively the “Code of Conduct”)*  
 
-- **Protected characteristics** include attributes such as race, ethnicity, gender, religion, sexual orientation, disability, and other traits or qualities safeguarded from discrimination by relevant laws and regulations. This defines what is meant by "protected characteristics" in the context of this document.
+**Effective Date**: This Code of Conduct is deemed effective retroactively from the first inclusion of any Code of Conduct within the Poke project. Any outdated, altered, or fork-specific versions are superseded by this version unless otherwise explicitly replaced by the Poke maintainers.  
 
-2. Terms
+By contributing to, forking, or otherwise participating in Poke (or Poketube) or any of its forks, you agree to be bound by this Code of Conduct.  
 
-NOTE: The Contributor Covenant Code of Conduct already includes provisions on some of these issues. Our intention is to provide a more defined and explicit statement regarding these prohibitions to ensure a clear and inclusive community environment.
+---
 
-YOU ARE NOT ENCOURAGED TO EDIT, REMOVE, OR ALTER THE TERMS OF THIS FILE. However, should you choose to make changes, please avoid using the title "Poketube Code of Conduct." Removing this file from your Poketube fork is allowed. Everyone, without exception, is permitted to create unmodified copies of this document and distribute it as is; however, modifications to this document are allowed with the aforementioned condition. 
- 
-It is of paramount importance to emphasize that the promotion or glorification of anti-immigrant sentiments, the alignment with far-right ideologies, Islamophobia, or any form of religious discrimination is strongly discouraged within the scope of Poketube. We maintain a stance against such content, which includes material that discriminates against immigrants, promotes hatred or hostility towards religious groups, or actively supports extremist beliefs associated with far-right ideologies. This stance is encouraged and non-binding.
+## 1. Purpose  
 
-We believe in fostering an environment that is inclusive, respectful, and free from discrimination or the promotion of extremist ideologies. As such, any content found in violation of this encouragement will be addressed promptly and appropriately.
+The purpose of this Code of Conduct is to establish binding rules and standards for participation in the Poke project and its forks. These standards are designed to protect contributors, maintainers, and users from harmful or exclusionary conduct and to uphold the values of inclusivity, respect, and Free Software principles.  
 
-THE CLARITY AND FORCE OF THIS STATEMENT ARE INTENDED TO ENCOURAGE CLEAR GUIDELINES: ANTI-IMMIGRANT SENTIMENTS, FAR-RIGHT IDEOLOGIES, ISLAMOPHOBIA, RELIGIOUS DISCRIMINATION, MISOGYNY, AND SEXISM ARE STRONGLY DISCOURAGED AND NOT PREFERRED WITHIN OUR COMMUNITY. OUR HOPE IS TO MAINTAIN A RESPECTFUL AND INCLUSIVE ATMOSPHERE FOR ALL, REGARDLESS OF THEIR BACKGROUND, BELIEFS, OR IDENTITY.
+---
 
-These terms may be subject to change, and any updates will be communicated to the Poketube community. Changes to these terms will be communicated to users.
+## 2. Naming and Modification  
 
-**3. Application of GNU Kind Communication Policy**
+1. **Unmodified Distribution**:  
+   - This document may be copied and redistributed without restriction if unmodified.  
 
-These terms also align with the principles outlined in the [GNU Kind Communication Policy](https://www.gnu.org/philosophy/kind-communication.html), which encourage respectful and inclusive communication within the Poketube community.
+2. **Modification Restrictions**:  
+   - If you materially alter this document, you **must not** use any title that could reasonably be interpreted as referring to the official Poke project.  
+   - This prohibition applies to titles **such as** (non-exhaustive list):  
+     - “Poketube Code of Conduct”  
+     - “Poke Code of Conduct”  
+     - “Poke Project Code of Conduct”  
+     - “Poketube Project Code of Conduct”  
+     - “Pok Project Code of Conduct”  
+     - “Pok Code of Conduct”  
+     - “PokeTube Project Community Guidelines”  
+     - “Poketube Community Code”  
+     - “Poke Conduct”  
+     - “Poketube Conduct Policy”  
+   - Any other substantially similar title or abbreviation that suggests endorsement, origin, or association with the official Poke project is likewise prohibited.  
 
-It is crucial to note that we respect the diverse opinions and beliefs of our users.
+3. **Encouragement**:  
+   - While modifications are permitted under Free Software freedoms, it is strongly discouraged to remove prohibitions on hate speech, harassment, trolling, or extremist content, as doing so undermines community safety.  
+
+---
+
+## 3. Definitions  
+
+- **Free Software**: As defined under the GNU General Public License v3 (GPLv3).  
+- **Hate Speech**: Any communication or conduct that promotes discrimination, hostility, or violence based on protected characteristics.  
+- **Inappropriate Behavior**: Harassment, bullying, intimidation, trolling, impersonation, use of troll names, ban evasion, coordinated disruption, or any action that creates a hostile environment.  
+- **Authoritarianism**: Content or conduct that promotes authoritarian ideologies, suppression of freedoms, or extremist movements.  
+- **Protected Characteristics**: Traits safeguarded under anti-discrimination law, including but not limited to race, ethnicity, gender, sexual orientation, disability, nationality, and religion.  
+
+---
+
+## 4. Prohibited Conduct  
+
+The following are expressly prohibited in any participation within **Poke (or Poketube) or its forks**:  
+
+1. Hate speech or discriminatory conduct.  
+2. Harassment, intimidation, bullying, or stalking.  
+3. Trolling, coordinated disruption, ban evasion, or the use of troll names.  
+4. Anti-immigrant sentiments, xenophobia, Islamophobia, homophobia, transphobia, misogyny, or sexism.  
+5. Far-right extremist or authoritarian content, including glorification of extremist ideologies or leaders.  
+6. Impersonation of contributors, maintainers, or community members in bad faith.  
+7. Any conduct that undermines inclusivity, respect, or Free Software community values.  
+
+---
+
+## 5. Enforcement  
+
+1. **Authority**: The Poke maintainers hold exclusive authority to interpret and enforce this Code of Conduct.  
+
+2. **Consequences for Violations**:  
+   - Issuance of warnings.  
+   - Temporary or permanent suspension of participation rights.  
+   - Removal of content, commits, or contributions.  
+   - Public identification of non-compliant forks, if required to protect the community.  
+
+3. **Binding Effect**: Enforcement actions taken under this Code of Conduct are final and binding within the scope of the Poke project and its forks.  
+
+---
+
+## 6. Retroactive Application  
+
+- This Code of Conduct applies **retroactively** to all forks of Poke (or Poketube).  
+- Outdated or altered versions are deemed void and non-authoritative.  
+- This version remains binding unless explicitly replaced by an updated version from the official Poke maintainers.  
+
+---
+
+## 7. Amendments  
+
+- The Poke maintainers reserve the right to amend or update this Code of Conduct at any time.  
+- Notice of amendments will be provided through official project communication channels.  
+- Continued participation constitutes acceptance of revised terms.  
+
+---
+
+## 8. Governing Principles  
+
+- This Code of Conduct is a **binding community standard**, not a license.  
+- It is consistent with Free Software principles and does not restrict the freedom to copy, share, or modify software.  
+- It establishes binding rules for conduct and participation under the Poke (and Poketube) project name.  
 
 ***Additional terms end lol*** 
 

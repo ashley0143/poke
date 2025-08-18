@@ -235,7 +235,7 @@ module.exports = function (app, config, renderTemplate) {
     isMobile: req.useragent.isMobile,
     p,
     mobilesearch: req.query.mobilesearch,
-    q:query,
+    q:req.query.q,
     inv: t,
     turntomins,
     continuation: req.query.continuation,

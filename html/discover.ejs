@@ -1,7 +1,7 @@
  <!--
     This Source Code Form is subject to the terms of the GNU General Public License:
 
-    Copyright (C) 2021-2024 POKETUBE (https://codeberg.org/Ashley/poketube)
+    Copyright (C) 2021-2025 POKETUBE (https://codeberg.org/Ashley/poketube)
     
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -1175,15 +1175,14 @@ Privacy
           
               	<div class="video-grid" style="background-color: var(--app-background);margin-top: -4em;">
                      <span style="margin-bottom: -8em;margin-top: 8px;">
-                         <%=j.Search.estimatedResults.toLocaleString()%> Results
- </span>
-       <% j.Search.Results.Video.forEach(x => { %>
+  </span>
+       <% j.results.forEach(x => { %>
 
-     		<a href="/watch?v=<%- x.id %>"  class="video">
-				<div class="thumbnail" style="background-image: url('https://p.poketube.fun/https://i.ytimg.com/vi/<%= x.id %>/hqdefault.jpg?sqp=-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLBy_x4UUHLNDZtJtH0PXeQGoRFTgw');border-radius: 16px;"> <span class="video-length"><%=x.duration %></span> </div>
+     		<a href="/watch?v=<%- x.videoId %>"  class="video">
+				<div class="thumbnail" style="background-image: url('https://p.poketube.fun/https://i.ytimg.com/vi/<%= x.videoId %>/hqdefault.jpg?sqp=-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLBy_x4UUHLNDZtJtH0PXeQGoRFTgw');border-radius: 16px;"> <span class="video-length"><%=x.duration %></span> </div>
 				<div class="info">
-					<span class="title max-lines-2" title="<%- x.title %>" style="font-family:Inter,sans-serif;"><%- x.Title %></span>
-            					<span class="title max-lines-2" title="Video By <%- x.author %>" style="margin-top:1px">By <%- x.Channel.Name %></span>
+					<span class="title max-lines-2" title="<%- x.title %>" style="font-family:Inter,sans-serif;"><%- x.title %></span>
+            					<span class="title max-lines-2" title="Video By <%- x.author %>" style="margin-top:1px">By <%- x.author %></span>
 
                         </div>
             
@@ -1196,14 +1195,14 @@ Privacy
     <a  href="/?mobilesearch=<%=mobilesearch%>">First Page</a>  
               </p>
               <p style="text-align: left;;color: var(--text-secondary);text-decoration: none;">
-    <a  href="/app?mobilesearch=<%=mobilesearch%>&continuation=<%=j.Search.continuation%>">Next Page</a>     
+    <a  href="/app?mobilesearch=<%=mobilesearch%>&continuation=<%- Number(continuation) + 1 %>">Next Page</a>     
               </p>
                                                 <% } %> 
                                                   
-                            <%  if (!continuation) { %>
+                                  <%  if (Number(continuation) <= "0" || !continuation) { %>
                <p style="text-align: left;margin-left: 16em;;color: var(--text-secondary);text-decoration: none;">
-    <a  href="/app?mobilesearch=<%=mobilesearch%>&continuation=<%=j.Search.continuation%>">Next Page</a>      
-                               </p>
+    <a  href="/search?query=<%=q%>&continuation=2"  %>
+              ">Next Page</a>
 
                                                 <% } %>  
              

@@ -10,7 +10,7 @@
 </h1>
 
 <div align="center">
-  <p>Be anonymous while watching (cat falling) videos, searching the web, and listening to music on Poke - the free privacy front-end!</p>
+  <p>Be anonymous while watching  videos, gaming, and listening to music on Poke - the free privacy front-end!</p>
 </div>
 
 <div align="center">
@@ -26,8 +26,7 @@
 
 ## Welcome!
 
-Welcome to Poke (formerly PokeTube), the privacy-friendly YouTube front-end built with the invidious API! Imagine paying for YouTube Premium just to download videos - couldn't be us (literally).
-
+Welcome to Poke (formerly PokeTube), the privacy-friendly YouTube front-end built with the invidious API!  
 ## Features
 
 | <img width="100%" style="border-radius: 24px" src="./css/README_RYD.png"> | <div style="text-align: left"><h3>🔙 Built-In Return YouTube Dislikes</h3>See the dislikes from *returnyoutubedislike* - because sometimes you need to know how bad that video really is :3</div> |
@@ -56,12 +55,12 @@ Poke uses OpenH264, which is free software! No non-free components included :3 V
    - GitHub: `$ git clone https://github.com/ashley0143/poke.git`
     
    reccomended unoffical mirrors:
-   - code.lgbt: `$ git clone https://code.lgbt/mirror/poke.git` [sync every 10mins]
    - git.lgbt: `$ git clone https://git.lgbt/mirror/poke.git` [sync every 10mins]
    - nin0git :`$ git clone https://git.nin0.dev/mirrors/poke.git` [sync every 10mins]
 
     not reccomended, unstable
-   - SudoVanilla: `$ git clone https://ark.sudovanilla.org/Korbs/poke.git` [sync every week]
+    - none!!! yippee
+
 
 3. **Install Dependencies**
    - `$ cd poke`
@@ -83,7 +82,12 @@ the main parts of the project is Under GPL-3.0-OR-LATER :3
 
 see the each sections LICENSE tho!! 
 
-Copyleft 2021-202x Poke Project, mostly ashley0143 - poke does not support the ["source first"](https://sourcefirst.com/) or ["open source"](https://opensource.org) movement :3 - we support the free software movement (fsf.org)
+Copyleft 2021-202x Poke Project, mostly ashley0143 
+Trans rights!
+
+poke does not support the ["source first"](https://sourcefirst.com/) or ["open source"](https://opensource.org) movement :3 
+
+ we support the free software movement (fsf.org)
 
 
 [Code Of conduct](https://codeberg.org/Ashley/poke/src/branch/main/CODE_OF_CONDUCT.md)
@@ -92,17 +96,13 @@ Copyleft 2021-202x Poke Project, mostly ashley0143 - poke does not support the [
 
 TL;DR: we dont collect or share your personal info, that's it lol.
 
-We use the GNU Coding Standard Thingy, see [this link.](https://www.gnu.org/prep/standards)
 
 
 <div align="center">
-  <p>Parts of Poke are hosted on Glitch.com since <i>2020</i>.</p>
+  <p>Parts of Poke were hosted on Glitch.com from <i>2020 to 2023</i>.</p>
   <a href="https://glitch.com/">
     <img src="https://cdn.glitch.global/d68d17bb-f2c0-4bc3-993f-50902734f652/glitch-fastly-lock-up.svg">
   </a>
   <br><hr>
-  <p> this software does not support <a href="https://opensource.org">"OSI"</a> - <a href="https://rationalwiki.org/wiki/Eric_S._Raymond#Open_Source">they are terrible people </a> - pls support the FSF/GNU (<a href="https://fsf.org">fsf.org</a> or <a href="https://gnu.org">gnu.org</a>) instead :3 </p>
-  <a href="https://gnu.org/not-open-source">
-    <img width="200" src="https://autumn.revolt.chat/attachments/eNpfwV2C1_wudONe43YCvWr-4vbvLpG78HbuXgOYfO">
-  </a>
+
 </div>

@@ -332,6 +332,7 @@ module.exports = function (app, config, renderTemplate) {
         shorts,
         firstVideo: ChannelFirstVideoObject,
         j: "",
+        dnoreplace:"",
         sort: sort_by,
         stream,
         tj,

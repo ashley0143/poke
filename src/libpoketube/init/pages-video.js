@@ -221,8 +221,7 @@ module.exports = function (app, config, renderTemplate) {
     INNERTUBE.getYouTubeApiVideo(f, v, contentlang, contentregion).then(
       (data) => {
         try {
-          const k = " ";
-          const channel_uploads = data?.channel_uploads;
+           const channel_uploads = data?.channel_uploads;
           const json = data?.json;
           const engagement = data?.engagement;
           const inv_comments = data?.comments || "Disabled";
@@ -337,8 +336,7 @@ module.exports = function (app, config, renderTemplate) {
               e,
               a,
               twitter:STUPID_ELON_MUSK_WEBSITE_HE_IS_TRYING_TO_CALL_IT_X_FOR_SOME_REASON_WHICH_IS_A_STUPID_NAME_WE_WILL_FOREVER_CALL_IT_TWITTER_AND_HE_CAN_DO_NOTHING_ABOUT_IT_LOL_FUCK_YOU_ELON_TRANS_RIGHTS_BTW,
-              k,
-              dm,
+               dm,
               proxyurl,
               media_proxy_url: mediaproxy,
               instagram,

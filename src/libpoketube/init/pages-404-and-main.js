@@ -180,6 +180,8 @@ module.exports = function (app, config, renderTemplate) {
       })
         .then((res) => res.text())
         .then((txt) => getJson(txt));
+
+        console.log(j)
     }
 
     renderTemplate(res, req, "discover.ejs", {

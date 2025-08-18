@@ -172,11 +172,14 @@ module.exports = function (app, config, renderTemplate) {
     if (req.query.mobilesearch) {
       const query = req.query.mobilesearch;
       const continuation = req.query.continuation || "";
-      const search = await fetch(
-        `https://inner-api.poketube.fun/api/search?query=${query}&continuation=${continuation}`
-      );
-      const text = await search.text();
-      j = getJson(modules.toJson(text));
+      const searchUrl = `${config.invapi}/search?q=${encodeURIComponent(query)}&page=${encodeURIComponent(continuation)}`
+     const xmlData = await fetch(searchUrl, {
+        headers: {
+          'User-Agent': config.useragent,
+        },
+      })
+        .then((res) => res.text())
+        .then((txt) => getJson(txt));
     }
 
     renderTemplate(res, req, "discover.ejs", {
@@ -187,7 +190,7 @@ module.exports = function (app, config, renderTemplate) {
       inv: t,
       turntomins,
       continuation: req.query.continuation,
-      j,
+      j:xmlData,
     });
   });
 

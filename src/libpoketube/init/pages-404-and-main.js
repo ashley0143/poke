@@ -171,7 +171,7 @@ module.exports = function (app, config, renderTemplate) {
     let j = null;
     if (req.query.mobilesearch) {
       const query = req.query.mobilesearch;
-      const continuation = req.query.continuation || "";
+      const continuation = req.query.continuation || "1";
       const searchUrl = `${config.invapi}/search?q=${encodeURIComponent(query)}&page=${encodeURIComponent(continuation)}`
        j = await fetch(searchUrl, {
         headers: {

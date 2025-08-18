@@ -23,9 +23,7 @@ const path = require("path");
 const fs = require("node:fs");
 const CleanCSS = require("clean-css");
 
-const sha384 = modules.hash;
-const notice =
-  "/* the code is Licensed in gpl-3.0-or-later. This program comes with ABSOLUTELY NO WARRANTY. This is free software, and you are welcome to redistribute it under certain conditions. See the GNU General Public License for more detailsYou should have received a copy of the GNU General Public Licensealong with this program.  If not, see <https://www.gnu.org/licenses/>. - add the param nomin to view source code. (eg poketube.fun/css/poketube.css?nomin=true) */";
+const notice =  "/* the code is Licensed in gpl-3.0-or-later. This program comes with ABSOLUTELY NO WARRANTY. This is free software, and you are welcome to redistribute it under certain conditions. See the GNU General Public License for more detailsYou should have received a copy of the GNU General Public Licensealong with this program.  If not, see <https://www.gnu.org/licenses/>. - add the param nomin to view source code. (eg poketube.fun/css/poketube.css?nomin=true) */";
 
 function getJson(str) {
   try {
@@ -52,31 +50,22 @@ module.exports = function (app, config, renderTemplate) {
     renderTemplate(res, req, "502.ejs");
   });
 
-  app.get("/143", function (req, res) {
-    var number_easteregg = getRandomArbitrary(0, 143);
+app.get("/143", (req, res) => {
+  const numberEasterEgg = getRandomArbitrary(0, 143);
+  const { number, something } = req.query;
 
-    if (number_easteregg == "143") {
-      renderTemplate(res, req, "143.ejs", {
-        something: req.query.something,
-      });
-    }
+  const shouldRender =
+    numberEasterEgg === 143 ||
+    number === "143" ||
+    something === "143";
 
-    if (req.query.number == "143") {
-      renderTemplate(res, req, "143.ejs", {
-        something: req.query.something,
-      });
-    }
+  if (shouldRender) {
+    return renderTemplate(res, req, "143.ejs", { something });
+  }
 
-    if (req.query.something == "143") {
-      renderTemplate(res, req, "143.ejs", {
-        something: req.query.something,
-      });
-    }
+  return res.redirect(`/?number=${numberEasterEgg}`);
+});
 
-    if (number_easteregg != "143") {
-      return res.redirect("/" + "?number=" + number_easteregg);
-    }
-  });
 
   app.get("/rewind", function (req, res) {
     renderTemplate(res, req, "rewind.ejs");

@@ -342,7 +342,6 @@ module.exports = function (app, config, renderTemplate) {
         turntomins,
         pronoun,
         media_proxy_url: media_proxy,
-        dnoreplace,
         getThumbnailUrl,
         continuation,
         wiki: "",
@@ -353,8 +352,7 @@ module.exports = function (app, config, renderTemplate) {
         subs: typeof subscribers === "string"
           ? subscribers.replace("subscribers", "")
           : "None",
-        desc: dnoreplace === "[object Object]" ? "" : description,
-      });
+       });
     } catch (error) {
       console.error("Failed to render channel page:", error);
       res.redirect("/");

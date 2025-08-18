@@ -319,12 +319,8 @@ module.exports = function (app, config, renderTemplate) {
       }
 
       const subscribers = convert(cinv?.subCount || 0);
-      const description = about?.Description.toString().replace(
-        /\n/g,
-        " <br> "
-      );
-      const dnoreplace = about?.Description.toString();
-
+    
+ 
       let ChannelFirstVideoObject = {
         subCountText: "0",
         authorVerified: false,

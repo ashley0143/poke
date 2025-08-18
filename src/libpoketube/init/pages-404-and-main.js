@@ -167,22 +167,56 @@ module.exports = function (app, config, renderTemplate) {
       }
     );
     const p = getJson(await invpopular.text());
+let j = null;
 
-    let j = null;
-    if (req.query.mobilesearch) {
-      const query = req.query.mobilesearch;
-      const continuation = req.query.continuation || "1";
-      const searchUrl = `${config.invapi}/search?q=${encodeURIComponent(query)}&page=${encodeURIComponent(continuation)}`
-       j = await fetch(searchUrl, {
-        headers: {
-          'User-Agent': config.useragent,
-        },
-      })
-        .then((res) => res.text())
-        .then((txt) => getJson(txt));
+try {
+  // Accept multiple query aliases; trim to avoid spaces-only values.
+  const query =
+    (typeof req.query.mobilesearch === "string" && req.query.mobilesearch.trim()) ??
+    (typeof req.query.query === "string" && req.query.query.trim()) ??
+    (typeof req.query.q === "string" && req.query.q.trim()) ??
+    "";
 
-        console.log(j)
+  // Use nullish coalescing so "0" is NOT overwritten.
+  const continuation = (req.query.continuation ?? "1").toString();
+
+  if (query) {
+    const searchUrl = `${config.invapi}/search?q=${encodeURIComponent(query)}&page=${encodeURIComponent(continuation)}`;
+
+    const res = await fetch(searchUrl, {
+      headers: { "User-Agent": config.useragent },
+    });
+
+    if (!res.ok) {
+      // Don’t leave j as null; store error info to inspect upstream.
+      j = { error: true, status: res.status, statusText: res.statusText };
+      console.error("[mobilesearch] HTTP error", j, "URL:", searchUrl);
+    } else {
+      // If the endpoint returns JSON, prefer res.json(); otherwise parse text -> getJson.
+      // Try JSON first; fall back to text parsing.
+      let data;
+      const ct = res.headers.get("content-type") || "";
+      if (ct.includes("application/json")) {
+        data = await res.json();
+      } else {
+        const txt = await res.text();
+         data = await Promise.resolve(getJson(txt));
+      }
+
+      j = (data ?? null);
+      if (j === null) {
+        j = { error: true, reason: "Parsed data is null/undefined" };
+        console.error("[mobilesearch] getJson produced null/undefined. URL:", searchUrl);
+      }
     }
+  } else {
+     j = { error: true, reason: "Missing 'mobilesearch' (or q/query) parameter" };
+    console.warn("[mobilesearch] Missing query parameter");
+  }
+} catch (err) {
+   j = { error: true, reason: "Exception", message: String(err && err.message || err) };
+  console.error("[mobilesearch] Exception:", err);
+}
 
     renderTemplate(res, req, "discover.ejs", {
       tab: req.query.tab,

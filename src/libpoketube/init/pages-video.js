@@ -332,7 +332,7 @@ module.exports = function (app, config, renderTemplate) {
               u: vidurl,
               isvidious: isvidious,
               video: json,
-              date: inv_vid.publishedText	,
+              date: inv_vid?.publishedText	,
               e,
               a,
               twitter:STUPID_ELON_MUSK_WEBSITE_HE_IS_TRYING_TO_CALL_IT_X_FOR_SOME_REASON_WHICH_IS_A_STUPID_NAME_WE_WILL_FOREVER_CALL_IT_TWITTER_AND_HE_CAN_DO_NOTHING_ABOUT_IT_LOL_FUCK_YOU_ELON_TRANS_RIGHTS_BTW,

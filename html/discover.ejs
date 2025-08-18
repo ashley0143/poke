@@ -1176,7 +1176,7 @@ Privacy
               	<div class="video-grid" style="background-color: var(--app-background);margin-top: -4em;">
                      <span style="margin-bottom: -8em;margin-top: 8px;">
   </span>
-       <% j.results.forEach(x => { %>
+<% (j && Array.isArray(j.results) ? j.results : []).forEach(x => { %>
 
      		<a href="/watch?v=<%- x.videoId %>"  class="video">
 				<div class="thumbnail" style="background-image: url('https://p.poketube.fun/https://i.ytimg.com/vi/<%= x.videoId %>/hqdefault.jpg?sqp=-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLBy_x4UUHLNDZtJtH0PXeQGoRFTgw');border-radius: 16px;"> <span class="video-length"><%=x.duration %></span> </div>

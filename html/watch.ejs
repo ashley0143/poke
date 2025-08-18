@@ -44,7 +44,7 @@
 <meta content="{canplayhd: true, redesign_feburary_2023:true, poke-rebrand:true, universe:2, ImmersiveAmbientMode:true, november2023_poke_rebrand:true, rebrand_2024:true, faster_load:true, AudioSyncV2:false, AudioSyncV3:true }" name="flags">
 <meta content="<%=inv_vid.author%>" name=twitter:author>
 <meta content="https://poketube.fun/watch?v=<%=inv_vid.videoId%>" name=twitter:url>
-<meta content="<%=inv_vid.title%> | Poke" name=twitter:title>
+<meta content="<%=inv_vid?.title%> | Poke" name=twitter:title>
 <meta content="Watch this <%- turntomins(inv_vid.lengthSeconds) || "LIVE"%> long video from <%=inv_vid.author%> On Poke! 
 👍 <%=convert(engagement.likes)%> | 👎 <%=convert(engagement.dislikes)%> | 📈 <%=convert(engagement.viewCount)%> Views 🗓️ <%= date.replace("Premiered", " ") %> 💬 <% if (!isNaN(inv.commentCount)) { %><%= inv.commentCount.toLocaleString() %>
 <% } else { %>
@@ -57,7 +57,7 @@
 <meta name="darkreader-lock"> <!-- tells dark reader that the site has a dark theme and to turn itself off -->
 <link href="/css/yt-ukraine.svg?v=7" rel=icon>
 <link rel="manifest" href="/manifest.json">
-<title><%= inv_vid.title %> | <%= /^[A-Z]/.test(inv_vid.title) ? 'Watch' : 'watch' %></title>
+<title><%= inv_vid.?title %> | <%= /^[A-Z]/.test(inv_vid.title) ? 'Watch' : 'watch' %></title>
 <style>     
   .comments-area {
   background: #f1f9ff;

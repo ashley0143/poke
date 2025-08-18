@@ -1245,7 +1245,7 @@ Offical Discord Server! :3
                
                               
 <div class="subscriber-count" style="word-wrap: initial;word-break: break-all;display: block ruby;">
-          <%= inv_vid.subCountText.replace("subscribers", "Subs") %>
+          <%= inv_vid.subCountText.replace("subscribers", "Subs") %> subs 
  				</div>
                
 
@@ -2168,7 +2168,7 @@ if (/[?&]autoplay=/.test(location.search)) {
 	
 	if (userID) {
 	    // If user ID exists in localStorage, set the href attribute
-	    anchor.href = `/api/set-channel-subs?ID=${userID}&channelName=<%=inv_vid.author%>&avatar=<%- media_proxy_url %>/proxy?url=<%= k.Video.Channel.Avatar[1].$t %>&channelID=<%=video?.Channel.id || inv_vid.authorId %>`;
+	    anchor.href = `/api/set-channel-subs?ID=${userID}&channelName=<%=inv_vid.author%>&avatar=<%- media_proxy_url %>/proxy?url=<%= inv_vid.authorThumbnails[1].url %>&channelID=<%=video?.Channel.id || inv_vid.authorId %>`;
 	} else {
 	     anchor.href = "/account-create"
 	 } 
@@ -3080,7 +3080,7 @@ font-size: 13px;margin:0;padding:0;white-space: nowrap;
 
 <div class="channel-info" name="chnl" style="padding: 0;border: none;margin-bottom:8px">
   <a href="/channel?id=<%=video?.Channel.id || inv_vid.authorId%>" class="avatar">
-					<img src=" <%= k.Video.Channel.Avatar[1].$t %>">
+					<img src=" <%= inv_vid.authorThumbnails[1].url %>">
 				</a>
 				<div class="name" style="font-family:var(--text-font-primary);font-weight:var(--text-header-weight);">
 		  <div>
@@ -3696,7 +3696,7 @@ var userID = localStorage.getItem("UserID");
 
 if (userID) {
     // If user ID exists in localStorage, set the href attribute
-    anchor.href = `/api/set-channel-subs?ID=${userID}&channelName=<%=inv_vid.author%>&avatar=<%- proxyurl %>/<%= k.Video.Channel.Avatar[1].$t %>&channelID=<%=video?.Channel.id || inv_vid.authorId %>`;
+    anchor.href = `/api/set-channel-subs?ID=${userID}&channelName=<%=inv_vid.author%>&avatar=<%- proxyurl %>/<%= inv_vid.authorThumbnails[1].url %>&channelID=<%=video?.Channel.id || inv_vid.authorId %>`;
 } else {
     // If user ID doesn't exist in localStorage, you can handle it as needed
     anchor.href = "/account-create"

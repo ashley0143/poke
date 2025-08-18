@@ -57,7 +57,7 @@
 <meta name="darkreader-lock"> <!-- tells dark reader that the site has a dark theme and to turn itself off -->
 <link href="/css/yt-ukraine.svg?v=7" rel=icon>
 <link rel="manifest" href="/manifest.json">
-<title><%= inv_vid.?title %> | <%= /^[A-Z]/.test(inv_vid.title) ? 'Watch' : 'watch' %></title>
+<title><%= inv_vid?.title %> | <%= /^[A-Z]/.test(inv_vid.title) ? 'Watch' : 'watch' %></title>
 <style>     
   .comments-area {
   background: #f1f9ff;

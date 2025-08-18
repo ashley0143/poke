@@ -173,7 +173,7 @@ module.exports = function (app, config, renderTemplate) {
       const query = req.query.mobilesearch;
       const continuation = req.query.continuation || "";
       const searchUrl = `${config.invapi}/search?q=${encodeURIComponent(query)}&page=${encodeURIComponent(continuation)}`
-     const xmlData = await fetch(searchUrl, {
+     j = await fetch(searchUrl, {
         headers: {
           'User-Agent': config.useragent,
         },
@@ -190,7 +190,7 @@ module.exports = function (app, config, renderTemplate) {
       inv: t,
       turntomins,
       continuation: req.query.continuation,
-      j:xmlData,
+      j,
     });
   });
 

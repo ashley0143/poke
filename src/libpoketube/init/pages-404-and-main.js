@@ -51,7 +51,6 @@ const splash = [
   "poke & chill!",
   "can play HD!",
   "also try invidious!",
-  "also try vencord!",
   "rms <3!",
   "du hast",
   "can u belive no one bought this?",
@@ -119,18 +118,16 @@ const splash = [
   "RAWFEAR",
   "putting on a drum show!",
   "welcome to breach!",
+  "i been this way...",
+  "i want to change...",
+  "FEDHKDHDGBK!",
+  "100% meow!",
   "meows at u",
   "hai i am gay",
   "yay, GEX!",
   "say gex..,,",
   "wha if we um erm",
-  "turkey is literally 1984!",
-  "turkey is literally 1984!",
-  "turkey is literally 1984!",
-  "turkey is literally 1984!",
-  "turkey is literally 1984!",
-  "turkey is literally 1984!",
-  "awesome screen!",
+    "awesome screen!",
   "awesome camera!",
   "long lasting battery life",
   "stallmansupport.org!!!",
@@ -190,7 +187,7 @@ module.exports = function (app, config, renderTemplate) {
     const continuation = (req.query.continuation ?? "1").toString();
 
     if (query) {
-      const searchUrl = `${config.invapi}/search?q=${encodeURIComponent(query)}&page=${encodeURIComponent(continuation)}`;
+      const searchUrl = `${config.invapi}/search?q=${encodeURIComponent(query)}&type=video&page=${encodeURIComponent(continuation)}`;
 
       const res = await fetch(searchUrl, {
         headers: { "User-Agent": config.useragent },

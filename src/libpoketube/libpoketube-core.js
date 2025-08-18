@@ -8,23 +8,26 @@
 
 const getdislikes = require("../libpoketube/libpoketube-dislikes.js");
 const getColors = require("get-image-colors");
-const config = require("../../config.json")
+const config = require("../../config.json");
 
 class InnerTubePokeVidious {
   constructor(config) {
     this.config = config;
     this.cache = {};
     this.language = "hl=en-US";
-    this.param = "2AMB"
-    this.param_legacy = "CgIIAdgDAQ%3D%3D"
-    this.apikey = "AIzaSyAO_FJ2SlqU8Q4STEHLGCilw_Y9_11qcW8"
-    this.ANDROID_API_KEY = "AIzaSyA8eiZmM1FaDVjRy-df2KTyQ_vz_yYM39w"
-    this.ANDROID_APP_VERSION = "20.20.41" // https://www.apkmirror.com/apk/google-inc/youtube/youtube-20-20-41-release/
-    this.ANDROID_VERSION = "16" // https://en.wikipedia.org/wiki/Android_version_history
-    this.useragent = config.useragent || "PokeTube/2.0.0 (GNU/Linux; Android 14; Trisquel 11; poketube-vidious; like FreeTube)"
-    this.INNERTUBE_CONTEXT_CLIENT_VERSION = "1"
+    this.param = "2AMB";
+    this.param_legacy = "CgIIAdgDAQ%3D%3D";
+    this.apikey = "AIzaSyAO_FJ2SlqU8Q4STEHLGCilw_Y9_11qcW8";
+    this.ANDROID_API_KEY = "AIzaSyA8eiZmM1FaDVjRy-df2KTyQ_vz_yYM39w";
+    this.ANDROID_APP_VERSION = "20.20.41";
+    this.ANDROID_VERSION = "16";
+    this.useragent =
+      config.useragent ||
+      "PokeTube/2.0.0 (GNU/Linux; Android 14; Trisquel 11; poketube-vidious; like FreeTube)";
+    this.INNERTUBE_CONTEXT_CLIENT_VERSION = "1";
     this.region = "region=US";
-    this.sqp = "-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLBy_x4UUHLNDZtJtH0PXeQGoRFTgw";
+    this.sqp =
+      "-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLBy_x4UUHLNDZtJtH0PXeQGoRFTgw";
   }
 
   getJson(str) {
@@ -42,7 +45,10 @@ class InnerTubePokeVidious {
   async getYouTubeApiVideo(f, v, contentlang, contentregion) {
     const { fetch } = await import("undici");
 
-    if (v == null) return "Gib ID";
+    if (!v) {
+      this.initError("Missing video ID", null);
+      return { error: true, message: "No video ID provided" };
+    }
 
     if (this.cache[v] && Date.now() - this.cache[v].timestamp < 3600000) {
       return this.cache[v].result;
@@ -54,40 +60,85 @@ class InnerTubePokeVidious {
 
     const fetchWithRetry = async (url, options = {}, retries = 3) => {
       for (let attempt = 0; attempt < retries; attempt++) {
-        const res = await fetch(url, {
-          ...options,
-          headers: {
-            ...options.headers,
-            ...headers,
+        try {
+          const res = await fetch(url, {
+            ...options,
+            headers: {
+              ...options.headers,
+              ...headers,
+            },
+          });
+          if (res.status === 500 && attempt < retries - 1) {
+            this.initError(`Retrying fetch for ${url}`, res.status);
+            continue;
           }
-        });
-        if (res.status === 500 && attempt < retries - 1) continue;
-        return res;
+          return res;
+        } catch (err) {
+          this.initError(`Fetch error for ${url}`, err);
+          if (attempt === retries - 1) throw err;
+        }
       }
       return null;
     };
 
     try {
       const [invComments, videoInfo] = await Promise.all([
-        fetchWithRetry(`${this.config.invapi}/comments/${v}?hl=${contentlang}&region=${contentregion}&h=${btoa(Date.now())}`).then(res => res.text()),
-        fetchWithRetry(`${this.config.invapi}/videos/${v}?hl=${contentlang}&region=${contentregion}&h=${btoa(Date.now())}`).then(res => res.text()),
+        fetchWithRetry(
+          `${this.config.invapi}/comments/${v}?hl=${contentlang}&region=${contentregion}&h=${btoa(
+            Date.now()
+          )}`
+        ).then((res) => res?.text()),
+        fetchWithRetry(
+          `${this.config.invapi}/videos/${v}?hl=${contentlang}&region=${contentregion}&h=${btoa(
+            Date.now()
+          )}`
+        ).then((res) => res?.text()),
       ]);
 
       const comments = this.getJson(invComments);
       const vid = this.getJson(videoInfo);
 
-      let p = {};
-      if (f === "true" && vid?.authorId) {
-        const uploads = await fetchWithRetry(`${this.config.invapi}/channels/${vid.authorId}?hl=${contentlang}&region=${contentregion}`);
-        p = this.getJson(await uploads.text());
+      if (!vid) {
+        this.initError("Video info missing/unparsable", v);
+        return {
+          error: true,
+          message: "Sorry nya, we couldn't find any information about that video qwq",
+        };
       }
 
-      if (!vid) {
-        console.log(`Sorry nya, we couldn't find any information about that video qwq`);
+      let p = {};
+      if (f === "true" && vid?.authorId) {
+        try {
+          const uploads = await fetchWithRetry(
+            `${this.config.invapi}/channels/${vid.authorId}?hl=${contentlang}&region=${contentregion}`
+          );
+          p = this.getJson(await uploads.text());
+        } catch (err) {
+          this.initError("Failed to fetch channel uploads", err);
+        }
       }
 
       if (this.checkUnexistingObject(vid)) {
-        const fe = await getdislikes(v);
+        let fe = { engagement: null };
+        try {
+          fe = await getdislikes(v);
+        } catch (err) {
+          this.initError("Dislike API error", err);
+        }
+
+        let color = "#0ea5e9";
+        let color2 = "#111827";
+        try {
+          const palette = await getColors(
+            `https://i.ytimg.com/vi/${v}/hqdefault.jpg?sqp=${this.sqp}`
+          );
+          if (Array.isArray(palette) && palette[0] && palette[1]) {
+            color = palette[0].hex();
+            color2 = palette[1].hex();
+          }
+        } catch (err) {
+          this.initError("Thumbnail color extraction error", err);
+        }
 
         this.cache[v] = {
           result: {
@@ -97,34 +148,44 @@ class InnerTubePokeVidious {
             engagement: fe.engagement,
             wiki: "",
             desc: "",
-            color: await getColors(`https://i.ytimg.com/vi/${v}/hqdefault.jpg?sqp=${this.sqp}`).then(colors => colors[0].hex()),
-            color2: await getColors(`https://i.ytimg.com/vi/${v}/hqdefault.jpg?sqp=${this.sqp}`).then(colors => colors[1].hex()),
+            color,
+            color2,
           },
           timestamp: Date.now(),
         };
 
         return this.cache[v].result;
+      } else {
+        this.initError("Invalid video object (missing authorId)", vid);
+        return {
+          error: true,
+          message: "Sorry nya, this video seems incomplete qwq (missing author info)",
+        };
       }
     } catch (error) {
       this.initError("Error getting video", error);
+      return { error: true, message: "Internal error while fetching video info" };
     }
   }
 
   isvalidvideo(v) {
     if (v != "assets" && v != "cdn-cgi" && v != "404") {
-      return /^([a-zA-Z0-9_-]{11})/.test(v);
+      return /^([a-zA-Z0-9_-]{11})$/.test(v);
     }
     return false;
   }
 
-  initError(args, error) {
-    console.error("[LIBPT CORE ERROR] " + args, error);
+  initError(context, error) {
+    console.error("[LIBPT CORE ERROR]", context, error?.stack || error || "");
   }
 }
 
 const pokeTubeApiCore = new InnerTubePokeVidious({
   invapi: "https://invid-api.poketube.fun/bHj665PpYhUdPWuKPfZuQGoX/api/v1",
-  invapi_alt: config.proxylocation === "EU" ? "https://invid-api.poketube.fun/api/v1" : "https://iv.ggtyler.dev/api/v1",
+  invapi_alt:
+    config.proxylocation === "EU"
+      ? "https://invid-api.poketube.fun/api/v1"
+      : "https://iv.ggtyler.dev/api/v1",
   dislikes: "https://returnyoutubedislikeapi.com/votes?videoId=",
   t_url: "https://t.poketube.fun/",
   useragent: config.useragent,

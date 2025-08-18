@@ -347,7 +347,7 @@ module.exports = function (app, config, renderTemplate) {
         wiki: "",
         getFirstLine,
         isMobile: req.useragent.isMobile,
-        about,
+        about:"",
         playlist,
         subs: typeof subscribers === "string"
           ? subscribers.replace("subscribers", "")

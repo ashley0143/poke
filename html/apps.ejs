@@ -201,11 +201,43 @@
       *{animation:none !important; transition:none !important}
       .bg video{ filter:brightness(.85) }
     }
+
+    .e2e-badge {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: linear-gradient(135deg, #22c55e, #16a34a);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .5px;
+  padding: 4px 8px;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0,0,0,.25);
+}
+.wip-banner {
+  text-align: center;
+  background: linear-gradient(90deg, #facc15, #f59e0b);
+  color: #1f2937;
+  font-weight: 700;
+  font-size: 14px;
+  padding: 10px 14px;
+  border-bottom: 1px solid rgba(0,0,0,.1);
+  letter-spacing: .3px;
+}
+.wip-banner strong {
+  color: #111827;
+}
+
   </style>
 </head>
 <body>
+<div class="wip-banner">
+  This page is <strong>WIP</strong> !!! nothing is final!!
+</div>
+
    <div class="bg" aria-hidden="true">
-    <video id="bgvid" autoplay muted loop playsinline preload="auto" poster="/bg-poster.jpg">
+    <video id="bgvid" autoplay muted loop paused playsinline preload="auto" poster="/bg-poster.jpg">
       <source src="/bg-480.webm" type="video/webm" />
     </video>
   </div>
@@ -214,8 +246,7 @@
     <!-- Top navigation -->
     <div class="nav" role="navigation" aria-label="Top">
       <div class="brand">
-        <img src="/css/yt-ukraine.svg?v=3" alt="" />
-        <span>Poke</span>
+       
       </div>
 
       <div class="right">
@@ -225,15 +256,14 @@
     <kbd style="opacity:.7;font-size:.8rem">/</kbd>
   </form>
   <a class="icon-btn" href="/settings" aria-label="Settings"><i class="fa-regular fa-gear"></i></a>
-  <a class="icon-btn" href="/account" aria-label="Account"><i class="fa-regular fa-user"></i></a>
+  <a class="icon-btn" href="/account-create" aria-label="Account"><i class="fa-regular fa-user"></i></a>
 </div>
 
     </div>
 
     <!-- Hero -->
     <section class="hero" aria-labelledby="title">
-      <span class="kicker"><i class="fa-regular fa-shield"></i> Free software · Privacy-first</span>
-      <h1 id="title" class="title">Poke Apps</h1>
+       <h1 id="title" class="title">Poke Apps</h1>
       <p class="subtitle">Youtube Front-end, translator, maps, notes, calendar, and moar! and they are cool as heck!!</p>
       <div class="cta-row">
         <a class="cta" href="/app"><i class="fa-regular fa-compass"></i>Discover!</a>
@@ -266,22 +296,27 @@
 
       <a class="card" href="/calendar" aria-label="Calendar">
         <div class="row"><span class="badge"><i class="fa-light fa-calendar"></i></span><span class="name">Calendar</span></div>
-        <span class="hint">NO javascript!!! calender</span>
+        <span class="hint">NO javascript!!! calendar :3</span>
       </a>
 
-      <a class="card" href="/notepad" aria-label="Pokepad">
-        <div class="row"><span class="badge"><i class="fa-light fa-memo-pad"></i></span><span class="name">Pokepad!</span></div>
-        <span class="hint">End to End encrypted notepad!</span>
-      </a>
+     <a class="card" href="/notepad" aria-label="Pokepad">
+  <span class="e2e-badge">E2E</span>
+  <div class="row">
+    <span class="badge"><i class="fa-light fa-memo-pad"></i></span>
+    <span class="name">Pokepad!</span>
+  </div>
+  <span class="hint">End-to-End Encrypted Feature rich web Notepad!</span>
+</a>
+
 
       <a class="card" href="/app" aria-label="Watch">
         <div class="row"><span class="badge"><i class="fa-light fa-play"></i></span><span class="name">Watch</span></div>
-        <span class="hint">the biggest part of poke!</span>
+        <span class="hint">the biggest part of poke - the best-looking youtube front end ever!</span>
       </a>
 
       <a class="card" href="/settings" aria-label="Settings">
         <div class="row"><span class="badge"><i class="fa-light fa-gear"></i></span><span class="name">Settings</span></div>
-        <span class="hint">Tune everything</span>
+        <span class="hint">settings lol idk wha to tell ya mate </span>
       </a>
     </nav>
  

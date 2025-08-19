@@ -57,121 +57,58 @@
     .customize-navbar__input{
       width:100%; height:40px; padding:0 44px 0 16px;
       border-radius:14px; border:1px solid rgba(255,255,255,.12); outline:none;
-      background: radial-gradient(400px 80px at 50% 0%, rgba(124,199,255,.06), transparent 60%), #151720;
+      background:#151720;
       color:var(--text); box-shadow:inset 0 0 0 1px rgba(255,255,255,.02);
-      transition:.18s border-color, .18s box-shadow, .18s background-color;
     }
     .customize-navbar__input::placeholder{color:#8b93a6}
-    .customize-navbar__input:focus{
-      border-color:rgba(124,199,255,.5); box-shadow:0 0 0 4px rgba(124,199,255,.15); background:#141826;
-    }
     .customize-navbar__btn{
       position:absolute; right:6px; top:50%;
       transform:translateY(-50%);
       border:0; border-radius:10px; width:36px; height:36px; cursor:pointer;
       background:linear-gradient(180deg,#1b2231,#151b27); color:var(--text);
-      display:grid; place-items:center; outline:none;
+      display:grid; place-items:center;
     }
-    .customize-navbar__btn:focus{ box-shadow:0 0 0 3px rgba(124,199,255,.25) }
     .customize-navbar__right{display:flex;align-items:center;gap:10px;padding-left:8px;height:40px}
     .customize-navbar__icon{
       display:grid; place-items:center; width:34px; height:34px; border-radius:10px;
       color:#cfd6e6; border:1px solid rgba(255,255,255,.07);
       background:linear-gradient(180deg,#161925,#121521);
-      transition:.15s transform,.15s border-color,.15s background-color,.15s color;
     }
-    .customize-navbar__icon:hover{ color:#e8f0ff; transform:translateY(-1px); border-color:rgba(124,199,255,.35) }
 
     /* -------- PAGE LAYOUT -------- */
-    .container{max-width:1100px;margin:22px auto 64px;padding:0 16px}
-
-    /* Center hero content */
-    .hero{
-      display:grid; grid-template-columns:1fr; gap:16px;
-      justify-items:center; text-align:center;
-      background:linear-gradient(180deg, rgba(124,199,255,.08), rgba(249,119,148,.07)), var(--panel);
-      border:1px solid var(--border); border-radius:var(--radius-lg); padding:20px; box-shadow:var(--shadow);
-    }
-    .title{font-weight:900;font-size:clamp(22px,3vw,34px);letter-spacing:.2px;line-height:1.1}
-    .subtitle{color:var(--muted);margin-top:6px;font-size:clamp(13px,1.6vw,15px)}
-
-    /* Center the tabs row */
-    .tabs{display:flex;gap:8px;padding:14px;margin:18px auto 0;background:var(--panel-2);border:1px solid var(--border);border-radius:var(--radius);justify-content:center;max-width:fit-content}
-    .tab{position:relative;padding:10px 14px;border-radius:10px;cursor:pointer;text-transform:uppercase;letter-spacing:.75px;font-size:12px;color:var(--muted);user-select:none;text-decoration:none}
+    .container{max-width:1200px;margin:22px auto 64px;padding:0 16px}
+    .hero{display:grid;grid-template-columns:1fr;gap:16px;background:var(--panel);border:1px solid var(--border);border-radius:var(--radius-lg);padding:18px;box-shadow:var(--shadow)}
+    .title{text-align:center;font-weight:900;font-size:clamp(22px,3vw,34px)}
+    .subtitle{text-align:center;color:var(--muted);margin-top:6px}
+    .tabs{display:flex;justify-content:center;gap:8px;padding:14px;margin-top:14px;background:var(--panel-2);border:1px solid var(--border);border-radius:var(--radius)}
+    .tab{padding:10px 14px;border-radius:10px;cursor:pointer;text-transform:uppercase;font-size:12px;color:var(--muted);text-decoration:none}
     .tab.active{color:var(--text);background:rgba(124,199,255,.06)}
-    .tab.active::after{content:"";position:absolute;left:12px;right:12px;bottom:6px;height:2px;background:linear-gradient(90deg, var(--accent), var(--accent-2));border-radius:2px}
 
-    .work{display:grid;grid-template-columns:1.05fr .95fr;gap:16px;margin-top:14px}
+    .work{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:14px}
     @media (max-width:1000px){.work{grid-template-columns:1fr}}
-
-    .panel{background:var(--panel);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden}
-    .panel .head{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 12px;border-bottom:1px solid var(--border);background:linear-gradient(180deg, rgba(255,255,255,.03), transparent)}
+    .panel{background:var(--panel);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow)}
+    .panel .head{display:flex;align-items:center;justify-content:space-between;padding:10px 12px;border-bottom:1px solid var(--border)}
     .panel .head .title{font-weight:700;font-size:14px}
     .panel .head .hint{color:var(--muted);font-size:12px}
     .btns{display:flex;gap:8px;flex-wrap:wrap}
     .btn{border:1px solid var(--border);background:var(--chip);color:var(--text);padding:8px 10px;border-radius:10px;font-size:12px;cursor:pointer}
-    .btn:hover{border-color:var(--accent);box-shadow:var(--ring)}
-    .btn.ok{background:rgba(32,201,151,.12);border-color:rgba(32,201,151,.4)}
-    .btn.warn{background:rgba(255,180,0,.12);border-color:rgba(255,180,0,.4)}
-    .btn.err{background:rgba(239,71,111,.12);border-color:rgba(239,71,111,.4)}
 
-    /* -------- Preview / tips styling (restored) -------- */
-    .preview{padding:12px}
-    .preview .box{
-      padding:14px;border-radius:14px;
-      background:linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,.01));
-      border:1px solid rgba(255,255,255,.08);
-    }
-    .preview .box pre{color:#cbd3e3;}
-
-    /* -------- Prism-Live editors -------- */
-    .editor-wrap{
-      position:relative;height:min(70vh,680px);overflow:auto;background:#0a0b12
-    }
-    /* Line numbers rail */
+    /* -------- Editors (no syntax highlighting) -------- */
+    .editor-wrap{position:relative;height:min(70vh,680px);overflow:auto;background:#0a0b12}
     .ln{
-      position:absolute; left:0; top:0; bottom:0; width:48px;
-      background:#08090f; color:#6c7aa5; border-right:1px solid #0d0f1a;
-      text-align:right; padding:18px 8px; font:500 var(--code-size)/1.6 var(--mono);
-      user-select:none; z-index:2;
+      position:absolute; left:0; top:0; bottom:0; width:40px;
+      background:#08090f; color:#6272a4; border-right:1px solid #0d0f1a;
+      text-align:right; padding:18px 6px; font:500 var(--code-size)/1.6 var(--mono);
     }
-    /* Editable code surface */
     .live-editor{
-      box-sizing:border-box; margin:0; outline:0; border:0; background:transparent;
-      font:500 var(--code-size)/1.6 var(--mono); color:#e6eaff; caret-color:#a7d0ff;
+      margin:0; outline:0; border:0; background:transparent;
+      font:500 var(--code-size)/1.6 var(--mono);
+      color:var(--text);
       white-space:pre; tab-size:2; -moz-tab-size:2;
-      padding:18px 18px 18px 64px; min-height:100%; position:relative; z-index:1;
-    }
-    /* Ensure Prism token colors pop over the dark bg (theme-safe tweaks) */
-    .token.comment,.token.prolog,.token.doctype,.token.cdata{color:#6c7aa5}
-    .token.punctuation{color:#aab2c0}
-    .token.property,.token.tag,.token.constant,.token.symbol,.token.deleted{color:#ff8b8b}
-    .token.boolean,.token.number{color:#ffd27f}
-    .token.selector,.token.attr-name,.token.string,.token.char,.token.builtin,.token.inserted{color:#9df7c9}
-    .token.operator,.token.entity,.token.url{color:#7cc7ff}
-    .token.atrule,.token.attr-value,.token.keyword{color:#bba7ff}
-    .token.function,.token.class-name{color:#84d0ff}
-    .token.regex,.token.important,.token.variable{color:#f6a2d8}
-
-    /* Footer (restored) */
-    footer{
-      margin:40px auto 24px; max-width:1100px; padding:12px 16px; color:var(--muted);
-      text-align:center; opacity:.9
+      padding:18px 18px 18px 54px;
+      min-height:100%;
     }
   </style>
-
-  <!-- Prism + Prism-Live (proxied) -->
-  <link rel="stylesheet" href="https://p.poketube.fun/https://cdn.jsdelivr.net/npm/prismjs@1/themes/prism-tomorrow.min.css">
-  <link rel="stylesheet" href="https://p.poketube.fun/https://cdn.jsdelivr.net/npm/prism-live@1/prism-live.css">
-  <script>
-    /* Make sure autoloader knows where to fetch languages */
-    window.Prism = window.Prism || {};
-    window.Prism.plugins = window.Prism.plugins || {};
-  </script>
-  <script src="https://p.poketube.fun/https://cdn.jsdelivr.net/npm/prismjs@1/prism.min.js"></script>
-  <script src="https://p.poketube.fun/https://cdn.jsdelivr.net/npm/prismjs@1/plugins/autoloader/prism-autoloader.min.js"></script>
-  <script>Prism.plugins.autoloader.languages_path='https://p.poketube.fun/https://cdn.jsdelivr.net/npm/prismjs@1/components/';</script>
-  <script src="https://p.poketube.fun/https://cdn.jsdelivr.net/npm/prism-live@1/prism-live.min.js"></script>
 </head>
 <body>
   <div class="app gradient-bg">
@@ -182,15 +119,15 @@
       </div>
       <div class="customize-navbar__middle">
         <form class="customize-navbar__search" action="/search">
-          <input id="fname" name="query" class="customize-navbar__input" type="search" placeholder="Search videos, channels…" aria-label="Search" autocomplete="on"/>
-          <button class="customize-navbar__btn" type="submit" aria-label="Search"><i class="fa-light fa-search"></i></button>
+          <input id="fname" name="query" class="customize-navbar__input" type="search" placeholder="Search videos, channels…" />
+          <button class="customize-navbar__btn" type="submit"><i class="fa-light fa-search"></i></button>
         </form>
       </div>
       <div class="customize-navbar__right">
-        <a class="customize-navbar__icon" href="/domains" aria-label="Domains"><i class="fa-light fa-server"></i></a>
-        <a class="customize-navbar__icon" href="/privacy" aria-label="Privacy"><i class="fa-light fa-shield"></i></a>
-        <a class="customize-navbar__icon" href="/video/upload?from=" aria-label="Upload"><i class="fa-light fa-video"></i></a>
-        <a class="customize-navbar__icon" href="https://codeberg.org/Ashley/poketube/issues" aria-label="Report a bug"><i class="fa-light fa-bug"></i></a>
+        <a class="customize-navbar__icon" href="/domains"><i class="fa-light fa-server"></i></a>
+        <a class="customize-navbar__icon" href="/privacy"><i class="fa-light fa-shield"></i></a>
+        <a class="customize-navbar__icon" href="/video/upload?from="><i class="fa-light fa-video"></i></a>
+        <a class="customize-navbar__icon" href="https://codeberg.org/Ashley/poketube/issues"><i class="fa-light fa-bug"></i></a>
       </div>
     </nav>
 
@@ -202,121 +139,66 @@
         </div>
       </section>
 
-      <div class="tabs" role="tablist" aria-label="Customization Tabs">
+      <div class="tabs">
         <% if (!tab) { %>
-          <a class="tab active" role="tab" aria-selected="true" href="/customize">Custom CSS</a>
-          <a class="tab" role="tab" aria-selected="false" href="/customize?tab=js">Custom JS</a>
+          <a class="tab active" href="/customize">Custom CSS</a>
+          <a class="tab" href="/customize?tab=js">Custom JS</a>
         <% } else { %>
-          <a class="tab" role="tab" aria-selected="false" href="/customize">Custom CSS</a>
-          <a class="tab active" role="tab" aria-selected="true" href="/customize?tab=js">Custom JS</a>
+          <a class="tab" href="/customize">Custom CSS</a>
+          <a class="tab active" href="/customize?tab=js">Custom JS</a>
         <% } %>
       </div>
 
       <% if (!tab) { %>
-      <!-- ---------------- CSS TAB ---------------- -->
-      <section class="work" aria-label="Custom CSS workspace">
+      <section class="work">
         <div class="panel">
           <div class="head">
-            <div>
-              <div class="title">Custom CSS Editor</div>
-              <div class="hint">Saved to <code>localStorage['poke-custom-css']</code></div>
-            </div>
+            <div><div class="title">Custom CSS Editor</div><div class="hint">Saved to <code>localStorage['poke-custom-css']</code></div></div>
             <div class="btns">
-              <button class="btn ok" id="saveCssBtn"><i class="fa-light fa-floppy-disk"></i> Save</button>
+              <button class="btn ok" id="saveCssBtn">Save</button>
               <button class="btn" id="formatCssBtn">Format</button>
               <button class="btn" id="wrapCssBtn" data-wrap="1">Wrap: On</button>
               <button class="btn" id="copyCssBtn">Copy</button>
               <button class="btn warn" id="exportCssBtn">Export</button>
-              <label class="btn warn" for="importCssFile" style="cursor:pointer"><i class="fa-light fa-file-arrow-up"></i> Import
-                <input id="importCssFile" type="file" accept=".css,text/css,text/plain" style="display:none">
-              </label>
+              <label class="btn warn" for="importCssFile">Import<input id="importCssFile" type="file" accept=".css,text/css,text/plain" style="display:none"></label>
               <button class="btn err" id="resetCssBtn">Reset</button>
             </div>
           </div>
-
-          <div class="editor-wrap" id="cssWrap">
-            <pre class="ln" id="cssLines">1</pre>
-            <pre id="cssEd" class="live-editor prism-live language-css" contenteditable
-                 aria-label="Custom CSS" data-keep-tabs spellcheck="false"></pre>
-          </div>
+          <div class="editor-wrap"><pre class="ln" id="cssLines">1</pre><pre id="cssEd" class="live-editor" contenteditable></pre></div>
         </div>
-
         <div class="panel">
-          <div class="head">
-            <div>
-              <div class="title">Live Preview</div>
-              <div class="hint">CSS below applies to this page (isolated box)</div>
-            </div>
-            <div class="btns"><button class="btn" id="reloadPreviewCss"><i class="fa-light fa-rotate"></i> Reload</button></div>
-          </div>
-          <div class="preview">
-            <div class="box" id="cssPreviewBox">
-              <p style="margin-top:0">Preview area — try:</p>
-              <pre style="margin:0" aria-hidden="true">nav{backdrop-filter:blur(16px)} .tab.active{filter:drop-shadow(0 0 10px #7cc7ff)}</pre>
-            </div>
-          </div>
+          <div class="head"><div class="title">Live Preview</div></div>
+          <div class="preview"><div class="box" id="cssPreviewBox"><p>Preview area</p></div></div>
         </div>
       </section>
       <% } %>
 
       <% if (tab) { %>
-      <!-- ---------------- JS TAB ---------------- -->
-      <section class="work" aria-label="Custom JS workspace">
+      <section class="work">
         <div class="panel">
-          <div class="head">
-            <div>
-              <div class="title">Custom JS Editor</div>
-              <div class="hint">Saved to <code>localStorage['poke-custom-script']</code></div>
-            </div>
-            <div class="btns">
-              <button class="btn ok" id="saveJsBtn"><i class="fa-light fa-floppy-disk"></i> Save</button>
-              <button class="btn" id="formatJsBtn">Format</button>
-              <button class="btn" id="wrapJsBtn" data-wrap="1">Wrap: On</button>
-              <button class="btn" id="copyJsBtn">Copy</button>
-              <button class="btn warn" id="exportJsBtn">Export</button>
-              <label class="btn warn" for="importJsFile" style="cursor:pointer"><i class="fa-light fa-file-arrow-up"></i> Import
-                <input id="importJsFile" type="file" accept=".js,application/javascript,text/javascript,text/plain" style="display:none">
-              </label>
-              <button class="btn err" id="resetJsBtn">Reset</button>
-            </div>
+          <div class="head"><div class="title">Custom JS Editor</div><div class="hint">Saved to <code>localStorage['poke-custom-script']</code></div></div>
+          <div class="btns">
+            <button class="btn ok" id="saveJsBtn">Save</button>
+            <button class="btn" id="formatJsBtn">Format</button>
+            <button class="btn" id="wrapJsBtn" data-wrap="1">Wrap: On</button>
+            <button class="btn" id="copyJsBtn">Copy</button>
+            <button class="btn warn" id="exportJsBtn">Export</button>
+            <label class="btn warn" for="importJsFile">Import<input id="importJsFile" type="file" accept=".js,text/javascript,text/plain" style="display:none"></label>
+            <button class="btn err" id="resetJsBtn">Reset</button>
           </div>
-
-          <div class="editor-wrap" id="jsWrap">
-            <pre class="ln" id="jsLines">1</pre>
-            <pre id="jsEd" class="live-editor prism-live language-javascript" contenteditable
-                 aria-label="Custom JS" data-keep-tabs spellcheck="false"></pre>
-          </div>
-        </div>
-
-        <div class="panel">
-          <div class="head"><div class="title">Note</div><div class="hint">Code runs on Poke pages via the site loader.</div></div>
-          <div class="preview">
-            <div class="box">
-              <p style="margin-top:0">Snippet idea:</p>
-<pre style="margin:0"><code>// Add a badge to the navbar
-document.addEventListener('DOMContentLoaded', () => {
-  const nav = document.querySelector('.customize-navbar__right');
-  if (!nav) return;
-  const b = document.createElement('span');
-  b.textContent = 'Custom JS Active';
-  b.style.cssText = 'margin-left:8px;padding:4px 8px;border-radius:999px;background:#1a2a40;color:#a8dcff;font:600 11px/1 var(--sans)';
-  nav.appendChild(b);
-});</code></pre>
-            </div>
-          </div>
+          <div class="editor-wrap"><pre class="ln" id="jsLines">1</pre><pre id="jsEd" class="live-editor" contenteditable></pre></div>
         </div>
       </section>
       <% } %>
     </div>
 
     <footer>
-      <div>© 2021–2025 PokeTube • Free software under the GNU GPL. Customizations are stored locally on the device.</div>
+      <div style="text-align:center;margin-top:32px;color:var(--muted)">© 2021–2025 PokeTube • Free software under the GNU GPL. Customizations are stored locally on the device.</div>
     </footer>
   </div>
 
   <!-- ================= SCRIPTS ================ -->
   <script>
-    /* utils */
     const $ = s => document.querySelector(s);
     const on = (el, ev, fn) => el && el.addEventListener(ev, fn, { passive:true });
     const saveFile = (name, content, type='text/plain') => {
@@ -325,30 +207,18 @@ document.addEventListener('DOMContentLoaded', () => {
       const a = document.createElement('a'); a.href = url; a.download = name;
       document.body.appendChild(a); a.click(); URL.revokeObjectURL(url); a.remove();
     };
-    const copyText = async (txt) => { try { await navigator.clipboard.writeText(txt); toast('Copied'); } catch { toast('Copy failed', true); } };
-    const toast = (msg,bad=false)=>{
-      const t=document.createElement('div'); t.textContent=msg;
-      t.style.cssText='position:fixed;left:50%;bottom:22px;transform:translateX(-50%);background:'+(bad?'#4d1622':'#132a20')+';color:#fff;padding:10px 14px;border:1px solid rgba(255,255,255,.12);border-radius:12px;z-index:9999';
-      document.body.appendChild(t); setTimeout(()=>t.remove(),1500);
-    };
+    const copyText = async (txt) => { try { await navigator.clipboard.writeText(txt); } catch {} };
     const debounce = (fn,ms=120)=>{ let t; return (...a)=>{ clearTimeout(t); t=setTimeout(()=>fn(...a),ms); }; };
-    const basicFormatCSS = s => { try { return s.replace(/\{/g,'{\n  ').replace(/\;/g,';\n  ').replace(/\}\s*/g,'\n}\n').replace(/\n\s+\n/g,'\n'); } catch { return s } };
-    const basicFormatJS  = s => { try { return s.replace(/;\s*/g,';\n').replace(/\{\s*/g,'{\n  ').replace(/\}\s*/g,'\n}\n').replace(/\)\s*\{/g,') {\n  ').replace(/\n\s+\n/g,'\n'); } catch { return s } };
 
-    /* line numbers helper */
     function setLines(preEl, lnEl){
       const lines = preEl.textContent.split('\n').length || 1;
       let out=''; for (let i=1;i<=lines;i++) out += i + (i<lines?'\n':'');
       lnEl.textContent = out;
     }
-
-    /* wrap toggle */
     function setWrap(preEl, onwrap){
       preEl.style.whiteSpace = onwrap ? 'pre-wrap' : 'pre';
       preEl.style.overflowWrap = onwrap ? 'anywhere' : 'normal';
     }
-
-    /* storage helpers */
     function loadEditor(preEl, storageKey, fallback){
       const saved = localStorage.getItem(storageKey);
       preEl.textContent = saved ?? fallback;
@@ -356,88 +226,26 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     function saveEditor(preEl, storageKey){
       localStorage.setItem(storageKey, preEl.textContent);
-      toast('Saved');
     }
 
-    /* CSS tab */
     <% if (!tab) { %>
       const cssEd = $('#cssEd'), cssLines = $('#cssLines');
-      const defaultCss = `/* Site-wide CSS example:
-
-nav { backdrop-filter: blur(16px) saturate(120%); }
-.tab.active { filter: drop-shadow(0 0 10px #7cc7ff); }
-:root { --accent: #9df7c9; }
-
-*/`;
-      loadEditor(cssEd, 'poke-custom-css', defaultCss);
-
-      /* Live page preview of CSS */
-      const cssPreviewStyle = document.createElement('style'); cssPreviewStyle.id='custom-css-preview'; document.body.appendChild(cssPreviewStyle);
+      loadEditor(cssEd, 'poke-custom-css', "/* Custom CSS */");
+      const cssPreviewStyle = document.createElement('style'); document.body.appendChild(cssPreviewStyle);
       const applyCssPreview = ()=>{ cssPreviewStyle.textContent = cssEd.textContent || ''; };
-
-      /* Sync line numbers & highlight as you type */
-      on(cssEd, 'input', debounce(()=>{
-        setLines(cssEd, cssLines);
-        if (window.Prism && Prism.highlightElement) Prism.highlightElement(cssEd);
-        applyCssPreview();
-      }, 50));
-      on(cssEd, 'scroll', ()=>{ cssLines.scrollTop = cssEd.scrollTop; });
-
-      /* Controls */
-      on($('#saveCssBtn'), 'click', ()=> saveEditor(cssEd,'poke-custom-css'));
-      on($('#formatCssBtn'),'click', ()=>{ cssEd.textContent = basicFormatCSS(cssEd.textContent); cssEd.dispatchEvent(new Event('input')); });
-      on($('#copyCssBtn'),  'click', ()=> copyText(cssEd.textContent));
-      on($('#exportCssBtn'),'click', ()=> saveFile('poke-custom-css.css', cssEd.textContent, 'text/css'));
-      on($('#resetCssBtn'), 'click', ()=>{ if(confirm('Clear the editor?')){ cssEd.textContent=''; cssEd.dispatchEvent(new Event('input')); saveEditor(cssEd,'poke-custom-css'); }});
-      on($('#importCssFile'),'change', async e=>{ const f=e.target.files?.[0]; if(!f) return; const t=await f.text(); cssEd.textContent=t; cssEd.dispatchEvent(new Event('input')); });
-      on($('#wrapCssBtn'),'click', e=>{ const b=e.currentTarget; const onw=b.getAttribute('data-wrap')==='1'; setWrap(cssEd,!onw); b.setAttribute('data-wrap', onw?'0':'1'); b.textContent='Wrap: ' + (onw?'Off':'On'); });
-      on($('#reloadPreviewCss'),'click', applyCssPreview);
-
-      /* Kick highlighting once on load so tokens appear */
-      requestAnimationFrame(()=>{ cssEd.dispatchEvent(new Event('input')); applyCssPreview(); });
+      on(cssEd,'input',debounce(()=>{setLines(cssEd,cssLines);applyCssPreview()},50));
+      on($('#saveCssBtn'),'click',()=> saveEditor(cssEd,'poke-custom-css'));
+      on($('#exportCssBtn'),'click',()=> saveFile('poke-custom-css.css', cssEd.textContent,'text/css'));
     <% } %>
 
-    /* JS tab */
     <% if (tab) { %>
       const jsEd = $('#jsEd'), jsLines = $('#jsLines');
-      const defaultJs = `// Code runs on Poke pages.
-// To avoid race conditions, wait for DOMContentLoaded:
-document.addEventListener('DOMContentLoaded', () => {
-  console.log('[Poke Custom] hello!');
-});`;
-      loadEditor(jsEd, 'poke-custom-script', defaultJs);
-
-      on(jsEd, 'input', debounce(()=>{
-        setLines(jsEd, jsLines);
-        if (window.Prism && Prism.highlightElement) Prism.highlightElement(jsEd);
-      }, 50));
-      on(jsEd, 'scroll', ()=>{ jsLines.scrollTop = jsEd.scrollTop; });
-
-      on($('#saveJsBtn'), 'click', ()=> saveEditor(jsEd,'poke-custom-script'));
-      on($('#formatJsBtn'),'click', ()=>{ jsEd.textContent = basicFormatJS(jsEd.textContent); jsEd.dispatchEvent(new Event('input')); });
-      on($('#copyJsBtn'),  'click', ()=> copyText(jsEd.textContent));
-      on($('#exportJsBtn'),'click', ()=> saveFile('poke-custom-script.js', jsEd.textContent, 'application/javascript'));
-      on($('#resetJsBtn'), 'click', ()=>{ if(confirm('Clear the editor?')){ jsEd.textContent=''; jsEd.dispatchEvent(new Event('input')); saveEditor(jsEd,'poke-custom-script'); }});
-      on($('#importJsFile'),'change', async e=>{ const f=e.target.files?.[0]; if(!f) return; const t=await f.text(); jsEd.textContent=t; jsEd.dispatchEvent(new Event('input')); });
-      on($('#wrapJsBtn'),'click', e=>{ const b=e.currentTarget; const onw=b.getAttribute('data-wrap')==='1'; setWrap(jsEd,!onw); b.setAttribute('data-wrap', onw?'0':'1'); b.textContent='Wrap: ' + (onw?'Off':'On'); });
-
-      /* Kick highlighting on load */
-      requestAnimationFrame(()=>{ jsEd.dispatchEvent(new Event('input')); });
+      loadEditor(jsEd, 'poke-custom-script', "// Custom JS");
+      on(jsEd,'input',debounce(()=> setLines(jsEd,jsLines),50));
+      on($('#saveJsBtn'),'click',()=> saveEditor(jsEd,'poke-custom-script'));
+      on($('#exportJsBtn'),'click',()=> saveFile('poke-custom-script.js', jsEd.textContent,'application/javascript'));
     <% } %>
-
-    /* Global save shortcut */
-    document.addEventListener('keydown', (e)=>{
-      if ((e.ctrlKey||e.metaKey) && e.key.toLowerCase()==='s'){
-        e.preventDefault();
-        const cssBtn = document.querySelector('#saveCssBtn');
-        const jsBtn  = document.querySelector('#saveJsBtn');
-        if (cssBtn && getComputedStyle(cssBtn).display !== 'none') cssBtn.click();
-        if (jsBtn  && getComputedStyle(jsBtn).display  !== 'none')  jsBtn.click();
-      }
-    });
   </script>
-
-  <!-- applies saved CSS/JS globally -->
   <script src="/css/custom-css.js"></script>
 </body>
 </html>

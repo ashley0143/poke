@@ -336,10 +336,7 @@
       const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
       if(reduce){ v.pause(); v.removeAttribute('autoplay'); v.currentTime = 0; }
        v.muted = true; v.playsInline = true; v.setAttribute('playsinline','');
-      const tryPlay = () => v.play().catch(()=>{/* ignore */});
-      document.addEventListener('visibilitychange', ()=>{ if(!document.hidden) tryPlay(); });
-      window.addEventListener('pointerdown', tryPlay, {once:true, passive:true});
-      tryPlay();
+      
     })();
 
     // Keyboard focus order for cards

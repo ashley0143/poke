@@ -157,14 +157,10 @@ class InnerTubePokeVidious {
         return this.cache[v].result;
       } else {
         this.initError("Invalid video object (missing authorId)", vid);
-        return {
-          error: true,
-          message: "Sorry nya, this video seems incomplete qwq (missing author info)",
-        };
+      
       }
     } catch (error) {
       this.initError("Error getting video", error);
-      return { error: true, message: "Internal error while fetching video info" };
     }
   }
 

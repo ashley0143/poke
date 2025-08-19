@@ -75,7 +75,7 @@
       background:linear-gradient(180deg,#161925,#121521);
     }
 
-    /* -------- PAGE LAYOUT -------- */
+    /* -------- PAGE LAYOUT -------- * /
     .container{max-width:1200px;margin:22px auto 64px;padding:0 16px}
     .hero{display:grid;grid-template-columns:1fr;gap:16px;background:var(--panel);border:1px solid var(--border);border-radius:var(--radius-lg);padding:18px;box-shadow:var(--shadow)}
     .title{text-align:center;font-weight:900;font-size:clamp(22px,3vw,34px)}
@@ -86,7 +86,7 @@
 
     .work{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:14px}
     @media (max-width:1000px){.work{grid-template-columns:1fr}}
-    .panel{background:var(--panel);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow)}
+    .panel{background:var(--panel);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow)   min-width: 73em;}
     .panel .head{display:flex;align-items:center;justify-content:space-between;padding:10px 12px;border-bottom:1px solid var(--border)}
     .panel .head .title{font-weight:700;font-size:14px}
     .panel .head .hint{color:var(--muted);font-size:12px}
@@ -156,9 +156,7 @@
             <div><div class="title">Custom CSS Editor</div><div class="hint">Saved to <code>localStorage['poke-custom-css']</code></div></div>
             <div class="btns">
               <button class="btn ok" id="saveCssBtn">Save</button>
-              <button class="btn" id="formatCssBtn">Format</button>
-              <button class="btn" id="wrapCssBtn" data-wrap="1">Wrap: On</button>
-              <button class="btn" id="copyCssBtn">Copy</button>
+                <button class="btn" id="copyCssBtn">Copy</button>
               <button class="btn warn" id="exportCssBtn">Export</button>
               <label class="btn warn" for="importCssFile">Import<input id="importCssFile" type="file" accept=".css,text/css,text/plain" style="display:none"></label>
               <button class="btn err" id="resetCssBtn">Reset</button>
@@ -176,9 +174,7 @@
           <div class="head"><div class="title">Custom JS Editor</div><div class="hint">Saved to <code>localStorage['poke-custom-script']</code></div></div>
           <div class="btns">
             <button class="btn ok" id="saveJsBtn">Save</button>
-            <button class="btn" id="formatJsBtn">Format</button>
-            <button class="btn" id="wrapJsBtn" data-wrap="1">Wrap: On</button>
-            <button class="btn" id="copyJsBtn">Copy</button>
+              <button class="btn" id="copyJsBtn">Copy</button>
             <button class="btn warn" id="exportJsBtn">Export</button>
             <label class="btn warn" for="importJsFile">Import<input id="importJsFile" type="file" accept=".js,text/javascript,text/plain" style="display:none"></label>
             <button class="btn err" id="resetJsBtn">Reset</button>

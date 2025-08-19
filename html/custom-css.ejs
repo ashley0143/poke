@@ -42,7 +42,7 @@
     *{box-sizing:border-box}
     body{margin:0;color:var(--text);font-family:var(--sans);background:transparent;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;overflow-x:hidden}
 
-    /* -------- NAVBAR (isolated) -------- */
+    /* -------- NAVBAR -------- */
     .customize-navbar{
       display:flex; align-items:center; gap:16px; padding:12px 20px;
       position:sticky; top:0; z-index:2000; min-height:62px;
@@ -109,53 +109,37 @@
     .btn.warn{background:rgba(255,180,0,.12);border-color:rgba(255,180,0,.4)}
     .btn.err{background:rgba(239,71,111,.12);border-color:rgba(239,71,111,.4)}
 
-    /* -------- Editor (textarea overlayed by Prism) -------- */
+    /* -------- Prism-Live editors -------- */
     .editor-wrap{position:relative;height:min(70vh,680px);overflow:auto;background:#0a0b12}
-    .editor{
-      position:absolute; inset:0; resize:none; width:100%; height:100%;
-      padding:18px 18px 18px 54px;
-      border:0; outline:0; background:transparent; color:transparent;
-      caret-color:var(--text);
-      font:500 var(--code-size)/1.6 var(--mono);
-      white-space:pre; overflow:auto; tab-size:2; -moz-tab-size:2;
-      -webkit-text-size-adjust:100%;
-    }
-    .hl{
-      pointer-events:none; user-select:none;
-      padding:18px 18px 18px 54px; min-height:100%;
-      font:500 var(--code-size)/1.6 var(--mono);
-      white-space:pre; color:var(--text);
-    }
     .ln{
       position:absolute; left:0; top:0; bottom:0; width:40px;
       background:#08090f; color:#6272a4; border-right:1px solid #0d0f1a;
       text-align:right; padding:18px 6px; font:500 var(--code-size)/1.6 var(--mono);
       user-select:none;
     }
-
-    .preview{padding:14px;background:var(--panel-2)}
-    .preview .box{border:1px dashed var(--border);border-radius:12px;padding:14px;background:#0b0d14;min-height:180px}
-
-    footer{max-width:1200px;margin:40px auto 50px;padding:0 16px;color:var(--muted);font-size:12px}
-    .btn:focus,.tab:focus{outline:none;box-shadow:var(--ring)}
-  </style>
-
-  <!-- Prism (through proxy) -->
-  <link rel="stylesheet" href="https://p.poketube.fun/https://cdn.jsdelivr.net/npm/prismjs@1/themes/prism-tomorrow.min.css">
-  <style>
-    .hl code[class*="language-"]{
-      background:transparent!important;
+    /* The editor itself is a single element now */
+    .live-editor{
+      box-sizing:border-box;
+      margin:0; outline:0; border:0; background:transparent;
       font:500 var(--code-size)/1.6 var(--mono);
-      color:var(--text); white-space:pre;
+      color:var(--text);
+      white-space:pre; tab-size:2; -moz-tab-size:2;
+      padding:18px 18px 18px 54px;
+      min-height:100%;
     }
   </style>
-  <script src="https://p.poketube.fun/https://cdn.jsdelivr.net/npm/prismjs@1/components/prism-core.min.js"></script>
+
+  <!-- Prism + Prism-Live (proxied) -->
+  <link rel="stylesheet" href="https://p.poketube.fun/https://cdn.jsdelivr.net/npm/prismjs@1/themes/prism-tomorrow.min.css">
+  <link rel="stylesheet" href="https://p.poketube.fun/https://cdn.jsdelivr.net/npm/prism-live@1/prism-live.css">
+  <script src="https://p.poketube.fun/https://cdn.jsdelivr.net/npm/prismjs@1/prism.min.js"></script>
   <script src="https://p.poketube.fun/https://cdn.jsdelivr.net/npm/prismjs@1/plugins/autoloader/prism-autoloader.min.js"></script>
   <script>Prism.plugins.autoloader.languages_path='https://p.poketube.fun/https://cdn.jsdelivr.net/npm/prismjs@1/components/';</script>
+  <script src="https://p.poketube.fun/https://cdn.jsdelivr.net/npm/prism-live@1/prism-live.min.js"></script>
 </head>
 <body>
   <div class="app gradient-bg">
-    <!-- NEW NAVBAR -->
+    <!-- NAVBAR -->
     <nav class="customize-navbar">
       <div class="customize-navbar__left">
         <a href="/143"><img class="customize-navbar__logo" src="/css/logo.svg?v=5" alt="PokeTube"></a>
@@ -213,11 +197,12 @@
               <button class="btn err" id="resetCssBtn">Reset</button>
             </div>
           </div>
-          <div class="editor-wrap" id="cssWrap" aria-label="CSS code editor">
+
+          <div class="editor-wrap" id="cssWrap">
             <pre class="ln" id="cssLines">1</pre>
-            <pre class="hl" id="cssHl" aria-hidden="true" role="presentation"></pre>
-            <textarea id="cssEd" class="editor" aria-label="Custom CSS"
-              autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></textarea>
+            <!-- Single live editor (no overlay) -->
+            <pre id="cssEd" class="live-editor prism-live language-css" contenteditable
+                 aria-label="Custom CSS" data-keep-tabs spellcheck="false"></pre>
           </div>
         </div>
 
@@ -260,11 +245,12 @@
               <button class="btn err" id="resetJsBtn">Reset</button>
             </div>
           </div>
-          <div class="editor-wrap" id="jsWrap" aria-label="JS code editor">
+
+          <div class="editor-wrap" id="jsWrap">
             <pre class="ln" id="jsLines">1</pre>
-            <pre class="hl" id="jsHl" aria-hidden="true" role="presentation"></pre>
-            <textarea id="jsEd" class="editor" aria-label="Custom JS"
-              autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></textarea>
+            <!-- Single live editor (no overlay) -->
+            <pre id="jsEd" class="live-editor prism-live language-javascript" contenteditable
+                 aria-label="Custom JS" data-keep-tabs spellcheck="false"></pre>
           </div>
         </div>
 
@@ -296,237 +282,102 @@ document.addEventListener('DOMContentLoaded', () => {
 
   <!-- ================= SCRIPTS ================ -->
   <script>
-    /* ---------- utils ---------- */
+    /* utils */
     const $ = s => document.querySelector(s);
     const on = (el, ev, fn) => el && el.addEventListener(ev, fn, { passive:true });
     const saveFile = (name, content, type='text/plain') => {
       const blob = new Blob([content], { type });
       const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url; a.download = name; document.body.appendChild(a); a.click();
-      URL.revokeObjectURL(url); a.remove();
+      const a = document.createElement('a'); a.href = url; a.download = name;
+      document.body.appendChild(a); a.click(); URL.revokeObjectURL(url); a.remove();
     };
-    const copyText = async (txt) => { try{ await navigator.clipboard.writeText(txt); toast('Copied'); } catch{ toast('Copy failed', true); } };
+    const copyText = async (txt) => { try { await navigator.clipboard.writeText(txt); toast('Copied'); } catch { toast('Copy failed', true); } };
     const toast = (msg,bad=false)=>{
-      const t=document.createElement('div');
-      t.textContent=msg;
+      const t=document.createElement('div'); t.textContent=msg;
       t.style.cssText='position:fixed;left:50%;bottom:22px;transform:translateX(-50%);background:'+(bad?'#4d1622':'#132a20')+';color:#fff;padding:10px 14px;border:1px solid rgba(255,255,255,.12);border-radius:12px;z-index:9999';
       document.body.appendChild(t); setTimeout(()=>t.remove(),1500);
     };
-    const debounce = (fn,ms=90)=>{ let t; return (...a)=>{ clearTimeout(t); t=setTimeout(()=>fn(...a),ms); }; };
+    const debounce = (fn,ms=120)=>{ let t; return (...a)=>{ clearTimeout(t); t=setTimeout(()=>fn(...a),ms); }; };
+    const basicFormatCSS = s => { try { return s.replace(/\{/g,'{\n  ').replace(/\;/g,';\n  ').replace(/\}\s*/g,'\n}\n').replace(/\n\s+\n/g,'\n'); } catch { return s } };
+    const basicFormatJS  = s => { try { return s.replace(/;\s*/g,';\n').replace(/\{\s*/g,'{\n  ').replace(/\}\s*/g,'\n}\n').replace(/\)\s*\{/g,') {\n  ').replace(/\n\s+\n/g,'\n'); } catch { return s } };
 
-    /* ---------- basic formatters ---------- */
-    const basicFormatCSS = s => { try{ return s.replace(/\{/g,'{\n  ').replace(/\;/g,';\n  ').replace(/\}\s*/g,'\n}\n').replace(/\n\s+\n/g,'\n'); }catch{ return s } };
-    const basicFormatJS  = s => { try{ return s.replace(/;\s*/g,';\n').replace(/\{\s*/g,'{\n  ').replace(/\}\s*/g,'\n}\n').replace(/\)\s*\{/g,') {\n  ').replace(/\n\s+\n/g,'\n'); }catch{ return s } };
-
-    /* ---------- clean old polluted saves (from pre-Prism versions) ---------- */
-    function stripHighlightArtifacts(s){
-      if (typeof s !== 'string') return s;
-      if (!/<span\s+class="tok\s/.test(s) && !/&lt;span\s+class="tok\s/.test(s)) return s;
-      let out = s.replace(/<\/span>/g, '').replace(/<span\s+class="tok\s[^>]*>/g, '');
-      out = out.replace(/&lt;/g,'<').replace(/&gt;/g,'>').replace(/&amp;/g,'&');
-      return out;
+    /* line numbers helper */
+    function setLines(preEl, lnEl){
+      const lines = preEl.textContent.split('\n').length || 1;
+      let out=''; for (let i=1;i<=lines;i++) out += i + (i<lines?'\n':'');
+      lnEl.textContent = out;
     }
 
-    /* ---------- Prism renderer ---------- */
-    function prismRender(preEl, lang, text){
-      preEl.innerHTML = '';
-      const code = document.createElement('code');
-      code.className = 'language-' + (lang==='css' ? 'css' : 'javascript');
-      code.textContent = text;   // never innerHTML
-      preEl.appendChild(code);
-      if (window.Prism) Prism.highlightElement(code);
+    /* wrap toggle (contenteditable works with CSS white-space) */
+    function setWrap(preEl, onwrap){
+      preEl.style.whiteSpace = onwrap ? 'pre-wrap' : 'pre';
+      preEl.style.overflowWrap = onwrap ? 'anywhere' : 'normal';
     }
 
-    /* ---------- Editor (textarea + passive Prism view) ---------- */
-    function makeEditor(edSel, hlSel, lnSel, { lang='css', storageKey, defaultValue='' }){
-      const ed = $(edSel), hl = $(hlSel), ln = $(lnSel);
-
-      const load = () => {
-        let saved = localStorage.getItem(storageKey);
-        if (saved === null) saved = defaultValue;
-        const cleaned = stripHighlightArtifacts(saved);
-        if (cleaned !== saved) { localStorage.setItem(storageKey, cleaned); saved = cleaned; }
-        return saved;
-      };
-
-      let lastLineCount = 1;
-      const setLines = (text) => {
-        const lines = text.split('\n').length;
-        if (lines === lastLineCount) return;
-        lastLineCount = lines;
-        let out = '';
-        for (let i=1;i<=lines;i++) out += i + (i<lines ? '\n' : '');
-        ln.textContent = out;
-      };
-
-      const render = (text) => { setLines(text); prismRender(hl, lang, text); };
-
-      // initial
-      const initial = load();
-      ed.value = initial; render(initial);
-
-      // scroll sync
-      const syncScroll = () => { hl.scrollTop = ed.scrollTop; hl.scrollLeft = ed.scrollLeft; ln.scrollTop = ed.scrollTop; };
-      on(ed, 'scroll', syncScroll);
-
-      // IME / composition guard: avoid “two textboxes” effect
-      let composing = false;
-      on(ed, 'compositionstart', ()=> composing = true);
-      on(ed, 'compositionupdate', ()=> composing = true);
-      on(ed, 'compositionend', ()=> { composing = false; render(ed.value); });
-
-      // input update (debounced; skipped while composing)
-      const update = () => { if (!composing) window.requestAnimationFrame(()=> render(ed.value)); };
-      on(ed, 'input', debounce(update, 40));
-
-      // focus overlay click sends focus to textarea
-      on(hl, 'mousedown', () => ed.focus());
-
-      // editor key helpers (indent/outdent, toggle comments)
-      on(ed, 'keydown', (e)=>{
-        const { selectionStart:s, selectionEnd:ePos, value:v } = ed;
-
-        // Save (Ctrl/Cmd+S)
-        if ((e.metaKey||e.ctrlKey) && e.key.toLowerCase()==='s'){ e.preventDefault(); save(); return; }
-
-        // Toggle comment (JS only)
-        if (lang==='js' && (e.metaKey||e.ctrlKey) && e.key === '/'){
-          e.preventDefault();
-          const lines = v.slice(s,ePos).split('\n');
-          const allCommented = lines.every(l=>l.trimStart().startsWith('//'));
-          const replaced = lines.map(l=>{
-            if (allCommented) return l.replace(/^\s*\/\/\s?/, '');
-            return l.replace(/^/, '// ');
-          }).join('\n');
-          replaceRange(s, ePos, replaced);
-          return;
-        }
-
-        // Tab / Shift+Tab
-        if (e.key === 'Tab'){
-          e.preventDefault();
-          const sel = v.slice(s,ePos);
-          if (s !== ePos && sel.includes('\n')){
-            const lines = sel.split('\n');
-            const out = e.shiftKey
-              ? lines.map(l=>l.replace(/^ {1,2}/,'')).join('\n')
-              : lines.map(l=>'  '+l).join('\n');
-            replaceRange(s, ePos, out);
-          } else {
-            if (e.shiftKey){
-              const startLine = v.lastIndexOf('\n', s-1)+1;
-              const m = /^ {1,2}/.exec(v.slice(startLine));
-              if (m) replaceRange(startLine, startLine+m[0].length, '');
-            } else {
-              insertAt(s, '  ');
-            }
-          }
-          return;
-        }
-      });
-
-      function insertAt(pos, text){
-        const val = ed.value;
-        ed.value = val.slice(0,pos) + text + val.slice(pos);
-        const np = pos + text.length;
-        ed.selectionStart = ed.selectionEnd = np;
-        render(ed.value);
-      }
-      function replaceRange(start, end, text){
-        const val = ed.value;
-        ed.value = val.slice(0,start) + text + val.slice(end);
-        ed.selectionStart = start;
-        ed.selectionEnd   = start + text.length;
-        render(ed.value);
-      }
-
-      // drag & drop import
-      ['dragenter','dragover'].forEach(evt => on(ed, evt, e=>{ e.preventDefault(); }));
-      on(ed, 'drop', e=>{
-        e.preventDefault();
-        const f = e.dataTransfer?.files?.[0];
-        if (!f) return;
-        const r = new FileReader();
-        r.onload = () => { ed.value = String(r.result||''); render(ed.value); save(); };
-        r.readAsText(f);
-      });
-
-      // actions
-      const save   = () => { localStorage.setItem(storageKey, ed.value); toast('Saved'); };
-      const reset  = () => { if (confirm('Clear the editor?')) { ed.value=''; render(ed.value); save(); } };
-      const copy   = () => copyText(ed.value);
-      const exportFile = () => saveFile(storageKey + (lang==='css'?'.css':'.js'), ed.value, 'text/plain');
-
-      return {
-        ed, hl, ln, save, reset, copy, exportFile, render, setLines,
-        setWrap:(onwrap)=>{ ed.style.whiteSpace = onwrap?'pre-wrap':'pre'; ed.style.overflowWrap = onwrap?'anywhere':'normal'; },
-        format:()=>{ if (lang==='css') ed.value = basicFormatCSS(ed.value); else ed.value = basicFormatJS(ed.value); render(ed.value); },
-        importFrom:(file)=> new Promise(res=>{
-          const r=new FileReader();
-          r.onload=()=>{ ed.value=String(r.result||''); render(ed.value); res(); };
-          r.readAsText(file);
-        })
-      };
+    /* storage helpers using textContent (no spans, no artifacts) */
+    function loadEditor(preEl, storageKey, fallback){
+      const saved = localStorage.getItem(storageKey);
+      preEl.textContent = saved ?? fallback;
+      setLines(preEl, preEl.previousElementSibling);
+    }
+    function saveEditor(preEl, storageKey){
+      localStorage.setItem(storageKey, preEl.textContent);
+      toast('Saved');
     }
 
-    /* ---------- init per tab ---------- */
+    /* CSS tab */
     <% if (!tab) { %>
-      const cssEditor = makeEditor('#cssEd','#cssHl','#cssLines',{
-        lang:'css', storageKey:'poke-custom-css',
-        defaultValue:`/* Site-wide CSS example:
+      const cssEd = $('#cssEd'), cssLines = $('#cssLines');
+      const defaultCss = `/* Site-wide CSS example:
 
 nav { backdrop-filter: blur(16px) saturate(120%); }
 .tab.active { filter: drop-shadow(0 0 10px #7cc7ff); }
 :root { --accent: #9df7c9; }
 
-*/`
-      });
+*/`;
+      loadEditor(cssEd, 'poke-custom-css', defaultCss);
 
-      // live preview
-      const cssStylePreview = document.createElement('style');
-      cssStylePreview.id='custom-css-preview'; document.body.appendChild(cssStylePreview);
-      const applyCssPreview = () => { cssStylePreview.textContent = cssEditor.ed.value || ''; };
+      const cssPreviewStyle = document.createElement('style'); cssPreviewStyle.id='custom-css-preview'; document.body.appendChild(cssPreviewStyle);
+      const applyCssPreview = ()=>{ cssPreviewStyle.textContent = cssEd.textContent || ''; };
+
+      on(cssEd, 'input', debounce(()=>{ setLines(cssEd, cssLines); applyCssPreview(); }, 50));
+      on(cssEd, 'scroll', ()=>{ cssLines.scrollTop = cssEd.scrollTop; });
+
+      on($('#saveCssBtn'), 'click', ()=> saveEditor(cssEd,'poke-custom-css'));
+      on($('#formatCssBtn'),'click', ()=>{ cssEd.textContent = basicFormatCSS(cssEd.textContent); cssEd.dispatchEvent(new Event('input')); });
+      on($('#copyCssBtn'),  'click', ()=> copyText(cssEd.textContent));
+      on($('#exportCssBtn'),'click', ()=> saveFile('poke-custom-css.css', cssEd.textContent, 'text/css'));
+      on($('#resetCssBtn'), 'click', ()=>{ if(confirm('Clear the editor?')){ cssEd.textContent=''; cssEd.dispatchEvent(new Event('input')); saveEditor(cssEd,'poke-custom-css'); }});
+      on($('#importCssFile'),'change', async e=>{ const f=e.target.files?.[0]; if(!f) return; const t=await f.text(); cssEd.textContent=t; cssEd.dispatchEvent(new Event('input')); });
+      on($('#wrapCssBtn'),'click', e=>{ const b=e.currentTarget; const onw=b.getAttribute('data-wrap')==='1'; setWrap(cssEd,!onw); b.setAttribute('data-wrap', onw?'0':'1'); b.textContent='Wrap: ' + (onw?'Off':'On'); });
+      on($('#reloadPreviewCss'),'click', applyCssPreview);
       applyCssPreview();
-
-      on($('#saveCssBtn'),'click',cssEditor.save);
-      on($('#formatCssBtn'),'click',cssEditor.format);
-      on($('#copyCssBtn'),'click',cssEditor.copy);
-      on($('#exportCssBtn'),'click',cssEditor.exportFile);
-      on($('#resetCssBtn'),'click',cssEditor.reset);
-      on($('#importCssFile'),'change', async e=>{ const f=e.target.files?.[0]; if(f) await cssEditor.importFrom(f); });
-      on($('#wrapCssBtn'),'click', e=>{
-        const b=e.currentTarget; const onw=b.getAttribute('data-wrap')==='1';
-        cssEditor.setWrap(!onw); b.setAttribute('data-wrap', onw?'0':'1'); b.textContent='Wrap: ' + (onw?'Off':'On');
-      });
-      on($('#reloadPreviewCss'),'click',applyCssPreview);
-      on(cssEditor.ed,'input',debounce(applyCssPreview,50));
     <% } %>
 
+    /* JS tab */
     <% if (tab) { %>
-      const jsEditor = makeEditor('#jsEd','#jsHl','#jsLines',{
-        lang:'js', storageKey:'poke-custom-script',
-        defaultValue:`// Code runs on Poke pages.
+      const jsEd = $('#jsEd'), jsLines = $('#jsLines');
+      const defaultJs = `// Code runs on Poke pages.
 // To avoid race conditions, wait for DOMContentLoaded:
 document.addEventListener('DOMContentLoaded', () => {
   console.log('[Poke Custom] hello!');
-});`
-      });
+});`;
+      loadEditor(jsEd, 'poke-custom-script', defaultJs);
 
-      on($('#saveJsBtn'),'click',jsEditor.save);
-      on($('#formatJsBtn'),'click',jsEditor.format);
-      on($('#copyJsBtn'),'click',jsEditor.copy);
-      on($('#exportJsBtn'),'click',jsEditor.exportFile);
-      on($('#resetJsBtn'),'click',jsEditor.reset);
-      on($('#importJsFile'),'change', async e=>{ const f=e.target.files?.[0]; if(f) await jsEditor.importFrom(f); });
-      on($('#wrapJsBtn'),'click', e=>{
-        const b=e.currentTarget; const onw=b.getAttribute('data-wrap')==='1';
-        jsEditor.setWrap(!onw); b.setAttribute('data-wrap', onw?'0':'1'); b.textContent='Wrap: ' + (onw?'Off':'On');
-      });
+      on(jsEd, 'input', debounce(()=> setLines(jsEd, jsLines), 50));
+      on(jsEd, 'scroll', ()=>{ jsLines.scrollTop = jsEd.scrollTop; });
+
+      on($('#saveJsBtn'), 'click', ()=> saveEditor(jsEd,'poke-custom-script'));
+      on($('#formatJsBtn'),'click', ()=>{ jsEd.textContent = basicFormatJS(jsEd.textContent); jsEd.dispatchEvent(new Event('input')); });
+      on($('#copyJsBtn'),  'click', ()=> copyText(jsEd.textContent));
+      on($('#exportJsBtn'),'click', ()=> saveFile('poke-custom-script.js', jsEd.textContent, 'application/javascript'));
+      on($('#resetJsBtn'), 'click', ()=>{ if(confirm('Clear the editor?')){ jsEd.textContent=''; jsEd.dispatchEvent(new Event('input')); saveEditor(jsEd,'poke-custom-script'); }});
+      on($('#importJsFile'),'change', async e=>{ const f=e.target.files?.[0]; if(!f) return; const t=await f.text(); jsEd.textContent=t; jsEd.dispatchEvent(new Event('input')); });
+      on($('#wrapJsBtn'),'click', e=>{ const b=e.currentTarget; const onw=b.getAttribute('data-wrap')==='1'; setWrap(jsEd,!onw); b.setAttribute('data-wrap', onw?'0':'1'); b.textContent='Wrap: ' + (onw?'Off':'On'); });
     <% } %>
 
-    // global: Ctrl/Cmd+S saves current visible editor
-    on(document,'keydown',e=>{
+    /* Global save shortcut */
+    document.addEventListener('keydown', (e)=>{
       if ((e.ctrlKey||e.metaKey) && e.key.toLowerCase()==='s'){
         e.preventDefault();
         const cssBtn = document.querySelector('#saveCssBtn');

@@ -963,7 +963,14 @@ white-space: nowrap;text-decoration: none;" href="/feeds/videos.xml?channel_id=<
      <a  href="/channel?id=<%=ID%>&tab=community"  class="tab" style="color:pink">Posts</a>
                                                                          <% } %>
                                                                          <% } %>
+                                        
+<%  if (Array.isArray(playlist?.playlists)) { %> 
 
+  <%  if (playlist.playlists.length != "0") { %> 
+
+     <a  href="/channel?id=<%=ID%>&tab=playlist"  class="tab" style="color:pink">Playlists</a>
+                                                                         <% } %>
+                                                                         <% } %>
                                                                 <% } %>
                                                                             
             </div>

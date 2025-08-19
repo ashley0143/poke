@@ -156,8 +156,8 @@
             <div><div class="title">Custom CSS Editor</div><div class="hint">Saved to <code>localStorage['poke-custom-css']</code></div></div>
             <div class="btns">
               <button class="btn ok" id="saveCssBtn">Save</button>
-              <button class="btn" id="formatCssBtn">Format</button>
-              <button class="btn" id="wrapCssBtn" data-wrap="1">Wrap: On</button>
+              <button class="btn" id="formatCssBtn" style="display:none" >Format</button>
+              <button class="btn" id="wrapCssBtn" style="display:none" data-wrap="1">Wrap: On</button>
               <button class="btn" id="copyCssBtn">Copy</button>
               <button class="btn warn" id="exportCssBtn">Export</button>
               <label class="btn warn" for="importCssFile">Import<input id="importCssFile" type="file" accept=".css,text/css,text/plain" style="display:none"></label>
@@ -176,8 +176,8 @@
           <div class="head"><div class="title">Custom JS Editor</div><div class="hint">Saved to <code>localStorage['poke-custom-script']</code></div></div>
           <div class="btns">
             <button class="btn ok" id="saveJsBtn">Save</button>
-            <button class="btn" id="formatJsBtn">Format</button>
-            <button class="btn" id="wrapJsBtn" data-wrap="1">Wrap: On</button>
+            <button class="btn" style="display:none"  id="formatJsBtn">Format</button>
+            <button class="btn" id="wrapJsBtn" style="display:none"  data-wrap="1">Wrap: On</button>
             <button class="btn" id="copyJsBtn">Copy</button>
             <button class="btn warn" id="exportJsBtn">Export</button>
             <label class="btn warn" for="importJsFile">Import<input id="importJsFile" type="file" accept=".js,text/javascript,text/plain" style="display:none"></label>

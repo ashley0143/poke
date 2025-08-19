@@ -1375,6 +1375,20 @@ font-weight: 1000;">dont.</h1></a>
   display: none;
 }
 </style>
+    <style>
+  .badge {
+    display: inline-block;
+    padding: 2px 6px;
+    margin: 2px 4px 2px 0;
+    font-size: 0.8rem;
+    font-weight: 500;
+    border-radius: 4px;
+    background-color: #e0e0e0; /* light gray */
+    color: #000;
+    white-space: nowrap;
+  }
+</style>
+
    <%  if (invresults?.length < 1) { %>
               <style>
               #filters {
@@ -1409,6 +1423,28 @@ font-weight: 1000;" href="/watch?v=<%= x.videoId %>" class="title max-lines-2"><
         <img src="<%= x.authorThumbnails[1].url %>">
      <a href="/channel?id=<%= x.authorId %>"><%= x.author %><% if (x?.authorVerified) { %> 
             <i class="icon ion ion-md-checkmark-circle" title="verified channel"></i><% } %></a>
+    
+<div class="badges">
+  <% if (x?.hasCaptions) { %>
+    <span class="badge">Subtitles</span>
+  <% } %>
+  <% if (x?.isNew) { %>
+    <span class="badge">New</span>
+  <% } %>
+  <% if (x?.is4k) { %>
+    <span class="badge">4K Ultra-HD</span>
+  <% } %>
+  <% if (x?.is8k) { %>
+    <span class="badge">8K</span>
+  <% } %>
+  <% if (x?.isVr360) { %>
+    <span class="badge">VR 360°</span>
+  <% } %>
+  <% if (x?.isVr180) { %>
+    <span class="badge">VR 180°</span>
+  <% } %>
+</div>
+
           <div style="display: inline-flex;flex-direction: row;min-width: 6em;gap: 4px;">
             <a href="/download?v=<%= x.videoId %>" style="background: #333;width: 7.6em;border-radius: 8px;">
               <div style="display: flex;">
@@ -1420,14 +1456,6 @@ font-weight: 1000;" href="/watch?v=<%= x.videoId %>" class="title max-lines-2"><
                 <i class="fa-brands fa-youtube" style="display: flex;font-size: 16px;padding: 5px;border-radius: 18px;margin-left: 2px;"></i><span style="margin-top: 6px;">Open on YouTube :/</span>
               </div>
             </a>
-<% if (x?.hasCaptions) { %> 
-            <a style="background: #333;width: 3.6em;border-radius: 8px;">
-              <div style="display: flex;">
- Captions!
-               </div>
-               </a>
-<% } %>
-
             </a>
           </div>
         </div>
@@ -1455,6 +1483,27 @@ font-weight: 1000;" href="/watch?v=<%= x.videoId %>" class="title max-lines-2"><
      <a href="/channel?id=<%= x.authorId %>" style="margin:4px"><%= x.author %><% if (x?.authorVerified) { %> 
             <i class="icon ion ion-md-checkmark-circle" title="verified channel"></i><% } %></a>
             </div>
+
+<div class="badges">
+  <% if (x?.hasCaptions) { %>
+    <span class="badge">Subtitles</span>
+  <% } %>
+  <% if (x?.isNew) { %>
+    <span class="badge">New</span>
+  <% } %>
+  <% if (x?.is4k) { %>
+    <span class="badge">4K Ultra-HD</span>
+  <% } %>
+  <% if (x?.is8k) { %>
+    <span class="badge">8K</span>
+  <% } %>
+  <% if (x?.isVr360) { %>
+    <span class="badge">VR 360°</span>
+  <% } %>
+  <% if (x?.isVr180) { %>
+    <span class="badge">VR 180°</span>
+  <% } %>
+</div>
           <div style="display: inline-flex;flex-direction: row;min-width: 6em;gap: 4px;">
             <a href="/download?v=<%= x.videoId %>" style="background: #333;width: 7.6em;border-radius: 8px;">
               <div style="display: flex;">
@@ -1465,14 +1514,7 @@ font-weight: 1000;" href="/watch?v=<%= x.videoId %>" class="title max-lines-2"><
               <div style="display: flex;">
                 <i class="fa-brands fa-youtube" style="display: flex;font-size: 16px;padding: 5px;border-radius: 18px;margin-left: 2px;"></i><span style="margin-top: 6px;">Open on YouTube :/</span>
               </div>
-
-              <% if (x?.hasCaptions) { %> 
-            <a style="background: #333;width: 3.6em;border-radius: 8px;">
-              <div style="display: flex;">
- Captions!
-               </div>
-               </a>
-<% } %>
+ 
 
 
             </a>

@@ -46,7 +46,7 @@
 <meta content="https://poketube.fun/watch?v=<%=inv_vid?.videoId%>" name=twitter:url>
 <meta content="<%=inv_vid?.title%> | Poke" name=twitter:title>
 <meta content="Watch this <%- turntomins(inv_vid?.lengthSeconds) || "LIVE"%> long video from <%=inv_vid?.author%> On Poke! 
-👍 <%=convert(engagement.likes)%> | 👎 <%=convert(engagement.dislikes)%> | 📈 <%=convert(engagement.viewCount)%> Views 🗓️ <%= date.replace("Premiered", " ") %> 💬 <% if (!isNaN(inv.commentCount)) { %><%= inv.commentCount.toLocaleString() %>
+👍 <%=convert(engagement?.likes)%> | 👎 <%=convert(engagement?.dislikes)%> | 📈 <%=convert(engagement.viewCount)%> Views 🗓️ <%= date.replace("Premiered", " ") %> 💬 <% if (!isNaN(inv.commentCount)) { %><%= inv.commentCount.toLocaleString() %>
 <% } else { %>
  0
 <% } %>" property=twitter:description>
@@ -3708,23 +3708,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
 <% } catch (error) { %>
   
-  
- 
-<script>             
-let seconds = 3;
-document.body.innerHTML = `<h1 style="color:#f00;"> <%- error %></h1>
-<p>Reloading in <span id="count">${seconds}</span> seconds…</p>`;
-
-const interval = setInterval(() => {
-  seconds--;
-  document.getElementById("count").textContent = seconds;
-  if (seconds <= 0) {
-    clearInterval(interval);
-    location.reload();
-  }
-}, 1000);
-
-</script>
+   <p>"Error while communicating with Invidious companion: Error connecting to 'gluetun:8282': Host is unreachable"</p>
 
  <% } %>
  <!-- PHTML END -->

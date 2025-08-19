@@ -1465,6 +1465,16 @@ font-weight: 1000;" href="/watch?v=<%= x.videoId %>" class="title max-lines-2"><
               <div style="display: flex;">
                 <i class="fa-brands fa-youtube" style="display: flex;font-size: 16px;padding: 5px;border-radius: 18px;margin-left: 2px;"></i><span style="margin-top: 6px;">Open on YouTube :/</span>
               </div>
+
+              <% if (x?.hasCaptions) { %> 
+            <a style="background: #333;width: 3.6em;border-radius: 8px;">
+              <div style="display: flex;">
+ Captions!
+               </div>
+               </a>
+<% } %>
+
+
             </a>
           </div>
         </div>

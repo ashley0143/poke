@@ -4,16 +4,9 @@
     Copyright (C) 2021-2025 POKETUBE (https://codeberg.org/Ashley/poketube)
 
     This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with this program. If not, see https://www.gnu.org/licenses/.
+    it under the terms of the GNU General Public License, version 3 or later.
+    This program is distributed WITHOUT ANY WARRANTY.
+    See https://www.gnu.org/licenses/.
 -->
 
 <!DOCTYPE html>
@@ -82,7 +75,7 @@
       overflow-x:hidden;
     }
 
-    /* Top nav — fixed spacing + centered search */
+    /* Top nav — centered search, icons aligned, forced translateY(0) */
     nav{
       display:flex;
       align-items:center;
@@ -99,16 +92,16 @@
     nav .left{ display:flex; align-items:center }
     nav .left img{ width:124px; display:block }
     nav .middle{
-      flex:1;
-      display:flex;
-      justify-content:center;
-      align-items:center;
+      flex:1; display:flex; justify-content:center; align-items:center;
+      transform: translateY(0) !important; /* requested */
     }
-    nav .middle .search{ position:relative; width:100%; max-width:640px }
+    nav .middle .search{
+      position:relative; width:100%; max-width:640px;
+      transform: translateY(0) !important; /* requested */
+    }
     nav .middle input[type="search"]{
-      width:100%;
-      height:40px;
-      padding:0 44px 0 16px;
+      width:100%; height:40px;
+      padding:0 44px 0 16px; /* leave space for button */
       border-radius:14px;
       border:1px solid rgba(255,255,255,.12);
       outline:none;
@@ -125,18 +118,23 @@
       box-shadow: 0 0 0 4px rgba(124,199,255,.15);
       background:#141826;
     }
+    /* Search button INSIDE the field */
     nav .middle button{
-      position:absolute; right:6px; top:50%; transform:translateY(-50%);
+      position:absolute; right:6px; top:50%; transform:translateY(0) translateY(-50%) !important;
       border:0; border-radius:10px; width:36px; height:36px; cursor:pointer;
       background:linear-gradient(180deg,#1b2231,#151b27);
       color:var(--text); display:grid; place-items:center;
       outline:none;
     }
     nav .middle button:focus{ box-shadow:0 0 0 3px rgba(124,199,255,.25) }
-    nav .right{ display:flex; align-items:center; gap:14px; padding-left:8px }
+
+    nav .right{
+      display:flex; align-items:center; gap:10px; padding-left:8px; height:40px;
+    }
     nav .right a{
-      color:#cfd6e6; opacity:.9; display:grid; place-items:center;
-      width:34px; height:34px; border-radius:10px; border:1px solid rgba(255,255,255,.07);
+      display:grid; place-items:center;
+      width:34px; height:34px; border-radius:10px;
+      color:#cfd6e6; border:1px solid rgba(255,255,255,.07);
       background:linear-gradient(180deg,#161925,#121521);
       transition:.15s transform,.15s border-color,.15s background-color,.15s color;
     }
@@ -160,29 +158,14 @@
     }
     @media (max-width:900px){ .hero{ grid-template-columns:1fr } }
 
-    .hero .title{
-      font-weight:900; font-size:clamp(22px, 3vw, 34px);
-      letter-spacing:.2px; line-height:1.1;
-    }
-    .hero .subtitle{
-      color:var(--muted); margin-top:6px; font-size:clamp(13px,1.6vw,15px)
-    }
+    .hero .title{ font-weight:900; font-size:clamp(22px, 3vw, 34px); letter-spacing:.2px; line-height:1.1; }
+    .hero .subtitle{ color:var(--muted); margin-top:6px; font-size:clamp(13px,1.6vw,15px) }
 
     .chips{ display:flex; flex-wrap:wrap; gap:8px; margin-top:12px }
     .chip{
       background:linear-gradient(180deg, var(--chip), var(--chipb));
       border:1px solid var(--border);
       padding:6px 10px; border-radius:999px; font-size:12px; color:var(--muted);
-    }
-
-    /* Theme selector row */
-    .theme-row{
-      display:flex; gap:10px; align-items:center; margin-top:10px;
-      flex-wrap:wrap;
-    }
-    .theme-row select{
-      background:var(--panel-2); color:var(--text);
-      border:1px solid var(--border); border-radius:10px; padding:8px 10px;
     }
 
     /* Tabs */
@@ -236,17 +219,14 @@
     .btn.err{ background:rgba(239,71,111,.12); border-color:rgba(239,71,111,.4) }
 
     /* Editor (textarea + overlayed highlighted pre) */
-    .editor-wrap{
-      position:relative; height:min(70vh, 680px); overflow:auto; background:#0a0b12;
-    }
+    .editor-wrap{ position:relative; height:min(70vh, 680px); overflow:auto; background:#0a0b12; }
     .editor{
       position:absolute; inset:0; resize:none; width:100%; height:100%;
       padding:18px 18px 18px 54px;
-      border:0; outline:0; background:transparent; color:transparent;
+      border:0; outline:0; background:transparent; color:transparent; /* let overlay show */
       caret-color:var(--text);
       font: 500 var(--code-size)/1.6 var(--mono);
-      white-space:pre; overflow:auto;
-      tab-size:2; -moz-tab-size:2;
+      white-space:pre; overflow:auto; tab-size:2; -moz-tab-size:2;
     }
     .hl{
       pointer-events:none; user-select:none;
@@ -275,38 +255,16 @@
     .tok.reg     { color:#a5ffce }
 
     /* Preview */
-    .preview{
-      padding:14px; background:var(--panel-2);
-    }
+    .preview{ padding:14px; background:var(--panel-2); }
     .preview .box{
       border:1px dashed var(--border);
       border-radius:12px; padding:14px; background:#0b0d14;
       min-height:180px;
     }
 
-    /* Alerts */
-    .alert{
-      display:flex; align-items:flex-start; gap:10px;
-      padding:10px 12px; border-radius:12px; border:1px solid var(--border);
-      background:linear-gradient(180deg, rgba(255,255,255,.02), transparent);
-      font-size:13px; color:var(--muted);
-    }
-    .alert i{ margin-top:2px }
-    .alert.ok{ border-color:rgba(32,201,151,.35) }
-    .alert.warn{ border-color:rgba(255,180,0,.35) }
-    .alert.err{ border-color:rgba(239,71,111,.35) }
-
-    /* Footer */
-    footer{
-      max-width:1200px; margin:40px auto 50px; padding:0 16px;
-      color:var(--muted); font-size:12px;
-    }
-
+    footer{ max-width:1200px; margin:40px auto 50px; padding:0 16px; color:var(--muted); font-size:12px; }
     .btn:focus, .tab:focus { outline: none; box-shadow: var(--ring) }
   </style>
-
-  <!-- Theme runtime style (updated by JS) -->
-  <style id="theme-style"></style>
 </head>
 <body>
   <div class="app gradient-bg">
@@ -340,21 +298,6 @@
         <div>
           <div class="title">Customize Poke</div>
           <div class="subtitle">Personalize styles and behavior. Your edits are stored locally in your browser. Nothing is uploaded.</div>
-
-          <div class="theme-row">
-            <label for="themeSelect">Preset theme:</label>
-            <select id="themeSelect" aria-label="Preset CSS theme">
-              <option value="midnight">Midnight (default)</option>
-              <option value="sakura">Sakura</option>
-              <option value="ocean">Ocean</option>
-              <option value="solarized">Solarized Dark</option>
-              <option value="amoled">AMOLED Black</option>
-              <option value="highcontrast">High Contrast</option>
-            </select>
-            <button class="btn" id="saveThemeBtn" title="Save theme">Save Theme</button>
-            <button class="btn warn" id="resetThemeBtn" title="Reset theme">Reset Theme</button>
-          </div>
-
           <div class="chips" role="list" style="margin-top:10px">
             <span class="chip"><i class="fa-light fa-lock"></i>&nbsp; Local-only storage</span>
             <span class="chip"><i class="fa-light fa-floppy-disk"></i>&nbsp; Auto-save</span>
@@ -364,9 +307,7 @@
         </div>
         <div class="alert ok" role="status" aria-live="polite">
           <i class="fa-light fa-shield-check"></i>
-          <div>
-            <strong>Heads-up:</strong> Your CSS/JS never leaves the browser. If you clear site data, your customizations are removed. Export a backup first.
-          </div>
+          <div><strong>Heads-up:</strong> Your CSS/JS never leaves the browser. If you clear site data, your customizations are removed. Export a backup first.</div>
         </div>
       </section>
 
@@ -412,13 +353,8 @@
 
         <div class="panel">
           <div class="head">
-            <div>
-              <div class="title">Live Preview</div>
-              <div class="hint">Applies your CSS below (isolated box)</div>
-            </div>
-            <div class="btns">
-              <button class="btn" id="reloadPreviewCss"><i class="fa-light fa-rotate"></i> Reload</button>
-            </div>
+            <div><div class="title">Live Preview</div><div class="hint">Applies your CSS below (isolated box)</div></div>
+            <div class="btns"><button class="btn" id="reloadPreviewCss"><i class="fa-light fa-rotate"></i> Reload</button></div>
           </div>
           <div class="preview">
             <div class="box" id="cssPreviewBox">
@@ -461,16 +397,11 @@
         </div>
 
         <div class="panel">
-          <div class="head">
-            <div class="title">Security Notice</div>
-            <div class="hint">Run only code you wrote or fully trust.</div>
-          </div>
+          <div class="head"><div class="title">Security Notice</div><div class="hint">Run only code you wrote or fully trust.</div></div>
           <div class="preview">
             <div class="alert warn">
               <i class="fa-light fa-triangle-exclamation"></i>
-              <div>
-                Your script executes on Poke pages via the site’s loader. If something breaks, use a private window or clear site storage to recover.
-              </div>
+              <div>Your script executes on Poke pages via the site’s loader. If something breaks, use a private window or clear site storage to recover.</div>
             </div>
             <div style="height:10px"></div>
             <div class="box">
@@ -498,8 +429,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
   <!-- ============================== SCRIPTS =============================== -->
   <script>
-    // --------------------- Utilities ---------------------
-    const $ = sel => document.querySelector(sel);
+    // ---------- tiny utils ----------
+    const $ = s => document.querySelector(s);
     const on = (el, ev, fn) => el && el.addEventListener(ev, fn, { passive: true });
     const saveFile = (name, content, type='text/plain') => {
       const blob = new Blob([content], { type });
@@ -517,65 +448,64 @@ document.addEventListener('DOMContentLoaded', () => {
     };
     const debounce = (fn, ms=200) => { let t; return (...a)=>{ clearTimeout(t); t=setTimeout(()=>fn(...a), ms); }; };
 
-    // --------------------- Minimal formatter ---------------------
+    // ---------- quick formatters ----------
     function basicFormatCSS(src){
       try{
-        return src
-          .replace(/\{/g,'{\n  ')
-          .replace(/\;/g,';\n  ')
-          .replace(/\}\s*/g,'\n}\n')
-          .replace(/\n\s+\n/g,'\n');
+        return src.replace(/\{/g,'{\n  ').replace(/\;/g,';\n  ').replace(/\}\s*/g,'\n}\n').replace(/\n\s+\n/g,'\n');
       }catch{ return src }
     }
     function basicFormatJS(src){
       try{
-        return src
-          .replace(/;\s*/g,';\n')
-          .replace(/\{\s*/g,'{\n  ')
-          .replace(/\}\s*/g,'\n}\n')
-          .replace(/\)\s*\{/g,') {\n  ')
-          .replace(/\n\s+\n/g,'\n');
+        return src.replace(/;\s*/g,';\n').replace(/\{\s*/g,'{\n  ').replace(/\}\s*/g,'\n}\n').replace(/\)\s*\{/g,') {\n  ').replace(/\n\s+\n/g,'\n');
       }catch{ return src }
     }
 
-    // --------------------- Syntax highlighter (no libraries) ---------------------
-    // IMPORTANT: use single backslashes in regex literals (previous version double-escaped, breaking highlighting)
+    // ---------- robust JS/CSS highlighter (no libs) ----------
+    // Avoid the "classspan" issue by protecting tokens first, then styling keywords on the remainder,
+    // finally restoring protected segments. We never run regex over our injected <span> tags.
     const JS_KEYWORDS = /\b(?:await|break|case|catch|class|const|continue|debugger|default|delete|do|else|enum|export|extends|false|finally|for|from|function|if|import|in|instanceof|let|new|null|return|super|switch|this|throw|true|try|typeof|var|void|while|with|yield)\b/g;
     const JS_BUILTINS = /\b(?:Array|Object|String|Number|Boolean|Map|Set|WeakMap|WeakSet|Date|Math|JSON|Promise|RegExp|Error|TypeError|URL|Node|Element|document|window|console|fetch)\b/g;
 
-    function escapeHTML(s){ return s.replace(/[&<>]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;'}[c])); }
+    const ESC = s => s.replace(/[&<>]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
 
     function highlightJS(code){
-      let s = escapeHTML(code);
-      // comments
-      s = s.replace(/(\/\*[\s\S]*?\*\/)/g, '<span class="tok comment">$1</span>');
-      s = s.replace(/(\/\/.*?$)/gm, '<span class="tok comment">$1</span>');
-      // strings + template literals
-      s = s.replace(/(`[\s\S]*?`)/g, '<span class="tok str">$1</span>');
-      s = s.replace(/('[^'\\]*(?:\\.[^'\\]*)*')/g, '<span class="tok str">$1</span>');
-      s = s.replace(/("[^"\\]*(?:\\.[^"\\]*)*")/g, '<span class="tok str">$1</span>');
-      // regex literals (rough)
-      s = s.replace(/(\/(?:\\.|[^\\\/\n])+\/[gimsuy]*)/g, '<span class="tok reg">$1</span>');
-      // numbers/booleans/null
+      let s = ESC(code);
+      const tokens = [];
+
+      // helper: protect ranges (returns placeholder)
+      const protect = (re, cls) => {
+        s = s.replace(re, m => {
+          const idx = tokens.push(`<span class="tok ${cls}">${m}</span>`) - 1;
+          return `\u0000${idx}\u0000`;
+        });
+      };
+
+      // protect comments, strings, regexes first (order matters)
+      protect(/\/\*[\s\S]*?\*\//g, 'comment');
+      protect(/\/\/.*?$/gm, 'comment');
+      protect(/`[\s\S]*?`/g, 'str');
+      protect(/'[^'\\]*(?:\\.[^'\\]*)*'/g, 'str');
+      protect(/"[^"\\]*(?:\\.[^"\\]*)*"/g, 'str');
+      protect(/\/(?:\\.|[^\\\/\n])+\/[gimsuy]*/g, 'reg');
+
+      // now safe to style plain text (no spans exist yet)
       s = s.replace(/\b(0x[\da-fA-F]+|\d+\.\d+|\d+)\b/g, '<span class="tok num">$1</span>');
       s = s.replace(/\b(true|false|null)\b/g, '<span class="tok bool">$1</span>');
-      // keywords & builtins
       s = s.replace(JS_KEYWORDS, '<span class="tok kw">$&</span>');
       s = s.replace(JS_BUILTINS, '<span class="tok fn">$&</span>');
-      // operators
       s = s.replace(/([=+\-/*<>!&|%^~?:]+)/g, '<span class="tok op">$1</span>');
+
+      // restore protected segments
+      s = s.replace(/\u0000(\d+)\u0000/g, (_, i) => tokens[+i]);
       return s;
     }
 
     function highlightCSS(code){
-      let s = escapeHTML(code);
-      // block comments
-      s = s.replace(/(\/\*[\s\S]*?\*\/)/g, '<span class="tok comment">$1</span>');
-      // at-rules
+      let s = ESC(code);
+      // simple & safe for CSS (no keyword-in-attribute problem)
+      s = s.replace(/\/\*[\s\S]*?\*\//g, '<span class="tok comment">$&</span>');
       s = s.replace(/(@[a-zA-Z-]+)/g, '<span class="tok at">$1</span>');
-      // selectors (naive: line before { )
       s = s.replace(/^([^{}@\n][^{\n]+)(?=\s*\{)/gm, '<span class="tok selector">$1</span>');
-      // properties/values
       s = s.replace(/([a-zA-Z-]+)(\s*:\s*)([^;}{]+)/g, (m, p, c, v) => {
         v = v.replace(/(#[0-9a-fA-F]{3,8}|\b\d+(?:\.\d+)?(?:px|em|rem|%|vh|vw)?\b)/g, '<span class="tok num">$1</span>');
         v = v.replace(/("[^"]*"|'[^']*')/g, '<span class="tok str">$1</span>');
@@ -630,58 +560,7 @@ document.addEventListener('DOMContentLoaded', () => {
       };
     }
 
-    // --------------------- Theme presets ---------------------
-    const THEME_STYLE = $('#theme-style');
-    const THEME_KEY = 'poke-custom-theme';
-    const THEMES = {
-      midnight: `
-:root{
-  --bg:#0c0c0f; --panel:#121218; --panel-2:#0f0f15; --text:#e9ecf1; --muted:#aab2c0;
-  --accent:#7cc7ff; --accent-2:#f97794; --border:#212230; --chip:#161824; --chipb:#0f111a;
-}`,
-      sakura: `
-:root{
-  --bg:#0e0a10; --panel:#1b1019; --panel-2:#160d14; --text:#ffeef4; --muted:#ffc8d8;
-  --accent:#ff9cc3; --accent-2:#ffd1e1; --border:#2a1622; --chip:#22111b; --chipb:#1a0d15;
-}`,
-      ocean: `
-:root{
-  --bg:#071017; --panel:#0b1b27; --panel-2:#091521; --text:#e6f3ff; --muted:#a9c4da;
-  --accent:#53b7ff; --accent-2:#3de1c5; --border:#102536; --chip:#0c1a26; --chipb:#0a1520;
-}`,
-      solarized: `
-:root{
-  --bg:#002b36; --panel:#073642; --panel-2:#062c35; --text:#eee8d5; --muted:#93a1a1;
-  --accent:#268bd2; --accent-2:#2aa198; --border:#0a3945; --chip:#0b2f38; --chipb:#0a2830;
-}`,
-      amoled: `
-:root{
-  --bg:#000; --panel:#050505; --panel-2:#0a0a0a; --text:#f2f2f2; --muted:#bdbdbd;
-  --accent:#8ab4ff; --accent-2:#ff8ab4; --border:#111; --chip:#0b0b0b; --chipb:#070707;
-}`,
-      highcontrast: `
-:root{
-  --bg:#000; --panel:#000; --panel-2:#000; --text:#fff; --muted:#e6e6e6;
-  --accent:#00ffff; --accent-2:#ff00ff; --border:#fff; --chip:#000; --chipb:#000;
-}`
-    };
-
-    function applyTheme(name){
-      const css = THEMES[name] || THEMES.midnight;
-      THEME_STYLE.textContent = css;
-      $('#themeSelect').value = name in THEMES ? name : 'midnight';
-    }
-    function saveTheme(){ localStorage.setItem(THEME_KEY, $('#themeSelect').value); toast('Theme saved'); }
-    function resetTheme(){ localStorage.removeItem(THEME_KEY); applyTheme('midnight'); toast('Theme reset'); }
-
-    // --------------------- Initialize per tab ---------------------
-    // Theme boot
-    applyTheme(localStorage.getItem(THEME_KEY) || 'midnight');
-    on($('#themeSelect'), 'change', (e)=> applyTheme(e.target.value));
-    on($('#saveThemeBtn'), 'click', saveTheme);
-    on($('#resetThemeBtn'), 'click', resetTheme);
-
-    // CSS TAB
+    // ---------- initialize ----------
     <% if (!tab) { %>
     const cssEditor = makeEditor('#cssEd', '#cssHl', '#cssLines', {
       lang:'css', storageKey:'poke-custom-css',
@@ -701,7 +580,6 @@ nav { backdrop-filter: blur(16px) saturate(120%); }
     const applyCssPreview = () => { cssStylePreview.textContent = cssEditor.ed.value || ''; };
     applyCssPreview();
 
-    // Controls
     on($('#saveCssBtn'), 'click', cssEditor.save);
     on($('#formatCssBtn'), 'click', cssEditor.format);
     on($('#copyCssBtn'), 'click', cssEditor.copy);
@@ -713,17 +591,13 @@ nav { backdrop-filter: blur(16px) saturate(120%); }
       cssEditor.setWrap(!onw); b.setAttribute('data-wrap', onw?'0':'1'); b.textContent = 'Wrap: ' + (onw?'Off':'On');
     });
     on($('#reloadPreviewCss'), 'click', applyCssPreview);
-
-    // Live preview while typing
     on(cssEditor.ed, 'input', debounce(applyCssPreview, 50));
 
-    // Save on Ctrl/Cmd+S
     on(document, 'keydown', (e)=>{
       if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase()==='s') { e.preventDefault(); cssEditor.save(); }
     });
     <% } %>
 
-    // JS TAB
     <% if (tab) { %>
     const jsEditor = makeEditor('#jsEd', '#jsHl', '#jsLines', {
       lang:'js', storageKey:'poke-custom-script',
@@ -744,14 +618,12 @@ document.addEventListener('DOMContentLoaded', () => {
       const b = e.currentTarget; const onw = b.getAttribute('data-wrap')==='1';
       jsEditor.setWrap(!onw); b.setAttribute('data-wrap', onw?'0':'1'); b.textContent = 'Wrap: ' + (onw?'Off':'On');
     });
-
     on(document, 'keydown', (e)=>{
       if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase()==='s') { e.preventDefault(); jsEditor.save(); }
     });
     <% } %>
   </script>
 
-  <!-- Site loader that applies saved CSS/JS globally (kept for compatibility) -->
   <script src="/css/custom-css.js"></script>
 </body>
 </html>

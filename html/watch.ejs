@@ -39,7 +39,7 @@
     <!-- meta tags disabled by user -->
  <% } %>
   <% if (!e) { %>
-<meta content="<%=inv_vid.?title%>" name=title>
+<meta content="<%=inv_vid?.title%>" name=title>
 <meta content="<%=color%>" name="theme-color">
 <meta content="{canplayhd: true, redesign_feburary_2023:true, poke-rebrand:true, universe:2, ImmersiveAmbientMode:true, november2023_poke_rebrand:true, rebrand_2024:true, faster_load:true, AudioSyncV2:false, AudioSyncV3:true }" name="flags">
 <meta content="<%=inv_vid?.author%>" name=twitter:author>
@@ -3711,6 +3711,18 @@ window.addEventListener('DOMContentLoaded', () => {
   
  
 <script>             
+let seconds = 3;
+document.body.innerHTML = `<h1 style="color:#f00;"> <%- error %></h1>
+<p>Reloading in <span id="count">${seconds}</span> seconds…</p>`;
+
+const interval = setInterval(() => {
+  seconds--;
+  document.getElementById("count").textContent = seconds;
+  if (seconds <= 0) {
+    clearInterval(interval);
+    location.reload();
+  }
+}, 1000);
 
 </script>
 

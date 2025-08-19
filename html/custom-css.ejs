@@ -1,4 +1,3 @@
- 
 <!DOCTYPE html>
 <html class="gradient-bg" lang="en">
 <head>
@@ -12,6 +11,7 @@
   <meta content="summary_large_image" name="twitter:card" />
   <meta content="#f97794" name="theme-color" />
 
+  <!-- your site css -->
   <link href="/css/app-cdn.min.css" rel="stylesheet">
   <link href="/css/app.main.css?v=44600" rel="stylesheet">
   <link href="/css/search.main.css?v=57" rel="stylesheet">
@@ -53,13 +53,8 @@
     }
     .customize-navbar__left{display:flex;align-items:center}
     .customize-navbar__logo{width:124px;display:block}
-    .customize-navbar__middle{
-      flex:1; display:flex; justify-content:center; align-items:center;
-      transform:translateY(0) !important;
-    }
-    .customize-navbar__search{
-      position:relative; width:100%; max-width:640px; transform:translateY(0) !important;
-    }
+    .customize-navbar__middle{flex:1; display:flex; justify-content:center; align-items:center; transform:translateY(0)!important}
+    .customize-navbar__search{position:relative; width:100%; max-width:640px; transform:translateY(0)!important}
     .customize-navbar__input{
       width:100%; height:40px; padding:0 44px 0 16px;
       border-radius:14px; border:1px solid rgba(255,255,255,.12); outline:none;
@@ -73,7 +68,7 @@
     }
     .customize-navbar__btn{
       position:absolute; right:6px; top:50%;
-      transform:translateY(0) translateY(-50%) !important;
+      transform:translateY(-50%)!important;
       border:0; border-radius:10px; width:36px; height:36px; cursor:pointer;
       background:linear-gradient(180deg,#1b2231,#151b27); color:var(--text);
       display:grid; place-items:center; outline:none;
@@ -116,31 +111,53 @@
     .btn.ok{background:rgba(32,201,151,.12);border-color:rgba(32,201,151,.4)}
     .btn.warn{background:rgba(255,180,0,.12);border-color:rgba(255,180,0,.4)}
     .btn.err{background:rgba(239,71,111,.12);border-color:rgba(239,71,111,.4)}
+
+    /* -------- Editor (textarea overlayed by Prism) -------- */
     .editor-wrap{position:relative;height:min(70vh,680px);overflow:auto;background:#0a0b12}
-    .editor{position:absolute;inset:0;resize:none;width:100%;height:100%;padding:18px 18px 18px 54px;border:0;outline:0;background:transparent;color:transparent;caret-color:var(--text);font:500 var(--code-size)/1.6 var(--mono);white-space:pre;overflow:auto;tab-size:2;-moz-tab-size:2}
-    .hl{pointer-events:none;user-select:none;padding:18px 18px 18px 54px;min-height:100%;font:500 var(--code-size)/1.6 var(--mono);white-space:pre;color:var(--text)}
-    .ln{position:absolute;left:0;top:0;bottom:0;width:40px;background:#08090f;color:#6272a4;border-right:1px solid #0d0f1a;text-align:right;padding:18px 6px;font:500 var(--code-size)/1.6 var(--mono);user-select:none}
-    .tok.comment{color:#6c7891;font-style:italic}.tok.str{color:#a1eafb}.tok.num{color:#ffd580}.tok.kw{color:#8ef0a5;font-weight:600}.tok.fn{color:#9bb7ff}.tok.prop{color:#c2d1ff}.tok.op{color:#ffadb5}.tok.selector{color:#ffb8e2}.tok.at{color:#9cf1dd}.tok.bool{color:#ffcf99}.tok.reg{color:#a5ffce}
+    .editor{
+      position:absolute; inset:0; resize:none; width:100%; height:100%;
+      padding:18px 18px 18px 54px;
+      border:0; outline:0; background:transparent; color:transparent;
+      caret-color:var(--text);
+      font:500 var(--code-size)/1.6 var(--mono);
+      white-space:pre; overflow:auto; tab-size:2; -moz-tab-size:2;
+      -webkit-text-size-adjust:100%;
+      spellcheck:false;
+    }
+    .hl{
+      pointer-events:none; user-select:none;
+      padding:18px 18px 18px 54px; min-height:100%;
+      font:500 var(--code-size)/1.6 var(--mono);
+      white-space:pre; color:var(--text);
+    }
+    .ln{
+      position:absolute; left:0; top:0; bottom:0; width:40px;
+      background:#08090f; color:#6272a4; border-right:1px solid #0d0f1a;
+      text-align:right; padding:18px 6px; font:500 var(--code-size)/1.6 var(--mono);
+      user-select:none;
+    }
+
     .preview{padding:14px;background:var(--panel-2)}
     .preview .box{border:1px dashed var(--border);border-radius:12px;padding:14px;background:#0b0d14;min-height:180px}
+
     footer{max-width:1200px;margin:40px auto 50px;padding:0 16px;color:var(--muted);font-size:12px}
     .btn:focus,.tab:focus{outline:none;box-shadow:var(--ring)}
   </style>
- <link rel="stylesheet" href="https://p.poketube.fun/https://cdn.jsdelivr.net/npm/prismjs@1/themes/prism-tomorrow.min.css">
-<style>
-   .hl code[class*="language-"]{
-    background: transparent !important;
-    font: 500 var(--code-size)/1.6 var(--mono);
-    color: var(--text);
-    white-space: pre;
-  }
-</style>
-<script src="https://p.poketube.fun/https://cdn.jsdelivr.net/npm/prismjs@1/components/prism-core.min.js"></script>
-<script src="https://p.poketube.fun/https://cdn.jsdelivr.net/npm/prismjs@1/plugins/autoloader/prism-autoloader.min.js"></script>
-<script>
-  Prism.plugins.autoloader.languages_path = 'https://p.poketube.fun/https://cdn.jsdelivr.net/npm/prismjs@1/components/';
-</script>
 
+  <!-- Prism (through your proxy to respect CSP) -->
+  <link rel="stylesheet" href="https://p.poketube.fun/https://cdn.jsdelivr.net/npm/prismjs@1/themes/prism-tomorrow.min.css">
+  <style>
+    .hl code[class*="language-"]{
+      background:transparent!important;
+      font:500 var(--code-size)/1.6 var(--mono);
+      color:var(--text); white-space:pre;
+    }
+  </style>
+  <script src="https://p.poketube.fun/https://cdn.jsdelivr.net/npm/prismjs@1/components/prism-core.min.js"></script>
+  <script src="https://p.poketube.fun/https://cdn.jsdelivr.net/npm/prismjs@1/plugins/autoloader/prism-autoloader.min.js"></script>
+  <script>
+    Prism.plugins.autoloader.languages_path = 'https://p.poketube.fun/https://cdn.jsdelivr.net/npm/prismjs@1/components/';
+  </script>
 </head>
 <body>
   <div class="app gradient-bg">
@@ -149,17 +166,12 @@
       <div class="customize-navbar__left">
         <a href="/143"><img class="customize-navbar__logo" src="/css/logo.svg?v=5" alt="PokeTube"></a>
       </div>
-
       <div class="customize-navbar__middle">
         <form class="customize-navbar__search" action="/search">
-          <input id="fname" name="query" class="customize-navbar__input" type="search"
-                 placeholder="Search videos, channels…" aria-label="Search" />
-          <button class="customize-navbar__btn" type="submit" aria-label="Search">
-            <i class="fa-light fa-search"></i>
-          </button>
+          <input id="fname" name="query" class="customize-navbar__input" type="search" placeholder="Search videos, channels…" aria-label="Search"/>
+          <button class="customize-navbar__btn" type="submit" aria-label="Search"><i class="fa-light fa-search"></i></button>
         </form>
       </div>
-
       <div class="customize-navbar__right">
         <a class="customize-navbar__icon" href="/domains" aria-label="Domains"><i class="fa-light fa-server"></i></a>
         <a class="customize-navbar__icon" href="/privacy" aria-label="Privacy"><i class="fa-light fa-shield"></i></a>
@@ -173,9 +185,7 @@
         <div>
           <div class="title">Customize Poke</div>
           <div class="subtitle">Personalize everything about poke!!!</div>
-          
         </div>
-       
       </section>
 
       <div class="tabs" role="tablist" aria-label="Customization Tabs">
@@ -193,7 +203,10 @@
       <section class="work" aria-label="Custom CSS workspace">
         <div class="panel">
           <div class="head">
-            <div><div class="title">Custom CSS Editor</div><div class="hint">Saved to <code>localStorage['poke-custom-css']</code></div></div>
+            <div>
+              <div class="title">Custom CSS Editor</div>
+              <div class="hint">Saved to <code>localStorage['poke-custom-css']</code></div>
+            </div>
             <div class="btns">
               <button class="btn ok" id="saveCssBtn"><i class="fa-light fa-floppy-disk"></i> Save</button>
               <button class="btn" id="formatCssBtn">Format</button>
@@ -214,8 +227,19 @@
         </div>
 
         <div class="panel">
-          <div class="head"><div><div class="title">Live Preview</div><div class="hint">Applies your CSS below (isolated box)</div></div><div class="btns"><button class="btn" id="reloadPreviewCss"><i class="fa-light fa-rotate"></i> Reload</button></div></div>
-          <div class="preview"><div class="box" id="cssPreviewBox"><p style="margin-top:0">Preview area — try:</p><pre style="margin:0" aria-hidden="true">nav{backdrop-filter:blur(16px)} .tab.active{filter:drop-shadow(0 0 10px #7cc7ff)}</pre></div></div>
+          <div class="head">
+            <div>
+              <div class="title">Live Preview</div>
+              <div class="hint">Applies your CSS below (isolated box)</div>
+            </div>
+            <div class="btns"><button class="btn" id="reloadPreviewCss"><i class="fa-light fa-rotate"></i> Reload</button></div>
+          </div>
+          <div class="preview">
+            <div class="box" id="cssPreviewBox">
+              <p style="margin-top:0">Preview area — try:</p>
+              <pre style="margin:0" aria-hidden="true">nav{backdrop-filter:blur(16px)} .tab.active{filter:drop-shadow(0 0 10px #7cc7ff)}</pre>
+            </div>
+          </div>
         </div>
       </section>
       <% } %>
@@ -225,7 +249,10 @@
       <section class="work" aria-label="Custom JS workspace">
         <div class="panel">
           <div class="head">
-            <div><div class="title">Custom JS Editor</div><div class="hint">Saved to <code>localStorage['poke-custom-script']</code></div></div>
+            <div>
+              <div class="title">Custom JS Editor</div>
+              <div class="hint">Saved to <code>localStorage['poke-custom-script']</code></div>
+            </div>
             <div class="btns">
               <button class="btn ok" id="saveJsBtn"><i class="fa-light fa-floppy-disk"></i> Save</button>
               <button class="btn" id="formatJsBtn">Format</button>
@@ -270,167 +297,248 @@ document.addEventListener('DOMContentLoaded', () => {
       <div>© 2021–2025 PokeTube • Free software under the GNU GPL. Customizations are stored locally on your device.</div>
     </footer>
   </div>
- <!-- ================= SCRIPTS ================ -->
-<script>
-  /* ---------- utils ---------- */
-  const $ = s => document.querySelector(s);
-  const on = (el, ev, fn) => el && el.addEventListener(ev, fn, { passive:true });
-  const saveFile = (name, content, type='text/plain') => {
-    const blob = new Blob([content], { type });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url; a.download = name; document.body.appendChild(a); a.click();
-    URL.revokeObjectURL(url); a.remove();
-  };
-  const copyText = async (txt) => { try{ await navigator.clipboard.writeText(txt); toast('Copied'); } catch{ toast('Copy failed', true); } };
-  const toast = (msg,bad=false)=>{
-    const t=document.createElement('div');
-    t.textContent=msg;
-    t.style.cssText='position:fixed;left:50%;bottom:22px;transform:translateX(-50%);background:'+(bad?'#4d1622':'#132a20')+';color:#fff;padding:10px 14px;border:1px solid rgba(255,255,255,.12);border-radius:12px;z-index:9999';
-    document.body.appendChild(t); setTimeout(()=>t.remove(),1500);
-  };
-  const debounce = (fn,ms=120)=>{ let t; return (...a)=>{ clearTimeout(t); t=setTimeout(()=>fn(...a),ms); }; };
 
-  /* ---------- quick formatters ---------- */
-  const basicFormatCSS = s => { try{ return s.replace(/\{/g,'{\n  ').replace(/\;/g,';\n  ').replace(/\}\s*/g,'\n}\n').replace(/\n\s+\n/g,'\n'); }catch{ return s } };
-  const basicFormatJS  = s => { try{ return s.replace(/;\s*/g,';\n').replace(/\{\s*/g,'{\n  ').replace(/\}\s*/g,'\n}\n').replace(/\)\s*\{/g,') {\n  ').replace(/\n\s+\n/g,'\n'); }catch{ return s } };
-
-  /* ---------- one-time repair for polluted saves ---------- */
-  function stripHighlightArtifacts(s){
-    if (typeof s !== 'string') return s;
-    if (!/<span\s+class="tok\s/.test(s) && !/&lt;span\s+class="tok\s/.test(s)) return s;
-    let out = s.replace(/<\/span>/g, '').replace(/<span\s+class="tok\s[^>]*>/g, '');
-    out = out.replace(/&lt;/g,'<').replace(/&gt;/g,'>').replace(/&amp;/g,'&');
-    return out;
-  }
-
-  /* ---------- Prism-powered renderer ---------- */
-  function prismRender(targetPre, lang, text){
-    // Build a fresh <code> so Prism can own it
-    targetPre.innerHTML = '';
-    const code = document.createElement('code');
-    code.className = 'language-' + (lang==='css' ? 'css' : 'javascript');
-    code.textContent = text;           // never insert HTML here
-    targetPre.appendChild(code);
-    // Highlight
-    if (window.Prism) Prism.highlightElement(code);
-  }
-
-  function makeEditor(edSel, hlSel, lnSel, { lang='css', storageKey, defaultValue='' }){
-    const ed = $(edSel), hl = $(hlSel), ln = $(lnSel);
-
-    const load = () => {
-      let saved = localStorage.getItem(storageKey);
-      if (saved === null) saved = defaultValue;
-      const cleaned = stripHighlightArtifacts(saved);
-      if (cleaned !== saved) { localStorage.setItem(storageKey, cleaned); saved = cleaned; }
-      return saved;
+  <!-- ================= SCRIPTS ================ -->
+  <script>
+    /* ---------- utils ---------- */
+    const $ = s => document.querySelector(s);
+    const on = (el, ev, fn) => el && el.addEventListener(ev, fn, { passive:true });
+    const saveFile = (name, content, type='text/plain') => {
+      const blob = new Blob([content], { type });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url; a.download = name; document.body.appendChild(a); a.click();
+      URL.revokeObjectURL(url); a.remove();
     };
-
-    const setLines = (text) => {
-      const lines = text.split('\n').length;
-      let out = '';
-      for (let i=1;i<=lines;i++) out += i + (i<lines ? '\n' : '');
-      ln.textContent = out;
+    const copyText = async (txt) => { try{ await navigator.clipboard.writeText(txt); toast('Copied'); } catch{ toast('Copy failed', true); } };
+    const toast = (msg,bad=false)=>{
+      const t=document.createElement('div');
+      t.textContent=msg;
+      t.style.cssText='position:fixed;left:50%;bottom:22px;transform:translateX(-50%);background:'+(bad?'#4d1622':'#132a20')+';color:#fff;padding:10px 14px;border:1px solid rgba(255,255,255,.12);border-radius:12px;z-index:9999';
+      document.body.appendChild(t); setTimeout(()=>t.remove(),1500);
     };
+    const debounce = (fn,ms=120)=>{ let t; return (...a)=>{ clearTimeout(t); t=setTimeout(()=>fn(...a),ms); }; };
 
-    const render = (text) => { setLines(text); prismRender(hl, lang, text); };
+    /* ---------- quick formatters ---------- */
+    const basicFormatCSS = s => { try{ return s.replace(/\{/g,'{\n  ').replace(/\;/g,';\n  ').replace(/\}\s*/g,'\n}\n').replace(/\n\s+\n/g,'\n'); }catch{ return s } };
+    const basicFormatJS  = s => { try{ return s.replace(/;\s*/g,';\n').replace(/\{\s*/g,'{\n  ').replace(/\}\s*/g,'\n}\n').replace(/\)\s*\{/g,') {\n  ').replace(/\n\s+\n/g,'\n'); }catch{ return s } };
 
-    const initial = load();
-    ed.value = initial; render(initial);
+    /* ---------- clean old polluted saves (from pre-Prism versions) ---------- */
+    function stripHighlightArtifacts(s){
+      if (typeof s !== 'string') return s;
+      if (!/<span\s+class="tok\s/.test(s) && !/&lt;span\s+class="tok\s/.test(s)) return s;
+      let out = s.replace(/<\/span>/g, '').replace(/<span\s+class="tok\s[^>]*>/g, '');
+      out = out.replace(/&lt;/g,'<').replace(/&gt;/g,'>').replace(/&amp;/g,'&');
+      return out;
+    }
 
-    // Scroll sync
-    const syncScroll = () => { hl.scrollTop = ed.scrollTop; hl.scrollLeft = ed.scrollLeft; ln.scrollTop = ed.scrollTop; };
-    on(ed, 'scroll', syncScroll);
+    /* ---------- Prism-powered renderer ---------- */
+    function prismRender(preEl, lang, text){
+      preEl.innerHTML = '';
+      const code = document.createElement('code');
+      code.className = 'language-' + (lang==='css' ? 'css' : 'javascript');
+      code.textContent = text;   // important: no innerHTML to avoid XSS / artifacts
+      preEl.appendChild(code);
+      if (window.Prism) {
+        Prism.highlightElement(code);
+      }
+    }
 
-    // Update
-    const update = () => render(ed.value);
-    on(ed, 'input', debounce(update, 40));
+    /* ---------- Editor factory (overlayed Prism) ---------- */
+    function makeEditor(edSel, hlSel, lnSel, { lang='css', storageKey, defaultValue='' }){
+      const ed = $(edSel), hl = $(hlSel), ln = $(lnSel);
 
-    // Actions
-    const save = () => { localStorage.setItem(storageKey, ed.value); toast('Saved'); };
-    const reset = () => { if (confirm('Clear the editor?')) { ed.value=''; update(); save(); } };
-    const copy = () => copyText(ed.value);
-    const exportFile = () => saveFile(storageKey + (lang==='css'?'.css':'.js'), ed.value, 'text/plain');
+      const load = () => {
+        let saved = localStorage.getItem(storageKey);
+        if (saved === null) saved = defaultValue;
+        const cleaned = stripHighlightArtifacts(saved);
+        if (cleaned !== saved) { localStorage.setItem(storageKey, cleaned); saved = cleaned; }
+        return saved;
+      };
 
-    return {
-      ed, hl, ln, save, reset, copy, exportFile, render, setLines,
-      setWrap:(onwrap)=>{ ed.style.whiteSpace = onwrap?'pre-wrap':'pre'; ed.style.overflowWrap = onwrap?'anywhere':'normal'; },
-      format:()=>{ if (lang==='css') ed.value = basicFormatCSS(ed.value); else ed.value = basicFormatJS(ed.value); update(); },
-      importFrom:(file)=> new Promise(res=>{
-        const r=new FileReader();
-        r.onload=()=>{ ed.value=String(r.result||''); update(); res(); };
-        r.readAsText(file);
-      })
-    };
-  }
+      let lastLineCount = 1;
+      const setLines = (text) => {
+        const lines = text.split('\n').length;
+        if (lines === lastLineCount) return;
+        lastLineCount = lines;
+        let out = '';
+        for (let i=1;i<=lines;i++) out += i + (i<lines ? '\n' : '');
+        ln.textContent = out;
+      };
 
-  /* ---------- init per tab ---------- */
-  <% if (!tab) { %>
-    const cssEditor = makeEditor('#cssEd','#cssHl','#cssLines',{
-      lang:'css', storageKey:'poke-custom-css',
-      defaultValue:`/* Write CSS that applies across Poke. Example:
+      const render = (text) => { setLines(text); prismRender(hl, lang, text); };
+
+      // initial
+      const initial = load();
+      ed.value = initial; render(initial);
+
+      // scroll sync
+      const syncScroll = () => { hl.scrollTop = ed.scrollTop; hl.scrollLeft = ed.scrollLeft; ln.scrollTop = ed.scrollTop; };
+      on(ed, 'scroll', syncScroll);
+
+      // input update (debounced + rAF for smoothness)
+      const update = () => { window.requestAnimationFrame(()=> render(ed.value)); };
+      on(ed, 'input', debounce(update, 40));
+
+      // focus overlay click sends focus to textarea
+      on(hl, 'mousedown', () => ed.focus());
+
+      // keyboard niceties: Tab / Shift+Tab, Cmd/Ctrl+/, Home/End preserve column
+      on(ed, 'keydown', (e)=>{
+        const { selectionStart:s, selectionEnd:ePos, value:v } = ed;
+
+        // Save (Ctrl/Cmd+S)
+        if ((e.metaKey||e.ctrlKey) && e.key.toLowerCase()==='s'){ e.preventDefault(); save(); return; }
+
+        // Toggle comment (JS only)
+        if (lang==='js' && (e.metaKey||e.ctrlKey) && e.key === '/'){
+          e.preventDefault();
+          const lines = v.slice(s,ePos).split('\n');
+          const allCommented = lines.every(l=>l.trimStart().startsWith('//'));
+          const replaced = lines.map(l=>{
+            if (allCommented) return l.replace(/^\s*\/\/\s?/, '');
+            return l.replace(/^/, '// ');
+          }).join('\n');
+          replaceRange(s, ePos, replaced);
+          return;
+        }
+
+        // Tab / Shift+Tab
+        if (e.key === 'Tab'){
+          e.preventDefault();
+          const sel = v.slice(s,ePos);
+          if (s !== ePos && sel.includes('\n')){
+            // multi-line indent/outdent
+            const lines = sel.split('\n');
+            const out = e.shiftKey
+              ? lines.map(l=>l.replace(/^ {1,2}/,'')).join('\n')
+              : lines.map(l=>'  '+l).join('\n');
+            replaceRange(s, ePos, out);
+          } else {
+            if (e.shiftKey){
+              // outdent single line
+              const startLine = v.lastIndexOf('\n', s-1)+1;
+              const m = /^ {1,2}/.exec(v.slice(startLine));
+              if (m) replaceRange(startLine, startLine+m[0].length, '');
+            } else {
+              insertAt(s, '  ');
+            }
+          }
+          return;
+        }
+      });
+
+      function insertAt(pos, text){
+        const val = ed.value;
+        ed.value = val.slice(0,pos) + text + val.slice(pos);
+        const np = pos + text.length;
+        ed.selectionStart = ed.selectionEnd = np;
+        update();
+      }
+      function replaceRange(start, end, text){
+        const val = ed.value;
+        ed.value = val.slice(0,start) + text + val.slice(end);
+        ed.selectionStart = start;
+        ed.selectionEnd   = start + text.length;
+        update();
+      }
+
+      // drag & drop import
+      ['dragenter','dragover'].forEach(evt => on(ed, evt, e=>{ e.preventDefault(); }));
+      on(ed, 'drop', e=>{
+        e.preventDefault();
+        const f = e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files[0];
+        if (!f) return;
+        const r = new FileReader();
+        r.onload = () => { ed.value = String(r.result||''); update(); save(); };
+        r.readAsText(f);
+      });
+
+      // actions
+      const save   = () => { localStorage.setItem(storageKey, ed.value); toast('Saved'); };
+      const reset  = () => { if (confirm('Clear the editor?')) { ed.value=''; update(); save(); } };
+      const copy   = () => copyText(ed.value);
+      const exportFile = () => saveFile(storageKey + (lang==='css'?'.css':'.js'), ed.value, 'text/plain');
+
+      return {
+        ed, hl, ln, save, reset, copy, exportFile, render, setLines,
+        setWrap:(onwrap)=>{ ed.style.whiteSpace = onwrap?'pre-wrap':'pre'; ed.style.overflowWrap = onwrap?'anywhere':'normal'; },
+        format:()=>{ if (lang==='css') ed.value = basicFormatCSS(ed.value); else ed.value = basicFormatJS(ed.value); update(); },
+        importFrom:(file)=> new Promise(res=>{
+          const r=new FileReader();
+          r.onload=()=>{ ed.value=String(r.result||''); update(); res(); };
+          r.readAsText(file);
+        })
+      };
+    }
+
+    /* ---------- init per tab ---------- */
+    <% if (!tab) { %>
+      const cssEditor = makeEditor('#cssEd','#cssHl','#cssLines',{
+        lang:'css', storageKey:'poke-custom-css',
+        defaultValue:`/* Write CSS that applies across Poke. Example:
 
 nav { backdrop-filter: blur(16px) saturate(120%); }
 .tab.active { filter: drop-shadow(0 0 10px #7cc7ff); }
 :root { --accent: #9df7c9; }
 
 */`
-    });
+      });
 
-    const cssStylePreview = document.createElement('style');
-    cssStylePreview.id='custom-css-preview';
-    document.body.appendChild(cssStylePreview);
+      // live preview
+      const cssStylePreview = document.createElement('style');
+      cssStylePreview.id='custom-css-preview'; document.body.appendChild(cssStylePreview);
+      const applyCssPreview = () => { cssStylePreview.textContent = cssEditor.ed.value || ''; };
+      applyCssPreview();
 
-    const applyCssPreview = () => { cssStylePreview.textContent = cssEditor.ed.value || ''; };
-    applyCssPreview();
+      on($('#saveCssBtn'),'click',cssEditor.save);
+      on($('#formatCssBtn'),'click',cssEditor.format);
+      on($('#copyCssBtn'),'click',cssEditor.copy);
+      on($('#exportCssBtn'),'click',cssEditor.exportFile);
+      on($('#resetCssBtn'),'click',cssEditor.reset);
+      on($('#importCssFile'),'change', async e=>{ const f=e.target.files?.[0]; if(f) await cssEditor.importFrom(f); });
+      on($('#wrapCssBtn'),'click', e=>{
+        const b=e.currentTarget; const onw=b.getAttribute('data-wrap')==='1';
+        cssEditor.setWrap(!onw); b.setAttribute('data-wrap', onw?'0':'1'); b.textContent='Wrap: ' + (onw?'Off':'On');
+      });
+      on($('#reloadPreviewCss'),'click',applyCssPreview);
+      on(cssEditor.ed,'input',debounce(applyCssPreview,50));
+    <% } %>
 
-    on($('#saveCssBtn'),'click',cssEditor.save);
-    on($('#formatCssBtn'),'click',cssEditor.format);
-    on($('#copyCssBtn'),'click',cssEditor.copy);
-    on($('#exportCssBtn'),'click',cssEditor.exportFile);
-    on($('#resetCssBtn'),'click',cssEditor.reset);
-    on($('#importCssFile'),'change', async e=>{ const f=e.target.files?.[0]; if(f) await cssEditor.importFrom(f); });
-    on($('#wrapCssBtn'),'click', e=>{
-      const b=e.currentTarget; const onw=b.getAttribute('data-wrap')==='1';
-      cssEditor.setWrap(!onw); b.setAttribute('data-wrap', onw?'0':'1'); b.textContent='Wrap: ' + (onw?'Off':'On');
-    });
-    on($('#reloadPreviewCss'),'click',applyCssPreview);
-    on(cssEditor.ed,'input',debounce(applyCssPreview,50));
-
-    on(document,'keydown',e=>{
-      if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='s'){ e.preventDefault(); cssEditor.save(); }
-    });
-  <% } %>
-
-  <% if (tab) { %>
-    const jsEditor = makeEditor('#jsEd','#jsHl','#jsLines',{
-      lang:'js', storageKey:'poke-custom-script',
-      defaultValue:`// Write JavaScript that will run on Poke pages.
+    <% if (tab) { %>
+      const jsEditor = makeEditor('#jsEd','#jsHl','#jsLines',{
+        lang:'js', storageKey:'poke-custom-script',
+        defaultValue:`// Write JavaScript that will run on Poke pages.
 // Tip: wrap in DOMContentLoaded to avoid race conditions:
 document.addEventListener('DOMContentLoaded', () => {
   console.log('[Poke Custom] Hello from your script!');
 });`
-    });
+      });
 
-    on($('#saveJsBtn'),'click',jsEditor.save);
-    on($('#formatJsBtn'),'click',jsEditor.format);
-    on($('#copyJsBtn'),'click',jsEditor.copy);
-    on($('#exportJsBtn'),'click',jsEditor.exportFile);
-    on($('#resetJsBtn'),'click',jsEditor.reset);
-    on($('#importJsFile'),'change', async e=>{ const f=e.target.files?.[0]; if(f) await jsEditor.importFrom(f); });
-    on($('#wrapJsBtn'),'click', e=>{
-      const b=e.currentTarget; const onw=b.getAttribute('data-wrap')==='1';
-      jsEditor.setWrap(!onw); b.setAttribute('data-wrap', onw?'0':'1'); b.textContent='Wrap: ' + (onw?'Off':'On');
-    });
+      on($('#saveJsBtn'),'click',jsEditor.save);
+      on($('#formatJsBtn'),'click',jsEditor.format);
+      on($('#copyJsBtn'),'click',jsEditor.copy);
+      on($('#exportJsBtn'),'click',jsEditor.exportFile);
+      on($('#resetJsBtn'),'click',jsEditor.reset);
+      on($('#importJsFile'),'change', async e=>{ const f=e.target.files?.[0]; if(f) await jsEditor.importFrom(f); });
+      on($('#wrapJsBtn'),'click', e=>{
+        const b=e.currentTarget; const onw=b.getAttribute('data-wrap')==='1';
+        jsEditor.setWrap(!onw); b.setAttribute('data-wrap', onw?'0':'1'); b.textContent='Wrap: ' + (onw?'Off':'On');
+      });
+    <% } %>
 
+    // global: Ctrl/Cmd+S saves current visible editor
     on(document,'keydown',e=>{
-      if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='s'){ e.preventDefault(); jsEditor.save(); }
+      if ((e.ctrlKey||e.metaKey) && e.key.toLowerCase()==='s'){
+        e.preventDefault();
+        const cssBtn = document.querySelector('#saveCssBtn');
+        const jsBtn  = document.querySelector('#saveJsBtn');
+        if (cssBtn && getComputedStyle(cssBtn).display !== 'none') cssBtn.click();
+        if (jsBtn  && getComputedStyle(jsBtn).display  !== 'none')  jsBtn.click();
+      }
     });
-  <% } %>
-</script>
+  </script>
 
- 
   <!-- site loader to apply saved CSS/JS globally -->
   <script src="/css/custom-css.js"></script>
 </body>

@@ -28,25 +28,6 @@
       --sans: Inter, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, "Helvetica Neue", Arial, "Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol", sans-serif;
       --code-size:13.5px;
     }
-/* Fix alignment of live editor content */
-.editor-wrap {
-  display: flex;
-  align-items: flex-start;
-  position: relative;
-}
-
-.ln {
-  position: sticky;
-  left: 0;
-  z-index: 2;
-}
-
-.live-editor {
-  flex: 1;
-  padding-left: 24px !important;
-  margin-left: 16px;
-  min-width: 0;
-}
 
     html.gradient-bg{
       min-height:100%;
@@ -71,8 +52,8 @@
     }
     .customize-navbar__left{display:flex;align-items:center}
     .customize-navbar__logo{width:124px;display:block}
-    .customize-navbar__middle{flex:1; display:flex; justify-content:center; align-items:center; transform:translateY(0)!important}
-    .customize-navbar__search{position:relative; width:100%; max-width:640px; transform:translateY(0)!important}
+    .customize-navbar__middle{flex:1; display:flex; justify-content:center; align-items:center}
+    .customize-navbar__search{position:relative; width:100%; max-width:640px}
     .customize-navbar__input{
       width:100%; height:40px; padding:0 44px 0 16px;
       border-radius:14px; border:1px solid rgba(255,255,255,.12); outline:none;
@@ -86,7 +67,7 @@
     }
     .customize-navbar__btn{
       position:absolute; right:6px; top:50%;
-      transform:translateY(-50%)!important;
+      transform:translateY(-50%);
       border:0; border-radius:10px; width:36px; height:36px; cursor:pointer;
       background:linear-gradient(180deg,#1b2231,#151b27); color:var(--text);
       display:grid; place-items:center; outline:none;
@@ -102,21 +83,27 @@
     .customize-navbar__icon:hover{ color:#e8f0ff; transform:translateY(-1px); border-color:rgba(124,199,255,.35) }
 
     /* -------- PAGE LAYOUT -------- */
-    .container{max-width:1200px;margin:22px auto 64px;padding:0 16px}
+    .container{max-width:1100px;margin:22px auto 64px;padding:0 16px}
+
+    /* Center hero content */
     .hero{
-      display:grid; grid-template-columns:1.1fr .9fr; gap:16px;
+      display:grid; grid-template-columns:1fr; gap:16px;
+      justify-items:center; text-align:center;
       background:linear-gradient(180deg, rgba(124,199,255,.08), rgba(249,119,148,.07)), var(--panel);
-      border:1px solid var(--border); border-radius:var(--radius-lg); padding:18px; box-shadow:var(--shadow);
+      border:1px solid var(--border); border-radius:var(--radius-lg); padding:20px; box-shadow:var(--shadow);
     }
-    @media (max-width:900px){.hero{grid-template-columns:1fr}}
     .title{font-weight:900;font-size:clamp(22px,3vw,34px);letter-spacing:.2px;line-height:1.1}
     .subtitle{color:var(--muted);margin-top:6px;font-size:clamp(13px,1.6vw,15px)}
-    .tabs{display:flex;gap:8px;padding:14px;margin-top:14px;background:var(--panel-2);border:1px solid var(--border);border-radius:var(--radius)}
+
+    /* Center the tabs row */
+    .tabs{display:flex;gap:8px;padding:14px;margin:18px auto 0;background:var(--panel-2);border:1px solid var(--border);border-radius:var(--radius);justify-content:center;max-width:fit-content}
     .tab{position:relative;padding:10px 14px;border-radius:10px;cursor:pointer;text-transform:uppercase;letter-spacing:.75px;font-size:12px;color:var(--muted);user-select:none;text-decoration:none}
     .tab.active{color:var(--text);background:rgba(124,199,255,.06)}
     .tab.active::after{content:"";position:absolute;left:12px;right:12px;bottom:6px;height:2px;background:linear-gradient(90deg, var(--accent), var(--accent-2));border-radius:2px}
-    .work{display:grid;grid-template-columns:1.1fr .9fr;gap:16px;margin-top:14px}
+
+    .work{display:grid;grid-template-columns:1.05fr .95fr;gap:16px;margin-top:14px}
     @media (max-width:1000px){.work{grid-template-columns:1fr}}
+
     .panel{background:var(--panel);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden}
     .panel .head{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 12px;border-bottom:1px solid var(--border);background:linear-gradient(180deg, rgba(255,255,255,.03), transparent)}
     .panel .head .title{font-weight:700;font-size:14px}
@@ -128,29 +115,59 @@
     .btn.warn{background:rgba(255,180,0,.12);border-color:rgba(255,180,0,.4)}
     .btn.err{background:rgba(239,71,111,.12);border-color:rgba(239,71,111,.4)}
 
-    /* -------- Prism-Live editors -------- */
-    .editor-wrap{position:relative;height:min(70vh,680px);overflow:auto;background:#0a0b12}
-    .ln{
-      position:absolute; left:0; top:0; bottom:0; width:40px;
-      background:#08090f; color:#6272a4; border-right:1px solid #0d0f1a;
-      text-align:right; padding:18px 6px; font:500 var(--code-size)/1.6 var(--mono);
-      user-select:none;
+    /* -------- Preview / tips styling (restored) -------- */
+    .preview{padding:12px}
+    .preview .box{
+      padding:14px;border-radius:14px;
+      background:linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,.01));
+      border:1px solid rgba(255,255,255,.08);
     }
-    /* The editor itself is a single element now */
+    .preview .box pre{color:#cbd3e3;}
+
+    /* -------- Prism-Live editors -------- */
+    .editor-wrap{
+      position:relative;height:min(70vh,680px);overflow:auto;background:#0a0b12
+    }
+    /* Line numbers rail */
+    .ln{
+      position:absolute; left:0; top:0; bottom:0; width:48px;
+      background:#08090f; color:#6c7aa5; border-right:1px solid #0d0f1a;
+      text-align:right; padding:18px 8px; font:500 var(--code-size)/1.6 var(--mono);
+      user-select:none; z-index:2;
+    }
+    /* Editable code surface */
     .live-editor{
-      box-sizing:border-box;
-      margin:0; outline:0; border:0; background:transparent;
-      font:500 var(--code-size)/1.6 var(--mono);
-      color:var(--text);
+      box-sizing:border-box; margin:0; outline:0; border:0; background:transparent;
+      font:500 var(--code-size)/1.6 var(--mono); color:#e6eaff; caret-color:#a7d0ff;
       white-space:pre; tab-size:2; -moz-tab-size:2;
-      padding:18px 18px 18px 54px;
-      min-height:100%;
+      padding:18px 18px 18px 64px; min-height:100%; position:relative; z-index:1;
+    }
+    /* Ensure Prism token colors pop over the dark bg (theme-safe tweaks) */
+    .token.comment,.token.prolog,.token.doctype,.token.cdata{color:#6c7aa5}
+    .token.punctuation{color:#aab2c0}
+    .token.property,.token.tag,.token.constant,.token.symbol,.token.deleted{color:#ff8b8b}
+    .token.boolean,.token.number{color:#ffd27f}
+    .token.selector,.token.attr-name,.token.string,.token.char,.token.builtin,.token.inserted{color:#9df7c9}
+    .token.operator,.token.entity,.token.url{color:#7cc7ff}
+    .token.atrule,.token.attr-value,.token.keyword{color:#bba7ff}
+    .token.function,.token.class-name{color:#84d0ff}
+    .token.regex,.token.important,.token.variable{color:#f6a2d8}
+
+    /* Footer (restored) */
+    footer{
+      margin:40px auto 24px; max-width:1100px; padding:12px 16px; color:var(--muted);
+      text-align:center; opacity:.9
     }
   </style>
 
   <!-- Prism + Prism-Live (proxied) -->
   <link rel="stylesheet" href="https://p.poketube.fun/https://cdn.jsdelivr.net/npm/prismjs@1/themes/prism-tomorrow.min.css">
   <link rel="stylesheet" href="https://p.poketube.fun/https://cdn.jsdelivr.net/npm/prism-live@1/prism-live.css">
+  <script>
+    /* Make sure autoloader knows where to fetch languages */
+    window.Prism = window.Prism || {};
+    window.Prism.plugins = window.Prism.plugins || {};
+  </script>
   <script src="https://p.poketube.fun/https://cdn.jsdelivr.net/npm/prismjs@1/prism.min.js"></script>
   <script src="https://p.poketube.fun/https://cdn.jsdelivr.net/npm/prismjs@1/plugins/autoloader/prism-autoloader.min.js"></script>
   <script>Prism.plugins.autoloader.languages_path='https://p.poketube.fun/https://cdn.jsdelivr.net/npm/prismjs@1/components/';</script>
@@ -219,7 +236,6 @@
 
           <div class="editor-wrap" id="cssWrap">
             <pre class="ln" id="cssLines">1</pre>
-            <!-- Single live editor (no overlay) -->
             <pre id="cssEd" class="live-editor prism-live language-css" contenteditable
                  aria-label="Custom CSS" data-keep-tabs spellcheck="false"></pre>
           </div>
@@ -267,7 +283,6 @@
 
           <div class="editor-wrap" id="jsWrap">
             <pre class="ln" id="jsLines">1</pre>
-            <!-- Single live editor (no overlay) -->
             <pre id="jsEd" class="live-editor prism-live language-javascript" contenteditable
                  aria-label="Custom JS" data-keep-tabs spellcheck="false"></pre>
           </div>
@@ -327,13 +342,13 @@ document.addEventListener('DOMContentLoaded', () => {
       lnEl.textContent = out;
     }
 
-    /* wrap toggle (contenteditable works with CSS white-space) */
+    /* wrap toggle */
     function setWrap(preEl, onwrap){
       preEl.style.whiteSpace = onwrap ? 'pre-wrap' : 'pre';
       preEl.style.overflowWrap = onwrap ? 'anywhere' : 'normal';
     }
 
-    /* storage helpers using textContent (no spans, no artifacts) */
+    /* storage helpers */
     function loadEditor(preEl, storageKey, fallback){
       const saved = localStorage.getItem(storageKey);
       preEl.textContent = saved ?? fallback;
@@ -356,12 +371,19 @@ nav { backdrop-filter: blur(16px) saturate(120%); }
 */`;
       loadEditor(cssEd, 'poke-custom-css', defaultCss);
 
+      /* Live page preview of CSS */
       const cssPreviewStyle = document.createElement('style'); cssPreviewStyle.id='custom-css-preview'; document.body.appendChild(cssPreviewStyle);
       const applyCssPreview = ()=>{ cssPreviewStyle.textContent = cssEd.textContent || ''; };
 
-      on(cssEd, 'input', debounce(()=>{ setLines(cssEd, cssLines); applyCssPreview(); }, 50));
+      /* Sync line numbers & highlight as you type */
+      on(cssEd, 'input', debounce(()=>{
+        setLines(cssEd, cssLines);
+        if (window.Prism && Prism.highlightElement) Prism.highlightElement(cssEd);
+        applyCssPreview();
+      }, 50));
       on(cssEd, 'scroll', ()=>{ cssLines.scrollTop = cssEd.scrollTop; });
 
+      /* Controls */
       on($('#saveCssBtn'), 'click', ()=> saveEditor(cssEd,'poke-custom-css'));
       on($('#formatCssBtn'),'click', ()=>{ cssEd.textContent = basicFormatCSS(cssEd.textContent); cssEd.dispatchEvent(new Event('input')); });
       on($('#copyCssBtn'),  'click', ()=> copyText(cssEd.textContent));
@@ -370,7 +392,9 @@ nav { backdrop-filter: blur(16px) saturate(120%); }
       on($('#importCssFile'),'change', async e=>{ const f=e.target.files?.[0]; if(!f) return; const t=await f.text(); cssEd.textContent=t; cssEd.dispatchEvent(new Event('input')); });
       on($('#wrapCssBtn'),'click', e=>{ const b=e.currentTarget; const onw=b.getAttribute('data-wrap')==='1'; setWrap(cssEd,!onw); b.setAttribute('data-wrap', onw?'0':'1'); b.textContent='Wrap: ' + (onw?'Off':'On'); });
       on($('#reloadPreviewCss'),'click', applyCssPreview);
-      applyCssPreview();
+
+      /* Kick highlighting once on load so tokens appear */
+      requestAnimationFrame(()=>{ cssEd.dispatchEvent(new Event('input')); applyCssPreview(); });
     <% } %>
 
     /* JS tab */
@@ -383,7 +407,10 @@ document.addEventListener('DOMContentLoaded', () => {
 });`;
       loadEditor(jsEd, 'poke-custom-script', defaultJs);
 
-      on(jsEd, 'input', debounce(()=> setLines(jsEd, jsLines), 50));
+      on(jsEd, 'input', debounce(()=>{
+        setLines(jsEd, jsLines);
+        if (window.Prism && Prism.highlightElement) Prism.highlightElement(jsEd);
+      }, 50));
       on(jsEd, 'scroll', ()=>{ jsLines.scrollTop = jsEd.scrollTop; });
 
       on($('#saveJsBtn'), 'click', ()=> saveEditor(jsEd,'poke-custom-script'));
@@ -393,6 +420,9 @@ document.addEventListener('DOMContentLoaded', () => {
       on($('#resetJsBtn'), 'click', ()=>{ if(confirm('Clear the editor?')){ jsEd.textContent=''; jsEd.dispatchEvent(new Event('input')); saveEditor(jsEd,'poke-custom-script'); }});
       on($('#importJsFile'),'change', async e=>{ const f=e.target.files?.[0]; if(!f) return; const t=await f.text(); jsEd.textContent=t; jsEd.dispatchEvent(new Event('input')); });
       on($('#wrapJsBtn'),'click', e=>{ const b=e.currentTarget; const onw=b.getAttribute('data-wrap')==='1'; setWrap(jsEd,!onw); b.setAttribute('data-wrap', onw?'0':'1'); b.textContent='Wrap: ' + (onw?'Off':'On'); });
+
+      /* Kick highlighting on load */
+      requestAnimationFrame(()=>{ jsEd.dispatchEvent(new Event('input')); });
     <% } %>
 
     /* Global save shortcut */

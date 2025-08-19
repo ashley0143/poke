@@ -11,7 +11,6 @@
   <meta content="summary_large_image" name="twitter:card" />
   <meta content="#f97794" name="theme-color" />
 
-  <!-- your site css -->
   <link href="/css/app-cdn.min.css" rel="stylesheet">
   <link href="/css/app.main.css?v=44600" rel="stylesheet">
   <link href="/css/search.main.css?v=57" rel="stylesheet">
@@ -93,8 +92,6 @@
     @media (max-width:900px){.hero{grid-template-columns:1fr}}
     .title{font-weight:900;font-size:clamp(22px,3vw,34px);letter-spacing:.2px;line-height:1.1}
     .subtitle{color:var(--muted);margin-top:6px;font-size:clamp(13px,1.6vw,15px)}
-    .chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
-    .chip{background:linear-gradient(180deg,var(--chip),var(--chipb));border:1px solid var(--border);padding:6px 10px;border-radius:999px;font-size:12px;color:var(--muted)}
     .tabs{display:flex;gap:8px;padding:14px;margin-top:14px;background:var(--panel-2);border:1px solid var(--border);border-radius:var(--radius)}
     .tab{position:relative;padding:10px 14px;border-radius:10px;cursor:pointer;text-transform:uppercase;letter-spacing:.75px;font-size:12px;color:var(--muted);user-select:none;text-decoration:none}
     .tab.active{color:var(--text);background:rgba(124,199,255,.06)}
@@ -122,7 +119,6 @@
       font:500 var(--code-size)/1.6 var(--mono);
       white-space:pre; overflow:auto; tab-size:2; -moz-tab-size:2;
       -webkit-text-size-adjust:100%;
-      spellcheck:false;
     }
     .hl{
       pointer-events:none; user-select:none;
@@ -144,7 +140,7 @@
     .btn:focus,.tab:focus{outline:none;box-shadow:var(--ring)}
   </style>
 
-  <!-- Prism (through your proxy to respect CSP) -->
+  <!-- Prism (through proxy) -->
   <link rel="stylesheet" href="https://p.poketube.fun/https://cdn.jsdelivr.net/npm/prismjs@1/themes/prism-tomorrow.min.css">
   <style>
     .hl code[class*="language-"]{
@@ -155,9 +151,7 @@
   </style>
   <script src="https://p.poketube.fun/https://cdn.jsdelivr.net/npm/prismjs@1/components/prism-core.min.js"></script>
   <script src="https://p.poketube.fun/https://cdn.jsdelivr.net/npm/prismjs@1/plugins/autoloader/prism-autoloader.min.js"></script>
-  <script>
-    Prism.plugins.autoloader.languages_path = 'https://p.poketube.fun/https://cdn.jsdelivr.net/npm/prismjs@1/components/';
-  </script>
+  <script>Prism.plugins.autoloader.languages_path='https://p.poketube.fun/https://cdn.jsdelivr.net/npm/prismjs@1/components/';</script>
 </head>
 <body>
   <div class="app gradient-bg">
@@ -168,7 +162,7 @@
       </div>
       <div class="customize-navbar__middle">
         <form class="customize-navbar__search" action="/search">
-          <input id="fname" name="query" class="customize-navbar__input" type="search" placeholder="Search videos, channels…" aria-label="Search"/>
+          <input id="fname" name="query" class="customize-navbar__input" type="search" placeholder="Search videos, channels…" aria-label="Search" autocomplete="on"/>
           <button class="customize-navbar__btn" type="submit" aria-label="Search"><i class="fa-light fa-search"></i></button>
         </form>
       </div>
@@ -184,7 +178,7 @@
       <section class="hero">
         <div>
           <div class="title">Customize Poke</div>
-          <div class="subtitle">Personalize everything about poke!!!</div>
+          <div class="subtitle">Edits are stored in the browser. Export a backup before clearing site data.</div>
         </div>
       </section>
 
@@ -221,8 +215,9 @@
           </div>
           <div class="editor-wrap" id="cssWrap" aria-label="CSS code editor">
             <pre class="ln" id="cssLines">1</pre>
-            <pre class="hl" id="cssHl"></pre>
-            <textarea id="cssEd" class="editor" spellcheck="false" aria-label="Custom CSS"></textarea>
+            <pre class="hl" id="cssHl" aria-hidden="true" role="presentation"></pre>
+            <textarea id="cssEd" class="editor" aria-label="Custom CSS"
+              autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></textarea>
           </div>
         </div>
 
@@ -230,7 +225,7 @@
           <div class="head">
             <div>
               <div class="title">Live Preview</div>
-              <div class="hint">Applies your CSS below (isolated box)</div>
+              <div class="hint">CSS below applies to this page (isolated box)</div>
             </div>
             <div class="btns"><button class="btn" id="reloadPreviewCss"><i class="fa-light fa-rotate"></i> Reload</button></div>
           </div>
@@ -267,13 +262,14 @@
           </div>
           <div class="editor-wrap" id="jsWrap" aria-label="JS code editor">
             <pre class="ln" id="jsLines">1</pre>
-            <pre class="hl" id="jsHl"></pre>
-            <textarea id="jsEd" class="editor" spellcheck="false" aria-label="Custom JS"></textarea>
+            <pre class="hl" id="jsHl" aria-hidden="true" role="presentation"></pre>
+            <textarea id="jsEd" class="editor" aria-label="Custom JS"
+              autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></textarea>
           </div>
         </div>
 
         <div class="panel">
-          <div class="head"><div class="title">Security Notice</div><div class="hint">Run only code you wrote or fully trust.</div></div>
+          <div class="head"><div class="title">Note</div><div class="hint">Code runs on Poke pages via the site loader.</div></div>
           <div class="preview">
             <div class="box">
               <p style="margin-top:0">Snippet idea:</p>
@@ -294,7 +290,7 @@ document.addEventListener('DOMContentLoaded', () => {
     </div>
 
     <footer>
-      <div>© 2021–2025 PokeTube • Free software under the GNU GPL. Customizations are stored locally on your device.</div>
+      <div>© 2021–2025 PokeTube • Free software under the GNU GPL. Customizations are stored locally on the device.</div>
     </footer>
   </div>
 
@@ -317,9 +313,9 @@ document.addEventListener('DOMContentLoaded', () => {
       t.style.cssText='position:fixed;left:50%;bottom:22px;transform:translateX(-50%);background:'+(bad?'#4d1622':'#132a20')+';color:#fff;padding:10px 14px;border:1px solid rgba(255,255,255,.12);border-radius:12px;z-index:9999';
       document.body.appendChild(t); setTimeout(()=>t.remove(),1500);
     };
-    const debounce = (fn,ms=120)=>{ let t; return (...a)=>{ clearTimeout(t); t=setTimeout(()=>fn(...a),ms); }; };
+    const debounce = (fn,ms=90)=>{ let t; return (...a)=>{ clearTimeout(t); t=setTimeout(()=>fn(...a),ms); }; };
 
-    /* ---------- quick formatters ---------- */
+    /* ---------- basic formatters ---------- */
     const basicFormatCSS = s => { try{ return s.replace(/\{/g,'{\n  ').replace(/\;/g,';\n  ').replace(/\}\s*/g,'\n}\n').replace(/\n\s+\n/g,'\n'); }catch{ return s } };
     const basicFormatJS  = s => { try{ return s.replace(/;\s*/g,';\n').replace(/\{\s*/g,'{\n  ').replace(/\}\s*/g,'\n}\n').replace(/\)\s*\{/g,') {\n  ').replace(/\n\s+\n/g,'\n'); }catch{ return s } };
 
@@ -332,19 +328,17 @@ document.addEventListener('DOMContentLoaded', () => {
       return out;
     }
 
-    /* ---------- Prism-powered renderer ---------- */
+    /* ---------- Prism renderer ---------- */
     function prismRender(preEl, lang, text){
       preEl.innerHTML = '';
       const code = document.createElement('code');
       code.className = 'language-' + (lang==='css' ? 'css' : 'javascript');
-      code.textContent = text;   // important: no innerHTML to avoid XSS / artifacts
+      code.textContent = text;   // never innerHTML
       preEl.appendChild(code);
-      if (window.Prism) {
-        Prism.highlightElement(code);
-      }
+      if (window.Prism) Prism.highlightElement(code);
     }
 
-    /* ---------- Editor factory (overlayed Prism) ---------- */
+    /* ---------- Editor (textarea + passive Prism view) ---------- */
     function makeEditor(edSel, hlSel, lnSel, { lang='css', storageKey, defaultValue='' }){
       const ed = $(edSel), hl = $(hlSel), ln = $(lnSel);
 
@@ -376,14 +370,20 @@ document.addEventListener('DOMContentLoaded', () => {
       const syncScroll = () => { hl.scrollTop = ed.scrollTop; hl.scrollLeft = ed.scrollLeft; ln.scrollTop = ed.scrollTop; };
       on(ed, 'scroll', syncScroll);
 
-      // input update (debounced + rAF for smoothness)
-      const update = () => { window.requestAnimationFrame(()=> render(ed.value)); };
+      // IME / composition guard: avoid “two textboxes” effect
+      let composing = false;
+      on(ed, 'compositionstart', ()=> composing = true);
+      on(ed, 'compositionupdate', ()=> composing = true);
+      on(ed, 'compositionend', ()=> { composing = false; render(ed.value); });
+
+      // input update (debounced; skipped while composing)
+      const update = () => { if (!composing) window.requestAnimationFrame(()=> render(ed.value)); };
       on(ed, 'input', debounce(update, 40));
 
       // focus overlay click sends focus to textarea
       on(hl, 'mousedown', () => ed.focus());
 
-      // keyboard niceties: Tab / Shift+Tab, Cmd/Ctrl+/, Home/End preserve column
+      // editor key helpers (indent/outdent, toggle comments)
       on(ed, 'keydown', (e)=>{
         const { selectionStart:s, selectionEnd:ePos, value:v } = ed;
 
@@ -408,7 +408,6 @@ document.addEventListener('DOMContentLoaded', () => {
           e.preventDefault();
           const sel = v.slice(s,ePos);
           if (s !== ePos && sel.includes('\n')){
-            // multi-line indent/outdent
             const lines = sel.split('\n');
             const out = e.shiftKey
               ? lines.map(l=>l.replace(/^ {1,2}/,'')).join('\n')
@@ -416,7 +415,6 @@ document.addEventListener('DOMContentLoaded', () => {
             replaceRange(s, ePos, out);
           } else {
             if (e.shiftKey){
-              // outdent single line
               const startLine = v.lastIndexOf('\n', s-1)+1;
               const m = /^ {1,2}/.exec(v.slice(startLine));
               if (m) replaceRange(startLine, startLine+m[0].length, '');
@@ -433,40 +431,40 @@ document.addEventListener('DOMContentLoaded', () => {
         ed.value = val.slice(0,pos) + text + val.slice(pos);
         const np = pos + text.length;
         ed.selectionStart = ed.selectionEnd = np;
-        update();
+        render(ed.value);
       }
       function replaceRange(start, end, text){
         const val = ed.value;
         ed.value = val.slice(0,start) + text + val.slice(end);
         ed.selectionStart = start;
         ed.selectionEnd   = start + text.length;
-        update();
+        render(ed.value);
       }
 
       // drag & drop import
       ['dragenter','dragover'].forEach(evt => on(ed, evt, e=>{ e.preventDefault(); }));
       on(ed, 'drop', e=>{
         e.preventDefault();
-        const f = e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files[0];
+        const f = e.dataTransfer?.files?.[0];
         if (!f) return;
         const r = new FileReader();
-        r.onload = () => { ed.value = String(r.result||''); update(); save(); };
+        r.onload = () => { ed.value = String(r.result||''); render(ed.value); save(); };
         r.readAsText(f);
       });
 
       // actions
       const save   = () => { localStorage.setItem(storageKey, ed.value); toast('Saved'); };
-      const reset  = () => { if (confirm('Clear the editor?')) { ed.value=''; update(); save(); } };
+      const reset  = () => { if (confirm('Clear the editor?')) { ed.value=''; render(ed.value); save(); } };
       const copy   = () => copyText(ed.value);
       const exportFile = () => saveFile(storageKey + (lang==='css'?'.css':'.js'), ed.value, 'text/plain');
 
       return {
         ed, hl, ln, save, reset, copy, exportFile, render, setLines,
         setWrap:(onwrap)=>{ ed.style.whiteSpace = onwrap?'pre-wrap':'pre'; ed.style.overflowWrap = onwrap?'anywhere':'normal'; },
-        format:()=>{ if (lang==='css') ed.value = basicFormatCSS(ed.value); else ed.value = basicFormatJS(ed.value); update(); },
+        format:()=>{ if (lang==='css') ed.value = basicFormatCSS(ed.value); else ed.value = basicFormatJS(ed.value); render(ed.value); },
         importFrom:(file)=> new Promise(res=>{
           const r=new FileReader();
-          r.onload=()=>{ ed.value=String(r.result||''); update(); res(); };
+          r.onload=()=>{ ed.value=String(r.result||''); render(ed.value); res(); };
           r.readAsText(file);
         })
       };
@@ -476,7 +474,7 @@ document.addEventListener('DOMContentLoaded', () => {
     <% if (!tab) { %>
       const cssEditor = makeEditor('#cssEd','#cssHl','#cssLines',{
         lang:'css', storageKey:'poke-custom-css',
-        defaultValue:`/* Write CSS that applies across Poke. Example:
+        defaultValue:`/* Site-wide CSS example:
 
 nav { backdrop-filter: blur(16px) saturate(120%); }
 .tab.active { filter: drop-shadow(0 0 10px #7cc7ff); }
@@ -508,10 +506,10 @@ nav { backdrop-filter: blur(16px) saturate(120%); }
     <% if (tab) { %>
       const jsEditor = makeEditor('#jsEd','#jsHl','#jsLines',{
         lang:'js', storageKey:'poke-custom-script',
-        defaultValue:`// Write JavaScript that will run on Poke pages.
-// Tip: wrap in DOMContentLoaded to avoid race conditions:
+        defaultValue:`// Code runs on Poke pages.
+// To avoid race conditions, wait for DOMContentLoaded:
 document.addEventListener('DOMContentLoaded', () => {
-  console.log('[Poke Custom] Hello from your script!');
+  console.log('[Poke Custom] hello!');
 });`
       });
 
@@ -539,7 +537,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   </script>
 
-  <!-- site loader to apply saved CSS/JS globally -->
+  <!-- applies saved CSS/JS globally -->
   <script src="/css/custom-css.js"></script>
 </body>
 </html>

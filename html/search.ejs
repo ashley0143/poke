@@ -1478,7 +1478,7 @@ font-weight: 1000;" href="/watch?v=<%= x.videoId %>" class="title max-lines-2"><
 font-weight: 1000;" href="/watch?v=<%= x.videoId %>" class="title max-lines-2"><%= x.title %></a>
         <div style="display: flex; flex-direction: column; row-gap: 8px;font-weight:bold">
           <a href="/watch?v=<%= x.videoId %>"><span><%= x.viewCountText %></span> <span>•</span> <span><%= x.publishedText %></span></a>
-          <div style="display: flex;margin-bottom: 6px;">
+          <div style="display: flex;margin-bottom: 0px;">
              <img src="<%= x.authorThumbnails[1].url %>" style="width: fit-content;height: 23px;border-radius: 1em;">
      <a href="/channel?id=<%= x.authorId %>" style="margin:4px"><%= x.author %><% if (x?.authorVerified) { %> 
             <i class="icon ion ion-md-checkmark-circle" title="verified channel"></i><% } %></a>

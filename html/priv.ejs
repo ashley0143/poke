@@ -1,757 +1,476 @@
-<!--
-    This Source Code Form is subject to the terms of the GNU General Public License:
-
-    Copyright (C) 2021-2025 POKETUBE (https://codeberg.org/Ashley/poketube)
-
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with this program. If not, see https://www.gnu.org/licenses/.
--->
-
 <!DOCTYPE html>
-<html class="gradient-bg" lang="en">
+<html lang="en">
 <head>
   <meta charset="utf-8" />
-  <title>PokeTube | Customize</title>
-
+  <title>Poke — Privacy Policy</title>
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
-  <link href="/css/yt-ukraine.svg?v=6" rel="icon">
-  <meta content="Poke | Customize" property="og:title">
-  <meta content="Theme Poke and add custom scripts — go wild (safely)!" property="twitter:description">
-  <meta content="https://cdn.glitch.global/d68d17bb-f2c0-4bc3-993f-50902734f652/aa70111e-5bcd-4379-8b23-332a33012b78.image.png?v=1701898829884" property="og:image" />
-  <meta content="summary_large_image" name="twitter:card" />
-  <meta content="#f97794" name="theme-color" />
+ <meta content="website" property="og:type">
+    <meta content="PokeTube - Legal thingy to put you into sleep" property="og:title">
+    <meta content="This is the PokeTube Privacy Policy meta description. Wow, helpful meta description Poke. Thanks!" property="twitter:description">
+       <meta content="https://cdn.glitch.me/d68d17bb-f2c0-4bc3-993f-50902734f652/aa70111e-5bcd-4379-8b23-332a33012b78.image.png?v=1701898829884" property="og:image"  />
+  <meta content="summary_large_image" name="twitter:card">
+  <link href="/css/yt-ukraine.svg?v=7" rel=icon>
 
-  <link href="/css/app-cdn.min.css" rel="stylesheet">
-  <link href="/css/app.main.css?v=44600" rel="stylesheet">
-  <link href="/css/search.main.css?v=57" rel="stylesheet">
-  <link href="/css/watch.main.css" rel="stylesheet">
-
-  <style>
-    @import url("https://p.poketube.fun/https://site-assets.fontawesome.com/releases/v6.1.1/css/all.css");
-
-    :root{
-      --bg: #0c0c0f;
-      --panel: #121218;
-      --panel-2: #0f0f15;
-      --text: #e9ecf1;
-      --muted: #aab2c0;
-      --accent: #7cc7ff;
-      --accent-2:#f97794;
-      --ok:#20c997;
-      --warn:#ffb400;
-      --err:#ef476f;
-      --border: #212230;
-      --chip: #161824;
-      --chipb: #0f111a;
-      --ring: 0 0 0 2px rgba(124,199,255,.25);
-      --radius: 16px;
-      --radius-lg: 22px;
-      --shadow: 0 10px 30px rgba(0,0,0,.35);
-      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, "Ubuntu Mono", Consolas, "Liberation Mono", monospace;
-      --sans: Inter, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, "Helvetica Neue", Arial, "Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol", sans-serif;
-      --code-size: 13.5px;
-    }
-
-    html.gradient-bg{
-      min-height:100%;
+   <style>
+     *, *::before, *::after { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; }
+    html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+    body {
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+      line-height: 1.55;
       background:
-        radial-gradient(1200px 800px at 10% 10%, rgba(249,119,148,.22), transparent 60%),
-        radial-gradient(1200px 800px at 90% 20%, rgba(124,199,255,.18), transparent 60%),
-        radial-gradient(800px 600px at 30% 80%, rgba(124,255,208,.12), transparent 60%),
-        linear-gradient(135deg, #0a0a0f, #0b0b12 60%, #0c0c15);
-      background-attachment: fixed;
+        radial-gradient(1200px 600px at 0% 0%, #0ea5e9 0%, #0ea5e900 60%),
+        radial-gradient(1000px 700px at 100% 0%, #8b5cf6 0%, #8b5cf600 65%),
+        radial-gradient(1000px 700px at 0% 100%, #14b8a6 0%, #14b8a600 65%),
+        #0b0b0b;
+      color: #eaeaea;
+    }
+    a { color: #54c8ff; text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    :focus-visible { outline: 2px solid #54c8ff; outline-offset: 2px; }
+    img { max-width: 100%; height: auto; }
+    code, pre, kbd, samp {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "DejaVu Sans Mono", monospace;
+      font-size: 0.95em;
     }
 
-    * { box-sizing:border-box }
-    body{
-      margin:0;
-      color:var(--text);
-      font-family:var(--sans);
-      background: transparent;
-      -webkit-font-smoothing: antialiased;
-      text-rendering: optimizeLegibility;
-      overflow-x:hidden;
+    /* ===== Layout ===== */
+    .wrap {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 24px;
+    }
+    header.site {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      backdrop-filter: saturate(140%) blur(10px);
+      background: color-mix(in oklab, #0b0b0b 80%, transparent);
+      border-bottom: 1px solid #222;
+    }
+    .site-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 12px 24px;
+    }
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      color: #fff;
+      font-weight: 800;
+      letter-spacing: 0.2px;
+    }
+    .brand-mark {
+      inline-size: 36px; block-size: 36px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, #0ea5e9, #8b5cf6);
+      display: grid; place-items: center;
+      font-weight: 900;
+    }
+    .brand span { font-size: 1.05rem; }
+    .actions {
+      display: flex; align-items: center; gap: 10px;
+    }
+    .btn {
+      appearance: none; border: 0; cursor: pointer;
+      padding: 10px 14px; border-radius: 12px;
+      background: #111; color: #ddd;
+      border: 1px solid #222;
+      transition: transform .08s ease, background .2s ease, border-color .2s ease;
+    }
+    .btn:hover { background: #161616; border-color: #2a2a2a; }
+    .btn:active { transform: translateY(1px); }
+    .btn.primary {
+      background: linear-gradient(135deg, #0ea5e9, #8b5cf6);
+      color: #0b0b0b; font-weight: 700;
+      border: 0;
     }
 
-    /* Top nav — fixed spacing + centered search */
-    nav{
-      display:flex;
-      align-items:center;
-      gap:16px;
-      padding:12px 20px;
-      position:sticky;
-      top:0;
-      backdrop-filter: blur(12px) saturate(120%);
-      background:linear-gradient(180deg, rgba(14,14,24,.78), rgba(14,14,24,.45));
-      border-bottom:1px solid rgba(255,255,255,.06);
-      z-index:2000;
-      min-height:62px;
+    /* ===== Hero ===== */
+    .hero {
+      padding: 28px 24px 6px;
     }
-    nav .left{ display:flex; align-items:center }
-    nav .left img{ width:124px; display:block }
-    nav .middle{
-      flex:1;
-      display:flex;
-      justify-content:center;
-      align-items:center;
+    .hero-card {
+      background: color-mix(in oklab, #111 86%, transparent);
+      border: 1px solid #222;
+      border-radius: 24px;
+      padding: clamp(18px, 3.5vw, 28px);
+      display: grid;
+      grid-template-columns: 1.2fr .8fr;
+      gap: clamp(18px, 3.5vw, 28px);
     }
-    nav .middle .search{ position:relative; width:100%; max-width:640px }
-    nav .middle input[type="search"]{
-      width:100%;
-      height:40px;
-      padding:0 44px 0 16px;
-      border-radius:14px;
-      border:1px solid rgba(255,255,255,.12);
-      outline:none;
-      background:
-        radial-gradient(400px 80px at 50% 0%, rgba(124,199,255,.06), transparent 60%),
-        #151720;
-      color:var(--text);
-      transition:.18s border-color, .18s box-shadow, .18s background-color;
-      box-shadow: inset 0 0 0 1px rgba(255,255,255,.02);
+    .hero h1 {
+      margin: 0 0 8px 0;
+      font-size: clamp(1.6rem, 3.6vw, 2.2rem);
+      letter-spacing: 0.2px;
     }
-    nav .middle input[type="search"]::placeholder{ color:#8b93a6 }
-    nav .middle input[type="search"]:focus{
-      border-color: rgba(124,199,255,.5);
-      box-shadow: 0 0 0 4px rgba(124,199,255,.15);
-      background:#141826;
+    .hero p.lede {
+      margin: 0 0 14px 0;
+      color: #cfcfcf;
     }
-    nav .middle button{
-      position:absolute; right:6px; top:50%; transform:translateY(-50%);
-      border:0; border-radius:10px; width:36px; height:36px; cursor:pointer;
-      background:linear-gradient(180deg,#1b2231,#151b27);
-      color:var(--text); display:grid; place-items:center;
-      outline:none;
+    .badges {
+      display: flex; flex-wrap: wrap; gap: 10px;
+      margin-top: 10px;
     }
-    nav .middle button:focus{ box-shadow:0 0 0 3px rgba(124,199,255,.25) }
-    nav .right{ display:flex; align-items:center; gap:14px; padding-left:8px }
-    nav .right a{
-      color:#cfd6e6; opacity:.9; display:grid; place-items:center;
-      width:34px; height:34px; border-radius:10px; border:1px solid rgba(255,255,255,.07);
-      background:linear-gradient(180deg,#161925,#121521);
-      transition:.15s transform,.15s border-color,.15s background-color,.15s color;
+    .chip {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 8px 12px; border-radius: 999px;
+      background: #0f0f10; border: 1px solid #1f1f22; color: #dcdcdc;
+      font-weight: 600; font-size: 0.9rem;
     }
-    nav .right a:hover{ color:#e8f0ff; transform:translateY(-1px); border-color:rgba(124,199,255,.35) }
+    .chip .dot {
+      inline-size: 10px; block-size: 10px; border-radius: 999px;
+      background: #22c55e;
+      box-shadow: 0 0 0 3px color-mix(in oklab, #22c55e 18%, transparent);
+    }
+    .hero-side {
+      display: grid; gap: 12px;
+      align-content: start;
+    }
+    .note {
+      padding: 12px 14px;
+      border-radius: 16px;
+      background: #0f1315;
+      border: 1px solid #1a2126;
+      color: #dfe9f3;
+    }
+    .note h3 { margin: 0 0 6px 0; font-size: 1rem; }
+    .muted { color: #a9a9a9; }
 
-    /* Page container */
-    .container{
-      max-width:1200px;
-      margin:22px auto 64px;
-      padding:0 16px;
+    /* ===== TOC ===== */
+    .toc {
+      margin-top: 16px;
+      background: #0f0f10;
+      border: 1px solid #1f1f22;
+      border-radius: 16px;
+      padding: 12px;
     }
-
-    /* Header card */
-    .hero{
-      display:grid; grid-template-columns:1.1fr .9fr; gap:16px;
-      background:linear-gradient(180deg, rgba(124,199,255,.08), rgba(249,119,148,.07)), var(--panel);
-      border:1px solid var(--border);
-      border-radius:var(--radius-lg);
-      padding:18px;
-      box-shadow:var(--shadow);
+    .toc h3 { margin: 0 0 8px 0; font-size: 1rem; }
+    .toc ul {
+      list-style: none; margin: 0; padding: 0;
+      columns: 2; column-gap: 16px;
     }
-    @media (max-width:900px){ .hero{ grid-template-columns:1fr } }
-
-    .hero .title{
-      font-weight:900; font-size:clamp(22px, 3vw, 34px);
-      letter-spacing:.2px; line-height:1.1;
-    }
-    .hero .subtitle{
-      color:var(--muted); margin-top:6px; font-size:clamp(13px,1.6vw,15px)
+    .toc li { break-inside: avoid; margin: 6px 0; }
+    .toc a { color: #cfe8ff; }
+    @media (max-width: 780px) {
+      .hero-card { grid-template-columns: 1fr; }
+      .toc ul { columns: 1; }
     }
 
-    .chips{ display:flex; flex-wrap:wrap; gap:8px; margin-top:12px }
-    .chip{
-      background:linear-gradient(180deg, var(--chip), var(--chipb));
-      border:1px solid var(--border);
-      padding:6px 10px; border-radius:999px; font-size:12px; color:var(--muted);
+    /* ===== Sections ===== */
+    section.policy {
+      margin: 22px 0;
+      background: #0f0f10;
+      border: 1px solid #1f1f22;
+      border-radius: 18px;
+      padding: clamp(16px, 3vw, 22px);
     }
+    section.policy h2 {
+      margin: 0 0 10px 0; font-size: clamp(1.2rem, 2.5vw, 1.6rem);
+    }
+    section.policy p { margin: 10px 0; color: #e7e7e7; }
+    .callout {
+      background: #0c1114; border: 1px solid #132029; color: #d2ebff;
+      padding: 12px 14px; border-radius: 14px;
+    }
+    .grid-2 {
+      display: grid; gap: 12px; grid-template-columns: 1fr 1fr;
+    }
+    @media (max-width: 780px) { .grid-2 { grid-template-columns: 1fr; } }
 
-    /* Theme selector row */
-    .theme-row{
-      display:flex; gap:10px; align-items:center; margin-top:10px;
-      flex-wrap:wrap;
+    /* ===== Details blocks ===== */
+    details.block {
+      background: #0c0c0d; border: 1px solid #1a1a1d;
+      border-radius: 14px; padding: 10px 12px; margin: 10px 0;
     }
-    .theme-row select{
-      background:var(--panel-2); color:var(--text);
-      border:1px solid var(--border); border-radius:10px; padding:8px 10px;
+    details.block > summary {
+      cursor: pointer; list-style: none;
+      display: flex; align-items: center; gap: 10px;
+      font-weight: 700; color: #e6f7ff;
     }
+    details.block > summary::before {
+      content: "▸"; transition: transform .15s ease;
+      color: #8bd2ff;
+    }
+    details[open].block > summary::before { transform: rotate(90deg); }
+    details.block p, details.block ul { margin-left: 22px; }
 
-    /* Tabs */
-    .tabs{
-      display:flex; gap:8px; padding:14px; margin-top:14px;
-      background:var(--panel-2); border:1px solid var(--border);
-      border-radius:var(--radius);
+    /* ===== Footer ===== */
+    footer.site {
+      margin: 28px auto 50px;
+      color: #bdbdbd;
+      text-align: center;
     }
-    .tab{
-      position:relative;
-      padding:10px 14px; border-radius:10px; cursor:pointer;
-      text-transform:uppercase; letter-spacing:.75px; font-size:12px;
-      color:var(--muted); user-select:none; text-decoration:none;
-    }
-    .tab.active{ color:var(--text); background:rgba(124,199,255,.06) }
-    .tab.active::after{
-      content:""; position:absolute; left:12px; right:12px; bottom:6px; height:2px;
-      background:linear-gradient(90deg, var(--accent), var(--accent-2));
-      border-radius:2px;
-    }
+    .small { font-size: .925rem; }
+    .mono { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "DejaVu Sans Mono", monospace; }
 
-    /* Editor layout */
-    .work{
-      display:grid; grid-template-columns:1.1fr .9fr; gap:16px; margin-top:14px;
+    /* ===== Theme toggle (pure CSS + a tiny bit of JS for preference) ===== */
+    .theme-toggle {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 8px 10px; border-radius: 12px; border: 1px solid #222;
+      background: #111; color: #ddd; cursor: pointer;
+      font-size: .95rem;
     }
-    @media (max-width:1000px){ .work{ grid-template-columns:1fr } }
+    .theme-toggle input { appearance: none; inline-size: 38px; block-size: 22px; background: #222; border-radius: 999px; position: relative; outline: none; margin: 0; }
+    .theme-toggle input::after {
+      content: ""; position: absolute; inset: 3px auto auto 3px;
+      inline-size: 16px; block-size: 16px; border-radius: 999px; background: #eee; transition: transform .2s ease;
+    }
+    .theme-toggle input:checked::after { transform: translateX(16px); }
 
-    .panel{
-      background:var(--panel);
-      border:1px solid var(--border);
-      border-radius:var(--radius);
-      box-shadow:var(--shadow);
-      overflow:hidden;
+    /* ===== Print ===== */
+    @media print {
+      header.site, .actions, .theme-toggle, .hero-side, .toc { display: none !important; }
+      body { background: #fff; color: #000; }
+      section.policy { border-color: #999; background: #fff; }
+      a { color: #0645ad; }
     }
-    .panel .head{
-      display:flex; align-items:center; justify-content:space-between; gap:10px;
-      padding:10px 12px; border-bottom:1px solid var(--border);
-      background:linear-gradient(180deg, rgba(255,255,255,.03), transparent);
-    }
-    .panel .head .title{ font-weight:700; font-size:14px }
-    .panel .head .hint{ color:var(--muted); font-size:12px }
-    .btns{ display:flex; gap:8px; flex-wrap:wrap }
-    .btn{
-      border:1px solid var(--border);
-      background:var(--chip); color:var(--text);
-      padding:8px 10px; border-radius:10px; font-size:12px; cursor:pointer;
-    }
-    .btn:hover{ border-color:var(--accent); box-shadow:var(--ring) }
-    .btn.ok{ background:rgba(32,201,151,.12); border-color:rgba(32,201,151,.4) }
-    .btn.warn{ background:rgba(255,180,0,.12); border-color:rgba(255,180,0,.4) }
-    .btn.err{ background:rgba(239,71,111,.12); border-color:rgba(239,71,111,.4) }
-
-    /* Editor (textarea + overlayed highlighted pre) */
-    .editor-wrap{
-      position:relative; height:min(70vh, 680px); overflow:auto; background:#0a0b12;
-    }
-    .editor{
-      position:absolute; inset:0; resize:none; width:100%; height:100%;
-      padding:18px 18px 18px 54px;
-      border:0; outline:0; background:transparent; color:transparent;
-      caret-color:var(--text);
-      font: 500 var(--code-size)/1.6 var(--mono);
-      white-space:pre; overflow:auto;
-      tab-size:2; -moz-tab-size:2;
-    }
-    .hl{
-      pointer-events:none; user-select:none;
-      padding:18px 18px 18px 54px; min-height:100%;
-      font: 500 var(--code-size)/1.6 var(--mono);
-      white-space:pre; color:var(--text);
-    }
-    .ln{
-      position:absolute; left:0; top:0; bottom:0; width:40px;
-      background:#08090f; color:#6272a4; border-right:1px solid #0d0f1a;
-      text-align:right; padding:18px 6px; font: 500 var(--code-size)/1.6 var(--mono);
-      user-select:none;
-    }
-
-    /* Syntax highlighting (no library) */
-    .tok.comment { color:#6c7891; font-style:italic }
-    .tok.str     { color:#a1eafb }
-    .tok.num     { color:#ffd580 }
-    .tok.kw      { color:#8ef0a5; font-weight:600 }
-    .tok.fn      { color:#9bb7ff }
-    .tok.prop    { color:#c2d1ff }
-    .tok.op      { color:#ffadb5 }
-    .tok.selector{ color:#ffb8e2 }
-    .tok.at      { color:#9cf1dd }
-    .tok.bool    { color:#ffcf99 }
-    .tok.reg     { color:#a5ffce }
-
-    /* Preview */
-    .preview{
-      padding:14px; background:var(--panel-2);
-    }
-    .preview .box{
-      border:1px dashed var(--border);
-      border-radius:12px; padding:14px; background:#0b0d14;
-      min-height:180px;
-    }
-
-    /* Alerts */
-    .alert{
-      display:flex; align-items:flex-start; gap:10px;
-      padding:10px 12px; border-radius:12px; border:1px solid var(--border);
-      background:linear-gradient(180deg, rgba(255,255,255,.02), transparent);
-      font-size:13px; color:var(--muted);
-    }
-    .alert i{ margin-top:2px }
-    .alert.ok{ border-color:rgba(32,201,151,.35) }
-    .alert.warn{ border-color:rgba(255,180,0,.35) }
-    .alert.err{ border-color:rgba(239,71,111,.35) }
-
-    /* Footer */
-    footer{
-      max-width:1200px; margin:40px auto 50px; padding:0 16px;
-      color:var(--muted); font-size:12px;
-    }
-
-    .btn:focus, .tab:focus { outline: none; box-shadow: var(--ring) }
   </style>
-
-  <!-- Theme runtime style (updated by JS) -->
-  <style id="theme-style"></style>
 </head>
 <body>
-  <div class="app gradient-bg">
-    <nav>
-      <div class="left">
-        <a class="class" href="/143" style="color:#fff">
-          <img src="/css/logo.svg?v=5" alt="PokeTube" />
-        </a>
-      </div>
+  <!-- Header -->
+  <header class="site">
+    <div class="site-row wrap">
+      <a class="brand" href="/" aria-label="Poke home">
+<img style="transform: scale(1.3);width:8.5em;display: block;margin-left: auto;margin-right: auto;" src="/css/logo.svg?v=5"></a>
+       </a>
+    </div>
+  </header>
 
-      <div class="middle">
-        <div class="search">
-          <form action="/search">
-            <input class="search-bar" autocomplete="on" id="fname" name="query" placeholder="Search videos, channels…" aria-label="Search" />
-            <button class="btn btn-success" type="submit" aria-label="Search"><i class="fa-light fa-search"></i></button>
-          </form>
-          <img src="https://search-metrics.poketube.fun/t/rep.gif" style="border:0;width:0;visibility:hidden" alt="">
+  <!-- Hero -->
+  <main class="wrap hero" id="top">
+    <div class="hero-card" role="region" aria-label="Privacy overview">
+      <div>
+        <h1>Poke Privacy Policy</h1>
+        <p class="lede">
+         <strong>We don’t collect any data about you.</strong> No telemetry, no trackers ! Because Poke is <strong>free software</strong>, you can also check the source and self-host.
+        </p>
+        <div class="badges" aria-label="Key guarantees">
+          <span class="chip"><span class="dot" aria-hidden="true"></span> No data collected</span>
+          <span class="chip"><span class="dot" aria-hidden="true"></span> No telemetry</span>
+          <span class="chip"><span class="dot" aria-hidden="true"></span> Requests proxied</span>
+        </div>
+
+        <div class="toc" aria-label="Table of contents">
+          <h3>Jump to a section</h3>
+          <ul>
+            <li><a href="#preamble">Preamble</a></li>
+            <li><a href="#summary">TL;DR</a></li>
+            <li><a href="#what-we-collect">What We Do/Don’t Collect</a></li>
+             <li><a href="#cookies">Cookies &amp; Storage</a></li>
+            <li><a href="#openstreetmap">OpenStreetMap</a></li>
+            <li><a href="#third-parties">Third-Party Requests &amp; Proxy</a></li>
+            <li><a href="#legal-bases">Legal Bases (GDPR)</a></li>
+            <li><a href="#your-rights">Your Rights</a></li>
+            <li><a href="#retention">Data Retention</a></li>
+            <li><a href="#security">Security</a></li>
+             <li><a href="#self-host">Self-Hosting</a></li>
+            <li><a href="#changes">Changes to this Policy</a></li>
+            <li><a href="#contact">Contact</a></li>
+            <li><a href="#license">Policy License</a></li>
+          </ul>
         </div>
       </div>
 
-      <div class="right">
-        <a href="/domains" aria-label="Domains"><i class="fa-light fa-server"></i></a>
-        <a href="/privacy" aria-label="Privacy"><i class="fa-light fa-shield"></i></a>
-        <a href="/video/upload?from=" aria-label="Upload"><i class="fa-light fa-video"></i></a>
-        <a href="https://codeberg.org/Ashley/poketube/issues" aria-label="Report a bug"><i class="fa-light fa-bug"></i></a>
-      </div>
-    </nav>
-
-    <div class="container">
-      <section class="hero">
-        <div>
-          <div class="title">Customize Poke</div>
-          <div class="subtitle">Personalize styles and behavior. Your edits are stored locally in your browser. Nothing is uploaded.</div>
-
-          <div class="theme-row">
-            <label for="themeSelect">Preset theme:</label>
-            <select id="themeSelect" aria-label="Preset CSS theme">
-              <option value="midnight">Midnight (default)</option>
-              <option value="sakura">Sakura</option>
-              <option value="ocean">Ocean</option>
-              <option value="solarized">Solarized Dark</option>
-              <option value="amoled">AMOLED Black</option>
-              <option value="highcontrast">High Contrast</option>
-            </select>
-            <button class="btn" id="saveThemeBtn" title="Save theme">Save Theme</button>
-            <button class="btn warn" id="resetThemeBtn" title="Reset theme">Reset Theme</button>
-          </div>
-
-          <div class="chips" role="list" style="margin-top:10px">
-            <span class="chip"><i class="fa-light fa-lock"></i>&nbsp; Local-only storage</span>
-            <span class="chip"><i class="fa-light fa-floppy-disk"></i>&nbsp; Auto-save</span>
-            <span class="chip"><i class="fa-light fa-code"></i>&nbsp; Syntax highlight (no libs)</span>
-            <span class="chip"><i class="fa-light fa-bolt"></i>&nbsp; Live preview</span>
-          </div>
+      <aside class="hero-side">
+        <div class="note" role="note" aria-label="Status">
+          <h3>Current version</h3>
+          <p class="muted small">Last updated: <time datetime="2025-08-19">August 19, 2025</time></p>
+          <p class="small">This page is for the default Poke instance (<span class="mono">poketube.fun</span>). If you use a community instance or your own instance, its policy may differ.</p>
         </div>
-        <div class="alert ok" role="status" aria-live="polite">
-          <i class="fa-light fa-shield-check"></i>
-          <div>
-            <strong>Heads-up:</strong> Your CSS/JS never leaves the browser. If you clear site data, your customizations are removed. Export a backup first.
-          </div>
-        </div>
-      </section>
-
-      <div class="tabs" role="tablist" aria-label="Customization Tabs">
-        <% if (!tab) { %>
-          <a class="tab active" role="tab" aria-selected="true" href="/customize">Custom CSS</a>
-          <a class="tab" role="tab" aria-selected="false" href="/customize?tab=js">Custom JS</a>
-        <% } else { %>
-          <a class="tab" role="tab" aria-selected="false" href="/customize">Custom CSS</a>
-          <a class="tab active" role="tab" aria-selected="true" href="/customize?tab=js">Custom JS</a>
-        <% } %>
-      </div>
-
-      <% if (!tab) { %>
-      <!-- ============================= CSS TAB ============================= -->
-      <section class="work" aria-label="Custom CSS workspace">
-        <div class="panel">
-          <div class="head">
-            <div>
-              <div class="title">Custom CSS Editor</div>
-              <div class="hint">Saved to <code>localStorage['poke-custom-css']</code></div>
-            </div>
-            <div class="btns">
-              <button class="btn ok" id="saveCssBtn" title="Save (Ctrl/Cmd+S)"><i class="fa-light fa-floppy-disk"></i> Save</button>
-              <button class="btn" id="formatCssBtn" title="Basic formatting">Format</button>
-              <button class="btn" id="wrapCssBtn" data-wrap="1" title="Toggle line wrap">Wrap: On</button>
-              <button class="btn" id="copyCssBtn" title="Copy to clipboard">Copy</button>
-              <button class="btn warn" id="exportCssBtn" title="Download a backup">Export</button>
-              <label class="btn warn" for="importCssFile" title="Restore from file" style="cursor:pointer">
-                <i class="fa-light fa-file-arrow-up"></i> Import
-                <input id="importCssFile" type="file" accept=".css,text/css,text/plain" style="display:none">
-              </label>
-              <button class="btn err" id="resetCssBtn" title="Clear editor">Reset</button>
-            </div>
-          </div>
-
-          <div class="editor-wrap" id="cssWrap" aria-label="CSS code editor">
-            <pre class="ln" id="cssLines">1</pre>
-            <pre class="hl" id="cssHl"></pre>
-            <textarea id="cssEd" class="editor" spellcheck="false" aria-label="Custom CSS"></textarea>
-          </div>
-        </div>
-
-        <div class="panel">
-          <div class="head">
-            <div>
-              <div class="title">Live Preview</div>
-              <div class="hint">Applies your CSS below (isolated box)</div>
-            </div>
-            <div class="btns">
-              <button class="btn" id="reloadPreviewCss"><i class="fa-light fa-rotate"></i> Reload</button>
-            </div>
-          </div>
-          <div class="preview">
-            <div class="box" id="cssPreviewBox">
-              <p style="margin-top:0">Preview area — try something like:</p>
-              <pre style="margin:0" aria-hidden="true">nav{backdrop-filter: blur(16px)} .tab.active{filter: drop-shadow(0 0 10px #7cc7ff)}</pre>
-            </div>
-          </div>
-        </div>
-      </section>
-      <% } %>
-
-      <% if (tab) { %>
-      <!-- ============================== JS TAB ============================== -->
-      <section class="work" aria-label="Custom JS workspace">
-        <div class="panel">
-          <div class="head">
-            <div>
-              <div class="title">Custom JS Editor</div>
-              <div class="hint">Saved to <code>localStorage['poke-custom-script']</code></div>
-            </div>
-            <div class="btns">
-              <button class="btn ok" id="saveJsBtn" title="Save (Ctrl/Cmd+S)"><i class="fa-light fa-floppy-disk"></i> Save</button>
-              <button class="btn" id="formatJsBtn" title="Basic formatting">Format</button>
-              <button class="btn" id="wrapJsBtn" data-wrap="1" title="Toggle line wrap">Wrap: On</button>
-              <button class="btn" id="copyJsBtn" title="Copy to clipboard">Copy</button>
-              <button class="btn warn" id="exportJsBtn" title="Download a backup">Export</button>
-              <label class="btn warn" for="importJsFile" title="Restore from file" style="cursor:pointer">
-                <i class="fa-light fa-file-arrow-up"></i> Import
-                <input id="importJsFile" type="file" accept=".js,application/javascript,text/javascript,text/plain" style="display:none">
-              </label>
-              <button class="btn err" id="resetJsBtn" title="Clear editor">Reset</button>
-            </div>
-          </div>
-
-          <div class="editor-wrap" id="jsWrap" aria-label="JS code editor">
-            <pre class="ln" id="jsLines">1</pre>
-            <pre class="hl" id="jsHl"></pre>
-            <textarea id="jsEd" class="editor" spellcheck="false" aria-label="Custom JS"></textarea>
-          </div>
-        </div>
-
-        <div class="panel">
-          <div class="head">
-            <div class="title">Security Notice</div>
-            <div class="hint">Run only code you wrote or fully trust.</div>
-          </div>
-          <div class="preview">
-            <div class="alert warn">
-              <i class="fa-light fa-triangle-exclamation"></i>
-              <div>
-                Your script executes on Poke pages via the site’s loader. If something breaks, use a private window or clear site storage to recover.
-              </div>
-            </div>
-            <div style="height:10px"></div>
-            <div class="box">
-              <p style="margin-top:0">Snippet ideas:</p>
-              <pre style="margin:0"><code>// Example: add a badge to nav
-document.addEventListener('DOMContentLoaded', () => {
-  const nav = document.querySelector('nav .right');
-  if (!nav) return;
-  const b = document.createElement('span');
-  b.textContent = 'Custom JS Active';
-  b.style.cssText = 'margin-left:8px;padding:4px 8px;border-radius:999px;background:#1a2a40;color:#a8dcff;font:600 11px/1 var(--sans)';
-  nav.appendChild(b);
-});</code></pre>
-            </div>
-          </div>
-        </div>
-      </section>
-      <% } %>
+     
+      </aside>
     </div>
 
-    <footer>
-      <div>© 2021–2025 PokeTube • Free software under the GNU GPL. Customizations are stored locally on your device.</div>
+     <section id="preamble" class="policy">
+      <h2>Preamble</h2>
+      <p>
+        Welcome to Poke’s Privacy Policy. We don’t collect data about you and we don’t run telemetry. Poke is <strong>free software</strong> you can read, remix, and run yourself.
+      </p>
+      <p class="callout">
+        Not legal advice lol
+      </p>
+    </section>
+
+    <!-- Summary -->
+    <section id="summary" class="policy">
+      <h2>TL;DR</h2>
+      <div class="grid-2">
+        <div>
+          <ul>
+            <li><strong>No data collected.</strong> at all!!</li>
+            <li><strong>No telemetry.</strong> We don’t phone home.</li>
+            <li><strong>No third‑party trackers.</strong> Yippe!!</li>
+            <li><strong>YouTube can’t see what you watch here.</strong> Its all done on the backend. </li>
+          </ul>
+        </div>
+        <div>
+          <ul>
+            <li><strong>Poke Account:</strong> no email required, no personal info needed.</li>
+            <li><strong>Poke Maps:</strong> uses OpenStreetMap data; map tiles/attribution may have separate privacy rules depending on the tile server you use.</li>
+            <li><strong>No required cookies.</strong> Preferences (like theme or layout) may live in local storage on your device.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- What we collect -->
+    <section id="what-we-collect" class="policy">
+      <h2>What We Do/Don’t Collect</h2>
+      <details class="block" open>
+        <summary>We collect <em>nothing</em> about you</summary>
+        <p>
+          We don’t store IP addresses, user‑agent fingerprints, unique identifiers, emails, names—none of it. There’s no telemetry or “anonymous crash reports.”
+        </p>
+      </details>
+      <details class="block">
+        <summary>What exists briefly so the internet works</summary>
+        <p>
+          Your browser and our server exchange data to deliver pages (that’s how HTTP works). That info is handled <em>transiently</em> and not logged in a way that identifies you on our primary instance.
+        </p>
+      </details>
+      <details class="block">
+        <summary>Poke Account</summary>
+        <p>
+          If you make a Poke account, we don’t require an email or personal details.  
+        </p>
+      </details>
+    </section>
+ 
+    <!-- Cookies & storage -->
+    <section id="cookies" class="policy">
+      <h2>Cookies &amp; Local Storage</h2>
+      <ul>
+        <li><strong>No cookies :D!</strong></li>
+        <li><strong>Local storage only for preferences</strong> (e.g., theme, layout). This stays on your device.</li>
+      </ul>
+    </section>
+
+
+
+<!-- OpenStreetMap -->
+<section id="openstreetmap" class="policy">
+<h2>OpenStreetMap</h2>
+<p>
+Poke Maps uses <a href="https://www.openstreetmap.org/" target="_blank" rel="noopener">OpenStreetMap</a> data. That means when you explore maps at <a href="/map">/map</a>, we embed OSM via an <strong>iframe</strong> directly into the Poke site. The tiles and geographic info are delivered from OSM contributors’ servers.
+While Poke itself doesn’t collect any of your data, OpenStreetMap’s tile servers have their own <a href="https://wiki.osmfoundation.org/wiki/Privacy_Policy" target="_blank" rel="noopener">privacy policy</a>.  
+</p>
+ 
+</section>
+
+    <!-- Third parties -->
+    <section id="third-parties" class="policy">
+      <h2>Third‑Party Requests &amp; Proxy</h2>
+      <p>
+        When Poke needs assets (videos, thumbnails, etc.), we fetch them through our proxy (e.g., <span class="mono">p.poketube.fun</span>).  
+      </p>
+      <p>
+        Fonts and other assets are shipped locally where possible. If a third‑party endpoint is necessary, we keep it behind the proxy and strip identifying headers.
+      </p>
+    </section>
+
+<!-- Legal bases -->
+<section id="legal-bases" class="policy">
+  <h2>Legal Bases for Processing (GDPR)</h2>
+  <ul>
+    <li><strong>Legitimate interests:</strong> Running Poke smoothly while collecting exactly zero personal data.</li>
+    <li><strong>Consent:</strong> If we ever invent an optional feature that needs info, we’ll ask. But right now? There’s nothing to consent to.</li>
+    <li><strong>Legal obligation:</strong> Even if someone waves a fancy piece of paper at us, we literally have nothing personal to hand over. Empty pockets.</li>
+ 
+</section>
+
+
+ <!-- Your rights -->
+<section id="your-rights" class="policy">
+  <h2>Your Privacy Rights</h2>
+  <p>
+    Since Poke doesn’t collect or store personal data, there’s basically nothing for us to give, sell, or lose about you. 
+    You don’t have to worry about “export my data” or “delete my profile” requests because we don’t have anything on you in the first place.
+  </p>
+  <p>
+    Poke Accounts don’t require an email, name, or any other identifying info — and there’s no way to add that kind of data even if you wanted to. 
+   </p>
+ 
+</section>
+
+    <!-- Retention -->
+    <section id="retention" class="policy">
+      <h2>Data Retention</h2>
+      <ul>
+        <li><strong>Server logs:</strong> No personal identifiers on our main instance.</li>
+        <li><strong>Telemetry/analytics:</strong> Not enabled here.</li>
+        <li><strong>Optional contact data (if you added it):</strong> Kept only as long as you want it to be.</li>
+      </ul>
+    </section>
+
+    <!-- Security -->
+    <section id="security" class="policy">
+      <h2>Security</h2>
+      <p>
+        Connections use modern TLS. We minimize what could ever be exposed by not collecting personal data in the first place. Less data, less risk. Math checks out.
+      </p>
+    </section>
+ 
+
+    <!-- Self-host -->
+    <section id="self-host" class="policy">
+      <h2>Self‑Hosting</h2>
+      <p>
+        Poke is free software under the <strong>GNU GPL v3.0 or later</strong>.  
+      </p>
+    </section>
+
+    <!-- Changes -->
+    <section id="changes" class="policy">
+      <h2>Changes to this Policy</h2>
+      <p>
+        If we ever change how privacy works here, we’ll update the date at the top and announce major changes. Spoiler: changes would not include adding two bananas. this isnt minions LOL :3
+      </p>
+    </section>
+
+    <!-- Contact -->
+    <section id="contact" class="policy">
+      <h2>Contact</h2>
+      <p>
+        Questions or concerns? Open an issue on our project tracker :D
+      </p>
+      <ul>
+        <li>Project: <span class="mono">codeberg.org/Ashley/poketube</span></li>
+       </ul>
+    </section>
+
+    <!-- License -->
+    <section id="license" class="policy">
+      <h2>Policy License</h2>
+      <p class="small">
+        © 2021–2025 Poke. This policy is licensed under the
+        <strong>Creative Commons Attribution–ShareAlike 4.0 International</strong> (CC BY-SA 4.0).
+      </p>
+      <details class="block">
+        <summary>GPLv3 Warranty Disclaimer (excerpt)</summary>
+        <pre class="small" style="white-space:pre-wrap;margin:8px 0;">
+IN NO EVENT UNLESS REQUIRED BY APPLICABLE LAW OR AGREED TO IN WRITING WILL ANY COPYRIGHT HOLDER,
+OR ANY OTHER PARTY WHO MODIFIES AND/OR CONVEYS THE PROGRAM AS PERMITTED ABOVE, BE LIABLE TO YOU FOR DAMAGES,
+INCLUDING ANY GENERAL, SPECIAL, INCIDENTAL OR CONSEQUENTIAL DAMAGES ARISING OUT OF THE USE OR INABILITY TO USE THE PROGRAM
+(E.G., LOSS OF DATA, DATA BEING RENDERED INACCURATE, OR FAILURES OF THE PROGRAM TO OPERATE WITH ANY OTHER PROGRAMS),
+EVEN IF SUCH HOLDER OR OTHER PARTY HAS BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGES.
+        </pre>
+      </details>
+    </section>
+
+    <footer class="site small">
+      <p>
+       </p>
+      <p>
+        Return to <a href="#top">Top</a>!
+      </p>
     </footer>
-  </div>
+  </main>
 
-  <!-- ============================== SCRIPTS =============================== -->
-  <script>
-    // --------------------- Utilities ---------------------
-    const $ = sel => document.querySelector(sel);
-    const on = (el, ev, fn) => el && el.addEventListener(ev, fn, { passive: true });
-    const saveFile = (name, content, type='text/plain') => {
-      const blob = new Blob([content], { type });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url; a.download = name; document.body.appendChild(a); a.click();
-      URL.revokeObjectURL(url); a.remove();
-    };
-    const copyText = async (txt) => { try { await navigator.clipboard.writeText(txt); toast('Copied'); } catch { toast('Copy failed', true); } };
-    const toast = (msg, bad=false) => {
-      const t = document.createElement('div');
-      t.textContent = msg;
-      t.style.cssText = 'position:fixed;left:50%;bottom:22px;transform:translateX(-50%);background:'+ (bad?'#4d1622':'#132a20') +';color:#fff;padding:10px 14px;border:1px solid rgba(255,255,255,.12);border-radius:12px;z-index:9999';
-      document.body.appendChild(t); setTimeout(()=>t.remove(), 1500);
-    };
-    const debounce = (fn, ms=200) => { let t; return (...a)=>{ clearTimeout(t); t=setTimeout(()=>fn(...a), ms); }; };
-
-    // --------------------- Minimal formatter ---------------------
-    function basicFormatCSS(src){
-      try{
-        return src
-          .replace(/\{/g,'{\n  ')
-          .replace(/\;/g,';\n  ')
-          .replace(/\}\s*/g,'\n}\n')
-          .replace(/\n\s+\n/g,'\n');
-      }catch{ return src }
-    }
-    function basicFormatJS(src){
-      try{
-        return src
-          .replace(/;\s*/g,';\n')
-          .replace(/\{\s*/g,'{\n  ')
-          .replace(/\}\s*/g,'\n}\n')
-          .replace(/\)\s*\{/g,') {\n  ')
-          .replace(/\n\s+\n/g,'\n');
-      }catch{ return src }
-    }
-
-    // --------------------- Syntax highlighter (no libraries) ---------------------
-    // IMPORTANT: use single backslashes in regex literals (previous version double-escaped, breaking highlighting)
-    const JS_KEYWORDS = /\b(?:await|break|case|catch|class|const|continue|debugger|default|delete|do|else|enum|export|extends|false|finally|for|from|function|if|import|in|instanceof|let|new|null|return|super|switch|this|throw|true|try|typeof|var|void|while|with|yield)\b/g;
-    const JS_BUILTINS = /\b(?:Array|Object|String|Number|Boolean|Map|Set|WeakMap|WeakSet|Date|Math|JSON|Promise|RegExp|Error|TypeError|URL|Node|Element|document|window|console|fetch)\b/g;
-
-    function escapeHTML(s){ return s.replace(/[&<>]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;'}[c])); }
-
-    function highlightJS(code){
-      let s = escapeHTML(code);
-      // comments
-      s = s.replace(/(\/\*[\s\S]*?\*\/)/g, '<span class="tok comment">$1</span>');
-      s = s.replace(/(\/\/.*?$)/gm, '<span class="tok comment">$1</span>');
-      // strings + template literals
-      s = s.replace(/(`[\s\S]*?`)/g, '<span class="tok str">$1</span>');
-      s = s.replace(/('[^'\\]*(?:\\.[^'\\]*)*')/g, '<span class="tok str">$1</span>');
-      s = s.replace(/("[^"\\]*(?:\\.[^"\\]*)*")/g, '<span class="tok str">$1</span>');
-      // regex literals (rough)
-      s = s.replace(/(\/(?:\\.|[^\\\/\n])+\/[gimsuy]*)/g, '<span class="tok reg">$1</span>');
-      // numbers/booleans/null
-      s = s.replace(/\b(0x[\da-fA-F]+|\d+\.\d+|\d+)\b/g, '<span class="tok num">$1</span>');
-      s = s.replace(/\b(true|false|null)\b/g, '<span class="tok bool">$1</span>');
-      // keywords & builtins
-      s = s.replace(JS_KEYWORDS, '<span class="tok kw">$&</span>');
-      s = s.replace(JS_BUILTINS, '<span class="tok fn">$&</span>');
-      // operators
-      s = s.replace(/([=+\-/*<>!&|%^~?:]+)/g, '<span class="tok op">$1</span>');
-      return s;
-    }
-
-    function highlightCSS(code){
-      let s = escapeHTML(code);
-      // block comments
-      s = s.replace(/(\/\*[\s\S]*?\*\/)/g, '<span class="tok comment">$1</span>');
-      // at-rules
-      s = s.replace(/(@[a-zA-Z-]+)/g, '<span class="tok at">$1</span>');
-      // selectors (naive: line before { )
-      s = s.replace(/^([^{}@\n][^{\n]+)(?=\s*\{)/gm, '<span class="tok selector">$1</span>');
-      // properties/values
-      s = s.replace(/([a-zA-Z-]+)(\s*:\s*)([^;}{]+)/g, (m, p, c, v) => {
-        v = v.replace(/(#[0-9a-fA-F]{3,8}|\b\d+(?:\.\d+)?(?:px|em|rem|%|vh|vw)?\b)/g, '<span class="tok num">$1</span>');
-        v = v.replace(/("[^"]*"|'[^']*')/g, '<span class="tok str">$1</span>');
-        return '<span class="tok prop">'+p+'</span>'+c+v;
-      });
-      return s;
-    }
-
-    function makeEditor(edSel, hlSel, lnSel, { lang='css', storageKey, defaultValue='' }){
-      const ed = $(edSel), hl = $(hlSel), ln = $(lnSel);
-
-      const load = () => {
-        const saved = localStorage.getItem(storageKey);
-        return (saved !== null) ? saved : defaultValue;
-      };
-
-      const setLines = (text) => {
-        const lines = text.split('\n').length;
-        let out = '';
-        for (let i=1;i<=lines;i++) out += i + (i<lines ? '\n' : '');
-        ln.textContent = out;
-      };
-
-      const render = (text) => {
-        setLines(text);
-        hl.innerHTML = (lang==='css') ? highlightCSS(text) : highlightJS(text);
-      };
-
-      const initial = load();
-      ed.value = initial;
-      render(initial);
-
-      const syncScroll = () => { hl.scrollTop = ed.scrollTop; hl.scrollLeft = ed.scrollLeft; ln.scrollTop = ed.scrollTop; };
-      on(ed, 'scroll', syncScroll);
-
-      const update = () => render(ed.value);
-      on(ed, 'input', debounce(update, 20));
-
-      const save = () => { localStorage.setItem(storageKey, ed.value); toast('Saved'); };
-      const reset = () => { if (confirm('Clear the editor?')) { ed.value=''; update(); save(); } };
-      const copy = () => copyText(ed.value);
-      const exportFile = () => saveFile(storageKey + (lang==='css'?'.css':'.js'), ed.value, 'text/plain');
-
-      return { ed, hl, ln, save, reset, copy, exportFile, render, setLines,
-               setWrap:(onwrap)=>{ ed.style.whiteSpace = onwrap?'pre-wrap':'pre'; ed.style.overflowWrap = onwrap?'anywhere':'normal'; },
-               format:()=>{ if (lang==='css') ed.value = basicFormatCSS(ed.value); else ed.value = basicFormatJS(ed.value); update(); },
-               importFrom:(file)=> new Promise(res=>{
-                  const r = new FileReader();
-                  r.onload = () => { ed.value = String(r.result||''); update(); res(); };
-                  r.readAsText(file);
-               })
-      };
-    }
-
-    // --------------------- Theme presets ---------------------
-    const THEME_STYLE = $('#theme-style');
-    const THEME_KEY = 'poke-custom-theme';
-    const THEMES = {
-      midnight: `
-:root{
-  --bg:#0c0c0f; --panel:#121218; --panel-2:#0f0f15; --text:#e9ecf1; --muted:#aab2c0;
-  --accent:#7cc7ff; --accent-2:#f97794; --border:#212230; --chip:#161824; --chipb:#0f111a;
-}`,
-      sakura: `
-:root{
-  --bg:#0e0a10; --panel:#1b1019; --panel-2:#160d14; --text:#ffeef4; --muted:#ffc8d8;
-  --accent:#ff9cc3; --accent-2:#ffd1e1; --border:#2a1622; --chip:#22111b; --chipb:#1a0d15;
-}`,
-      ocean: `
-:root{
-  --bg:#071017; --panel:#0b1b27; --panel-2:#091521; --text:#e6f3ff; --muted:#a9c4da;
-  --accent:#53b7ff; --accent-2:#3de1c5; --border:#102536; --chip:#0c1a26; --chipb:#0a1520;
-}`,
-      solarized: `
-:root{
-  --bg:#002b36; --panel:#073642; --panel-2:#062c35; --text:#eee8d5; --muted:#93a1a1;
-  --accent:#268bd2; --accent-2:#2aa198; --border:#0a3945; --chip:#0b2f38; --chipb:#0a2830;
-}`,
-      amoled: `
-:root{
-  --bg:#000; --panel:#050505; --panel-2:#0a0a0a; --text:#f2f2f2; --muted:#bdbdbd;
-  --accent:#8ab4ff; --accent-2:#ff8ab4; --border:#111; --chip:#0b0b0b; --chipb:#070707;
-}`,
-      highcontrast: `
-:root{
-  --bg:#000; --panel:#000; --panel-2:#000; --text:#fff; --muted:#e6e6e6;
-  --accent:#00ffff; --accent-2:#ff00ff; --border:#fff; --chip:#000; --chipb:#000;
-}`
-    };
-
-    function applyTheme(name){
-      const css = THEMES[name] || THEMES.midnight;
-      THEME_STYLE.textContent = css;
-      $('#themeSelect').value = name in THEMES ? name : 'midnight';
-    }
-    function saveTheme(){ localStorage.setItem(THEME_KEY, $('#themeSelect').value); toast('Theme saved'); }
-    function resetTheme(){ localStorage.removeItem(THEME_KEY); applyTheme('midnight'); toast('Theme reset'); }
-
-    // --------------------- Initialize per tab ---------------------
-    // Theme boot
-    applyTheme(localStorage.getItem(THEME_KEY) || 'midnight');
-    on($('#themeSelect'), 'change', (e)=> applyTheme(e.target.value));
-    on($('#saveThemeBtn'), 'click', saveTheme);
-    on($('#resetThemeBtn'), 'click', resetTheme);
-
-    // CSS TAB
-    <% if (!tab) { %>
-    const cssEditor = makeEditor('#cssEd', '#cssHl', '#cssLines', {
-      lang:'css', storageKey:'poke-custom-css',
-      defaultValue: `/* Write CSS that applies across Poke. Example:
-
-nav { backdrop-filter: blur(16px) saturate(120%); }
-.tab.active { filter: drop-shadow(0 0 10px #7cc7ff); }
-:root { --accent: #9df7c9; }
-
-*/`
-    });
-
-    const cssStylePreview = document.createElement('style');
-    cssStylePreview.id = 'custom-css-preview';
-    document.body.appendChild(cssStylePreview);
-
-    const applyCssPreview = () => { cssStylePreview.textContent = cssEditor.ed.value || ''; };
-    applyCssPreview();
-
-    // Controls
-    on($('#saveCssBtn'), 'click', cssEditor.save);
-    on($('#formatCssBtn'), 'click', cssEditor.format);
-    on($('#copyCssBtn'), 'click', cssEditor.copy);
-    on($('#exportCssBtn'), 'click', cssEditor.exportFile);
-    on($('#resetCssBtn'), 'click', cssEditor.reset);
-    on($('#importCssFile'), 'change', async (e)=>{ const f=e.target.files?.[0]; if (f) await cssEditor.importFrom(f); });
-    on($('#wrapCssBtn'), 'click', (e)=>{
-      const b = e.currentTarget; const onw = b.getAttribute('data-wrap')==='1';
-      cssEditor.setWrap(!onw); b.setAttribute('data-wrap', onw?'0':'1'); b.textContent = 'Wrap: ' + (onw?'Off':'On');
-    });
-    on($('#reloadPreviewCss'), 'click', applyCssPreview);
-
-    // Live preview while typing
-    on(cssEditor.ed, 'input', debounce(applyCssPreview, 50));
-
-    // Save on Ctrl/Cmd+S
-    on(document, 'keydown', (e)=>{
-      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase()==='s') { e.preventDefault(); cssEditor.save(); }
-    });
-    <% } %>
-
-    // JS TAB
-    <% if (tab) { %>
-    const jsEditor = makeEditor('#jsEd', '#jsHl', '#jsLines', {
-      lang:'js', storageKey:'poke-custom-script',
-      defaultValue: `// Write JavaScript that will run on Poke pages.
-// Tip: wrap in DOMContentLoaded to avoid race conditions:
-document.addEventListener('DOMContentLoaded', () => {
-  console.log('[Poke Custom] Hello from your script!');
-});`
-    });
-
-    on($('#saveJsBtn'), 'click', jsEditor.save);
-    on($('#formatJsBtn'), 'click', jsEditor.format);
-    on($('#copyJsBtn'), 'click', jsEditor.copy);
-    on($('#exportJsBtn'), 'click', jsEditor.exportFile);
-    on($('#resetJsBtn'), 'click', jsEditor.reset);
-    on($('#importJsFile'), 'change', async (e)=>{ const f=e.target.files?.[0]; if (f) await jsEditor.importFrom(f); });
-    on($('#wrapJsBtn'), 'click', (e)=>{
-      const b = e.currentTarget; const onw = b.getAttribute('data-wrap')==='1';
-      jsEditor.setWrap(!onw); b.setAttribute('data-wrap', onw?'0':'1'); b.textContent = 'Wrap: ' + (onw?'Off':'On');
-    });
-
-    on(document, 'keydown', (e)=>{
-      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase()==='s') { e.preventDefault(); jsEditor.save(); }
-    });
-    <% } %>
-  </script>
-
-  <!-- Site loader that applies saved CSS/JS globally (kept for compatibility) -->
-  <script src="/css/custom-css.js"></script>
+   
 </body>
 </html>

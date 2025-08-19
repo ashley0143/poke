@@ -1,425 +1,464 @@
- <!--
-    This Source Code Form is subject to the terms of the GNU General Public License:
+<!--
+  This Source Code Form is subject to the terms of the GNU General Public License:
 
-    Copyright (C) 2021-2023 POKETUBE (https://codeberg.org/Ashley/poketube)
-    
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
+  Copyright (C) 2021-2023 POKETUBE (https://codeberg.org/Ashley/poketube)
 
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
+  This program is free software: you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation, either version 3 of the License, or
+  (at your option) any later version.
 
-    You should have received a copy of the GNU General Public License
-    along with this program. If not, see https://www.gnu.org/licenses/.
---><!DOCTYPE html><html>
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+
+  You should have received a copy of the GNU General Public License
+  along with this program. If not, see https://www.gnu.org/licenses/.
+-->
+<!DOCTYPE html>
+<html lang="en">
 <head>
-    <title>Poke | Download Video </title>
-    <meta content="<%=color%>" name="theme-color">
-    <link href=/css/yt-ukraine.svg?v=7 rel=icon>
-    <link rel="manifest" href="/manifest.json">
-    <meta content=website property=og:type>
-      <meta name="viewport" content="width=device-1200px, initial-scale=1.0, shrink-to-fit=yes, viewport-fit=cover">
+  <meta charset="utf-8" />
+  <title>Poke | Download Video</title>
 
-    <meta content="PokeTube - Video Downloader" property=og:title>
-    <meta content="You wouldn't download a car... Right? welp i would - Download this video on PokeTube! for the price of 0$!" property=twitter:description>
-    <meta content="https://i.ytimg.com/vi/<%=v%>/maxresdefault.jpg" property=og:image>
-     <meta content=summary_large_image name=twitter:card>
-    <meta content=@PoketaleBot name=twitter:site>
-    <meta content=@PoketaleBot name=twitter:creator>
-    <link href=/css/app-cdn.min.css rel=stylesheet>
-    <link href=/css/app.main.css?v=44600 rel=stylesheet>
-    <link href="https://fonts.poketube.fun/css/fonts.css" rel=stylesheet>
-    <link href="/css/watch.main.css?v=56" rel=stylesheet>
-    <link href=https://p.poketube.fun/https://site-assets.fontawesome.com/releases/v6.1.1/css/all.css rel=stylesheet>
-<style>
-   a.class:hover {
-    font-weight:bold
-}
-  summary{
-    color:gray;
-}
-summary:hove
-    color:white;
-}
+  <!-- Meta -->
+  <meta name="viewport" content="width=device-width,initial-scale=1,shrink-to-fit=no,viewport-fit=cover" />
+  <meta name="theme-color" content="<%= color %>"/>
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="PokeTube - Video Downloader" />
+  <meta property="og:image" content="https://i.ytimg.com/vi/<%= v %>/maxresdefault.jpg" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:site" content="@PoketaleBot" />
+  <meta name="twitter:creator" content="@PoketaleBot" />
+  <meta name="twitter:description" content="You wouldn't download a car... Right? welp i would — Download this video on PokeTube for 0$!" />
 
-</style>
-  <!-- WIGGLE WIGGLE WIGGLE -->
+  <!-- Icons / Manifest -->
+  <link rel="icon" href="/css/yt-ukraine.svg?v=7" />
+  <link rel="manifest" href="/manifest.json" />
+
+  <!-- Stylesheets already in your stack -->
+  <link rel="preconnect" href="https://fonts.poketube.fun" crossorigin />
+  <link href="https://fonts.poketube.fun/css/fonts.css" rel="stylesheet" />
+  <link href="/css/app-cdn.min.css" rel="stylesheet" />
+  <link href="/css/app.main.css?v=44600" rel="stylesheet" />
+  <link href="/css/watch.main.css?v=56" rel="stylesheet" />
+  <link href="https://p.poketube.fun/https://site-assets.fontawesome.com/releases/v6.1.1/css/all.css" rel="stylesheet" />
+
+  <!-- Page-scoped styles -->
   <style>
+    :root{
+      --bg: #0f0f10;
+      --bg-elev: #17171a;
+      --bg-chip: #1e1e22;
+      --text: #e8e8ee;
+      --muted: #a8a8b3;
+      --link: #3ea6ff;
+      --ring: <%= color %>;
+      --radius: 14px;
+      --pad: 16px;
+      --gap: 12px;
+      --shadow: 0 10px 30px rgba(0,0,0,.25), 0 1px 0 rgba(255,255,255,.04) inset;
+    }
+    @media (prefers-color-scheme: light){
+      :root{
+        --bg: #f7f7fb;
+        --bg-elev: #ffffff;
+        --bg-chip: #f1f2f6;
+        --text: #151518;
+        --muted: #5a5a66;
+        --shadow: 0 12px 30px rgba(0,0,0,.08), 0 1px 0 rgba(0,0,0,.04) inset;
+      }
+    }
+
+    html,body{height:100%;}
     body{
-        overflow-x: hidden; /* Hide horizontal scrollbar */
-        color:#111111;
+      margin:0;
+      background:
+        radial-gradient(1200px 600px at 10% -10%, rgba(255,255,255,.06), transparent 50%),
+        radial-gradient(1000px 600px at 110% 10%, rgba(255,255,255,.04), transparent 40%),
+        linear-gradient(135deg, #820622 10%, #4e2e82 60%, #725965 100%);
+      color:var(--text);
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, "PokeTube Flex", "Inter", sans-serif;
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+      overflow-x:hidden;
     }
-    
-   .animated {
-            -webkit-animation-duration: 10s; 
-            animation-duration: 10s; 
-            -webkit-animation-fill-mode: both;
-            animation-fill-mode: both; 
-            animation-iteration-count: infinite;
-            -moz-animation-iteration-count: infinite;
-            -webkit-animation-iteration-count: infinite;
-            -o-animation-iteration-count: infinite;
-         }
-         
-         @-webkit-keyframes wiggle { 
-            0% { -webkit-transform: skewX(9deg); }
-            10% { -webkit-transform: skewX(-8deg); }
-            20% { -webkit-transform: skewX(7deg); }
-            30% { -webkit-transform: skewX(-6deg); }
-            40% { -webkit-transform: skewX(5deg); } 
-            50% { -webkit-transform: skewX(-4deg); } 
-            60% { -webkit-transform: skewX(3deg); }
-            70% { -webkit-transform: skewX(-2deg); } 
-            80% { -webkit-transform: skewX(1deg); } 
-            90% { -webkit-transform: skewX(0deg); }
-            100% { -webkit-transform: skewX(0deg); } 
-         }
-         
-         @keyframes wiggle { 
-            0% { transform: skewX(9deg); } 
-            10% { transform: skewX(-8deg); } 
-            20% { transform: skewX(7deg); } 
-            30% { transform: skewX(-6deg); } 
-            40% { transform: skewX(5deg); } 
-            50% { transform: skewX(-4deg); } 
-            60% { transform: skewX(3deg); } 
-            70% { transform: skewX(-2deg); } 
-            80% { transform: skewX(1deg); } 
-            90% { transform: skewX(0deg); } 
-            100% { transform: skewX(0deg); } 
-         }
-         
-         .wiggle { 
-            -webkit-animation-name: wiggle;
-            animation-name: wiggle; 
-            -webkit-animation-timing-function: ease-in;
-            animation-timing-function: ease-in; 
-         }
-         
-         .animated.wiggle { 
-            -webkit-animation-duration: 0.75s; 
-            animation-duration: 0.75s;
-         }
-    
-    :root {
-    --text-primary: #fff;
-    --text-secondary: #fff;
-    --text-link: #3ea6ff;
 
-    --app-background: #111111;
-    --context-menu-background: #333;
-    --border-color: #444;
-    --item-hover-background: #373737;
-    --item-active-background: #383838;
-
-    --top-bar-background: #202020;
-    --guide-background: #212121;
-
-    --thumbnail-background: #252525;
-
-    --channel-info-background: #181818;
-    --channel-contents-background: #0f0f0f;
-}
-
-.alert {
-  padding: 20px;
-  background-color: #f44336;
-  color: white;
-  opacity: 1;
-  transition: opacity 0.6s;
-  margin-bottom: 15px;
-}
-
-.alert.success {background-color: #04AA6D;}
-.alert.info {background-color: #2196F3;}
-.alert.warning {background-color: #ff9800;}
-
-.closebtn {
-  margin-left: 15px;
-  color: white;
-  font-weight: bold;
-  float: right;
-  font-size: 22px;
-  line-height: 20px;
-  cursor: pointer;
-  transition: 0.3s;
-}
-a{
-border-radius:13px
-}
-    
-.video-list > p {
-font-family:Ubuntu
-}
-.closebtn:hover {
-  color: black;
-}
-.download-format >  a:hover{
-    border:solid;
-  }
-    .download-format:{
-      width:65px;
+    /* Top nav (kept minimal; reuse your icons/links) */
+    .topbar{
+      position:sticky; top:0; z-index:50;
+      display:flex; align-items:center; justify-content:space-between;
+      gap:var(--gap);
+      padding:12px clamp(12px, 2vw, 24px);
+      background:linear-gradient(to bottom, rgba(0,0,0,.45), rgba(0,0,0,.25));
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border-bottom:1px solid rgba(255,255,255,.06);
     }
-    .download-list {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  column-gap: 32px;
-  max-width: 27em;
-  margin-left: auto;
-  margin-right: auto;
-  background: #333;
- height: fit-content;
-  height: -moz-fit-content;
+    .brand{display:flex; align-items:center; gap:10px; text-decoration:none; color:var(--text);}
+    .brand img{height:28px}
+    .actions{display:flex; align-items:center; gap:10px}
+    .icon-btn{
+      display:inline-grid; place-items:center;
+      width:36px; height:36px; border-radius:999px;
+      background: rgba(255,255,255,.08);
+      box-shadow: var(--shadow);
+      color: var(--text);
+      text-decoration:none;
+      transition: transform .15s ease, background .2s ease;
+    }
+    .icon-btn:focus-visible{outline:2px solid var(--ring); outline-offset:3px}
+    .icon-btn:hover{transform: translateY(-1px); background: rgba(255,255,255,.12)}
 
-  border-radius: 10px;
-  margin-top: 2em;
-}
+    /* Page container */
+    .container{
+      max-width:1100px;
+      margin: clamp(16px, 4vw, 40px) auto;
+      padding: 0 clamp(12px, 2vw, 20px);
+    }
+
+    /* Header card */
+    .panel{
+      background: var(--bg-elev);
+      border: 1px solid rgba(255,255,255,.08);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow:hidden;
+    }
+    .panel-header{
+      display:grid;
+      grid-template-columns: 1.2fr .8fr;
+      gap: clamp(12px, 3vw, 20px);
+      padding: clamp(16px, 3vw, 24px);
+    }
+    @media (max-width: 840px){
+      .panel-header{grid-template-columns: 1fr;}
+    }
+    .title{
+      display:flex; flex-direction:column; gap:10px;
+    }
+    .title h1{
+      margin:0;
+      font-size: clamp(20px, 3.2vw, 28px);
+      letter-spacing:.2px;
+    }
+    .subtitle{color:var(--muted); font-size:14px}
+    .subtitle a{color:var(--link); text-decoration:none}
+    .subtitle a:hover{text-decoration:underline}
+
+    /* Thumbnail */
+    .thumb-wrap{
+      position:relative;
+      border-radius: 12px;
+      overflow:hidden;
+      box-shadow: 0 0 0 1px rgba(255,255,255,.06) inset, 0 14px 40px rgba(0,0,0,.35);
+    }
+    .thumb{
+      width:100%; height:auto; display:block;
+      aspect-ratio: 16/9; object-fit: cover;
+      transform: translateZ(0);
+    }
+
+    /* Format sections */
+    .formats{
+      display:flex; flex-direction:column; gap: 8px;
+      padding: 0 clamp(16px, 3vw, 24px) clamp(16px, 3vw, 24px);
+    }
+    .section{
+      margin-top: 8px;
+      padding-top: 8px;
+    }
+    .section h2{
+      font-size: clamp(16px, 2.5vw, 18px);
+      font-weight: 800;
+      margin: 10px 0 8px;
+      letter-spacing:.3px;
+    }
+    .section p.helper{
+      margin:4px 0 12px; color:var(--muted); font-size: 13px;
+    }
+
+    .grid{
+      display:grid;
+      grid-template-columns: repeat( auto-fill, minmax(230px, 1fr) );
+      gap: 12px;
+    }
+
+    /* Format card / chip */
+    .chip{
+      display:flex; align-items:center; justify-content:space-between; gap: 10px;
+      background: var(--bg-chip);
+      border: 1px solid rgba(255,255,255,.08);
+      border-radius: 12px;
+      padding: 12px;
+      min-height: 56px;
+      box-shadow: var(--shadow);
+    }
+    .chip .meta{
+      display:flex; flex-direction:column; gap: 4px; min-width:0;
+    }
+    .chip .label{
+      font-weight: 800; letter-spacing:.2px; white-space: nowrap; overflow:hidden; text-overflow:ellipsis;
+    }
+    .chip .hint{
+      font-size: 12px; color: var(--muted);
+    }
+    .chip .actions{
+      display:flex; align-items:center; gap: 8px;
+      margin-left:auto;
+    }
+    .btn{
+      --h: 36px;
+      display:inline-flex; align-items:center; gap:8px;
+      height: var(--h); padding: 0 14px;
+      border-radius: 999px; border: 1px solid rgba(255,255,255,.12);
+      background: linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.04));
+      color: var(--text); text-decoration:none; font-weight:700; letter-spacing:.2px;
+      box-shadow: var(--shadow);
+      transition: transform .15s ease, background .2s ease, border-color .2s ease;
+    }
+    .btn:hover{transform: translateY(-1px); background: linear-gradient(180deg, rgba(255,255,255,.12), rgba(255,255,255,.06))}
+    .btn:focus-visible{outline:2px solid var(--ring); outline-offset:3px}
+    .btn .fa-download{font-size: 14px}
+
+    /* Small alert (optional utility) */
+    .alert{
+      margin: 16px 0 0;
+      padding: 12px 14px;
+      font-size: 13px;
+      color:#fff;
+      background:#2196F3;
+      border-radius: 10px;
+      box-shadow: var(--shadow);
+    }
+
+    /* Utilities */
+    .sr-only{position:absolute !important; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0}
+
+    /* Fixes and hover color for links inside chips */
+    a{color:inherit}
+    .chip a.btn{color:var(--text)}
   </style>
- </head>
- 
+</head>
+
 <body>
-   <% if (!isMobile) { %>
+  <!-- Topbar -->
+  <header class="topbar" role="banner">
+    <a class="brand" href="/143" aria-label="Poke home">
+      <img src="/css/logo-poke.svg?v=5" alt="Poke logo" />
+      <strong>Poke</strong>
+    </a>
 
-       <div class="app" style="background:linear-gradient(135deg, #820622 10%, #4e2e82 100%, #725965 100%);height: 162em;">      
-	   <nav>
-       <div class=left><a class="class" href="/143" style=font-family:Inter,sans-serif;color:#fff><img style="transform: scale(1.3);padding-left:0.9em;width: 8.5em;display: block;margin-left: auto;margin-right: auto;" src="/css/logo-poke.svg?v=5">  </a>                                                                                               </div>               
-            <div class="middle">
-        <form action="/search"><input class="search-bar" autocomplete="on" id="fname" name="query" style="color:var(--text-color);font-family:poketube flex,sans-serif;border-radius: 2em;font-weight: 850;font-stretch: extra-expanded;" data-ddg-inputtype="identities.firstName">
-<button class="btn btn-success" type="submit" style="transform: translate(21em, -1.25em);"><i class="fa-light fa-search"></i></button>             
-         </form>
-             
-           <img src="https://search-metrics.poketube.fun/t/rep.gif"  style="border:0;width: 0;visibility: hidden;"> 
+    <div class="actions" role="group" aria-label="Quick actions">
+      <a class="icon-btn" href="/privacy" aria-label="Privacy"><i class="fa-light fa-shield"></i></a>
+      <a class="icon-btn" href="/video/upload?from=" aria-label="Upload video"><i class="fa-light fa-video"></i></a>
+      <a class="icon-btn" href="https://codeberg.org/Ashley/poketube/" aria-label="Source code"><i class="fab fa-git-alt"></i></a>
+      <a class="icon-btn" href="https://codeberg.org/Ashley/poketube/issues" aria-label="Report a bug"><i class="fa-light fa-bug"></i></a>
+    </div>
+  </header>
 
-      </div>
-            <div class=right><a href="/privacy"><i class="fa-light fa-shield"></i></a><a href="/video/upload?from="><i class="fa-light fa-video"></i></a> <a href="https://codeberg.org/Ashley/poketube/"><i class="fab fa-git-alt"></i></a><a href="https://codeberg.org/Ashley/poketube/issues"><i class="fa-light fa-bug"></i></a></a></div>
-        </nav>
-                                                                                          <% } %>          
+  <!-- Metrics pixel (kept) -->
+  <img src="https://search-metrics.poketube.fun/t/rep.gif" alt="" style="width:0;height:0;visibility:hidden;border:0" />
 
-	   
- 
-      
-	<div class="video-list download-list playlist-video-list">
-    <div>
-            <h3 style="font-family:'PokeTube Flex';font-weight:1000;white-space:yes;font-stretch: ultra-expanded;"> DOWNLOAD VIDEO / MUSIC</h3>
-      <span>ID: <%=v%> -  <a href="/watch?v=<%=v%>"> Watch the video</a> </span>
-<hr>
-
-       <div>
-       <% if (!isMobile) { %>
-  
-         <img src="/vi/<%=v%>/maxresdefault.jpg" style="height: 15em;border-radius: 1em;box-shadow: 0 0 4.4em <%=color%>;">
-                                                                                             <% } %>          
-       <% if (isMobile) { %>
-
-         <img src="/vi/<%=v%>/maxresdefault.jpg" style="height: 11.9em;border-radius: 1em;box-shadow: 0 0 4.4em <%=color%>;">
-                                                                                                     <% } %>          
-
-         <div>
-         
-
+  <main class="container">
+    <!-- Header / thumb panel -->
+    <section class="panel" aria-labelledby="download-title">
+      <div class="panel-header">
+        <div class="title">
+          <h1 id="download-title">Download Video / Music</h1>
+          <div class="subtitle">
+            ID: <code><%= v %></code> —
+            <a href="/watch?v=<%= v %>">Open the watch page</a>
           </div>
+          <p class="helper" style="margin:6px 0 0;color:var(--muted)">
+            Select a format to download. Muxed = audio+video. “Video-only” needs a separate audio track if you plan to mux.
+          </p>
         </div>
-     </div>
-  		<div class="format-list">
-        <p style="text-align: center;margin-top: 0;margin-bottom: 10px;">
-          select a format to download :3
-        </p>
-      	 <h2>Muxed formats</h2>
-       
-           <% if (!isMobile) { %>
 
-      <div class="download-format" style="background: black;margin: 6px;width: 25em;border-radius: 14px;/*! text-align: center; */"><div style="font-family:&quot;PokeTube flex&quot;;font-stretch: ultra-expanded;font-weight: 700;"> 
-                                                                                                 <% } %>          
-      <% if (isMobile) { %>
+        <figure class="thumb-wrap">
+          <!-- Using your proxied path for thumbnail -->
+          <img
+            class="thumb"
+            src="/vi/<%= v %>/maxresdefault.jpg"
+            alt="Thumbnail preview for the requested video"
+            loading="eager"
+            decoding="async"
+          />
+        </figure>
+      </div>
 
-      <div class="download-format" style="background: black;margin: 6px;border-radius: 14px;/*! text-align: center; */"><div style="font-family:&quot;PokeTube flex&quot;;font-stretch: ultra-expanded;font-weight: 700;"> 
-                                                                                                 <% } %> 
+      <!-- Formats -->
+      <div class="formats">
 
-             MP4 - 480p
+        <!-- Muxed -->
+        <section class="section" aria-labelledby="muxed">
+          <h2 id="muxed">Muxed formats</h2>
+          <div class="grid">
+            <!-- Keep your existing endpoint & params -->
+            <article class="chip">
+              <div class="meta">
+                <span class="label">MP4 — 480p</span>
+                <span class="hint">Audio + Video • Good compatibility</span>
+              </div>
+              <div class="actions">
+                <a class="btn" href="/api/video/download?v=<%= v %>&q=18">
+                  <i class="fa-light fa-download" aria-hidden="true"></i>
+                  <span>Download</span>
+                </a>
+              </div>
+            </article>
           </div>
-					<a style="color:#fff;font-family:Ubuntu" href="/api/video/download?v=<%=v%>&q=18">
-            <i class="fa-light fa-download"></i>
-						Download 
-					</a>
-				<br>
-				</div>
-  
-      
-				
-        
-             
-		</div>
-	 
-    <div class="format-list" style="margin-top: 2em;">
-      
-			<h2>Audio-Only formats</h2>
-      
-        <div class="download-format" style="background: black;margin: 6px;border-radius: 14px;/*! text-align: center; */">					          <div style="font-family:&quot;PokeTube flex&quot;;font-stretch: ultra-expanded;font-weight: 700;">  m4a (low) 
-           </div>
-			  	<a style="color:#fff;font-family:Ubuntu" href="/api/video/download?v=<%=v%>&q=139&f=webm">
-            <i class="fa-light fa-download"></i>
-						Download 
-					</a>
-				<br>
-				</div>
+        </section>
 
-            <div class="download-format" style="background: black;margin: 6px;border-radius: 14px;/*! text-align: center; */">					          <div style="font-family:&quot;PokeTube flex&quot;;font-stretch: ultra-expanded;font-weight: 700;">  m4a (high) 
-           </div>
-			  	<a style="color:#fff;font-family:Ubuntu" href="/api/video/download?v=<%=v%>&q=140&f=webm">
-            <i class="fa-light fa-download"></i>
-						Download 
-					</a>
-				<br>
-				</div>
+        <!-- Audio-only -->
+        <section class="section" aria-labelledby="audio">
+          <h2 id="audio">Audio-only formats</h2>
+          <div class="grid">
+            <article class="chip">
+              <div class="meta">
+                <span class="label">m4a — low</span>
+                <span class="hint">Small size</span>
+              </div>
+              <a class="btn" href="/api/video/download?v=<%= v %>&q=139&f=webm" aria-label="Download m4a low">
+                <i class="fa-light fa-download" aria-hidden="true"></i><span>Download</span>
+              </a>
+            </article>
 
-        <div class="download-format" style="background: black;margin: 6px;border-radius: 14px;/*! text-align: center; */">					          <div style="font-family:&quot;PokeTube flex&quot;;font-stretch: ultra-expanded;font-weight: 700;">  webm (low) 
-           </div>
-			  	<a style="color:#fff;font-family:Ubuntu" href="/api/video/download?v=<%=v%>&q=249&f=webm">
-            <i class="fa-light fa-download"></i>
-						Download 
-					</a>
-				<br>
-				</div>
-      
-        <div class="download-format" style="background: black;margin: 6px;border-radius: 14px;/*! text-align: center; */">					           <div style="font-family:&quot;PokeTube flex&quot;;font-stretch: ultra-expanded;font-weight: 700;">  webm (HIGH) 
-           </div>
-			  	<a style="color:#fff;font-family:Ubuntu" href="/api/video/download?v=<%=v%>&q=251&f=webm">
-            <i class="fa-light fa-download"></i>
-						Download 
-					</a>
-				<br>
-				</div>
-        
-               <div class="format-list" style="margin-top: 2em;">
-<h2>Video-Only formats</h2>
+            <article class="chip">
+              <div class="meta">
+                <span class="label">m4a — high</span>
+                <span class="hint">Better quality</span>
+              </div>
+              <a class="btn" href="/api/video/download?v=<%= v %>&q=140&f=webm" aria-label="Download m4a high">
+                <i class="fa-light fa-download" aria-hidden="true"></i><span>Download</span>
+              </a>
+            </article>
 
-<div class="download-format" style="background: black;margin: 6px;border-radius: 14px;">
-  <div style="font-family:'PokeTube flex';font-stretch: ultra-expanded;font-weight: 700;">144p - MP4</div>
-  <a style="color:#fff;font-family:Ubuntu" href="/api/video/download?v=<%=v%>&q=160&f=mp4">
-    <i class="fa-light fa-download"></i>
-    Download
-  </a>
-  <br>
-</div>
+            <article class="chip">
+              <div class="meta">
+                <span class="label">webm — low</span>
+                <span class="hint">Opus • Small size</span>
+              </div>
+              <a class="btn" href="/api/video/download?v=<%= v %>&q=249&f=webm" aria-label="Download webm low">
+                <i class="fa-light fa-download" aria-hidden="true"></i><span>Download</span>
+              </a>
+            </article>
 
-<div class="download-format" style="background: black;margin: 6px;border-radius: 14px;">
-  <div style="font-family:'PokeTube flex';font-stretch: ultra-expanded;font-weight: 700;">144p - WEBM</div>
-  <a style="color:#fff;font-family:Ubuntu" href="/api/video/download?v=<%=v%>&q=278&f=webm">
-    <i class="fa-light fa-download"></i>
-    Download
-  </a>
-  <br>
-</div>
+            <article class="chip">
+              <div class="meta">
+                <span class="label">webm — high</span>
+                <span class="hint">Opus • Higher bitrate</span>
+              </div>
+              <a class="btn" href="/api/video/download?v=<%= v %>&q=251&f=webm" aria-label="Download webm high">
+                <i class="fa-light fa-download" aria-hidden="true"></i><span>Download</span>
+              </a>
+            </article>
+          </div>
+        </section>
 
-<div class="download-format" style="background: black;margin: 6px;border-radius: 14px;">
-  <div style="font-family:'PokeTube flex';font-stretch: ultra-expanded;font-weight: 700;">240p - MP4</div>
-  <a style="color:#fff;font-family:Ubuntu" href="/api/video/download?v=<%=v%>&q=133&f=mp4">
-    <i class="fa-light fa-download"></i>
-    Download
-  </a>
-  <br>
-</div>
+        <!-- Video-only -->
+        <section class="section" aria-labelledby="videoonly">
+          <h2 id="videoonly">Video-only formats</h2>
+          <p class="helper">No audio. You may need to mux with an audio track.</p>
+          <div class="grid">
+            <article class="chip">
+              <div class="meta"><span class="label">144p — MP4</span><span class="hint">Very small</span></div>
+              <a class="btn" href="/api/video/download?v=<%= v %>&q=160&f=mp4"><i class="fa-light fa-download"></i><span>Download</span></a>
+            </article>
 
-<div class="download-format" style="background: black;margin: 6px;border-radius: 14px;">
-  <div style="font-family:'PokeTube flex';font-stretch: ultra-expanded;font-weight: 700;">240p - WEBM</div>
-  <a style="color:#fff;font-family:Ubuntu" href="/api/video/download?v=<%=v%>&q=242&f=webm">
-    <i class="fa-light fa-download"></i>
-    Download
-  </a>
-  <br>
-</div>
+            <article class="chip">
+              <div class="meta"><span class="label">144p — WEBM</span><span class="hint">Very small</span></div>
+              <a class="btn" href="/api/video/download?v=<%= v %>&q=278&f=webm"><i class="fa-light fa-download"></i><span>Download</span></a>
+            </article>
 
-<div class="download-format" style="background: black;margin: 6px;border-radius: 14px;">
-  <div style="font-family:'PokeTube flex';font-stretch: ultra-expanded;font-weight: 700;">360p - MP4</div>
-  <a style="color:#fff;font-family:Ubuntu" href="/api/video/download?v=<%=v%>&q=134&f=mp4">
-    <i class="fa-light fa-download"></i>
-    Download
-  </a>
-  <br>
-</div>
+            <article class="chip">
+              <div class="meta"><span class="label">240p — MP4</span></div>
+              <a class="btn" href="/api/video/download?v=<%= v %>&q=133&f=mp4"><i class="fa-light fa-download"></i><span>Download</span></a>
+            </article>
 
-<div class="download-format" style="background: black;margin: 6px;border-radius: 14px;">
-  <div style="font-family:'PokeTube flex';font-stretch: ultra-expanded;font-weight: 700;">360p - WEBM</div>
-  <a style="color:#fff;font-family:Ubuntu" href="/api/video/download?v=<%=v%>&q=243&f=webm">
-    <i class="fa-light fa-download"></i>
-    Download
-  </a>
-  <br>
-</div>
+            <article class="chip">
+              <div class="meta"><span class="label">240p — WEBM</span></div>
+              <a class="btn" href="/api/video/download?v=<%= v %>&q=242&f=webm"><i class="fa-light fa-download"></i><span>Download</span></a>
+            </article>
 
-<div class="download-format" style="background: black;margin: 6px;border-radius: 14px;">
-  <div style="font-family:'PokeTube flex';font-stretch: ultra-expanded;font-weight: 700;">480p - MP4</div>
-  <a style="color:#fff;font-family:Ubuntu" href="/api/video/download?v=<%=v%>&q=135&f=mp4">
-    <i class="fa-light fa-download"></i>
-    Download
-  </a>
-  <br>
-</div>
+            <article class="chip">
+              <div class="meta"><span class="label">360p — MP4</span></div>
+              <a class="btn" href="/api/video/download?v=<%= v %>&q=134&f=mp4"><i class="fa-light fa-download"></i><span>Download</span></a>
+            </article>
 
-<div class="download-format" style="background: black;margin: 6px;border-radius: 14px;">
-  <div style="font-family:'PokeTube flex';font-stretch: ultra-expanded;font-weight: 700;">480p - WEBM</div>
-  <a style="color:#fff;font-family:Ubuntu" href="/api/video/download?v=<%=v%>&q=244&f=webm">
-    <i class="fa-light fa-download"></i>
-    Download
-  </a>
-  <br>
-</div>
+            <article class="chip">
+              <div class="meta"><span class="label">360p — WEBM</span></div>
+              <a class="btn" href="/api/video/download?v=<%= v %>&q=243&f=webm"><i class="fa-light fa-download"></i><span>Download</span></a>
+            </article>
 
-<div class="download-format" style="background: black;margin: 6px;border-radius: 14px;">
-  <div style="font-family:'PokeTube flex';font-stretch: ultra-expanded;font-weight: 700;">720p - MP4</div>
-  <a style="color:#fff;font-family:Ubuntu" href="/api/video/download?v=<%=v%>&q=136&f=mp4">
-    <i class="fa-light fa-download"></i>
-    Download
-  </a>
-  <br>
-</div>
+            <article class="chip">
+              <div class="meta"><span class="label">480p — MP4</span></div>
+              <a class="btn" href="/api/video/download?v=<%= v %>&q=135&f=mp4"><i class="fa-light fa-download"></i><span>Download</span></a>
+            </article>
 
-<div class="download-format" style="background: black;margin: 6px;border-radius: 14px;">
-  <div style="font-family:'PokeTube flex';font-stretch: ultra-expanded;font-weight: 700;">720p - WEBM</div>
-  <a style="color:#fff;font-family:Ubuntu" href="/api/video/download?v=<%=v%>&q=247&f=webm">
-    <i class="fa-light fa-download"></i>
-    Download
-  </a>
-  <br>
-</div>
+            <article class="chip">
+              <div class="meta"><span class="label">480p — WEBM</span></div>
+              <a class="btn" href="/api/video/download?v=<%= v %>&q=244&f=webm"><i class="fa-light fa-download"></i><span>Download</span></a>
+            </article>
 
-<div class="download-format" style="background: black;margin: 6px;border-radius: 14px;">
-  <div style="font-family:'PokeTube flex';font-stretch: ultra-expanded;font-weight: 700;">1080p - MP4</div>
-  <a style="color:#fff;font-family:Ubuntu" href="/api/video/download?v=<%=v%>&q=137&f=mp4">
-    <i class="fa-light fa-download"></i>
-    Download
-  </a>
-  <br>
-</div>
+            <article class="chip">
+              <div class="meta"><span class="label">720p — MP4</span></div>
+              <a class="btn" href="/api/video/download?v=<%= v %>&q=136&f=mp4"><i class="fa-light fa-download"></i><span>Download</span></a>
+            </article>
 
-<div class="download-format" style="background: black;margin: 6px;border-radius: 14px;">
-  <div style="font-family:'PokeTube flex';font-stretch: ultra-expanded;font-weight: 700;">1080p - WEBM</div>
-  <a style="color:#fff;font-family:Ubuntu" href="/api/video/download?v=<%=v%>&q=248&f=webm">
-    <i class="fa-light fa-download"></i>
-    Download
-  </a>
-  <br>
-</div>
+            <article class="chip">
+              <div class="meta"><span class="label">720p — WEBM</span></div>
+              <a class="btn" href="/api/video/download?v=<%= v %>&q=247&f=webm"><i class="fa-light fa-download"></i><span>Download</span></a>
+            </article>
 
-      <!-- ignore this -->
-        <p style="visibility: hidden;">
- gfhefdhgrdfhdfshfgddfsfdgdfsds gfhefdhgrdfhdfshfgddfsfdgdfsds
-      </p>
- 
-	</div>
-</div>
- 
-<img src="https://t.poketube.fun/t/rep.gif?download_video=<%=btoa(v)%>" style="width: 0;visibility: hidden;" id="download_page">
+            <article class="chip">
+              <div class="meta"><span class="label">1080p — MP4</span></div>
+              <a class="btn" href="/api/video/download?v=<%= v %>&q=137&f=mp4"><i class="fa-light fa-download"></i><span>Download</span></a>
+            </article>
 
-</div>
-      
-<script src="/css/custom-css.js?v=54"> </script><script src="/css/data-mobile.js?v=549"> </script>
+            <article class="chip">
+              <div class="meta"><span class="label">1080p — WEBM</span></div>
+              <a class="btn" href="/api/video/download?v=<%= v %>&q=248&f=webm"><i class="fa-light fa-download"></i><span>Download</span></a>
+            </article>
+          </div>
+        </section>
 
- 
+        <!-- Optional note -->
+        <div class="alert" role="status" aria-live="polite">
+          Tip: if a download fails, try another container (MP4 vs WEBM) or a different quality.
+        </div>
+      </div>
+    </section>
+
+    <!-- Invisible analytics beacon (kept) -->
+    <img
+      id="download_page"
+      src="https://t.poketube.fun/t/rep.gif?download_video=<%= btoa(v) %>"
+      alt=""
+      style="width:0;height:0;visibility:hidden;border:0"
+    />
+  </main>
+
+  <script src="/css/custom-css.js?v=54"></script>
+  <script src="/css/data-mobile.js?v=549"></script>
+
+  <script>
+    // Make entire chip focusable and invoke its primary button with Enter
+    document.addEventListener('DOMContentLoaded', () => {
+      document.querySelectorAll('.chip').forEach(chip => {
+        const btn = chip.querySelector('.btn');
+        chip.setAttribute('tabindex','0');
+        chip.addEventListener('keydown', (e) => {
+          if ((e.key === 'Enter' || e.key === ' ') && btn) {
+            e.preventDefault();
+            btn.click();
+          }
+        });
+        chip.addEventListener('focus', () => chip.style.outline = `2px solid <%= color %>`);
+        chip.addEventListener('blur', () => chip.style.outline = 'none');
+      });
+    });
+  </script>
 </body>
 </html>

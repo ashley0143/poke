@@ -8,6 +8,7 @@ const URL_WHITELIST = [
   "i.ytimg.com",
   "yt3.googleusercontent.com",
   "cdn.glitch.global",
+  "cdn.glitch.me",
   "cdn.statically.io",
   "site-assets.fontawesome.com",
   "fonts.gstatic.com",

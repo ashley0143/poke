@@ -28,6 +28,25 @@
       --sans: Inter, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, "Helvetica Neue", Arial, "Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol", sans-serif;
       --code-size:13.5px;
     }
+/* Fix alignment of live editor content */
+.editor-wrap {
+  display: flex;
+  align-items: flex-start;
+  position: relative;
+}
+
+.ln {
+  position: sticky;
+  left: 0;
+  z-index: 2;
+}
+
+.live-editor {
+  flex: 1;
+  padding-left: 24px !important;
+  margin-left: 16px;
+  min-width: 0;
+}
 
     html.gradient-bg{
       min-height:100%;

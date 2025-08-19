@@ -126,6 +126,21 @@
     footer{max-width:1200px;margin:40px auto 50px;padding:0 16px;color:var(--muted);font-size:12px}
     .btn:focus,.tab:focus{outline:none;box-shadow:var(--ring)}
   </style>
+ <link rel="stylesheet" href="https://p.poketube.fun/https://cdn.jsdelivr.net/npm/prismjs@1/themes/prism-tomorrow.min.css">
+<style>
+   .hl code[class*="language-"]{
+    background: transparent !important;
+    font: 500 var(--code-size)/1.6 var(--mono);
+    color: var(--text);
+    white-space: pre;
+  }
+</style>
+<script src="https://p.poketube.fun/https://cdn.jsdelivr.net/npm/prismjs@1/components/prism-core.min.js"></script>
+<script src="https://p.poketube.fun/https://cdn.jsdelivr.net/npm/prismjs@1/plugins/autoloader/prism-autoloader.min.js"></script>
+<script>
+  Prism.plugins.autoloader.languages_path = 'https://p.poketube.fun/https://cdn.jsdelivr.net/npm/prismjs@1/components/';
+</script>
+
 </head>
 <body>
   <div class="app gradient-bg">
@@ -274,72 +289,31 @@ document.addEventListener('DOMContentLoaded', () => {
     t.style.cssText='position:fixed;left:50%;bottom:22px;transform:translateX(-50%);background:'+(bad?'#4d1622':'#132a20')+';color:#fff;padding:10px 14px;border:1px solid rgba(255,255,255,.12);border-radius:12px;z-index:9999';
     document.body.appendChild(t); setTimeout(()=>t.remove(),1500);
   };
-  const debounce = (fn,ms=200)=>{ let t; return (...a)=>{ clearTimeout(t); t=setTimeout(()=>fn(...a),ms); }; };
+  const debounce = (fn,ms=120)=>{ let t; return (...a)=>{ clearTimeout(t); t=setTimeout(()=>fn(...a),ms); }; };
 
-  /* ---------- basic formatters ---------- */
+  /* ---------- quick formatters ---------- */
   const basicFormatCSS = s => { try{ return s.replace(/\{/g,'{\n  ').replace(/\;/g,';\n  ').replace(/\}\s*/g,'\n}\n').replace(/\n\s+\n/g,'\n'); }catch{ return s } };
   const basicFormatJS  = s => { try{ return s.replace(/;\s*/g,';\n').replace(/\{\s*/g,'{\n  ').replace(/\}\s*/g,'\n}\n').replace(/\)\s*\{/g,') {\n  ').replace(/\n\s+\n/g,'\n'); }catch{ return s } };
 
   /* ---------- one-time repair for polluted saves ---------- */
-  // Strips any leftover <span class="tok ...">...</span> from previously broken runs
-  // and decodes entities back to plain text.
   function stripHighlightArtifacts(s){
     if (typeof s !== 'string') return s;
-    // fast bail if nothing suspicious
     if (!/<span\s+class="tok\s/.test(s) && !/&lt;span\s+class="tok\s/.test(s)) return s;
-    // Remove our token spans
-    let out = s.replace(/<\/span>/g, '')
-               .replace(/<span\s+class="tok\s[^>]*>/g, '');
-    // Decode common entities that may have been saved
+    let out = s.replace(/<\/span>/g, '').replace(/<span\s+class="tok\s[^>]*>/g, '');
     out = out.replace(/&lt;/g,'<').replace(/&gt;/g,'>').replace(/&amp;/g,'&');
     return out;
   }
 
-  /* ---------- highlighter (safe placeholders; never touches source text) ---------- */
-  const JS_KEYWORDS = /\b(?:await|break|case|catch|class|const|continue|debugger|default|delete|do|else|enum|export|extends|false|finally|for|from|function|if|import|in|instanceof|let|new|null|return|super|switch|this|throw|true|try|typeof|var|void|while|with|yield)\b/g;
-  const JS_BUILTINS = /\b(?:Array|Object|String|Number|Boolean|Map|Set|WeakMap|WeakSet|Date|Math|JSON|Promise|RegExp|Error|TypeError|URL|Node|Element|document|window|console|fetch)\b/g;
-  const ESC = s => s.replace(/[&<>]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
-
-  function highlightJS(code){
-    let s = ESC(code);
-    const tokens = [];
-    const PL = i => `__PTK${i}__`;
-
-    const protect = (re, cls) => {
-      s = s.replace(re, m => { const i = tokens.push(`<span class="tok ${cls}">${m}</span>`) - 1; return PL(i); });
-    };
-
-    // protect first (so later regexes never see our <span> tags)
-    protect(/\/\*[\s\S]*?\*\//g, 'comment');
-    protect(/\/\/.*?$/gm,        'comment');
-    protect(/`[\s\S]*?`/g,       'str');
-    protect(/'[^'\\]*(?:\\.[^'\\]*)*'/g, 'str');
-    protect(/"[^"\\]*(?:\\.[^"\\]*)*"/g, 'str');
-    protect(/\/(?:\\.|[^\\\/\n])+\/[gimsuy]*/g, 'reg');
-
-    // plain text pass
-    s = s.replace(/\b(0x[\da-fA-F]+|\d+\.\d+|\d+)\b/g, '<span class="tok num">$1</span>');
-    s = s.replace(/\b(true|false|null)\b/g,         '<span class="tok bool">$1</span>');
-    s = s.replace(JS_KEYWORDS,                      '<span class="tok kw">$&</span>');
-    s = s.replace(JS_BUILTINS,                      '<span class="tok fn">$&</span>');
-    s = s.replace(/([=+\-/*<>!&|%^~?:]+)/g,         '<span class="tok op">$1</span>');
-
-    // restore protected segments
-    s = s.replace(/__PTK(\d+)__/g, (_,i)=>tokens[+i]);
-    return s;
-  }
-
-  function highlightCSS(code){
-    let s = ESC(code);
-    s = s.replace(/\/\*[\s\S]*?\*\//g, '<span class="tok comment">$&</span>');
-    s = s.replace(/(@[a-zA-Z-]+)/g, '<span class="tok at">$1</span>');
-    s = s.replace(/^([^{}@\n][^{\n]+)(?=\s*\{)/gm, '<span class="tok selector">$1</span>');
-    s = s.replace(/([a-zA-Z-]+)(\s*:\s*)([^;}{]+)/g, (m,p,c,v)=>{
-      v = v.replace(/(#[0-9a-fA-F]{3,8}|\b\d+(?:\.\d+)?(?:px|em|rem|%|vh|vw)?\b)/g, '<span class="tok num">$1</span>');
-      v = v.replace(/("[^"]*"|'[^']*')/g, '<span class="tok str">$1</span>');
-      return '<span class="tok prop">'+p+'</span>'+c+v;
-    });
-    return s;
+  /* ---------- Prism-powered renderer ---------- */
+  function prismRender(targetPre, lang, text){
+    // Build a fresh <code> so Prism can own it
+    targetPre.innerHTML = '';
+    const code = document.createElement('code');
+    code.className = 'language-' + (lang==='css' ? 'css' : 'javascript');
+    code.textContent = text;           // never insert HTML here
+    targetPre.appendChild(code);
+    // Highlight
+    if (window.Prism) Prism.highlightElement(code);
   }
 
   function makeEditor(edSel, hlSel, lnSel, { lang='css', storageKey, defaultValue='' }){
@@ -348,12 +322,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const load = () => {
       let saved = localStorage.getItem(storageKey);
       if (saved === null) saved = defaultValue;
-      // one-time cleanup for old corrupted saves
       const cleaned = stripHighlightArtifacts(saved);
-      if (cleaned !== saved) {
-        localStorage.setItem(storageKey, cleaned);
-        saved = cleaned;
-      }
+      if (cleaned !== saved) { localStorage.setItem(storageKey, cleaned); saved = cleaned; }
       return saved;
     };
 
@@ -364,33 +334,34 @@ document.addEventListener('DOMContentLoaded', () => {
       ln.textContent = out;
     };
 
-    const render = (text) => {
-      setLines(text);
-      hl.innerHTML = (lang==='css') ? highlightCSS(text) : highlightJS(text);
-    };
+    const render = (text) => { setLines(text); prismRender(hl, lang, text); };
 
     const initial = load();
     ed.value = initial; render(initial);
 
+    // Scroll sync
     const syncScroll = () => { hl.scrollTop = ed.scrollTop; hl.scrollLeft = ed.scrollLeft; ln.scrollTop = ed.scrollTop; };
     on(ed, 'scroll', syncScroll);
 
+    // Update
     const update = () => render(ed.value);
-    on(ed, 'input', debounce(update, 20));
+    on(ed, 'input', debounce(update, 40));
 
+    // Actions
     const save = () => { localStorage.setItem(storageKey, ed.value); toast('Saved'); };
     const reset = () => { if (confirm('Clear the editor?')) { ed.value=''; update(); save(); } };
     const copy = () => copyText(ed.value);
     const exportFile = () => saveFile(storageKey + (lang==='css'?'.css':'.js'), ed.value, 'text/plain');
 
-    return { ed, hl, ln, save, reset, copy, exportFile, render, setLines,
-             setWrap:(onwrap)=>{ ed.style.whiteSpace = onwrap?'pre-wrap':'pre'; ed.style.overflowWrap = onwrap?'anywhere':'normal'; },
-             format:()=>{ if (lang==='css') ed.value = basicFormatCSS(ed.value); else ed.value = basicFormatJS(ed.value); update(); },
-             importFrom:(file)=> new Promise(res=>{
-                const r=new FileReader();
-                r.onload=()=>{ ed.value=String(r.result||''); update(); res(); };
-                r.readAsText(file);
-             })
+    return {
+      ed, hl, ln, save, reset, copy, exportFile, render, setLines,
+      setWrap:(onwrap)=>{ ed.style.whiteSpace = onwrap?'pre-wrap':'pre'; ed.style.overflowWrap = onwrap?'anywhere':'normal'; },
+      format:()=>{ if (lang==='css') ed.value = basicFormatCSS(ed.value); else ed.value = basicFormatJS(ed.value); update(); },
+      importFrom:(file)=> new Promise(res=>{
+        const r=new FileReader();
+        r.onload=()=>{ ed.value=String(r.result||''); update(); res(); };
+        r.readAsText(file);
+      })
     };
   }
 
@@ -407,7 +378,10 @@ nav { backdrop-filter: blur(16px) saturate(120%); }
 */`
     });
 
-    const cssStylePreview = document.createElement('style'); cssStylePreview.id='custom-css-preview'; document.body.appendChild(cssStylePreview);
+    const cssStylePreview = document.createElement('style');
+    cssStylePreview.id='custom-css-preview';
+    document.body.appendChild(cssStylePreview);
+
     const applyCssPreview = () => { cssStylePreview.textContent = cssEditor.ed.value || ''; };
     applyCssPreview();
 

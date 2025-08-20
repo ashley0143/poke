@@ -44,17 +44,29 @@
     @media (prefers-color-scheme: light){
       :root{--bg:#f7f7fb;--bg-elev:#fff;--bg-chip:#f1f2f6;--text:#151518;--muted:#5a5a66;--shadow:0 12px 30px rgba(0,0,0,.08),0 1px 0 rgba(0,0,0,.04) inset}
     }
+
     html,body{height:100%}
     body{
       margin:0;
+      color:var(--text);
+      background:var(--bg);             /* solid fallback */
+      font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,"PokeTube Flex","Inter",sans-serif;
+      -webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;overflow-x:hidden
+    }
+    /* FIX: make gradient seamless on scroll with a fixed pseudo-layer.
+       Also prevent tiling so it doesn't "restart" as you scroll. */
+    body::before{
+      content:"";
+      position:fixed; inset:0; z-index:-1;
       background:
         radial-gradient(1200px 600px at 10% -10%, rgba(255,255,255,.06), transparent 50%),
         radial-gradient(1000px 600px at 110% 10%, rgba(255,255,255,.04), transparent 40%),
         linear-gradient(135deg,#820622 10%,#4e2e82 60%,#725965 100%);
-      color:var(--text);
-      font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,"PokeTube Flex","Inter",sans-serif;
-      -webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;overflow-x:hidden
+      background-repeat:no-repeat,no-repeat,no-repeat;
+      background-attachment:fixed,fixed,fixed;
+      background-size:auto,auto,cover;
     }
+
     .topbar{
       position:sticky;top:0;z-index:50;display:flex;align-items:center;justify-content:space-between;gap:var(--gap);
       padding:12px clamp(12px,2vw,24px);
@@ -71,21 +83,26 @@
     }
     .icon-btn:focus-visible{outline:2px solid var(--ring);outline-offset:3px}
     .icon-btn:hover{transform:translateY(-1px);background:rgba(255,255,255,.12)}
+
     .container{max-width:1100px;margin:clamp(16px,4vw,40px) auto;padding:0 clamp(12px,2vw,20px)}
     .panel{background:var(--bg-elev);border:1px solid rgba(255,255,255,.08);border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden}
     .panel-header{display:grid;grid-template-columns:1.2fr .8fr;gap:clamp(12px,3vw,20px);padding:clamp(16px,3vw,24px)}
     @media (max-width:840px){.panel-header{grid-template-columns:1fr}}
+
     .title{display:flex;flex-direction:column;gap:10px}
     .title h1{margin:0;font-size:clamp(20px,3.2vw,28px);letter-spacing:.2px}
     .subtitle{color:var(--muted);font-size:14px}
     .subtitle a{color:var(--link);text-decoration:none}
     .subtitle a:hover{text-decoration:underline}
+
     .thumb-wrap{position:relative;border-radius:12px;overflow:hidden;box-shadow:0 0 4.4em <%=color%>}
     .thumb{width:100%;height:auto;display:block;aspect-ratio:16/9;object-fit:cover;transform:translateZ(0)}
+
     .formats{display:flex;flex-direction:column;gap:8px;padding:0 clamp(16px,3vw,24px) clamp(16px,3vw,24px)}
     .section{margin-top:8px;padding-top:8px}
     .section h2{font-size:clamp(16px,2.5vw,18px);font-weight:800;margin:10px 0 8px;letter-spacing:.3px}
     .section p.helper{margin:4px 0 12px;color:var(--muted);font-size:13px}
+
     .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(340px,1fr));gap:12px}
     .chip{
       display:flex;align-items:center;gap:12px;background:var(--bg-chip);
@@ -95,6 +112,7 @@
     .chip .label{font-weight:800;letter-spacing:.2px;white-space:nowrap;overflow:hidden;text-overflow:clip}
     .chip .hint{font-size:12px;color:var(--muted)}
     .chip .actions{display:flex;align-items:center;gap:8px;margin-left:auto;flex:0 0 auto}
+
     .btn{
       --h:36px;display:inline-flex;align-items:center;gap:8px;height:var(--h);padding:0 14px;border-radius:999px;
       border:1px solid rgba(255,255,255,.12);background:linear-gradient(180deg,rgba(255,255,255,.08),rgba(255,255,255,.04));
@@ -104,6 +122,7 @@
     .btn:hover{transform:translateY(-1px);background:linear-gradient(180deg,rgba(255,255,255,.12),rgba(255,255,255,.06))}
     .btn:focus-visible{outline:2px solid var(--ring);outline-offset:3px}
     .btn .fa-download{font-size:14px}
+
     .alert{margin:16px 0 0;padding:12px 14px;font-size:13px;color:#fff;background:#2196F3;border-radius:10px;box-shadow:var(--shadow)}
     .sr-only{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
     a{color:inherit}
@@ -115,13 +134,20 @@
     }
     .mux-rows{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px;margin-top:12px}
     .mux-item{background:var(--bg-chip);border:1px solid rgba(255,255,255,.08);border-radius:10px;padding:12px}
-    .kbd{font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+
+    .kbd{
+      font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace;
       background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);border-radius:8px;padding:10px;display:block;
-      overflow:auto;line-height:1.45;font-size:13px}
-    .copy{
-      display:inline-flex;align-items:center;gap:6px;margin-top:8px;padding:6px 10px;border-radius:8px;border:1px solid rgba(255,255,255,.12);
-      background:rgba(255,255,255,.06);cursor:pointer
+      overflow:auto;line-height:1.45;font-size:13px;color:var(--text)
     }
+    /* FIX: copy buttons showing black text */
+    .copy{
+      display:inline-flex;align-items:center;gap:6px;margin-top:8px;padding:6px 10px;border-radius:8px;
+      border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.06);
+      color:var(--text); cursor:pointer
+    }
+    .copy i{color:inherit}
+    .copy:hover{background:rgba(255,255,255,.09)}
     .copy:focus-visible{outline:2px solid var(--ring);outline-offset:3px}
   </style>
 </head>
@@ -260,7 +286,6 @@
 
         <div class="alert" role="status" aria-live="polite">Tip: if a download fails, try another container (MP4 vs WEBM) or a different quality.</div>
 
-        <!-- Combine (mux) section -->
         <section class="mux-card" aria-labelledby="combine">
           <h2 id="combine" style="margin:0 0 6px">Combine video-only + audio-only (mux)</h2>
           <p class="helper">Pick one of these quick methods. They don’t re-encode, so quality stays the same.</p>
@@ -329,10 +354,9 @@ ffmpeg -i video.webm -i audio.webm -c copy -map 0:v:0 -map 1:a:0 output.webm</pr
       const toClipboard = async (text, el) => {
         try {
           await navigator.clipboard.writeText(text);
-          el.dataset.copied = "1";
           const old = el.innerHTML;
           el.innerHTML = '<i class="fa-light fa-check"></i> Copied';
-          setTimeout(() => { el.innerHTML = old; el.dataset.copied=""; }, 1200);
+          setTimeout(() => { el.innerHTML = old; }, 1200);
         } catch (_) {}
       };
 

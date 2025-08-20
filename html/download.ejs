@@ -145,7 +145,7 @@
       position:relative;
       border-radius: 12px;
       overflow:hidden;
-      box-shadow: 0 0 0 1px rgba(255,255,255,.06) inset, 0 14px 40px rgba(0,0,0,.35);
+      box-shadow: box-shadow: 0 0 4.4em <%=color%>
     }
     .thumb{
       width:100%; height:auto; display:block;
@@ -192,10 +192,7 @@
       display:flex; flex-direction:column; gap: 4px; min-width:0;
     }
     .chip .label{
-      font-weight: 800; letter-spacing:.2px; 
-white-space: nowrap;
-  overflow: visible;    
-
+      font-weight: 800; letter-spacing:.2px; white-space: nowrap; overflow:hidden; text-overflow:ellipsis;
     }
     .chip .hint{
       font-size: 12px; color: var(--muted);
@@ -232,8 +229,7 @@ white-space: nowrap;
     /* Utilities */
     .sr-only{position:absolute !important; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0}
 
-    /* Fixes and hover color for links inside chips */
-    a{color:inherit}
+     a{color:inherit}
     .chip a.btn{color:var(--text)}
   </style>
 </head>
@@ -415,20 +411,12 @@ white-space: nowrap;
           </div>
         </section>
 
-        <!-- Optional note -->
-        <div class="alert" role="status" aria-live="polite">
+         <div class="alert" role="status" aria-live="polite">
           Tip: if a download fails, try another container (MP4 vs WEBM) or a different quality.
         </div>
       </div>
     </section>
-
-    <!-- Invisible analytics beacon (kept) -->
-    <img
-      id="download_page"
-      src="https://t.poketube.fun/t/rep.gif?download_video=<%= btoa(v) %>"
-      alt=""
-      style="width:0;height:0;visibility:hidden;border:0"
-    />
+ 
   </main>
 
   <script src="/css/custom-css.js?v=54"></script>

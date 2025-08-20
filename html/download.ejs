@@ -170,7 +170,7 @@
         <div class="title">
           <h1 id="download-title">Download Video / Music</h1>
           <div class="subtitle">ID: <code><%= v %></code> — <a href="/watch?v=<%= v %>">Open the watch page</a></div>
-          <p class="helper" style="margin:6px 0 0;color:var(--muted)">Select a format to download. Muxed = audio+video. “Video-only” needs a separate audio track if you plan to mux.</p>
+          <p class="helper" style="margin:6px 0 0;color:var(--muted)">select a format to download :3 Muxed is audio+video and Video only needs a separate audio track if you plan to mux!</p>
         </div>
         <figure class="thumb-wrap">
           <img class="thumb" src="/vi/<%= v %>/maxresdefault.jpg" alt="Thumbnail preview for the requested video" loading="eager" decoding="async"/>
@@ -220,7 +220,7 @@
 
         <section class="section" aria-labelledby="videoonly">
           <h2 id="videoonly">Video-only formats</h2>
-          <p class="helper">No audio. You may need to mux with an audio track.</p>
+          <p class="helper">No audio!! You may need to mux with an audio track :c</p>
           <div class="grid">
             <article class="chip">
               <div class="meta"><span class="label">144p — MP4</span><span class="hint">Very small</span></div>
@@ -284,30 +284,30 @@
           </div>
         </section>
 
-        <div class="alert" role="status" aria-live="polite">Tip: if a download fails, try another container (MP4 vs WEBM) or a different quality.</div>
+        <div class="alert" role="status" aria-live="polite">if a download fails try another container (MP4 vs WEBM) or a different quality :D</div>
 
         <section class="mux-card" aria-labelledby="combine">
-          <h2 id="combine" style="margin:0 0 6px">Combine video-only + audio-only (mux)</h2>
-          <p class="helper">Pick one of these quick methods. They don’t re-encode, so quality stays the same.</p>
+          <h2 id="combine" style="margin:0 0 6px">How2 Combine video-only + audio-only (mux)</h2>
+          <p class="helper">U can pick one of these methods!!</p>
 
           <div class="mux-rows">
             <div class="mux-item">
               <strong>FFmpeg — MP4 output</strong>
-              <pre class="kbd" data-code="ffmpeg -i video.mp4 -i audio.m4a -c copy -map 0:v:0 -map 1:a:0 output.mp4">ffmpeg -i video.mp4 -i audio.m4a -c copy -map 0:v:0 -map 1:a:0 output.mp4</pre>
+              <pre class="kbd" data-code="ffmpeg -i video.mp4 -i videoplayback.m4a -c copy -map 0:v:0 -map 1:a:0 output.mp4">ffmpeg -i video.mp4 -i videoplayback.m4a -c copy -map 0:v:0 -map 1:a:0 output.mp4</pre>
               <button class="copy" data-target="prev"><i class="fa-light fa-copy"></i> Copy</button>
               <p class="helper" style="margin-top:8px">Use when your video is MP4 (H.264) and audio is M4A/AAC.</p>
             </div>
 
             <div class="mux-item">
               <strong>FFmpeg — WEBM output</strong>
-              <pre class="kbd" data-code="ffmpeg -i video.webm -i audio.webm -c copy -map 0:v:0 -map 1:a:0 output.webm">ffmpeg -i video.webm -i audio.webm -c copy -map 0:v:0 -map 1:a:0 output.webm</pre>
+              <pre class="kbd" data-code="ffmpeg -i videoplayback.webm -i audio.webm -c copy -map 0:v:0 -map 1:a:0 output.webm">ffmpeg -i videoplayback.webm -i audio.webm -c copy -map 0:v:0 -map 1:a:0 output.webm</pre>
               <button class="copy" data-target="prev"><i class="fa-light fa-copy"></i> Copy</button>
               <p class="helper" style="margin-top:8px">Use when both tracks are WEBM (VP9/AV1 + Opus).</p>
             </div>
 
             <div class="mux-item">
               <strong>FFmpeg — mixed containers</strong>
-              <pre class="kbd" data-code="ffmpeg -i video.webm -i audio.m4a -c copy -map 0:v:0 -map 1:a:0 output.mkv">ffmpeg -i video.webm -i audio.m4a -c copy -map 0:v:0 -map 1:a:0 output.mkv</pre>
+              <pre class="kbd" data-code="ffmpeg -i videoplayback.webm -i videoplayback.m4a -c copy -map 0:v:0 -map 1:a:0 output.mkv">ffmpeg -i videoplayback.webm -i videoplayback.m4a -c copy -map 0:v:0 -map 1:a:0 output.mkv</pre>
               <button class="copy" data-target="prev"><i class="fa-light fa-copy"></i> Copy</button>
               <p class="helper" style="margin-top:8px">If containers differ, mux to <code>mkv</code> for best compatibility.</p>
             </div>
@@ -322,14 +322,14 @@
             <div class="mux-item">
               <strong>GNU/Linux / macOS</strong>
               <pre class="kbd"># Example
-ffmpeg -i video.mp4 -i audio.m4a -c copy -map 0:v:0 -map 1:a:0 output.mp4</pre>
+ffmpeg -i video.mp4 -i videoplayback.m4a -c copy -map 0:v:0 -map 1:a:0 output.mp4</pre>
             </div>
 
             <div class="mux-item">
               <strong>Android (Termux)</strong>
               <pre class="kbd">pkg install ffmpeg
 cd /sdcard/Download
-ffmpeg -i video.webm -i audio.webm -c copy -map 0:v:0 -map 1:a:0 output.webm</pre>
+ffmpeg -i videoplayback.webm -i audio.webm -c copy -map 0:v:0 -map 1:a:0 output.webm</pre>
             </div>
           </div>
         </section>

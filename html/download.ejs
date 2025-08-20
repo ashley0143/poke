@@ -197,7 +197,7 @@
           <h2 id="audio">Audio-only formats</h2>
           <div class="grid">
             <article class="chip">
-              <div class="meta"><span class="label">m4a — low</span><span class="hint">Small size</span></div>
+              <div class="meta"><span class="label">m4a — low</span><span class="hint">smol size</span></div>
               <a class="btn" href="/api/video/download?v=<%= v %>&q=139&f=webm" aria-label="Download m4a low"><i class="fa-light fa-download" aria-hidden="true"></i><span>Download</span></a>
             </article>
 
@@ -207,7 +207,7 @@
             </article>
 
             <article class="chip">
-              <div class="meta"><span class="label">webm — low</span><span class="hint">Opus • Small size</span></div>
+              <div class="meta"><span class="label">webm — low</span><span class="hint">Opus • smol size</span></div>
               <a class="btn" href="/api/video/download?v=<%= v %>&q=249&f=webm" aria-label="Download webm low"><i class="fa-light fa-download" aria-hidden="true"></i><span>Download</span></a>
             </article>
 
@@ -223,12 +223,12 @@
           <p class="helper">No audio!! You may need to mux with an audio track :c</p>
           <div class="grid">
             <article class="chip">
-              <div class="meta"><span class="label">144p — MP4</span><span class="hint">Very small</span></div>
+              <div class="meta"><span class="label">144p — MP4</span><span class="hint">Very smol</span></div>
               <a class="btn" href="/api/video/download?v=<%= v %>&q=160&f=mp4"><i class="fa-light fa-download"></i><span>Download</span></a>
             </article>
 
             <article class="chip">
-              <div class="meta"><span class="label">144p — WEBM</span><span class="hint">Very small</span></div>
+              <div class="meta"><span class="label">144p — WEBM</span><span class="hint">Very smol</span></div>
               <a class="btn" href="/api/video/download?v=<%= v %>&q=278&f=webm"><i class="fa-light fa-download"></i><span>Download</span></a>
             </article>
 
@@ -295,21 +295,21 @@
               <strong>FFmpeg — MP4 output</strong>
               <pre class="kbd" data-code="ffmpeg -i video.mp4 -i videoplayback.m4a -c copy -map 0:v:0 -map 1:a:0 output.mp4">ffmpeg -i video.mp4 -i videoplayback.m4a -c copy -map 0:v:0 -map 1:a:0 output.mp4</pre>
               <button class="copy" data-target="prev"><i class="fa-light fa-copy"></i> Copy</button>
-              <p class="helper" style="margin-top:8px">Use when your video is MP4 (H.264) and audio is M4A/AAC.</p>
+              <p class="helper" style="margin-top:8px">when your video is MP4 (H.264) and audio is M4A/AAC use dis!</p>
             </div>
 
             <div class="mux-item">
               <strong>FFmpeg — WEBM output</strong>
               <pre class="kbd" data-code="ffmpeg -i videoplayback.webm -i audio.webm -c copy -map 0:v:0 -map 1:a:0 output.webm">ffmpeg -i videoplayback.webm -i audio.webm -c copy -map 0:v:0 -map 1:a:0 output.webm</pre>
               <button class="copy" data-target="prev"><i class="fa-light fa-copy"></i> Copy</button>
-              <p class="helper" style="margin-top:8px">Use when both tracks are WEBM (VP9/AV1 + Opus).</p>
+              <p class="helper" style="margin-top:8px"> when both tracks are WEBM (VP9/AV1 + Opus) use dis!</p>
             </div>
 
             <div class="mux-item">
               <strong>FFmpeg — mixed containers</strong>
               <pre class="kbd" data-code="ffmpeg -i videoplayback.webm -i videoplayback.m4a -c copy -map 0:v:0 -map 1:a:0 output.mkv">ffmpeg -i videoplayback.webm -i videoplayback.m4a -c copy -map 0:v:0 -map 1:a:0 output.mkv</pre>
               <button class="copy" data-target="prev"><i class="fa-light fa-copy"></i> Copy</button>
-              <p class="helper" style="margin-top:8px">If containers differ, mux to <code>mkv</code> for best compatibility.</p>
+              <p class="helper" style="margin-top:8px">If containers differ u can mux to <code>mkv</code> for best compatibility!</p>
             </div>
 
             <div class="mux-item">

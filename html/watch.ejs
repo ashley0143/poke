@@ -31,7 +31,7 @@
 <!DOCTYPE html>
 <% if(secure) { %><!-- HOSTNAME_IS_POKETUBE.FUN --><% } %><% if(!secure) { %><!-- HOSTNAME_IS_NOT_POKETUBE.FUN --><% } %>
 
-<html class="poketube_desktop_player js events addEventListener hasVideoJS canPlayHD" style="background: #000000;" invidproxy="<%=u%>" universe_version="2" vid_id="<%=inv_vid?.videoId%>" t="<%=btoa(Date.now())%>" version="browser_web_<%=Date.now()%>">  
+<html class="poketube_desktop_player js events addEventListener hasVideoJS canPlayHD" style="background: #000000;" invidproxy="<%=u%>" universe_version="2" vid_id="<%=VideoObject?.videoId%>" t="<%=btoa(Date.now())%>" version="browser_web_<%=Date.now()%>">  
 <head>
   
 
@@ -39,25 +39,25 @@
     <!-- meta tags disabled by user -->
  <% } %>
   <% if (!e) { %>
-<meta content="<%=inv_vid?.title%>" name=title>
+<meta content="<%=VideoObject?.title%>" name=title>
 <meta content="<%=color%>" name="theme-color">
 <meta content="{canplayhd: true, redesign_feburary_2023:true, poke-rebrand:true, universe:2, ImmersiveAmbientMode:true, november2023_poke_rebrand:true, rebrand_2024:true, faster_load:true, AudioSyncV2:false, AudioSyncV3:true }" name="flags">
-<meta content="<%=inv_vid?.author%>" name=twitter:author>
-<meta content="https://poketube.fun/watch?v=<%=inv_vid?.videoId%>" name=twitter:url>
-<meta content="<%=inv_vid?.title%> | Poke" name=twitter:title>
-<meta content="Watch this <%- turntomins(inv_vid?.lengthSeconds) || "LIVE"%> long video from <%=inv_vid?.author%> On Poke! 
+<meta content="<%=VideoObject?.author%>" name=twitter:author>
+<meta content="https://poketube.fun/watch?v=<%=VideoObject?.videoId%>" name=twitter:url>
+<meta content="<%=VideoObject?.title%> | Poke" name=twitter:title>
+<meta content="Watch this <%- turntomins(VideoObject?.lengthSeconds) || "LIVE"%> long video from <%=VideoObject?.author%> On Poke! 
 👍 <%=convert(engagement?.likes)%> | 👎 <%=convert(engagement?.dislikes)%> | 📈 <%=convert(engagement.viewCount)%> Views 🗓️ <%= date.replace("Premiered", " ") %> 💬 <% if (!isNaN(inv.commentCount)) { %><%= inv.commentCount.toLocaleString() %>
 <% } else { %>
  0
 <% } %>" property=twitter:description>
-<meta content="https://i.ytimg.com/vi/<%=inv_vid.videoId%>/maxresdefault.jpg" property=og:image>
+<meta content="https://i.ytimg.com/vi/<%=VideoObject.videoId%>/maxresdefault.jpg" property=og:image>
 <meta content=summary_large_image name=twitter:card>
-<link href="https://poketube.fun/watch?v=<%=inv_vid.videoId%>" itemprop=url>
+<link href="https://poketube.fun/watch?v=<%=VideoObject.videoId%>" itemprop=url>
 <!-- closes the } --> <% } %> 
 <meta name="darkreader-lock"> <!-- tells dark reader that the site has a dark theme and to turn itself off -->
 <link href="/css/yt-ukraine.svg?v=7" rel=icon>
 <link rel="manifest" href="/manifest.json">
-<title><%= inv_vid?.title %> | <%= /^[A-Z]/.test(inv_vid.title) ? 'Watch' : 'watch' %></title>
+<title><%= VideoObject?.title %> | <%= /^[A-Z]/.test(VideoObject.title) ? 'Watch' : 'watch' %></title>
 <style>     
   .comments-area {
   background: #f1f9ff;
@@ -420,7 +420,7 @@ button:hover, a:hover {
 
 <!-- css files end -->
 
-<% if (inv_vid.title == "7clouds") { %> 
+<% if (VideoObject.title == "7clouds") { %> 
 <style>
  @font-face {
   font-family: 'Edo SZ';
@@ -476,7 +476,7 @@ button:hover, a:hover {
     
   </style>
   </noscript>
-                    <% if (inv_vid.videoId == "QrGrOK8oZG8") { %> 
+                    <% if (VideoObject.videoId == "QrGrOK8oZG8") { %> 
 
                       <style>
               
@@ -739,7 +739,7 @@ background-color: #0000;
     <nav>
                   <div class=left>
 
-<% if (inv_vid.author !== "twenty one pilots") { %> 
+<% if (VideoObject.author !== "twenty one pilots") { %> 
  
               <a title="Poke Homepage" class="class" href="/143" style=font-family:Inter,sans-serif;color:var(--text-color)>  <img  style="transform: scale(1.3);padding-left:0.9em;width: 8.5em;display: block;margin-left: auto;margin-right: auto;" src="/css/logo-poke.svg?v=5"></a>
                                      		 	                    
@@ -773,7 +773,7 @@ if your domain matches this code you are probably in poketube.fun owo:3
                                                          <% } %>   
  
  
-<% if (inv_vid.author === "twenty one pilots") { %> 
+<% if (VideoObject.author === "twenty one pilots") { %> 
  
 <a title="Poke Homepage" class="class" href="/143" style="font-family:Inter,sans-serif;color:var(--text-color);display: flex;">  <img style="transform: scale(1.3);padding-left:0.9em;width: 8.5em;display: block;margin-left: auto;margin-right: auto;" src="/css/logo-poke.svg?v=5">
                 <img src="/css/red-tape.png?v=5" style="opacity: 0.9;height: 41px;margin-left: -10em;"></a>
@@ -830,7 +830,7 @@ if your domain matches this code you are probably in poketube.fun owo:3
  <p id="fetch-count">
                    </p>
  
-             <a class="settings-icon" href="<%= config.mastodon_client_url %>/share?text=watch+<%=inv_vid.title%>+by+<%=inv_vid.author%>+on+Poke!+%0Ahttps://<%= hostname %>/watch?v=<%=inv_vid.videoId%>"><i  class="fa-brands fa-mastodon"></i>
+             <a class="settings-icon" href="<%= config.mastodon_client_url %>/share?text=watch+<%=VideoObject.title%>+by+<%=VideoObject.author%>+on+Poke!+%0Ahttps://<%= hostname %>/watch?v=<%=VideoObject.videoId%>"><i  class="fa-brands fa-mastodon"></i>
 </a>
         
       <a class="settings-icon" href="/customize"><i  class="fa-light fa-brush"></i>
@@ -845,7 +845,7 @@ if your domain matches this code you are probably in poketube.fun owo:3
   			
     
 			<div class="dropdown__menu" style="right: -1em;">
-      	<a href="<%= config.mastodon_client_url %>/share?text=watch+<%=inv_vid.title%>+by+<%=inv_vid.author%>+on+Poke!+%0Ahttps://<%= hostname %>/watch?v=<%=inv_vid.videoId%>" style="text-decoration: none;" class="dropdown__item">
+      	<a href="<%= config.mastodon_client_url %>/share?text=watch+<%=VideoObject.title%>+by+<%=VideoObject.author%>+on+Poke!+%0Ahttps://<%= hostname %>/watch?v=<%=VideoObject.videoId%>" style="text-decoration: none;" class="dropdown__item">
                             <i  class="fa-brands fa-mastodon"></i>
                       Share On <%= config.mastodon_client_server_name	%>!
         </a>
@@ -878,7 +878,7 @@ Poke Translate
     
                           <% if (!a) { %>  
 
-        		<a href="/watch?v=<%=inv_vid.videoId%>&a=false" title="Ambient light mode uses a very cool ahh effect to make watching videos more immersive by casting gentle colors from the video into your screen’s background! and it looks amazing :3 owo" style="text-decoration: none;" class="dropdown__item">
+        		<a href="/watch?v=<%=VideoObject.videoId%>&a=false" title="Ambient light mode uses a very cool ahh effect to make watching videos more immersive by casting gentle colors from the video into your screen’s background! and it looks amazing :3 owo" style="text-decoration: none;" class="dropdown__item">
 <i class="fa-light fa-lightbulb-on"></i>
                Ambient Lights • on
         </a>
@@ -887,7 +887,7 @@ Poke Translate
      <% if (a) { %>  
 
 
-        		<a title=title="Ambient light mode uses a very cool ahh effect to make watching videos more immersive by casting gentle colors from the video into your screen’s background! and it looks amazing :3 owo" href="/watch?v=<%=inv_vid.videoId%>" style="text-decoration: none;" class="dropdown__item">
+        		<a title=title="Ambient light mode uses a very cool ahh effect to make watching videos more immersive by casting gentle colors from the video into your screen’s background! and it looks amazing :3 owo" href="/watch?v=<%=VideoObject.videoId%>" style="text-decoration: none;" class="dropdown__item">
 <i class="fa-light fa-lightbulb" style="width: 1em;margin-left: 4px;"></i>
              Ambient Lights • off
         </a>
@@ -898,7 +898,7 @@ Poke Translate
                                                                                        
                           <% if (!dm) { %>  
 
-        		<a href="/watch?v=<%=inv_vid.videoId%>&dm=true" title="Enable dark video info panel" style="text-decoration: none;" class="dropdown__item">
+        		<a href="/watch?v=<%=VideoObject.videoId%>&dm=true" title="Enable dark video info panel" style="text-decoration: none;" class="dropdown__item">
 <i class="fa-light fa-sun-bright"></i>
                Dark Panel • off
         </a>
@@ -907,7 +907,7 @@ Poke Translate
      <% if (dm) { %>  
 
 
-        		<a title="Enable Dark video info" href="/watch?v=<%=inv_vid.videoId%>" style="text-decoration: none;" class="dropdown__item">
+        		<a title="Enable Dark video info" href="/watch?v=<%=VideoObject.videoId%>" style="text-decoration: none;" class="dropdown__item">
 <i class="fa-light fa-moon" style="width: 1em;margin-left: 4px;"></i>
              Dark Panel • on
         </a>
@@ -919,7 +919,7 @@ Poke Translate
                                                                   
                                                                                            <% if (!universe) { %>  
 
-        		<a href="/watch?v=<%=inv_vid.videoId%>&universe=2" title="test out the new layout of poke!" style="text-decoration: none;" class="dropdown__item">
+        		<a href="/watch?v=<%=VideoObject.videoId%>&universe=2" title="test out the new layout of poke!" style="text-decoration: none;" class="dropdown__item">
 <i class="fa-light fa-flask" style="width: 16px;height: 17px;margin-left: 2px;"></i>
               Testing Mode
                                                                                              </a>
@@ -928,7 +928,7 @@ Poke Translate
      <% if (universe) { %>  
 
 
-        		<a title="test out the new layout of poke!" href="/watch?v=<%=inv_vid.videoId%>" style="text-decoration: none;" class="dropdown__item">
+        		<a title="test out the new layout of poke!" href="/watch?v=<%=VideoObject.videoId%>" style="text-decoration: none;" class="dropdown__item">
 <i class="fa-light fa-flask" style="width: 16px;height: 17px;margin-left: 2px;"></i>
               Close testing mode
         </a>
@@ -936,12 +936,12 @@ Poke Translate
                                       
                                                                                      <% } %>    
          
-         	<a href="https://youtube.com/watch?v=<%=inv_vid.videoId%>"style="text-decoration: none;" class="dropdown__item">
+         	<a href="https://youtube.com/watch?v=<%=VideoObject.videoId%>"style="text-decoration: none;" class="dropdown__item">
                             <i  class="fa-brands fa-youtube"></i>
 Open on YouTube :3
         </a>
 
-                 		<a title="Low Bandwidth? Is your Internet from ummhh 1999? Do u still use dial-in for some reason lol - u can try Lite!" href="/lite?v=<%=inv_vid.videoId%>" style="text-decoration: none;" class="dropdown__item">
+                 		<a title="Low Bandwidth? Is your Internet from ummhh 1999? Do u still use dial-in for some reason lol - u can try Lite!" href="/lite?v=<%=VideoObject.videoId%>" style="text-decoration: none;" class="dropdown__item">
 <i class="fa-light fa-bolt" style="width: 16px;height: 17px;margin-left: 2px;"></i>
 Go Lite!
                                                                                        </a>                                                       
@@ -979,11 +979,11 @@ Offical Discord Server! :3
  	<div class="primary">
       <div id="popupMenu" class="popup">
    <div >
-          <a href="<%=u%>/latest_version?id=<%=inv_vid.videoId%>&itag=18&local=true" style="color: #fff;">
+          <a href="<%=u%>/latest_version?id=<%=VideoObject.videoId%>&itag=18&local=true" style="color: #fff;">
        <i class="fa-light fa-download"></i> Download Video (360p)</a>
               </div>   <div >
 
-          <a href="/download?v=<%=inv_vid.videoId%>" style="color: #fff;">
+          <a href="/download?v=<%=VideoObject.videoId%>" style="color: #fff;">
        <i class="fa-light fa-download"></i> Download - Moar Options</a>
               </div>
                     
@@ -1012,11 +1012,11 @@ Offical Discord Server! :3
     </div>
     
     
-		<div id="<%=sha384(inv_vid.videoId)%>" class="video-player-container">
+		<div id="<%=sha384(VideoObject.videoId)%>" class="video-player-container">
       
  <% 
   let itag = null; // Default to null
-  inv_vid.adaptiveFormats.forEach(format => {
+  VideoObject.adaptiveFormats.forEach(format => {
     if (format.itag == '136' || format.itag == '298') {
       itag = '140'; // Set itag to '140' if either '136' or '298' is found
     }
@@ -1025,7 +1025,7 @@ Offical Discord Server! :3
 
 <% if (itag && !qua) { %>
   <audio id="aud" preload>
-    <source src="<%=u%>/latest_version?id=<%=inv_vid.videoId%>&itag=<%=itag%>&local=true" type="video/mp4"  />
+    <source src="<%=u%>/latest_version?id=<%=VideoObject.videoId%>&itag=<%=itag%>&local=true" type="video/mp4"  />
   </audio>
 <% } else { %>
   <audio id="aud"></audio>
@@ -1039,52 +1039,52 @@ Offical Discord Server! :3
         <% } %>
       </noscript>
    
-      <video poster="<%- media_proxy_url %>/proxy?url=https://i.ytimg.com/vi/<%= inv_vid.videoId %>/hqdefault.jpg" class="video-js player video-ambient-container" id="video" style="border-radius: 16px; box-sizing: border-box; min-width: 100%; display: block;" preload>
+      <video poster="<%- media_proxy_url %>/proxy?url=https://i.ytimg.com/vi/<%= VideoObject.videoId %>/hqdefault.jpg" class="video-js player video-ambient-container" id="video" style="border-radius: 16px; box-sizing: border-box; min-width: 100%; display: block;" preload>
       <% if (isvidious) { %>
         <% if (!qua) { %>
 <% 
   let itag = '136'; // Default itag
-  inv_vid.adaptiveFormats.forEach(format => {
+  VideoObject.adaptiveFormats.forEach(format => {
     if (format.itag == '298') {
       itag = '298';
     }
   });
 %>
-<source src="<%=u%>/latest_version?id=<%=inv_vid.videoId%>&itag=<%=itag%>&local=true" type="video/mp4; codecs=&quot;avc1.64001F, mp4a.40.2&quot;" label="hd720" selected="true">
+<source src="<%=u%>/latest_version?id=<%=VideoObject.videoId%>&itag=<%=itag%>&local=true" type="video/mp4; codecs=&quot;avc1.64001F, mp4a.40.2&quot;" label="hd720" selected="true">
         <% } %>
         <% if (qua === "medium") { %>
-          <source src="<%=u%>/latest_version?id=<%=inv_vid.videoId%>&itag=18&local=true" type="video/mp4; codecs=&quot;avc1.64001F, mp4a.40.2&quot;" label="sd360" selected="true" >
+          <source src="<%=u%>/latest_version?id=<%=VideoObject.videoId%>&itag=18&local=true" type="video/mp4; codecs=&quot;avc1.64001F, mp4a.40.2&quot;" label="sd360" selected="true" >
         <% } %>
       <% } %>
 
       <% if (!isSchoolProxy) { %>
         <% if (!isvidious) { %>
           <% if (!qua) { %>
-            <source src="https://tube.kuylar.dev/proxy/media/<%=inv_vid.videoId%>/22" type="video/mp4; codecs=&quot;avc1.64001F, mp4a.40.2&quot;" label="hd720" selected="true" onerror="showErrorCard(event)">
+            <source src="https://tube.kuylar.dev/proxy/media/<%=VideoObject.videoId%>/22" type="video/mp4; codecs=&quot;avc1.64001F, mp4a.40.2&quot;" label="hd720" selected="true" onerror="showErrorCard(event)">
           <% } %>
           <% if (qua === "medium") { %>
-            <source src="https://tube.kuylar.dev/proxy/media/<%=inv_vid.videoId%>/18" type="video/mp4; codecs=&quot;avc1.64001F, mp4a.40.2&quot;" label="sd360" selected="true" onerror="showErrorCard(event)">
+            <source src="https://tube.kuylar.dev/proxy/media/<%=VideoObject.videoId%>/18" type="video/mp4; codecs=&quot;avc1.64001F, mp4a.40.2&quot;" label="sd360" selected="true" onerror="showErrorCard(event)">
           <% } %>
         <% } %>
       <% } %>
 
       <% if (isSchoolProxy) { %>
         <% if (!qua) { %>
-          <source src="https://tube-proxy.ashley0143.xyz/proxy/media/<%=inv_vid.videoId%>/22" type="video/mp4; codecs=&quot;avc1.64001F, mp4a.40.2&quot;" label="hd720" selected="true" onerror="showErrorCard()">
+          <source src="https://tube-proxy.ashley0143.xyz/proxy/media/<%=VideoObject.videoId%>/22" type="video/mp4; codecs=&quot;avc1.64001F, mp4a.40.2&quot;" label="hd720" selected="true" onerror="showErrorCard()">
         <% } %>
         <% if (qua === "medium") { %>  
-          <source src="https://tube-proxy.ashley0143.xyz/proxy/media/<%=inv_vid.videoId%>/18" type="video/mp4; codecs=&quot;avc1.64001F, mp4a.40.2&quot;" label="sd360" selected="true" onerror="showErrorCard()">
+          <source src="https://tube-proxy.ashley0143.xyz/proxy/media/<%=VideoObject.videoId%>/18" type="video/mp4; codecs=&quot;avc1.64001F, mp4a.40.2&quot;" label="sd360" selected="true" onerror="showErrorCard()">
         <% } %>
       <% } %>
 
-      <%  if (Array.isArray( inv_vid.captions)) { %> 
-        <% inv_vid.captions?.forEach(x => { %>
-          <track src="/api/subtitles?v=<%=inv_vid.videoId%>&h=<%= x.label %>" label="<%= x.label.replace("United States","Simplified - USA") %>" kind="subtitles">      
+      <%  if (Array.isArray( VideoObject.captions)) { %> 
+        <% VideoObject.captions?.forEach(x => { %>
+          <track src="/api/subtitles?v=<%=VideoObject.videoId%>&h=<%= x.label %>" label="<%= x.label.replace("United States","Simplified - USA") %>" kind="subtitles">      
         <% }) %>   
       <% } %>                     
       
-      <%  if (!Array.isArray( inv_vid.captions)) { %> 
-        <track src="/api/subtitles?v=<%=inv_vid.videoId%>&h=<%= %>" label="<%=  video.Subtitles.Subtitle.language.replace("United States","Simplified - USA") %>" kind="subtitles">      
+      <%  if (!Array.isArray( VideoObject.captions)) { %> 
+        <track src="/api/subtitles?v=<%=VideoObject.videoId%>&h=<%= %>" label="<%=  video.Subtitles.Subtitle.language.replace("United States","Simplified - USA") %>" kind="subtitles">      
       <% } %>                                                       
     </video>
 
@@ -1096,11 +1096,11 @@ Offical Discord Server! :3
     <div class="pwp">
       <% if (!qua) { %> 
         <a><i style="display: block;" title="High Definition [Current]" class="fa-solid fa-high-definition"></i> High Definition </a>
-        <a href="/watch?v=<%=inv_vid.videoId%>&quality=medium"><i style="display: block;" title="Standard Definition" class="fa-light fa-standard-definition"></i> Standard Definition</a>
+        <a href="/watch?v=<%=VideoObject.videoId%>&quality=medium"><i style="display: block;" title="Standard Definition" class="fa-light fa-standard-definition"></i> Standard Definition</a>
       <% } %>
 
       <% if (qua) { %> 
-        <a href="/watch?v=<%=inv_vid.videoId%>">  <i style="display: block;"  title="High Definition" class="fa-light fa-high-definition"></i> High Definition </a>
+        <a href="/watch?v=<%=VideoObject.videoId%>">  <i style="display: block;"  title="High Definition" class="fa-light fa-high-definition"></i> High Definition </a>
         <a><i style="display: block;" title="Standard Definition [Current]"  class="fa-solid fa-standard-definition"></i> Standard Definition</a>
       <% } %>
 
@@ -1134,17 +1134,17 @@ Offical Discord Server! :3
 <!-- Stats for nerds -->
                                                                                                                          
            <div class="div_box">
-         Video id : <%=inv_vid.videoId%> <br>
+         Video id : <%=VideoObject.videoId%> <br>
        ImmersiveAmbientModecolor: <% if (lightOrDark(color) == "light") { %><%=color%> (color 1)<% } %><% if (lightOrDark(color) == "dark") { %> <%=color2%> (color 2) <% } %> <br>  
         Video Format :<% if (!qua) { %>  <%= itag_hd %> (720p) openh264 ( https://github.com/cisco/openh264) mp4a.40.2  | 44100Hz  <% } %>
       <% if (qua === "medium") { %>  18 (320p)  openh264 (https://github.com/cisco/openh264) mp4a.40.2 | 44100Hz  <% } %>       <br> 
-        <% if (inv_vid.genre === "Music") { %> 
+        <% if (VideoObject.genre === "Music") { %> 
         Audio Format: ALAC lossless (https://github.com/macosforge/alac) <br>
                                     <% } %>   
-    <% if (inv_vid.genre !== "Music") { %> 
+    <% if (VideoObject.genre !== "Music") { %> 
         Audio Format: 140 ( High ) <br>
                                     <% } %>   
-        PokeEncryptID: <%=sha384(inv_vid.videoId)%> <br>
+        PokeEncryptID: <%=sha384(VideoObject.videoId)%> <br>
                       <% if (isvidious) { %>
 
        Proxy : <%= u.replace("https://","") %> - refresh the page to change the proxy location<br>
@@ -1154,20 +1154,20 @@ Offical Discord Server! :3
        Proxy : tube-proxy.poketube.fun - refresh the page to change the proxy location<br>
                           <% } %>   
        Date : <%- Date.now() %> - <%- useragent.os.replace("Linux", "GNU/Linux") %> on <%- useragent.browser %> <br>
-                                                       <% if (inv_vid.authorId != "UCBQZwaNPFfJ1gZ1fLZpAEGw") { %> 
+                                                       <% if (VideoObject.authorId != "UCBQZwaNPFfJ1gZ1fLZpAEGw") { %> 
 
                                                   <% if (isvidious) { %>
 
-       Mystery text :  <%=btoa(inv_vid.videoId + " i " + " lov " + " u " + u.replace("https://","") ) %> <br>
+       Mystery text :  <%=btoa(VideoObject.videoId + " i " + " lov " + " u " + u.replace("https://","") ) %> <br>
                                                                               <% } %>  
                                                                                                                                   <% if (!isvidious) { %>
 
-       Mystery text :  <%=btoa(inv_vid.videoId + " i " + " lov " + " u " + "tube-proxy.poketube.fun" ) %> <br>
+       Mystery text :  <%=btoa(VideoObject.videoId + " i " + " lov " + " u " + "tube-proxy.poketube.fun" ) %> <br>
                                                                               <% } %>   
                                                                               <% } %>   
 
-                                                <% if (inv_vid.authorId == "UCBQZwaNPFfJ1gZ1fLZpAEGw") { %> 
-       Mystery text :  <%=btoa(Date.now() + "dmaorg.info/found/15398642_14/clancy.html" + inv_vid.videoId) %>  <br>                                   
+                                                <% if (VideoObject.authorId == "UCBQZwaNPFfJ1gZ1fLZpAEGw") { %> 
+       Mystery text :  <%=btoa(Date.now() + "dmaorg.info/found/15398642_14/clancy.html" + VideoObject.videoId) %>  <br>                                   
                                                                               <% } %>   
 
 
@@ -1187,39 +1187,39 @@ Offical Discord Server! :3
         	<div class="video-info-panel gradient">  
                                                                                         <% } %>   
 
-            <% if (inv_vid.author == "7clouds") { %> 
+            <% if (VideoObject.author == "7clouds") { %> 
             <div class="video-title t" style="font-family: 'Edo SZ', sans-serif !important;font-weight:bold;line-break: auto;max-width: max-content;margin: 0;margin-bottom: 0;padding: 0;"
                                                    		 	               <% } %> 
-<% if (inv_vid.author !== "7clouds") { %> 
+<% if (VideoObject.author !== "7clouds") { %> 
                           <div class="video-title t" style="font-family:inter;font-weight:bold;line-break: auto;max-width: max-content;margin: 0;margin-bottom: 0;padding: 0;"
                                                    		 	               <% } %> 
 
-                                <% if (inv_vid?.title !== inv_vid.title) { %>
-                 title="Non-Translated title : <%=inv_vid.title%>"
+                                <% if (VideoObject?.title !== VideoObject.title) { %>
+                 title="Non-Translated title : <%=VideoObject.title%>"
                <% } %> 
-            > <%-inv_vid.title.replace(/\/channel\//g, "/channel?id=").replace(/https:\/\/youtube.com/g, ""); %> 
+            > <%-VideoObject.title.replace(/\/channel\//g, "/channel?id=").replace(/https:\/\/youtube.com/g, ""); %> 
 
                  
 
              </div>
           
-            <% if (inv_vid.genre === "Music") { %> 
+            <% if (VideoObject.genre === "Music") { %> 
 
             <div style="float: left;font-size: small;font-family: ubuntu;margin-bottom: 1em;">     <i title="hq audio" class="fa-light fa-waveform-lines"></i>&nbsp;High Quality Audio </div>
                                   		 	               <% } %> 
   <% 
   let nonhditag = '136'; // Default itag
-  inv_vid.adaptiveFormats.forEach(format => {
+  VideoObject.adaptiveFormats.forEach(format => {
     if (format.itag == '298') {
       nonhditag = '298';
     }
   });
 %>                                             
-                                                         <% if (inv_vid.genre !== "Music" && nonhditag !== "298") { %> 
+                                                         <% if (VideoObject.genre !== "Music" && nonhditag !== "298") { %> 
      
           <a href="#connections" style="font-weight: bolder;font-family: sans-serif;color: var(--text-color);font-size: small;"> Jump to Connections </a>
                                            		 	               <% } %>
-                                                                  <% if (inv_vid.genre !== "Music" && nonhditag === "298") { %> 
+                                                                  <% if (VideoObject.genre !== "Music" && nonhditag === "298") { %> 
      
             <div style="float: left;font-size: small;font-family: ubuntu;margin-bottom: 1em;">     <i title="60 FPS" class="fa-light fa-circle-waveform-lines"></i>&nbsp;60 FPS video </div>
                                            		 	               <% } %> 
@@ -1227,14 +1227,14 @@ Offical Discord Server! :3
                <div class="video-chnl-info-pill"  name="chnl">
   <a name="chnl"></a>
 
-				<a href="/channel?id=<%=video?.Channel.id || inv_vid.authorId%>@youtube.com" class="avatar">
-					<img loading="lazy" src="/avatars/<%= inv_vid.authorThumbnails[1].url.replace("https://yt3.ggpht.com/", "") %>" %>">
+				<a href="/channel?id=<%=video?.Channel.id || VideoObject.authorId%>@youtube.com" class="avatar">
+					<img loading="lazy" src="/avatars/<%= VideoObject.authorThumbnails[1].url.replace("https://yt3.ggpht.com/", "") %>" %>">
 				</a>
 				<div class="name" >
 <div style="display: flex;flex-direction: row;max-width: 119px;">
-						<a title="<%=inv_vid.author%> " href="/channel?id=<%=video?.Channel.id || inv_vid.authorId%>@youtube.com" class="video-info-pill-channelname">  <%=inv_vid.author%> 
+						<a title="<%=VideoObject.author%> " href="/channel?id=<%=video?.Channel.id || VideoObject.authorId%>@youtube.com" class="video-info-pill-channelname">  <%=VideoObject.author%> 
                </a>   
-                                       <% if (inv_vid?.authorVerified) { %> 
+                                       <% if (VideoObject?.authorVerified) { %> 
                    <div>
 <a href="https://support.google.com/youtube/answer/3046484?hl=en">
             <i class="icon ion ion-md-checkmark-circle" title="verified channel"></i></a>
@@ -1245,7 +1245,7 @@ Offical Discord Server! :3
                
                               
 <div class="subscriber-count" style="word-wrap: initial;word-break: break-all;display: block ruby;">
-          <%= inv_vid.subCountText.replace("subscribers", "Subs") %> subs 
+          <%= VideoObject.subCountText.replace("subscribers", "Subs") %> subs 
  				</div>
                
 
@@ -1279,7 +1279,7 @@ Offical Discord Server! :3
       
 <div style="display: flex;">
 
-<a class="new-button" title="Download this Video :3" style="color:var(--text-color);text-decoration: none; " href="/download?v=<%=inv_vid.videoId%>">
+<a class="new-button" title="Download this Video :3" style="color:var(--text-color);text-decoration: none; " href="/download?v=<%=VideoObject.videoId%>">
   <div class="pill-button" style="">
 
             <i class="fa-light fa-download"></i>
@@ -1288,7 +1288,7 @@ Offical Discord Server! :3
 					</a>
   
    <% if (!video?.Channel.Name.endsWith(' - Topic')) { %> 
-    <% if (!inv_vid.title.endsWith('IGNORE_THIS_PLEASE)')) { %> 
+    <% if (!VideoObject.title.endsWith('IGNORE_THIS_PLEASE)')) { %> 
 <% if (support != undefined && linkto == undefined) { %>
 
     <div class="new-button button-encryption">
@@ -1310,10 +1310,10 @@ Offical Discord Server! :3
 <% if (support == undefined && linkto == undefined) { %>
 
  <% if (!video?.Channel.Name.endsWith(' - Topic')) { %> 
-    <% if (!inv_vid.title.endsWith('IGNORE_THIS_PLEASE)')) { %> 
+    <% if (!VideoObject.title.endsWith('IGNORE_THIS_PLEASE)')) { %> 
 
       <div class="new-button button-encryption">
-					<a   title="Switch PokeTube Instance :3" style="color:var(--text-color);text-decoration: none;" href="https://redirect.poketube.fun/watch?v=<%=inv_vid.videoId%>">
+					<a   title="Switch PokeTube Instance :3" style="color:var(--text-color);text-decoration: none;" href="https://redirect.poketube.fun/watch?v=<%=VideoObject.videoId%>">
                                         <div class="pill-button">
 
                <i class="fa-light fa-rocket-launch"></i>
@@ -1329,7 +1329,7 @@ Offical Discord Server! :3
                                                             <% if (support == undefined && linkto != undefined) { %>
 
  <% if (!video?.Channel.Name.endsWith(' - Topic')) { %> 
-    <% if (!inv_vid.title.endsWith('IGNORE_THIS_PLEASE)')) { %> 
+    <% if (!VideoObject.title.endsWith('IGNORE_THIS_PLEASE)')) { %> 
 
       <div class="new-button button-encryption">
 					<a   title="Stream The Song :3" style="color:var(--text-color);text-decoration: none;" href="https://<%= linkto.subdomain %>.lnk.to/<%= linkto.path %>">
@@ -1345,7 +1345,7 @@ Offical Discord Server! :3
    </a>
                                                                           <% }%>                                                                              <% }%>      
                                                                                                                    <% }%>     
-                            <% if (video?.Channel.Name.endsWith(' - Topic') || inv_vid.title.endsWith('IGNORE_THIS_PLEASE)'))  { %> 
+                            <% if (video?.Channel.Name.endsWith(' - Topic') || VideoObject.title.endsWith('IGNORE_THIS_PLEASE)'))  { %> 
                                                  					<a  class="new-button" title="open this song in poketube music player :3" style="color:var(--text-color);text-decoration: none;" href="/">
                                                                                                     <div class="pill-button">
 
@@ -1357,7 +1357,7 @@ WIP!                                                 </a>
     
                                                     
  <% if (!video?.Channel.Name.endsWith(' - Topic')) { %> 
-    <% if (!inv_vid.title.endsWith('IGNORE_THIS_PLEASE)')) { %>            
+    <% if (!VideoObject.title.endsWith('IGNORE_THIS_PLEASE)')) { %>            
       <%  if (inv.comments) { %> 
 
       <div class="new-button button-lite" style=";margin-left: -4px;">
@@ -1387,7 +1387,7 @@ WIP!                                                 </a>
 
 <div class="video-sub-info description">
 
-       <% if (inv_vid.descriptionHtml && inv_vid.descriptionHtml.trim() !== "" && inv_vid.descriptionHtml.trim() !== "<p></p>") { %>
+       <% if (VideoObject.descriptionHtml && VideoObject.descriptionHtml.trim() !== "" && VideoObject.descriptionHtml.trim() !== "<p></p>") { %>
     <details open="true" class="description-new">
 <% } else { %>
     <details class="description-new">
@@ -1395,30 +1395,30 @@ WIP!                                                 </a>
          	<summary style="color:#fff;">
                                 <%=engagement.viewCount.toLocaleString()%> Views  •  <%=date%> • Click to toggle off description</summary>
    
-          <% if (String(inv_vid.descriptionHtml) != "undefined")  { %>
-         <% if (String(inv_vid.descriptionHtml) != " ")  { %>
-           <% if (String(inv_vid.descriptionHtml) != "<p></p>")  { %>
+          <% if (String(VideoObject.descriptionHtml) != "undefined")  { %>
+         <% if (String(VideoObject.descriptionHtml) != " ")  { %>
+           <% if (String(VideoObject.descriptionHtml) != "<p></p>")  { %>
 
            <div style="margin-top:1em;">
              
         
-              <%-String(channelurlfixer(inv_vid.descriptionHtml)).replace(/\n/g, " <br> ").replace(/x\.com/g, "twitter.com").replace(/reddit\.com/g, "redlib.matthew.science") %>
+              <%-String(channelurlfixer(VideoObject.descriptionHtml)).replace(/\n/g, " <br> ").replace(/x\.com/g, "twitter.com").replace(/reddit\.com/g, "redlib.matthew.science") %>
                    </div> 
                           <% } %>                          <% } %>                                  <% } %>          
                              
-          <% if (String(inv_vid.descriptionHtml) != "undefined")  { %>
-         <% if (String(inv_vid.descriptionHtml) != " ")  { %>
-           <% if (String(inv_vid.descriptionHtml) == "<p></p>")  { %>
+          <% if (String(VideoObject.descriptionHtml) != "undefined")  { %>
+         <% if (String(VideoObject.descriptionHtml) != " ")  { %>
+           <% if (String(VideoObject.descriptionHtml) == "<p></p>")  { %>
 
            <div style="margin-top:1em;">
              
         
-              <%-String(linkify(inv_vid.description)).replace(/\n/g, " <br> ").replace(/twitter\.com/g, "twitter.com").replace(/reddit\.com/g, "redlib.matthew.science") %>
+              <%-String(linkify(VideoObject.description)).replace(/\n/g, " <br> ").replace(/twitter\.com/g, "twitter.com").replace(/reddit\.com/g, "redlib.matthew.science") %>
                    </div> 
                           <% } %>                          <% } %>                                  <% } %>          
                              
   
-                <% if (String(inv_vid.description) == " ")  { %>
+                <% if (String(VideoObject.description) == " ")  { %>
 
       <p> No Description On this Video ( sad innit :c )</p>
                            <% } %>               
@@ -1449,9 +1449,9 @@ WIP!                                                 </a>
      <p  style="font-weight: bold;">
  
                     <span>Views : <%=engagement.viewCount.toLocaleString()%> <br>
-                        Genre: <%-inv_vid.genre %>  <br>
-                         <% if (inv_vid?.license) { %> 
-                         License: <%-inv_vid?.license %> 
+                        Genre: <%-VideoObject.genre %>  <br>
+                         <% if (VideoObject?.license) { %> 
+                         License: <%-VideoObject?.license %> 
                          <% } else { %>
                          License: Standard YouTube License
                          <% } %> <br>
@@ -1528,7 +1528,7 @@ WIP!                                                 </a>
                       <span style="color: <%= dislikeColor %>;"><%= dislikePercentage %>%</span> of the users dislieked the video!! <br>
                       User score: <span style="color: <%= userScoreColor %>;"><%= userScore %></span>- <span class="<%= userScoreClass %>"> <%= userScoreLabel %> </span><br><br>
                       RYD date created : <%=engagement.dateCreated.toLocaleString()%>  <br>
-                      <a href="/api/getEngagementData?v=<%=inv_vid.videoId%>">See in json</a>
+                      <a href="/api/getEngagementData?v=<%=VideoObject.videoId%>">See in json</a>
                       
                   
                                                 <a id="nerdy"></a>
@@ -1582,11 +1582,11 @@ WIP!                                                 </a>
 }
 
 </style>
-     <%  if (Array.isArray(inv_vid?.keywords)) { %> 
+     <%  if (Array.isArray(VideoObject?.keywords)) { %> 
 
                        <div class="tag-container">
-          <% if (inv_vid?.keywords && inv_vid.keywords.length > 0) { %>
- <% inv_vid?.keywords.forEach(x => { %>
+          <% if (VideoObject?.keywords && VideoObject.keywords.length > 0) { %>
+ <% VideoObject?.keywords.forEach(x => { %>
  <div class="tag">
    <a href="/hashtag/<%=x %>" style="color:var(--text-color)">
    <%=x %>
@@ -1610,7 +1610,7 @@ WIP!                                                 </a>
             		</details>
 
 
-               <%  if (inv_vid.genre === "Gaming") { %> 
+               <%  if (VideoObject.genre === "Gaming") { %> 
 
         <div style="padding: 19px;background: #1f1f1f;border-radius: inherit;border: solid var(--div-border-color);margin-top: 13px;display: flex;flex-direction: row;">
 <div class="video-title loaded" style="color:var(--text-color);font-family:var(--text-font-primary);;font-weight:var(--text-header-weight);font-stretch: extra-expanded;margin-top: -15px;margin-bottom: 10px;">Poke! Games Hub</div>
@@ -1714,25 +1714,25 @@ WIP!                                                 </a>
 
             <div>
 
-					<a title="Download this Video :3" style="color:var(--text-color);text-decoration: " href="/download?v=<%=inv_vid.videoId%>">
+					<a title="Download this Video :3" style="color:var(--text-color);text-decoration: " href="/download?v=<%=VideoObject.videoId%>">
             <i class="fa-light fa-download"></i>
             Download
 					</a>
  
    
  <% if (!video?.Channel.Name.endsWith(' - Topic')) { %> 
-    <% if (!inv_vid.title.endsWith('Audio)')) { %> 
+    <% if (!VideoObject.title.endsWith('Audio)')) { %> 
 
-					<a title="Encryption duh" style="color:var(--text-color);text-decoration: none;" href="/encryption?v=<%=inv_vid.videoId%>">
+					<a title="Encryption duh" style="color:var(--text-color);text-decoration: none;" href="/encryption?v=<%=VideoObject.videoId%>">
                <i class="fa-light fa-shield"></i>
                 Encryption
    </a>
 <% }%><% }%>      
   
-                                                                             <% if (video?.Channel.Name.endsWith(' - Topic') || inv_vid.title.endsWith('Audio)')) { %> 
+                                                                             <% if (video?.Channel.Name.endsWith(' - Topic') || VideoObject.title.endsWith('Audio)')) { %> 
                                                             
-                            <% if (video?.Channel.Name.endsWith(' - Topic') || inv_vid.title.endsWith('Audio)'))  { %> 
-                                                 					<a title="open this song in poketube music player :3" style="color:var(--text-color);text-decoration: none;" href="/music?v=<%=inv_vid.videoId%>">
+                            <% if (video?.Channel.Name.endsWith(' - Topic') || VideoObject.title.endsWith('Audio)'))  { %> 
+                                                 					<a title="open this song in poketube music player :3" style="color:var(--text-color);text-decoration: none;" href="/music?v=<%=VideoObject.videoId%>">
           <i class="fa-light fa-music"></i>
                   Open In Music Player
                                                  </a>
@@ -1813,14 +1813,14 @@ WIP!                                                 </a>
 <div class="recommended-list" align="center">
      <% if (universe) { %>  
 
-            <% if (inv_vid.author == "7clouds") { %> 
+            <% if (VideoObject.author == "7clouds") { %> 
             <div class="video-title t" style="font-family: 'Edo SZ', sans-serif !important;font-weight:bold;line-break: auto;max-width: max-content;margin: 0;margin-bottom: 0;padding: 0;"
                                                    		 	               <% } %> 
-<% if (inv_vid.author !== "7clouds") { %> 
+<% if (VideoObject.author !== "7clouds") { %> 
                           <div class="video-title t" style="font-family:inter;font-weight:bold;line-break: auto;max-width: max-content;margin: 0;margin-bottom: 0;padding: 0;"
                                                    		 	               <% } %> 
  
-            > <%-inv_vid.title.replace(/\/channel\//g, "/channel?id=").replace(/https:\/\/youtube.com/g, ""); %> 
+            > <%-VideoObject.title.replace(/\/channel\//g, "/channel?id=").replace(/https:\/\/youtube.com/g, ""); %> 
                  
 
              </div>        
@@ -1851,12 +1851,12 @@ WIP!                                                 </a>
 
   <div class="tags rec" >
 
-        <a style="color:#fff" class="tag"  href="/watch?v=<%= inv_vid.videoId %>">
+        <a style="color:#fff" class="tag"  href="/watch?v=<%= VideoObject.videoId %>">
 Recommended Videos
     </a>
                
              <div style="background:var(--chip-background-hover)" class="tag">
-              Uploaded by <%=inv_vid.author%>
+              Uploaded by <%=VideoObject.author%>
                </div>
                
 
@@ -1868,7 +1868,7 @@ Recommended Videos
     
                               <% if (!r) { %> 
  
-            <% if (inv_vid.recommendedVideos.length > 1) { %> 
+            <% if (VideoObject.recommendedVideos.length > 1) { %> 
 
  <div>
    
@@ -1878,17 +1878,17 @@ Recommended Videos
                                 
 <% if (!f) { %>
   
-<% if (inv_vid.recommendedVideos) { %>
+<% if (VideoObject.recommendedVideos) { %>
 <% 
 const musicChannels = new Set();
-inv_vid?.recommendedVideos.forEach(video => {
+VideoObject?.recommendedVideos.forEach(video => {
   if (video.title.toLowerCase().includes("official video") || video.title.toLowerCase().includes("official music video") || video.title.toLowerCase().includes("official audio")) {
     musicChannels.add(video.authorId);
   }
 });
 %>
 
-<% inv_vid?.recommendedVideos.forEach(x => { %>
+<% VideoObject?.recommendedVideos.forEach(x => { %>
     <div class="fade-in video" data-channel="<%= x.authorId %>">
         <% if (!optout) { %>
             <a class="thumbnail" href="/watch?v=<%= x.videoId %>" style="background-image:url(<%- media_proxy_url %>/proxy?url=https://i.ytimg.com/vi/<%= x.videoId %>/hqdefault.jpg?sqp=-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLBy_x4UUHLNDZtJtH0PXeQGoRFTgw);border-radius:9.5px" alt="<%= x.Title %>">
@@ -1936,7 +1936,7 @@ inv_vid?.recommendedVideos.forEach(video => {
         <% } %>
                   <% } %>
 
- <% if (!inv_vid.recommendedVideos) { %>
+ <% if (!VideoObject.recommendedVideos) { %>
         <p> oops </p>
   <% } %>
 
@@ -1977,7 +1977,7 @@ inv_vid?.recommendedVideos.forEach(video => {
                                                   <% if (r === "f") { %> 
                                 <hr style="clear: both;display: block;border: none;border-bottom: 0.5px solid #2f2f2f;margin: 0 0;/*! width: 4.5em; */height: 0;">
                                                     <div>
-            <a href="/watch?v=<%=inv_vid.videoId%>">See the Recommended videos instead</a> - <a href="https://codeberg.org/Ashley/poketube/issues">Report wrong lyrics qwq</a>
+            <a href="/watch?v=<%=VideoObject.videoId%>">See the Recommended videos instead</a> - <a href="https://codeberg.org/Ashley/poketube/issues">Report wrong lyrics qwq</a>
                                                     </div>
          <div align="center">                                <hr style="clear: both;display: block;border: none;border-bottom: 0.5px solid #2f2f2f;margin: 0 0;/*! width: 4.5em; */height: 0;">
 
@@ -2001,12 +2001,12 @@ inv_vid?.recommendedVideos.forEach(video => {
                                              <div style="font-family:Inter,sans-serif;;white-space:yes;" align="center">
 
       <% if (optout) { %> 
-     <a href="/watch?v=<%=inv_vid.videoId%>&r=f">Lyrics (Wow)</a>
+     <a href="/watch?v=<%=VideoObject.videoId%>&r=f">Lyrics (Wow)</a>
 
 
   <% } %> 
          <% if (!optout) { %> 
-                       <a href="/watch?v=<%=inv_vid.videoId%>&r=f">Lyrics (Wow)</a>
+                       <a href="/watch?v=<%=VideoObject.videoId%>&r=f">Lyrics (Wow)</a>
  <% } %>
                     </div>
                            <% } %>
@@ -2036,7 +2036,7 @@ inv_vid?.recommendedVideos.forEach(video => {
   }
 }
     
-<% if (Array.isArray(inv_vid.recommendedVideos) && inv_vid.recommendedVideos.length > 1) { %> 
+<% if (Array.isArray(VideoObject.recommendedVideos) && VideoObject.recommendedVideos.length > 1) { %> 
         
 let checkbox = document.getElementById("continue");
 
@@ -2044,10 +2044,10 @@ checkbox.addEventListener('change', function(e) {
   if (checkbox.checked) {
     console.log("[AUTOPLAY] enabled");
     document.getElementById('video').addEventListener('ended', autoplaynextvideo, false);
-    let url = window.location.hostname + "/watch?v=<%- inv_vid?.recommendedVideos[0]?.videoId %>";
+    let url = window.location.hostname + "/watch?v=<%- VideoObject?.recommendedVideos[0]?.videoId %>";
    
     function autoplaynextvideo(e) {
-      location.href = "/watch?v=<%- inv_vid?.recommendedVideos[0]?.videoId%>&autoplay=<%-btoa("1f739d935676111cfff4b4693e3816e664797050" + inv_vid?.recommendedVideos[0].videoId) %>";
+      location.href = "/watch?v=<%- VideoObject?.recommendedVideos[0]?.videoId%>&autoplay=<%-btoa("1f739d935676111cfff4b4693e3816e664797050" + VideoObject?.recommendedVideos[0].videoId) %>";
     }
   }
   if (/[?&]autoplay=/.test(location.search)) {
@@ -2058,7 +2058,7 @@ checkbox.addEventListener('change', function(e) {
   
   if (/[?&]autoplay=/.test(location.search)) {
     if (checkbox.checked) {
-        fetch("https://" + window.location.hostname + "/watch?v=<%- inv_vid?.recommendedVideos[0].videoId%>").then(() => {})
+        fetch("https://" + window.location.hostname + "/watch?v=<%- VideoObject?.recommendedVideos[0].videoId%>").then(() => {})
       }    
   }
 });
@@ -2082,7 +2082,7 @@ checkbox.addEventListener('change', function(e) {
 if (/[?&]autoplay=/.test(location.search)) {
   checkbox.checked = true;
   console.log("[AUTOPLAY] enabled");
-  let url = window.location.hostname + "/watch?v=<%- inv_vid?.recommendedVideos[0].videoId%>";
+  let url = window.location.hostname + "/watch?v=<%- VideoObject?.recommendedVideos[0].videoId%>";
   document.body.style.cursor = "wait"; // set cursor to "wait" before the fetch request starts
   fetch(url)
     .then(response => response.json())
@@ -2097,11 +2097,11 @@ if (/[?&]autoplay=/.test(location.search)) {
   document.getElementById('video').addEventListener('ended', autoplaynextvideo, false);
   if (/[?&]autoplay=/.test(location.search)) {
     if (checkbox.checked) {
-        fetch("https://" + window.location.hostname + "/watch?v=<%- inv_vid?.recommendedVideos[0].videoId%>").then(() => {})
+        fetch("https://" + window.location.hostname + "/watch?v=<%- VideoObject?.recommendedVideos[0].videoId%>").then(() => {})
       }    
   }
   function autoplaynextvideo(e) {
-    location.href = "/watch?v=<%- inv_vid?.recommendedVideos[0].videoId%>&autoplay=<%-btoa("1f739d935676111cfff4b4693e3816e664797050" + inv_vid?.recommendedVideos[0].videoId) %>";
+    location.href = "/watch?v=<%- VideoObject?.recommendedVideos[0].videoId%>&autoplay=<%-btoa("1f739d935676111cfff4b4693e3816e664797050" + VideoObject?.recommendedVideos[0].videoId) %>";
   }
 }
  <% } %>
@@ -2168,13 +2168,13 @@ if (/[?&]autoplay=/.test(location.search)) {
 	
 	if (userID) {
 	    // If user ID exists in localStorage, set the href attribute
-	    anchor.href = `/api/set-channel-subs?ID=${userID}&channelName=<%=inv_vid.author%>&avatar=<%- media_proxy_url %>/proxy?url=<%= inv_vid.authorThumbnails[1].url %>&channelID=<%=video?.Channel.id || inv_vid.authorId %>`;
+	    anchor.href = `/api/set-channel-subs?ID=${userID}&channelName=<%=VideoObject.author%>&avatar=<%- media_proxy_url %>/proxy?url=<%= VideoObject.authorThumbnails[1].url %>&channelID=<%=video?.Channel.id || VideoObject.authorId %>`;
 	} else {
 	     anchor.href = "/account-create"
 	 } 
 	 </script>
 
-<script id="video" type="application/json"><%- JSON.stringify(inv_vid) %></script><script id="comments" type="application/json"><%- JSON.stringify(inv.comments) %></script>
+<script id="video" type="application/json"><%- JSON.stringify(VideoObject) %></script><script id="comments" type="application/json"><%- JSON.stringify(inv.comments) %></script>
    
 <!-- Ambient Mode, for Poke -->
 <% if(IsOldWindows) { %>
@@ -2387,20 +2387,20 @@ window.addEventListener("unload", cleanup)
     
  <% } %>
   <% if (!e) { %>
-<meta content="<%=inv_vid.title%>" name=title>
+<meta content="<%=VideoObject.title%>" name=title>
 <meta content="<%=color%>" name="theme-color">
-<meta content="<%= video?.Channel?.Name || inv_vid.author%>" name=twitter:author>
+<meta content="<%= video?.Channel?.Name || VideoObject.author%>" name=twitter:author>
 <meta content=@youtube name=twitter:site>
-<meta content="https://poketube.fun/watch?v=<%=inv_vid.videoId%>" name=twitter:url>
-<meta content="<%=inv_vid.title%> - PokeTube" name=twitter:title>
-<meta content="mobile this video by <%= video?.Channel?.Name || inv_vid.author%> On PokeTube. The YouTube front-end that doesnt track you!" property=twitter:description>
-<meta content="https://i.ytimg.com/vi/<%=inv_vid.videoId%>/maxresdefault.jpg" property=og:image>
+<meta content="https://poketube.fun/watch?v=<%=VideoObject.videoId%>" name=twitter:url>
+<meta content="<%=VideoObject.title%> - PokeTube" name=twitter:title>
+<meta content="mobile this video by <%= video?.Channel?.Name || VideoObject.author%> On PokeTube. The YouTube front-end that doesnt track you!" property=twitter:description>
+<meta content="https://i.ytimg.com/vi/<%=VideoObject.videoId%>/maxresdefault.jpg" property=og:image>
 <meta content=summary_large_image name=twitter:card>
-<link href="https://poketube.fun/watch?v=<%=inv_vid.videoId%>" itemprop=url>
+<link href="https://poketube.fun/watch?v=<%=VideoObject.videoId%>" itemprop=url>
  <% } %> <!-- close the } -->
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <link href=/css/yt-ukraine.svg?v=6 rel=icon>
-<title> <%=inv_vid.title%> | PokeTube Mobile</title>
+<title> <%=VideoObject.title%> | PokeTube Mobile</title>
  <link href="/css/mobile.css?v=2" rel=stylesheet>
  <link href="/css/app.main.css?v=44600" rel=stylesheet>
     <link href="<%- proxyurl %>/https://unpkg.com/ionicons@4.5.10-0/dist/css/ionicons.css" rel=stylesheet>
@@ -2561,7 +2561,7 @@ a {
 	<div class="primary" >
 		<div class="video-player-container" style="background-color:#000">
 
-<video style="border-radius: 16px;" class="player" id="video" autoplay controls poster="<%- proxyurl %>/https://i.ytimg.com/vi/<%=inv_vid.videoId%>/maxresdefault.jpg?v=607ddcd4" onerror="">
+<video style="border-radius: 16px;" class="player" id="video" autoplay controls poster="<%- proxyurl %>/https://i.ytimg.com/vi/<%=VideoObject.videoId%>/maxresdefault.jpg?v=607ddcd4" onerror="">
           
 
   
@@ -2571,7 +2571,7 @@ a {
 
 
                      
-                                                <source src="<%=u%>/latest_version?id=<%=inv_vid.videoId%>&itag=18&local=true" type="video/mp4; codecs=&quot;avc1.64001F, mp4a.40.2&quot;" label="hd720" selected="true" onerror="">
+                                                <source src="<%=u%>/latest_version?id=<%=VideoObject.videoId%>&itag=18&local=true" type="video/mp4; codecs=&quot;avc1.64001F, mp4a.40.2&quot;" label="hd720" selected="true" onerror="">
 
                                                                              <% } %>                
 
@@ -2579,17 +2579,17 @@ a {
 
             
                 
-               <%  if (Array.isArray( inv_vid.captions)) { %> 
-   <% inv_vid.captions?.forEach(x => { %>
-     <track src="/api/subtitles?v=<%=inv_vid.videoId%>&h=<%= x.label %>" label="<%= x.label.replace("United States","Simplified - USA") %>" kind="subtitles">      
+               <%  if (Array.isArray( VideoObject.captions)) { %> 
+   <% VideoObject.captions?.forEach(x => { %>
+     <track src="/api/subtitles?v=<%=VideoObject.videoId%>&h=<%= x.label %>" label="<%= x.label.replace("United States","Simplified - USA") %>" kind="subtitles">      
      
-        <img src="https://t.poketube.fun/t/rep.gif?v=<%=btoa(inv_vid.videoId)%>&h=<%= x.label %>" id="subtitle_usage_rate" style="border:0;width: 0;visibility: hidden;"> 
+        <img src="https://t.poketube.fun/t/rep.gif?v=<%=btoa(VideoObject.videoId)%>&h=<%= x.label %>" id="subtitle_usage_rate" style="border:0;width: 0;visibility: hidden;"> 
          <% }) %>   
                                                                                                        <% } %>                     
-     <%  if (!Array.isArray( inv_vid.captions)) { %> 
-     <track src="/api/subtitles?v=<%=inv_vid.videoId%>&h=<%=   %>" label="<%=  video.Subtitles.Subtitle.language.replace("United States","Simplified - USA") %>" kind="subtitles">      
+     <%  if (!Array.isArray( VideoObject.captions)) { %> 
+     <track src="/api/subtitles?v=<%=VideoObject.videoId%>&h=<%=   %>" label="<%=  video.Subtitles.Subtitle.language.replace("United States","Simplified - USA") %>" kind="subtitles">      
      
-        <img loading="lazy" src="https://t.poketube.fun/t/rep.gif?v=<%=btoa(inv_vid.videoId)%>&h=<%= video.Subtitles.Subtitle.language %>" id="subtitle_usage_rate" style="border:0;width: 0;visibility: hidden;"> 
+        <img loading="lazy" src="https://t.poketube.fun/t/rep.gif?v=<%=btoa(VideoObject.videoId)%>&h=<%= video.Subtitles.Subtitle.language %>" id="subtitle_usage_rate" style="border:0;width: 0;visibility: hidden;"> 
             
                                                            <% } %>         
                                                      
@@ -2600,14 +2600,14 @@ a {
 
 <div class="video-info" style="position: sticky;z-index: 1;">
         <div style="linear-gradient(135deg,#f97794 10%,#623aa2 100%,#8e6f7e 100%);border-radius: 10px;margin-bottom: 10px;padding-bottom: 1em;padding-top: 0.3em;">
-               <%  if (inv_vid?.title.includes("voice training")) { %> 
-                              <%  if (inv_vid?.title.includes("voice tutorial")) { %> 
+               <%  if (VideoObject?.title.includes("voice training")) { %> 
+                              <%  if (VideoObject?.title.includes("voice tutorial")) { %> 
 
     <a href="https://google.com">quick escape</a> <br>
                                                            <% } %>         
 
                                                            <% } %>         
-   <div class="video-title" style="padding: 10px;background: #0009;margin-bottom: 6px;margin-left: 6px;margin-right: 12px;border-radius: 15px;margin-top: 4px;font-family: poketube flex;font-weight: 800;font-stretch: ultra-expanded;"><%=inv_vid.title%> <br>
+   <div class="video-title" style="padding: 10px;background: #0009;margin-bottom: 6px;margin-left: 6px;margin-right: 12px;border-radius: 15px;margin-top: 4px;font-family: poketube flex;font-weight: 800;font-stretch: ultra-expanded;"><%=VideoObject.title%> <br>
 <a id="language-button" href="#desc-container" style="color: pink;
 margin: 0;
 font-size: 13px;margin:0;padding:0;white-space: nowrap;
@@ -2619,16 +2619,16 @@ font-size: 13px;margin:0;padding:0;white-space: nowrap;
 					<div class="channel-info" style="border: none;padding: 10px;background: #0009;border-radius: 15px;margin-left: 6px;margin-right: 12px;" name="chnl">
                
 				<a class="avatar">
-					<img src=" <%- proxyurl %>/<%= inv_vid.authorThumbnails[1].url %>">
+					<img src=" <%- proxyurl %>/<%= VideoObject.authorThumbnails[1].url %>">
 				</a>
               
 				<div class="name" style="font-family:var(--text-font-primary);font-weight:var(--text-header-weight);">
 		  <div>
-             <a href="/channel?id=<%=inv_vid.authorId%>" style="color:#fff;max-width: 7.8em;" class="max-lines-1">
-               <%=inv_vid.author%></a>   
+             <a href="/channel?id=<%=VideoObject.authorId%>" style="color:#fff;max-width: 7.8em;" class="max-lines-1">
+               <%=VideoObject.author%></a>   
          
 		<div class="subscriber-count" style="write-space:nowraap">
-          <%= inv_vid.subCountText.replace("subscribers", "Subs") %> Subs
+          <%= VideoObject.subCountText.replace("subscribers", "Subs") %> Subs
  				</div>
               </div>
 				</div>
@@ -2684,7 +2684,7 @@ font-size: 13px;margin:0;padding:0;white-space: nowrap;
                                                                                                              <% }%>      
 
  
-  					<a class="new-button" title="Download this Video :3" style="color:#fff;text-decoration: none;margin-right: 0; " href="/download?v=<%=inv_vid.videoId%>">
+  					<a class="new-button" title="Download this Video :3" style="color:#fff;text-decoration: none;margin-right: 0; " href="/download?v=<%=VideoObject.videoId%>">
                             <div class="pill-button">
 
             <i class="fa-light fa-download"></i>
@@ -2693,7 +2693,7 @@ font-size: 13px;margin:0;padding:0;white-space: nowrap;
 					</a>
  
    <% if (!video?.Channel.Name.endsWith(' - Topic')) { %> 
-    <% if (!inv_vid.title.endsWith('Audio)')) { %> 
+    <% if (!VideoObject.title.endsWith('Audio)')) { %> 
    <% if (support != undefined) { %> 
 
  					<a class="new-button"  title="Support the Creator of the video!"  style="color:#fff;text-decoration: none;margin-right: 0; " href="https://www.patreon.com/join/<%- support.name %>">
@@ -2726,7 +2726,7 @@ font-size: 13px;margin:0;padding:0;white-space: nowrap;
                 </div>
                 </a>
 
-              <a class="new-button" style="color:#fff" href="<%= config.mastodon_client_url %>/share?text=watch+<%=inv_vid.title%>+by+<%=inv_vid.author%>+on+Poke!+%0Ahttps://<%= hostname %>/watch?v=<%=inv_vid.videoId%>">   
+              <a class="new-button" style="color:#fff" href="<%= config.mastodon_client_url %>/share?text=watch+<%=VideoObject.title%>+by+<%=VideoObject.author%>+on+Poke!+%0Ahttps://<%= hostname %>/watch?v=<%=VideoObject.videoId%>">   
                                             <div class="pill-button">
 
             <i class="fa-brands fa-mastodon"></i>
@@ -2734,7 +2734,7 @@ font-size: 13px;margin:0;padding:0;white-space: nowrap;
                 </div>
                 </a>
 
-               <a class="new-button" style="color:#fff"  href="https://redirect.poketube.fun/watch?v=<%=inv_vid.videoId%>">   
+               <a class="new-button" style="color:#fff"  href="https://redirect.poketube.fun/watch?v=<%=VideoObject.videoId%>">   
                                             <div class="pill-button">
             <i class="fa-light fa-rocket"></i>
             Redirect
@@ -2834,9 +2834,9 @@ font-size: 13px;margin:0;padding:0;white-space: nowrap;
 ">
 
     
-         <div class="video-title" style="font-family: 'PokeTube Flex';margin-bottom: -5px;text-align:center;font-stretch: extra-expanded;font-weight: 1000;" ><%=inv_vid.title%></div>
+         <div class="video-title" style="font-family: 'PokeTube Flex';margin-bottom: -5px;text-align:center;font-stretch: extra-expanded;font-weight: 1000;" ><%=VideoObject.title%></div>
           
-           <% if (inv_vid.genre === "Music") { %> 
+           <% if (VideoObject.genre === "Music") { %> 
              <span style="font-size: 13px;font-family: ubuntu;width:auto;text-align:center;"><i title="hq audio" class="fa-light fa-waveform-lines"></i>&nbsp;Lossless Audio </span>
 	                                  		 	               <% } %>
                                      </div>
@@ -2926,7 +2926,7 @@ font-size: 13px;margin:0;padding:0;white-space: nowrap;
     %>      
  <div class="nerddd" style="background:#272727;padding: 5px;margin-top: 12px;border-radius: 11px;font-family: 'PokeTube Flex';font-stretch: extra-expanded;font-weight: 700;">
             
-              <%-String(channelurlfixer(inv_vid.descriptionHtml)).replace(/\n/g, " <br> ").replace(/twitter\.com/g, "twitter.com").replace(/reddit\.com/g, "redlib.matthew.science") %>
+              <%-String(channelurlfixer(VideoObject.descriptionHtml)).replace(/\n/g, " <br> ").replace(/twitter\.com/g, "twitter.com").replace(/reddit\.com/g, "redlib.matthew.science") %>
                
 
                     
@@ -3013,28 +3013,28 @@ font-size: 13px;margin:0;padding:0;white-space: nowrap;
        <div class="video-title" style="color:var(--text-color);font-family:var(--text-font-primary);;font-weight:var(--text-header-weight);font-stretch: extra-expanded;margin-top: 10px;margin-bottom: 10px;">Uploader</div>
 
 <div class="channel-info" name="chnl" style="padding: 0;border: none;margin-bottom:8px">
-  <a href="/channel?id=<%=video?.Channel.id || inv_vid.authorId%>" class="avatar">
-					<img src=" <%= inv_vid.authorThumbnails[1].url %>">
+  <a href="/channel?id=<%=video?.Channel.id || VideoObject.authorId%>" class="avatar">
+					<img src=" <%= VideoObject.authorThumbnails[1].url %>">
 				</a>
 				<div class="name" style="font-family:var(--text-font-primary);font-weight:var(--text-header-weight);">
 		  <div>
-						<a style="color:#fff" href="/channel?id=<%=inv_vid.authorId%>" >  <%=inv_vid.author%></a>   
+						<a style="color:#fff" href="/channel?id=<%=VideoObject.authorId%>" >  <%=VideoObject.author%></a>   
                           </div>
 				</div>
 		 
  			</div>
     <div style="color:#fff;border:solid 0.5px gray;background: #0009;width: fit-content;padding: 5px;border-radius: 4px;height:2em">
-  <a href="/channel?id=<%=video?.Channel.id || inv_vid.authorId%>" >
+  <a href="/channel?id=<%=video?.Channel.id || VideoObject.authorId%>" >
     View Channel
  				</a>  </div>
   
     
      </div>
-      <%  if (Array.isArray(inv_vid?.keywords)) { %> 
+      <%  if (Array.isArray(VideoObject?.keywords)) { %> 
 <div class="video-title" style="background: #272727;color:var(--text-color);font-family:var(--text-font-primary);;font-weight:var(--text-header-weight);font-stretch: extra-expanded;margin-top: 10px;margin-bottom: -10px;padding: 10px;border-top-left-radius: 11px;border-top-right-radius: 11px;">Tags</div>
         <div class="tags" style="padding: 10px;background: #272727;margin-top: 10px;border-bottom-left-radius: 11px;border-bottom-right-radius:11px;">
  <br>
- <% inv_vid.keywords.forEach(x => { %>
+ <% VideoObject.keywords.forEach(x => { %>
  <div class="tag">
    <a href="/hashtag/<%=x %>" style="color:var(--text-color)">
    <%=x %>
@@ -3064,18 +3064,18 @@ font-size: 13px;margin:0;padding:0;white-space: nowrap;
         <div class="nerddd" style="padding:10px;background: #272727;margin-top:10px;border-radius: 11px;">
        <div class="video-title" style="color:var(--text-color);font-family:var(--text-font-primary);;font-weight:var(--text-header-weight);font-stretch: extra-expanded;margin-top: 10px;margin-bottom: 10px;">Stats for 🤓 </div>
 
-           Video id : <%=inv_vid.videoId%> <br>
+           Video id : <%=VideoObject.videoId%> <br>
        ImmersiveAmbientModecolor: <% if (lightOrDark(color) == "light") { %><%=color%> (color 1)<% } %><% if (lightOrDark(color) == "dark") { %> <%=color2%> (color 2) <% } %> <br>  
         Video Format :<% if (!qua) { %>  22 (720p) openh264 ( https://github.com/cisco/openh264) mp4a.40.2  | 44100Hz  <% } %>
       <% if (qua === "medium") { %>  18 (320p)  openh264 (https://github.com/cisco/openh264) mp4a.40.2 | 44100Hz  <% } %>  
   
-        <% if (inv_vid.genre === "Music") { %> 
+        <% if (VideoObject.genre === "Music") { %> 
     <br>    Audio Format: ALAC lossless (https://codeberg.org/Ashley/poke/src/branch/main/alac) Audio/ Flac<br>
                                     <% } %>   
-    <% if (inv_vid.genre !== "Music") { %> 
+    <% if (VideoObject.genre !== "Music") { %> 
         <br> Audio Format: Opus - Normalized audio<br>
                                     <% } %>     
-       PokeTubeEncryptID: <%=sha384(inv_vid.videoId)%> <br>
+       PokeTubeEncryptID: <%=sha384(VideoObject.videoId)%> <br>
                       <% if (isvidious) { %>
 
        Proxy : <%= u.replace("https://","") %> - refresh the page to change the proxy location<br>
@@ -3087,11 +3087,11 @@ font-size: 13px;margin:0;padding:0;white-space: nowrap;
        Date : <%- Date.now() %> - <%- useragent.os.replace("Linux", "GNU/Linux") %> on <%- useragent.browser %> <br>
                                                   <% if (isvidious) { %>
 
-       Mystery text :  <%=btoa(inv_vid.videoId + " i " + " lov " + " u " + "mobile "+ u.replace("https://","") ) %> <br>
+       Mystery text :  <%=btoa(VideoObject.videoId + " i " + " lov " + " u " + "mobile "+ u.replace("https://","") ) %> <br>
                                                                               <% } %>  
                                                                                                                                   <% if (!isvidious) { %>
 
-       Mystery text :  <%=btoa(inv_vid.videoId + " i " + " lov " + " u " + "tube-proxy.poketube.fun" ) %> <br>
+       Mystery text :  <%=btoa(VideoObject.videoId + " i " + " lov " + " u " + "tube-proxy.poketube.fun" ) %> <br>
                                                                               <% } %>   
 
        143 : true <br>
@@ -3127,24 +3127,24 @@ More Epic options owo~
   <hr style="clear: both;display: block;border: none;border-bottom: 0.5px solid #2f2f2f;/*! width: 4.5em; */height: 0;">
 
            <div style="font-family:Inter,sans-serif;;white-space:yes;">
-     <a href="https://youtube.com/watch?v=<%=inv_vid.videoId%>">Open On YouTube</a>  •  <a href="/privacy">Privacy</a>    • <a href="https://codeberg.org/Ashley/poketube/">Git</a> 
+     <a href="https://youtube.com/watch?v=<%=VideoObject.videoId%>">Open On YouTube</a>  •  <a href="/privacy">Privacy</a>    • <a href="https://codeberg.org/Ashley/poketube/">Git</a> 
                                 <% if (optout) { %> 
  <% } %>
       <% if (!optout) { %> 
-   • <a href="/watch?v=<%=inv_vid.videoId%>&m=f"> 
+   • <a href="/watch?v=<%=VideoObject.videoId%>&m=f"> 
  Opt out of Metrics</a> (<a href="/privacy" style="color:#fff">Wut?</a>) 
      <% } %>
                         <% if (lyrics && !r) { %>                      
       <% if (optout) { %> 
-                 <br>    <br>     <a href="/watch?v=<%=inv_vid.videoId%>&r=f">  Lyrics (Wow) </a> 
+                 <br>    <br>     <a href="/watch?v=<%=VideoObject.videoId%>&r=f">  Lyrics (Wow) </a> 
   <% } %>
          <% if (!optout) { %> 
-             <br>   <br>          <a href="/watch?v=<%=inv_vid.videoId%>&r=f" >  Lyrics (Wow) </a> 
+             <br>   <br>          <a href="/watch?v=<%=VideoObject.videoId%>&r=f" >  Lyrics (Wow) </a> 
  <% } %>
                             <% } %> 
                           
             <% } %>                                     
-                     <br>    <br>   <p><i class="fa-light fa-shield"></i> The Connection is secured with ECDSA with SHA-384 Signature Algorithm :3 <a href="/encryption?v=<%=inv_vid.videoId%>">Click here for encryption info</a><br> 
+                     <br>    <br>   <p><i class="fa-light fa-shield"></i> The Connection is secured with ECDSA with SHA-384 Signature Algorithm :3 <a href="/encryption?v=<%=VideoObject.videoId%>">Click here for encryption info</a><br> 
                                              
                     </p> 
 
@@ -3161,7 +3161,7 @@ More Epic options owo~
                                                   <% if (r === "f") { %> 
                                 <hr style="clear: both;display: block;border: none;border-bottom: 0.5px solid #2f2f2f;margin: 0 0;/*! width: 4.5em; */height: 0;">
                                                     <p>
-            <a href="/watch?v=<%=inv_vid.videoId%>">See the Recommended videos instead</a> - <a href="https://codeberg.org/Ashley/poketube/issues">Report wrong lyrics qwq</a>
+            <a href="/watch?v=<%=VideoObject.videoId%>">See the Recommended videos instead</a> - <a href="https://codeberg.org/Ashley/poketube/issues">Report wrong lyrics qwq</a>
                                                     </p>
          <div align="center">                                <hr style="clear: both;display: block;border: none;border-bottom: 0.5px solid #2f2f2f;margin: 0 0;/*! width: 4.5em; */height: 0;">
                                                               <h1 style="font-family:var(--text-font-primary);font-weight:var(--text-header-weight);;white-space:yes;" align="center">
@@ -3337,9 +3337,9 @@ More Epic options owo~
                               
                               <% if (!f) { %> 
 
-<% if (inv_vid.recommendedVideos) { %>
+<% if (VideoObject.recommendedVideos) { %>
 
-<% inv_vid?.recommendedVideos.forEach(x => { %>
+<% VideoObject?.recommendedVideos.forEach(x => { %>
     <div class="fade-in video">
         <% if (!optout) { %><a class="thumbnail" href="/watch?v=<%= x.videoId %>" style="background-image:url(<%- media_proxy_url %>/proxy?url=https://i.ytimg.com/vi/<%= x.videoId %>/hqdefault.jpg?sqp=-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLBy_x4UUHLNDZtJtH0PXeQGoRFTgw);border-radius:9.5px" alt="<%= x.Title %>"><span class="video-length"><%- turntomins(x.lengthSeconds) || "LIVE"%></span><% } %><% if (optout) { %><a class="thumbnail"href="/watch?v=<%= x.videoId %>&m=f"style="background-image:url(<%- media_proxy_url %>/proxy?url=https://i.ytimg.com/vi/<%= x.videoId %>/hqdefault.jpg?sqp=-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLBy_x4UUHLNDZtJtH0PXeQGoRFTgw);border-radius:9.5px"alt="<%= x.Title %>"><span class="video-length"><%- x.duration || "LIVE"%></span><% } %></a>
             <div class="info">
@@ -3373,7 +3373,7 @@ More Epic options owo~
         <% } %>
                   <% } %>
 
-            <% if (inv_vid.recommendedVideos.length < 1) { %> 
+            <% if (VideoObject.recommendedVideos.length < 1) { %> 
  <% channel_uploads.latestVideos.forEach(x => { %>
     <div class="fade-in video">
         <% if (!optout) { %><a class="thumbnail" href="/watch?v=<%= x.videoId %>" style="background-image:url(<%- media_proxy_url %>/proxy?url=https://i.ytimg.com/vi/<%= x.videoId %>/hqdefault.jpg?sqp=-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLBy_x4UUHLNDZtJtH0PXeQGoRFTgw);border-radius:9.5px" alt="<%= x.Title %>"><span class="video-length"><%- turntomins(x.lengthSeconds) || "LIVE"%></span><% } %><% if (optout) { %><a class="thumbnail"href="/watch?v=<%= x.videoId %>&m=f"style="background-image:url(<%- media_proxy_url %>/proxy?url=https://i.ytimg.com/vi/<%= x.videoId %>/hqdefault.jpg?sqp=-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLBy_x4UUHLNDZtJtH0PXeQGoRFTgw);border-radius:9.5px"alt="<%= x.Title %>"><span class="video-length"><%- x.duration || "LIVE"%></span><% } %></a>
@@ -3423,7 +3423,7 @@ More Epic options owo~
 								<a href="/watch?v=<%= x.id %>&m=f" class="title max-lines-2"><%= x.Title %></a>
                    <% } %>
 								<div>
-               <a class="max-lines-2" style="color:#fff"  href="/channel?id=<%= video?.Channel.id || inv_vid.authorId%>"><%= video?.Channel?.Name || inv_vid.author %></a>
+               <a class="max-lines-2" style="color:#fff"  href="/channel?id=<%= video?.Channel.id || VideoObject.authorId%>"><%= video?.Channel?.Name || VideoObject.author %></a>
 									<div>  
  <%= x.uploadedAt %>  </div>
 								</div>
@@ -3475,7 +3475,7 @@ More Epic options owo~
   navigator.share({
     title: document.title,
     text: "",
-    url: "https://" + window.location.hostname + "/<%=inv_vid.videoId%>?piwik_si=mobile_share"
+    url: "https://" + window.location.hostname + "/<%=VideoObject.videoId%>?piwik_si=mobile_share"
   })
   .then(() => console.log('Successful share'))
   .catch(error => console.log('Error sharing:', error));
@@ -3493,12 +3493,12 @@ document.addEventListener('DOMContentLoaded', () => {
   if ('mediaSession' in navigator) {
     // Set metadata
     navigator.mediaSession.metadata = new MediaMetadata({
-      title: "<%- inv_vid.title %>",
-      artist: "<%= video?.Channel?.Name || inv_vid.author %>",
+      title: "<%- VideoObject.title %>",
+      artist: "<%= video?.Channel?.Name || VideoObject.author %>",
       album: "Poke",
       artwork: [
         {
-          src: "https://i.ytimg.com/vi/<%=inv_vid.videoId%>/maxresdefault.jpg",
+          src: "https://i.ytimg.com/vi/<%=VideoObject.videoId%>/maxresdefault.jpg",
           sizes: "1280x720",
           type: "image/jpeg"
         }
@@ -3600,7 +3600,7 @@ checkbox.addEventListener('change', function(e) {
     document.getElementById('video').addEventListener('ended',autoplaynextvideo,false);
       
     function autoplaynextvideo(e) {
-    location.href = "/watch?v=<%- inv_vid?.recommendedVideos[0].videoId%>&autoplay=<%-btoa("1f739d935676111cfff4b4693e3816e664797050" + inv_vid?.recommendedVideos[0].videoId) %>"
+    location.href = "/watch?v=<%- VideoObject?.recommendedVideos[0].videoId%>&autoplay=<%-btoa("1f739d935676111cfff4b4693e3816e664797050" + VideoObject?.recommendedVideos[0].videoId) %>"
     }
   }
   
@@ -3620,7 +3620,7 @@ if (/[?&]autoplay=/.test(location.search)) {
     document.getElementById('video').addEventListener('ended',autoplaynextvideo,false);
       
     function autoplaynextvideo(e) {
-        location.href = "/watch?v=<%- inv_vid?.recommendedVideos[0].videoId%>&autoplay=<%-btoa("1f739d935676111cfff4b4693e3816e664797050" + inv_vid?.recommendedVideos[0].videoId) %>"
+        location.href = "/watch?v=<%- VideoObject?.recommendedVideos[0].videoId%>&autoplay=<%-btoa("1f739d935676111cfff4b4693e3816e664797050" + VideoObject?.recommendedVideos[0].videoId) %>"
     }
 }
   var anchor = document.getElementById("sub");
@@ -3630,7 +3630,7 @@ var userID = localStorage.getItem("UserID");
 
 if (userID) {
     // If user ID exists in localStorage, set the href attribute
-    anchor.href = `/api/set-channel-subs?ID=${userID}&channelName=<%=inv_vid.author%>&avatar=<%- proxyurl %>/<%= inv_vid.authorThumbnails[1].url %>&channelID=<%=video?.Channel.id || inv_vid.authorId %>`;
+    anchor.href = `/api/set-channel-subs?ID=${userID}&channelName=<%=VideoObject.author%>&avatar=<%- proxyurl %>/<%= VideoObject.authorThumbnails[1].url %>&channelID=<%=video?.Channel.id || VideoObject.authorId %>`;
 } else {
     // If user ID doesn't exist in localStorage, you can handle it as needed
     anchor.href = "/account-create"

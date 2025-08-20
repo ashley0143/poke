@@ -1423,27 +1423,24 @@ font-weight: 1000;" href="/watch?v=<%= x.videoId %>" class="title max-lines-2"><
         <img src="<%= x.authorThumbnails[1].url %>">
      <a href="/channel?id=<%= x.authorId %>"><%= x.author %><% if (x?.authorVerified) { %> 
             <i class="icon ion ion-md-checkmark-circle" title="verified channel"></i><% } %></a>
-    
+
 <div class="badges">
-  <% if (x?.hasCaptions) { %>
-    <span class="badge">Subtitles</span>
-  <% } %>
-  <% if (x?.isNew) { %>
-    <span class="badge">New</span>
-  <% } %>
-  <% if (x?.is4k) { %>
-    <span class="badge">4K Ultra-HD</span>
-  <% } %>
-  <% if (x?.is8k) { %>
-    <span class="badge">8K</span>
-  <% } %>
-  <% if (x?.isVr360) { %>
-    <span class="badge">VR 360°</span>
-  <% } %>
-  <% if (x?.isVr180) { %>
-    <span class="badge">VR 180°</span>
-  <% } %>
+  <% 
+    const badgeConfig = [
+      { show: x?.hasCaptions, label: "Subtitles" },
+      { show: x?.isNew,       label: "New" },
+      { show: x?.is4k,        label: "4K Ultra-HD" },
+      { show: x?.is8k,        label: "8K" },
+      { show: x?.isVr360,     label: "VR 360°" },
+      { show: x?.isVr180,     label: "VR 180°" },
+    ];
+    
+    badgeConfig.forEach(b => {
+      if (b.show) { %>
+        <span class="badge"><%= b.label %></span>
+  <% } }) %>
 </div>
+
 
           <div style="display: inline-flex;flex-direction: row;min-width: 6em;gap: 4px;">
             <a href="/download?v=<%= x.videoId %>" style="background: #333;width: 7.6em;border-radius: 8px;">
@@ -1483,27 +1480,23 @@ font-weight: 1000;" href="/watch?v=<%= x.videoId %>" class="title max-lines-2"><
      <a href="/channel?id=<%= x.authorId %>" style="margin:4px"><%= x.author %><% if (x?.authorVerified) { %> 
             <i class="icon ion ion-md-checkmark-circle" title="verified channel"></i><% } %></a>
             </div>
-
 <div class="badges">
-  <% if (x?.hasCaptions) { %>
-    <span class="badge">Subtitles</span>
-  <% } %>
-  <% if (x?.isNew) { %>
-    <span class="badge">New</span>
-  <% } %>
-  <% if (x?.is4k) { %>
-    <span class="badge">4K Ultra-HD</span>
-  <% } %>
-  <% if (x?.is8k) { %>
-    <span class="badge">8K</span>
-  <% } %>
-  <% if (x?.isVr360) { %>
-    <span class="badge">VR 360°</span>
-  <% } %>
-  <% if (x?.isVr180) { %>
-    <span class="badge">VR 180°</span>
-  <% } %>
+  <% 
+    const badgeConfig = [
+      { show: x?.hasCaptions, label: "Subtitles" },
+      { show: x?.isNew,       label: "New" },
+      { show: x?.is4k,        label: "4K Ultra-HD" },
+      { show: x?.is8k,        label: "8K" },
+      { show: x?.isVr360,     label: "VR 360°" },
+      { show: x?.isVr180,     label: "VR 180°" },
+    ];
+    
+    badgeConfig.forEach(b => {
+      if (b.show) { %>
+        <span class="badge"><%= b.label %></span>
+  <% } }) %>
 </div>
+
           <div style="display: inline-flex;flex-direction: row;min-width: 6em;gap: 4px;">
             <a href="/download?v=<%= x.videoId %>" style="background: #333;width: 7.6em;border-radius: 8px;">
               <div style="display: flex;">

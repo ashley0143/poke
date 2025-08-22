@@ -45,201 +45,306 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta charset="UTF-8" />
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Poke! Games Hub</title>
   <style>
-    :root {
-      --bg-start: #111;
-      --bg-end:   #000;
-      --accent:   #00ff99;
-      --card-bg:  rgba(0,0,0,0.6);
-      --card-border: rgba(0,255,153,0.5);
-      --card-hover: rgba(0,255,153,0.2);
-      --text-light: #fff;
+    :root{
+      --bg-start:#111;--bg-end:#000;--accent:#00ff99;--accent2:#08d9d6;
+      --card-bg:rgba(0,0,0,.6);--card-border:rgba(0,255,153,.5);--card-hover:rgba(0,255,153,.15);
+      --text:#fff;--muted:#cfcfcf;--shadow:0 0 16px rgba(0,255,153,.25)
     }
-    * { box-sizing: border-box; margin:0; padding:0; }
-    html, body {
-      width:100%; height:100%;
-      background: linear-gradient(135deg, var(--bg-start), var(--bg-end));
-      font-family: 'Press Start 2P', monospace;
-      color: var(--text-light);
-      overflow: hidden;
+    *{box-sizing:border-box;margin:0;padding:0}
+    html,body{height:100%}
+    body{
+      min-height:100%;
+      background:linear-gradient(135deg,var(--bg-start),var(--bg-end));
+      font-family:'Press Start 2P', monospace, system-ui;
+      color:var(--text);
+      -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
     }
-    .emoji-bg {
-      position: fixed; top: 0; left: 0;
-      width: 100vw; height: 100vh;
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(3rem,1fr));
-      grid-auto-rows:3rem;
-      pointer-events:none; z-index:0;
-      font-size:2.5rem; opacity:0.1;
+    /* Subtle, cheap background flair (perf-friendly) */
+    .emoji-bg{
+      position:fixed; inset:0; pointer-events:none; z-index:0; opacity:.08;
+      display:grid; grid-template-columns:repeat(auto-fill,minmax(3rem,1fr)); grid-auto-rows:3rem;
+      font-size:2rem; user-select:none;
     }
-    .wrapper {
-      position: relative; z-index:1;
-      max-width:960px; margin:3rem auto; padding:2rem;
-      background: rgba(0,0,0,0.5);
-      border:2px solid var(--accent);
-      border-radius:16px;
-      box-shadow: 0 0 16px var(--accent);
+    @media (prefers-reduced-motion:no-preference){
+      .emoji-bg span{ animation: floaty 10s linear infinite }
+      @keyframes floaty{ from{transform:translateY(0)} to{transform:translateY(-6px)} }
     }
-    h1 {
-      font-size:3rem; text-align:center;
-      background: linear-gradient(90deg, #00ff99, #08d9d6);
-      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-      margin-bottom:1.5rem;
+
+    .wrapper{
+      position:relative; z-index:1; max-width:1100px; margin:2rem auto; padding:1.25rem;
     }
-    .game-container {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px,1fr));
-      gap:1rem;
+    .panel{
+      background:rgba(0,0,0,.5);
+      border:2px solid var(--accent); border-radius:16px; box-shadow:var(--shadow);
+      padding:1.25rem;
     }
-    .game {
-      position: relative;
-      background: var(--card-bg);
-      border:2px solid var(--card-border);
-      border-radius:12px;
-      padding:1rem;
-      text-decoration:none;
-      color: var(--text-light);
-      transition: transform 0.3s, background 0.3s;
-      overflow:hidden;
+    h1{
+      font-size:2.25rem; line-height:1.15; text-align:center; margin-bottom:1rem;
+      background:linear-gradient(90deg,var(--accent),var(--accent2));
+      -webkit-background-clip:text; -webkit-text-fill-color:transparent;
     }
-    .game:hover {
-      transform: translateY(-5px);
-      background: var(--card-hover);
+    p.lead{
+      text-align:center; font-size:.8rem; color:var(--muted); margin-bottom:1.25rem;
     }
-    .icon { font-size:2.5rem; margin-bottom:0.5rem; }
-    .title { font-size:1.2rem; margin-bottom:0.3rem; }
-    .subtitle { font-size:0.7rem; color: #ccc; margin-bottom:0.5rem; }
-    .info-btn {
-      position:absolute; top:8px; right:8px;
-      background:none; border:none; color:var(--accent);
-      font-size:1rem; cursor:pointer;
+
+    .game-container{
+      display:grid; gap:1rem;
+      grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
     }
-    .info-modal {
-      position:absolute; top:0; left:0; width:100%; height:100%;
-      background: rgba(0,0,0,0.8); display:flex;
-      align-items:center; justify-content:center;
-      text-align:left; padding:1rem;
-      font-size:0.8rem;
+
+     .game{
+      position:relative; display:flex; flex-direction:column; gap:.45rem;
+      background:var(--card-bg); border:2px solid var(--card-border); border-radius:14px;
+      padding:1rem 1rem 1.25rem 1rem; text-decoration:none; color:var(--text);
+      box-shadow:0 2px 0 rgba(0,0,0,.4);
+      min-height:150px;
+      transition:transform .18s ease, background .18s ease, box-shadow .18s ease;
+      outline:none;
     }
-    .info-modal.hidden { display:none; }
-    .info-content {
-      background: var(--bg-start); padding:1rem;
-      border:2px solid var(--accent); border-radius:8px;
-      max-width:90%; max-height:80%; overflow:auto;
+    .game:hover{ transform:translateY(-4px); background:var(--card-hover) }
+    .game:active{ transform:translateY(-1px) }
+    .game:focus-visible{ box-shadow:0 0 0 3px #fff, 0 0 0 6px var(--accent) }
+
+    .row-top{ display:flex; align-items:flex-start; justify-content:space-between; gap:.5rem }
+    .icon{ font-size:2.25rem; line-height:1 }
+    .info-btn{
+      --size:40px;
+      height:var(--size); width:var(--size);
+      display:inline-grid; place-items:center;
+      background:transparent; border:2px solid var(--accent); border-radius:10px;
+      color:var(--accent); cursor:pointer; flex:0 0 auto;
+      transition:background .15s ease, color .15s ease, transform .1s ease;
     }
-    .close-info {
-      display:block; margin-top:1rem; background:var(--accent);
-      border:none; padding:0.5rem; color:var(--bg-start);
-      cursor:pointer;
+    .info-btn:hover{ background:var(--accent); color:#002a1c }
+    .info-btn:active{ transform:scale(.98) }
+    .info-btn:focus-visible{ outline:3px solid #fff; outline-offset:2px }
+
+    .title{ font-size:1.05rem }
+    .subtitle{ color:var(--muted); font-size:.7rem; line-height:1.5 }
+
+    /* Modal inside card */
+    .info-modal{
+      position:absolute; inset:0; background:rgba(0,0,0,.82);
+      display:flex; align-items:center; justify-content:center; padding:1rem;
+    }
+    .hidden{ display:none !important }
+    .info-content{
+      background:#0b0b0b; border:2px solid var(--accent); border-radius:12px;
+      padding:1rem; max-width:min(520px,92vw); max-height:80vh; overflow:auto;
+      box-shadow:var(--shadow); font-size:.8rem;
+    }
+    .close-row{ display:flex; justify-content:flex-end; margin-top:.75rem }
+    .close-info{
+      border:none; background:var(--accent); color:#002a1c; padding:.55rem .8rem;
+      font-weight:700; border-radius:10px; cursor:pointer;
+    }
+    .close-info:focus-visible{ outline:3px solid #fff; outline-offset:2px }
+
+    /* Footer help strip */
+    .help{
+      margin-top:1rem; text-align:center; font-size:.65rem; color:var(--muted)
+    }
+
+    /* Larger hit targets on very small screens */
+    @media (max-width:420px){
+      .game{ min-height:170px; padding:1.1rem }
+      .icon{ font-size:2.4rem }
     }
   </style>
 </head>
 <body>
-  <div class="emoji-bg"></div>
+  <div class="emoji-bg" aria-hidden="true"></div>
+
   <div class="wrapper">
-    <h1>Poke! Games Hub</h1>
-    <div class="game-container">
-      <!-- Snake -->
-      <div class="game" data-game="snake">
-        <button class="info-btn">ℹ️</button>
-        <div class="icon">🐍</div>
-        <div class="title">Snake</div>
-        <div class="subtitle">Guide your snake to eat apples and grow longer—avoid crashing into yourself</div>
-        <div class="info-modal hidden">
-          <div class="info-content">
-            <p><strong>Snake</strong> is a retro arcade game where you control a growing line. Eat food to grow longer, but avoid running into walls or yourself.</p>
-            <button class="close-info">Close</button>
+    <div class="panel" role="region" aria-label="Poke Games Hub">
+      <h1>Poke! Games Hub</h1>
+ 
+      <div class="game-container">
+        <!-- Snake -->
+        <a class="game" data-game="snake" href="?game=snake" role="button" aria-label="Open Snake">
+          <div class="row-top">
+            <div class="icon" aria-hidden="true">🐍</div>
+            <button class="info-btn" type="button" aria-haspopup="dialog" aria-label="About Snake">ℹ️</button>
           </div>
-        </div>
-      </div>
-      <!-- Tic-Tac-Toe -->
-      <div class="game" data-game="tic-tac-toe">
-        <button class="info-btn">ℹ️</button>
-        <div class="icon">❌⭕</div>
-        <div class="title">Tic-Tac-Toe</div>
-        <div class="subtitle">Classic 3×3 grid game. Get three in a row before your opponent.</div>
-        <div class="info-modal hidden">
-          <div class="info-content">
-            <p><strong>Tic-Tac-Toe</strong> lets you play X vs O on a 3×3 grid. Win by placing three in a row. Play against AI or a friend!</p>
-            <button class="close-info">Close</button>
+          <div class="title">Snake</div>
+          <div class="subtitle">Guide the snake, eat apples, don’t hit walls or yourself.</div>
+          <div class="info-modal hidden" role="dialog" aria-modal="true" aria-label="Snake info">
+            <div class="info-content">
+              <p><strong>Snake</strong> is a retro arcade classic. Eat food to grow; collisions end your run.</p>
+              <div class="close-row"><button class="close-info" type="button">Close</button></div>
+            </div>
           </div>
-        </div>
-      </div>
-      <!-- Sudoku -->
-      <div class="game" data-game="sudoku">
-        <button class="info-btn">ℹ️</button>
-        <div class="icon">🧮</div>
-        <div class="title">Sudoku</div>
-        <div class="subtitle">Two-player or vs AI. Bounce the ball past opponent’s paddle to score!</div>
-        <div class="info-modal hidden">
-          <div class="info-content">
-            <p><strong>Sudoku</strong> challenges you to fill a 9×9 grid so that each column, row, and 3×3 block contains all digits 1–9.</p>
-            <button class="close-info">Close</button>
+        </a>
+
+        <!-- Tic-Tac-Toe -->
+        <a class="game" data-game="tic-tac-toe" href="?game=tic-tac-toe" role="button" aria-label="Open Tic-Tac-Toe">
+          <div class="row-top">
+            <div class="icon" aria-hidden="true">❌⭕</div>
+            <button class="info-btn" type="button" aria-haspopup="dialog" aria-label="About Tic-Tac-Toe">ℹ️</button>
           </div>
-        </div>
-      </div>
-      <!-- Pong -->
-      <div class="game" data-game="pong">
-        <button class="info-btn">ℹ️</button>
-        <div class="icon">🏓</div>
-        <div class="title">Ping-Pong</div>
-        <div class="subtitle">Retro table tennis</div>
-        <div class="info-modal hidden">
-          <div class="info-content">
-            <p><strong>Pong</strong> is the classic table tennis arcade game. Move your paddle and bounce the ball past your opponent.</p>
-            <button class="close-info">Close</button>
+          <div class="title">Tic-Tac-Toe</div>
+          <div class="subtitle">Classic 3×3. Get three in a row before your opponent.</div>
+          <div class="info-modal hidden" role="dialog" aria-modal="true" aria-label="Tic-Tac-Toe info">
+            <div class="info-content">
+              <p><strong>Tic-Tac-Toe</strong> lets you play X vs O on a 3×3 grid. Play vs AI or a friend.</p>
+              <div class="close-row"><button class="close-info" type="button">Close</button></div>
+            </div>
           </div>
-        </div>
-      </div>
-      <!-- Minesweeper -->
-      <div class="game" data-game="minesweeper">
-        <button class="info-btn">ℹ️</button>
-        <div class="icon">💣</div>
-        <div class="title">Minesweeper</div>
-        <div class="subtitle">Find all safe cells</div>
-        <div class="info-modal hidden">
-          <div class="info-content">
-            <p><strong>Minesweeper</strong> tasks you to clear a grid avoiding hidden mines. Use numbers to deduce safe spots.</p>
-            <button class="close-info">Close</button>
+        </a>
+
+        <!-- Sudoku -->
+        <a class="game" data-game="sudoku" href="?game=sudoku" role="button" aria-label="Open Sudoku">
+          <div class="row-top">
+            <div class="icon" aria-hidden="true">🧩</div>
+            <button class="info-btn" type="button" aria-haspopup="dialog" aria-label="About Sudoku">ℹ️</button>
           </div>
-        </div>
-      </div>
-      <!-- Breakout -->
-      <div class="game" data-game="breakout">
-        <button class="info-btn">ℹ️</button>
-        <div class="icon">🧱</div>
-        <div class="title">Breakout</div>
-        <div class="subtitle">Brick-busting action</div>
-        <div class="info-modal hidden">
-          <div class="info-content">
-            <p><strong>Breakout</strong> challenges you to destroy all bricks by bouncing a ball off your paddle. Collect power-ups to survive!</p>
-            <button class="close-info">Close</button>
+          <div class="title">Sudoku</div>
+          <div class="subtitle">Fill each row, column, and 3×3 box with digits 1–9.</div>
+          <div class="info-modal hidden" role="dialog" aria-modal="true" aria-label="Sudoku info">
+            <div class="info-content">
+              <p><strong>Sudoku</strong> is a logic puzzle: each row/column/box must contain 1–9 exactly once.</p>
+              <div class="close-row"><button class="close-info" type="button">Close</button></div>
+            </div>
           </div>
-        </div>
+        </a>
+
+        <!-- Pong -->
+        <a class="game" data-game="pong" href="?game=pong" role="button" aria-label="Open Ping-Pong">
+          <div class="row-top">
+            <div class="icon" aria-hidden="true">🏓</div>
+            <button class="info-btn" type="button" aria-haspopup="dialog" aria-label="About Pong">ℹ️</button>
+          </div>
+          <div class="title">Ping-Pong</div>
+          <div class="subtitle">Retro table tennis. Bounce the ball past the paddle.</div>
+          <div class="info-modal hidden" role="dialog" aria-modal="true" aria-label="Pong info">
+            <div class="info-content">
+              <p><strong>Pong</strong> is the original table-tennis arcade game. Move, deflect, score.</p>
+              <div class="close-row"><button class="close-info" type="button">Close</button></div>
+            </div>
+          </div>
+        </a>
+
+        <!-- Minesweeper -->
+        <a class="game" data-game="minesweeper" href="?game=minesweeper" role="button" aria-label="Open Minesweeper">
+          <div class="row-top">
+            <div class="icon" aria-hidden="true">💣</div>
+            <button class="info-btn" type="button" aria-haspopup="dialog" aria-label="About Minesweeper">ℹ️</button>
+          </div>
+          <div class="title">Minesweeper</div>
+          <div class="subtitle">Use numbers to flag mines and clear the board.</div>
+          <div class="info-modal hidden" role="dialog" aria-modal="true" aria-label="Minesweeper info">
+            <div class="info-content">
+              <p><strong>Minesweeper</strong> is deduction: numbers tell how many adjacent mines to avoid.</p>
+              <div class="close-row"><button class="close-info" type="button">Close</button></div>
+            </div>
+          </div>
+        </a>
+
+        <!-- Breakout -->
+        <a class="game" data-game="breakout" href="?game=breakout" role="button" aria-label="Open Breakout">
+          <div class="row-top">
+            <div class="icon" aria-hidden="true">🧱</div>
+            <button class="info-btn" type="button" aria-haspopup="dialog" aria-label="About Breakout">ℹ️</button>
+          </div>
+          <div class="title">Breakout</div>
+          <div class="subtitle">Bust the bricks. Catch power-ups. Don’t drop the ball.</div>
+          <div class="info-modal hidden" role="dialog" aria-modal="true" aria-label="Breakout info">
+            <div class="info-content">
+              <p><strong>Breakout</strong> challenges you to clear bricks with a bouncing ball and paddle.</p>
+              <div class="close-row"><button class="close-info" type="button">Close</button></div>
+            </div>
+          </div>
+        </a>
       </div>
-    </div>
+
+     </div>
   </div>
+
   <script>
-    // populate emoji background
-    const emojis=['🎮','🕹️','👾','🎧','🖥️','🎲','🏆','🎯','🔥','💥','🧩','⭐','⚔️','🛡️','🚀','🎉','🌟','⚡','💣'];
-    const bg=document.querySelector('.emoji-bg');
-    for(let i=0;i<400;i++){const s=document.createElement('span');s.textContent=emojis[i%emojis.length];bg.appendChild(s);}    
-    // info modal toggles
-    document.querySelectorAll('.game').forEach(card=>{
-      const btn=card.querySelector('.info-btn');
-      const modal=card.querySelector('.info-modal');
-      btn.onclick=()=>modal.classList.toggle('hidden');
-      modal.querySelector('.close-info').onclick=()=>modal.classList.add('hidden');
-      // navigate on click outside info
-      card.addEventListener('click',e=>{ if(e.target===card){ const g=card.dataset.game; window.location=`?game=${g}`; }});
-    });
+    // Lightweight emoji background ( 
+    (function initBG(){
+      const emojis=['🎮','🕹️','👾','🎧','🖥️','🎲','🏆','🎯','🔥','💥','🧩','⭐','⚔️','🛡️','🚀','🎉','🌟','⚡','💣'];
+      const bg=document.querySelector('.emoji-bg');
+      const cells = Math.min(220, Math.ceil((window.innerWidth*window.innerHeight)/(80*80)));
+      for(let i=0;i<cells;i++){
+        const s=document.createElement('span');
+        s.textContent = emojis[i % emojis.length];
+        bg.appendChild(s);
+      }
+    })();
+
+    // UX: info modals, safe navigation, keyboard access
+    (function initCards(){
+      const cards = document.querySelectorAll('.game');
+
+      function openModal(modal){
+        modal.classList.remove('hidden');
+        // trap focus: move to close button
+        const closeBtn = modal.querySelector('.close-info');
+        closeBtn?.focus();
+      }
+      function closeModal(modal){
+        modal.classList.add('hidden');
+      }
+
+      cards.forEach(card=>{
+        const infoBtn = card.querySelector('.info-btn');
+        const modal  = card.querySelector('.info-modal');
+        const closeBtn = card.querySelector('.close-info');
+
+        // Prevent link navigation when clicking ℹ️
+        infoBtn.addEventListener('click', (e)=>{
+          e.preventDefault();
+          e.stopPropagation();
+          openModal(modal);
+        }, { passive:false });
+
+        // Close modal via close button
+        closeBtn.addEventListener('click', (e)=>{
+          e.preventDefault();
+          closeModal(modal);
+          // return focus to the info button for a11y continuity
+          infoBtn.focus();
+        });
+
+        // Close modal when clicking backdrop
+        modal.addEventListener('click', (e)=>{
+          if(e.target === modal){
+            closeModal(modal);
+            infoBtn.focus();
+          }
+        });
+
+        // Close modal with Escape
+        document.addEventListener('keydown', (e)=>{
+          if(e.key === 'Escape' && !modal.classList.contains('hidden')){
+            closeModal(modal);
+            infoBtn.focus();
+          }
+        });
+
+        // Keyboard: open card with Enter/Space
+        card.addEventListener('keydown', (e)=>{
+          // Don’t intercept if modal open
+          if(!modal.classList.contains('hidden')) return;
+          if(e.code === 'Enter' || e.code === 'Space'){
+            e.preventDefault();
+            // follow the link
+            const href = card.getAttribute('href');
+            if(href) window.location.assign(href);
+          }
+        });
+      });
+    })();
   </script>
 </body>
 </html>
+
 
 <% } %>
 

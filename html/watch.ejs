@@ -1232,7 +1232,7 @@ Offical Discord Server! :3
 				</a>
 				<div class="name" >
 <div style="display: flex;flex-direction: row;max-width: 119px;">
-						<a title="<%=VideoData.author%> " href="/channel?id=<%=video?.Channel.id || VideoData.authorId%>@youtube.com" class="video-info-pill-channelname">  <%=VideoData.author%> 
+						<a title="<%=VideoData.author%> " href="/channel?id=<%=video?.Channel.id || VideoData.authorId%>@youtube.com" class="video-info-pill-channelname">  <%=VideoData.author.replace(" - Topic", "")%> 
                </a>   
                                        <% if (VideoData?.authorVerified) { %> 
                    <div>
@@ -2625,7 +2625,7 @@ font-size: 13px;margin:0;padding:0;white-space: nowrap;
 				<div class="name" style="font-family:var(--text-font-primary);font-weight:var(--text-header-weight);">
 		  <div>
              <a href="/channel?id=<%=VideoData.authorId%>" style="color:#fff;max-width: 7.8em;" class="max-lines-1">
-               <%=VideoData.author%></a>   
+               <%=VideoData.author.replace(" - Topic", "")%> </a>   
          
 		<div class="subscriber-count" style="write-space:nowraap">
           <%= VideoData.subCountText.replace("subscribers", "Subs") %> Subs

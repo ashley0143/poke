@@ -109,10 +109,28 @@
             transform: scale(1) rotate(-20deg)
           }
         }
+
+        .donate-banner {
+  text-align: center;
+  background: red;
+  color: #1f2937;
+  font-weight: 700;
+  font-size: 14px;
+  padding: 10px 14px;
+  border-bottom: 1px solid rgba(0,0,0,.1);
+  letter-spacing: .3px;
+}
+.donate-banner strong {
+  color: #111827;
+}
       </style>
 </head>
 
 <body>
+<div class="donate-banner">
+   Donate To the trevor project ! <a href="https://initiative.poketube.fun/donate">Donate!</a>
+</div>
+
   <div style="margin-top: 6em;margin-left: auto;margin-right: auto;margin-bottom: -7em;background: #000;padding: 1em;border-radius: 14px;font-family: ubuntu;"> <%- banner %></div>
   <%- include('./partials/header.ejs') %>
   <video playsinline muted paused><source src="/bg-480.webm" type="video/webm"/></video>

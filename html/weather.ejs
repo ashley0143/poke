@@ -202,6 +202,11 @@
   </main>
 
 <script>
+   window.__SSR__ = <%- JSON.stringify(ssr || {}) %>;
+  window.__SSR_ROUTE__ = "/weather";   // change if you mount it elsewhere
+</script>
+
+<script>
   const $=s=>document.querySelector(s);const $$=s=>[...document.querySelectorAll(s)];
   const units=JSON.parse(localStorage.getItem('pokeweather:units')||'{}');
   let state={lat:null,lon:null,name:null,units:units.units||'metric'};
@@ -393,21 +398,7 @@
   });
 
   function debounce(fn,ms){let t;return (...a)=>{clearTimeout(t);t=setTimeout(()=>fn(...a),ms)}}
-
-  (function setupPWA(){
-    const manifest={name:'PokeWeather',short_name:'PokeWeather',start_url:'./',display:'standalone',background_color:'#0b0f16',theme_color:'#0ea5e9',icons:[{src:'data:image/svg+xml;utf8,'+encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#00d2ff"/><stop offset="1" stop-color="#3a7bd5"/></linearGradient></defs><rect rx="28" width="128" height="128" fill="url(#g)"/><text x="50%" y="58%" text-anchor="middle" font-size="72" font-weight="900" fill="#fff">☁️</text></svg>`),sizes:'128x128',type:'image/svg+xml'}]};
-    const blob=new Blob([JSON.stringify(manifest)],{type:'application/json'}); const url=URL.createObjectURL(blob);
-    const link=document.createElement('link'); link.rel='manifest'; link.href=url; document.head.appendChild(link);
-
-    if('serviceWorker' in navigator){
-      const swSrc=`self.addEventListener('install',e=>{e.waitUntil(caches.open('pokeweather-v1').then(c=>c.addAll(['./'])))});self.addEventListener('fetch',e=>{const u=new URL(e.request.url);if(u.origin===location.origin){e.respondWith(caches.match(e.request).then(r=>r||fetch(e.request)))} })`;
-      const swURL=URL.createObjectURL(new Blob([swSrc],{type:'application/javascript'}));
-      navigator.serviceWorker.register(swURL);
-      window.addEventListener('beforeinstallprompt',(e)=>{e.preventDefault();window.deferredPrompt=e;$('#btnInstall').classList.remove('hidden')});
-      $('#btnInstall').addEventListener('click',async()=>{const p=window.deferredPrompt;if(!p) return;p.prompt();await p.userChoice;$('#btnInstall').classList.add('hidden')});
-    }
-  })();
-
+ 
   (function init(){
     const sp=new URLSearchParams(location.search);
     const lat=sp.get('lat'), lon=sp.get('lon'), name=sp.get('name');

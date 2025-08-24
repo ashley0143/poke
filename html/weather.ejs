@@ -60,7 +60,9 @@
   .suggest button:last-child{border-bottom:0}
   .hidden{display:none}
   @media (min-width:780px){.current{grid-column:span 7}.panel{grid-column:span 5}}
- 
+     .ssr{display:none}
+    main{display:block}
+
 </style>
  <noscript>
   <style>
@@ -71,8 +73,7 @@
 </head>
 <body class="<%= ssr && ssr.forceNoJS ? 'no-js' : '' %>">
 
-  <!-- NAVBAR (brand text removed, location chip compact) -->
-  <header>
+   <header>
     <div class="navwrap">
       <div class="wrap top">
         <div class="brand">
@@ -103,8 +104,7 @@
     </div>
   </header>
 
-  <!-- ===== Server-Side Render (shown if no JS) ===== -->
-  <section class="ssr">
+   <section class="ssr">
     <div class="wrap" style="padding-top:14px">
       <article class="card" aria-live="polite">
         <h3 class="section-title">Now — <%= (ssr && ssr.name) || 'Unknown' %></h3>
@@ -196,15 +196,12 @@
       <h3 class="section-title">7-day forecast</h3>
       <div id="days" class="grid" style="grid-template-columns:repeat(1,1fr);gap:10px"></div>
     </section>
-
-    <footer>
-      <div>Data: Open-Meteo & OpenStreetMap/Nominatim. Your settings are saved locally.</div>
-    </footer>
+ 
   </main>
 
 <script>
    window.__SSR__ = <%- JSON.stringify(ssr || {}) %>;
-  window.__SSR_ROUTE__ = "/weather";   // change if you mount it elsewhere
+  window.__SSR_ROUTE__ = "/weather";   
 </script>
 
 <script>

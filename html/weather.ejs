@@ -29,8 +29,14 @@
   .subrow{display:flex;gap:10px;align-items:center;justify-content:space-between;flex-wrap:wrap;padding-top:8px}
   .tabs{display:flex;gap:8px}
   .tab{padding:8px 12px;border:1px solid var(--ring);border-radius:999px;background:linear-gradient(180deg,transparent,rgba(255,255,255,.03));font-weight:700;text-decoration:none;color:inherit}
+
+  /* Search (works with & without JS) */
   .search{display:flex;gap:8px;position:relative;flex:1;min-width:220px}
-  input[type="search"]{flex:1;min-width:140px;border:1px solid var(--ring);background:var(--card);color:var(--fg);padding:12px 14px;border-radius:12px;outline:none}
+  .search input[type="search"]{flex:1;min-width:140px;border:1px solid var(--ring);background:var(--card);color:var(--fg);padding:12px 14px;border-radius:12px;outline:none}
+  .search button[type="submit"]{padding:10px 12px}
+  .search .suggest{position:absolute;background:var(--card);border:1px solid var(--ring);border-radius:12px;margin-top:4px;overflow:hidden;display:none;z-index:30;max-height:300px;overflow:auto;top:100%;left:0;right:auto}
+  .search .suggest button{display:block;width:100%;text-align:left;padding:10px 12px;border:0;border-bottom:1px solid var(--ring);background:none;color:inherit}
+  .search .suggest button:last-child{border-bottom:0}
 
   main{max-width:1100px;margin:14px auto;padding:0 14px;display:grid;gap:14px}
   .grid{display:grid;gap:14px;grid-template-columns:repeat(12,1fr)}
@@ -55,16 +61,16 @@
   .panel{grid-column:span 12}
   canvas{width:100%;height:120px;background:linear-gradient(180deg,transparent,rgba(255,255,255,.02));border-radius:12px;border:1px solid var(--ring)}
   footer{opacity:.8;text-align:center;padding:18px;color:var(--muted)}
-  .suggest{position:absolute;background:var(--card);border:1px solid var(--ring);border-radius:12px;margin-top:4px;overflow:hidden;display:none;z-index:30;max-height:300px;overflow:auto}
-  .suggest button{display:block;width:100%;text-align:left;padding:10px 12px;border:0;border-bottom:1px solid var(--ring);background:none;color:inherit}
-  .suggest button:last-child{border-bottom:0}
   .hidden{display:none}
   @media (min-width:780px){.current{grid-column:span 7}.panel{grid-column:span 5}}
-     .ssr{display:none}
-    main{display:grid}
 
+  /* Default: show JS UI; hide SSR block */
+  .ssr{display:none}
+  main{display:grid}
 </style>
- <noscript>
+
+<!-- When JS is disabled/blocked, show SSR block and hide main -->
+<noscript>
   <style>
     .ssr{display:block !important;}
     main{display:none !important;}
@@ -73,7 +79,8 @@
 </head>
 <body class="<%= ssr && ssr.forceNoJS ? 'no-js' : '' %>">
 
-   <header>
+  <!-- NAVBAR -->
+  <header>
     <div class="navwrap">
       <div class="wrap top">
         <div class="brand">
@@ -94,17 +101,21 @@
           <a class="tab" href="#hourly">Hourly</a>
           <a class="tab" href="#daily">7-Day</a>
         </div>
-        <div class="search" role="search" aria-label="Search location">
-          <input id="q" type="search" placeholder="Search city, place, or paste lat,lon" autocomplete="off" />
-          <button id="btnSearch" title="Search">Search</button>
-          <button id="btnGeo" title="Use my location">📍</button>
+
+        <!-- SEARCH: real form so it works without JS -->
+        <form class="search" role="search" aria-label="Search location" action="/weather" method="GET" id="searchForm">
+          <input id="q" name="q" type="search" placeholder="Search city, place, or paste lat,lon" autocomplete="off" />
+          <input type="hidden" name="units" id="unitsHidden" value="<%= (ssr && ssr.units) || 'metric' %>"/>
+          <button id="btnSearch" type="submit" title="Search">Search</button>
+          <button id="btnGeo" type="button" title="Use my location">📍</button>
           <div id="suggest" class="suggest" role="listbox" aria-label="Suggestions"></div>
-        </div>
+        </form>
       </div>
     </div>
   </header>
 
-   <section class="ssr">
+  <!-- ===== Server-Side Render (visible with <noscript> or if you choose to render body.no-js) ===== -->
+  <section class="ssr">
     <div class="wrap" style="padding-top:14px">
       <article class="card" aria-live="polite">
         <h3 class="section-title">Now — <%= (ssr && ssr.name) || 'Unknown' %></h3>
@@ -196,18 +207,18 @@
       <h3 class="section-title">7-day forecast</h3>
       <div id="days" class="grid" style="grid-template-columns:repeat(1,1fr);gap:10px"></div>
     </section>
- 
   </main>
 
 <script>
-   window.__SSR__ = <%- JSON.stringify(ssr || {}) %>;
-  window.__SSR_ROUTE__ = "/weather";   
+  /* Expose server data to the client + tell it we’re on the SSR route */
+  window.__SSR__ = <%- JSON.stringify(ssr || {}) %>;
+  window.__SSR_ROUTE__ = "/weather";
 </script>
 
 <script>
   const $=s=>document.querySelector(s);const $$=s=>[...document.querySelectorAll(s)];
   const units=JSON.parse(localStorage.getItem('pokeweather:units')||'{}');
-  let state={lat:null,lon:null,name:null,units:units.units||'metric'};
+  let state={lat:null,lon:null,name:null,units:units.units||'<%= (ssr && ssr.units) || "metric" %>'};
   const btnUnits=$('#btnUnits'); btnUnits.textContent=state.units==='metric'?"°C":"°F";
 
   const weatherText=(c)=>{
@@ -251,6 +262,9 @@
 
   function applyUnits(){
     btnUnits.textContent=state.units==='metric'?"°C":"°F";
+    // Keep SSR search form in sync so non-JS round-trips preserve units
+    const uHidden=document.getElementById('unitsHidden');
+    if(uHidden) uHidden.value = state.units === 'metric' ? 'metric' : 'imperial';
     if(state.lat&&state.lon) loadWeather(state.lat,state.lon,state.name);
     localStorage.setItem('pokeweather:units',JSON.stringify({units:state.units}))
   }
@@ -339,7 +353,12 @@
     ys.forEach((v,i)=>{ctx.beginPath();ctx.arc(pad+i*xstep, ymap(v), 2.5, 0, Math.PI*2);ctx.fill()});
   }
 
-  btnUnits.addEventListener('click',()=>{state.units=state.units==='metric'?'imperial':'metric';applyUnits()});
+  // Keep units in sync for SSR form and client
+  btnUnits.addEventListener('click',()=>{
+    state.units=state.units==='metric'?'imperial':'metric';
+    applyUnits();
+  });
+
   $('#btnTheme').addEventListener('click',()=>{
     const dark=document.documentElement.style.getPropertyValue('--bg')==='#0b0f16';
     if(dark){document.documentElement.style.setProperty('--bg','#fbfbfe');document.documentElement.style.setProperty('--fg','#0b1020');document.documentElement.style.setProperty('--muted','#5b6b87');document.documentElement.style.setProperty('--card','#ffffff');document.documentElement.style.setProperty('--ring','#0b102018');}
@@ -377,6 +396,13 @@
     loadWeather(item.lat,item.lon,item.display_name.split(',').slice(0,2).join(', '));
   }
 
+  // Intercept form submit in JS mode and route smartly.
+  const form = document.getElementById('searchForm');
+  form.addEventListener('submit',(e)=>{
+    e.preventDefault();
+    goSearch();
+  });
+
   $('#btnSearch').addEventListener('click',()=>goSearch());
   $('#q').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();goSearch()}});
 
@@ -384,7 +410,7 @@
     const v=$('#q').value.trim();
     if(!v) return;
 
-    // If user typed "lat,lon", stay fully client-side (as before)
+    // If user typed "lat,lon", stay fully client-side
     const latlon=v.match(/^\s*(-?\d+(?:\.\d+)?)\s*,\s*(-?\d+(?:\.\d+)?)\s*$/);
     if(latlon){
       const lat=+latlon[1], lon=+latlon[2];
@@ -392,7 +418,7 @@
       return;
     }
 
-    // If we’re on the SSR page, round-trip to your /weather route (keeps no-JS users happy, too)
+    // Prefer SSR round-trip when available
     if (window.__SSR_ROUTE__) {
       const units = (state.units==='metric') ? 'metric' : 'imperial';
       const url = new URL(window.__SSR_ROUTE__, location.origin);
@@ -402,45 +428,51 @@
       return;
     }
 
-    // Fallback: pure client search (for the static single-file build)
+    // Fallback: pure client search (for static build)
     searchPlaces(v).then(list=>{
       if(list[0]) selectPlace(list[0]);
       else alert('No results');
     });
   }
 
-
   $('#btnShare').addEventListener('click',async e=>{
     e.preventDefault();
     const url=new URL(location.href);
     if(state.lat&&state.lon){url.searchParams.set('lat',state.lat);url.searchParams.set('lon',state.lon);url.searchParams.set('name',state.name)}
-    try{ if(navigator.share){await navigator.share({title:'PokeWeather',text:`${state.name||'Weather'}: ${$('#currTemp').textContent} ${$('#currDesc').textContent}`,url:url.toString()});}
-         else{await navigator.clipboard.writeText(url.toString());alert('Link copied!')} }catch{}
+    try{
+      if(navigator.share){
+        await navigator.share({title:'PokeWeather',text:`${state.name||'Weather'}: ${$('#currTemp').textContent} ${$('#currDesc').textContent}`,url:url.toString()});
+      }else{
+        await navigator.clipboard.writeText(url.toString());alert('Link copied!')
+      }
+    }catch{}
   });
 
   function debounce(fn,ms){let t;return (...a)=>{clearTimeout(t);t=setTimeout(()=>fn(...a),ms)}}
 
   (function init(){
+    // Sync hidden units field at boot
+    const uHidden=document.getElementById('unitsHidden');
+    if(uHidden) uHidden.value = state.units;
+
     // If server already gave us a place, hydrate immediately so UI & search are “awake”
     if (window.__SSR__ && typeof window.__SSR__.lat === "number" && typeof window.__SSR__.lon === "number") {
       try {
-        // Also seed last cache so offline/opening without params still has context
         localStorage.setItem('pokeweather:last', JSON.stringify({
           when: Date.now(),
-          state: { lat: window.__SSR__.lat, lon: window.__SSR__.lon, name: window.__SSR__.name, units: (JSON.parse(localStorage.getItem('pokeweather:units')||'{}').units || 'metric') },
+          state: { lat: window.__SSR__.lat, lon: window.__SSR__.lon, name: window.__SSR__.name, units: state.units },
           data: { current: window.__SSR__.current || {}, daily: window.__SSR__.daily || {}, hourly: window.__SSR__.hourly || {} }
         }));
       } catch {}
-      // Re-fetch on the client to fully power the JS UI (chart, hourly, etc.)
       loadWeather(window.__SSR__.lat, window.__SSR__.lon, window.__SSR__.name);
       return;
     }
 
-     const sp=new URLSearchParams(location.search);
+    const sp=new URLSearchParams(location.search);
     const lat=sp.get('lat'), lon=sp.get('lon'), name=sp.get('name');
     if(lat&&lon){loadWeather(+lat,+lon,name);return}
     const cached=JSON.parse(localStorage.getItem('pokeweather:last')||'null');
-    if(cached){state.units=cached.state?.units||state.units; btnUnits.textContent=state.units==='metric'?"°C":"°F"; loadWeather(cached.state.lat,cached.state.lon,cached.state.name); return}
+    if(cached){state.units=cached.state?.units||state.units; btnUnits.textContent=state.units==='metric'?"°C":"°F"; if(uHidden) uHidden.value=state.units; loadWeather(cached.state.lat,cached.state.lon,cached.state.name); return}
     if(navigator.geolocation){navigator.geolocation.getCurrentPosition(
       p=>{reverseName(p.coords.latitude,p.coords.longitude).then(n=>loadWeather(p.coords.latitude,p.coords.longitude,n))},
       ()=>{}

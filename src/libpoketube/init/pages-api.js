@@ -104,6 +104,26 @@ module.exports = function (app, config, renderTemplate) {
       res.send(body);
     } catch {}
   });
+  
+app.get("/api/weather", async (req, res) => {
+  try {
+     const url = new URL("https://api.open-meteo.com/v1/forecast");
+    for (const [key, value] of Object.entries(req.query)) {
+      url.searchParams.set(key, value);
+    }
+
+    const response = await fetch(url.toString());
+    if (!response.ok) {
+      return res.status(response.status).json({ error: "Upstream error" });
+    }
+
+    const data = await response.json();
+    res.json(data);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Proxy error" });
+  }
+});
 
   app.get("/api/getEngagementData", async (req, res) => {
     const { fetch } = await import("undici");

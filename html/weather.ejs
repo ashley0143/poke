@@ -381,13 +381,36 @@
 
   $('#btnSearch').addEventListener('click',()=>goSearch());
   $('#q').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();goSearch()}});
+
   function goSearch(){
     const v=$('#q').value.trim();
     if(!v) return;
+
+    // If user typed "lat,lon", stay fully client-side (as before)
     const latlon=v.match(/^\s*(-?\d+(?:\.\d+)?)\s*,\s*(-?\d+(?:\.\d+)?)\s*$/);
-    if(latlon){const lat=+latlon[1], lon=+latlon[2]; reverseName(lat,lon).then(n=>loadWeather(lat,lon,n)); return}
-    searchPlaces(v).then(list=>{if(list[0]) selectPlace(list[0]); else alert('No results')})
+    if(latlon){
+      const lat=+latlon[1], lon=+latlon[2];
+      reverseName(lat,lon).then(n=>loadWeather(lat,lon,n));
+      return;
+    }
+
+    // If we’re on the SSR page, round-trip to your /weather route (keeps no-JS users happy, too)
+    if (window.__SSR_ROUTE__) {
+      const units = (state.units==='metric') ? 'metric' : 'imperial';
+      const url = new URL(window.__SSR_ROUTE__, location.origin);
+      url.searchParams.set('q', v);
+      url.searchParams.set('units', units);
+      location.href = url.toString();
+      return;
+    }
+
+    // Fallback: pure client search (for the static single-file build)
+    searchPlaces(v).then(list=>{
+      if(list[0]) selectPlace(list[0]);
+      else alert('No results');
+    });
   }
+
 
   $('#btnShare').addEventListener('click',async e=>{
     e.preventDefault();
@@ -398,14 +421,32 @@
   });
 
   function debounce(fn,ms){let t;return (...a)=>{clearTimeout(t);t=setTimeout(()=>fn(...a),ms)}}
- 
+
   (function init(){
-    const sp=new URLSearchParams(location.search);
+    // If server already gave us a place, hydrate immediately so UI & search are “awake”
+    if (window.__SSR__ && typeof window.__SSR__.lat === "number" && typeof window.__SSR__.lon === "number") {
+      try {
+        // Also seed last cache so offline/opening without params still has context
+        localStorage.setItem('pokeweather:last', JSON.stringify({
+          when: Date.now(),
+          state: { lat: window.__SSR__.lat, lon: window.__SSR__.lon, name: window.__SSR__.name, units: (JSON.parse(localStorage.getItem('pokeweather:units')||'{}').units || 'metric') },
+          data: { current: window.__SSR__.current || {}, daily: window.__SSR__.daily || {}, hourly: window.__SSR__.hourly || {} }
+        }));
+      } catch {}
+      // Re-fetch on the client to fully power the JS UI (chart, hourly, etc.)
+      loadWeather(window.__SSR__.lat, window.__SSR__.lon, window.__SSR__.name);
+      return;
+    }
+
+     const sp=new URLSearchParams(location.search);
     const lat=sp.get('lat'), lon=sp.get('lon'), name=sp.get('name');
     if(lat&&lon){loadWeather(+lat,+lon,name);return}
     const cached=JSON.parse(localStorage.getItem('pokeweather:last')||'null');
     if(cached){state.units=cached.state?.units||state.units; btnUnits.textContent=state.units==='metric'?"°C":"°F"; loadWeather(cached.state.lat,cached.state.lon,cached.state.name); return}
-    if(navigator.geolocation){navigator.geolocation.getCurrentPosition(p=>{reverseName(p.coords.latitude,p.coords.longitude).then(n=>loadWeather(p.coords.latitude,p.coords.longitude,n))},()=>{})}
+    if(navigator.geolocation){navigator.geolocation.getCurrentPosition(
+      p=>{reverseName(p.coords.latitude,p.coords.longitude).then(n=>loadWeather(p.coords.latitude,p.coords.longitude,n))},
+      ()=>{}
+    )}
   })();
 </script>
 </body>

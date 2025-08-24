@@ -60,13 +60,14 @@
   .suggest button:last-child{border-bottom:0}
   .hidden{display:none}
   @media (min-width:780px){.current{grid-column:span 7}.panel{grid-column:span 5}}
-
-  /* SSR (no-JS) block */
-  .ssr{display:none}
-  .no-js .ssr{display:block}
-  .no-js main{display:none}
+ 
 </style>
-<% /* Add a no-JS class if you detect on server (e.g., via UA or query). Default leaves it blank. */ %>
+ <noscript>
+  <style>
+    .ssr{display:block !important;}
+    main{display:none !important;}
+  </style>
+</noscript>
 </head>
 <body class="<%= ssr && ssr.forceNoJS ? 'no-js' : '' %>">
 

@@ -400,8 +400,5 @@ module.exports = function (app, config, renderTemplate) {
             });
         
   });
-
-  app.get("/music", async function (req, res) {
-     
-  });
+ 
 };

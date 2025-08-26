@@ -227,6 +227,115 @@ document.addEventListener("DOMContentLoaded", () => {
                 clearSyncLoop();
             }
         });
+
+        // ** VIDEO.JS AUTO-RETRY FOR NETWORK / FORMAT ERRORS **
+        // Retries on common transient failures:
+        //  - "A network error caused the media download to fail part-way."
+        //  - "The media could not be loaded, either because the server or network failed or because the format is not supported."
+        //  - HTMLMediaElement error codes 2/3/4 (network/decode/src not supported)
+        const VJS_RETRY_MAX = 3;
+        const VJS_RETRY_BASE_DELAY = 1000; // ms (exponential backoff)
+        video._retryCount = 0;
+
+        function currentVideoSrc() {
+            const s = video.src();
+            return Array.isArray(s) ? (s[0] && s[0].src) : s;
+        }
+
+        function shouldRetryForError(err) {
+            if (!err) return false;
+            // HTML5 codes: 1=aborted, 2=network, 3=decode, 4=src not supported
+            if (err.code === 2 || err.code === 3 || err.code === 4) return true;
+            const msg = (err.message || '').toLowerCase();
+            return (
+                msg.includes('network error') ||
+                msg.includes('media download') ||
+                msg.includes('could not be loaded') ||
+                msg.includes('server or network failed') ||
+                msg.includes('not supported')
+            );
+        }
+
+        function scheduleVideoRetry(reason) {
+            if (video._retryCount >= VJS_RETRY_MAX) {
+                console.error(`[vjs-retry] giving up after ${video._retryCount} attempts (${reason}).`);
+                return;
+            }
+            video._retryCount += 1;
+            const backoff = VJS_RETRY_BASE_DELAY * Math.pow(2, video._retryCount - 1);
+            const keepTime = video.currentTime();
+
+            console.warn(`[vjs-retry] attempt ${video._retryCount}/${VJS_RETRY_MAX} in ${backoff}ms (${reason})`);
+
+            // pause & clear sync while we refetch
+            video.pause();
+            audio.pause();
+            clearSyncLoop();
+
+            setTimeout(() => {
+                const srcUrl = currentVideoSrc() || videoSrc;
+                // Re-apply the same source to force a new fetch
+                video.src(srcUrl);
+                // Once it can play again, restore position and resume sync
+                video.one('loadeddata', () => {
+                    try {
+                        video.currentTime(keepTime);
+                        audio.currentTime = keepTime;
+                    } catch {}
+                    // Attempt to play both in lockstep
+                    video.play().catch(() => {});
+                    if (audioReady) audio.play().catch(() => {});
+                    if (!syncInterval) startSyncLoop();
+                });
+
+                // Explicitly call load on the underlying element for some browsers
+                try { videoEl.load && videoEl.load(); } catch {}
+            }, backoff);
+        }
+
+        // main error hook
+        video.on('error', () => {
+            const err = video.error();
+            if (shouldRetryForError(err)) {
+                scheduleVideoRetry('error');
+            } else {
+                console.error('[vjs-retry] non-retryable error:', err);
+            }
+        });
+
+        // treat prolonged stalls/aborts as retryable (often transient network)
+        video.on('stalled', () => scheduleVideoRetry('stalled'));
+        video.on('abort',   () => scheduleVideoRetry('abort'));
+
+        // watchdog: if time isn’t advancing while supposed to play, retry after grace period
+        let lastWatch = { t: 0, when: 0, active: false };
+        const WATCH_GRACE_MS = 8000;
+
+        function startWatchdog() {
+            lastWatch.active = true;
+            lastWatch.t = video.currentTime();
+            lastWatch.when = Date.now();
+        }
+        function stopWatchdog() {
+            lastWatch.active = false;
+        }
+
+        video.on('playing', startWatchdog);
+        video.on('pause', stopWatchdog);
+        video.on('waiting', startWatchdog);
+        video.on('timeupdate', () => {
+            if (!lastWatch.active) return;
+            const nowT = video.currentTime();
+            if (nowT !== lastWatch.t) {
+                lastWatch.t = nowT;
+                lastWatch.when = Date.now();
+                return;
+            }
+            if (Date.now() - lastWatch.when > WATCH_GRACE_MS && !video.paused()) {
+                scheduleVideoRetry('watchdog');
+                stopWatchdog();
+            }
+        });
     }
 });
 

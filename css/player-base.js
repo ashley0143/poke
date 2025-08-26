@@ -1,7 +1,7 @@
 // in the beginning.... god made mrrprpmnaynayaynaynayanyuwuuuwmauwnwanwaumawp :p
 var _yt_player = videojs;
-document.addEventListener("DOMContentLoaded", () => {
-    // video.js 8 init - source can be seen in https://poketube.fun/static/vjs.min.js or the vjs.min.js file 
+ document.addEventListener("DOMContentLoaded", () => {
+    // video.js 8 init - source can be seen in https://poketube.fun/static/vjs.min.js or the vjs.min.js file
     const video = videojs('video', {
         controls: true,
         autoplay: false,
@@ -9,27 +9,54 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     // todo : remove this code lol
-    const qua = new URLSearchParams(window.location.search).get("quality") || "";
-    const vidKey = new URLSearchParams(window.location.search).get('v');
-    localStorage.setItem(`progress-${vidKey}`, 0);
+    const qs = new URLSearchParams(window.location.search);
+    const qua = qs.get("quality") || "";
+    const vidKey = qs.get('v');
+    try { localStorage.setItem(`progress-${vidKey}`, 0); } catch {}
 
     // raw media elements
     const videoEl = document.getElementById('video');
     const audio = document.getElementById('aud');
 
-    const audioSrc = audio.getAttribute('src');
-    const vidSrcObj = video.src();
-    const videoSrc = Array.isArray(vidSrcObj) ? (vidSrcObj[0] && vidSrcObj[0].src) : vidSrcObj;
+    // resolve initial sources robustly (works whether <audio src> or <source> children are used)
+    const pickAudioSrc = () => {
+        const s = audio?.getAttribute?.('src');
+        if (s) return s;
+        const child = audio?.querySelector?.('source');
+        if (child?.getAttribute?.('src')) return child.getAttribute('src');
+        if (audio?.currentSrc) return audio.currentSrc;
+        return null;
+    };
+    let audioSrc = pickAudioSrc();
 
+    const srcObj = video.src();
+    const videoSrc = Array.isArray(srcObj) ? (srcObj[0] && srcObj[0].src) : srcObj;
+    const videoType = Array.isArray(srcObj) ? (srcObj[0] && srcObj[0].type) : undefined;
+
+    // readiness + sync state
     let audioReady = false, videoReady = false;
     let syncInterval = null;
 
-    // pauses and syncs the video when the seek is finished :3
+    // thresholds / constants
+    const BIG_DRIFT = 0.5;
+    const MICRO_DRIFT = 0.05;
+    const SYNC_INTERVAL_MS = 250;
+
+    // utility: safe currentTime set (avoid DOMExceptions before ready)
+    function safeSetCT(media, t) {
+        try {
+            if (!isFinite(t) || t < 0) return;
+            // readyState >= 1 (HAVE_METADATA) generally safe, but clamp anyway
+            media.currentTime = t;
+        } catch {}
+    }
+
+    // clear sync ticker
     function clearSyncLoop() {
         if (syncInterval) {
             clearInterval(syncInterval);
             syncInterval = null;
-            audio.playbackRate = 1;
+            try { audio.playbackRate = 1; } catch {}
         }
     }
 
@@ -37,91 +64,120 @@ document.addEventListener("DOMContentLoaded", () => {
     function startSyncLoop() {
         clearSyncLoop();
         syncInterval = setInterval(() => {
-            const vt = video.currentTime();
-            const at = audio.currentTime;
+            const vt = Number(video.currentTime());
+            const at = Number(audio.currentTime);
+            if (!isFinite(vt) || !isFinite(at)) return;
+
             const delta = vt - at;
 
-            // large drift → jump
-            if (Math.abs(delta) > 0.5) {
-                audio.currentTime = vt;
-                audio.playbackRate = 1;
+            // large drift → snap
+            if (Math.abs(delta) > BIG_DRIFT) {
+                safeSetCT(audio, vt);
+                try { audio.playbackRate = 1; } catch {}
+                return;
             }
-            // micro drift → adjust rate
-            else if (Math.abs(delta) > 0.05) {
-                audio.playbackRate = 1 + delta * 0.1;
+
+            // micro drift → gentle nudge by rate
+            if (Math.abs(delta) > MICRO_DRIFT) {
+                const targetRate = 1 + (delta * 0.12); // slightly stronger nudge
+                try {
+                    // cap to avoid audible artifacts
+                    audio.playbackRate = Math.max(0.85, Math.min(1.15, targetRate));
+                } catch {}
             } else {
-                audio.playbackRate = 1;
+                try { audio.playbackRate = 1; } catch {}
             }
-        }, 300);
+        }, SYNC_INTERVAL_MS);
     }
 
     // align start when both are ready
     function tryStart() {
         if (audioReady && videoReady) {
-            const t = video.currentTime();
-            if (Math.abs(audio.currentTime - t) > 0.1) {
-                audio.currentTime = t;
+            const t = Number(video.currentTime());
+            if (isFinite(t) && Math.abs(Number(audio.currentTime) - t) > 0.1) {
+                safeSetCT(audio, t);
             }
-            video.play();
-            audio.play();
+            // play both, ignore promise rejections to remain invisible
+            video.play()?.catch(()=>{});
+            audio.play()?.catch(()=>{});
             startSyncLoop();
             setupMediaSession();
         }
     }
 
-    // simple one-time retry on error
-    function attachRetry(elm, src, markReady) {
-        elm.addEventListener('loadeddata', () => {
+    // generic one-shot retry helper for DOM media element
+    function attachRetry(elm, resolveSrc, markReady) {
+        const src = resolveSrc?.(); // defer resolving to latest url if possible
+
+        // mark readiness
+        const onLoaded = () => {
+            try { elm._didRetry = false; } catch {}
             markReady();
             tryStart();
-        }, { once: true });
+        };
+        elm.addEventListener('loadeddata', onLoaded, { once: true });
+        elm.addEventListener('loadedmetadata', onLoaded, { once: true });
 
+        // one quiet retry on error
         elm.addEventListener('error', () => {
             // only retry once, and only if we have a valid src
-            if (!elm._didRetry && src) {
+            const retryURL = resolveSrc?.() || src;
+            if (!elm._didRetry && retryURL) {
                 elm._didRetry = true;
-                elm.src = src;
-                elm.load();
+                try {
+                    // If <source> children were used, switch to a direct src
+                    elm.removeAttribute('src');
+                    // clear existing <source> nodes to avoid ambiguous state
+                    [...elm.querySelectorAll('source')].forEach(n => n.remove());
+                    elm.src = retryURL;
+                    elm.load();
+                } catch {}
             } else {
-                console.error(`${elm.tagName} failed to load.`);
+                // swallow to avoid console spam/UI noise
             }
         }, { once: true });
     }
 
-    // le volume :3
+    // media session / hardware keys
     function setupMediaSession() {
         if ('mediaSession' in navigator) {
-            navigator.mediaSession.metadata = new MediaMetadata({
-                title: document.title || 'Video',
-                artist: '',
-                album: '',
-                artwork: []
-            });
+            try {
+                navigator.mediaSession.metadata = new MediaMetadata({
+                    title: document.title || 'Video',
+                    artist: '',
+                    album: '',
+                    artwork: []
+                });
+            } catch {}
 
             navigator.mediaSession.setActionHandler('play', () => {
-                video.play(); audio.play();
+                video.play()?.catch(()=>{}); audio.play()?.catch(()=>{});
             });
             navigator.mediaSession.setActionHandler('pause', () => {
                 video.pause(); audio.pause();
             });
             navigator.mediaSession.setActionHandler('seekbackward', ({ seekOffset }) => {
                 const skip = seekOffset || 10;
-                video.currentTime(video.currentTime() - skip);
-                audio.currentTime -= skip;
+                const to = Math.max(0, Number(video.currentTime()) - skip);
+                video.currentTime(to);
+                safeSetCT(audio, to);
             });
             navigator.mediaSession.setActionHandler('seekforward', ({ seekOffset }) => {
                 const skip = seekOffset || 10;
-                video.currentTime(video.currentTime() + skip);
-                audio.currentTime += skip;
+                const to = Number(video.currentTime()) + skip;
+                video.currentTime(to);
+                safeSetCT(audio, to);
             });
             navigator.mediaSession.setActionHandler('seekto', ({ seekTime, fastSeek }) => {
-                if (fastSeek && 'fastSeek' in audio) audio.fastSeek(seekTime);
-                else audio.currentTime = seekTime;
+                if (!isFinite(seekTime)) return;
+                if (fastSeek && 'fastSeek' in audio) try { audio.fastSeek(seekTime); } catch { safeSetCT(audio, seekTime); }
+                else safeSetCT(audio, seekTime);
                 video.currentTime(seekTime);
             });
             navigator.mediaSession.setActionHandler('stop', () => {
                 video.pause(); audio.pause();
-                video.currentTime(0); audio.currentTime = 0;
+                try { video.currentTime(0); } catch {}
+                try { audio.currentTime = 0; } catch {}
                 clearSyncLoop();
             });
         }
@@ -132,40 +188,55 @@ document.addEventListener("DOMContentLoaded", () => {
         switch (e.code) {
             case 'AudioPlay':
             case 'MediaPlayPause':
-                if (video.paused()) { video.play(); audio.play(); }
-                else            { video.pause(); audio.pause(); }
+                if (video.paused()) { video.play()?.catch(()=>{}); audio.play()?.catch(()=>{}); }
+                else { video.pause(); audio.pause(); }
                 break;
-
             case 'AudioPause':
                 video.pause(); audio.pause();
                 break;
-
             case 'AudioNext':
-            case 'MediaTrackNext':
-                const tFwd = video.currentTime() + 10;
-                video.currentTime(tFwd); audio.currentTime += 10;
+            case 'MediaTrackNext': {
+                const tFwd = Number(video.currentTime()) + 10;
+                video.currentTime(tFwd); safeSetCT(audio, tFwd);
                 break;
-
+            }
             case 'AudioPrevious':
-            case 'MediaTrackPrevious':
-                const tBwd = video.currentTime() - 10;
-                video.currentTime(tBwd); audio.currentTime -= 10;
+            case 'MediaTrackPrevious': {
+                const tBwd = Math.max(0, Number(video.currentTime()) - 10);
+                video.currentTime(tBwd); safeSetCT(audio, tBwd);
                 break;
+            }
         }
     });
 
+    // === PRIMARY SYNC/RETRY LOGIC (skips when qua=medium) ===
     if (qua !== "medium") {
         // attach retry & ready markers to the real elements
-        attachRetry(audio,    audioSrc, () => { audioReady = true; });
-        attachRetry(videoEl,  videoSrc, () => { videoReady = true; });
+        attachRetry(audio, pickAudioSrc, () => { audioReady = true; });
+        attachRetry(videoEl, () => {
+            // prefer current player src if any; fallback to initial
+            const s = video.src();
+            return Array.isArray(s) ? (s[0] && s[0].src) : (s || videoSrc);
+        }, () => { videoReady = true; });
+
+        // keep audio volume mirrored to player volume both ways
+        const clamp = v => Math.max(0, Math.min(1, Number(v)));
+        video.on('volumechange', () => { try { audio.volume = clamp(video.volume()); } catch {} });
+        audio.addEventListener('volumechange', () => { try { video.volume(clamp(audio.volume)); } catch {} });
+
+        // rate sync (rare, but keep consistent)
+        video.on('ratechange', () => {
+            try { audio.playbackRate = video.playbackRate(); } catch {}
+        });
 
         // Sync when playback starts
         video.on('play', () => {
             if (!syncInterval) startSyncLoop();
-            if (Math.abs(video.currentTime() - audio.currentTime) > 0.3) {
-                audio.currentTime = video.currentTime();
+            const vt = Number(video.currentTime());
+            if (Math.abs(vt - Number(audio.currentTime)) > 0.3) {
+                safeSetCT(audio, vt);
             }
-            if (audioReady) audio.play();
+            if (audioReady) audio.play()?.catch(()=>{});
         });
 
         video.on('pause', () => {
@@ -181,45 +252,40 @@ document.addEventListener("DOMContentLoaded", () => {
 
         // resume audio when video resumes
         video.on('playing', () => {
-            if (audioReady) audio.play();
+            if (audioReady) audio.play()?.catch(()=>{});
             if (!syncInterval) startSyncLoop();
         });
 
-        // pauses and syncs on seek
+        // seeks: keep tight alignment
         video.on('seeking', () => {
             audio.pause();
             clearSyncLoop();
-            if (Math.abs(video.currentTime() - audio.currentTime) > 0.3) {
-                audio.currentTime = video.currentTime();
-            }
+            const vt = Number(video.currentTime());
+            if (Math.abs(vt - Number(audio.currentTime)) > 0.1) safeSetCT(audio, vt);
         });
 
         video.on('seeked', () => {
-            if (audioReady) audio.play();
+            const vt = Number(video.currentTime());
+            if (Math.abs(vt - Number(audio.currentTime)) > 0.05) safeSetCT(audio, vt);
+            if (audioReady) audio.play()?.catch(()=>{});
             if (!syncInterval) startSyncLoop();
         });
 
-        // volume sync
-        video.on('volumechange', () => {
-            audio.volume = video.volume();
-        });
-        audio.addEventListener('volumechange', () => {
-            video.volume(audio.volume);
-        });
-
-        // Detects when video or audio finishes buffering
+        // Detects when video or audio finishes buffering; nudge sync
         video.on('canplaythrough', () => {
-            if (Math.abs(video.currentTime() - audio.currentTime) > 0.3) {
-                audio.currentTime = video.currentTime();
-            }
+            const vt = Number(video.currentTime());
+            if (Math.abs(vt - Number(audio.currentTime)) > 0.1) safeSetCT(audio, vt);
         });
         audio.addEventListener('canplaythrough', () => {
-            if (Math.abs(video.currentTime() - audio.currentTime) > 0.3) {
-                audio.currentTime = video.currentTime();
-            }
+            const vt = Number(video.currentTime());
+            if (Math.abs(vt - Number(audio.currentTime)) > 0.1) safeSetCT(audio, vt);
         });
 
-        // pause if it becomes full screen :3
+        // stop everything on media end
+        video.on('ended', () => { try { audio.pause(); } catch {}; clearSyncLoop(); });
+        audio.addEventListener('ended', () => { try { video.pause(); } catch {}; clearSyncLoop(); });
+
+        // pause when exiting full screen :3 (your existing behavior)
         document.addEventListener('fullscreenchange', () => {
             if (!document.fullscreenElement) {
                 video.pause();
@@ -228,7 +294,7 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         });
 
-        // ** VIDEO.JS AUTO-RETRY (30s GRACE + ONLY WHEN REALLY BROKEN) **
+        // === VIDEO.JS AUTO-RETRY (30s GRACE + ONLY WHEN REALLY BROKEN) ===
         // We completely ignore all tech errors for the first 30s after the stream actually starts (play or loadeddata).
         // After 30s, retries stay invisible and only trigger if playback is genuinely stuck (no advancement, bad readyState, or real net/decode error).
         const VJS_RETRY_STEPS_MS = [250, 400, 650, 900, 1200, 1600, 2000, 2600]; // tight, subtle backoff
@@ -253,11 +319,13 @@ document.addEventListener("DOMContentLoaded", () => {
         // treat as *healthy* if we clearly have playable media or are advancing time
         function isPlaybackHealthy() {
             try {
-                if (!video.paused() && video.currentTime() > 0) return true;
+                if (!video.paused() && Number(video.currentTime()) > 0) return true;
                 if (typeof video.readyState === 'function') {
-                    if (video.readyState() >= 2 && video.duration() > 0) return true;
+                    if (video.readyState() >= 2 && isFinite(video.duration()) && video.duration() > 0) return true;
                 }
-                if (!isNaN(video.duration()) && video.duration() > 0 && video.currentTime() > 0) return true;
+                // also check tech el if available
+                const el = videoEl;
+                if (el && typeof el.readyState === 'number' && el.readyState >= 2) return true;
             } catch {}
             return false;
         }
@@ -285,43 +353,57 @@ document.addEventListener("DOMContentLoaded", () => {
                 vjsRetryCount = 0;
                 return;
             }
+            if (navigator && 'onLine' in navigator && !navigator.onLine) {
+                // wait until we come back online, then retry once
+                const onlineOnce = () => {
+                    window.removeEventListener('online', onlineOnce);
+                    scheduleVideoRetry('back-online');
+                };
+                window.addEventListener('online', onlineOnce, { once: true });
+                return;
+            }
 
             const step = Math.min(vjsRetryCount, VJS_RETRY_STEPS_MS.length - 1);
             const delay = VJS_RETRY_STEPS_MS[step];
             vjsRetryCount++;
 
-            const keepTime = video.currentTime();
+            const keepTime = Number(video.currentTime());
 
             // pause & clear sync while we refetch (quiet, no UI flicker)
-            video.pause();
-            audio.pause();
+            try { video.pause(); } catch {}
+            try { audio.pause(); } catch {}
             clearSyncLoop();
 
             setTimeout(() => {
                 const srcUrl  = currentVideoSrc() || videoSrc;
-                const srcType = currentVideoType();
+                const type    = currentVideoType() || videoType;
 
-                if (srcType) video.src({ src: srcUrl, type: srcType });
-                else         video.src(srcUrl);
+                try {
+                    if (type) video.src({ src: srcUrl, type });
+                    else      video.src(srcUrl);
+                } catch {}
+
+                // force underlying tech to refresh if available
+                try { videoEl.load && videoEl.load(); } catch {}
 
                 video.one('loadeddata', () => {
                     try {
-                        video.currentTime(keepTime);
-                        audio.currentTime = keepTime;
+                        if (isFinite(keepTime)) {
+                            video.currentTime(keepTime);
+                            safeSetCT(audio, keepTime);
+                        }
                     } catch {}
-                    video.play().catch(() => {});
-                    if (audioReady) audio.play().catch(() => {});
+                    video.play()?.catch(()=>{});
+                    if (audioReady) audio.play()?.catch(()=>{});
                     if (!syncInterval) startSyncLoop();
                 });
-
-                try { videoEl.load && videoEl.load(); } catch {}
             }, delay);
         }
 
         // watchdog: only active after grace; if time does not advance while “playing”, do a fast retry
         function startWatchdog() {
             watch.active = true;
-            watch.t  = video.currentTime();
+            watch.t  = Number(video.currentTime());
             watch.at = Date.now();
         }
         function stopWatchdog() {
@@ -333,13 +415,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
         video.on('timeupdate', () => {
             if (!allowRetries || !watch.active) return;
-            const ct = video.currentTime();
+            const ct = Number(video.currentTime());
             if (ct !== watch.t) {
                 watch.t = ct;
                 watch.at = Date.now();
                 return;
             }
-            if (Date.now() - watch.at > WATCH_GRACE_MS && !video.paused()) {
+            if ((Date.now() - watch.at) > WATCH_GRACE_MS && !video.paused()) {
                 scheduleVideoRetry('watchdog');
                 stopWatchdog();
             }
@@ -348,7 +430,7 @@ document.addEventListener("DOMContentLoaded", () => {
         // error gating: ignore everything until grace ends; after that, only retry if truly broken
         function browserThinksPlayable() {
             try {
-                const type = currentVideoType();
+                const type = currentVideoType() || videoType;
                 if (type && videoEl && typeof videoEl.canPlayType === 'function') {
                     const res = videoEl.canPlayType(type);
                     return !!(res && res !== 'no');
@@ -359,8 +441,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
         function shouldRetryForError(err) {
             if (!allowRetries) return false;      // never react during grace window
-            if (!err) return false;
             if (isPlaybackHealthy()) return false;
+            if (!err) return true; // sometimes empty error objects are emitted for real stalls
 
             // HTML5 codes: 1=aborted, 2=network, 3=decode, 4=src not supported (noisy)
             if (err.code === 2 || err.code === 3) return true;
@@ -371,11 +453,13 @@ document.addEventListener("DOMContentLoaded", () => {
                 return false; // real "not supported" → do not loop
             }
 
-            const msg = (err.message || '').toLowerCase();
+            const msg = String(err.message || '').toLowerCase();
             if (
                 msg.includes('network error') ||
                 msg.includes('media download') ||
-                msg.includes('server or network failed')
+                msg.includes('server or network failed') ||
+                msg.includes('demuxer') ||
+                msg.includes('decode')
             ) return true;
 
             return false;
@@ -392,20 +476,96 @@ document.addEventListener("DOMContentLoaded", () => {
         // treat transient stalls/aborts as retryable, but only after grace and only if not healthy
         video.on('stalled', () => { if (allowRetries && !isPlaybackHealthy()) scheduleVideoRetry('stalled'); });
         video.on('abort',   () => { if (allowRetries && !isPlaybackHealthy()) scheduleVideoRetry('abort'); });
+        video.on('suspend', () => { if (allowRetries && !isPlaybackHealthy()) scheduleVideoRetry('suspend'); });
+        video.on('emptied', () => { if (allowRetries && !isPlaybackHealthy()) scheduleVideoRetry('emptied'); });
 
         // if we truly can play, reset counters; also cancel grace if we’re definitely healthy early
         function markHealthy() {
             vjsRetryCount = 0;
-            if (!allowRetries && isPlaybackHealthy() && graceTimerId) {
-                // we’re clearly fine; still let grace finish naturally, but nothing to do
-            }
+            // no explicit cancel of grace; just a no-op once healthy
         }
         video.on('canplay',     markHealthy);
         video.on('playing',     markHealthy);
         video.on('loadeddata',  markHealthy);
+
+        // === AUDIO WATCHDOG (quiet, invisible) ===
+        // If audio gets stuck (e.g., CORS hiccup / network) while video advances,
+        // reload audio source silently and resync.
+        let audioWatch = { t: 0, at: 0, playing: false };
+        const AUDIO_WATCH_MS = 2500;
+        const AUDIO_RETRY_STEPS_MS = [200, 350, 500, 700, 900, 1200];
+        let audioRetryCount = 0;
+
+        function audioStartWatch() {
+            audioWatch.t = Number(audio.currentTime) || 0;
+            audioWatch.at = Date.now();
+            audioWatch.playing = true;
+        }
+        function audioStopWatch() {
+            audioWatch.playing = false;
+        }
+
+        const audioWatchTicker = setInterval(() => {
+            if (!allowRetries || !audioWatch.playing) return;
+            const at = Number(audio.currentTime) || 0;
+            if (at !== audioWatch.t) {
+                audioWatch.t = at;
+                audioWatch.at = Date.now();
+                return;
+            }
+            // not advancing while video is playing → consider retry
+            if (!video.paused() && (Date.now() - audioWatch.at) > AUDIO_WATCH_MS) {
+                // backoff
+                const step = Math.min(audioRetryCount, AUDIO_RETRY_STEPS_MS.length - 1);
+                const delay = AUDIO_RETRY_STEPS_MS[step];
+                audioRetryCount++;
+
+                const keep = Number(video.currentTime()) || at;
+
+                // pause quietly
+                try { audio.pause(); } catch {}
+                try { clearSyncLoop(); } catch {}
+
+                setTimeout(() => {
+                    // refresh audio src (prefer currentSrc if available, else original)
+                    audioSrc = pickAudioSrc() || audioSrc;
+                    try {
+                        audio.removeAttribute('src');
+                        [...audio.querySelectorAll('source')].forEach(n => n.remove());
+                        if (audioSrc) audio.src = audioSrc;
+                        audio.load();
+                    } catch {}
+
+                    audio.addEventListener('loadeddata', function relinkOnce() {
+                        audio.removeEventListener('loadeddata', relinkOnce);
+                        try {
+                            if (isFinite(keep)) safeSetCT(audio, keep);
+                            audio.play()?.catch(()=>{});
+                            if (!syncInterval) startSyncLoop();
+                            audioRetryCount = 0;
+                            audioStartWatch();
+                        } catch {}
+                    }, { once: true });
+                }, delay);
+            }
+        }, 400);
+
+        // keep audio watchdog aligned with video state
+        video.on('playing', audioStartWatch);
+        video.on('pause',   audioStopWatch);
+        video.on('waiting', audioStartWatch);
+        audio.addEventListener('playing', audioStartWatch);
+        audio.addEventListener('pause',   audioStopWatch);
+
+        // clean up on unload (avoid stray timers)
+        window.addEventListener('beforeunload', () => {
+            clearSyncLoop();
+            try { clearInterval(audioWatchTicker); } catch {}
+            try { clearTimeout(graceTimerId); } catch {}
+        });
     }
 });
-
+ 
 // hai!! if ur asking why are they here - its for smth in the future!!!!!!
 
 const FORMATS = {

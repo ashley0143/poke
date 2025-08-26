@@ -732,29 +732,34 @@ function validatePlayerObject(player) {
 
 const extractedData = extractPlayerData(base_player);
 const initializedPlayer = initializePlayer(extractedData);
+ 
+
+
+
+
+
 const saa = document.createElement('style');
 saa.innerHTML = `
 .vjs-play-progress {
-  background-image: linear-gradient(to right, 
-    #ff0045,    
-    #ff0e55,   
-    #ff1d79  
-  );
+  background-image: linear-gradient(to right, #ff0045, #ff0e55, #ff1d79);
 }
 
 .vjs-control-bar {
   border-radius: 16px;
-  background-color: #0007 !important;
-  backdrop-filter: blur(10px);
+  background: linear-gradient(180deg, rgba(0,0,0,0.35), rgba(0,0,0,0.55)) !important;
+  -webkit-backdrop-filter: blur(16px) saturate(160%);
+  backdrop-filter: blur(16px) saturate(160%);
+  border: 1px solid rgba(255,255,255,0.12);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.06);
   display: flex !important;
   align-items: flex-end !important;
   gap: 12px;
   padding: 10px 14px;
 }
 
-.vjs-remaining-time, 
+.vjs-remaining-time,
 .vjs-fullscreen-control {
-  background-color: transparent !important;   
+  background-color: transparent !important;
 }
 
 .vjs-control-bar .vjs-button,
@@ -769,20 +774,22 @@ saa.innerHTML = `
   height: 38px;
   min-width: 38px;
   border-radius: 50%;
-  background: rgba(255,255,255,0.08);
-  backdrop-filter: blur(6px);
-  box-shadow: 0 4px 16px rgba(0,0,0,0.25), inset 0 0 0 1px rgba(255,255,255,0.12);
+  background: linear-gradient(180deg, rgba(255,255,255,0.18), rgba(255,255,255,0.08));
+  -webkit-backdrop-filter: blur(12px) saturate(160%);
+  backdrop-filter: blur(12px) saturate(160%);
+  border: 1px solid rgba(255,255,255,0.18);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.35), inset 0 0 0 1px rgba(255,255,255,0.10);
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  margin: 2px 6px 0 6px;
+  margin: 0 6px 2px 6px;
   transition: transform .12s ease, box-shadow .2s ease, background .2s ease;
   vertical-align: bottom;
 }
 
 .vjs-control-bar .vjs-button:hover {
-  background: rgba(255,255,255,0.14);
-  box-shadow: 0 6px 20px rgba(0,0,0,0.35), inset 0 0 0 1px rgba(255,255,255,0.18);
+  background: linear-gradient(180deg, rgba(255,255,255,0.24), rgba(255,255,255,0.12));
+  box-shadow: 0 10px 28px rgba(0,0,0,0.4), inset 0 0 0 1px rgba(255,255,255,0.16);
   transform: translateY(-1px);
 }
 
@@ -803,7 +810,7 @@ saa.innerHTML = `
 .vjs-progress-control {
   flex: 1 1 auto;
   display: flex !important;
-  align-items: center !important;
+  align-items: flex-end !important;
   margin: 0 6px;
   padding-bottom: 2px;
 }
@@ -811,9 +818,13 @@ saa.innerHTML = `
 .vjs-progress-control .vjs-progress-holder {
   height: 8px !important;
   border-radius: 999px !important;
-  background: rgba(255,255,255,0.08) !important;
-  backdrop-filter: blur(6px);
-  box-shadow: inset 0 0 0 1px rgba(255,255,255,0.10), 0 4px 12px rgba(0,0,0,0.25);
+  background: linear-gradient(180deg, rgba(255,255,255,0.14), rgba(255,255,255,0.06)) !important;
+  -webkit-backdrop-filter: blur(10px) saturate(160%);
+  backdrop-filter: blur(10px) saturate(160%);
+  border: 1px solid rgba(255,255,255,0.14);
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,0.10), 0 6px 18px rgba(0,0,0,0.28);
+  position: relative;
+  margin-bottom: 2px;
 }
 
 .vjs-progress-control .vjs-load-progress,
@@ -830,7 +841,8 @@ saa.innerHTML = `
   height: 16px !important;
   border-radius: 50% !important;
   background: #fff !important;
-  box-shadow: 0 4px 16px rgba(0,0,0,0.35), 0 0 0 4px rgba(255,0,90,0.20);
+  border: 1px solid rgba(255,255,255,0.9);
+  box-shadow: 0 6px 18px rgba(0,0,0,0.35), 0 0 0 4px rgba(255,0,90,0.20);
   top: -4px !important;
 }
 
@@ -843,7 +855,10 @@ saa.innerHTML = `
 .vjs-volume-bar {
   height: 6px !important;
   border-radius: 999px !important;
-  background: rgba(255,255,255,0.10) !important;
+  background: linear-gradient(180deg, rgba(255,255,255,0.14), rgba(255,255,255,0.06)) !important;
+  -webkit-backdrop-filter: blur(10px) saturate(160%);
+  backdrop-filter: blur(10px) saturate(160%);
+  border: 1px solid rgba(255,255,255,0.12);
   box-shadow: inset 0 0 0 1px rgba(255,255,255,0.08);
 }
 
@@ -857,8 +872,9 @@ saa.innerHTML = `
   height: 14px !important;
   border-radius: 50% !important;
   background: #fff !important;
+  border: 1px solid rgba(255,255,255,0.9);
   top: -4px !important;
-  box-shadow: 0 3px 12px rgba(0,0,0,0.3), 0 0 0 3px rgba(255,0,90,0.18);
+  box-shadow: 0 4px 14px rgba(0,0,0,0.3), 0 0 0 3px rgba(255,0,90,0.18);
 }
 
 .vjs-current-time,
@@ -866,7 +882,10 @@ saa.innerHTML = `
 .vjs-duration {
   padding: 6px 10px;
   border-radius: 999px;
-  background: rgba(255,255,255,0.06);
+  background: linear-gradient(180deg, rgba(255,255,255,0.12), rgba(255,255,255,0.05));
+  -webkit-backdrop-filter: blur(10px) saturate(160%);
+  backdrop-filter: blur(10px) saturate(160%);
+  border: 1px solid rgba(255,255,255,0.10);
   box-shadow: inset 0 0 0 1px rgba(255,255,255,0.08);
   align-self: flex-end;
   margin-bottom: 2px;
@@ -881,6 +900,10 @@ saa.innerHTML = `
 }
 `;
 document.head.appendChild(saa);
+
+
+
+
 
 
 window.pokePlayer = {

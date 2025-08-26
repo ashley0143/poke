@@ -734,20 +734,18 @@ const extractedData = extractPlayerData(base_player);
 const initializedPlayer = initializePlayer(extractedData);
  
 
-
-const saa = document.createElement('style');
+ const saa = document.createElement('style');
 saa.innerHTML = `
 .vjs-play-progress{background-image:linear-gradient(to right,#ff0045,#ff0e55,#ff1d79)}
 
 /* move the whole controls panel up a bit so buttons fit */
 .video-js .vjs-control-bar{bottom:12px!important}
 
-/* control bar: no background; keep layout tight and perfectly centered baseline */
+/* control bar: clean baseline */
 .vjs-control-bar{
   background:transparent!important;border:none!important;box-shadow:none!important;
   display:flex!important;align-items:center!important;gap:12px;padding:6px 10px;border-radius:16px
 }
-
 .vjs-remaining-time,.vjs-fullscreen-control{background-color:transparent!important}
 
 /* glassy circular controls */
@@ -765,37 +763,41 @@ saa.innerHTML = `
 .vjs-control-bar .vjs-button:focus-visible{outline:none;box-shadow:0 0 0 3px rgba(255,0,90,.35),inset 0 0 0 1px rgba(255,255,255,.2)}
 .vjs-control-bar .vjs-icon-placeholder:before{font-size:18px;line-height:38px}
 
-/* time text: keep on the same baseline, no chip bg */
-.vjs-current-time,.vjs-time-divider,.vjs-duration{
-  background:transparent;padding:0 8px;border-radius:999px;box-shadow:none;margin:0;line-height:38px;align-self:center
+/* center the time text vertically like buttons */
+.vjs-current-time,.vjs-time-divider,.vjs-duration,.vjs-remaining-time{
+  background:transparent;padding:0 8px;border-radius:999px;box-shadow:none;margin:0;
+  height:38px;line-height:1;display:inline-flex;align-items:center
 }
 
-/* progress: NO background panel, just a clean track + handle; aligned with buttons */
+/* progress: glass capsule like the buttons */
 .vjs-progress-control{
   flex:1 1 auto;display:flex!important;align-items:center!important;margin:0 6px;padding:0;height:38px
 }
 .vjs-progress-control .vjs-progress-holder{
-  height:6px!important;border-radius:999px!important;background:transparent!important;border:none;box-shadow:none;
+  height:8px!important;border-radius:999px!important;background:transparent!important;border:none;box-shadow:none;
   position:relative;margin:0;width:100%
 }
-/* optional: a subtle base track for contrast; comment out if you want literally nothing */
+/* glass capsule background (same vibe as circular buttons) */
 .vjs-progress-control .vjs-progress-holder::before{
-  content:"";position:absolute;inset:0;height:6px;border-radius:999px;background:#2c2c2c;opacity:.7;pointer-events:none
+  content:"";position:absolute;inset:0;border-radius:inherit;
+  background:linear-gradient(180deg,rgba(255,255,255,.18),rgba(255,255,255,.08));
+  -webkit-backdrop-filter:blur(12px) saturate(160%);backdrop-filter:blur(12px) saturate(160%);
+  border:1px solid rgba(255,255,255,.18);
+  box-shadow:0 8px 24px rgba(0,0,0,.35),inset 0 0 0 1px rgba(255,255,255,.10);
+  pointer-events:none
 }
-
-.vjs-progress-control .vjs-load-progress,.vjs-progress-control .vjs-play-progress{border-radius:inherit!important}
+/* keep bars above the capsule bg */
+.vjs-progress-control .vjs-load-progress,
+.vjs-progress-control .vjs-play-progress{position:relative;z-index:1;border-radius:inherit!important}
 .vjs-progress-control .vjs-play-progress{background-image:linear-gradient(to right,#ff0045,#ff0e55,#ff1d79)!important}
 .vjs-progress-control .vjs-slider-handle{
   width:14px!important;height:14px!important;border-radius:50%!important;background:#fff!important;border:1px solid rgba(255,255,255,.9);
-  box-shadow:0 6px 18px rgba(0,0,0,.35),0 0 0 3px rgba(255,0,90,.20);top:-4px!important
+  box-shadow:0 6px 18px rgba(0,0,0,.35),0 0 0 3px rgba(255,0,90,.20);top:-4px!important;z-index:2
 }
 
-/* volume aligned to baseline; no background bar */
+/* volume aligned to baseline; simple track */
 .vjs-volume-panel{gap:8px;align-items:center!important;padding:0;height:38px}
-.vjs-volume-bar{height:6px!important;border-radius:999px!important;background:transparent!important;border:none;box-shadow:none;position:relative}
-.vjs-volume-bar::before{
-  content:"";position:absolute;inset:0;height:6px;border-radius:999px;background:#2c2c2c;opacity:.7;pointer-events:none
-}
+.vjs-volume-bar{height:6px!important;border-radius:999px!important;background:#2c2c2c!important;border:none;box-shadow:none;position:relative}
 .vjs-volume-level{border-radius:inherit!important;background-image:linear-gradient(to right,#ff0045,#ff1d79)!important}
 .vjs-volume-bar .vjs-slider-handle{
   width:12px!important;height:12px!important;border-radius:50%!important;background:#fff!important;border:1px solid rgba(255,255,255,.9);
@@ -808,13 +810,12 @@ saa.innerHTML = `
   .vjs-control-bar{gap:8px;padding:6px 8px}
   .vjs-control-bar .vjs-button{width:34px;height:34px;min-width:34px}
   .vjs-control-bar .vjs-icon-placeholder:before{font-size:16px;line-height:34px}
-  .vjs-current-time,.vjs-time-divider,.vjs-duration{line-height:34px}
+  .vjs-current-time,.vjs-time-divider,.vjs-duration,.vjs-remaining-time{height:34px}
   .vjs-progress-control{height:34px}
   .vjs-progress-control .vjs-slider-handle{width:12px!important;height:12px!important;top:-3px!important}
 }
 `;
 document.head.appendChild(saa);
-
 
 
 window.pokePlayer = {

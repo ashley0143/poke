@@ -228,12 +228,18 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         });
 
-        // ** VIDEO.JS AUTO-RETRY (ONLY WHEN REALLY STUCK) **
-        // Tight, nearly invisible retries. We ignore CODE:4 unless we previously had playable media or
-        // the browser reports it can play the current type. We also avoid retries if playback is healthy.
-        const VJS_RETRY_STEPS_MS = [300, 600, 900, 1200, 1600, 2000, 2600, 3200]; 
+        // ** VIDEO.JS AUTO-RETRY (30s GRACE + ONLY WHEN REALLY BROKEN) **
+        // We completely ignore all tech errors for the first 30s after the stream actually starts (play or loadeddata).
+        // After 30s, retries stay invisible and only trigger if playback is genuinely stuck (no advancement, bad readyState, or real net/decode error).
+        const VJS_RETRY_STEPS_MS = [250, 400, 650, 900, 1200, 1600, 2000, 2600]; // tight, subtle backoff
         let vjsRetryCount = 0;
+        let allowRetries = false;          // becomes true only after grace window
+        let graceTimerStarted = false;
+        let graceTimerId = null;
+
+        // tiny watchdog state
         let watch = { t: 0, at: 0, active: false };
+        const WATCH_GRACE_MS = 2200;       // if no time advance for ~2.2s while "playing" post-grace → retry
 
         function currentVideoSrc() {
             const s = video.src();
@@ -248,27 +254,45 @@ document.addEventListener("DOMContentLoaded", () => {
         function isPlaybackHealthy() {
             try {
                 if (!video.paused() && video.currentTime() > 0) return true;
-                if (video.readyState && video.readyState() >= 2 && video.duration() > 0) return true;
-                if (!isNaN(video.duration()) && video.duration() > 0) return true;
+                if (typeof video.readyState === 'function') {
+                    if (video.readyState() >= 2 && video.duration() > 0) return true;
+                }
+                if (!isNaN(video.duration()) && video.duration() > 0 && video.currentTime() > 0) return true;
             } catch {}
             return false;
         }
 
-        // only retry when truly transient: stalled/waiting with no progress for a bit
+        // start 30s grace on first real start signal
+        function startGraceIfNeeded() {
+            if (graceTimerStarted) return;
+            graceTimerStarted = true;
+            graceTimerId = setTimeout(() => {
+                // after 30s, only enable retries if we are not healthy
+                allowRetries = true;
+                if (!isPlaybackHealthy()) {
+                    scheduleVideoRetry('post-30s-initial');
+                }
+            }, 30000);
+        }
+
+        video.one('loadeddata', startGraceIfNeeded);
+        video.one('play',       startGraceIfNeeded);
+
+        // only retry when truly broken, and only after grace
         function scheduleVideoRetry(reason) {
-            if (isPlaybackHealthy()) {
+            if (!allowRetries) return;            // do nothing inside 30s grace
+            if (isPlaybackHealthy()) {            // if at any point we look fine, reset and stop
                 vjsRetryCount = 0;
                 return;
             }
+
             const step = Math.min(vjsRetryCount, VJS_RETRY_STEPS_MS.length - 1);
             const delay = VJS_RETRY_STEPS_MS[step];
             vjsRetryCount++;
 
             const keepTime = video.currentTime();
-            // keep it quiet in console; comment out next line to silence even this:
-            // console.warn(`[vjs-retry] #${vjsRetryCount} in ${delay}ms (${reason})`);
 
-            // pause & clear sync while we refetch
+            // pause & clear sync while we refetch (quiet, no UI flicker)
             video.pause();
             audio.pause();
             clearSyncLoop();
@@ -277,7 +301,6 @@ document.addEventListener("DOMContentLoaded", () => {
                 const srcUrl  = currentVideoSrc() || videoSrc;
                 const srcType = currentVideoType();
 
-                // Only re-request the same src; do not flip formats here to avoid flashes.
                 if (srcType) video.src({ src: srcUrl, type: srcType });
                 else         video.src(srcUrl);
 
@@ -295,8 +318,7 @@ document.addEventListener("DOMContentLoaded", () => {
             }, delay);
         }
 
-        // watchdog: tiny grace; if time does not advance while “playing”, do a fast retry
-        const WATCH_GRACE_MS = 2500;
+        // watchdog: only active after grace; if time does not advance while “playing”, do a fast retry
         function startWatchdog() {
             watch.active = true;
             watch.t  = video.currentTime();
@@ -305,11 +327,12 @@ document.addEventListener("DOMContentLoaded", () => {
         function stopWatchdog() {
             watch.active = false;
         }
-        video.on('playing', () => { startWatchdog(); vjsRetryCount = 0; });
+        video.on('playing', () => { startWatchdog(); if (allowRetries) vjsRetryCount = 0; });
         video.on('pause',   () => { stopWatchdog(); });
         video.on('waiting', () => { startWatchdog(); });
+
         video.on('timeupdate', () => {
-            if (!watch.active) return;
+            if (!allowRetries || !watch.active) return;
             const ct = video.currentTime();
             if (ct !== watch.t) {
                 watch.t = ct;
@@ -322,7 +345,7 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         });
 
-        // error filter: ignore CODE:4 unless we have a reason to believe it’s transient/false-positive
+        // error gating: ignore everything until grace ends; after that, only retry if truly broken
         function browserThinksPlayable() {
             try {
                 const type = currentVideoType();
@@ -335,21 +358,19 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
         function shouldRetryForError(err) {
+            if (!allowRetries) return false;      // never react during grace window
             if (!err) return false;
-
-            // If playback is healthy, ignore any error surfaced by the tech.
             if (isPlaybackHealthy()) return false;
 
-            // HTML5 codes: 1=aborted, 2=network, 3=decode, 4=src not supported (often noisy)
+            // HTML5 codes: 1=aborted, 2=network, 3=decode, 4=src not supported (noisy)
             if (err.code === 2 || err.code === 3) return true;
 
             // For code 4, only retry if we already had data or browser says it can play this type
             if (err.code === 4) {
                 if (videoReady || browserThinksPlayable()) return true;
-                return false; // real "not supported" → don't loop
+                return false; // real "not supported" → do not loop
             }
 
-            // message-based fallback
             const msg = (err.message || '').toLowerCase();
             if (
                 msg.includes('network error') ||
@@ -360,27 +381,30 @@ document.addEventListener("DOMContentLoaded", () => {
             return false;
         }
 
-        // main error hook (quiet + filtered)
+        // main error hook (gated by 30s)
         video.on('error', () => {
             const err = video.error && video.error();
             if (shouldRetryForError(err)) {
                 scheduleVideoRetry('error');
-            } else {
-                // console.debug('[vjs-retry] ignored error:', err);
             }
         });
 
-        // treat transient stalls/aborts as retryable, but only if not healthy
-        video.on('stalled', () => { if (!isPlaybackHealthy()) scheduleVideoRetry('stalled'); });
-        video.on('abort',   () => { if (!isPlaybackHealthy()) scheduleVideoRetry('abort'); });
+        // treat transient stalls/aborts as retryable, but only after grace and only if not healthy
+        video.on('stalled', () => { if (allowRetries && !isPlaybackHealthy()) scheduleVideoRetry('stalled'); });
+        video.on('abort',   () => { if (allowRetries && !isPlaybackHealthy()) scheduleVideoRetry('abort'); });
 
-        // whenever we really can play, reset retries so user never notices
-        video.on('canplay', () => { vjsRetryCount = 0; });
-        video.on('playing', () => { vjsRetryCount = 0; });
-        video.on('loadeddata', () => { vjsRetryCount = 0; });
+        // if we truly can play, reset counters; also cancel grace if we’re definitely healthy early
+        function markHealthy() {
+            vjsRetryCount = 0;
+            if (!allowRetries && isPlaybackHealthy() && graceTimerId) {
+                // we’re clearly fine; still let grace finish naturally, but nothing to do
+            }
+        }
+        video.on('canplay',     markHealthy);
+        video.on('playing',     markHealthy);
+        video.on('loadeddata',  markHealthy);
     }
 });
-
 
 // hai!! if ur asking why are they here - its for smth in the future!!!!!!
 

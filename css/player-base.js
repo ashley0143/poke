@@ -744,7 +744,7 @@ saa.innerHTML = `
 /* control bar: clean baseline */
 .vjs-control-bar{
   background:transparent!important;border:none!important;box-shadow:none!important;
-  display:flex!important;align-items:center!important;gap:12px;padding:6px 10px;border-radius:16px
+  display:flex!important;align-items:center!important;gap:2px;padding:6px 10px;border-radius:16px
 }
 .vjs-remaining-time,.vjs-fullscreen-control{background-color:transparent!important}
 
@@ -779,7 +779,7 @@ saa.innerHTML = `
 }
 /* glass capsule background (same vibe as circular buttons) */
 .vjs-progress-control .vjs-progress-holder::before{
-  content:"";position:absolute;inset:0;border-radius:inherit;
+position:absolute;inset:0;border-radius:inherit;
   background:linear-gradient(180deg,rgba(255,255,255,.18),rgba(255,255,255,.08));
   -webkit-backdrop-filter:blur(12px) saturate(160%);backdrop-filter:blur(12px) saturate(160%);
   border:1px solid rgba(255,255,255,.18);

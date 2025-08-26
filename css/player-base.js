@@ -732,7 +732,6 @@ function validatePlayerObject(player) {
 
 const extractedData = extractPlayerData(base_player);
 const initializedPlayer = initializePlayer(extractedData);
-
 const saa = document.createElement('style');
 saa.innerHTML = `
 .vjs-play-progress {
@@ -743,29 +742,27 @@ saa.innerHTML = `
   );
 }
 
-/* control bar container */
 .vjs-control-bar {
   border-radius: 16px;
   background-color: #0007 !important;
   backdrop-filter: blur(10px);
-  display: flex;
-  gap: 10px;
-  padding: 8px 12px;
+  display: flex !important;
+  align-items: flex-end !important;
+  gap: 12px;
+  padding: 10px 14px;
 }
 
-/* keep these transparent like you had */
 .vjs-remaining-time, 
 .vjs-fullscreen-control {
   background-color: transparent !important;   
 }
 
-/* circular frosted-glass buttons (play/pause, mute, fs, pip, etc.) */
 .vjs-control-bar .vjs-button,
 .vjs-play-control,
 .vjs-mute-control,
 .vjs-fullscreen-control,
-.vjs-picture-in-picture-control,
-.vjs-remaining-time .vjs-control-text { /* harmless noop for consistency */ }
+.vjs-picture-in-picture-control {
+}
 
 .vjs-control-bar .vjs-button {
   width: 38px;
@@ -778,8 +775,9 @@ saa.innerHTML = `
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  margin: 0 4px;
+  margin: 2px 6px 0 6px;
   transition: transform .12s ease, box-shadow .2s ease, background .2s ease;
+  vertical-align: bottom;
 }
 
 .vjs-control-bar .vjs-button:hover {
@@ -797,18 +795,17 @@ saa.innerHTML = `
   box-shadow: 0 0 0 3px rgba(255,0,90,0.35), inset 0 0 0 1px rgba(255,255,255,0.2);
 }
 
-/* icon sizing inside circular buttons */
 .vjs-control-bar .vjs-icon-placeholder:before {
   font-size: 18px;
   line-height: 38px;
 }
 
-/* progress (seek) bar: frosted track + rounded ends */
 .vjs-progress-control {
   flex: 1 1 auto;
   display: flex !important;
-  align-items: center;
-  margin: 0 4px;
+  align-items: center !important;
+  margin: 0 6px;
+  padding-bottom: 2px;
 }
 
 .vjs-progress-control .vjs-progress-holder {
@@ -834,13 +831,13 @@ saa.innerHTML = `
   border-radius: 50% !important;
   background: #fff !important;
   box-shadow: 0 4px 16px rgba(0,0,0,0.35), 0 0 0 4px rgba(255,0,90,0.20);
-  top: -4px !important; /* center on 8px track */
+  top: -4px !important;
 }
 
-/* volume panel spacing and circular handle too */
 .vjs-volume-panel {
   gap: 8px;
-  align-items: center;
+  align-items: flex-end !important;
+  padding-bottom: 2px;
 }
 
 .vjs-volume-bar {
@@ -864,7 +861,6 @@ saa.innerHTML = `
   box-shadow: 0 3px 12px rgba(0,0,0,0.3), 0 0 0 3px rgba(255,0,90,0.18);
 }
 
-/* give text timers a small chip look (optional), but keep transparent base */
 .vjs-current-time,
 .vjs-time-divider,
 .vjs-duration {
@@ -872,9 +868,10 @@ saa.innerHTML = `
   border-radius: 999px;
   background: rgba(255,255,255,0.06);
   box-shadow: inset 0 0 0 1px rgba(255,255,255,0.08);
+  align-self: flex-end;
+  margin-bottom: 2px;
 }
 
-/* tighter layout on small screens */
 @media (max-width: 640px) {
   .vjs-control-bar { gap: 8px; padding: 6px 8px; }
   .vjs-control-bar .vjs-button { width: 34px; height: 34px; min-width: 34px; }
@@ -884,7 +881,6 @@ saa.innerHTML = `
 }
 `;
 document.head.appendChild(saa);
-
 
 
 window.pokePlayer = {

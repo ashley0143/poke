@@ -19,7 +19,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const audioSrc = audio.getAttribute('src');
     const vidSrcObj = video.src();
-    const videoSrc = Array.isArray(vidSrcObj) ? vidSrcObj[0].src : vidSrcObj;
+    const videoSrc = Array.isArray(vidSrcObj) ? (vidSrcObj[0] && vidSrcObj[0].src) : vidSrcObj;
 
     let audioReady = false, videoReady = false;
     let syncInterval = null;
@@ -228,44 +228,45 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         });
 
-        // ** VIDEO.JS AUTO-RETRY FOR NETWORK / FORMAT ERRORS **
-        // Retries on common transient failures:
-        //  - "A network error caused the media download to fail part-way."
-        //  - "The media could not be loaded, either because the server or network failed or because the format is not supported."
-        //  - HTMLMediaElement error codes 2/3/4 (network/decode/src not supported)
-        const VJS_RETRY_MAX = 3;
-        const VJS_RETRY_BASE_DELAY = 1000; // ms (exponential backoff)
-        video._retryCount = 0;
+        // ** VIDEO.JS AUTO-RETRY (ONLY WHEN REALLY STUCK) **
+        // Tight, nearly invisible retries. We ignore CODE:4 unless we previously had playable media or
+        // the browser reports it can play the current type. We also avoid retries if playback is healthy.
+        const VJS_RETRY_STEPS_MS = [300, 600, 900, 1200, 1600, 2000, 2600, 3200]; 
+        let vjsRetryCount = 0;
+        let watch = { t: 0, at: 0, active: false };
 
         function currentVideoSrc() {
             const s = video.src();
             return Array.isArray(s) ? (s[0] && s[0].src) : s;
         }
-
-        function shouldRetryForError(err) {
-            if (!err) return false;
-            // HTML5 codes: 1=aborted, 2=network, 3=decode, 4=src not supported
-            if (err.code === 2 || err.code === 3 || err.code === 4) return true;
-            const msg = (err.message || '').toLowerCase();
-            return (
-                msg.includes('network error') ||
-                msg.includes('media download') ||
-                msg.includes('could not be loaded') ||
-                msg.includes('server or network failed') ||
-                msg.includes('not supported')
-            );
+        function currentVideoType() {
+            const s = video.src();
+            return Array.isArray(s) ? (s[0] && s[0].type) : undefined;
         }
 
+        // treat as *healthy* if we clearly have playable media or are advancing time
+        function isPlaybackHealthy() {
+            try {
+                if (!video.paused() && video.currentTime() > 0) return true;
+                if (video.readyState && video.readyState() >= 2 && video.duration() > 0) return true;
+                if (!isNaN(video.duration()) && video.duration() > 0) return true;
+            } catch {}
+            return false;
+        }
+
+        // only retry when truly transient: stalled/waiting with no progress for a bit
         function scheduleVideoRetry(reason) {
-            if (video._retryCount >= VJS_RETRY_MAX) {
-                console.error(`[vjs-retry] giving up after ${video._retryCount} attempts (${reason}).`);
+            if (isPlaybackHealthy()) {
+                vjsRetryCount = 0;
                 return;
             }
-            video._retryCount += 1;
-            const backoff = VJS_RETRY_BASE_DELAY * Math.pow(2, video._retryCount - 1);
-            const keepTime = video.currentTime();
+            const step = Math.min(vjsRetryCount, VJS_RETRY_STEPS_MS.length - 1);
+            const delay = VJS_RETRY_STEPS_MS[step];
+            vjsRetryCount++;
 
-            console.warn(`[vjs-retry] attempt ${video._retryCount}/${VJS_RETRY_MAX} in ${backoff}ms (${reason})`);
+            const keepTime = video.currentTime();
+            // keep it quiet in console; comment out next line to silence even this:
+            // console.warn(`[vjs-retry] #${vjsRetryCount} in ${delay}ms (${reason})`);
 
             // pause & clear sync while we refetch
             video.pause();
@@ -273,72 +274,112 @@ document.addEventListener("DOMContentLoaded", () => {
             clearSyncLoop();
 
             setTimeout(() => {
-                const srcUrl = currentVideoSrc() || videoSrc;
-                // Re-apply the same source to force a new fetch
-                video.src(srcUrl);
-                // Once it can play again, restore position and resume sync
+                const srcUrl  = currentVideoSrc() || videoSrc;
+                const srcType = currentVideoType();
+
+                // Only re-request the same src; do not flip formats here to avoid flashes.
+                if (srcType) video.src({ src: srcUrl, type: srcType });
+                else         video.src(srcUrl);
+
                 video.one('loadeddata', () => {
                     try {
                         video.currentTime(keepTime);
                         audio.currentTime = keepTime;
                     } catch {}
-                    // Attempt to play both in lockstep
                     video.play().catch(() => {});
                     if (audioReady) audio.play().catch(() => {});
                     if (!syncInterval) startSyncLoop();
                 });
 
-                // Explicitly call load on the underlying element for some browsers
                 try { videoEl.load && videoEl.load(); } catch {}
-            }, backoff);
+            }, delay);
         }
 
-        // main error hook
-        video.on('error', () => {
-            const err = video.error();
-            if (shouldRetryForError(err)) {
-                scheduleVideoRetry('error');
-            } else {
-                console.error('[vjs-retry] non-retryable error:', err);
-            }
-        });
-
-        // treat prolonged stalls/aborts as retryable (often transient network)
-        video.on('stalled', () => scheduleVideoRetry('stalled'));
-        video.on('abort',   () => scheduleVideoRetry('abort'));
-
-        // watchdog: if time isn’t advancing while supposed to play, retry after grace period
-        let lastWatch = { t: 0, when: 0, active: false };
-        const WATCH_GRACE_MS = 8000;
-
+        // watchdog: tiny grace; if time does not advance while “playing”, do a fast retry
+        const WATCH_GRACE_MS = 2500;
         function startWatchdog() {
-            lastWatch.active = true;
-            lastWatch.t = video.currentTime();
-            lastWatch.when = Date.now();
+            watch.active = true;
+            watch.t  = video.currentTime();
+            watch.at = Date.now();
         }
         function stopWatchdog() {
-            lastWatch.active = false;
+            watch.active = false;
         }
-
-        video.on('playing', startWatchdog);
-        video.on('pause', stopWatchdog);
-        video.on('waiting', startWatchdog);
+        video.on('playing', () => { startWatchdog(); vjsRetryCount = 0; });
+        video.on('pause',   () => { stopWatchdog(); });
+        video.on('waiting', () => { startWatchdog(); });
         video.on('timeupdate', () => {
-            if (!lastWatch.active) return;
-            const nowT = video.currentTime();
-            if (nowT !== lastWatch.t) {
-                lastWatch.t = nowT;
-                lastWatch.when = Date.now();
+            if (!watch.active) return;
+            const ct = video.currentTime();
+            if (ct !== watch.t) {
+                watch.t = ct;
+                watch.at = Date.now();
                 return;
             }
-            if (Date.now() - lastWatch.when > WATCH_GRACE_MS && !video.paused()) {
+            if (Date.now() - watch.at > WATCH_GRACE_MS && !video.paused()) {
                 scheduleVideoRetry('watchdog');
                 stopWatchdog();
             }
         });
+
+        // error filter: ignore CODE:4 unless we have a reason to believe it’s transient/false-positive
+        function browserThinksPlayable() {
+            try {
+                const type = currentVideoType();
+                if (type && videoEl && typeof videoEl.canPlayType === 'function') {
+                    const res = videoEl.canPlayType(type);
+                    return !!(res && res !== 'no');
+                }
+            } catch {}
+            return false;
+        }
+
+        function shouldRetryForError(err) {
+            if (!err) return false;
+
+            // If playback is healthy, ignore any error surfaced by the tech.
+            if (isPlaybackHealthy()) return false;
+
+            // HTML5 codes: 1=aborted, 2=network, 3=decode, 4=src not supported (often noisy)
+            if (err.code === 2 || err.code === 3) return true;
+
+            // For code 4, only retry if we already had data or browser says it can play this type
+            if (err.code === 4) {
+                if (videoReady || browserThinksPlayable()) return true;
+                return false; // real "not supported" → don't loop
+            }
+
+            // message-based fallback
+            const msg = (err.message || '').toLowerCase();
+            if (
+                msg.includes('network error') ||
+                msg.includes('media download') ||
+                msg.includes('server or network failed')
+            ) return true;
+
+            return false;
+        }
+
+        // main error hook (quiet + filtered)
+        video.on('error', () => {
+            const err = video.error && video.error();
+            if (shouldRetryForError(err)) {
+                scheduleVideoRetry('error');
+            } else {
+                // console.debug('[vjs-retry] ignored error:', err);
+            }
+        });
+
+        // treat transient stalls/aborts as retryable, but only if not healthy
+        video.on('stalled', () => { if (!isPlaybackHealthy()) scheduleVideoRetry('stalled'); });
+        video.on('abort',   () => { if (!isPlaybackHealthy()) scheduleVideoRetry('abort'); });
+
+        // whenever we really can play, reset retries so user never notices
+        video.on('canplay', () => { vjsRetryCount = 0; });
+        video.on('playing', () => { vjsRetryCount = 0; });
+        video.on('loadeddata', () => { vjsRetryCount = 0; });
     }
 });
-
 
 
 // hai!! if ur asking why are they here - its for smth in the future!!!!!!

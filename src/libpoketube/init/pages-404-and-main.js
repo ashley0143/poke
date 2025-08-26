@@ -39,6 +39,8 @@ const splash = [
   "say gex!",
   "ur valid :3",
   "gay space communism!",
+  "has nothing to with pokemon!",
+  "A house of gold :3",
   "doesnt have AI!",
   "no web3!",
   "keemstar is a bald ___!",
@@ -100,6 +102,8 @@ const splash = [
   "100+ stars on gh!",
   "let the vibe slide over me!",
   "sip a capri sun like its don peregon",
+  "i love you alot!",
+  "BREACH OUT SEPT 12!",
   "now even gayer!",
   "its joever..",
   "lesbiam,,,",
@@ -132,7 +136,7 @@ const splash = [
   "long lasting battery life",
   "stallmansupport.org!!!",
   "does include nya~!!!",
-  "actually stable! :3",
+  "actually stable-ish! :3",
 ];
 
 function getJson(str) {

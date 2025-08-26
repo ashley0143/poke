@@ -734,28 +734,191 @@ const extractedData = extractPlayerData(base_player);
 const initializedPlayer = initializePlayer(extractedData);
 
 
-const saa = document.createElement('style');
-saa.innerHTML = `
-.vjs-play-progress {
-  background-image: linear-gradient(to right, 
-    #ff0045,    
-    #ff0e55,   
-    #ff1d79  
-  );
-}
+// --- Custom VJS skin + loading overlay ---
+(function () {
+  const css = `
+  .video-js.poke-skin { --bg:#000000b3; --fg:#fff; --muted:#b8c0cc; --accent:#ff1d79; --accent2:#ff0e55; --accent3:#ff0045; --ring:#ffffff22; --blur:8px; --br:16px; }
 
-.vjs-control-bar {
-  border-radius: 16px;
-  background-color: #0007 !important; 
-}
+  .video-js.poke-skin .vjs-control-bar {
+    background: var(--bg) !important;
+    border-radius: var(--br);
+    backdrop-filter: blur(var(--blur));
+    -webkit-backdrop-filter: blur(var(--blur));
+    box-shadow: 0 8px 24px rgba(0,0,0,.35), inset 0 0 0 1px var(--ring);
+    padding: .4rem .5rem;
+    gap: .35rem;
+  }
 
-.vjs-remaining-time, 
-.vjs-fullscreen-control {
-  background-color: transparent !important;   
-}
-`;
+  .video-js.poke-skin .vjs-control.vjs-button,
+  .video-js.poke-skin .vjs-volume-panel,
+  .video-js.poke-skin .vjs-fullscreen-control,
+  .video-js.poke-skin .vjs-play-control {
+    background: rgba(255,255,255,.06);
+    border-radius: 9999px;
+    backdrop-filter: blur(var(--blur));
+    -webkit-backdrop-filter: blur(var(--blur));
+    box-shadow: inset 0 0 0 1px var(--ring), 0 4px 14px rgba(0,0,0,.25);
+    transition: transform .15s ease, background .15s ease, box-shadow .15s ease;
+  }
+  .video-js.poke-skin .vjs-volume-panel { padding: 0 .25rem; }
 
-document.head.appendChild(saa);
+  .video-js.poke-skin .vjs-control.vjs-button:hover,
+  .video-js.poke-skin .vjs-volume-panel:hover,
+  .video-js.poke-skin .vjs-fullscreen-control:hover,
+  .video-js.poke-skin .vjs-play-control:hover {
+    background: rgba(255,255,255,.12);
+    transform: translateY(-1px);
+    box-shadow: inset 0 0 0 1px rgba(255,255,255,.28), 0 6px 18px rgba(0,0,0,.35);
+  }
+
+  .video-js.poke-skin .vjs-play-control,
+  .video-js.poke-skin .vjs-fullscreen-control,
+  .video-js.poke-skin .vjs-mute-control {
+    width: 42px; height: 42px; display: grid; place-items: center; margin: 0 .15rem;
+  }
+  .video-js.poke-skin .vjs-play-control .vjs-icon-placeholder:before,
+  .video-js.poke-skin .vjs-fullscreen-control .vjs-icon-placeholder:before,
+  .video-js.poke-skin .vjs-mute-control .vjs-icon-placeholder:before {
+    color: var(--fg);
+    font-size: 1.1rem;
+    line-height: 1;
+  }
+
+  .video-js.poke-skin .vjs-time-control { color: var(--muted); text-shadow: 0 1px 1px #000a; }
+
+  .video-js.poke-skin .vjs-progress-control {
+    flex: 1 1 auto; margin: 0 .35rem; min-width: 120px;
+  }
+  .video-js.poke-skin .vjs-progress-holder {
+    height: 10px; border-radius: 9999px; background: rgba(255,255,255,.08);
+    box-shadow: inset 0 0 0 1px var(--ring);
+  }
+  .video-js.poke-skin .vjs-load-progress {
+    background: linear-gradient(90deg, rgba(255,255,255,.18), rgba(255,255,255,.1));
+    border-radius: inherit;
+  }
+  .video-js.poke-skin .vjs-play-progress {
+    background-image: linear-gradient(90deg, var(--accent3), var(--accent2), var(--accent));
+    border-radius: inherit;
+    position: relative;
+  }
+  .video-js.poke-skin .vjs-play-progress::after {
+    content: "";
+    position: absolute;
+    right: -6px; top: 50%; transform: translateY(-50%);
+    width: 18px; height: 18px; border-radius: 9999px;
+    background: #fff;
+    box-shadow: 0 0 0 6px rgba(255,29,121,.18), 0 2px 10px rgba(0,0,0,.35);
+  }
+
+  .video-js.poke-skin .vjs-slider { background: transparent; }
+  .video-js.poke-skin .vjs-volume-panel .vjs-volume-control .vjs-volume-bar,
+  .video-js.poke-skin .vjs-volume-panel .vjs-volume-control .vjs-volume-level {
+    border-radius: 9999px; height: 8px;
+  }
+  .video-js.poke-skin .vjs-volume-panel .vjs-volume-control .vjs-volume-bar {
+    background: rgba(255,255,255,.12); box-shadow: inset 0 0 0 1px var(--ring);
+  }
+  .video-js.poke-skin .vjs-volume-panel .vjs-volume-control .vjs-volume-level {
+    background-image: linear-gradient(90deg, var(--accent3), var(--accent2), var(--accent));
+  }
+  .video-js.poke-skin .vjs-volume-panel .vjs-volume-control .vjs-volume-level:after {
+    content:""; position:absolute; right:-6px; top:50%; transform:translateY(-50%);
+    width:14px; height:14px; border-radius:9999px; background:#fff; box-shadow:0 0 0 4px rgba(255,29,121,.16);
+  }
+
+  .video-js.poke-skin .vjs-remaining-time,
+  .video-js.poke-skin .vjs-fullscreen-control { background: transparent !important; }
+
+  .video-js.poke-skin .vjs-big-play-button {
+    border: none; border-radius: 9999px;
+    width: 74px; height: 74px;
+    background: rgba(0,0,0,.45);
+    backdrop-filter: blur(var(--blur));
+    -webkit-backdrop-filter: blur(var(--blur));
+    box-shadow: 0 10px 28px rgba(0,0,0,.45), inset 0 0 0 1px var(--ring);
+  }
+  .video-js.poke-skin .vjs-big-play-button .vjs-icon-placeholder:before { color: #fff; font-size: 1.6rem; }
+
+  .video-js.poke-skin .poke-wait {
+    position: absolute; inset: 0; display: none; place-items: center; z-index: 12;
+    background: radial-gradient(800px 400px at 50% 60%, rgba(0,0,0,.55), rgba(0,0,0,.8));
+    backdrop-filter: blur(2px);
+  }
+  .video-js.poke-skin.vjs-waiting .poke-wait,
+  .video-js.poke-skin.poke-show-wait .poke-wait { display: grid; }
+
+  .video-js.poke-skin .poke-wait-box {
+    display: grid; gap: .6rem; padding: 1rem 1.2rem; border-radius: 16px;
+    background: rgba(20,20,28,.55);
+    box-shadow: 0 8px 30px rgba(0,0,0,.45), inset 0 0 0 1px var(--ring);
+    color: var(--fg); text-align: center; min-width: 260px;
+  }
+  .video-js.poke-skin .poke-wait-text { font: 600 14px/1.2 ui-sans-serif,system-ui,Segoe UI,Roboto,Ubuntu; letter-spacing:.2px; }
+  .video-js.poke-skin .poke-wait-sub  { font: 12px/1.2 ui-sans-serif,system-ui,Segoe UI,Roboto,Ubuntu; color: var(--muted); }
+
+  .video-js.poke-skin .poke-dots { display:inline-grid; grid-auto-flow:column; gap:6px; justify-content:center; }
+  .video-js.poke-skin .poke-dot { width:6px; height:6px; border-radius:9999px; background:#fff; opacity:.9; animation: poke-bounce 900ms infinite ease-in-out; }
+  .video-js.poke-skin .poke-dot:nth-child(2){ animation-delay:.15s }
+  .video-js.poke-skin .poke-dot:nth-child(3){ animation-delay:.3s }
+  @keyframes poke-bounce { 0%,80%,100%{ transform:translateY(0); opacity:.6 } 40%{ transform:translateY(-6px); opacity:1 } }
+  `;
+  const style = document.createElement('style');
+  style.textContent = css;
+  document.head.appendChild(style);
+
+  function mountPokeSkin(player) {
+    const root = player.el();
+    player.addClass('poke-skin');
+
+    if (!root.querySelector('.poke-wait')) {
+      const wait = document.createElement('div');
+      wait.className = 'poke-wait';
+      wait.innerHTML = `
+        <div class="poke-wait-box">
+          <div class="poke-wait-text">Loading… please wait</div>
+          <div class="poke-wait-sub" data-rot></div>
+          <div class="poke-dots"><div class="poke-dot"></div><div class="poke-dot"></div><div class="poke-dot"></div></div>
+        </div>`;
+      root.appendChild(wait);
+
+      const hints = [
+        'Stabilizing stream…',
+        'Syncing audio & video…',
+        'Warming buffers…',
+        'Checking connection…',
+        'Re-requesting segments…'
+      ];
+      let i = 0; const rot = wait.querySelector('[data-rot]');
+      const tick = () => { rot.textContent = hints[i % hints.length]; i++; };
+      tick(); wait._rot = setInterval(tick, 1200);
+      player.on('dispose', () => clearInterval(wait._rot));
+    }
+
+    const show = () => player.addClass('poke-show-wait');
+    const hide = () => player.removeClass('poke-show-wait');
+
+    player.on('waiting', show);
+    player.on('stalled', show);
+    player.on('seeking', show);
+
+    player.on('canplay', hide);
+    player.on('playing', hide);
+    player.on('pause', hide);
+    player.on('error', () => {
+      // keep overlay if really broken; otherwise hide on next canplay/playing
+    });
+  }
+
+  if (window.videojs && window.video) {
+    try { mountPokeSkin(window.video); } catch {}
+  } else {
+    document.addEventListener('readystatechange', () => {
+      if (window.videojs && window.video) { try { mountPokeSkin(window.video); } catch {} }
+    });
+  }
+})();
+
 
 window.pokePlayer = {
     ver:`20-a87a9450-vjs-${videojs.VERSION}`,

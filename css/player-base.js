@@ -3,17 +3,12 @@ var _yt_player = videojs;
 
 
 
-
-
-
-// Video.js + dash.js (via videojs-contrib-dash)
-// Prefer 720–1080p automatically, never go below ~430p if that representation exists.
-// - Starts in the best rep within 720–1080p (or nearest <=1080p, else best available ≥430p, else max available)
-// - Leaves ABR ON but constrains it to stay within [~430p .. ~1080p] when those reps exist
-
+// Best-balanced DASH selection for Video.js + dash.js (via videojs-contrib-dash)
+// - Probes 1080p → 720p → 480p with ABR OFF; each probe must play ~4.5s without ≥2s stall
+// - If a probe succeeds, re-enable ABR with soft bounds (≥~430p floor if available, ≤1080p cap)
+// - If all probes fail or on any error: enable full ABR
 
 document.addEventListener('DOMContentLoaded', () => {
-  // wipe saved progress like progress-<videoId>
   const qs = new URLSearchParams(location.search);
   const vidKey = qs.get('v') || '';
   if (vidKey) { try { localStorage.removeItem(`progress-${vidKey}`); } catch {} }
@@ -21,112 +16,205 @@ document.addEventListener('DOMContentLoaded', () => {
   const MPD_URL = (typeof window !== 'undefined' && window.mpdurl) ? String(window.mpdurl) : '';
   if (!MPD_URL) { console.error('[dash] window.mpdurl is not set'); return; }
 
-  const player = videojs('video', {
-    controls: true,
-    autoplay: false,
-    preload: 'auto'
-  });
+  const player = videojs('video', { controls: true, autoplay: false, preload: 'auto' });
 
-  // Helpers to read dash.js bitrate list safely
-  function kbpsOf(info) {
-    // dash.js BitrateInfo usually exposes `bitrate` in kbps. Some manifests expose `bandwidth` in bps.
+  // ---- helpers ----
+  const kbpsOf = (info) => {
     if (!info) return 0;
     if (typeof info.bitrate === 'number') return info.bitrate;
     if (typeof info.bandwidth === 'number') return Math.round(info.bandwidth / 1000);
     return 0;
-  }
+  };
 
-  function pickIndexByHeight(list) {
-    // list: ascending by qualityIndex (usually increasing bitrate/height)
-    // 1) Prefer highest within 720–1080p
-    const withinRange = list
-      .map((it, i) => ({ i, h: it.height || 0 }))
-      .filter(x => x.h >= 720 && x.h <= 1080)
-      .sort((a,b) => a.h - b.h);
-    if (withinRange.length) return withinRange[withinRange.length - 1].i;
-
-    // 2) Else pick highest <=1080p but >=430p
-    const belowCap = list
-      .map((it, i) => ({ i, h: it.height || 0 }))
-      .filter(x => x.h >= 430 && x.h <= 1080)
-      .sort((a,b) => a.h - b.h);
-    if (belowCap.length) return belowCap[belowCap.length - 1].i;
-
-    // 3) Else if everything <430p, pick the max available (still under our floor, but best we can do)
-    const allHeights = list.map((it, i) => ({ i, h: it.height || 0 })).sort((a,b)=>a.h-b.h);
-    if (allHeights.length) return allHeights[allHeights.length - 1].i;
-
-    // fallback
-    return 0;
-  }
-
-  function computeBitrateBounds(list) {
-    // Find the lowest rep >=430p and the highest rep <=1080p (if present)
-    // Use their bitrates as min/max ABR constraints (kbps). If not present, leave -1 (no limit).
-    const sorted = list
-      .map((it, i) => ({ i, h: it.height || 0, kbps: kbpsOf(it) }))
-      .sort((a,b) => a.h - b.h);
-
-    let minKbps = -1, maxKbps = -1;
-
-    // min >= 430p
-    const floorCandidate = sorted.find(x => x.h >= 430);
-    if (floorCandidate && floorCandidate.kbps > 0) minKbps = floorCandidate.kbps;
-
-    // max <= 1080p
-    const capCandidates = sorted.filter(x => x.h > 0 && x.h <= 1080);
-    if (capCandidates.length) {
-      const bestCap = capCandidates[capCandidates.length - 1];
-      if (bestCap.kbps > 0) maxKbps = bestCap.kbps;
+  // Find the representation at/below a target height; return {repId, index}
+  function repAtOrBelow(targetH, reps, levels) {
+    let best = null;
+    for (const r of reps) {
+      const h = r.height || 0;
+      if (h <= targetH && (!best || h > (best.height || 0))) best = r;
     }
+    if (best) {
+      // Find matching quality index for fallback API
+      let idx = -1;
+      for (let i = 0; i < (levels || []).length; i++) {
+        if ((levels[i].height || 0) === (best.height || 0)) { idx = i; }
+      }
+      return { repId: best.id, index: idx, height: best.height || 0 };
+    }
+    return { repId: null, index: -1, height: 0 };
+  }
 
+  function bitrateBoundsForHeights(levels, floorH, capH) {
+    const sorted = levels.map((it, i) => ({ i, h: it.height || 0, kbps: kbpsOf(it) }))
+                         .sort((a,b)=>a.h-b.h);
+    let minKbps = -1, maxKbps = -1;
+    const floor = sorted.find(x => x.h >= floorH);
+    if (floor && floor.kbps > 0) minKbps = floor.kbps;
+    const caps = sorted.filter(x => x.h > 0 && x.h <= capH);
+    if (caps.length) {
+      const top = caps[caps.length - 1];
+      if (top.kbps > 0) maxKbps = top.kbps;
+    }
     return { minKbps, maxKbps };
   }
 
+  // Probe utilities
+  const PROBE_OK_PLAY_MS = 4500;
+  const STALL_FAIL_MS    = 2000;
+  const PROBE_TIMEOUT_MS = 8000;
+
+  function apiHasIdSelection(dash) {
+    return typeof dash.getRepresentationsByType === 'function' &&
+           typeof dash.setRepresentationForTypeById === 'function';
+  }
+
+  function setQualityByIdOrIndex(dash, type, id, index) {
+    if (id && apiHasIdSelection(dash)) {
+      dash.setRepresentationForTypeById(type, id); // recommended method. :contentReference[oaicite:2]{index=2}
+    } else if (typeof dash.setQualityFor === 'function' && index >= 0) {
+      dash.setQualityFor(type, index); // classic index-based selection. :contentReference[oaicite:3]{index=3}
+    }
+  }
+
+  function probeQuality(dash, idOrIdx) {
+    return new Promise((resolve) => {
+      let playingAccum = 0;
+      let lastAdvanceAt = performance.now();
+      let lastT = player.currentTime() || 0;
+      let waitingSince = null;
+      let done = false;
+
+      const cleanup = () => {
+        player.off('timeupdate', onTime);
+        player.off('waiting', onWaiting);
+        player.off('playing', onPlaying);
+        player.off('error', onErr);
+        clearTimeout(overallTO);
+      };
+      const finish = (ok) => { if (done) return; done = true; cleanup(); resolve(ok); };
+
+      // freeze ABR and jump to candidate, fast switching on. (Settings API) :contentReference[oaicite:4]{index=4}
+      try {
+        dash.updateSettings({
+          streaming: {
+            abr: { autoSwitchBitrate: { video: false, audio: true } },
+            fastSwitchEnabled: true,
+            limitBitrateByPortal: false
+          }
+        });
+        setQualityByIdOrIndex(dash, 'video', idOrIdx.id, idOrIdx.idx);
+      } catch {}
+
+      player.play().catch(()=>{});
+
+      const onPlaying = () => { waitingSince = null; };
+      const onWaiting = () => { waitingSince = performance.now(); };
+      const onErr = () => finish(false);
+
+      const onTime = () => {
+        const now = performance.now();
+        const ct = player.currentTime() || 0;
+        if (ct > lastT + 0.04) { // ~40ms progress
+          playingAccum += (now - lastAdvanceAt);
+          lastAdvanceAt = now;
+          lastT = ct;
+        }
+        if (waitingSince && (now - waitingSince) >= STALL_FAIL_MS) return finish(false);
+        if (playingAccum >= PROBE_OK_PLAY_MS) return finish(true);
+      };
+
+      player.on('playing', onPlaying);
+      player.on('waiting', onWaiting);
+      player.on('timeupdate', onTime);
+      player.on('error', onErr);
+
+      const overallTO = setTimeout(() => finish(false), PROBE_TIMEOUT_MS);
+    });
+  }
+
+  function enableBoundedABR(dash, levels, floorH = 430, capH = 1080, biasIdx = -1) {
+    const { minKbps, maxKbps } = bitrateBoundsForHeights(levels, floorH, capH);
+    const biasKbps = biasIdx >= 0 ? (kbpsOf(levels[biasIdx]) || -1) : -1;
+    try {
+      dash.updateSettings({
+        streaming: {
+          abr: {
+            autoSwitchBitrate: { video: true, audio: true },
+            minBitrate: { video: minKbps, audio: -1 },
+            maxBitrate: { video: maxKbps, audio: -1 },
+            initialBitrate: { video: biasKbps > 0 ? biasKbps : (maxKbps > 0 ? maxKbps : -1), audio: -1 }
+          },
+          fastSwitchEnabled: true,
+          limitBitrateByPortal: false
+        }
+      });
+    } catch {}
+  }
+
+  // ---- load + orchestrate ----
   player.ready(() => {
     player.src({ src: MPD_URL, type: 'application/dash+xml' });
 
-    player.one('loadedmetadata', () => {
-      try {
-        const dash = player.dash && player.dash.mediaPlayer;
-        if (!dash) return;
+    player.one('loadedmetadata', async () => {
+      const dash = player.dash && player.dash.mediaPlayer;             // contrib-dash exposes dash.js here. :contentReference[oaicite:5]{index=5}
+      if (!dash) return;
 
-        // Get available video qualities (Representations)
-        const levels = dash.getBitrateInfoListFor('video') || [];
+      // Get qualities (both APIs so we can map IDs<->indices)
+      const levels = (typeof dash.getBitrateInfoListFor === 'function' ? dash.getBitrateInfoListFor('video') : []) || []; // indices. :contentReference[oaicite:6]{index=6}
+      const reps   = (typeof dash.getRepresentationsByType === 'function' ? dash.getRepresentationsByType('video') : []) || []; // IDs. :contentReference[oaicite:7]{index=7}
 
-        if (levels.length) {
-          // Pick our starting quality index based on height preferences
-          const targetIdx = pickIndexByHeight(levels);
+      if (!levels.length && !reps.length) return;
 
-          // Compute ABR min/max bitrates to try to keep within 720–1080 and never <430 if available
-          const { minKbps, maxKbps } = computeBitrateBounds(levels);
+      // Build targets using representation data when available, else from levels
+      const basis = reps.length ? reps.map(r => ({ height: r.height||0 })) : levels.map(l => ({ height: l.height||0 }));
+      const anyHeights = basis.some(b => b.height > 0);
 
-          // Bias startup strongly to chosen quality, but keep ABR enabled (with our bounds)
-          dash.updateSettings({
-            streaming: {
-              abr: {
-                // Let ABR run, but bound it by our floor/cap (if those reps exist)
-                autoSwitchBitrate: { video: true, audio: true },
-                minBitrate: { video: minKbps, audio: -1 }, // -1 means no limit
-                maxBitrate: { video: maxKbps, audio: -1 },
-                initialBitrate: { video: Math.max( kbpsOf(levels[targetIdx]) || 6000, minKbps > 0 ? minKbps : 0 ) }
-              },
-              limitBitrateByPortal: false,
-              fastSwitchEnabled: true
-            }
-          });
-
-          // Force the initial selection to our target rep; ABR can still adjust within bounds after
-          dash.setQualityFor('video', targetIdx);
+      const pick = (h) => {
+        if (reps.length && anyHeights) return repAtOrBelow(h, reps, levels);
+        // fallback: approximate with indices only
+        let idx = -1, bestH = -1;
+        for (let i = 0; i < levels.length; i++) {
+          const hh = levels[i].height || 0;
+          if (hh <= h && hh > bestH) { idx = i; bestH = hh; }
         }
-      } catch (e) {
-        console.error('[dash] quality preference failed:', e);
+        return { repId: null, index: idx, height: bestH };
+      };
+
+      const c1080 = pick(1080);
+      const c720  = pick(720);
+      const c480  = pick(480);
+
+      const candidates = [];
+      if (c1080.index >= 0 || c1080.repId) candidates.push({ id: c1080.repId, idx: c1080.index });
+      if ((c720.index >= 0 || c720.repId) && (c720.idx !== c1080.idx || c720.id !== c1080.id)) candidates.push({ id: c720.repId, idx: c720.index });
+      if ((c480.index >= 0 || c480.repId) && (c480.idx !== c720.idx || c480.id !== c720.id))     candidates.push({ id: c480.repId, idx: c480.index });
+      if (!candidates.length && levels.length) candidates.push({ id: null, idx: levels.length - 1 });
+
+      let chosenIdx = -1;
+      for (const cand of candidates) {
+        const ok = await probeQuality(dash, cand);
+        if (ok) {
+          chosenIdx = (typeof cand.idx === 'number' ? cand.idx : -1);
+          // Stay on this pick but allow ABR within bounds
+          enableBoundedABR(dash, levels, 430, 1080, chosenIdx);
+          break;
+        }
+      }
+      if (chosenIdx < 0) {
+        // All probes failed: enable full ABR as a safety net
+        try {
+          dash.updateSettings({ streaming: { abr: { autoSwitchBitrate: { video: true, audio: true } }, fastSwitchEnabled: true } });
+        } catch {}
       }
     });
   });
 
-  // Quiet retry for transient stalls (same MPD)
+  // On real playback errors: enable ABR + soft recover
   player.on('error', () => {
+    try {
+      const dash = player.dash && player.dash.mediaPlayer;
+      if (dash) dash.updateSettings({ streaming: { abr: { autoSwitchBitrate: { video: true, audio: true } }, fastSwitchEnabled: true } });
+    } catch {}
     const err = player.error();
     if (!err || err.code === 2 || err.code === 3) {
       const keep = player.currentTime() || 0;

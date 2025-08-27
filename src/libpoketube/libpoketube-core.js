@@ -189,7 +189,7 @@ class InnerTubePokeVidious {
   }
 
   initError(context, error) {
-    console.error("[LIBPT CORE ERROR]", context, error?.stack || error || "");
+    console.log("[LIBPT CORE ERROR]", context, error?.stack || error || "");
   }
 }
 

@@ -3,100 +3,37 @@ var _yt_player = videojs;
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+ 
 
 
 document.addEventListener('DOMContentLoaded', () => {
-  // delete progress key like "progress-<videoId>"
-  const qs = new URLSearchParams(location.search);
+   const qs = new URLSearchParams(location.search);
   const vidKey = qs.get('v') || '';
   if (vidKey) { try { localStorage.removeItem(`progress-${vidKey}`); } catch {} }
 
-  // --- Capability preflight (helps explain "No decoders..." errors) ---
-  const can = (mime) => {
-    try {
-      // Check MSE container+codec support
-      return (window.MediaSource && MediaSource.isTypeSupported && MediaSource.isTypeSupported(mime)) ? 'MSE' :
-             (document.createElement('video').canPlayType(mime) ? 'native' : '');
-    } catch { return ''; }
-  };
-
-  // Common DASH fMP4 mime+codec combos
-  const checks = [
-    'video/mp4; codecs="avc1.4d401f"',         // H.264 baseline/main/high
-    'video/mp4; codecs="avc1.640028"',         // H.264 High@L4.0/4.2
-    'video/mp4; codecs="hev1.1.6.L120.90"',    // HEVC (rare on web; Safari/macOS only)
-    'video/mp4; codecs="vp09.00.10.08"',       // VP9 in MP4 (spotty)
-    'video/mp4; codecs="av01.0.05M.08"',       // AV1 in MP4 (newer browsers)
-    'audio/mp4; codecs="mp4a.40.2"',           // AAC-LC
-    'audio/mp4; codecs="mp4a.40.5"'            // HE-AAC
-  ];
-  const support = {};
-  checks.forEach(m => support[m] = can(m));
-  // If you see empty strings for everything except AAC, your MPD must include H.264/AAC reps.
-
-  // init Video.js with VHS (bundled in v7/v8)
+  // init Video.js
   const player = videojs('video', {
     controls: true,
     autoplay: false,
-    preload: 'auto',
-    html5: {
-      vhs: {
-        overrideNative: true,              // make sure VHS handles DASH
-        enableLowInitialPlaylist: true,
-        withCredentials: false
-      }
-    }
+    preload: 'auto'
   });
 
-  // Take the <source> but set programmatically so native doesn’t grab it first
-  const tag = document.getElementById('video').querySelector('source');
-  const src = tag ? { src: tag.getAttribute('src'), type: tag.getAttribute('type') } : null;
+   const MPD_URL = window.mpdurl || '';
+  if (MPD_URL) {
+    player.ready(() => {
+      // dash.js will handle this type
+      player.src({ src: MPD_URL, type: 'application/dash+xml' });
+    });
+  } else {
+    console.error("window.mpdurl is not set!");
+  }
 
-  player.ready(() => {
-    // Quick sanity: if no likely video codec is supported, warn in console (helps debugging)
-    const hasLikelyVideo =
-      support['video/mp4; codecs="avc1.4d401f"'] ||
-      support['video/mp4; codecs="avc1.640028"'] ||
-      support['video/mp4; codecs="vp09.00.10.08"'] ||
-      support['video/mp4; codecs="av01.0.05M.08"'];
-    const hasAAC =
-      support['audio/mp4; codecs="mp4a.40.2"'] || support['audio/mp4; codecs="mp4a.40.5"'];
-
-    if (!hasLikelyVideo) {
-      console.warn('[DASH] Browser lacks support for common DASH video codecs (H.264/VP9/AV1). ' +
-                   'Ensure your MPD includes H.264 (avc1) fMP4 reps.');
-    }
-    if (!hasAAC) {
-      console.warn('[DASH] Browser lacks AAC support; include AAC (mp4a.40.2) audio reps in MPD.');
-    }
-
-    if (src && src.src) {
-      player.src(src); // { src: MPD_URL, type: 'application/dash+xml' }
-    }
-  });
-
-  // Quiet retry for transient net/decode stalls (same MPD, no alternates)
+  // quiet retry for transient stalls (same MPD, no alternates)
   player.on('error', () => {
     const err = player.error();
-    // Only retry if it looks like a transient network/decoder stall
     if (!err || err.code === 2 || err.code === 3) {
       const keep = player.currentTime() || 0;
-      const cur  = player.currentSource(); // {src, type}
+      const cur  = player.currentSource();
       try {
         player.pause();
         if (cur && cur.src) player.src(cur);
@@ -107,10 +44,8 @@ document.addEventListener('DOMContentLoaded', () => {
       } catch {}
     }
   });
-
-  // Log what the browser says it supports—helps diagnose “No decoders...” cases:
-  console.debug('[DASH capability]', support);
 });
+
 
  
  

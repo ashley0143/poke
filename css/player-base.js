@@ -2,13 +2,16 @@
 var _yt_player = videojs;
 
 
-
-// Best-balanced DASH selection for Video.js + dash.js (via videojs-contrib-dash)
-// - Probes 1080p → 720p → 480p with ABR OFF; each probe must play ~4.5s without ≥2s stall
-// - If a probe succeeds, re-enable ABR with soft bounds (≥~430p floor if available, ≤1080p cap)
-// - If all probes fail or on any error: enable full ABR
-
+// Self-healing DASH player (Video.js + videojs-contrib-dash + dash.js)
+// + CORS hardening:
+//   - Force cookie-less requests: setXHRWithCredentialsForType(..., false) for all types
+//   - Drop CMCD headers (disable or force 'query' mode) to avoid preflights
+//   - Add request interceptor to strip credentials/custom headers on non-license calls
+//   - Set <video crossorigin="anonymous"> at runtime
+//   - Normalize MPD URL (follow redirects with fetch, credentials: 'omit') before player.src()
+ 
 document.addEventListener('DOMContentLoaded', () => {
+  // ---- housekeeping ----
   const qs = new URLSearchParams(location.search);
   const vidKey = qs.get('v') || '';
   if (vidKey) { try { localStorage.removeItem(`progress-${vidKey}`); } catch {} }
@@ -16,37 +19,62 @@ document.addEventListener('DOMContentLoaded', () => {
   const MPD_URL = (typeof window !== 'undefined' && window.mpdurl) ? String(window.mpdurl) : '';
   if (!MPD_URL) { console.error('[dash] window.mpdurl is not set'); return; }
 
+  // <video> never taints or sends cookies by default
+  try { document.getElementById('video')?.setAttribute('crossorigin', 'anonymous'); } catch {}
+
+  // --- tiny helper: resolve final URL without cookies & with CORS mode ---
+  async function normalizeMpdUrl(url) {
+    try {
+      const resp = await fetch(url, {
+        method: 'GET',
+        mode: 'cors',
+        redirect: 'follow',
+        credentials: 'omit',     // <- important: never send cookies to avoid ACAO-with-credentials rules
+        cache: 'no-store'
+      });
+      // If CDN sent us through redirects that drop CORS headers, we still lock to the final resolved URL
+      if (resp && resp.ok && resp.url) return resp.url;
+    } catch {}
+    return url;
+  }
+
   const player = videojs('video', { controls: true, autoplay: false, preload: 'auto' });
 
-  // ---- helpers ----
-  const kbpsOf = (info) => {
+  // ---- utils ----
+  const KBPS = (info) => {
     if (!info) return 0;
-    if (typeof info.bitrate === 'number') return info.bitrate;
-    if (typeof info.bandwidth === 'number') return Math.round(info.bandwidth / 1000);
+    if (typeof info.bitrate === 'number')   return info.bitrate;
+    if (typeof info.bandwidth === 'number') return Math.round(info.bandwidth/1000);
     return 0;
   };
 
-  // Find the representation at/below a target height; return {repId, index}
+  const hasIdAPI = (dash) =>
+    typeof dash.getRepresentationsByType === 'function' &&
+    typeof dash.setRepresentationForTypeById === 'function';
+
+  function setQualityByIdOrIndex(dash, repId, index) {
+    try {
+      if (repId && hasIdAPI(dash)) dash.setRepresentationForTypeById('video', repId);
+      else if (typeof dash.setQualityFor === 'function' && index >= 0) dash.setQualityFor('video', index);
+    } catch {}
+  }
+
   function repAtOrBelow(targetH, reps, levels) {
     let best = null;
     for (const r of reps) {
-      const h = r.height || 0;
+      const h = (r && r.height) || 0;
       if (h <= targetH && (!best || h > (best.height || 0))) best = r;
     }
-    if (best) {
-      // Find matching quality index for fallback API
-      let idx = -1;
-      for (let i = 0; i < (levels || []).length; i++) {
-        if ((levels[i].height || 0) === (best.height || 0)) { idx = i; }
-      }
-      return { repId: best.id, index: idx, height: best.height || 0 };
+    if (!best) return { id: null, idx: -1, height: 0 };
+    let idx = -1;
+    for (let i = 0; i < (levels || []).length; i++) {
+      if ((levels[i].height || 0) === (best.height || 0)) idx = i;
     }
-    return { repId: null, index: -1, height: 0 };
+    return { id: best.id, idx, height: best.height || 0 };
   }
 
   function bitrateBoundsForHeights(levels, floorH, capH) {
-    const sorted = levels.map((it, i) => ({ i, h: it.height || 0, kbps: kbpsOf(it) }))
-                         .sort((a,b)=>a.h-b.h);
+    const sorted = levels.map((it, i) => ({ i, h: it.height || 0, kbps: KBPS(it) })).sort((a,b)=>a.h-b.h);
     let minKbps = -1, maxKbps = -1;
     const floor = sorted.find(x => x.h >= floorH);
     if (floor && floor.kbps > 0) minKbps = floor.kbps;
@@ -58,31 +86,15 @@ document.addEventListener('DOMContentLoaded', () => {
     return { minKbps, maxKbps };
   }
 
-  // Probe utilities
+  // ---- probe a quality for smoothness ----
   const PROBE_OK_PLAY_MS = 4500;
   const STALL_FAIL_MS    = 2000;
   const PROBE_TIMEOUT_MS = 8000;
 
-  function apiHasIdSelection(dash) {
-    return typeof dash.getRepresentationsByType === 'function' &&
-           typeof dash.setRepresentationForTypeById === 'function';
-  }
-
-  function setQualityByIdOrIndex(dash, type, id, index) {
-    if (id && apiHasIdSelection(dash)) {
-      dash.setRepresentationForTypeById(type, id); // recommended method. :contentReference[oaicite:2]{index=2}
-    } else if (typeof dash.setQualityFor === 'function' && index >= 0) {
-      dash.setQualityFor(type, index); // classic index-based selection. :contentReference[oaicite:3]{index=3}
-    }
-  }
-
-  function probeQuality(dash, idOrIdx) {
+  function probeQuality(dash, cand) {
     return new Promise((resolve) => {
-      let playingAccum = 0;
-      let lastAdvanceAt = performance.now();
-      let lastT = player.currentTime() || 0;
-      let waitingSince = null;
-      let done = false;
+      let okPlay = 0, lastAdvanceAt = performance.now(), lastT = player.currentTime() || 0;
+      let waitingSince = null, done = false;
 
       const cleanup = () => {
         player.off('timeupdate', onTime);
@@ -93,7 +105,6 @@ document.addEventListener('DOMContentLoaded', () => {
       };
       const finish = (ok) => { if (done) return; done = true; cleanup(); resolve(ok); };
 
-      // freeze ABR and jump to candidate, fast switching on. (Settings API) :contentReference[oaicite:4]{index=4}
       try {
         dash.updateSettings({
           streaming: {
@@ -102,25 +113,25 @@ document.addEventListener('DOMContentLoaded', () => {
             limitBitrateByPortal: false
           }
         });
-        setQualityByIdOrIndex(dash, 'video', idOrIdx.id, idOrIdx.idx);
+        setQualityByIdOrIndex(dash, cand.id, cand.idx);
       } catch {}
 
       player.play().catch(()=>{});
 
       const onPlaying = () => { waitingSince = null; };
       const onWaiting = () => { waitingSince = performance.now(); };
-      const onErr = () => finish(false);
+      const onErr     = () => finish(false);
 
       const onTime = () => {
         const now = performance.now();
-        const ct = player.currentTime() || 0;
-        if (ct > lastT + 0.04) { // ~40ms progress
-          playingAccum += (now - lastAdvanceAt);
+        const ct  = player.currentTime() || 0;
+        if (ct > lastT + 0.04) {
+          okPlay += (now - lastAdvanceAt);
           lastAdvanceAt = now;
           lastT = ct;
         }
-        if (waitingSince && (now - waitingSince) >= STALL_FAIL_MS) return finish(false);
-        if (playingAccum >= PROBE_OK_PLAY_MS) return finish(true);
+        if (waitingSince && (now - waitingSince) >= STALL_FAIL_MS) { finish(false); return; }
+        if (okPlay >= PROBE_OK_PLAY_MS) { finish(true); }
       };
 
       player.on('playing', onPlaying);
@@ -132,9 +143,10 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  // ---- ABR control ----
   function enableBoundedABR(dash, levels, floorH = 430, capH = 1080, biasIdx = -1) {
     const { minKbps, maxKbps } = bitrateBoundsForHeights(levels, floorH, capH);
-    const biasKbps = biasIdx >= 0 ? (kbpsOf(levels[biasIdx]) || -1) : -1;
+    const biasKbps = biasIdx >= 0 ? (KBPS(levels[biasIdx]) || -1) : -1;
     try {
       dash.updateSettings({
         streaming: {
@@ -151,87 +163,218 @@ document.addEventListener('DOMContentLoaded', () => {
     } catch {}
   }
 
-  // ---- load + orchestrate ----
-  player.ready(() => {
-    player.src({ src: MPD_URL, type: 'application/dash+xml' });
+  function enableFullABR(dash) {
+    try {
+      dash.updateSettings({
+        streaming: {
+          abr: { autoSwitchBitrate: { video: true, audio: true } },
+          fastSwitchEnabled: true,
+          limitBitrateByPortal: false
+        }
+      });
+    } catch {}
+  }
+
+  // ---- health watchdog + recovery ----
+  const WATCH_GRACE_MS = 2500;
+  let watch = { t: 0, at: 0, on: false };
+
+  function startWatch() { watch.t = player.currentTime() || 0; watch.at = performance.now(); watch.on = true; }
+  function stopWatch()  { watch.on = false; }
+
+  const STEPS = [250, 400, 650, 900, 1200, 1600, 2100, 2800, 3600];
+  let retryCount = 0;
+  function backoffDelay() {
+    const base = STEPS[Math.min(retryCount, STEPS.length - 1)];
+    const jitter = Math.floor((Math.random()*2 - 1) * 120);
+    retryCount++;
+    return Math.max(150, base + jitter);
+  }
+
+  function healthy() {
+    try {
+      if (!player.paused() && (player.currentTime() || 0) > 0) return true;
+      const el = player.tech_ && player.tech_.el && player.tech_.el();
+      if (el && typeof el.readyState === 'number' && el.readyState >= 2) return true;
+    } catch {}
+    return false;
+  }
+
+  function refreshSameSource(keepTime) {
+    const cur = player.currentSource();
+    if (!cur || !cur.src) return;
+    try {
+      player.pause();
+      player.src(cur);
+      player.one('loadeddata', () => {
+        try { if (isFinite(keepTime) && keepTime > 0) player.currentTime(keepTime); } catch {}
+        player.play().catch(()=>{});
+      });
+    } catch {}
+  }
+
+  function scheduleHeal() {
+    if (healthy()) { retryCount = 0; return; }
+    if ('onLine' in navigator && !navigator.onLine) {
+      const onlineOnce = () => { window.removeEventListener('online', onlineOnce); scheduleHeal(); };
+      window.addEventListener('online', onlineOnce, { once: true });
+      return;
+    }
+    const keep = player.currentTime() || 0;
+    const delay = backoffDelay();
+    setTimeout(() => refreshSameSource(keep), delay);
+  }
+
+  // ---- fix “starts at 5–7s”: always rewind to 0 once after setup ----
+  const DESIRED_START = 0;
+  let didResetStart = false;
+  function resetToStartOnce() {
+    if (didResetStart) return;
+    didResetStart = true;
+    try {
+      if ((player.currentTime() || 0) > DESIRED_START + 0.05) {
+        player.pause();
+        player.currentTime(DESIRED_START);
+        player.one('seeked', () => player.play().catch(()=>{}));
+      } else {
+        player.play().catch(()=>{});
+      }
+    } catch {}
+  }
+
+  // ---- orchestrate load + probing + ABR + CORS hardening ----
+  player.ready(async () => {
+    const finalUrl = await normalizeMpdUrl(MPD_URL);
+    player.src({ src: finalUrl, type: 'application/dash+xml' });
 
     player.one('loadedmetadata', async () => {
-      const dash = player.dash && player.dash.mediaPlayer;             // contrib-dash exposes dash.js here. :contentReference[oaicite:5]{index=5}
+      const dash = player.dash && player.dash.mediaPlayer;
       if (!dash) return;
 
-      // Get qualities (both APIs so we can map IDs<->indices)
-      const levels = (typeof dash.getBitrateInfoListFor === 'function' ? dash.getBitrateInfoListFor('video') : []) || []; // indices. :contentReference[oaicite:6]{index=6}
-      const reps   = (typeof dash.getRepresentationsByType === 'function' ? dash.getRepresentationsByType('video') : []) || []; // IDs. :contentReference[oaicite:7]{index=7}
+      // 1) Hard-disable credentials for all request types to avoid ACAO-with-credentials pitfalls
+      try {
+        const H = (window.dashjs && window.dashjs.HTTPRequest) || {};
+        const TYPES = [
+          H.MPD_TYPE, H.MEDIA_SEGMENT_TYPE, H.INIT_SEGMENT_TYPE,
+          H.BITSTREAM_SWITCHING_SEGMENT_TYPE, H.INDEX_SEGMENT_TYPE,
+          H.MSS_FRAGMENT_INFO_SEGMENT_TYPE, H.LICENSE, H.OTHER_TYPE, H.XLINK_EXPANSION_TYPE
+        ].filter(Boolean);
+        if (typeof dash.setXHRWithCredentialsForType === 'function') {
+          TYPES.forEach(t => { try { dash.setXHRWithCredentialsForType(t, false); } catch {} });
+        }
+      } catch {}
 
-      if (!levels.length && !reps.length) return;
+      // 2) make it so CMCD cannot trigger preflights: either disable or force query mode
+      try {
+        dash.updateSettings({
+          streaming: {
+            cmcd: {
+              enabled: false,      // safest: no extra headers at all
+              mode: 'query',       // (explicit) keep 'query' if later enabled
+              includeInRequests: ['segment','mpd']
+            }
+          }
+        });
+      } catch {}
 
-      // Build targets using representation data when available, else from levels
-      const basis = reps.length ? reps.map(r => ({ height: r.height||0 })) : levels.map(l => ({ height: l.height||0 }));
-      const anyHeights = basis.some(b => b.height > 0);
+      // 3) As an extra guard, strip credentials/custom headers on non-license requests
+      try {
+        if (typeof dash.addRequestInterceptor === 'function') {
+          dash.addRequestInterceptor((req) => {
+            try {
+              const isLicense = /license|widevine|playready|fairplay/i.test(String(req?.url || ''));
+              if (!isLicense) {
+                req.withCredentials = false;
+                // Drop custom headers that could trigger CORS preflight; keep browser-managed ones
+                if (req.headers) {
+                  delete req.headers.Authorization;
+                  delete req.headers['X-Requested-With'];
+                  delete req.headers['X-CSRF-Token'];
+                  delete req.headers['Cookie'];
+                }
+              }
+            } catch {}
+            return Promise.resolve(req);
+          });
+        }
+      } catch {}
 
-      const pick = (h) => {
-        if (reps.length && anyHeights) return repAtOrBelow(h, reps, levels);
-        // fallback: approximate with indices only
+      // --- quality probing and ABR bounds  ---
+      const levels = (typeof dash.getBitrateInfoListFor === 'function' ? dash.getBitrateInfoListFor('video') : []) || [];
+      const reps   = (typeof dash.getRepresentationsByType === 'function' ? dash.getRepresentationsByType('video') : []) || [];
+
+      function pick(targetH) {
+        if (reps.length) return repAtOrBelow(targetH, reps, levels);
         let idx = -1, bestH = -1;
         for (let i = 0; i < levels.length; i++) {
-          const hh = levels[i].height || 0;
-          if (hh <= h && hh > bestH) { idx = i; bestH = hh; }
+          const h = levels[i].height || 0;
+          if (h <= targetH && h > bestH) { idx = i; bestH = h; }
         }
-        return { repId: null, index: idx, height: bestH };
-      };
+        return { id: null, idx, height: bestH };
+      }
 
       const c1080 = pick(1080);
       const c720  = pick(720);
       const c480  = pick(480);
 
       const candidates = [];
-      if (c1080.index >= 0 || c1080.repId) candidates.push({ id: c1080.repId, idx: c1080.index });
-      if ((c720.index >= 0 || c720.repId) && (c720.idx !== c1080.idx || c720.id !== c1080.id)) candidates.push({ id: c720.repId, idx: c720.index });
-      if ((c480.index >= 0 || c480.repId) && (c480.idx !== c720.idx || c480.id !== c720.id))     candidates.push({ id: c480.repId, idx: c480.index });
+      if (c1080.idx >= 0 || c1080.id) candidates.push({ id: c1080.id, idx: c1080.idx });
+      if ((c720.idx  >= 0 || c720.id)  && (c720.idx !== c1080.idx || c720.id !== c1080.id)) candidates.push({ id: c720.id, idx: c720.idx });
+      if ((c480.idx  >= 0 || c480.id)  && (c480.idx !== c720.idx  || c480.id !== c720.id))   candidates.push({ id: c480.id, idx: c480.idx });
       if (!candidates.length && levels.length) candidates.push({ id: null, idx: levels.length - 1 });
 
       let chosenIdx = -1;
       for (const cand of candidates) {
         const ok = await probeQuality(dash, cand);
-        if (ok) {
-          chosenIdx = (typeof cand.idx === 'number' ? cand.idx : -1);
-          // Stay on this pick but allow ABR within bounds
-          enableBoundedABR(dash, levels, 430, 1080, chosenIdx);
-          break;
-        }
+        if (ok) { chosenIdx = (typeof cand.idx === 'number' ? cand.idx : -1); enableBoundedABR(dash, levels, 430, 1080, chosenIdx); break; }
       }
-      if (chosenIdx < 0) {
-        // All probes failed: enable full ABR as a safety net
-        try {
-          dash.updateSettings({ streaming: { abr: { autoSwitchBitrate: { video: true, audio: true } }, fastSwitchEnabled: true } });
-        } catch {}
-      }
+      if (chosenIdx < 0) enableFullABR(dash);
+
+      resetToStartOnce();
+      startWatch();
     });
   });
 
-  // On real playback errors: enable ABR + soft recover
+  // ---- health & stall handling ----
+  player.on('timeupdate', () => {
+    if (!watch.on) return;
+    const ct = player.currentTime() || 0;
+    if (ct !== watch.t) { watch.t = ct; watch.at = performance.now(); return; }
+    if (!player.paused() && (performance.now() - watch.at) > WATCH_GRACE_MS) {
+      scheduleHeal();
+      watch.on = false;
+      setTimeout(startWatch, 1200);
+    }
+  });
+
+  player.on('playing',  () => { retryCount = 0; startWatch(); });
+  player.on('waiting',  () => { scheduleHeal(); });
+  player.on('stalled',  () => { scheduleHeal(); });
+  player.on('suspend',  () => { scheduleHeal(); });
+  player.on('emptied',  () => { scheduleHeal(); });
+  player.on('abort',    () => { scheduleHeal(); });
+
+  // ---- hard errors → flip to ABR + quiet refresh (treat CORS-like as transient) ----
+  function looksLikeCorsy(err) {
+    const s = String((err && (err.message || err.statusText)) || '');
+    return /cors|cross[- ]origin|allow-?origin|credentials|taint/i.test(s);
+  }
   player.on('error', () => {
     try {
       const dash = player.dash && player.dash.mediaPlayer;
-      if (dash) dash.updateSettings({ streaming: { abr: { autoSwitchBitrate: { video: true, audio: true } }, fastSwitchEnabled: true } });
+      if (dash) enableFullABR(dash);
     } catch {}
-    const err = player.error();
-    if (!err || err.code === 2 || err.code === 3) {
+    const err = player.error && player.error();
+    if (!err || err.code === 2 || err.code === 3 || looksLikeCorsy(err)) {
       const keep = player.currentTime() || 0;
-      const cur  = player.currentSource();
-      try {
-        player.pause();
-        if (cur && cur.src) player.src(cur);
-        player.one('loadeddata', () => {
-          try { if (isFinite(keep) && keep > 0) player.currentTime(keep); } catch {}
-          player.play().catch(()=>{});
-        });
-      } catch {}
+      refreshSameSource(keep);
     }
   });
+
+  // ---- offline/online bridge ----
+  window.addEventListener('online',  () => scheduleHeal());
 });
 
- 
 // hai!! if ur asking why are they here - its for smth in the future!!!!!!
 
 const FORMATS = {

@@ -410,7 +410,7 @@ button:hover, a:hover {
 
   <!-- player -->
   <link href="/css/videojs-v8.16.0.css?v=5949545" rel="stylesheet" />
-  <script src="/static/vjs.min.js?v=45959"></script><!-- custom video player for poke --><script src="/static/player-base.js?v=333_352&lang=en_us&set=player_ias.vflset"> </script>
+  <script src="/static/vjs.min.js?v=45959"></script><!-- custom video player for poke --><script src="/static/player-base.js?v=33_352&lang=en_us&set=player_ias.vflset"> </script>
 
   <!-- ICONS -->
   <!-- Font awesome pro -->
@@ -1013,7 +1013,21 @@ Offical Discord Server! :3
     
     
 		<div id="<%=sha384(VideoData.videoId)%>" class="video-player-container">
-       
+      
+ <% 
+  let itag = null; // Default to null
+  VideoData.adaptiveFormats.forEach(format => {
+    if (format.itag == '136' || format.itag == '298') {
+      itag = '140'; // Set itag to '140' if either '136' or '298' is found
+    }
+  });
+%>  
+
+<% if (itag && !qua) { %>
+<% } else { %>
+
+<% } %>
+
       <noscript>
         <% if (!qua) { %>
           <div id="nojs-high-res-warning" class="error-card">
@@ -1026,7 +1040,7 @@ Offical Discord Server! :3
       <% if (isvidious) { %>
         <% if (!qua) { %>
                        <source src="<%=u%>/api/manifest/dash/id/<%=VideoData.videoId%>" type='application/dash+xml' label="dash"> 
-        <% } %>         <% } %> 
+        <% } %>
         <% if (qua === "medium") { %>
           <source src="<%=u%>/latest_version?id=<%=VideoData.videoId%>&itag=18&local=true" type="video/mp4; codecs=&quot;avc1.64001F, mp4a.40.2&quot;" label="sd360" selected="true" >
         <% } %>

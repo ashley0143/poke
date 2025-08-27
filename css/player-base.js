@@ -2,12 +2,20 @@
 var _yt_player = videojs;
 
 
+// DASH.js + Video.js + quality menu
+// - Uses global window.mpdurl (YouTube DASH MPD URL)
+// - Starts in HD by default (high initial bitrate), then ABR can adapt
+// - Adds a Quality menu (manual override) via contrib-quality-levels + http-source-selector
+// - Wipes any saved progress key `progress-<v>` as you asked
 
- document.addEventListener('DOMContentLoaded', () => {
-  // delete progress key like "progress-<videoId>"
-  const qs = new URLSearchParams(location.search);
+document.addEventListener('DOMContentLoaded', () => {
+   const qs = new URLSearchParams(location.search);
   const vidKey = qs.get('v') || '';
   if (vidKey) { try { localStorage.removeItem(`progress-${vidKey}`); } catch {} }
+
+  // guard: require mpdurl
+  const MPD_URL = (typeof window !== 'undefined' && window.mpdurl) ? String(window.mpdurl) : '';
+  if (!MPD_URL) { console.error('[dash] window.mpdurl is not set'); return; }
 
   // init Video.js
   const player = videojs('video', {
@@ -16,24 +24,42 @@ var _yt_player = videojs;
     preload: 'auto'
   });
 
-
-  // initialize the plugin (this injects a menu button into the control bar)
-  player.httpSourceSelector({
-    default: 'auto'   // shows "Auto" by default
-  });
-
-
-  // Use your global window.mpdurl
-  const MPD_URL = window.mpdurl || '';
-  if (MPD_URL) {
-    player.ready(() => {
-      player.src({ src: MPD_URL, type: 'application/dash+xml' });
-    });
-  } else {
-    console.error("window.mpdurl is not set!");
+  // add quality menu (reads available DASH reps through quality-levels)
+  // plugin injects its own button; no addChild is needed
+  if (typeof player.httpSourceSelector === 'function') {
+    player.httpSourceSelector({ default: 'auto' });
   }
 
-  // quiet retry for transient stalls (same MPD, no alternates)
+  // set the MPD (dash.js attaches via videojs-contrib-dash)
+  player.ready(() => {
+    player.src({ src: MPD_URL, type: 'application/dash+xml' });
+
+    // when dash.js is fully wired, set HD as the initial default
+    // Use dash.js Settings: initialBitrate.video in kbps (keep ABR enabled)
+    // ref: dash.js Settings initialBitrate/autoSwitchBitrate docs. :contentReference[oaicite:0]{index=0}
+    const applyHDDefault = () => {
+      try {
+        const dash = player.dash && player.dash.mediaPlayer; // dash.js instance exposed by contrib-dash. :contentReference[oaicite:1]{index=1}
+        if (!dash || typeof dash.updateSettings !== 'function') return;
+
+        // Pick a "HD-ish" starting point; YouTube MPDs typically have > 2.5Mbps for 720p and up.
+        // Adjust if you want to bias higher/lower.
+        dash.updateSettings({
+          streaming: {
+            abr: {
+              initialBitrate: { video: 5000, audio: -1 }, // ~5 Mbps start → choose an HD rep first
+              autoSwitchBitrate: { video: true, audio: true } // keep ABR on after start
+            }
+          }
+        });
+      } catch {}
+    };
+
+    // call once the tech is up; 'loadedmetadata' is a safe point
+    player.one('loadedmetadata', applyHDDefault);
+  });
+
+  // tiny invisible retry for transient net/decode stalls (same MPD; no fallbacks)
   player.on('error', () => {
     const err = player.error();
     if (!err || err.code === 2 || err.code === 3) {
@@ -50,8 +76,6 @@ var _yt_player = videojs;
     }
   });
 });
-
-
 
  
  

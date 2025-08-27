@@ -1013,24 +1013,7 @@ Offical Discord Server! :3
     
     
 		<div id="<%=sha384(VideoData.videoId)%>" class="video-player-container">
-      
- <% 
-  let itag = null; // Default to null
-  VideoData.adaptiveFormats.forEach(format => {
-    if (format.itag == '136' || format.itag == '298') {
-      itag = '140'; // Set itag to '140' if either '136' or '298' is found
-    }
-  });
-%>  
-
-<% if (itag && !qua) { %>
-  <audio id="aud" preload>
-    <source src="<%=u%>/latest_version?id=<%=VideoData.videoId%>&itag=<%=itag%>&local=true" type="video/mp4"  />
-  </audio>
-<% } else { %>
-  <audio id="aud"></audio>
-<% } %>
-
+       
       <noscript>
         <% if (!qua) { %>
           <div id="nojs-high-res-warning" class="error-card">
@@ -1042,16 +1025,8 @@ Offical Discord Server! :3
       <video poster="<%- media_proxy_url %>/proxy?url=https://i.ytimg.com/vi/<%= VideoData.videoId %>/hqdefault.jpg" class="video-js player video-ambient-container" id="video" style="border-radius: 16px; box-sizing: border-box; min-width: 100%; display: block;" preload>
       <% if (isvidious) { %>
         <% if (!qua) { %>
-<% 
-  let itag = '136'; // Default itag
-  VideoData.adaptiveFormats.forEach(format => {
-    if (format.itag == '298') {
-      itag = '298';
-    }
-  });
-%>
-<source src="<%=u%>/latest_version?id=<%=VideoData.videoId%>&itag=<%=itag%>&local=true" type="video/mp4; codecs=&quot;avc1.64001F, mp4a.40.2&quot;" label="hd720" selected="true">
-        <% } %>
+                       <source src="<%=u%>/api/manifest/dash/id/<%=VideoData.videoId%>" type='application/dash+xml' label="dash"> 
+
         <% if (qua === "medium") { %>
           <source src="<%=u%>/latest_version?id=<%=VideoData.videoId%>&itag=18&local=true" type="video/mp4; codecs=&quot;avc1.64001F, mp4a.40.2&quot;" label="sd360" selected="true" >
         <% } %>

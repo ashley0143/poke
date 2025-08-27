@@ -43,7 +43,7 @@ module.exports = function (app, config, renderTemplate) {
   });
 
   app.get("/avatars/:v", async function (req, res) {
-    var url = `https://vid.puffyan.us/ggpht/${req.params.v}`;
+    var url = `https://yt3.ggpht.com/${req.params.v}`;
 
     let f = await modules.fetch(url + `?cachefixer=${btoa(Date.now())}`, {
       method: req.method,
@@ -54,7 +54,7 @@ module.exports = function (app, config, renderTemplate) {
   });
 
   app.get("/ggpht/:v", async function (req, res) {
-    var url = `https://vid.puffyan.us/ggpht/${req.params.v}`;
+    var url = `https://yt3.ggpht.com/${req.params.v}`;
 
     let f = await modules.fetch(url + `?cachefixer=${btoa(Date.now())}`, {
       method: req.method,
@@ -65,7 +65,7 @@ module.exports = function (app, config, renderTemplate) {
   });
 
   app.get("/avatars/ytc/:v", async function (req, res) {
-    var url = `https://vid.puffyan.us/ggpht/ytc/${req.params.v.replace("ytc", "")}`;
+    var url = `https://yt3.googleusercontent.com/ytc/${req.params.v.replace("ytc", "")}`;
 
     let f = await modules.fetch(url + `?cachefixer=${btoa(Date.now())}`, {
       method: req.method,

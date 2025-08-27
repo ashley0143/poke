@@ -1,14 +1,51 @@
 // in the beginning.... god made mrrprpmnaynayaynaynayanyuwuuuwmauwnwanwaumawp :p
 var _yt_player = videojs;
 
-// Self-healing DASH player (Video.js + videojs-contrib-dash + dash.js)
-// - Uses window.mpdurl (string) as MPD URL
- // - Probes 1080p → 720p → 480p with ABR OFF; picks the first stable one
-// - Then enables ABR with soft bounds (≥~430p floor if available, ≤1080p cap)
-// - Health watchdog detects stalls / non-advancing time and retries invisibly
-// - Error handler flips to ABR + quiet source refresh, keeps playback position
-// - Offline/online bridge: waits for connectivity, then heals itself
-// - Always rewinds to 0 once after initial probing (avoids “starts at 5–7s”)
+/**
+ * Self-Healing DASH Player for Video.js
+ * --------------------------------------------------------------
+ * Drop-in controller for MPEG-DASH playback
+ * with Video.js + videojs-contrib-dash (dash.js underneath).
+ *
+ * WHAT THIS SCRIPT DOES
+ * - Loads MPD from `window.mpdurl` and starts from 0s (fixes “starts at 5–7s”).
+ * - Probes quality in order: 1080p → 720p → 480p with ABR OFF, then
+ *   re-enables ABR with soft bounds (floor ≈ 430p if available, cap 1080p).
+ * - Monitors health; if playback stops advancing, it silently refreshes
+ *   the same MPD and resumes from the saved time (exponential backoff).
+ * - On player/demux/network hiccups it flips back to full ABR for safety.
+ *
+ * CORS / NETWORK HARDENING
+ * - Forces cookie-less segment/MPD requests (withCredentials=false per type).
+ * - Disables CMCD headers (or uses query mode) to avoid preflights.
+ * - Request interceptor strips non-essential custom headers on non-license
+ *   calls. The <video> element is set to crossorigin="anonymous".
+ * - The MPD URL is “normalized” first via fetch(..., credentials:'omit') to
+ *   collapse redirects that can drop ACAO headers.
+ *
+ * ERROR UI SUPPRESSION
+ * - `errorDisplay:false` hides the default “No compatible source …” overlay.
+ * - If any component still sets a stale MediaError, we clear it programmatically
+ *   (`player.error(null)`, remove `vjs-error`) whenever playback is actually OK.
+ *
+ * REQUIREMENTS
+ * - Video.js 7/8, videojs-contrib-dash, dash.js loaded before this script.
+ * - <video id="video"> exists in the DOM. Provide `window.mpdurl` (string).
+ *
+ * TUNABLE KNOBS (search constants below)
+ * - PROBE_OK_PLAY_MS, STALL_FAIL_MS, PROBE_TIMEOUT_MS: probe behavior.
+ * - WATCH_GRACE_MS, STEPS[]: health watchdog & silent refresh backoff.
+ * - ABR bounds: floor ≈ 430p, cap 1080p (adjust inside enableBoundedABR).
+ *
+ * DRM NOTE
+ * - By default all requests are credential-free to minimize CORS breaks.
+ *   If your license server requires credentials, selectively enable them:
+ *   dash.setXHRWithCredentialsForType(HTTPRequest.LICENSE, true) and
+ *   allow only the minimal headers required for the license endpoint.
+ *
+ * USAGE
+ * - Include after the libraries; no other wiring needed. Last reviewed: Aug 2025.
+ */
 
 document.addEventListener('DOMContentLoaded', () => {
   // ---- housekeeping ----
@@ -19,12 +56,53 @@ document.addEventListener('DOMContentLoaded', () => {
   const MPD_URL = (typeof window !== 'undefined' && window.mpdurl) ? String(window.mpdurl) : '';
   if (!MPD_URL) { console.error('[dash] window.mpdurl is not set'); return; }
 
-  const player = videojs('video', { controls: true, autoplay: false, preload: 'auto' });
+  // Ensure the underlying <video> never taints or sends cookies by default
+  try { document.getElementById('video')?.setAttribute('crossorigin', 'anonymous'); } catch {}
+
+  // --- tiny helper: resolve final URL without cookies & with CORS mode ---
+  async function normalizeMpdUrl(url) {
+    try {
+      const resp = await fetch(url, {
+        method: 'GET',
+        mode: 'cors',
+        redirect: 'follow',
+        credentials: 'omit',
+        cache: 'no-store'
+      });
+      if (resp && resp.ok && resp.url) return resp.url;
+    } catch {}
+    return url;
+  }
+
+  // === ERROR UI SUPPRESSION ===
+  // (A) disable overlay via option (prevents the big black “No compatible source…” box)
+  const player = videojs('video', {
+    controls: true,
+    autoplay: false,
+    preload: 'auto',
+    errorDisplay: false // <— documented way to hide the error UI
+  });
+
+  // (B) auto-clear any false/legacy errors that might still be set by other plugins
+  function clearFalseErrorUI() {
+    try {
+      // Clear any stored MediaError on the player; hide overlay if a plugin added it
+      if (typeof player.error === 'function') player.error(null);
+      player.removeClass('vjs-error');
+      const ed = player.getChild && player.getChild('errorDisplay');
+      if (ed && typeof ed.hide === 'function') ed.hide();
+    } catch {}
+  }
+
+  // Call the clearer anytime we know playback is actually OK.
+  ['loadstart','loadedmetadata','canplay','playing','timeupdate','seeked'].forEach(ev => {
+    player.on(ev, clearFalseErrorUI);
+  });
 
   // ---- utils ----
   const KBPS = (info) => {
     if (!info) return 0;
-    if (typeof info.bitrate === 'number')   return info.bitrate;              // dash.js typical
+    if (typeof info.bitrate === 'number')   return info.bitrate;
     if (typeof info.bandwidth === 'number') return Math.round(info.bandwidth/1000);
     return 0;
   };
@@ -35,13 +113,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function setQualityByIdOrIndex(dash, repId, index) {
     try {
-      if (repId && hasIdAPI(dash)) dash.setRepresentationForTypeById('video', repId); // preferred
-      else if (typeof dash.setQualityFor === 'function' && index >= 0) dash.setQualityFor('video', index); // fallback
+      if (repId && hasIdAPI(dash)) dash.setRepresentationForTypeById('video', repId);
+      else if (typeof dash.setQualityFor === 'function' && index >= 0) dash.setQualityFor('video', index);
     } catch {}
   }
 
   function repAtOrBelow(targetH, reps, levels) {
-    // choose highest height ≤ targetH; map to index for fallback
     let best = null;
     for (const r of reps) {
       const h = (r && r.height) || 0;
@@ -56,8 +133,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function bitrateBoundsForHeights(levels, floorH, capH) {
-    const sorted = levels.map((it, i) => ({ i, h: it.height || 0, kbps: KBPS(it) }))
-                         .sort((a,b)=>a.h-b.h);
+    const sorted = levels.map((it, i) => ({ i, h: it.height || 0, kbps: KBPS(it) })).sort((a,b)=>a.h-b.h);
     let minKbps = -1, maxKbps = -1;
     const floor = sorted.find(x => x.h >= floorH);
     if (floor && floor.kbps > 0) minKbps = floor.kbps;
@@ -70,17 +146,14 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // ---- probe a quality for smoothness ----
-  const PROBE_OK_PLAY_MS = 4500; // need ~4.5s advancing playback
-  const STALL_FAIL_MS    = 2000; // a single ≥2s stall fails the probe
+  const PROBE_OK_PLAY_MS = 4500;
+  const STALL_FAIL_MS    = 2000;
   const PROBE_TIMEOUT_MS = 8000;
 
   function probeQuality(dash, cand) {
     return new Promise((resolve) => {
-      let okPlay = 0;
-      let lastAdvanceAt = performance.now();
-      let lastT = player.currentTime() || 0;
-      let waitingSince = null;
-      let done = false;
+      let okPlay = 0, lastAdvanceAt = performance.now(), lastT = player.currentTime() || 0;
+      let waitingSince = null, done = false;
 
       const cleanup = () => {
         player.off('timeupdate', onTime);
@@ -162,20 +235,14 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // ---- health watchdog + recovery ----
-  const WATCH_GRACE_MS = 2500; // if time doesn't advance for ~2.5s while not paused → retry
+  const WATCH_GRACE_MS = 2500;
   let watch = { t: 0, at: 0, on: false };
 
-  function startWatch() {
-    watch.t  = player.currentTime() || 0;
-    watch.at = performance.now();
-    watch.on = true;
-  }
-  function stopWatch() { watch.on = false; }
+  function startWatch() { watch.t = player.currentTime() || 0; watch.at = performance.now(); watch.on = true; }
+  function stopWatch()  { watch.on = false; }
 
-  // backoff steps with a bit of jitter (invisible reload of same MPD)
   const STEPS = [250, 400, 650, 900, 1200, 1600, 2100, 2800, 3600];
   let retryCount = 0;
-
   function backoffDelay() {
     const base = STEPS[Math.min(retryCount, STEPS.length - 1)];
     const jitter = Math.floor((Math.random()*2 - 1) * 120);
@@ -201,15 +268,15 @@ document.addEventListener('DOMContentLoaded', () => {
       player.one('loadeddata', () => {
         try { if (isFinite(keepTime) && keepTime > 0) player.currentTime(keepTime); } catch {}
         player.play().catch(()=>{});
+        clearFalseErrorUI(); // make sure any overlay is gone after a refresh
       });
     } catch {}
   }
 
-  function scheduleHeal(reason) {
+  function scheduleHeal() {
     if (healthy()) { retryCount = 0; return; }
     if ('onLine' in navigator && !navigator.onLine) {
-      // wait for connectivity, then retry once
-      const onlineOnce = () => { window.removeEventListener('online', onlineOnce); scheduleHeal('back-online'); };
+      const onlineOnce = () => { window.removeEventListener('online', onlineOnce); scheduleHeal(); };
       window.addEventListener('online', onlineOnce, { once: true });
       return;
     }
@@ -233,22 +300,67 @@ document.addEventListener('DOMContentLoaded', () => {
         player.play().catch(()=>{});
       }
     } catch {}
+    clearFalseErrorUI();
   }
 
-  // ---- orchestrate load + probing + ABR ----
-  player.ready(() => {
-    player.src({ src: MPD_URL, type: 'application/dash+xml' });
+  // ---- orchestrate load + probing + ABR + CORS hardening ----
+  player.ready(async () => {
+    const finalUrl = await normalizeMpdUrl(MPD_URL);
+    player.src({ src: finalUrl, type: 'application/dash+xml' });
 
     player.one('loadedmetadata', async () => {
-      const dash = player.dash && player.dash.mediaPlayer; // contrib-dash exposes dash.js here
+      const dash = player.dash && player.dash.mediaPlayer;
       if (!dash) return;
 
+      // 1) Hard-disable credentials for all request types
+      try {
+        const H = (window.dashjs && window.dashjs.HTTPRequest) || {};
+        const TYPES = [
+          H.MPD_TYPE, H.MEDIA_SEGMENT_TYPE, H.INIT_SEGMENT_TYPE,
+          H.BITSTREAM_SWITCHING_SEGMENT_TYPE, H.INDEX_SEGMENT_TYPE,
+          H.MSS_FRAGMENT_INFO_SEGMENT_TYPE, H.LICENSE, H.OTHER_TYPE, H.XLINK_EXPANSION_TYPE
+        ].filter(Boolean);
+        if (typeof dash.setXHRWithCredentialsForType === 'function') {
+          TYPES.forEach(t => { try { dash.setXHRWithCredentialsForType(t, false); } catch {} });
+        }
+      } catch {}
+
+      // 2) Prevent CMCD headers (no preflights)
+      try {
+        dash.updateSettings({
+          streaming: {
+            cmcd: { enabled: false, mode: 'query', includeInRequests: ['segment','mpd'] }
+          }
+        });
+      } catch {}
+
+      // 3) Strip creds/headers on non-license
+      try {
+        if (typeof dash.addRequestInterceptor === 'function') {
+          dash.addRequestInterceptor((req) => {
+            try {
+              const isLicense = /license|widevine|playready|fairplay/i.test(String(req?.url || ''));
+              if (!isLicense) {
+                req.withCredentials = false;
+                if (req.headers) {
+                  delete req.headers.Authorization;
+                  delete req.headers['X-Requested-With'];
+                  delete req.headers['X-CSRF-Token'];
+                  delete req.headers['Cookie'];
+                }
+              }
+            } catch {}
+            return Promise.resolve(req);
+          });
+        }
+      } catch {}
+
+      // --- quality probing & ABR bounds ---
       const levels = (typeof dash.getBitrateInfoListFor === 'function' ? dash.getBitrateInfoListFor('video') : []) || [];
       const reps   = (typeof dash.getRepresentationsByType === 'function' ? dash.getRepresentationsByType('video') : []) || [];
 
       function pick(targetH) {
         if (reps.length) return repAtOrBelow(targetH, reps, levels);
-        // index-only fallback
         let idx = -1, bestH = -1;
         for (let i = 0; i < levels.length; i++) {
           const h = levels[i].height || 0;
@@ -267,21 +379,14 @@ document.addEventListener('DOMContentLoaded', () => {
       if ((c480.idx  >= 0 || c480.id)  && (c480.idx !== c720.idx  || c480.id !== c720.id))   candidates.push({ id: c480.id, idx: c480.idx });
       if (!candidates.length && levels.length) candidates.push({ id: null, idx: levels.length - 1 });
 
-      // Try each candidate until one plays smoothly; else enable full ABR
       let chosenIdx = -1;
       for (const cand of candidates) {
         const ok = await probeQuality(dash, cand);
-        if (ok) {
-          chosenIdx = (typeof cand.idx === 'number' ? cand.idx : -1);
-          enableBoundedABR(dash, levels, 430, 1080, chosenIdx);
-          break;
-        }
+        if (ok) { chosenIdx = (typeof cand.idx === 'number' ? cand.idx : -1); enableBoundedABR(dash, levels, 430, 1080, chosenIdx); break; }
       }
       if (chosenIdx < 0) enableFullABR(dash);
 
-      resetToStartOnce();    // ensure we begin at 0s
-
-      // start health watchdog
+      resetToStartOnce();
       startWatch();
     });
   });
@@ -292,36 +397,45 @@ document.addEventListener('DOMContentLoaded', () => {
     const ct = player.currentTime() || 0;
     if (ct !== watch.t) { watch.t = ct; watch.at = performance.now(); return; }
     if (!player.paused() && (performance.now() - watch.at) > WATCH_GRACE_MS) {
-      scheduleHeal('watchdog');
-      // don't spam retries; pause the watch until we see progress again
+      scheduleHeal();
       watch.on = false;
       setTimeout(startWatch, 1200);
     }
   });
 
   player.on('playing',  () => { retryCount = 0; startWatch(); });
-  player.on('waiting',  () => { scheduleHeal('waiting'); });
-  player.on('stalled',  () => { scheduleHeal('stalled'); });
-  player.on('suspend',  () => { scheduleHeal('suspend'); });
-  player.on('emptied',  () => { scheduleHeal('emptied'); });
-  player.on('abort',    () => { scheduleHeal('abort'); });
+  player.on('waiting',  () => { scheduleHeal(); });
+  player.on('stalled',  () => { scheduleHeal(); });
+  player.on('suspend',  () => { scheduleHeal(); });
+  player.on('emptied',  () => { scheduleHeal(); });
+  player.on('abort',    () => { scheduleHeal(); });
 
-  // ---- hard errors → enable ABR + quiet refresh ----
+  // ---- if any error slips through, clear UI if playback is actually fine ----
+  function looksLikeCorsy(err) {
+    const s = String((err && (err.message || err.statusText)) || '');
+    return /cors|cross[- ]origin|allow-?origin|credentials|taint/i.test(s);
+  }
   player.on('error', () => {
     try {
       const dash = player.dash && player.dash.mediaPlayer;
       if (dash) enableFullABR(dash);
     } catch {}
-    const err = player.error();
-    // For network/decoder-ish cases, try reloading same MPD and resume
-    if (!err || err.code === 2 || err.code === 3) {
-      const keep = player.currentTime() || 0;
-      refreshSameSource(keep);
+    const err = player.error && player.error();
+
+    // If we can control playback or see progress, treat as spurious UI error and clear it
+    const progressed = (player.currentTime() || 0) > 0 || (player.buffered && player.buffered().length > 0);
+    if (progressed || !err || err.code === 2 || err.code === 3 || looksLikeCorsy(err)) {
+      clearFalseErrorUI();
+      // also attempt a soft refresh when appropriate
+      if (!progressed) {
+        const keep = player.currentTime() || 0;
+        refreshSameSource(keep);
+      }
     }
   });
 
   // ---- offline/online bridge ----
-  window.addEventListener('online',  () => scheduleHeal('online'));
+  window.addEventListener('online',  () => scheduleHeal());
 });
 
 // hai!! if ur asking why are they here - its for smth in the future!!!!!!

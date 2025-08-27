@@ -1,65 +1,70 @@
 // in the beginning.... god made mrrprpmnaynayaynaynayanyuwuuuwmauwnwanwaumawp :p
 var _yt_player = videojs;
 
-
-// DASH.js + Video.js + quality menu
-// - Uses global window.mpdurl (YouTube DASH MPD URL)
-// - Starts in HD by default (high initial bitrate), then ABR can adapt
-// - Adds a Quality menu (manual override) via contrib-quality-levels + http-source-selector
-// - Wipes any saved progress key `progress-<v>` as you asked
-
 document.addEventListener('DOMContentLoaded', () => {
-   const qs = new URLSearchParams(location.search);
+  // nuke progress key like progress-<videoId>
+  const qs = new URLSearchParams(location.search);
   const vidKey = qs.get('v') || '';
   if (vidKey) { try { localStorage.removeItem(`progress-${vidKey}`); } catch {} }
 
-  // guard: require mpdurl
   const MPD_URL = (typeof window !== 'undefined' && window.mpdurl) ? String(window.mpdurl) : '';
   if (!MPD_URL) { console.error('[dash] window.mpdurl is not set'); return; }
 
-  // init Video.js
   const player = videojs('video', {
     controls: true,
     autoplay: false,
     preload: 'auto'
   });
 
-  // add quality menu (reads available DASH reps through quality-levels)
-  // plugin injects its own button; no addChild is needed
-  if (typeof player.httpSourceSelector === 'function') {
-    player.httpSourceSelector({ default: 'auto' });
-  }
-
-  // set the MPD (dash.js attaches via videojs-contrib-dash)
+  // load DASH source
   player.ready(() => {
     player.src({ src: MPD_URL, type: 'application/dash+xml' });
+  });
 
-    // when dash.js is fully wired, set HD as the initial default
-    // Use dash.js Settings: initialBitrate.video in kbps (keep ABR enabled)
-    // ref: dash.js Settings initialBitrate/autoSwitchBitrate docs. :contentReference[oaicite:0]{index=0}
-    const applyHDDefault = () => {
+  // --- HD Button component ---
+  const Button = videojs.getComponent('Button');
+  const HDButton = videojs.extend(Button, {
+    constructor: function() {
+      Button.apply(this, arguments);
+      this.controlText("Force HD");
+      this.addClass('vjs-hd-button');
+      this.addClass('vjs-control');
+    },
+    handleClick: function() {
       try {
-        const dash = player.dash && player.dash.mediaPlayer; // dash.js instance exposed by contrib-dash. :contentReference[oaicite:1]{index=1}
-        if (!dash || typeof dash.updateSettings !== 'function') return;
+        const dash = player.dash && player.dash.mediaPlayer;
+        if (!dash) return;
 
-        // Pick a "HD-ish" starting point; YouTube MPDs typically have > 2.5Mbps for 720p and up.
-        // Adjust if you want to bias higher/lower.
+        // get available video qualities
+        const q = dash.getBitrateInfoListFor('video') || [];
+        if (q.length === 0) return;
+
+        // highest quality index
+        const maxIndex = q.length - 1;
+
+        // lock to highest rep
         dash.updateSettings({
           streaming: {
             abr: {
-              initialBitrate: { video: 5000, audio: -1 }, // ~5 Mbps start → choose an HD rep first
-              autoSwitchBitrate: { video: true, audio: true } // keep ABR on after start
+              autoSwitchBitrate: { video: false }, // disable ABR
             }
           }
         });
-      } catch {}
-    };
+        dash.setQualityFor('video', maxIndex);
 
-    // call once the tech is up; 'loadedmetadata' is a safe point
-    player.one('loadedmetadata', applyHDDefault);
+        // visual feedback: briefly change button text
+        const old = this.el().textContent;
+        this.el().textContent = "HD✓";
+        setTimeout(() => { this.el().textContent = old; }, 1500);
+      } catch (e) { console.error("HD force failed", e); }
+    }
   });
 
-  // tiny invisible retry for transient net/decode stalls (same MPD; no fallbacks)
+  // register and add to control bar
+  videojs.registerComponent('HDButton', HDButton);
+  player.getChild('controlBar').addChild('HDButton', {}, player.getChild('controlBar').children().length - 1);
+
+  // --- retry logic stays same ---
   player.on('error', () => {
     const err = player.error();
     if (!err || err.code === 2 || err.code === 3) {
@@ -77,7 +82,6 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 });
 
- 
  
 // hai!! if ur asking why are they here - its for smth in the future!!!!!!
 

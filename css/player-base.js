@@ -1,12 +1,19 @@
 // in the beginning.... god made mrrprpmnaynayaynaynayanyuwuuuwmauwnwanwaumawp :p
 var _yt_player = videojs;
 
-// Video.js + dash.js (videojs-contrib-dash)
- // If buffering lasts >=7s (startup or mid-play) OR any error occurs -> enable ABR so it can adapt.
-// Uses global window.mpdurl (YouTube DASH MPD URL). 
+
+
+
+
+
+// Video.js + dash.js (via videojs-contrib-dash)
+// Prefer 720–1080p automatically, never go below ~430p if that representation exists.
+// - Starts in the best rep within 720–1080p (or nearest <=1080p, else best available ≥430p, else max available)
+// - Leaves ABR ON but constrains it to stay within [~430p .. ~1080p] when those reps exist
+
 
 document.addEventListener('DOMContentLoaded', () => {
-  // remove saved progress key like progress-<videoId>
+  // wipe saved progress like progress-<videoId>
   const qs = new URLSearchParams(location.search);
   const vidKey = qs.get('v') || '';
   if (vidKey) { try { localStorage.removeItem(`progress-${vidKey}`); } catch {} }
@@ -20,101 +27,106 @@ document.addEventListener('DOMContentLoaded', () => {
     preload: 'auto'
   });
 
-  // ---- ABR control helpers ----
-  let abrEnabled = false;
-  const BUFFER_THRESHOLD_MS = 9000;
-  let startTimerId = null;   // startup buffering timer (after user hits play)
-  let waitTimerId  = null;   // timer during 'waiting' stalls
-  let inWaiting    = false;
-
-  function clearStartTimer() { if (startTimerId) { clearTimeout(startTimerId); startTimerId = null; } }
-  function clearWaitTimer()  { if (waitTimerId)  { clearTimeout(waitTimerId);  waitTimerId  = null; } }
-
-  function enableAbrOnce(reason) {
-    if (abrEnabled) return;
-    try {
-      const dash = player.dash && player.dash.mediaPlayer;
-      if (!dash) return;
-      dash.updateSettings({
-        streaming: {
-          abr: {
-            autoSwitchBitrate: { video: true, audio: true }
-          },
-          fastSwitchEnabled: true
-        }
-      });
-      abrEnabled = true;
-      // console.debug('[dash] ABR enabled due to:', reason);
-    } catch {}
+  // Helpers to read dash.js bitrate list safely
+  function kbpsOf(info) {
+    // dash.js BitrateInfo usually exposes `bitrate` in kbps. Some manifests expose `bandwidth` in bps.
+    if (!info) return 0;
+    if (typeof info.bitrate === 'number') return info.bitrate;
+    if (typeof info.bandwidth === 'number') return Math.round(info.bandwidth / 1000);
+    return 0;
   }
 
-  function forceHighestRepOnce() {
-    try {
-      const dash = player.dash && player.dash.mediaPlayer;
-      if (!dash) return;
+  function pickIndexByHeight(list) {
+    // list: ascending by qualityIndex (usually increasing bitrate/height)
+    // 1) Prefer highest within 720–1080p
+    const withinRange = list
+      .map((it, i) => ({ i, h: it.height || 0 }))
+      .filter(x => x.h >= 720 && x.h <= 1080)
+      .sort((a,b) => a.h - b.h);
+    if (withinRange.length) return withinRange[withinRange.length - 1].i;
 
-      // Bias startup to HD and lock to max (temporarily)
-      dash.updateSettings({
-        streaming: {
-          abr: {
-            initialBitrate: { video: 12000, audio: -1 }, // aim high (12 Mbps) to pick HD/1080+ initially
-            autoSwitchBitrate: { video: false, audio: true }
-          },
-          limitBitrateByPortal: false,
-          fastSwitchEnabled: true
-        }
-      });
+    // 2) Else pick highest <=1080p but >=430p
+    const belowCap = list
+      .map((it, i) => ({ i, h: it.height || 0 }))
+      .filter(x => x.h >= 430 && x.h <= 1080)
+      .sort((a,b) => a.h - b.h);
+    if (belowCap.length) return belowCap[belowCap.length - 1].i;
 
-      const levels = dash.getBitrateInfoListFor('video') || [];
-      if (levels.length > 0) {
-        const maxIndex = levels.length - 1;
-        dash.setQualityFor('video', maxIndex);
-      }
-    } catch {}
+    // 3) Else if everything <430p, pick the max available (still under our floor, but best we can do)
+    const allHeights = list.map((it, i) => ({ i, h: it.height || 0 })).sort((a,b)=>a.h-b.h);
+    if (allHeights.length) return allHeights[allHeights.length - 1].i;
+
+    // fallback
+    return 0;
   }
 
-  // ---- Source + initial quality lock ----
+  function computeBitrateBounds(list) {
+    // Find the lowest rep >=430p and the highest rep <=1080p (if present)
+    // Use their bitrates as min/max ABR constraints (kbps). If not present, leave -1 (no limit).
+    const sorted = list
+      .map((it, i) => ({ i, h: it.height || 0, kbps: kbpsOf(it) }))
+      .sort((a,b) => a.h - b.h);
+
+    let minKbps = -1, maxKbps = -1;
+
+    // min >= 430p
+    const floorCandidate = sorted.find(x => x.h >= 430);
+    if (floorCandidate && floorCandidate.kbps > 0) minKbps = floorCandidate.kbps;
+
+    // max <= 1080p
+    const capCandidates = sorted.filter(x => x.h > 0 && x.h <= 1080);
+    if (capCandidates.length) {
+      const bestCap = capCandidates[capCandidates.length - 1];
+      if (bestCap.kbps > 0) maxKbps = bestCap.kbps;
+    }
+
+    return { minKbps, maxKbps };
+  }
+
   player.ready(() => {
     player.src({ src: MPD_URL, type: 'application/dash+xml' });
 
     player.one('loadedmetadata', () => {
-      forceHighestRepOnce();
-      // Startup buffering watchdog: if it takes >=9s from "play" to "playing", turn ABR on
-      player.on('play', () => {
-        clearStartTimer();
-        startTimerId = setTimeout(() => enableAbrOnce('startup>7s'), BUFFER_THRESHOLD_MS);
-      });
-      player.on('playing', () => {
-        clearStartTimer();
-        inWaiting = false;
-        clearWaitTimer();
-      });
-    });
-  });
+      try {
+        const dash = player.dash && player.dash.mediaPlayer;
+        if (!dash) return;
 
-  // ---- Mid-play buffering watchdog ----
-  player.on('waiting', () => {
-    // Ignore tiny decoder jitters; only act if sustained >=9s
-    if (inWaiting) return;
-    inWaiting = true;
-    clearWaitTimer();
-    waitTimerId = setTimeout(() => {
-      enableAbrOnce('stall>7s');
-    }, BUFFER_THRESHOLD_MS);
-  });
+        // Get available video qualities (Representations)
+        const levels = dash.getBitrateInfoListFor('video') || [];
 
-  ['playing','seeking','seeked','timeupdate','canplay','canplaythrough','pause','ended'].forEach(ev => {
-    player.on(ev, () => {
-      if (ev === 'playing' || ev === 'timeupdate' || ev === 'canplay' || ev === 'canplaythrough') {
-        inWaiting = false;
-        clearWaitTimer();
+        if (levels.length) {
+          // Pick our starting quality index based on height preferences
+          const targetIdx = pickIndexByHeight(levels);
+
+          // Compute ABR min/max bitrates to try to keep within 720–1080 and never <430 if available
+          const { minKbps, maxKbps } = computeBitrateBounds(levels);
+
+          // Bias startup strongly to chosen quality, but keep ABR enabled (with our bounds)
+          dash.updateSettings({
+            streaming: {
+              abr: {
+                // Let ABR run, but bound it by our floor/cap (if those reps exist)
+                autoSwitchBitrate: { video: true, audio: true },
+                minBitrate: { video: minKbps, audio: -1 }, // -1 means no limit
+                maxBitrate: { video: maxKbps, audio: -1 },
+                initialBitrate: { video: Math.max( kbpsOf(levels[targetIdx]) || 6000, minKbps > 0 ? minKbps : 0 ) }
+              },
+              limitBitrateByPortal: false,
+              fastSwitchEnabled: true
+            }
+          });
+
+          // Force the initial selection to our target rep; ABR can still adjust within bounds after
+          dash.setQualityFor('video', targetIdx);
+        }
+      } catch (e) {
+        console.error('[dash] quality preference failed:', e);
       }
     });
   });
 
-  // ---- Error path: enable ABR, then quiet retry on same MPD ----
+  // Quiet retry for transient stalls (same MPD)
   player.on('error', () => {
-    enableAbrOnce('error');
     const err = player.error();
     if (!err || err.code === 2 || err.code === 3) {
       const keep = player.currentTime() || 0;

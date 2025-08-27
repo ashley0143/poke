@@ -1,8 +1,12 @@
 // in the beginning.... god made mrrprpmnaynayaynaynayanyuwuuuwmauwnwanwaumawp :p
 var _yt_player = videojs;
 
+
+// Video.js + dash.js (videojs-contrib-dash)
+// Goal: Prefer HD automatically, but allow ABR to adapt (drop/raise) if bandwidth requires.
+// Uses global window.mpdurl for the MPD URL. 
+
 document.addEventListener('DOMContentLoaded', () => {
-  // nuke progress key like progress-<videoId>
   const qs = new URLSearchParams(location.search);
   const vidKey = qs.get('v') || '';
   if (vidKey) { try { localStorage.removeItem(`progress-${vidKey}`); } catch {} }
@@ -10,6 +14,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const MPD_URL = (typeof window !== 'undefined' && window.mpdurl) ? String(window.mpdurl) : '';
   if (!MPD_URL) { console.error('[dash] window.mpdurl is not set'); return; }
 
+  // init Video.js
   const player = videojs('video', {
     controls: true,
     autoplay: false,
@@ -19,52 +24,53 @@ document.addEventListener('DOMContentLoaded', () => {
   // load DASH source
   player.ready(() => {
     player.src({ src: MPD_URL, type: 'application/dash+xml' });
-  });
 
-  // --- HD Button component ---
-  const Button = videojs.getComponent('Button');
-  const HDButton = videojs.extend(Button, {
-    constructor: function() {
-      Button.apply(this, arguments);
-      this.controlText("Force HD");
-      this.addClass('vjs-hd-button');
-      this.addClass('vjs-control');
-    },
-    handleClick: function() {
+    // Prefer HD at start, but let ABR auto-adapt afterward
+    player.one('loadedmetadata', () => {
       try {
         const dash = player.dash && player.dash.mediaPlayer;
         if (!dash) return;
 
-        // get available video qualities
-        const q = dash.getBitrateInfoListFor('video') || [];
-        if (q.length === 0) return;
-
-        // highest quality index
-        const maxIndex = q.length - 1;
-
-        // lock to highest rep
+        // 1) Bias startup toward HD:
+        //    - Use a high initialBitrate so the first pick tends to be HD
+        //    - Temporarily disable ABR to *force* the highest rep just once
         dash.updateSettings({
           streaming: {
             abr: {
-              autoSwitchBitrate: { video: false }, // disable ABR
+              initialBitrate: { video: 8000, audio: -1 },        // ~8 Mbps target for initial HD pick
+              autoSwitchBitrate: { video: false, audio: true }   // pause ABR for a moment (video only)
             }
           }
         });
-        dash.setQualityFor('video', maxIndex);
 
-        // visual feedback: briefly change button text
-        const old = this.el().textContent;
-        this.el().textContent = "HD✓";
-        setTimeout(() => { this.el().textContent = old; }, 1500);
-      } catch (e) { console.error("HD force failed", e); }
-    }
+        // Force highest representation once
+        const levels = dash.getBitrateInfoListFor('video') || [];
+        if (levels.length > 0) {
+          const maxIndex = levels.length - 1;
+          dash.setQualityFor('video', maxIndex);
+          // Optional: also lift any portal cap
+          dash.updateSettings({ streaming: { abr: { limitBitrateByPortal: false } } });
+        }
+
+        // 2) Re-enable ABR shortly after so it can drop/raise based on network conditions
+        setTimeout(() => {
+          try {
+            dash.updateSettings({
+              streaming: {
+                abr: {
+                  autoSwitchBitrate: { video: true, audio: true }
+                }
+              }
+            });
+          } catch {}
+        }, 1200); // small delay lets the HD buffer initialize before ABR can adjust
+      } catch (e) {
+        console.error('[dash] HD preference setup failed:', e);
+      }
+    });
   });
 
-  // register and add to control bar
-  videojs.registerComponent('HDButton', HDButton);
-  player.getChild('controlBar').addChild('HDButton', {}, player.getChild('controlBar').children().length - 1);
-
-  // --- retry logic stays same ---
+  // Quiet retry for transient stalls (same MPD, no alternates)
   player.on('error', () => {
     const err = player.error();
     if (!err || err.code === 2 || err.code === 3) {
@@ -81,6 +87,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 });
+
 
  
 // hai!! if ur asking why are they here - its for smth in the future!!!!!!

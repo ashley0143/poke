@@ -3,11 +3,9 @@ var _yt_player = videojs;
 
 
 
- 
-
-
-document.addEventListener('DOMContentLoaded', () => {
-   const qs = new URLSearchParams(location.search);
+ document.addEventListener('DOMContentLoaded', () => {
+  // delete progress key like "progress-<videoId>"
+  const qs = new URLSearchParams(location.search);
   const vidKey = qs.get('v') || '';
   if (vidKey) { try { localStorage.removeItem(`progress-${vidKey}`); } catch {} }
 
@@ -18,10 +16,14 @@ document.addEventListener('DOMContentLoaded', () => {
     preload: 'auto'
   });
 
-   const MPD_URL = window.mpdurl || '';
+  // enable contrib-quality-levels + source selector
+  player.httpSourceSelector();
+  player.controlBar.addChild('QualitySelector');
+
+  // Use your global window.mpdurl
+  const MPD_URL = window.mpdurl || '';
   if (MPD_URL) {
     player.ready(() => {
-      // dash.js will handle this type
       player.src({ src: MPD_URL, type: 'application/dash+xml' });
     });
   } else {
@@ -45,6 +47,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 });
+
 
 
  

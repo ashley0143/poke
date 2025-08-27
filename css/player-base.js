@@ -16,9 +16,12 @@ var _yt_player = videojs;
     preload: 'auto'
   });
 
-  // enable contrib-quality-levels + source selector
-  player.httpSourceSelector();
-  player.controlBar.addChild('QualitySelector');
+
+  // initialize the plugin (this injects a menu button into the control bar)
+  player.httpSourceSelector({
+    default: 'auto'   // shows "Auto" by default
+  });
+
 
   // Use your global window.mpdurl
   const MPD_URL = window.mpdurl || '';

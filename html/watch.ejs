@@ -411,13 +411,13 @@ button:hover, a:hover {
   <!-- player -->
   <link href="/css/videojs-v8.16.0.css?v=5949545" rel="stylesheet" />
   <script src="/static/vjs.min.js?v=45959"></script><script>window.mpdurl = "<%=u%>/api/manifest/dash/id/<%=VideoData.videoId%>?local=true&t=<%=btoa(Date.now())%>&f=<%=btoa(Date.now())%>"</script>
-<script src="https://cdn.jsdelivr.net/npm/dashjs@4/dist/dash.all.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/videojs-contrib-dash@5/dist/videojs-dash.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/videojs-contrib-quality-levels@2/dist/videojs-contrib-quality-levels.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/videojs-http-source-selector@1/dist/videojs-http-source-selector.min.js"></script>
+<script src="<%- proxyurl %>/https://cdn.jsdelivr.net/npm/dashjs@4/dist/dash.all.min.js"></script>
+<script src="<%- proxyurl %>/https://cdn.jsdelivr.net/npm/videojs-contrib-dash@5/dist/videojs-dash.min.js"></script>
+<script src="<%- proxyurl %>/https://cdn.jsdelivr.net/npm/videojs-contrib-quality-levels@2/dist/videojs-contrib-quality-levels.min.js"></script>
+<script src="<%- proxyurl %>/https://cdn.jsdelivr.net/npm/videojs-http-source-selector@1/dist/videojs-http-source-selector.min.js"></script>
 
 
-<!-- custom video player for poke --><script src="/static/player-base.js?v=4333_3452&lang=en_us&set=player_ias.vflset"> </script>
+<!-- custom video player for poke --><script src="/static/player-base.js?v=43343_3452&lang=en_us&set=player_ias.vflset"> </script>
 
   <!-- ICONS -->
   <!-- Font awesome pro -->

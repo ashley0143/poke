@@ -1,12 +1,12 @@
 // in the beginning.... god made mrrprpmnaynayaynaynayanyuwuuuwmauwnwanwaumawp :p
 var _yt_player = videojs;
 
-
 // Video.js + dash.js (videojs-contrib-dash)
-// Goal: Prefer HD automatically, but allow ABR to adapt (drop/raise) if bandwidth requires.
-// Uses global window.mpdurl for the MPD URL. 
+ // If buffering lasts >=7s (startup or mid-play) OR any error occurs -> enable ABR so it can adapt.
+// Uses global window.mpdurl (YouTube DASH MPD URL). 
 
 document.addEventListener('DOMContentLoaded', () => {
+  // remove saved progress key like progress-<videoId>
   const qs = new URLSearchParams(location.search);
   const vidKey = qs.get('v') || '';
   if (vidKey) { try { localStorage.removeItem(`progress-${vidKey}`); } catch {} }
@@ -14,64 +14,107 @@ document.addEventListener('DOMContentLoaded', () => {
   const MPD_URL = (typeof window !== 'undefined' && window.mpdurl) ? String(window.mpdurl) : '';
   if (!MPD_URL) { console.error('[dash] window.mpdurl is not set'); return; }
 
-  // init Video.js
   const player = videojs('video', {
     controls: true,
     autoplay: false,
     preload: 'auto'
   });
 
-  // load DASH source
+  // ---- ABR control helpers ----
+  let abrEnabled = false;
+  const BUFFER_THRESHOLD_MS = 9000;
+  let startTimerId = null;   // startup buffering timer (after user hits play)
+  let waitTimerId  = null;   // timer during 'waiting' stalls
+  let inWaiting    = false;
+
+  function clearStartTimer() { if (startTimerId) { clearTimeout(startTimerId); startTimerId = null; } }
+  function clearWaitTimer()  { if (waitTimerId)  { clearTimeout(waitTimerId);  waitTimerId  = null; } }
+
+  function enableAbrOnce(reason) {
+    if (abrEnabled) return;
+    try {
+      const dash = player.dash && player.dash.mediaPlayer;
+      if (!dash) return;
+      dash.updateSettings({
+        streaming: {
+          abr: {
+            autoSwitchBitrate: { video: true, audio: true }
+          },
+          fastSwitchEnabled: true
+        }
+      });
+      abrEnabled = true;
+      // console.debug('[dash] ABR enabled due to:', reason);
+    } catch {}
+  }
+
+  function forceHighestRepOnce() {
+    try {
+      const dash = player.dash && player.dash.mediaPlayer;
+      if (!dash) return;
+
+      // Bias startup to HD and lock to max (temporarily)
+      dash.updateSettings({
+        streaming: {
+          abr: {
+            initialBitrate: { video: 12000, audio: -1 }, // aim high (12 Mbps) to pick HD/1080+ initially
+            autoSwitchBitrate: { video: false, audio: true }
+          },
+          limitBitrateByPortal: false,
+          fastSwitchEnabled: true
+        }
+      });
+
+      const levels = dash.getBitrateInfoListFor('video') || [];
+      if (levels.length > 0) {
+        const maxIndex = levels.length - 1;
+        dash.setQualityFor('video', maxIndex);
+      }
+    } catch {}
+  }
+
+  // ---- Source + initial quality lock ----
   player.ready(() => {
     player.src({ src: MPD_URL, type: 'application/dash+xml' });
 
-    // Prefer HD at start, but let ABR auto-adapt afterward
     player.one('loadedmetadata', () => {
-      try {
-        const dash = player.dash && player.dash.mediaPlayer;
-        if (!dash) return;
+      forceHighestRepOnce();
+      // Startup buffering watchdog: if it takes >=9s from "play" to "playing", turn ABR on
+      player.on('play', () => {
+        clearStartTimer();
+        startTimerId = setTimeout(() => enableAbrOnce('startup>7s'), BUFFER_THRESHOLD_MS);
+      });
+      player.on('playing', () => {
+        clearStartTimer();
+        inWaiting = false;
+        clearWaitTimer();
+      });
+    });
+  });
 
-        // 1) Bias startup toward HD:
-        //    - Use a high initialBitrate so the first pick tends to be HD
-        //    - Temporarily disable ABR to *force* the highest rep just once
-        dash.updateSettings({
-          streaming: {
-            abr: {
-              initialBitrate: { video: 8000, audio: -1 },        // ~8 Mbps target for initial HD pick
-              autoSwitchBitrate: { video: false, audio: true }   // pause ABR for a moment (video only)
-            }
-          }
-        });
+  // ---- Mid-play buffering watchdog ----
+  player.on('waiting', () => {
+    // Ignore tiny decoder jitters; only act if sustained >=9s
+    if (inWaiting) return;
+    inWaiting = true;
+    clearWaitTimer();
+    waitTimerId = setTimeout(() => {
+      enableAbrOnce('stall>7s');
+    }, BUFFER_THRESHOLD_MS);
+  });
 
-        // Force highest representation once
-        const levels = dash.getBitrateInfoListFor('video') || [];
-        if (levels.length > 0) {
-          const maxIndex = levels.length - 1;
-          dash.setQualityFor('video', maxIndex);
-          // Optional: also lift any portal cap
-          dash.updateSettings({ streaming: { abr: { limitBitrateByPortal: false } } });
-        }
-
-        // 2) Re-enable ABR shortly after so it can drop/raise based on network conditions
-        setTimeout(() => {
-          try {
-            dash.updateSettings({
-              streaming: {
-                abr: {
-                  autoSwitchBitrate: { video: true, audio: true }
-                }
-              }
-            });
-          } catch {}
-        }, 1200); // small delay lets the HD buffer initialize before ABR can adjust
-      } catch (e) {
-        console.error('[dash] HD preference setup failed:', e);
+  ['playing','seeking','seeked','timeupdate','canplay','canplaythrough','pause','ended'].forEach(ev => {
+    player.on(ev, () => {
+      if (ev === 'playing' || ev === 'timeupdate' || ev === 'canplay' || ev === 'canplaythrough') {
+        inWaiting = false;
+        clearWaitTimer();
       }
     });
   });
 
-  // Quiet retry for transient stalls (same MPD, no alternates)
+  // ---- Error path: enable ABR, then quiet retry on same MPD ----
   player.on('error', () => {
+    enableAbrOnce('error');
     const err = player.error();
     if (!err || err.code === 2 || err.code === 3) {
       const keep = player.currentTime() || 0;
@@ -87,7 +130,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 });
-
 
  
 // hai!! if ur asking why are they here - its for smth in the future!!!!!!

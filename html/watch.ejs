@@ -409,63 +409,8 @@ button:hover, a:hover {
   <link href="/css/app-cdn.min.css?v=9893448" rel=stylesheet><link href="/css/app.main.css?v=446008" rel=stylesheet><link href="/css/watch.main.css?v=9893448" rel=stylesheet> <link href="/css/watch-util.css?v=9893448" rel=stylesheet><link href="/css/watch-navbar.css?v=9893448" rel=stylesheet><link href="/css/poketube.css?v=9445645" rel=stylesheet>
 
   <!-- player -->
-  <link href="/css/videojs-v8.16.0.css?v=59494545" rel="stylesheet" />
-  <script src="/static/vjs.min.js?v=45959"></script>
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  <script>
-  window.mpdurl =  "<%=u%>/api/manifest/dash/id/<%=VideoData.videoId%>?local=true" // main DASH manifest
-
-
-  <% 
-  let itag = '136'; // Default itag
-  VideoData.adaptiveFormats.forEach(format => {
-    if (format.itag == '298') {
-      itag = '298';
-    }
-  });
-%>
- 
- <% 
-  let itagaudio = null; // Default to null
-  VideoData.adaptiveFormats.forEach(format => {
-    if (format.itag == '136' || format.itag == '298') {
-      itagaudio = '140'; // Set itag to '140' if either '136' or '298' is found
-    }
-  });
-%>  
-
-  window.fallbackVideoUrl = "<%=u%>/latest_version?id=<%=VideoData.videoId%>&itag=<%=itag%>&local=true";
-  window.fallbackAudioUrl = "<%=u%>/latest_version?id=<%=VideoData.videoId%>&itag=<%=itagaudio%>&local=true";
-</script>
-
-  
-  
-  
-  
- 
-
-
-
-<script src="<%- proxyurl %>/https://cdn.jsdelivr.net/npm/dashjs@4/dist/dash.all.min.js"></script>
-<script src="<%- proxyurl %>/https://cdn.jsdelivr.net/npm/videojs-contrib-dash@5/dist/videojs-dash.min.js"></script>
-<script src="<%- proxyurl %>/https://cdn.jsdelivr.net/npm/videojs-contrib-quality-levels@2/dist/videojs-contrib-quality-levels.min.js"></script>
-<script src="<%- proxyurl %>/https://cdn.jsdelivr.net/npm/videojs-http-source-selector@1/dist/videojs-http-source-selector.min.js"></script>
-
-
-<!-- custom video player for poke --><script src="/static/player-base.js?v=ab4rs_092a_6767144a&lang=en_us&set=player_ias.vflset"> </script>
+  <link href="/css/videojs-v8.16.0.css?v=5949545" rel="stylesheet" />
+  <script src="/static/vjs.min.js?v=45959"></script><!-- custom video player for poke --><script src="/static/player-base.js?v=33_4352&lang=en_us&set=player_ias.vflset"> </script>
 
   <!-- ICONS -->
   <!-- Font awesome pro -->
@@ -1068,7 +1013,23 @@ Offical Discord Server! :3
     
     
 		<div id="<%=sha384(VideoData.videoId)%>" class="video-player-container">
-       
+      
+ <% 
+  let itag = null; // Default to null
+  VideoData.adaptiveFormats.forEach(format => {
+    if (format.itag == '136' || format.itag == '298') {
+      itag = '140'; // Set itag to '140' if either '136' or '298' is found
+    }
+  });
+%>  
+
+<% if (itag && !qua) { %>
+  <audio id="aud" preload>
+    <source src="<%=u%>/latest_version?id=<%=VideoData.videoId%>&itag=<%=itag%>&local=true" type="video/mp4"  />
+  </audio>
+<% } else { %>
+  <audio id="aud"></audio>
+<% } %>
 
       <noscript>
         <% if (!qua) { %>
@@ -1078,11 +1039,19 @@ Offical Discord Server! :3
         <% } %>
       </noscript>
    
-      <video preload="none" poster="<%- media_proxy_url %>/proxy?url=https://i.ytimg.com/vi/<%= VideoData.videoId %>/hqdefault.jpg" class="video-js player video-ambient-container" id="video" style="border-radius: 16px; box-sizing: border-box; min-width: 100%; display: block;"  >
+      <video poster="<%- media_proxy_url %>/proxy?url=https://i.ytimg.com/vi/<%= VideoData.videoId %>/hqdefault.jpg" class="video-js player video-ambient-container" id="video" style="border-radius: 16px; box-sizing: border-box; min-width: 100%; display: block;" preload>
       <% if (isvidious) { %>
         <% if (!qua) { %>
- 
-         <% } %>
+<% 
+  let itag = '136'; // Default itag
+  VideoData.adaptiveFormats.forEach(format => {
+    if (format.itag == '298') {
+      itag = '298';
+    }
+  });
+%>
+<source src="<%=u%>/latest_version?id=<%=VideoData.videoId%>&itag=<%=itag%>&local=true" type="video/mp4; codecs=&quot;avc1.64001F, mp4a.40.2&quot;" label="hd720" selected="true">
+        <% } %>
         <% if (qua === "medium") { %>
           <source src="<%=u%>/latest_version?id=<%=VideoData.videoId%>&itag=18&local=true" type="video/mp4; codecs=&quot;avc1.64001F, mp4a.40.2&quot;" label="sd360" selected="true" >
         <% } %>
@@ -1125,7 +1094,6 @@ Offical Discord Server! :3
     <% } %>
     
     <div class="pwp">
-    <noscript>
       <% if (!qua) { %> 
         <a><i style="display: block;" title="High Definition [Current]" class="fa-solid fa-high-definition"></i> High Definition </a>
         <a href="/watch?v=<%=VideoData.videoId%>&quality=medium"><i style="display: block;" title="Standard Definition" class="fa-light fa-standard-definition"></i> Standard Definition</a>
@@ -1135,7 +1103,6 @@ Offical Discord Server! :3
         <a href="/watch?v=<%=VideoData.videoId%>">  <i style="display: block;"  title="High Definition" class="fa-light fa-high-definition"></i> High Definition </a>
         <a><i style="display: block;" title="Standard Definition [Current]"  class="fa-solid fa-standard-definition"></i> Standard Definition</a>
       <% } %>
-</noscript>
 
       <input type="checkbox" class="v" id="box" style="display:none">
       <label class="h" for="box">
@@ -3792,7 +3759,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
 <% } catch (error) { %>
   
-  <%- error %>
+   <p>"Error while communicating with Invidious companion: Error connecting to 'gluetun:8282': Host is unreachable"</p>
 
  <% } %>
  <!-- PHTML END -->

@@ -387,7 +387,7 @@ app.get("/game-hub", function (req, res) {
       res.redirect("/css/" + id);
     } else if (id.endsWith(".js")) {
       if (id.endsWith(".bundle.js")) {
-        const jsFiles = ["app.js", "custom-css.js", "emojis.js", "player-base-new.js"];
+        const jsFiles = ["app.js", "custom-css.js", "emojis.js"];
         const combinedContent = jsFiles
           .map((fileName) => {
             const filePath = path.join(html_location, fileName);

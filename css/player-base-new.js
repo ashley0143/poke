@@ -1,33 +1,7 @@
 // in the beginning.... god made mrrprpmnaynayaynaynayanyuwuuuwmauwnwanwaumawp :p
 var _yt_player = videojs;
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+ 
  document.addEventListener("DOMContentLoaded", () => {
     // video.js 8 init - source can be seen in https://poketube.fun/static/vjs.min.js or the vjs.min.js file
     const video = videojs('video', {
@@ -57,8 +31,6 @@ var _yt_player = videojs;
     try {
         if (PROG_KEY && localStorage.getItem(PROG_KEY) == null) localStorage.setItem(PROG_KEY, "0");
     } catch {}
-});
- 
 
     // raw media elements
     const videoEl = document.getElementById('video');

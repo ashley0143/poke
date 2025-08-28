@@ -58,18 +58,7 @@ var _yt_player = videojs;
         if (PROG_KEY && localStorage.getItem(PROG_KEY) == null) localStorage.setItem(PROG_KEY, "0");
     } catch {}
 });
-
-  function clearFalseErrorUI() {
-    try {
-      if (typeof player.error === 'function') player.error(null);
-      player.removeClass('vjs-error');
-      const ed = player.getChild && player.getChild('errorDisplay');
-      if (ed && typeof ed.hide === 'function') ed.hide();
-    } catch {}
-  }
-  ['loadstart','loadedmetadata','canplay','playing','timeupdate','seeked'].forEach(ev => {
-    player.on(ev, clearFalseErrorUI);
-  });
+ 
 
     // raw media elements
     const videoEl = document.getElementById('video');

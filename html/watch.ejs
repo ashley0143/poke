@@ -411,7 +411,51 @@ button:hover, a:hover {
   <!-- player -->
   <link href="/css/videojs-v8.16.0.css?v=59494545" rel="stylesheet" />
   <script src="/static/vjs.min.js?v=45959"></script>
-  <script>window.mpdurl = "<%=u%>/api/manifest/dash/id/<%=VideoData.videoId%>?local=true"</script>
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  <script>
+  window.mpdurl =  "<%=u%>/api/manifest/dash/id/<%=VideoData.videoId%>?local=true" // main DASH manifest
+
+
+  <% 
+  let itag = '136'; // Default itag
+  VideoData.adaptiveFormats.forEach(format => {
+    if (format.itag == '298') {
+      itag = '298';
+    }
+  });
+%>
+ 
+ <% 
+  let itagaudio = null; // Default to null
+  VideoData.adaptiveFormats.forEach(format => {
+    if (format.itag == '136' || format.itag == '298') {
+      itagaudio = '140'; // Set itag to '140' if either '136' or '298' is found
+    }
+  });
+%>  
+
+  window.fallbackVideoUrl = "<%=u%>/latest_version?id=<%=VideoData.videoId%>&itag=<%=itag%>&local=true";
+  window.fallbackAudioUrl = "<%=u%>/latest_version?id=<%=VideoData.videoId%>&itag=<%=itagaudio%>&local=true";
+</script>
+
+  
+  
+  
+  
+    <script>window.mpdurl =</script>
 
 
 

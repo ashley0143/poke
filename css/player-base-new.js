@@ -660,7 +660,8 @@ var _yt_player = videojs;
             } catch {}
         }, 5000);
     }
-});
+    
+
  
  
 // hai!! if ur asking why are they here - its for smth in the future!!!!!!

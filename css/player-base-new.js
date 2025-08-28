@@ -16,6 +16,19 @@ var _yt_player = videojs;
     const qua = qs.get("quality") || "";
     const vidKey = qs.get('v') || '';
     const PROG_KEY = vidKey ? `progress-${vidKey}` : null;
+});
+
+  function clearFalseErrorUI() {
+    try {
+      if (typeof player.error === 'function') player.error(null);
+      player.removeClass('vjs-error');
+      const ed = player.getChild && player.getChild('errorDisplay');
+      if (ed && typeof ed.hide === 'function') ed.hide();
+    } catch {}
+  }
+  ['loadstart','loadedmetadata','canplay','playing','timeupdate','seeked'].forEach(ev => {
+    player.on(ev, clearFalseErrorUI);
+  });
 
     // persist last position (quietly)
     let lastSaved = 0;

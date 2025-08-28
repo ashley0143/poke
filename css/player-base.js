@@ -1,51 +1,16 @@
 // in the beginning.... god made mrrprpmnaynayaynaynayanyuwuuuwmauwnwanwaumawp :p
 var _yt_player = videojs;
-
-/**
- * Self-Healing DASH Player for Video.js
- * --------------------------------------------------------------
- * Drop-in controller for MPEG-DASH playback
- * with Video.js + videojs-contrib-dash (dash.js underneath).
- *
- * WHAT THIS SCRIPT DOES
- * - Loads MPD from `window.mpdurl` and starts from 0s (fixes “starts at 5–7s”).
- * - Probes quality in order: 1080p → 720p → 480p with ABR OFF, then
- *   re-enables ABR with soft bounds (floor ≈ 430p if available, cap 1080p).
- * - Monitors health; if playback stops advancing, it silently refreshes
- *   the same MPD and resumes from the saved time (exponential backoff).
- * - On player/demux/network hiccups it flips back to full ABR for safety.
- *
- * CORS / NETWORK HARDENING
- * - Forces cookie-less segment/MPD requests (withCredentials=false per type).
- * - Disables CMCD headers (or uses query mode) to avoid preflights.
- * - Request interceptor strips non-essential custom headers on non-license
- *   calls. The <video> element is set to crossorigin="anonymous".
- * - The MPD URL is “normalized” first via fetch(..., credentials:'omit') to
- *   collapse redirects that can drop ACAO headers.
- *
- * ERROR UI SUPPRESSION
- * - `errorDisplay:false` hides the default “No compatible source …” overlay.
- * - If any component still sets a stale MediaError, we clear it programmatically
- *   (`player.error(null)`, remove `vjs-error`) whenever playback is actually OK.
- *
- * REQUIREMENTS
- * - Video.js 7/8, videojs-contrib-dash, dash.js loaded before this script.
- * - <video id="video"> exists in the DOM. Provide `window.mpdurl` (string).
- *
- * TUNABLE KNOBS (search constants below)
- * - PROBE_OK_PLAY_MS, STALL_FAIL_MS, PROBE_TIMEOUT_MS: probe behavior.
- * - WATCH_GRACE_MS, STEPS[]: health watchdog & silent refresh backoff.
- * - ABR bounds: floor ≈ 430p, cap 1080p (adjust inside enableBoundedABR).
- *
- * DRM NOTE
- * - By default all requests are credential-free to minimize CORS breaks.
- *   If your license server requires credentials, selectively enable them:
- *   dash.setXHRWithCredentialsForType(HTTPRequest.LICENSE, true) and
- *   allow only the minimal headers required for the license endpoint.
- *
- * USAGE
- * - Include after the libraries; no other wiring needed. Last reviewed: Aug 2025.
- */
+// Self-healing DASH player (Video.js + videojs-contrib-dash + dash.js)
+// + CORS hardening
+// + ERROR UI SUPPRESSION (hide/clear false “No compatible source…”)
+// + AUTO FALLBACK to Progressive (video+separate audio) after repeated errors
+//
+// Fallback expectations:
+//   - Provide progressive **video-only** URL at `window.fallbackVideoUrl` (e.g., MP4/WebM no-audio).
+//   - Provide matching **audio-only** URL at `window.fallbackAudioUrl` (e.g., M4A/Opus).
+//   - If either is missing, the fallback won’t engage and we’ll keep trying DASH.
+//
+// The fallback re-enables the old audio+video sync path (single <audio id="aud"> is created if absent).
 
 document.addEventListener('DOMContentLoaded', () => {
   // ---- housekeeping ----
@@ -59,7 +24,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // Ensure the underlying <video> never taints or sends cookies by default
   try { document.getElementById('video')?.setAttribute('crossorigin', 'anonymous'); } catch {}
 
-  // --- tiny helper: resolve final URL without cookies & with CORS mode ---
+  // --- normalize MPD URL (follow redirects, no cookies) ---
   async function normalizeMpdUrl(url) {
     try {
       const resp = await fetch(url, {
@@ -75,26 +40,21 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // === ERROR UI SUPPRESSION ===
-  // (A) disable overlay via option (prevents the big black “No compatible source…” box)
   const player = videojs('video', {
     controls: true,
     autoplay: false,
     preload: 'auto',
-    errorDisplay: false // <— documented way to hide the error UI
+    errorDisplay: false
   });
 
-  // (B) auto-clear any false/legacy errors that might still be set by other plugins
   function clearFalseErrorUI() {
     try {
-      // Clear any stored MediaError on the player; hide overlay if a plugin added it
       if (typeof player.error === 'function') player.error(null);
       player.removeClass('vjs-error');
       const ed = player.getChild && player.getChild('errorDisplay');
       if (ed && typeof ed.hide === 'function') ed.hide();
     } catch {}
   }
-
-  // Call the clearer anytime we know playback is actually OK.
   ['loadstart','loadedmetadata','canplay','playing','timeupdate','seeked'].forEach(ev => {
     player.on(ev, clearFalseErrorUI);
   });
@@ -237,7 +197,6 @@ document.addEventListener('DOMContentLoaded', () => {
   // ---- health watchdog + recovery ----
   const WATCH_GRACE_MS = 2500;
   let watch = { t: 0, at: 0, on: false };
-
   function startWatch() { watch.t = player.currentTime() || 0; watch.at = performance.now(); watch.on = true; }
   function stopWatch()  { watch.on = false; }
 
@@ -268,18 +227,20 @@ document.addEventListener('DOMContentLoaded', () => {
       player.one('loadeddata', () => {
         try { if (isFinite(keepTime) && keepTime > 0) player.currentTime(keepTime); } catch {}
         player.play().catch(()=>{});
-        clearFalseErrorUI(); // make sure any overlay is gone after a refresh
+        clearFalseErrorUI();
       });
     } catch {}
   }
 
   function scheduleHeal() {
+    if (!usingDash) return; // only heal Dash; progressive has its own retry
     if (healthy()) { retryCount = 0; return; }
     if ('onLine' in navigator && !navigator.onLine) {
       const onlineOnce = () => { window.removeEventListener('online', onlineOnce); scheduleHeal(); };
       window.addEventListener('online', onlineOnce, { once: true });
       return;
     }
+    addStrike('heal');
     const keep = player.currentTime() || 0;
     const delay = backoffDelay();
     setTimeout(() => refreshSameSource(keep), delay);
@@ -303,7 +264,183 @@ document.addEventListener('DOMContentLoaded', () => {
     clearFalseErrorUI();
   }
 
-  // ---- orchestrate load + probing + ABR + CORS hardening ----
+  // =========================
+  // DASH → Progressive fallback
+  // =========================
+  const MAX_STRIKES = 6;          // number of “serious” issues within window to trigger fallback
+  const STRIKE_WINDOW_MS = 20000; // lookback window
+  let usingDash = true;
+  let strikes = [];
+
+  function addStrike(reason) {
+    const now = performance.now();
+    strikes.push(now);
+    // prune
+    strikes = strikes.filter(t => now - t <= STRIKE_WINDOW_MS);
+    if (strikes.length >= MAX_STRIKES) {
+      console.warn('[player] too many errors → switching to progressive fallback', reason, strikes.length);
+      switchToProgressive();
+    }
+  }
+
+  function immediateFallback(reason) {
+    console.warn('[player] forcing progressive fallback:', reason);
+    switchToProgressive();
+  }
+
+  function switchToProgressive() {
+    if (!window.fallbackVideoUrl || !window.fallbackAudioUrl) {
+      console.error('[player] fallback requested but window.fallbackVideoUrl or window.fallbackAudioUrl is missing');
+      return;
+    }
+    usingDash = false;
+    try {
+      // Detach dash.js cleanly if present
+      const dash = player.dash && player.dash.mediaPlayer;
+      if (dash && typeof dash.reset === 'function') { try { dash.reset(); } catch {} }
+    } catch {}
+
+    // Kill dash listeners
+    player.off('waiting', scheduleHeal);
+    player.off('stalled', scheduleHeal);
+    player.off('suspend', scheduleHeal);
+    player.off('emptied', scheduleHeal);
+    player.off('abort',   scheduleHeal);
+
+    // Set progressive source on Video.js (HTML5 tech)
+    try {
+      player.pause();
+      player.src({ src: window.fallbackVideoUrl, type: guessMime(window.fallbackVideoUrl) || 'video/mp4' });
+      player.load();
+    } catch {}
+
+    // Ensure/prepare audio element
+    let audio = document.getElementById('aud');
+    if (!audio) {
+      audio = document.createElement('audio');
+      audio.id = 'aud';
+      audio.style.display = 'none';
+      document.body.appendChild(audio);
+    }
+    audio.src = window.fallbackAudioUrl;
+    audio.crossOrigin = 'anonymous';
+
+    // Mute HTML5 video element to prevent double audio (progressive video might carry audio)
+    try {
+      const techEl = player.tech_ && player.tech_.el && player.tech_.el();
+      if (techEl) techEl.muted = true;
+    } catch {}
+
+    // Bring back A+V sync stack
+    initDualAVSync(player, audio);
+
+    // Start playing from 0 (consistent UX with dash path)
+    player.one('loadeddata', () => {
+      try { player.currentTime(0); } catch {}
+      try { audio.currentTime = 0; } catch {}
+      player.play()?.catch(()=>{});
+      audio.play()?.catch(()=>{});
+    });
+  }
+
+  function guessMime(url) {
+    const q = url.split('?')[0].toLowerCase();
+    if (q.endsWith('.mp4'))  return 'video/mp4';
+    if (q.endsWith('.webm')) return 'video/webm';
+    if (q.endsWith('.m4v'))  return 'video/mp4';
+    return '';
+  }
+
+  // === dual A/V sync engine (progressive fallback) ===
+  function initDualAVSync(player, audio) {
+    const BIG_DRIFT = 0.5;
+    const MICRO_DRIFT = 0.05;
+    const SYNC_INTERVAL_MS = 240;
+    let syncInterval = null;
+
+    function safeSetCT(media, t) {
+      try { if (isFinite(t) && t >= 0) media.currentTime = t; } catch {}
+    }
+    function clearSyncLoop() {
+      if (syncInterval) {
+        clearInterval(syncInterval);
+        syncInterval = null;
+        try { audio.playbackRate = 1; } catch {}
+      }
+    }
+    function startSyncLoop() {
+      clearSyncLoop();
+      syncInterval = setInterval(() => {
+        const vt = Number(player.currentTime());
+        const at = Number(audio.currentTime);
+        if (!isFinite(vt) || !isFinite(at)) return;
+
+        const delta = vt - at;
+        if (Math.abs(delta) > BIG_DRIFT) {
+          safeSetCT(audio, vt);
+          try { audio.playbackRate = 1; } catch {}
+          return;
+        }
+        if (Math.abs(delta) > MICRO_DRIFT) {
+          const rate = Math.max(0.85, Math.min(1.15, 1 + delta * 0.12));
+          try { audio.playbackRate = rate; } catch {}
+        } else {
+          try { audio.playbackRate = 1; } catch {}
+        }
+      }, SYNC_INTERVAL_MS);
+    }
+
+    // one-shot retry helper for audio element
+    function attachRetry(elm, src) {
+      elm.addEventListener('error', () => {
+        if (elm._didRetry || !src) return;
+        elm._didRetry = true;
+        try { elm.src = src; elm.load(); elm.play()?.catch(()=>{}); } catch {}
+      }, { once: true });
+    }
+    attachRetry(audio, audio.src);
+
+    // wiring
+    player.on('play', () => {
+      if (!syncInterval) startSyncLoop();
+      const vt = Number(player.currentTime());
+      if (Math.abs(vt - Number(audio.currentTime)) > 0.3) safeSetCT(audio, vt);
+      audio.play()?.catch(()=>{});
+    });
+    player.on('pause', () => { audio.pause(); clearSyncLoop(); });
+    player.on('waiting', () => { audio.pause(); clearSyncLoop(); });
+    player.on('playing', () => { audio.play()?.catch(()=>{}); if (!syncInterval) startSyncLoop(); });
+
+    // Seek glue
+    player.on('seeking', () => {
+      audio.pause();
+      clearSyncLoop();
+      const vt = Number(player.currentTime());
+      if (Math.abs(vt - Number(audio.currentTime)) > 0.1) safeSetCT(audio, vt);
+    });
+    player.on('seeked', () => {
+      const vt = Number(player.currentTime());
+      if (Math.abs(vt - Number(audio.currentTime)) > 0.05) safeSetCT(audio, vt);
+      audio.play()?.catch(()=>{});
+      if (!syncInterval) startSyncLoop();
+    });
+
+    // Volume mirror
+    player.on('volumechange', () => {
+      try { audio.volume = Math.max(0, Math.min(1, Number(player.volume()))); } catch {}
+    });
+    audio.addEventListener('volumechange', () => {
+      try { player.volume(Math.max(0, Math.min(1, Number(audio.volume)))); } catch {}
+    });
+
+    // End + fullscreen
+    player.on('ended', () => { try { audio.pause(); } catch {}; clearSyncLoop(); });
+    document.addEventListener('fullscreenchange', () => {
+      if (!document.fullscreenElement) { player.pause(); audio.pause(); clearSyncLoop(); }
+    });
+  }
+
+  // ---- orchestrate load + probing + ABR + CORS hardening (DASH path) ----
   player.ready(async () => {
     const finalUrl = await normalizeMpdUrl(MPD_URL);
     player.src({ src: finalUrl, type: 'application/dash+xml' });
@@ -312,7 +449,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const dash = player.dash && player.dash.mediaPlayer;
       if (!dash) return;
 
-      // 1) Hard-disable credentials for all request types
+      // CORS hardening
       try {
         const H = (window.dashjs && window.dashjs.HTTPRequest) || {};
         const TYPES = [
@@ -323,19 +460,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (typeof dash.setXHRWithCredentialsForType === 'function') {
           TYPES.forEach(t => { try { dash.setXHRWithCredentialsForType(t, false); } catch {} });
         }
-      } catch {}
-
-      // 2) Prevent CMCD headers (no preflights)
-      try {
-        dash.updateSettings({
-          streaming: {
-            cmcd: { enabled: false, mode: 'query', includeInRequests: ['segment','mpd'] }
-          }
-        });
-      } catch {}
-
-      // 3) Strip creds/headers on non-license
-      try {
+        dash.updateSettings({ streaming: { cmcd: { enabled: false, mode: 'query', includeInRequests: ['segment','mpd'] } } });
         if (typeof dash.addRequestInterceptor === 'function') {
           dash.addRequestInterceptor((req) => {
             try {
@@ -355,7 +480,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
       } catch {}
 
-      // --- quality probing & ABR bounds ---
+      // quality probing & ABR bounds
       const levels = (typeof dash.getBitrateInfoListFor === 'function' ? dash.getBitrateInfoListFor('video') : []) || [];
       const reps   = (typeof dash.getRepresentationsByType === 'function' ? dash.getRepresentationsByType('video') : []) || [];
 
@@ -391,52 +516,56 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // ---- health & stall handling ----
+  // ---- health & stall handling (DASH path) ----
   player.on('timeupdate', () => {
-    if (!watch.on) return;
+    if (!usingDash || !watch.on) return;
     const ct = player.currentTime() || 0;
     if (ct !== watch.t) { watch.t = ct; watch.at = performance.now(); return; }
     if (!player.paused() && (performance.now() - watch.at) > WATCH_GRACE_MS) {
+      addStrike('watchdog');
       scheduleHeal();
       watch.on = false;
       setTimeout(startWatch, 1200);
     }
   });
 
-  player.on('playing',  () => { retryCount = 0; startWatch(); });
-  player.on('waiting',  () => { scheduleHeal(); });
-  player.on('stalled',  () => { scheduleHeal(); });
-  player.on('suspend',  () => { scheduleHeal(); });
-  player.on('emptied',  () => { scheduleHeal(); });
-  player.on('abort',    () => { scheduleHeal(); });
+  // treat these as strikes; they often precede fatal stalls on fragile paths
+  ['waiting','stalled','suspend','emptied','abort'].forEach(ev => {
+    player.on(ev, () => { addStrike(ev); if (usingDash) scheduleHeal(); });
+  });
 
-  // ---- if any error slips through, clear UI if playback is actually fine ----
+  // If dash throws real errors repeatedly, fall back
   function looksLikeCorsy(err) {
     const s = String((err && (err.message || err.statusText)) || '');
     return /cors|cross[- ]origin|allow-?origin|credentials|taint/i.test(s);
   }
   player.on('error', () => {
+    const err = player.error && player.error();
+    addStrike('error');
     try {
       const dash = player.dash && player.dash.mediaPlayer;
       if (dash) enableFullABR(dash);
     } catch {}
-    const err = player.error && player.error();
 
-    // If we can control playback or see progress, treat as spurious UI error and clear it
-    const progressed = (player.currentTime() || 0) > 0 || (player.buffered && player.buffered().length > 0);
-    if (progressed || !err || err.code === 2 || err.code === 3 || looksLikeCorsy(err)) {
-      clearFalseErrorUI();
-      // also attempt a soft refresh when appropriate
-      if (!progressed) {
-        const keep = player.currentTime() || 0;
-        refreshSameSource(keep);
+    // Immediate fallback on hard “no source”/CORS-ish scenarios if available
+    if (err && (err.code === 4 || looksLikeCorsy(err))) {
+      if (window.fallbackVideoUrl && window.fallbackAudioUrl) {
+        immediateFallback('code4-or-cors');
+        return;
       }
+    }
+
+    // otherwise soft refresh
+    if (usingDash) {
+      const keep = player.currentTime() || 0;
+      refreshSameSource(keep);
     }
   });
 
   // ---- offline/online bridge ----
-  window.addEventListener('online',  () => scheduleHeal());
+  window.addEventListener('online',  () => { if (usingDash) scheduleHeal(); });
 });
+
 
 // hai!! if ur asking why are they here - its for smth in the future!!!!!!
 

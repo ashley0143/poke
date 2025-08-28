@@ -377,62 +377,107 @@ app.get("/game-hub", function (req, res) {
   renderTemplate(res, req, "gamehub.ejs", {
     game: requestedGame,
   });
-});
-
-
-  app.get("/static/:id", (req, res) => {
+}); 
+ 
+app.get("/static/:id", async (req, res) => {
+  try {
     const id = req.params.id;
+    const licenseMagnet =
+      "// @license magnet:?xt=urn:btih:1f739d935676111cfff4b4693e3816e664797050&dn=gpl-3.0.txt GPL-3.0-or-later";
+    const endMarker = "// @license-end";
+
+    // Inline safe minify function
+    async function minifyJS(code) {
+      try {
+        const terser = require("terser");
+        const out = await terser.minify(code, {
+          compress: true,
+          mangle: true,
+          format: { comments: false },
+          ecma: 2020,
+        });
+        if (out && out.code) return out.code;
+      } catch (e) {
+        console.warn("[minify] Terser failed:", e.message || e);
+      }
+      try {
+        const uglify = require("uglify-js");
+        const out = uglify.minify(code);
+        if (out.error) throw out.error;
+        if (out && out.code) return out.code;
+      } catch (e) {
+        console.warn("[minify] Uglify failed:", e.message || e);
+      }
+      return code; // fallback: original code
+    }
+
+    function safeJoin(root, unsafe) {
+      const clean = path.posix.normalize(unsafe).replace(/^(\.\.(\/|\\|$))+/, "");
+      return path.join(root, clean);
+    }
 
     if (id.endsWith(".css")) {
-      res.redirect("/css/" + id);
-    } else if (id.endsWith(".js")) {
+      return res.redirect("/css/" + id);
+    }
+
+    if (id.endsWith(".js")) {
+      res.type("text/javascript");
+
       if (id.endsWith(".bundle.js")) {
-        const jsFiles = ["app.js", "custom-css.js", "emojis.js", "player-base-new.js"];
-        const combinedContent = jsFiles
-          .map((fileName) => {
-            const filePath = path.join(html_location, fileName);
-            return fs.existsSync(filePath)
-              ? fs.readFileSync(filePath, "utf-8")
-              : "";
+        const jsFiles = [
+          "app.js",
+          "custom-css.js",
+          "emojis.js",
+          "player-base-new.js",
+        ];
+        const parts = jsFiles
+          .map((f) => {
+            const p = path.join(html_location, f);
+            return fs.existsSync(p) ? fs.readFileSync(p, "utf8") : "";
           })
-          .join("\n" + "\n");
+          .filter(Boolean);
 
-        const minimizedJs = require("uglify-js").minify(combinedContent).code;
-
-        res.header("Content-Type", "text/javascript");
-        res.send(
-          "// @license magnet:?xt=urn:btih:1f739d935676111cfff4b4693e3816e664797050&dn=gpl-3.0.txt GPL-3.0-or-later" +
-            `\n` +
-            `// Includes app.js, emojis.js, and custom-css.js. Source code can be found for these 3 files in https://codeberg.org/Ashley/poketube/src/branch/main/css/` +
-            `\n` +
-            minimizedJs +
-            `\n` +
-            "// @license-end"
-        );
-      } else {
-        const filePath = path.join(html_location, id);
-
-        if (!fs.existsSync(filePath)) {
-          res.status(404).send("File not found");
-          return;
+        if (parts.length === 0) {
+          return res.status(404).send("No bundle sources found");
         }
 
-        const js = fs.readFileSync(filePath, "utf8");
-        const minimizedJs = require("uglify-js").minify(js).code;
+        const combinedContent = parts.join("\n\n");
+        const minified = await minifyJS(combinedContent);
 
-        res.header("Content-Type", "text/javascript");
-        res.send(
-          "// @license magnet:?xt=urn:btih:1f739d935676111cfff4b4693e3816e664797050&dn=gpl-3.0.txt GPL-3.0-or-later" +
-            `\n` +
-            `// Source code can be found in: https://codeberg.org/Ashley/poketube/src/branch/main/css/${id}` +
-            `\n` +
-            minimizedJs +
-            `\n` +
-            "// @license-end"
+        const banner =
+          "// Includes app.js, emojis.js, custom-css.js, player-base-new.js. " +
+          "Source code: https://codeberg.org/Ashley/poketube/src/branch/main/css/";
+
+        return res.send(
+          `${licenseMagnet}\n${banner}\n${minified}\n${endMarker}`
         );
+      } else {
+        const filePath = safeJoin(html_location, id);
+        if (!fs.existsSync(filePath)) {
+          return res.status(404).send("File not found");
+        }
+        const js = fs.readFileSync(filePath, "utf8");
+        const minified = await minifyJS(js);
+        const banner =
+          `// Source code: https://codeberg.org/Ashley/poketube/src/branch/main/css/${id}`;
+
+        return res.send(`${licenseMagnet}\n${banner}\n${minified}\n${endMarker}`);
       }
-    } else {
-      res.sendFile(id, { root: html_location });
     }
-  });
+
+    // Non-CSS/JS: serve as file
+    const safePath = safeJoin(html_location, id);
+    res.sendFile(safePath, (err) => {
+      if (err) {
+        if (err.code === "ENOENT") return res.status(404).send("File not found");
+        console.error("[/static] sendFile error:", err);
+        res.status(500).send("Internal server error");
+      }
+    });
+  } catch (err) {
+    console.error("[/static] handler failed:", err);
+    res.status(500).send("Internal server error");
+  }
+});
+
 };

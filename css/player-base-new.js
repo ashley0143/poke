@@ -18,8 +18,7 @@ var _yt_player = videojs;
     const PROG_KEY = vidKey ? `progress-${vidKey}` : null;
 });
  
-       video.removeClass('vjs-error');
-      
+       
 
     // persist last position (quietly)
     let lastSaved = 0;

@@ -17,18 +17,9 @@ var _yt_player = videojs;
     const vidKey = qs.get('v') || '';
     const PROG_KEY = vidKey ? `progress-${vidKey}` : null;
 });
-
-  function clearFalseErrorUI() {
-    try {
-      if (typeof video.error === 'function') video.error(null);
-      video.removeClass('vjs-error');
-      const ed = video.getChild && video.getChild('errorDisplay');
-      if (ed && typeof ed.hide === 'function') ed.hide();
-    } catch {}
-  }
-  ['loadstart','loadedmetadata','canplay','playing','timeupdate','seeked'].forEach(ev => {
-    video.on(ev, clearFalseErrorUI);
-  });
+ 
+       video.removeClass('vjs-error');
+      
 
     // persist last position (quietly)
     let lastSaved = 0;

@@ -1,572 +1,681 @@
 // in the beginning.... god made mrrprpmnaynayaynaynayanyuwuuuwmauwnwanwaumawp :p
 var _yt_player = videojs;
-// Self-healing DASH player (Video.js + videojs-contrib-dash + dash.js)
-// + CORS hardening
-// + ERROR UI SUPPRESSION (hide/clear false “No compatible source…”)
-// + AUTO FALLBACK to Progressive (video+separate audio) after repeated errors
-//
-// Fallback expectations:
-//   - Provide progressive **video-only** URL at `window.fallbackVideoUrl` (e.g., MP4/WebM no-audio).
-//   - Provide matching **audio-only** URL at `window.fallbackAudioUrl` (e.g., M4A/Opus).
-//   - If either is missing, the fallback won’t engage and we’ll keep trying DASH.
-//
-// The fallback re-enables the old audio+video sync path (single <audio id="aud"> is created if absent).
 
-document.addEventListener('DOMContentLoaded', () => {
-  // ---- housekeeping ----
-  const qs = new URLSearchParams(location.search);
-  const vidKey = qs.get('v') || '';
-  if (vidKey) { try { localStorage.removeItem(`progress-${vidKey}`); } catch {} }
 
-  const MPD_URL = (typeof window !== 'undefined' && window.mpdurl) ? String(window.mpdurl) : '';
-  if (!MPD_URL) { console.error('[dash] window.mpdurl is not set'); return; }
 
-  // Ensure the underlying <video> never taints or sends cookies by default
-  try { document.getElementById('video')?.setAttribute('crossorigin', 'anonymous'); } catch {}
 
-  // --- normalize MPD URL (follow redirects, no cookies) ---
-  async function normalizeMpdUrl(url) {
-    try {
-      const resp = await fetch(url, {
-        method: 'GET',
-        mode: 'cors',
-        redirect: 'follow',
-        credentials: 'omit',
-        cache: 'no-store'
-      });
-      if (resp && resp.ok && resp.url) return resp.url;
-    } catch {}
-    return url;
-  }
 
-  // === ERROR UI SUPPRESSION ===
-  const player = videojs('video', {
-    controls: true,
-    autoplay: false,
-    preload: 'auto',
-    errorDisplay: false
-  });
 
-  function clearFalseErrorUI() {
-    try {
-      if (typeof player.error === 'function') player.error(null);
-      player.removeClass('vjs-error');
-      const ed = player.getChild && player.getChild('errorDisplay');
-      if (ed && typeof ed.hide === 'function') ed.hide();
-    } catch {}
-  }
-  ['loadstart','loadedmetadata','canplay','playing','timeupdate','seeked'].forEach(ev => {
-    player.on(ev, clearFalseErrorUI);
-  });
 
-  // ---- utils ----
-  const KBPS = (info) => {
-    if (!info) return 0;
-    if (typeof info.bitrate === 'number')   return info.bitrate;
-    if (typeof info.bandwidth === 'number') return Math.round(info.bandwidth/1000);
-    return 0;
-  };
 
-  const hasIdAPI = (dash) =>
-    typeof dash.getRepresentationsByType === 'function' &&
-    typeof dash.setRepresentationForTypeById === 'function';
 
-  function setQualityByIdOrIndex(dash, repId, index) {
-    try {
-      if (repId && hasIdAPI(dash)) dash.setRepresentationForTypeById('video', repId);
-      else if (typeof dash.setQualityFor === 'function' && index >= 0) dash.setQualityFor('video', index);
-    } catch {}
-  }
 
-  function repAtOrBelow(targetH, reps, levels) {
-    let best = null;
-    for (const r of reps) {
-      const h = (r && r.height) || 0;
-      if (h <= targetH && (!best || h > (best.height || 0))) best = r;
-    }
-    if (!best) return { id: null, idx: -1, height: 0 };
-    let idx = -1;
-    for (let i = 0; i < (levels || []).length; i++) {
-      if ((levels[i].height || 0) === (best.height || 0)) idx = i;
-    }
-    return { id: best.id, idx, height: best.height || 0 };
-  }
 
-  function bitrateBoundsForHeights(levels, floorH, capH) {
-    const sorted = levels.map((it, i) => ({ i, h: it.height || 0, kbps: KBPS(it) })).sort((a,b)=>a.h-b.h);
-    let minKbps = -1, maxKbps = -1;
-    const floor = sorted.find(x => x.h >= floorH);
-    if (floor && floor.kbps > 0) minKbps = floor.kbps;
-    const caps = sorted.filter(x => x.h > 0 && x.h <= capH);
-    if (caps.length) {
-      const top = caps[caps.length - 1];
-      if (top.kbps > 0) maxKbps = top.kbps;
-    }
-    return { minKbps, maxKbps };
-  }
 
-  // ---- probe a quality for smoothness ----
-  const PROBE_OK_PLAY_MS = 4500;
-  const STALL_FAIL_MS    = 2000;
-  const PROBE_TIMEOUT_MS = 8000;
 
-  function probeQuality(dash, cand) {
-    return new Promise((resolve) => {
-      let okPlay = 0, lastAdvanceAt = performance.now(), lastT = player.currentTime() || 0;
-      let waitingSince = null, done = false;
 
-      const cleanup = () => {
-        player.off('timeupdate', onTime);
-        player.off('waiting', onWaiting);
-        player.off('playing', onPlaying);
-        player.off('error', onErr);
-        clearTimeout(overallTO);
-      };
-      const finish = (ok) => { if (done) return; done = true; cleanup(); resolve(ok); };
 
-      try {
-        dash.updateSettings({
-          streaming: {
-            abr: { autoSwitchBitrate: { video: false, audio: true } },
-            fastSwitchEnabled: true,
-            limitBitrateByPortal: false
-          }
-        });
-        setQualityByIdOrIndex(dash, cand.id, cand.idx);
-      } catch {}
 
-      player.play().catch(()=>{});
 
-      const onPlaying = () => { waitingSince = null; };
-      const onWaiting = () => { waitingSince = performance.now(); };
-      const onErr     = () => finish(false);
 
-      const onTime = () => {
-        const now = performance.now();
-        const ct  = player.currentTime() || 0;
-        if (ct > lastT + 0.04) {
-          okPlay += (now - lastAdvanceAt);
-          lastAdvanceAt = now;
-          lastT = ct;
-        }
-        if (waitingSince && (now - waitingSince) >= STALL_FAIL_MS) { finish(false); return; }
-        if (okPlay >= PROBE_OK_PLAY_MS) { finish(true); }
-      };
 
-      player.on('playing', onPlaying);
-      player.on('waiting', onWaiting);
-      player.on('timeupdate', onTime);
-      player.on('error', onErr);
 
-      const overallTO = setTimeout(() => finish(false), PROBE_TIMEOUT_MS);
+
+
+
+
+
+
+
+
+ document.addEventListener("DOMContentLoaded", () => {
+    // video.js 8 init - source can be seen in https://poketube.fun/static/vjs.min.js or the vjs.min.js file
+    const video = videojs('video', {
+        controls: true,
+        autoplay: false,
+        preload: 'auto',
+		    errorDisplay: false
     });
-  }
 
-  // ---- ABR control ----
-  function enableBoundedABR(dash, levels, floorH = 430, capH = 1080, biasIdx = -1) {
-    const { minKbps, maxKbps } = bitrateBoundsForHeights(levels, floorH, capH);
-    const biasKbps = biasIdx >= 0 ? (KBPS(levels[biasIdx]) || -1) : -1;
-    try {
-      dash.updateSettings({
-        streaming: {
-          abr: {
-            autoSwitchBitrate: { video: true, audio: true },
-            minBitrate: { video: minKbps, audio: -1 },
-            maxBitrate: { video: maxKbps, audio: -1 },
-            initialBitrate: { video: biasKbps > 0 ? biasKbps : (maxKbps > 0 ? maxKbps : -1), audio: -1 }
-          },
-          fastSwitchEnabled: true,
-          limitBitrateByPortal: false
+    // --- query + minimal state ---
+    const qs = new URLSearchParams(window.location.search);
+    const qua = qs.get("quality") || "";
+    const vidKey = qs.get('v') || '';
+    const PROG_KEY = vidKey ? `progress-${vidKey}` : null;
+
+    // persist last position (quietly)
+    let lastSaved = 0;
+    const SAVE_INTERVAL = 1500;
+    function saveProgress(t) {
+        if (!PROG_KEY) return;
+        if (t - lastSaved >= 1.0) {
+            lastSaved = t;
+            try { localStorage.setItem(PROG_KEY, String(t)); } catch {}
         }
-      });
-    } catch {}
-  }
-
-  function enableFullABR(dash) {
-    try {
-      dash.updateSettings({
-        streaming: {
-          abr: { autoSwitchBitrate: { video: true, audio: true } },
-          fastSwitchEnabled: true,
-          limitBitrateByPortal: false
-        }
-      });
-    } catch {}
-  }
-
-  // ---- health watchdog + recovery ----
-  const WATCH_GRACE_MS = 2500;
-  let watch = { t: 0, at: 0, on: false };
-  function startWatch() { watch.t = player.currentTime() || 0; watch.at = performance.now(); watch.on = true; }
-  function stopWatch()  { watch.on = false; }
-
-  const STEPS = [250, 400, 650, 900, 1200, 1600, 2100, 2800, 3600];
-  let retryCount = 0;
-  function backoffDelay() {
-    const base = STEPS[Math.min(retryCount, STEPS.length - 1)];
-    const jitter = Math.floor((Math.random()*2 - 1) * 120);
-    retryCount++;
-    return Math.max(150, base + jitter);
-  }
-
-  function healthy() {
-    try {
-      if (!player.paused() && (player.currentTime() || 0) > 0) return true;
-      const el = player.tech_ && player.tech_.el && player.tech_.el();
-      if (el && typeof el.readyState === 'number' && el.readyState >= 2) return true;
-    } catch {}
-    return false;
-  }
-
-  function refreshSameSource(keepTime) {
-    const cur = player.currentSource();
-    if (!cur || !cur.src) return;
-    try {
-      player.pause();
-      player.src(cur);
-      player.one('loadeddata', () => {
-        try { if (isFinite(keepTime) && keepTime > 0) player.currentTime(keepTime); } catch {}
-        player.play().catch(()=>{});
-        clearFalseErrorUI();
-      });
-    } catch {}
-  }
-
-  function scheduleHeal() {
-    if (!usingDash) return; // only heal Dash; progressive has its own retry
-    if (healthy()) { retryCount = 0; return; }
-    if ('onLine' in navigator && !navigator.onLine) {
-      const onlineOnce = () => { window.removeEventListener('online', onlineOnce); scheduleHeal(); };
-      window.addEventListener('online', onlineOnce, { once: true });
-      return;
     }
-    addStrike('heal');
-    const keep = player.currentTime() || 0;
-    const delay = backoffDelay();
-    setTimeout(() => refreshSameSource(keep), delay);
-  }
-
-  // ---- fix “starts at 5–7s”: always rewind to 0 once after setup ----
-  const DESIRED_START = 0;
-  let didResetStart = false;
-  function resetToStartOnce() {
-    if (didResetStart) return;
-    didResetStart = true;
+    // initialize progress if empty
     try {
-      if ((player.currentTime() || 0) > DESIRED_START + 0.05) {
-        player.pause();
-        player.currentTime(DESIRED_START);
-        player.one('seeked', () => player.play().catch(()=>{}));
-      } else {
-        player.play().catch(()=>{});
-      }
-    } catch {}
-    clearFalseErrorUI();
-  }
-
-  // =========================
-  // DASH → Progressive fallback
-  // =========================
-  const MAX_STRIKES = 6;          // number of “serious” issues within window to trigger fallback
-  const STRIKE_WINDOW_MS = 20000; // lookback window
-  let usingDash = true;
-  let strikes = [];
-
-  function addStrike(reason) {
-    const now = performance.now();
-    strikes.push(now);
-    // prune
-    strikes = strikes.filter(t => now - t <= STRIKE_WINDOW_MS);
-    if (strikes.length >= MAX_STRIKES) {
-      console.warn('[player] too many errors → switching to progressive fallback', reason, strikes.length);
-      switchToProgressive();
-    }
-  }
-
-  function immediateFallback(reason) {
-    console.warn('[player] forcing progressive fallback:', reason);
-    switchToProgressive();
-  }
-
-  function switchToProgressive() {
-    if (!window.fallbackVideoUrl || !window.fallbackAudioUrl) {
-      console.error('[player] fallback requested but window.fallbackVideoUrl or window.fallbackAudioUrl is missing');
-      return;
-    }
-    usingDash = false;
-    try {
-      // Detach dash.js cleanly if present
-      const dash = player.dash && player.dash.mediaPlayer;
-      if (dash && typeof dash.reset === 'function') { try { dash.reset(); } catch {} }
+        if (PROG_KEY && localStorage.getItem(PROG_KEY) == null) localStorage.setItem(PROG_KEY, "0");
     } catch {}
 
-    // Kill dash listeners
-    player.off('waiting', scheduleHeal);
-    player.off('stalled', scheduleHeal);
-    player.off('suspend', scheduleHeal);
-    player.off('emptied', scheduleHeal);
-    player.off('abort',   scheduleHeal);
+    // raw media elements
+    const videoEl = document.getElementById('video');
+    const audio = document.getElementById('aud');
 
-    // Set progressive source on Video.js (HTML5 tech)
-    try {
-      player.pause();
-      player.src({ src: window.fallbackVideoUrl, type: guessMime(window.fallbackVideoUrl) || 'video/mp4' });
-      player.load();
-    } catch {}
+    // resolve initial sources robustly (works whether <audio src> or <source> children are used)
+    const pickAudioSrc = () => {
+        const s = audio?.getAttribute?.('src');
+        if (s) return s;
+        const child = audio?.querySelector?.('source');
+        if (child?.getAttribute?.('src')) return child.getAttribute('src');
+        if (audio?.currentSrc) return audio.currentSrc;
+        return null;
+    };
+    let audioSrc = pickAudioSrc();
 
-    // Ensure/prepare audio element
-    let audio = document.getElementById('aud');
-    if (!audio) {
-      audio = document.createElement('audio');
-      audio.id = 'aud';
-      audio.style.display = 'none';
-      document.body.appendChild(audio);
-    }
-    audio.src = window.fallbackAudioUrl;
-    audio.crossOrigin = 'anonymous';
+    const srcObj = video.src();
+    const initialVideoSrc = Array.isArray(srcObj) ? (srcObj[0] && srcObj[0].src) : srcObj;
+    const initialVideoType = Array.isArray(srcObj) ? (srcObj[0] && srcObj[0].type) : undefined;
 
-    // Mute HTML5 video element to prevent double audio (progressive video might carry audio)
-    try {
-      const techEl = player.tech_ && player.tech_.el && player.tech_.el();
-      if (techEl) techEl.muted = true;
-    } catch {}
+    // readiness + sync state
+    let audioReady = false, videoReady = false;
+    let syncInterval = null;
 
-    // Bring back A+V sync stack
-    initDualAVSync(player, audio);
-
-    // Start playing from 0 (consistent UX with dash path)
-    player.one('loadeddata', () => {
-      try { player.currentTime(0); } catch {}
-      try { audio.currentTime = 0; } catch {}
-      player.play()?.catch(()=>{});
-      audio.play()?.catch(()=>{});
-    });
-  }
-
-  function guessMime(url) {
-    const q = url.split('?')[0].toLowerCase();
-    if (q.endsWith('.mp4'))  return 'video/mp4';
-    if (q.endsWith('.webm')) return 'video/webm';
-    if (q.endsWith('.m4v'))  return 'video/mp4';
-    return '';
-  }
-
-  // === dual A/V sync engine (progressive fallback) ===
-  function initDualAVSync(player, audio) {
+    // thresholds / constants
     const BIG_DRIFT = 0.5;
     const MICRO_DRIFT = 0.05;
     const SYNC_INTERVAL_MS = 240;
-    let syncInterval = null;
+    const SEEK_STICKY_EPS = 0.03;
+
+    // utility: clamping + safe currentTime
+    const clamp01 = v => Math.max(0, Math.min(1, Number(v)));
+
+    function canSafelySetCT(media) {
+        try {
+            // HAVE_METADATA (1) is enough to set currentTime without DOMExceptions for MP4/WebM
+            return typeof media.readyState === 'number' ? media.readyState >= 1 : true;
+        } catch { return false; }
+    }
 
     function safeSetCT(media, t) {
-      try { if (isFinite(t) && t >= 0) media.currentTime = t; } catch {}
+        try {
+            if (!isFinite(t) || t < 0) return;
+            if (canSafelySetCT(media)) media.currentTime = t;
+        } catch {}
     }
+
+    // clear sync ticker
     function clearSyncLoop() {
-      if (syncInterval) {
-        clearInterval(syncInterval);
-        syncInterval = null;
-        try { audio.playbackRate = 1; } catch {}
-      }
+        if (syncInterval) {
+            clearInterval(syncInterval);
+            syncInterval = null;
+            try { audio.playbackRate = 1; } catch {}
+        }
     }
+
+    // drift-compensation loop for micro-sync
     function startSyncLoop() {
-      clearSyncLoop();
-      syncInterval = setInterval(() => {
-        const vt = Number(player.currentTime());
-        const at = Number(audio.currentTime);
-        if (!isFinite(vt) || !isFinite(at)) return;
+        clearSyncLoop();
+        syncInterval = setInterval(() => {
+            const vt = Number(video.currentTime());
+            const at = Number(audio.currentTime);
+            if (!isFinite(vt) || !isFinite(at)) return;
 
-        const delta = vt - at;
-        if (Math.abs(delta) > BIG_DRIFT) {
-          safeSetCT(audio, vt);
-          try { audio.playbackRate = 1; } catch {}
-          return;
-        }
-        if (Math.abs(delta) > MICRO_DRIFT) {
-          const rate = Math.max(0.85, Math.min(1.15, 1 + delta * 0.12));
-          try { audio.playbackRate = rate; } catch {}
-        } else {
-          try { audio.playbackRate = 1; } catch {}
-        }
-      }, SYNC_INTERVAL_MS);
+            // save progress (throttled)
+            saveProgress(vt);
+
+            const delta = vt - at;
+
+            // large drift → snap
+            if (Math.abs(delta) > BIG_DRIFT) {
+                safeSetCT(audio, vt);
+                try { audio.playbackRate = 1; } catch {}
+                return;
+            }
+
+            // micro drift → gentle nudge by rate
+            if (Math.abs(delta) > MICRO_DRIFT) {
+                const targetRate = 1 + (delta * 0.12);
+                try { audio.playbackRate = Math.max(0.85, Math.min(1.15, targetRate)); } catch {}
+            } else {
+                try { audio.playbackRate = 1; } catch {}
+            }
+        }, SYNC_INTERVAL_MS);
     }
 
-    // one-shot retry helper for audio element
-    function attachRetry(elm, src) {
-      elm.addEventListener('error', () => {
-        if (elm._didRetry || !src) return;
-        elm._didRetry = true;
-        try { elm.src = src; elm.load(); elm.play()?.catch(()=>{}); } catch {}
-      }, { once: true });
-    }
-    attachRetry(audio, audio.src);
-
-    // wiring
-    player.on('play', () => {
-      if (!syncInterval) startSyncLoop();
-      const vt = Number(player.currentTime());
-      if (Math.abs(vt - Number(audio.currentTime)) > 0.3) safeSetCT(audio, vt);
-      audio.play()?.catch(()=>{});
-    });
-    player.on('pause', () => { audio.pause(); clearSyncLoop(); });
-    player.on('waiting', () => { audio.pause(); clearSyncLoop(); });
-    player.on('playing', () => { audio.play()?.catch(()=>{}); if (!syncInterval) startSyncLoop(); });
-
-    // Seek glue
-    player.on('seeking', () => {
-      audio.pause();
-      clearSyncLoop();
-      const vt = Number(player.currentTime());
-      if (Math.abs(vt - Number(audio.currentTime)) > 0.1) safeSetCT(audio, vt);
-    });
-    player.on('seeked', () => {
-      const vt = Number(player.currentTime());
-      if (Math.abs(vt - Number(audio.currentTime)) > 0.05) safeSetCT(audio, vt);
-      audio.play()?.catch(()=>{});
-      if (!syncInterval) startSyncLoop();
-    });
-
-    // Volume mirror
-    player.on('volumechange', () => {
-      try { audio.volume = Math.max(0, Math.min(1, Number(player.volume()))); } catch {}
-    });
-    audio.addEventListener('volumechange', () => {
-      try { player.volume(Math.max(0, Math.min(1, Number(audio.volume)))); } catch {}
-    });
-
-    // End + fullscreen
-    player.on('ended', () => { try { audio.pause(); } catch {}; clearSyncLoop(); });
-    document.addEventListener('fullscreenchange', () => {
-      if (!document.fullscreenElement) { player.pause(); audio.pause(); clearSyncLoop(); }
-    });
-  }
-
-  // ---- orchestrate load + probing + ABR + CORS hardening (DASH path) ----
-  player.ready(async () => {
-    const finalUrl = await normalizeMpdUrl(MPD_URL);
-    player.src({ src: finalUrl, type: 'application/dash+xml' });
-
-    player.one('loadedmetadata', async () => {
-      const dash = player.dash && player.dash.mediaPlayer;
-      if (!dash) return;
-
-      // CORS hardening
-      try {
-        const H = (window.dashjs && window.dashjs.HTTPRequest) || {};
-        const TYPES = [
-          H.MPD_TYPE, H.MEDIA_SEGMENT_TYPE, H.INIT_SEGMENT_TYPE,
-          H.BITSTREAM_SWITCHING_SEGMENT_TYPE, H.INDEX_SEGMENT_TYPE,
-          H.MSS_FRAGMENT_INFO_SEGMENT_TYPE, H.LICENSE, H.OTHER_TYPE, H.XLINK_EXPANSION_TYPE
-        ].filter(Boolean);
-        if (typeof dash.setXHRWithCredentialsForType === 'function') {
-          TYPES.forEach(t => { try { dash.setXHRWithCredentialsForType(t, false); } catch {} });
-        }
-        dash.updateSettings({ streaming: { cmcd: { enabled: false, mode: 'query', includeInRequests: ['segment','mpd'] } } });
-        if (typeof dash.addRequestInterceptor === 'function') {
-          dash.addRequestInterceptor((req) => {
+    // align start when both are ready
+    function tryStart() {
+        if (audioReady && videoReady) {
+            // resume from stored time once (quiet)
+            let resumeT = 0;
             try {
-              const isLicense = /license|widevine|playready|fairplay/i.test(String(req?.url || ''));
-              if (!isLicense) {
-                req.withCredentials = false;
-                if (req.headers) {
-                  delete req.headers.Authorization;
-                  delete req.headers['X-Requested-With'];
-                  delete req.headers['X-CSRF-Token'];
-                  delete req.headers['Cookie'];
-                }
-              }
+                if (PROG_KEY) resumeT = parseFloat(localStorage.getItem(PROG_KEY) || "0") || 0;
             } catch {}
-            return Promise.resolve(req);
-          });
+
+            const vt0 = resumeT > 0 ? resumeT : Number(video.currentTime());
+            if (isFinite(vt0) && Math.abs(Number(audio.currentTime) - vt0) > 0.1) {
+                safeSetCT(audio, vt0);
+                try { video.currentTime(vt0); } catch {}
+            }
+
+            // autoplay policy: try normal, if blocked try muted, then unmute
+            const startBoth = () => {
+                const pv = video.play();
+                const pa = audio.play();
+                pv?.catch(()=>{}); pa?.catch(()=>{});
+            };
+            const attempt = () => {
+                startSyncLoop();
+                setupMediaSession();
+                startBoth();
+            };
+
+            attempt();
+            // If autoplay blocked: try muted bootstrap, then unmute after a moment
+            setTimeout(() => {
+                if (video.paused()) {
+                    try { video.muted(true); } catch {}
+                    try { audio.muted = true; } catch {}
+                    startBoth();
+                    setTimeout(() => {
+                        try { video.muted(false); } catch {}
+                        try { audio.muted = false; } catch {}
+                    }, 800);
+                }
+            }, 200);
         }
-      } catch {}
+    }
 
-      // quality probing & ABR bounds
-      const levels = (typeof dash.getBitrateInfoListFor === 'function' ? dash.getBitrateInfoListFor('video') : []) || [];
-      const reps   = (typeof dash.getRepresentationsByType === 'function' ? dash.getRepresentationsByType('video') : []) || [];
+    // generic one-shot retry helper for DOM media element
+    function attachRetry(elm, resolveSrc, markReady) {
+        const initial = resolveSrc?.();
 
-      function pick(targetH) {
-        if (reps.length) return repAtOrBelow(targetH, reps, levels);
-        let idx = -1, bestH = -1;
-        for (let i = 0; i < levels.length; i++) {
-          const h = levels[i].height || 0;
-          if (h <= targetH && h > bestH) { idx = i; bestH = h; }
+        // mark readiness on either loadedmetadata|loadeddata
+        const onLoaded = () => {
+            try { elm._didRetry = false; } catch {}
+            markReady();
+            tryStart();
+        };
+        elm.addEventListener('loadeddata', onLoaded, { once: true });
+        elm.addEventListener('loadedmetadata', onLoaded, { once: true });
+
+        // one quiet retry on error
+        elm.addEventListener('error', () => {
+            const retryURL = resolveSrc?.() || initial;
+            if (!elm._didRetry && retryURL) {
+                elm._didRetry = true;
+                try {
+                    elm.removeAttribute('src');
+                    [...elm.querySelectorAll('source')].forEach(n => n.remove());
+                    elm.src = retryURL;
+                    elm.load();
+                } catch {}
+            } else {
+                // swallow to avoid console spam/UI noise
+            }
+        }, { once: true });
+    }
+
+    // media session / hardware keys
+    function setupMediaSession() {
+        if ('mediaSession' in navigator) {
+            try {
+                navigator.mediaSession.metadata = new MediaMetadata({
+                    title: document.title || 'Video',
+                    artist: '',
+                    album: '',
+                    artwork: []
+                });
+            } catch {}
+
+            navigator.mediaSession.setActionHandler('play', () => {
+                video.play()?.catch(()=>{}); audio.play()?.catch(()=>{});
+            });
+            navigator.mediaSession.setActionHandler('pause', () => {
+                video.pause(); audio.pause();
+            });
+            navigator.mediaSession.setActionHandler('seekbackward', ({ seekOffset }) => {
+                const skip = seekOffset || 10;
+                const to = Math.max(0, Number(video.currentTime()) - skip);
+                video.currentTime(to); safeSetCT(audio, to);
+            });
+            navigator.mediaSession.setActionHandler('seekforward', ({ seekOffset }) => {
+                const skip = seekOffset || 10;
+                const to = Number(video.currentTime()) + skip;
+                video.currentTime(to); safeSetCT(audio, to);
+            });
+            navigator.mediaSession.setActionHandler('seekto', ({ seekTime, fastSeek }) => {
+                if (!isFinite(seekTime)) return;
+                if (fastSeek && 'fastSeek' in audio) { try { audio.fastSeek(seekTime); } catch { safeSetCT(audio, seekTime); } }
+                else safeSetCT(audio, seekTime);
+                try { video.currentTime(seekTime); } catch {}
+            });
+            navigator.mediaSession.setActionHandler('stop', () => {
+                video.pause(); audio.pause();
+                try { video.currentTime(0); } catch {}
+                try { audio.currentTime = 0; } catch {}
+                clearSyncLoop();
+            });
         }
-        return { id: null, idx, height: bestH };
-      }
+    }
 
-      const c1080 = pick(1080);
-      const c720  = pick(720);
-      const c480  = pick(480);
-
-      const candidates = [];
-      if (c1080.idx >= 0 || c1080.id) candidates.push({ id: c1080.id, idx: c1080.idx });
-      if ((c720.idx  >= 0 || c720.id)  && (c720.idx !== c1080.idx || c720.id !== c1080.id)) candidates.push({ id: c720.id, idx: c720.idx });
-      if ((c480.idx  >= 0 || c480.id)  && (c480.idx !== c720.idx  || c480.id !== c720.id))   candidates.push({ id: c480.id, idx: c480.idx });
-      if (!candidates.length && levels.length) candidates.push({ id: null, idx: levels.length - 1 });
-
-      let chosenIdx = -1;
-      for (const cand of candidates) {
-        const ok = await probeQuality(dash, cand);
-        if (ok) { chosenIdx = (typeof cand.idx === 'number' ? cand.idx : -1); enableBoundedABR(dash, levels, 430, 1080, chosenIdx); break; }
-      }
-      if (chosenIdx < 0) enableFullABR(dash);
-
-      resetToStartOnce();
-      startWatch();
+    // ** DESKTOP MEDIA-KEY FALLBACK **
+    document.addEventListener('keydown', e => {
+        switch (e.code) {
+            case 'AudioPlay':
+            case 'MediaPlayPause':
+                if (video.paused()) { video.play()?.catch(()=>{}); audio.play()?.catch(()=>{}); }
+                else { video.pause(); audio.pause(); }
+                break;
+            case 'AudioPause':
+                video.pause(); audio.pause();
+                break;
+            case 'AudioNext':
+            case 'MediaTrackNext': {
+                const tFwd = Number(video.currentTime()) + 10;
+                video.currentTime(tFwd); safeSetCT(audio, tFwd);
+                break;
+            }
+            case 'AudioPrevious':
+            case 'MediaTrackPrevious': {
+                const tBwd = Math.max(0, Number(video.currentTime()) - 10);
+                video.currentTime(tBwd); safeSetCT(audio, tBwd);
+                break;
+            }
+        }
     });
-  });
 
-  // ---- health & stall handling (DASH path) ----
-  player.on('timeupdate', () => {
-    if (!usingDash || !watch.on) return;
-    const ct = player.currentTime() || 0;
-    if (ct !== watch.t) { watch.t = ct; watch.at = performance.now(); return; }
-    if (!player.paused() && (performance.now() - watch.at) > WATCH_GRACE_MS) {
-      addStrike('watchdog');
-      scheduleHeal();
-      watch.on = false;
-      setTimeout(startWatch, 1200);
+    // === PRIMARY SYNC/RETRY LOGIC (skips when qua=medium) ===
+    if (qua !== "medium") {
+        // attach retry & ready markers to the real elements
+        attachRetry(audio, pickAudioSrc, () => { audioReady = true; });
+        attachRetry(videoEl, () => {
+            // prefer current player src if any; fallback to initial
+            const s = video.src();
+            return Array.isArray(s) ? (s[0] && s[0].src) : (s || initialVideoSrc);
+        }, () => { videoReady = true; });
+
+        // keep audio volume mirrored to player volume both ways
+        video.on('volumechange', () => { try { audio.volume = clamp01(video.volume()); } catch {} });
+        audio.addEventListener('volumechange', () => { try { video.volume(clamp01(audio.volume)); } catch {} });
+
+        // rate sync (rare, but keep consistent)
+        video.on('ratechange', () => {
+            try { audio.playbackRate = video.playbackRate(); } catch {}
+        });
+
+        // Sync when playback starts
+        video.on('play', () => {
+            if (!syncInterval) startSyncLoop();
+            const vt = Number(video.currentTime());
+            if (Math.abs(vt - Number(audio.currentTime)) > 0.3) safeSetCT(audio, vt);
+            if (audioReady) audio.play()?.catch(()=>{});
+        });
+
+        video.on('pause', () => { audio.pause(); clearSyncLoop(); });
+
+        // pause audio when video is buffering :3
+        video.on('waiting', () => { audio.pause(); clearSyncLoop(); });
+
+        // resume audio when video resumes
+        video.on('playing', () => {
+            if (audioReady) audio.play()?.catch(()=>{});
+            if (!syncInterval) startSyncLoop();
+        });
+
+        // === refined seek: debounce + sticky lock ===
+        let seekingDebounce = null;
+        function seekSyncNow() {
+            const vt = Number(video.currentTime());
+            if (!isFinite(vt)) return;
+            if (Math.abs(vt - Number(audio.currentTime)) > SEEK_STICKY_EPS) safeSetCT(audio, vt);
+        }
+        video.on('seeking', () => {
+            audio.pause();
+            clearSyncLoop();
+            seekSyncNow();
+            if (seekingDebounce) clearTimeout(seekingDebounce);
+        });
+        video.on('seeked', () => {
+            seekSyncNow();
+            seekingDebounce = setTimeout(() => {
+                if (audioReady) audio.play()?.catch(()=>{});
+                if (!syncInterval) startSyncLoop();
+            }, 60); // tiny sticky to let demux stabilize
+        });
+
+        // Detects when video or audio finishes buffering; nudge sync
+        video.on('canplaythrough', seekSyncNow);
+        audio.addEventListener('canplaythrough', seekSyncNow);
+
+        // stop everything on media end
+        video.on('ended', () => { try { audio.pause(); } catch {}; clearSyncLoop(); });
+        audio.addEventListener('ended', () => { try { video.pause(); } catch {}; clearSyncLoop(); });
+
+        // pause when exiting full screen :3
+        document.addEventListener('fullscreenchange', () => {
+            if (!document.fullscreenElement) {
+                video.pause(); audio.pause(); clearSyncLoop();
+            }
+        });
+
+        // === PiP + Fullscreen sync niceties (quiet) ===
+        document.addEventListener('enterpictureinpicture', () => { if (audioReady) audio.play()?.catch(()=>{}); });
+        document.addEventListener('leavepictureinpicture', () => { /* no-op; keep state */ });
+
+        // === Wake Lock (if supported) to prevent sleep during playback (quiet, optional) ===
+        let wakeLock = null;
+        async function requestWakeLock() {
+            try { wakeLock = await navigator.wakeLock.request('screen'); } catch {}
+        }
+        function releaseWakeLock() { try { wakeLock?.release(); } catch {} wakeLock = null; }
+        video.on('playing', requestWakeLock);
+        video.on('pause', releaseWakeLock);
+        window.addEventListener('visibilitychange', () => {
+            // Reacquire on visibility change if still playing
+            if (!document.hidden && !video.paused()) requestWakeLock();
+        });
+
+        // === VIDEO.JS AUTO-RETRY (30s GRACE + ONLY WHEN REALLY BROKEN) ===
+        // We ignore tech errors for the first 30s after stream actually starts (play or loadeddata).
+        // After 30s, retries are invisible and only trigger if playback is genuinely stuck.
+        const BASE_STEPS_MS = [250, 400, 650, 900, 1200, 1600, 2000, 2600, 3400, 4400]; // a bit longer tail
+        const JITTER = 120;
+        let vjsRetryCount = 0;
+        let allowRetries = false;          // becomes true only after grace window
+        let graceTimerStarted = false;
+        let graceTimerId = null;
+
+        // tiny watchdogs
+        let watch = { t: 0, at: 0, active: false };
+        const WATCH_GRACE_MS = 2200; // if no time advance while “playing” post-grace → retry
+
+        let readyWatch = { ok: 0, bad: 0 }; // readyState health tiebreaker
+
+        function currentVideoSrc() {
+            const s = video.src();
+            return Array.isArray(s) ? (s[0] && s[0].src) : s;
+        }
+        function currentVideoType() {
+            const s = video.src();
+            return Array.isArray(s) ? (s[0] && s[0].type) : undefined;
+        }
+
+        // treat as *healthy* if we clearly have playable media or are advancing time
+        function isPlaybackHealthy() {
+            try {
+                if (!video.paused() && Number(video.currentTime()) > 0) return true;
+                if (typeof video.readyState === 'function') {
+                    if (video.readyState() >= 2 && isFinite(video.duration()) && video.duration() > 0) return true;
+                }
+                const el = videoEl;
+                if (el && typeof el.readyState === 'number' && el.readyState >= 2) return true;
+            } catch {}
+            return false;
+        }
+
+        // start 30s grace on first real start signal
+        function startGraceIfNeeded() {
+            if (graceTimerStarted) return;
+            graceTimerStarted = true;
+            graceTimerId = setTimeout(() => {
+                allowRetries = true;
+                if (!isPlaybackHealthy()) scheduleVideoRetry('post-30s-initial');
+            }, 30000);
+        }
+        video.one('loadeddata', startGraceIfNeeded);
+        video.one('play',       startGraceIfNeeded);
+
+        // exponential backoff with jitter
+        function backoffDelay(i) {
+            const base = BASE_STEPS_MS[Math.min(i, BASE_STEPS_MS.length - 1)];
+            const jitter = Math.floor((Math.random() * 2 - 1) * JITTER);
+            return Math.max(120, base + jitter);
+        }
+
+        // only retry when truly broken, and only after grace
+        function scheduleVideoRetry(reason) {
+            if (!allowRetries) return;
+            if (isPlaybackHealthy()) { vjsRetryCount = 0; return; }
+
+            if ('onLine' in navigator && !navigator.onLine) {
+                const onlineOnce = () => {
+                    window.removeEventListener('online', onlineOnce);
+                    scheduleVideoRetry('back-online');
+                };
+                window.addEventListener('online', onlineOnce, { once: true });
+                return;
+            }
+
+            const delay = backoffDelay(vjsRetryCount++);
+            const keepTime = Number(video.currentTime());
+
+            // pause & clear sync while we refetch (quiet, no UI flicker)
+            try { video.pause(); } catch {}
+            try { audio.pause(); } catch {}
+            clearSyncLoop();
+
+            setTimeout(() => {
+                const srcUrl  = currentVideoSrc() || initialVideoSrc;
+                const type    = currentVideoType() || initialVideoType;
+
+                try {
+                    if (type) video.src({ src: srcUrl, type });
+                    else      video.src(srcUrl);
+                } catch {}
+
+                try { videoEl.load && videoEl.load(); } catch {}
+
+                video.one('loadeddata', () => {
+                    try {
+                        if (isFinite(keepTime)) {
+                            video.currentTime(keepTime);
+                            safeSetCT(audio, keepTime);
+                        }
+                    } catch {}
+                    video.play()?.catch(()=>{});
+                    if (audioReady) audio.play()?.catch(()=>{});
+                    if (!syncInterval) startSyncLoop();
+                });
+            }, delay);
+        }
+
+        // watchdog: only active after grace; if time does not advance while “playing”, do a fast retry
+        function startWatchdog() {
+            watch.active = true;
+            watch.t  = Number(video.currentTime());
+            watch.at = performance.now();
+        }
+        function stopWatchdog() { watch.active = false; }
+        video.on('playing', () => { startWatchdog(); if (allowRetries) vjsRetryCount = 0; });
+        video.on('pause',   () => { stopWatchdog(); });
+        video.on('waiting', () => { startWatchdog(); });
+
+        video.on('timeupdate', () => {
+            if (!allowRetries || !watch.active) return;
+            const ct = Number(video.currentTime());
+            if (ct !== watch.t) {
+                watch.t = ct;
+                watch.at = performance.now();
+                return;
+            }
+            if ((performance.now() - watch.at) > WATCH_GRACE_MS && !video.paused()) {
+                scheduleVideoRetry('watchdog');
+                stopWatchdog();
+            }
+        });
+
+        // readyState health sampling: if repeatedly bad post-grace, trigger retry
+        const READY_SAMPLE_MS = 500;
+        setInterval(() => {
+            if (!allowRetries) return;
+            try {
+                const rs = videoEl?.readyState || 0; // 0-4
+                if (rs >= 3) { readyWatch.ok++; readyWatch.bad = 0; }
+                else { readyWatch.bad++; }
+                if (readyWatch.bad >= 6 && !video.paused()) { // ~3s of poor readiness
+                    readyWatch.bad = 0;
+                    scheduleVideoRetry('readystate');
+                }
+            } catch {}
+        }, READY_SAMPLE_MS);
+
+        // error gating: ignore everything until grace ends; after that, only retry if truly broken
+        function browserThinksPlayable() {
+            try {
+                const type = currentVideoType() || initialVideoType;
+                if (type && videoEl && typeof videoEl.canPlayType === 'function') {
+                    const res = videoEl.canPlayType(type);
+                    return !!(res && res !== 'no');
+                }
+            } catch {}
+            return false;
+        }
+
+        function shouldRetryForError(err) {
+            if (!allowRetries) return false;
+            if (isPlaybackHealthy()) return false;
+            if (!err) return true;
+
+            // HTML5 codes: 1=aborted, 2=network, 3=decode, 4=src not supported (noisy)
+            if (err.code === 2 || err.code === 3) return true;
+            if (err.code === 4) {
+                if (videoReady || browserThinksPlayable()) return true;
+                return false; // real "not supported" → do not loop
+            }
+
+            const msg = String(err.message || '').toLowerCase();
+            if (
+                msg.includes('network error') ||
+                msg.includes('media download') ||
+                msg.includes('server or network failed') ||
+                msg.includes('demuxer') ||
+                msg.includes('decode') ||
+                msg.includes('pipe') ||
+                msg.includes('hls') ||
+                msg.includes('dash')
+            ) return true;
+
+            return false;
+        }
+
+        // main error hook (gated by 30s)
+        video.on('error', () => {
+            const err = video.error && video.error();
+            if (shouldRetryForError(err)) scheduleVideoRetry('error');
+        });
+
+        // treat transient stalls/aborts as retryable, but only after grace and only if not healthy
+        ['stalled','abort','suspend','emptied','loadeddata'].forEach(ev => {
+            video.on(ev, () => { if (allowRetries && !isPlaybackHealthy()) scheduleVideoRetry(ev); });
+        });
+
+        // if we truly can play, reset counters
+        function markHealthy() { vjsRetryCount = 0; }
+        video.on('canplay',     markHealthy);
+        video.on('playing',     markHealthy);
+        video.on('loadeddata',  markHealthy);
+
+        // === AUDIO WATCHDOG (quiet, invisible) ===
+        let audioWatch = { t: 0, at: 0, playing: false };
+        const AUDIO_WATCH_MS = 2500;
+        const AUDIO_STEPS_MS = [200, 350, 500, 700, 900, 1200, 1600];
+        let audioRetryCount = 0;
+
+        function audioStartWatch() {
+            audioWatch.t = Number(audio.currentTime) || 0;
+            audioWatch.at = performance.now();
+            audioWatch.playing = true;
+        }
+        function audioStopWatch() { audioWatch.playing = false; }
+
+        const audioWatchTicker = setInterval(() => {
+            if (!allowRetries || !audioWatch.playing) return;
+            const at = Number(audio.currentTime) || 0;
+            if (at !== audioWatch.t) {
+                audioWatch.t = at;
+                audioWatch.at = performance.now();
+                return;
+            }
+            // not advancing while video is playing → consider retry
+            if (!video.paused() && (performance.now() - audioWatch.at) > AUDIO_WATCH_MS) {
+                const step = Math.min(audioRetryCount, AUDIO_STEPS_MS.length - 1);
+                const delay = AUDIO_STEPS_MS[step] + Math.floor(Math.random()*60);
+                audioRetryCount++;
+
+                const keep = Number(video.currentTime()) || at;
+
+                try { audio.pause(); } catch {}
+                try { clearSyncLoop(); } catch {}
+
+                setTimeout(() => {
+                    audioSrc = pickAudioSrc() || audioSrc;
+                    try {
+                        audio.removeAttribute('src');
+                        [...audio.querySelectorAll('source')].forEach(n => n.remove());
+                        if (audioSrc) audio.src = audioSrc;
+                        audio.load();
+                    } catch {}
+
+                    const relink = () => {
+                        audio.removeEventListener('loadeddata', relink);
+                        try {
+                            if (isFinite(keep)) safeSetCT(audio, keep);
+                            audio.play()?.catch(()=>{});
+                            if (!syncInterval) startSyncLoop();
+                            audioRetryCount = 0;
+                            audioStartWatch();
+                        } catch {}
+                    };
+                    audio.addEventListener('loadeddata', relink, { once: true });
+                }, delay);
+            }
+        }, 420);
+
+        // keep audio watchdog aligned with video state
+        video.on('playing', audioStartWatch);
+        video.on('pause',   audioStopWatch);
+        video.on('waiting', audioStartWatch);
+        audio.addEventListener('playing', audioStartWatch);
+        audio.addEventListener('pause',   audioStopWatch);
+
+        // === Offline/Online bridging ===
+        window.addEventListener('offline', () => { /* quiet; let watchdog pick it up */ });
+        window.addEventListener('online',  () => { if (allowRetries && !isPlaybackHealthy()) scheduleVideoRetry('online'); });
+
+        // === Page visibility: reduce background churn (timers quiet but playback undisturbed) ===
+        document.addEventListener('visibilitychange', () => {
+            if (document.hidden) {
+                // stop aggressive sync loop to save cycles; resume on show
+                clearSyncLoop();
+            } else if (!syncInterval && !video.paused()) {
+                startSyncLoop();
+            }
+        });
+
+        // === Clean up on unload (avoid stray timers) ===
+        window.addEventListener('beforeunload', () => {
+            clearSyncLoop();
+            try { releaseWakeLock(); } catch {}
+            try { saveProgress(Number(video.currentTime()) || 0); } catch {}
+            try { clearTimeout(graceTimerId); } catch {}
+        });
+
+        // === Minimal source sanity: if duration NaN for too long post-grace, nudge reload ===
+        setInterval(() => {
+            if (!allowRetries) return;
+            try {
+                const dur = video.duration();
+                if (!isFinite(dur) || dur <= 0) {
+                    // only if also not healthy; avoids churn on live streams
+                    if (!isPlaybackHealthy()) scheduleVideoRetry('duration-nan');
+                }
+            } catch {}
+        }, 5000);
     }
-  });
-
-  // treat these as strikes; they often precede fatal stalls on fragile paths
-  ['waiting','stalled','suspend','emptied','abort'].forEach(ev => {
-    player.on(ev, () => { addStrike(ev); if (usingDash) scheduleHeal(); });
-  });
-
-  // If dash throws real errors repeatedly, fall back
-  function looksLikeCorsy(err) {
-    const s = String((err && (err.message || err.statusText)) || '');
-    return /cors|cross[- ]origin|allow-?origin|credentials|taint/i.test(s);
-  }
-  player.on('error', () => {
-    const err = player.error && player.error();
-    addStrike('error');
-    try {
-      const dash = player.dash && player.dash.mediaPlayer;
-      if (dash) enableFullABR(dash);
-    } catch {}
-
-    // Immediate fallback on hard “no source”/CORS-ish scenarios if available
-    if (err && (err.code === 4 || looksLikeCorsy(err))) {
-      if (window.fallbackVideoUrl && window.fallbackAudioUrl) {
-        immediateFallback('code4-or-cors');
-        return;
-      }
-    }
-
-    // otherwise soft refresh
-    if (usingDash) {
-      const keep = player.currentTime() || 0;
-      refreshSameSource(keep);
-    }
-  });
-
-  // ---- offline/online bridge ----
-  window.addEventListener('online',  () => { if (usingDash) scheduleHeal(); });
 });
-
-
+ 
+ 
 // hai!! if ur asking why are they here - its for smth in the future!!!!!!
 
 const FORMATS = {

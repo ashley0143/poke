@@ -20,14 +20,14 @@ var _yt_player = videojs;
 
   function clearFalseErrorUI() {
     try {
-      if (typeof player.error === 'function') player.error(null);
-      player.removeClass('vjs-error');
-      const ed = player.getChild && player.getChild('errorDisplay');
+      if (typeof video.error === 'function') video.error(null);
+      video.removeClass('vjs-error');
+      const ed = video.getChild && video.getChild('errorDisplay');
       if (ed && typeof ed.hide === 'function') ed.hide();
     } catch {}
   }
   ['loadstart','loadedmetadata','canplay','playing','timeupdate','seeked'].forEach(ev => {
-    player.on(ev, clearFalseErrorUI);
+    video.on(ev, clearFalseErrorUI);
   });
 
     // persist last position (quietly)

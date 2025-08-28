@@ -1068,20 +1068,7 @@ Offical Discord Server! :3
     
     
 		<div id="<%=sha384(VideoData.videoId)%>" class="video-player-container">
-      
- <% 
-  let itag = null; // Default to null
-  VideoData.adaptiveFormats.forEach(format => {
-    if (format.itag == '136' || format.itag == '298') {
-      itag = '140'; // Set itag to '140' if either '136' or '298' is found
-    }
-  });
-%>  
-
-<% if (itag && !qua) { %>
-<% } else { %>
-
-<% } %>
+       
 
       <noscript>
         <% if (!qua) { %>

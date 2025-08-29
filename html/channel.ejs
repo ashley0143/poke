@@ -1546,7 +1546,7 @@ width: fit-content;
 
               </h5>
              <p>
-                      <%- channelurlfixer(x.contentHtml) %>
+                      <%- x.contentHtml %>
              <% if (x.attachment) { %>
                       <% if (x.attachment.type === "video") { %>
                       <a href="/watch?v=<%=x.attachment.videoId%>">watch video on watch page</a>

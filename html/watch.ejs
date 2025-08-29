@@ -303,6 +303,7 @@ a[data-onclick="jump_to_time"] {
 .dropdown__menu {
   max-height: calc(100vh - 100px);
   overflow: auto;
+    overflow-x: hidden;
 }
 
 
@@ -3607,7 +3608,7 @@ More Epic options owo~
     text: "",
     url: "https://" + window.location.hostname + "/<%=VideoData.videoId%>?piwik_si=mobile_share"
   })
-  .then(() => console.log('Successful share'))
+  .then(() => console.log('Successful share!'))
   .catch(error => console.log('Error sharing:', error));
 }
  }
@@ -3682,10 +3683,10 @@ function jumpToTime(e) {
   
   video.currentTime = time;
 
-  window.location.hash = 'top'; // Add #video to the URL
+  window.location.hash = 'top'; // Add #top to the URL
 
   setTimeout(() => {
-    history.replaceState(null, null, ' '); // Remove #video after 1 second
+    history.replaceState(null, null, ' '); // Remove #top after 1 second
   }, 250);
 }
 
@@ -3770,46 +3771,6 @@ if (userID) {
 const aud = document.getElementById("aud");
 const vid = document.getElementById("video");  
 
-// Save and resume video progress
-const videoId = new URLSearchParams(window.location.search).get('v');
-const localStorageKey = `progress-${videoId}`;
-
-
-
-function saveProgress() {
-  console.log(`Saved progress @ ${video.currentTime}`)
-  localStorage.setItem(localStorageKey, video.currentTime);
-}
-
-function removeProgress() {
-  localStorage.removeItem(localStorageKey);
-}
-
-function resumeProgress() {
-  const progress = localStorage.getItem(localStorageKey);
-  if (progress) {
-    aud.currentTime = progress;
-    vid.currentTime = progress;
-  }
-}
-
- 
-
- 
-
-
-video.addEventListener('timeupdate', () => {
-  if (Math.floor(video.currentTime) % 1 === 0) {
-    
-    saveProgress();
-  }
-});
-
-video.addEventListener('ended', () => {
-  removeProgress();
-});
-window.addEventListener('DOMContentLoaded', () => {
-  throw 1;
 </script>
 
 

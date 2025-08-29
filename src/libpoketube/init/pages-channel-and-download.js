@@ -196,6 +196,15 @@ module.exports = function (app, config, renderTemplate) {
     res.redirect("/");
   });
 
+function channelurlfixer(text) {
+  // Create a regular expression to match <a> tags with href containing "/channel/"
+  const regex = /<a\s+href="\/channel\/([^"]+)"/g;
+  // Replace matching <a> tags with the modified href attribute
+  const updatedDescription = text.replace(regex, '<a href="/channel?id=$1"');
+  return updatedDescription;
+}
+
+
   app.get("/channel/", async (req, res) => {
     const { fetch } = await import("undici");
     try {
@@ -268,6 +277,8 @@ module.exports = function (app, config, renderTemplate) {
 
       const pronoun = "no pronouns :c";
 
+      
+
       var [tj, shorts, playlist, stream, c, cinv] = await Promise.all([
         getChannelData(channelUrl),
         getChannelData(shortsUrl),
@@ -334,6 +345,7 @@ module.exports = function (app, config, renderTemplate) {
         j: "",
         dnoreplace:"",
         sort: sort_by,
+        channelurlfixer,
         stream,
         tj,
         c,

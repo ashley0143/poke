@@ -730,7 +730,10 @@ background-color: #0000;
 </script>
 <ptd-app-ejs>
 <div class="app" id="secret-theme" canHaveAmbientMode="true" style="color:var(--text-color)">
+ 
  <div id="loopedIndicator"></div>
+
+
  <div class="progress-container">
   <div class="progress-bar"></div>
 </div>
@@ -845,7 +848,8 @@ if your domain matches this code you are probably in poketube.fun owo:3
   			
     
 			<div class="dropdown__menu" style="right: -1em;">
-      	<a href="<%= config.mastodon_client_url %>/share?text=watch+<%=VideoData.title%>+by+<%=VideoData.author%>+on+Poke!+%0Ahttps://<%= hostname %>/watch?v=<%=VideoData.videoId%>" style="text-decoration: none;" class="dropdown__item">
+      	
+        <a href="<%= config.mastodon_client_url %>/share?text=watch+<%=VideoData.title%>+by+<%=VideoData.author%>+on+Poke!+%0Ahttps://<%= hostname %>/watch?v=<%=VideoData.videoId%>" style="text-decoration: none;" class="dropdown__item">
                             <i  class="fa-brands fa-mastodon"></i>
                       Share On <%= config.mastodon_client_server_name	%>!
         </a>
@@ -863,9 +867,9 @@ My Account
                             <i  class="fa-light fa-compass"></i>
 Discover Poke
         </a>
-   	<a href="/maps" style="text-decoration: none;" class="dropdown__item">
-                            <i  class="fa-light fa-map"></i>
-Poke Maps                  
+   	<a href="/weather" style="text-decoration: none;" class="dropdown__item">
+                            <i  class="fa-light fa-weather"></i>
+Poke Weather                  
         </a>
            	<a href="/translate" style="text-decoration: none;" class="dropdown__item">
                             <i  class="fa-light fa-language"></i>
@@ -873,7 +877,7 @@ Poke Translate
         </a>
           				<a href="/apps" style="text-decoration: none;" class="dropdown__item">
                             <i  class="fa-light fa-grid-2"></i>
- Poke Apps  </a>
+ More From Poke  </a>
                                                    <hr style="clear: both;display: block;border: none;border-bottom: 0.5px solid #1a1111;width: 16.5em;height: 0;">
     
                           <% if (!a) { %>  
@@ -921,7 +925,7 @@ Poke Translate
 
         		<a href="/watch?v=<%=VideoData.videoId%>&universe=2" title="test out the new layout of poke!" style="text-decoration: none;" class="dropdown__item">
 <i class="fa-light fa-flask" style="width: 16px;height: 17px;margin-left: 2px;"></i>
-              Testing Mode
+              Testing Mode (may be buggy)
                                                                                              </a>
         
                                                                                      <% } %>                
@@ -981,7 +985,7 @@ Offical Discord Server! :3
               </div>   <div >
 
           <a href="/download?v=<%=VideoData.videoId%>" style="color: #fff;">
-       <i class="fa-light fa-download"></i> Download - Moar Options</a>
+       <i class="fa-light fa-download"></i> Download - Moar Options :O</a>
               </div>
                     
                 <div id="loopOption"> 
@@ -1004,7 +1008,7 @@ Offical Discord Server! :3
           <a href="https://discord.poketube.fun" style="color: #fff;">
       <i class="fa-brands fa-discord"></i>  Discord Server</a>
               </div>
-<p style="margin: 0px;font-family: &quot;poketube flex&quot;;color: gray;font-size: 11px;text-align: center;">PokeVideoPlayer v23.9-app.js-020924_<br> 0143ab93_videojs8_1563605_YT_2d24ba15 licensed under gpl3-or-later </p>              
+<p style="margin: 0px;font-family: &quot;poketube flex&quot;;color: gray;font-size: 11px;text-align: center;">PokeVideoPlayer v23.9-app.js-aug2025_<br> 0143ab93_videojs8_1563605_YT_2d24ba15 licensed under gpl3-or-later </p>              
                                                                                                                        
     </div>
     
@@ -1195,17 +1199,7 @@ Offical Discord Server! :3
         </div>
       </label>
 
-
-                                                                        
-<%  if (inv.comments) { %> 
-                <input type="checkbox" class="hj" id="j" style="display:none">
-                                                                        <label class="hj" for="j">
-                                                                          <div class="fnt">
-                                                                            
-                                                                         <i  title="FLYING COMMENTS" class="fa-light fa-comments"></i>                                                                          </div>
-
-                                                                        </label>
-                                                                      <% } %>   
+ 
                                                                         
                                                                    
                                                                            
@@ -1215,7 +1209,7 @@ Offical Discord Server! :3
            <div class="div_box">
          Video id : <%=VideoData.videoId%> <br>
        ImmersiveAmbientModecolor: <% if (lightOrDark(color) == "light") { %><%=color%> (color 1)<% } %><% if (lightOrDark(color) == "dark") { %> <%=color2%> (color 2) <% } %> <br>  
-        Video Format :<% if (!qua) { %>  <%= itag_hd %> (720p) openh264 ( https://github.com/cisco/openh264) mp4a.40.2  | 44100Hz  <% } %>
+        Video Format :<% if (!qua) { %>  <%= itag %> (720p) openh264 ( https://github.com/cisco/openh264) mp4a.40.2  | 44100Hz  <% } %>
       <% if (qua === "medium") { %>  18 (320p)  openh264 (https://github.com/cisco/openh264) mp4a.40.2 | 44100Hz  <% } %>       <br> 
         <% if (VideoData.genre === "Music") { %> 
         Audio Format: ALAC lossless (https://github.com/macosforge/alac) <br>

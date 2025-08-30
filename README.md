@@ -1,5 +1,5 @@
 <h1 align="center">
-  <a href="https://poketube.fun/watch?v=9sJUDx7iEJw&quality=medium&=sjohgteojgytrueugtye4jhtytjrjnyıı">
+  <a href="https://poketube.fun/watch?v=QZfH7cFp3Ys">
     <img src="https://poketube.fun/css/logo-poke.svg" width="400">
   </a>
   <a href="http://www.defectivebydesign.org/drm-free">
@@ -96,7 +96,8 @@ poke does not support the ["source first"](https://sourcefirst.com/) or ["open s
 
 TL;DR: we dont collect or share your personal info, that's it lol.
 
-
+  <img align="center" width="65" height="65" src="https://codeberg.org/ashley/pages/raw/branch/main/amd.jpeg"><br>
+   poketube.fun is proudly powered by amd! </p> <br>
 
 <div align="center">
   <p>Parts of Poke were hosted on Glitch.com from <i>2020 to 2023</i>.</p>

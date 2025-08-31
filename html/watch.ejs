@@ -1458,7 +1458,7 @@ Offical Discord Server! :3
 					</a>
   
    <% if (!video?.Channel.Name.endsWith(' - Topic')) { %> 
-    <% if (!VideoData.title.endsWith('IGNORE_THIS_PLEASE)')) { %> 
+    <% if (!VideoData.title.endsWith('IGNORE_THIS_PLEASE_THIS_IS_DEPRACTED_LOL_SORRY)')) { %> 
 <% if (support != undefined && linkto == undefined) { %>
 
     <div class="new-button button-encryption">
@@ -1480,7 +1480,7 @@ Offical Discord Server! :3
 <% if (support == undefined && linkto == undefined) { %>
 
  <% if (!video?.Channel.Name.endsWith(' - Topic')) { %> 
-    <% if (!VideoData.title.endsWith('IGNORE_THIS_PLEASE)')) { %> 
+    <% if (!VideoData.title.endsWith('IGNORE_THIS_PLEASE_THIS_IS_DEPRACTED_LOL_SORRY)')) { %> 
 
       <div class="new-button button-encryption">
 					<a   title="Switch PokeTube Instance :3" style="color:var(--text-color);text-decoration: none;" href="https://redirect.poketube.fun/watch?v=<%=VideoData.videoId%>">
@@ -1499,7 +1499,7 @@ Offical Discord Server! :3
                                                             <% if (support == undefined && linkto != undefined) { %>
 
  <% if (!video?.Channel.Name.endsWith(' - Topic')) { %> 
-    <% if (!VideoData.title.endsWith('IGNORE_THIS_PLEASE)')) { %> 
+    <% if (!VideoData.title.endsWith('IGNORE_THIS_PLEASE_THIS_IS_DEPRACTED_LOL_SORRY)')) { %> 
 
       <div class="new-button button-encryption">
 					<a   title="Stream The Song :3" style="color:var(--text-color);text-decoration: none;" href="https://<%= linkto.subdomain %>.lnk.to/<%= linkto.path %>">
@@ -1515,7 +1515,7 @@ Offical Discord Server! :3
    </a>
                                                                           <% }%>                                                                              <% }%>      
                                                                                                                    <% }%>     
-                            <% if (video?.Channel.Name.endsWith(' - Topic') || VideoData.title.endsWith('IGNORE_THIS_PLEASE)'))  { %> 
+                            <% if (video?.Channel.Name.endsWith(' - Topic') || VideoData.title.endsWith('IGNORE_THIS_PLEASE_THIS_IS_DEPRACTED_LOL_SORRY)'))  { %> 
                                                  					<a  class="new-button" title="open this song in poketube music player :3" style="color:var(--text-color);text-decoration: none;" href="/">
                                                                                                     <div class="pill-button">
 
@@ -1527,7 +1527,7 @@ WIP!                                                 </a>
     
                                                     
  <% if (!video?.Channel.Name.endsWith(' - Topic')) { %> 
-    <% if (!VideoData.title.endsWith('IGNORE_THIS_PLEASE)')) { %>            
+    <% if (!VideoData.title.endsWith('IGNORE_THIS_PLEASE_THIS_IS_DEPRACTED_LOL_SORRY)')) { %>            
       <%  if (inv.comments) { %> 
 
       <div class="new-button button-lite" style=";margin-left: -4px;">
@@ -1619,7 +1619,12 @@ WIP!                                                 </a>
      <p  style="font-weight: bold;">
  
                     <span>Views : <%=engagement.viewCount.toLocaleString()%> <br>
-                        Genre: <%-VideoData.genre %>  <br>
+                        
+                        
+                         <% if (VideoData?.genre) { %> 
+                        Genre: <%-VideoData.genre %> 
+                         <% } %> 
+                        <br>
                          <% if (VideoData?.license) { %> 
                          License: <%-VideoData?.license %> 
                          <% } else { %>
@@ -1632,8 +1637,7 @@ WIP!                                                 </a>
                          Uploaded At <%= date %> ^^ <br>
                         <% } %>
                         
-                       <hr style="clear: both;display: none;border: none;border-bottom: 0.5px solid #2f2f2f;/*! width: 4.5em; */height: 0;">
-                    warning: returnyoutubedislikes may not be accurate, this is just an estiment ehe :3  <br>
+                     warning: returnyoutubedislikes may not be accurate, this is just an estiment ehe :3  <br>
 
                    Rating  :  <%=engagement.rating.toLocaleString()%> (<%=engagement.dislikes.toLocaleString()%>/<%=engagement.likes.toLocaleString()%> <abbr title="Like To dislike ratio - the number to the left is dislike count and the one to the right is like count :3">LTDR</abbr>) <br>
 
@@ -1703,7 +1707,7 @@ WIP!                                                 </a>
                   
                                                 <a id="nerdy"></a>
 
-                      </span>                              
+                       
 <style>
 
 
@@ -1977,9 +1981,15 @@ WIP!                                                 </a>
 
                                                          <% } %>
 
+<% if (!VideoData.recommendedVideos) { %>
+<style>
+   .recommended-list {
+    display:none !important;
+   }
+</style>
 
+                                                                           <% } %>
 
-                  
 <div class="recommended-list" align="center">
      <% if (universe) { %>  
 

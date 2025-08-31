@@ -93,12 +93,12 @@
         reloadCount++;
         localStorage.setItem('reloadCount', reloadCount);
 
-        let seconds = reloadCount > 8 ? 30 : 10;
+        let seconds = reloadCount > 90 ? 30 : 5;
 
         function updateCountdown() {
             const el = document.getElementById('countdown');
             if (el) {
-                if (reloadCount > 8) {
+                if (reloadCount > 90) {
                     document.querySelector('.error p').textContent = "This is taking so long...";
                 }
                 el.textContent = "Trying again in " + seconds + " seconds...";

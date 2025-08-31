@@ -1981,14 +1981,14 @@ WIP!                                                 </a>
 
                                                          <% } %>
 
-<% if (!VideoData.recommendedVideos) { %>
+<% if (!VideoData.recommendedVideos || VideoData.recommendedVideos.length === 0) { %>
 <style>
    .recommended-list {
-    display:none !important;
+      display: none !important;
    }
 </style>
+<% } %>
 
-                                                                           <% } %>
 
 <div class="recommended-list" align="center">
      <% if (universe) { %>  

@@ -1231,9 +1231,9 @@ Offical Discord Server! :3
     if (f) {
       statsForNerdsQuality = {
         itag: f.itag,
-        label: "720p",
+        label: f.qualityLabel,
         container: f.container || "mp4",
-        codecs: f.codecs || (f.mimeType ? f.mimeType : "unknown"),
+        codecs: f.encoding,
         audioSampleRate: f.audioSampleRate || "44100Hz",
         bitrate: f.bitrate || null
       };
@@ -1245,9 +1245,9 @@ Offical Discord Server! :3
     if (f) {
       statsForNerdsQuality = {
         itag: f.itag,
-        label: "360p",
+        label: f.qualityLabel,
         container: f.container || "mp4",
-        codecs: f.codecs || (f.mimeType ? f.mimeType : "unknown"),
+        codecs: f.encoding || (f.mimeType ? f.mimeType : "unknown"),
         audioSampleRate: f.audioSampleRate || "44100Hz",
         bitrate: f.bitrate || null
       };
@@ -1267,9 +1267,9 @@ Offical Discord Server! :3
     if (f) {
       statsForNerdsQuality = {
         itag: f.itag,
-        label: "2K",
+        label: f.qualityLabel,
         container: f.container || "mp4",
-        codecs: f.codecs || (f.mimeType ? f.mimeType : "unknown"),
+        codecs: f.encoding || (f.mimeType ? f.mimeType : "unknown"),
         audioSampleRate: f.audioSampleRate || "44100Hz",
         bitrate: f.bitrate || null
       };
@@ -1289,9 +1289,9 @@ Offical Discord Server! :3
     if (f) {
       statsForNerdsQuality = {
         itag: f.itag,
-        label: "4K",
+        label: f.qualityLabel,
         container: f.container || "mp4",
-        codecs: f.codecs || (f.mimeType ? f.mimeType : "unknown"),
+        codecs: f.encoding || (f.mimeType ? f.mimeType : "unknown"),
         audioSampleRate: f.audioSampleRate || "44100Hz",
         bitrate: f.bitrate || null
       };

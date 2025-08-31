@@ -1398,7 +1398,7 @@ Offical Discord Server! :3
   <a name="chnl"></a>
 
 				<a href="/channel?id=<%=video?.Channel.id || VideoData.authorId%>@youtube.com" class="avatar">
-					<img loading="lazy" src="/avatars/<%= VideoData.authorThumbnails[1].url.replace("https://yt3.ggpht.com/", "") %>" %>">
+					<img loading="lazy" src="/avatars/<%= VideoData.authorThumbnails[1].url.replace("https://yt3.ggpht.com/", "") %>" >
 				</a>
 				<div class="name" >
 <div style="display: flex;flex-direction: row;max-width: 119px;">
@@ -1407,7 +1407,7 @@ Offical Discord Server! :3
                                        <% if (VideoData?.authorVerified) { %> 
                    <div>
 <a href="https://support.google.com/youtube/answer/3046484?hl=en">
-            <i class="icon ion ion-md-checkmark-circle" title="verified channel"></i></a>
+            <i class="icon ion ion-md-checkmark-circle" title="verified channel" style="color:cyan" alt="verfied"></i></a>
                          </div>
 
   <% } %> 

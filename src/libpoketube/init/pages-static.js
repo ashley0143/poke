@@ -1,29 +1,9 @@
-const {
-  fetcher,
-  core,
-  wiki,
-  musicInfo,
-  modules,
-  version,
-  initlog,
-  init,
-} = require("../libpoketube-initsys.js");
-
-const {
-  IsJsonString,
-  convert,
-  getFirstLine,
-  capitalizeFirstLetter,
-  turntomins,
-  getRandomInt,
-  getRandomArbitrary,
-} = require("../ptutils/libpt-coreutils.js");
-
+const {  getRandomArbitrary } = require("../ptutils/libpt-coreutils.js");
 const path = require("path");
 const fs = require("node:fs");
 const CleanCSS = require("clean-css");
 
-const notice =  "/* the code is Licensed in gpl-3.0-or-later. This program comes with ABSOLUTELY NO WARRANTY. This is free software, and you are welcome to redistribute it under certain conditions. See the GNU General Public License for more detailsYou should have received a copy of the GNU General Public Licensealong with this program.  If not, see <https://www.gnu.org/licenses/>. - add the param nomin to view source code. (eg poketube.fun/css/poketube.css?nomin=true) */";
+const notice = "/* Licensed under GPL-3.0-or-later. This program comes with ABSOLUTELY NO WARRANTY. You may redistribute it under certain conditions; see <https://www.gnu.org/licenses/> for details. To view the original, unminified source code, append ?nomin=true to the URL (e.g. poketube.fun/css/poketube.css?nomin=true). */";
 
 function getJson(str) {
   try {
@@ -32,6 +12,9 @@ function getJson(str) {
     return null;
   }
 }
+
+
+
 module.exports = function (app, config, renderTemplate) {
   var html_location = "./css/";
   var location_pwa = "./pwa/";
@@ -346,7 +329,6 @@ app.get('/calendar', (req, res) => {
       res.status(404).send("File not found");
       return;
     }
-
     if (req.params.id.endsWith(".css") && !req.query.nomin) {
       // Minimize the CSS file
       const css = fs.readFileSync(filePath, "utf8");
@@ -387,7 +369,7 @@ app.get("/game-hub", function (req, res) {
       res.redirect("/css/" + id);
     } else if (id.endsWith(".js")) {
       if (id.endsWith(".bundle.js")) {
-        const jsFiles = ["app.js", "custom-css.js", "emojis.js"];
+        const jsFiles = ["app.js", "custom-css.js"];
         const combinedContent = jsFiles
           .map((fileName) => {
             const filePath = path.join(html_location, fileName);
@@ -403,7 +385,7 @@ app.get("/game-hub", function (req, res) {
         res.send(
           "// @license magnet:?xt=urn:btih:1f739d935676111cfff4b4693e3816e664797050&dn=gpl-3.0.txt GPL-3.0-or-later" +
             `\n` +
-            `// Includes app.js, emojis.js, and custom-css.js. Source code can be found for these 3 files in https://codeberg.org/Ashley/poketube/src/branch/main/css/` +
+            `// Includes app.js and custom-css.js. Source code can be found for these two files in https://codeberg.org/ashley/poke/src/branch/main/css/` +
             `\n` +
             minimizedJs +
             `\n` +
@@ -424,7 +406,7 @@ app.get("/game-hub", function (req, res) {
         res.send(
           "// @license magnet:?xt=urn:btih:1f739d935676111cfff4b4693e3816e664797050&dn=gpl-3.0.txt GPL-3.0-or-later" +
             `\n` +
-            `// Source code can be found in: https://codeberg.org/Ashley/poketube/src/branch/main/css/${id}` +
+            `// Source code can be found in: https://codeberg.org/ashley/poke/src/branch/main/css/${id}` +
             `\n` +
             minimizedJs +
             `\n` +

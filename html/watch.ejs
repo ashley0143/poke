@@ -1210,12 +1210,104 @@ Offical Discord Server! :3
                                                                            
                                                      
 <!-- Stats for nerds -->
-                                                                                                                         
+<%
+   function getAdaptiveFormat(itag) {
+    return VideoData.adaptiveFormats.find(f => f.itag == itag);
+  }
+  function getFormatStream(itag) {
+    return VideoData.formatStreams.find(f => f.itag == itag);
+  }
+
+   let statsForNerdsQuality = null;
+
+  if (!qua) {
+     let hdItag = '136';
+    VideoData.adaptiveFormats.forEach(format => {
+      if (format.itag == '298') {
+        hdItag = '298';
+      }
+    });
+    let f = getAdaptiveFormat(hdItag);
+    if (f) {
+      statsForNerdsQuality = {
+        itag: f.itag,
+        label: "720p",
+        container: f.container || "mp4",
+        codecs: f.codecs || (f.mimeType ? f.mimeType : "unknown"),
+        audioSampleRate: f.audioSampleRate || "44100Hz",
+        bitrate: f.bitrate || null
+      };
+    }
+  }
+
+  if (qua === "medium") {
+    let f = getFormatStream(18);
+    if (f) {
+      statsForNerdsQuality = {
+        itag: f.itag,
+        label: "360p",
+        container: f.container || "mp4",
+        codecs: f.codecs || (f.mimeType ? f.mimeType : "unknown"),
+        audioSampleRate: f.audioSampleRate || "44100Hz",
+        bitrate: f.bitrate || null
+      };
+    }
+  }
+
+  if (qua === "ultrahigh") {
+    let ultraItag = null;
+    VideoData.adaptiveFormats.forEach(format => {
+      if (format.itag == '400') {
+        ultraItag = '400';
+      } else if (format.itag == '271' && !ultraItag) {
+        ultraItag = '271';
+      }
+    });
+    let f = ultraItag ? getAdaptiveFormat(ultraItag) : null;
+    if (f) {
+      statsForNerdsQuality = {
+        itag: f.itag,
+        label: "2K",
+        container: f.container || "mp4",
+        codecs: f.codecs || (f.mimeType ? f.mimeType : "unknown"),
+        audioSampleRate: f.audioSampleRate || "44100Hz",
+        bitrate: f.bitrate || null
+      };
+    }
+  }
+
+  if (qua === "4k") {
+    let fourKItag = null;
+    VideoData.adaptiveFormats.forEach(format => {
+      if (format.itag == '313') {
+        fourKItag = '313';
+      } else if (format.itag == '401' && !fourKItag) {
+        fourKItag = '401';
+      }
+    });
+    let f = fourKItag ? getAdaptiveFormat(fourKItag) : null;
+    if (f) {
+      statsForNerdsQuality = {
+        itag: f.itag,
+        label: "4K",
+        container: f.container || "mp4",
+        codecs: f.codecs || (f.mimeType ? f.mimeType : "unknown"),
+        audioSampleRate: f.audioSampleRate || "44100Hz",
+        bitrate: f.bitrate || null
+      };
+    }
+  }
+%>                                                                    
            <div class="div_box">
          Video id : <%=VideoData.videoId%> <br>
        ImmersiveAmbientModecolor: <% if (lightOrDark(color) == "light") { %><%=color%> (color 1)<% } %><% if (lightOrDark(color) == "dark") { %> <%=color2%> (color 2) <% } %> <br>  
-        Video Format :<% if (!qua) { %>  <%= itag %> (720p) openh264 ( https://github.com/cisco/openh264) mp4a.40.2  | 44100Hz  <% } %>
-      <% if (qua === "medium") { %>  18 (320p)  openh264 (https://github.com/cisco/openh264) mp4a.40.2 | 44100Hz  <% } %>       <br> 
+     Video Format :
+  <% if (statsForNerdsQuality) { %>
+    <%= statsForNerdsQuality.itag %> (<%= statsForNerdsQuality.label %>) 
+    <%= statsForNerdsQuality.container %> | <%= statsForNerdsQuality.codecs %> | <%= statsForNerdsQuality.audioSampleRate %>
+    <% if (statsForNerdsQuality.bitrate) { %> | <%= statsForNerdsQuality.bitrate %> bps <% } %>
+  <% } %>
+     <br> 
         <% if (VideoData.genre === "Music") { %> 
         Audio Format: ALAC lossless (https://github.com/macosforge/alac) <br>
                                     <% } %>   

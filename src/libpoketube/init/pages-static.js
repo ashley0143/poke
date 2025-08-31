@@ -311,7 +311,7 @@ app.get('/calendar', (req, res) => {
   const cssDir = "./css/";
 
   app.get("/favicon.ico", function (req, res) {
-    res.sendFile("favicon.ico", { root: cssDir });
+    res.sendFile("favicon-new.ico", { root: cssDir });
   });
   app.get("/bg-full.webm", function (req, res) {
     res.sendFile("bg-full.webm", { root: cssDir });

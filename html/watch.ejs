@@ -1016,7 +1016,7 @@ Offical Discord Server! :3
 <p style="margin: 0px;font-family: &quot;poketube flex&quot;;color: gray;font-size: 11px;text-align: center;">PokeVideoPlayer v23.9-app.js-aug2025_<br> 0143ab93_videojs8_1563605_YT_2d24ba15 licensed under gpl3-or-later </p>              
                                                                                                                        
     </div>
-    <div id="<%=sha384(VideoData.videoId)%>" class="video-player-container">
+<div id="<%=sha384(VideoData.videoId)%>" class="video-player-container">
 <% 
   let itag = null;
   let hasHD = false, hasUHD = false, has4K = false;
@@ -1035,40 +1035,30 @@ Offical Discord Server! :3
   });
 %>  
 
-<% if (itag && qua !== "medium") { %>
-  <% if (itag !== '18') { %>
-    <audio id="aud" preload>
-      <source src="<%=u%>/latest_version?id=<%=VideoData.videoId%>&itag=<%=itag%>&local=true" type="video/mp4" />
-    </audio>
-  <% } else { %>
-    <audio id="aud"></audio>
-  <% } %>
+<% if (itag && qua !== "medium" && itag !== '18') { %>
+  <audio id="aud" preload>
+    <source src="<%=u%>/latest_version?id=<%=VideoData.videoId%>&itag=<%=itag%>&local=true" type="video/mp4" />
+  </audio>
 <% } else { %>
   <audio id="aud"></audio>
 <% } %>
 
 <noscript>
   <div class="error-card">
-    <p>Due to YouTube’s recent changes, high resolution video playback with audio requires JavaScript. You are now being served Standard Definition fallback.</p>
-    <video controls preload>
-      <source src="<%=u%>/latest_version?id=<%=VideoData.videoId%>&itag=18&local=true" type="video/mp4" />
-    </video>
+    <p>JavaScript is disabled. Playing Standard Definition only.</p>
   </div>
 </noscript>
    
 <video poster="<%- media_proxy_url %>/proxy?url=https://i.ytimg.com/vi/<%= VideoData.videoId %>/maxresdefault.jpg" class="video-js player video-ambient-container" id="video" style="border-radius: 16px; box-sizing: border-box; min-width: 100%; display: block;" preload>
   <% if (isvidious) { %>
     <% if (!qua) { %>
-      <%
+      <% if (hasHD) { 
         let hdItag = '136';
         VideoData.adaptiveFormats.forEach(format => {
-          if (format.itag == '298') {
-            hdItag = '298';
-          }
+          if (format.itag == '298') hdItag = '298';
         });
       %>
-      <% if (hasHD) { %>
-        <source src="<%=u%>/latest_version?id=<%=VideoData.videoId%>&itag=<%=hdItag%>&local=true" type="video/mp4; codecs=&quot;avc1.64001F, mp4a.40.2&quot;" label="hd720" selected="true">
+        <source src="<%=u%>/latest_version?id=<%=VideoData.videoId%>&itag=<%=hdItag%>&local=true" type="video/mp4" label="hd720" selected="true">
       <% } else { %>
         <source src="<%=u%>/latest_version?id=<%=VideoData.videoId%>&itag=18&local=true" type="video/mp4" label="sd360" selected="true">
       <% } %>
@@ -1105,25 +1095,13 @@ Offical Discord Server! :3
         <source src="<%=u%>/latest_version?id=<%=VideoData.videoId%>&itag=18&local=true" type="video/mp4" label="sd360" selected="true">
       <% } %>
     <% } %>
-  <% } %>
-
-  <% if (!isSchoolProxy) { %>
-    <% if (!isvidious) { %>
-      <% if (!qua) { %>
-        <source src="https://tube.kuylar.dev/proxy/media/<%=VideoData.videoId%>/<%= hasHD ? '22' : '18' %>" type="video/mp4" label="<%= hasHD ? 'hd720' : 'sd360' %>" selected="true" onerror="showErrorCard(event)">
-      <% } %>
-      <% if (qua === "medium") { %>
-        <source src="https://tube.kuylar.dev/proxy/media/<%=VideoData.videoId%>/18" type="video/mp4" label="sd360" selected="true" onerror="showErrorCard(event)">
-      <% } %>
-    <% } %>
-  <% } %>
-
-  <% if (isSchoolProxy) { %>
+  <% } else { %>
+    <!-- Default proxy fallbacks if not vidious -->
     <% if (!qua) { %>
-      <source src="https://tube-proxy.ashley0143.xyz/proxy/media/<%=VideoData.videoId%>/<%= hasHD ? '22' : '18' %>" type="video/mp4" label="<%= hasHD ? 'hd720' : 'sd360' %>" selected="true" onerror="showErrorCard()">
+      <source src="https://tube.kuylar.dev/proxy/media/<%=VideoData.videoId%>/<%= hasHD ? '22' : '18' %>" type="video/mp4" label="<%= hasHD ? 'hd720' : 'sd360' %>" selected="true" onerror="showErrorCard(event)">
     <% } %>
-    <% if (qua === "medium") { %>  
-      <source src="https://tube-proxy.ashley0143.xyz/proxy/media/<%=VideoData.videoId%>/18" type="video/mp4" label="sd360" selected="true" onerror="showErrorCard()">
+    <% if (qua === "medium") { %>
+      <source src="https://tube.kuylar.dev/proxy/media/<%=VideoData.videoId%>/18" type="video/mp4" label="sd360" selected="true" onerror="showErrorCard(event)">
     <% } %>
   <% } %>
 
@@ -1131,8 +1109,6 @@ Offical Discord Server! :3
     <% VideoData.captions.forEach(x => { %>
       <track src="/api/subtitles?v=<%=VideoData.videoId%>&h=<%= x.label %>" label="<%= x.label.replace("United States","Simplified - USA") %>" kind="subtitles">      
     <% }) %>   
-  <% } else { %> 
-    <track src="/api/subtitles?v=<%=VideoData.videoId%>&h=<%= %>" label="<%= video.Subtitles.Subtitle.language.replace("United States","Simplified - USA") %>" kind="subtitles">      
   <% } %>                                                       
 </video>
 

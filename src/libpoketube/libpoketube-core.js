@@ -56,47 +56,41 @@ class InnerTubePokeVidious {
 
     const headers = {
       "User-Agent": this.useragent,
-    }; 
-
+    };
 
     const fetchWithRetry = async (url, options = {}, retries = 3) => {
-  let lastError;
+      let lastError;
+      for (let attempt = 0; attempt < retries; attempt++) {
+        try {
+          const res = await fetch(url, {
+            ...options,
+            headers: {
+              ...options.headers,
+              ...headers,
+            },
+          });
 
-  for (let attempt = 0; attempt < retries; attempt++) {
-    try {
-      const res = await fetch(url, {
-        ...options,
-        headers: {
-          ...options.headers,
-          ...headers,
-        },
-      });
+          if (res.ok) {
+            return res;
+          }
 
-      // If success, return immediately
-      if (res.ok) {
-        return res;
+          if ((res.status >= 500 || res.status === 429) && attempt < retries - 1) {
+            this.initError(`Retrying fetch for ${url}`, res.status);
+            continue;
+          }
+
+          return res;
+        } catch (err) {
+          lastError = err;
+          this.initError(`Fetch error for ${url}`, err);
+          if (attempt < retries - 1) {
+            continue;
+          } else {
+            throw lastError;
+          }
+        }
       }
-
-      // If error but retryable
-      if ((res.status >= 500 || res.status === 429) && attempt < retries - 1) {
-        this.initError(`Retrying fetch for ${url}`, res.status);
-        continue;
-      }
-
-      // If non-retryable error, return response
-      return res;
-    } catch (err) {
-      lastError = err;
-      this.initError(`Fetch error for ${url}`, err);
-
-      if (attempt < retries - 1) {
-        continue;
-      } else {
-        throw lastError;
-      }
-    }
-  }
-};
+    };
 
     try {
       const [invComments, videoInfo] = await Promise.all([
@@ -121,18 +115,6 @@ class InnerTubePokeVidious {
           error: true,
           message: "Sorry nya, we couldn't find any information about that video qwq",
         };
-      }
-
-      let p = {};
-      if (f === "true" && vid?.authorId) {
-        try {
-          const uploads = await fetchWithRetry(
-            `${this.config.invapi}/channels/${vid.authorId}?hl=${contentlang}&region=${contentregion}`
-          );
-          p = this.getJson(await uploads.text());
-        } catch (err) {
-          this.initError("Failed to fetch channel uploads", err);
-        }
       }
 
       if (this.checkUnexistingObject(vid)) {
@@ -161,7 +143,7 @@ class InnerTubePokeVidious {
           result: {
             vid,
             comments,
-            channel_uploads: p,
+            channel_uploads: " ",
             engagement: fe.engagement,
             wiki: "",
             desc: "",
@@ -174,7 +156,6 @@ class InnerTubePokeVidious {
         return this.cache[v].result;
       } else {
         this.initError("Invalid video object (missing authorId)", vid);
-      
       }
     } catch (error) {
       this.initError("Error getting video", error);

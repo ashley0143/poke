@@ -195,12 +195,6 @@ class InnerTubePokeVidious {
 
 const pokeTubeApiCore = new InnerTubePokeVidious({
   invapi: "https://invid-api.poketube.fun/bHj665PpYhUdPWuKPfZuQGoX/api/v1",
-  invapi_alt:
-    config.proxylocation === "EU"
-      ? "https://invid-api.poketube.fun/api/v1"
-      : "https://iv.ggtyler.dev/api/v1",
-  dislikes: "https://returnyoutubedislikeapi.com/votes?videoId=",
-  t_url: "https://t.poketube.fun/",
   useragent: config.useragent,
 });
 

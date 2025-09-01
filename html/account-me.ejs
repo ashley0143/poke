@@ -1,53 +1,203 @@
-<!DOCTYPE html><html>
-  <head>
-          <title>PokeTube | Subscriptions </title>
-        <meta name="viewport" content="width=device-1200px, initial-scale=1.0, shrink-to-fit=yes, viewport-fit=cover">
-      <link href=/css/yt-ukraine.svg?v=6 rel=icon>
-       <link href=/css/app.main.css?v=44600 rel=stylesheet>
-    <style>
-
-        /* Define the grid container */
-.grid-container {
-    display: grid;
-  grid-template-columns: repeat(2, 0.2fr);
-  gap: 2px; /* Set the gap between grid items */
-    margin-left: auto;
-    margin-right: auto;
-    max-width: 15em;
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Poke | Subscriptions</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <link href="/css/yt-ukraine.svg?v=6" rel="icon">
+  <link href="/css/app.main.css?v=44600" rel="stylesheet">
+  <style>
+   :root {
+  --bg1: #231638;
+  --bg2: #2b160e;
+  --bg3: #09250e;
+  --bg4: #0f132b;
+  --card: #1a1a1a;
+  --text: #fff;
+  --muted: #b7b7b7;
+  --accent: #6cf;
+  --danger: #ff5b6e;
+  --ok: #6fff9b;
+  --chip: #111;
+  --chipText: #eee;
+  --radius: 14px;
 }
-
-/* Style for grid items */
-.grid-item {
-    background-color: #333;
-    padding: 20px;
-   max-width:5em;
-  text-align: center;
-    border-radius: 1em;
+* {
+  box-sizing: border-box;
 }
-
-body{
-font-family:sans-serif;
-color:#fff;
-background-image: radial-gradient(circle, #231638, #2b160e, #09250e, #0f132b);
+html,
+body {
+  height: 100%;
+}
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell,
+    Noto Sans, "Helvetica Neue", Arial, "Apple Color Emoji", "Segoe UI Emoji";
+  color: var(--text);
+  background-image: radial-gradient(
+    circle,
+    var(--bg1),
+    var(--bg2),
+    var(--bg3),
+    var(--bg4)
+  );
+  background-size: 400% 400%;
   animation: gradient 64s ease infinite;
-  background-size: 400% 400%;}
-      
-      
-      h1 {
-        font-family:"poketube flex";
-        font-weight: 800;
-        font-stretch: extra-expanded;
-      }
-      
-a {
-  background: #111;
-  padding: 5px;
-  color: #fff;
-  text-decoration: none !important;
-  border-radius: 5px;
 }
-      
-
+a {
+  color: var(--text);
+  text-decoration: none;
+}
+.wrap {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 20px;
+}
+header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+h1 {
+  font-family: "poketube flex", system-ui;
+  font-weight: 800;
+  letter-spacing: 0.3px;
+  margin: 0;
+}
+.uid {
+  font-size: 12px;
+  color: var(--muted);
+  background: rgba(0, 0, 0, 0.25);
+  padding: 6px 10px;
+  border-radius: 999px;
+}
+.bar {
+  margin-top: 14px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+}
+.chip {
+  background: var(--chip);
+  color: var(--chipText);
+  padding: 8px 12px;
+  border-radius: 999px;
+  font-size: 12px;
+}
+.spacer {
+  flex: 1;
+}
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--card);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 10px 12px;
+  border-radius: 10px;
+  transition: 0.2s;
+}
+.btn:hover {
+  transform: translateY(-1px);
+  border-color: rgba(255, 255, 255, 0.18);
+}
+.btn--danger {
+  background: linear-gradient(135deg, #2a1216, #1b0f12);
+  border-color: #3b151c;
+}
+.actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.search {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--card);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  padding: 8px 12px;
+  min-width: 220px;
+}
+.search input {
+  all: unset;
+  flex: 1;
+  font-size: 14px;
+}
+.grid {
+  margin-top: 18px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 12px;
+}
+.card {
+  background: var(--card);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: var(--radius);
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  transition: 0.18s;
+}
+.card:hover {
+  transform: translateY(-2px);
+  border-color: rgba(255, 255, 255, 0.15);
+}
+.avatar {
+  width: 88px;
+  height: 88px;
+  border-radius: 12px;
+  object-fit: cover;
+  background: #00000026;
+}
+.name {
+  font-weight: 700;
+  text-align: center;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.row {
+  display: flex;
+  gap: 8px;
+}
+.pill {
+  padding: 8px 10px;
+  border-radius: 10px;
+  background: #111;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  font-size: 13px;
+}
+.pill--view {
+  background: linear-gradient(135deg, #111, #0e1a26);
+}
+.pill--unsub {
+  background: linear-gradient(135deg, #1b1113, #251016);
+  border-color: #3b151c;
+}
+.muted {
+  color: var(--muted);
+  font-size: 13px;
+}
+.empty {
+  margin: 40px auto;
+  max-width: 560px;
+  text-align: center;
+  background: rgba(0, 0, 0, 0.25);
+  border: 1px dashed rgba(255, 255, 255, 0.18);
+  border-radius: 16px;
+  padding: 20px;
+}
+.toplink {
+  float: right;
+  margin-top: -6px;
+}
 @keyframes gradient {
   0% {
     background-position: 0 50%;
@@ -59,38 +209,123 @@ a {
     background-position: 0 50%;
   }
 }
-    </style>
-  </head>
-  <body>
-    User: <%- userid %><br>
-    <i><b>do not share ur user id with anyone</b></i><br><br>
-     <div>
-        <a style="margin-top:-59px; float: right" href="/api/get-channel-subs?ID=<%- userid %>">view json</a>
+@media (max-width: 520px) {
+  .toplink {
+    float: none;
+    margin: 0;
+  }
+  .wrap {
+    padding: 16px;
+  }
+}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="toplink">
+      <a class="btn" href="/api/get-channel-subs?ID=<%= encodeURIComponent(userid) %>">view json</a>
     </div>
-    <br>
-    
-     <center>
-    <h1>
-      My subscriptions
-       </h1>
-    </center>
-              <div class="grid-container">
-          <% if (userSubs) { %>
- <% for (const channelID in userSubs) { %>
-            <div class="grid-item">
-                              <img style="width:5em;border-radius:5px" src="<%= userSubs[channelID].avatar %>" alt="Avatar"><br >
-<br>
-               <%= userSubs[channelID].channelName %><br>
-                 <div style="gap: 1px;display: flex;margin-left: -12px;">
-              <a href="/api/remove-channel-sub?ID=<%- userid %>&channelID=<%= channelID %>" style="margin-bottom:1px">unsub </a> <a href="/channel?id=<%= channelID %>">view</a>
-            </div>            </div>
 
-        <% } %>
-		         <% } %>
+    <header>
+      <h1>My subscriptions</h1>
+      <span class="uid">User: <span title="Keep this private"><%= userid %></span></span>
+    </header>
 
+    <div class="bar">
+      <div class="search">
+        <svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79L20 21.49 21.49 20zM9.5 14A4.5 4.5 0 1 1 14 9.5 4.505 4.505 0 0 1 9.5 14"/></svg>
+        <input id="search" type="text" placeholder="Search channels">
+      </div>
+      <button id="sortAZ" class="btn" type="button">sort A→Z</button>
+      <span id="count" class="chip">0 subscriptions</span>
+      <span class="spacer"></span>
+      <a class="btn btn--danger" href="/api/remove-channel-sub?ID=<%= encodeURIComponent(userid) %>&channelID=ALL" id="unsubAll">unsub all</a>
+    </div>
+
+    <div id="empty" class="empty" style="display:none">
+      <div class="muted">No subscriptions found.</div>
+    </div>
+
+    <div id="grid" class="grid">
+      <% if (userSubs && Object.keys(userSubs).length) { %>
+        <% Object.keys(userSubs).forEach(function(channelID){ const c = userSubs[channelID]; %>
+          <div class="card" data-name="<%= (c.channelName||'').toLowerCase() %>">
+            <img class="avatar" loading="lazy" decoding="async"
+                 src="<%= c.avatar %>"
+                 alt="Avatar of <%= c.channelName %>"
+                 onerror="this.src='https://i.imgur.com/3ZQ3Z4R.png'">
+            <div class="name" title="<%= c.channelName %>"><%= c.channelName %></div>
+            <div class="row">
+              <a class="pill pill--unsub" href="/api/remove-channel-sub?ID=<%= encodeURIComponent(userid) %>&channelID=<%= channelID %>" data-unsub data-cid="<%= channelID %>">unsub</a>
+              <a class="pill pill--view" href="/channel?id=<%= channelID %>">view</a>
+            </div>
           </div>
- 
+        <% }) %>
+      <% } %>
     </div>
-   </body>
+
+    <noscript>
+      <p class="muted">JavaScript is disabled. Search and sorting are unavailable.</p>
+    </noscript>
+  </div>
+
+  <script>
+    const qs = s => document.querySelector(s);
+    const qsa = s => Array.from(document.querySelectorAll(s));
+    const grid = qs('#grid');
+    const search = qs('#search');
+    const count = qs('#count');
+    const empty = qs('#empty');
+    const sortAZ = qs('#sortAZ');
+    const cards = () => qsa('.card');
+
+    function updateCount(){
+      const visible = cards().filter(c => c.style.display !== 'none').length;
+      count.textContent = visible + (visible === 1 ? ' subscription' : ' subscriptions');
+      empty.style.display = visible ? 'none' : 'block';
+    }
+
+    function filter(){
+      const term = (search.value || '').trim().toLowerCase();
+      cards().forEach(c=>{
+        const name = c.getAttribute('data-name') || '';
+        c.style.display = name.includes(term) ? '' : 'none';
+      });
+      updateCount();
+    }
+
+    function sortByName(){
+      const nodes = cards().sort((a,b)=>{
+        const an = a.getAttribute('data-name')||'';
+        const bn = b.getAttribute('data-name')||'';
+        return an.localeCompare(bn,'en',{sensitivity:'base'});
+      });
+      nodes.forEach(n=>grid.appendChild(n));
+    }
+
+    search.addEventListener('input', filter);
+    sortAZ.addEventListener('click', ()=>{
+      sortByName();
+      filter();
+    });
+
+    grid.addEventListener('click', e=>{
+      const a = e.target.closest('a[data-unsub]');
+      if(!a) return;
+      const card = e.target.closest('.card');
+      const name = card ? card.querySelector('.name')?.textContent?.trim() : 'this channel';
+      if(!confirm('Unsubscribe from "'+name+'"?')) e.preventDefault();
+    });
+
+    (function init(){
+      const list = cards();
+      if(!list.length){ empty.style.display='block'; count.textContent='0 subscriptions'; return; }
+      sortByName();
+      updateCount();
+      if ('loading' in HTMLImageElement.prototype === false) {
+        list.forEach(c=>{ const img=c.querySelector('img'); if(img){ const i=new Image(); i.src=img.src; }});
+      }
+    })();
+  </script>
+</body>
 </html>
- 

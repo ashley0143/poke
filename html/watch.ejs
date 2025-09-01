@@ -2323,7 +2323,7 @@ if (/[?&]autoplay=/.test(location.search)) {
 	
 	if (userID) {
 	    // If user ID exists in localStorage, set the href attribute
-	    anchor.href = `/api/set-channel-subs?ID=${userID}&channelName=<%=VideoData.author%>&avatar=<%- media_proxy_url %>/proxy?url=<%= VideoData.authorThumbnails[1].url %>&channelID=<%=video?.Channel.id || VideoData.authorId %>`;
+	    anchor.href = `/api/set-channel-subs?ID=${userID}&channelName=<%=VideoData.author%>&avatar=<%- media_proxy_url %>/proxy?url=<%= VideoData.authorThumbnails[4].url %>&channelID=<%=video?.Channel.id || VideoData.authorId %>`;
 	} else {
 	     anchor.href = "/account-create"
 	 } 

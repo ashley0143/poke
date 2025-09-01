@@ -1622,13 +1622,14 @@ WIP!                                                 </a>
                         
                         
                          <% if (VideoData?.genre) { %> 
-                        Genre: <%-VideoData.genre %> 
+                        Genre: <%-VideoData.genre %>                         <br>
+
                          <% } %> 
                         <br>
                          <% if (VideoData?.license) { %> 
-                         License: <%-VideoData?.license %> 
+                         License: <%-VideoData?.license %> <br>
                          <% } else { %>
-                         License: Standard YouTube License
+                         License: Standard YouTube License <br>
                          <% } %> <br>
 
                          <% if (date.includes("Premiered")) { %>

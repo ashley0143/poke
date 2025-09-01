@@ -1016,193 +1016,191 @@ Offical Discord Server! :3
 <p style="margin: 0px;font-family: &quot;poketube flex&quot;;color: gray;font-size: 11px;text-align: center;">PokeVideoPlayer v23.9-app.js-aug2025_<br> 0143ab93_videojs8_1563605_YT_2d24ba15 licensed under gpl3-or-later </p>              
                                                                                                                        
     </div>
-    
-    
-		<div id="<%=sha384(VideoData.videoId)%>" class="video-player-container">
-      
- <% 
-  let itag = null; // Default to null
+    <div id="<%=sha384(VideoData.videoId)%>" class="video-player-container">
+<% 
+  let itag = null;
+  let hasHD = false, hasUHD = false, has4K = false;
+
   VideoData.adaptiveFormats.forEach(format => {
     if (format.itag == '136' || format.itag == '298') {
-      itag = '140'; // Set itag to '140' if either '136' or '298' is found
+      itag = '140';
+      hasHD = true;
+    }
+    if (format.itag == '400' || format.itag == '271') {
+      hasUHD = true;
+    }
+    if (format.itag == '313' || format.itag == '401') {
+      has4K = true;
     }
   });
 %>  
 
 <% if (itag && qua !== "medium") { %>
-  <audio id="aud" preload>
-    <source src="<%=u%>/latest_version?id=<%=VideoData.videoId%>&itag=<%=itag%>&local=true" type="video/mp4"  />
-  </audio>
+  <% if (itag !== '18') { %>
+    <audio id="aud" preload>
+      <source src="<%=u%>/latest_version?id=<%=VideoData.videoId%>&itag=<%=itag%>&local=true" type="video/mp4" />
+    </audio>
+  <% } else { %>
+    <audio id="aud"></audio>
+  <% } %>
 <% } else { %>
   <audio id="aud"></audio>
 <% } %>
 
-      <noscript>
-        <% if (!qua) { %>
-          <div id="nojs-high-res-warning" class="error-card">
-            <p>Due to YouTube's recent changes on high resolution playback, it is sadly impossible to play high-resolution video with audio without client-side JavaScript enabled. Switch to SD quality or enable JavaScript to play your video with audio.</p>
-          </div>
-        <% } %>
-      </noscript>
+<noscript>
+  <div class="error-card">
+    <p>Due to YouTube’s recent changes, high resolution video playback with audio requires JavaScript. You are now being served Standard Definition fallback.</p>
+    <video controls preload>
+      <source src="<%=u%>/latest_version?id=<%=VideoData.videoId%>&itag=18&local=true" type="video/mp4" />
+    </video>
+  </div>
+</noscript>
    
-      <video poster="<%- media_proxy_url %>/proxy?url=https://i.ytimg.com/vi/<%= VideoData.videoId %>/maxresdefault.jpg" class="video-js player video-ambient-container" id="video" style="border-radius: 16px; box-sizing: border-box; min-width: 100%; display: block;" preload>
+<video poster="<%- media_proxy_url %>/proxy?url=https://i.ytimg.com/vi/<%= VideoData.videoId %>/maxresdefault.jpg" class="video-js player video-ambient-container" id="video" style="border-radius: 16px; box-sizing: border-box; min-width: 100%; display: block;" preload>
   <% if (isvidious) { %>
-  <% if (!qua) { %>
-    <% 
-      let itag = '136'; // Default itag
-      VideoData.adaptiveFormats.forEach(format => {
-        if (format.itag == '298') {
-          itag = '298';
-        }
-      });
-    %>
-    <source src="<%=u%>/latest_version?id=<%=VideoData.videoId%>&itag=<%=itag%>&local=true" type="video/mp4; codecs=&quot;avc1.64001F, mp4a.40.2&quot;" label="hd720" selected="true">
-  <% } %>
+    <% if (!qua) { %>
+      <%
+        let hdItag = '136';
+        VideoData.adaptiveFormats.forEach(format => {
+          if (format.itag == '298') {
+            hdItag = '298';
+          }
+        });
+      %>
+      <% if (hasHD) { %>
+        <source src="<%=u%>/latest_version?id=<%=VideoData.videoId%>&itag=<%=hdItag%>&local=true" type="video/mp4; codecs=&quot;avc1.64001F, mp4a.40.2&quot;" label="hd720" selected="true">
+      <% } else { %>
+        <source src="<%=u%>/latest_version?id=<%=VideoData.videoId%>&itag=18&local=true" type="video/mp4" label="sd360" selected="true">
+      <% } %>
+    <% } %>
 
-  <% if (qua === "medium") { %>
-    <source src="<%=u%>/latest_version?id=<%=VideoData.videoId%>&itag=18&local=true" type="video/mp4; codecs=&quot;avc1.64001F, mp4a.40.2&quot;" label="sd360" selected="true">
-  <% } %>
+    <% if (qua === "medium") { %>
+      <source src="<%=u%>/latest_version?id=<%=VideoData.videoId%>&itag=18&local=true" type="video/mp4" label="sd360" selected="true">
+    <% } %>
 
-  <% if (qua === "ultrahigh") { %>
-    <%
-      let ultraItag = null;
-      VideoData.adaptiveFormats.forEach(format => {
-        if (format.itag == '400') {
-          ultraItag = '400';
-        } else if (format.itag == '271' && !ultraItag) {
-          ultraItag = '271';
-        }
-      });
-    %>
-    <% if (ultraItag) { %>
-      <source src="<%=u%>/latest_version?id=<%=VideoData.videoId%>&itag=<%=ultraItag%>&local=true" type="video/mp4" label="ultrahigh" selected="true">
+    <% if (qua === "ultrahigh") { %>
+      <% if (hasUHD) { 
+        let ultraItag = null;
+        VideoData.adaptiveFormats.forEach(format => {
+          if (format.itag == '400') ultraItag = '400';
+          else if (format.itag == '271' && !ultraItag) ultraItag = '271';
+        });
+      %>
+        <source src="<%=u%>/latest_version?id=<%=VideoData.videoId%>&itag=<%=ultraItag%>&local=true" type="video/mp4" label="ultrahigh" selected="true">
+      <% } else { %>
+        <source src="<%=u%>/latest_version?id=<%=VideoData.videoId%>&itag=18&local=true" type="video/mp4" label="sd360" selected="true">
+      <% } %>
+    <% } %>
+
+    <% if (qua === "4k") { %>
+      <% if (has4K) { 
+        let fourKItag = null;
+        VideoData.adaptiveFormats.forEach(format => {
+          if (format.itag == '313') fourKItag = '313';
+          else if (format.itag == '401' && !fourKItag) fourKItag = '401';
+        });
+      %>
+        <source src="<%=u%>/latest_version?id=<%=VideoData.videoId%>&itag=<%=fourKItag%>&local=true" type="video/mp4" label="4k" selected="true">
+      <% } else { %>
+        <source src="<%=u%>/latest_version?id=<%=VideoData.videoId%>&itag=18&local=true" type="video/mp4" label="sd360" selected="true">
+      <% } %>
     <% } %>
   <% } %>
 
-  <% if (qua === "4k") { %>
-    <%
-      let fourKItag = null;
-      VideoData.adaptiveFormats.forEach(format => {
-        if (format.itag == '313') {
-          fourKItag = '313';
-        } else if (format.itag == '401' && !fourKItag) {
-          fourKItag = '401';
-        }
-      });
-    %>
-    <% if (fourKItag) { %>
-      <source src="<%=u%>/latest_version?id=<%=VideoData.videoId%>&itag=<%=fourKItag%>&local=true" type="video/mp4" label="4k" selected="true">
+  <% if (!isSchoolProxy) { %>
+    <% if (!isvidious) { %>
+      <% if (!qua) { %>
+        <source src="https://tube.kuylar.dev/proxy/media/<%=VideoData.videoId%>/<%= hasHD ? '22' : '18' %>" type="video/mp4" label="<%= hasHD ? 'hd720' : 'sd360' %>" selected="true" onerror="showErrorCard(event)">
+      <% } %>
+      <% if (qua === "medium") { %>
+        <source src="https://tube.kuylar.dev/proxy/media/<%=VideoData.videoId%>/18" type="video/mp4" label="sd360" selected="true" onerror="showErrorCard(event)">
+      <% } %>
     <% } %>
   <% } %>
+
+  <% if (isSchoolProxy) { %>
+    <% if (!qua) { %>
+      <source src="https://tube-proxy.ashley0143.xyz/proxy/media/<%=VideoData.videoId%>/<%= hasHD ? '22' : '18' %>" type="video/mp4" label="<%= hasHD ? 'hd720' : 'sd360' %>" selected="true" onerror="showErrorCard()">
+    <% } %>
+    <% if (qua === "medium") { %>  
+      <source src="https://tube-proxy.ashley0143.xyz/proxy/media/<%=VideoData.videoId%>/18" type="video/mp4" label="sd360" selected="true" onerror="showErrorCard()">
+    <% } %>
+  <% } %>
+
+  <% if (Array.isArray(VideoData.captions)) { %> 
+    <% VideoData.captions.forEach(x => { %>
+      <track src="/api/subtitles?v=<%=VideoData.videoId%>&h=<%= x.label %>" label="<%= x.label.replace("United States","Simplified - USA") %>" kind="subtitles">      
+    <% }) %>   
+  <% } else { %> 
+    <track src="/api/subtitles?v=<%=VideoData.videoId%>&h=<%= %>" label="<%= video.Subtitles.Subtitle.language.replace("United States","Simplified - USA") %>" kind="subtitles">      
+  <% } %>                                                       
+</video>
+
+<% if (!a) { %>
+  <canvas width="12" height="6" class="ambient-canvas" id="ambient-canvas-1"></canvas>
+  <canvas width="12" height="6" class="ambient-canvas" id="ambient-canvas-2"></canvas>
 <% } %>
 
-
-      <% if (!isSchoolProxy) { %>
-        <% if (!isvidious) { %>
-          <% if (!qua) { %>
-            <source src="https://tube.kuylar.dev/proxy/media/<%=VideoData.videoId%>/22" type="video/mp4; codecs=&quot;avc1.64001F, mp4a.40.2&quot;" label="hd720" selected="true" onerror="showErrorCard(event)">
-          <% } %>
-          <% if (qua === "medium") { %>
-            <source src="https://tube.kuylar.dev/proxy/media/<%=VideoData.videoId%>/18" type="video/mp4; codecs=&quot;avc1.64001F, mp4a.40.2&quot;" label="sd360" selected="true" onerror="showErrorCard(event)">
-          <% } %>
-        <% } %>
-      <% } %>
-
-      <% if (isSchoolProxy) { %>
-        <% if (!qua) { %>
-          <source src="https://tube-proxy.ashley0143.xyz/proxy/media/<%=VideoData.videoId%>/22" type="video/mp4; codecs=&quot;avc1.64001F, mp4a.40.2&quot;" label="hd720" selected="true" onerror="showErrorCard()">
-        <% } %>
-        <% if (qua === "medium") { %>  
-          <source src="https://tube-proxy.ashley0143.xyz/proxy/media/<%=VideoData.videoId%>/18" type="video/mp4; codecs=&quot;avc1.64001F, mp4a.40.2&quot;" label="sd360" selected="true" onerror="showErrorCard()">
-        <% } %>
-      <% } %>
-
-      <%  if (Array.isArray( VideoData.captions)) { %> 
-        <% VideoData.captions?.forEach(x => { %>
-          <track src="/api/subtitles?v=<%=VideoData.videoId%>&h=<%= x.label %>" label="<%= x.label.replace("United States","Simplified - USA") %>" kind="subtitles">      
-        <% }) %>   
-      <% } %>                     
-      
-      <%  if (!Array.isArray( VideoData.captions)) { %> 
-        <track src="/api/subtitles?v=<%=VideoData.videoId%>&h=<%= %>" label="<%=  video.Subtitles.Subtitle.language.replace("United States","Simplified - USA") %>" kind="subtitles">      
-      <% } %>                                                       
-    </video>
-
-     <% if (!a) { %>
-      <canvas width="12" height="6" class="ambient-canvas" id="ambient-canvas-1"></canvas>
-      <canvas width="12" height="6" class="ambient-canvas" id="ambient-canvas-2"></canvas>
-    <% } %>
-    
-    <div class="pwp">
+<div class="pwp">
 <%
-  // Check if ultrahigh sources (2K) exist
-  let uhdAvailable = false;
-  VideoData.adaptiveFormats.forEach(format => {
-    if (format.itag == '400' || format.itag == '271') {
-      uhdAvailable = true;
-    }
-  });
-
-  // Check if 4K sources exist
-  let fourKAvailable = false;
-  VideoData.adaptiveFormats.forEach(format => {
-    if (format.itag == '313' || format.itag == '401') {
-      fourKAvailable = true;
-    }
-  });
+  let qualityOptions = [];
+  if (hasHD) qualityOptions.push("hd");
+  if (hasUHD) qualityOptions.push("uhd");
+  if (has4K) qualityOptions.push("4k");
 %>
 
-<% if (!qua) { %> 
-  <a><i style="display: block;" title="High Definition [Current]" class="fa-solid fa-high-definition"></i> High Definition</a>
-  <a href="/watch?v=<%=VideoData.videoId%>&quality=medium"><i style="display: block;" title="Standard Definition" class="fa-light fa-standard-definition"></i> Standard Definition</a>
-  <% if (uhdAvailable) { %>
-    <a href="/watch?v=<%=VideoData.videoId%>&quality=ultrahigh"><i style="display: block;" title="2K Definition" class="fa-light fa-high-definition"></i> 2K Definition</a>
-  <% } %>
-  <% if (fourKAvailable) { %>
-    <a href="/watch?v=<%=VideoData.videoId%>&quality=4k"><i style="display: block;" title="4K Definition" class="fa-light fa-high-definition"></i> 4K Definition</a>
-  <% } %>
-<% } %>
-
-<% if (qua === "medium") { %> 
-  <a href="/watch?v=<%=VideoData.videoId%>"><i style="display: block;" title="High Definition" class="fa-light fa-high-definition"></i> High Definition</a>
+<% if (qualityOptions.length === 0) { %>
   <a><i style="display: block;" title="Standard Definition [Current]" class="fa-solid fa-standard-definition"></i> Standard Definition</a>
-  <% if (uhdAvailable) { %>
-    <a href="/watch?v=<%=VideoData.videoId%>&quality=ultrahigh"><i style="display: block;" title="2K Definition" class="fa-light fa-high-definition"></i> 2K Definition</a>
-  <% } %>
-  <% if (fourKAvailable) { %>
-    <a href="/watch?v=<%=VideoData.videoId%>&quality=4k"><i style="display: block;" title="4K Definition" class="fa-light fa-high-definition"></i> 4K Definition</a>
-  <% } %>
-<% } %>
-
-<% if (qua === "ultrahigh" && uhdAvailable) { %> 
-  <a href="/watch?v=<%=VideoData.videoId%>"><i style="display: block;" title="High Definition" class="fa-light fa-high-definition"></i> High Definition</a>
-  <a href="/watch?v=<%=VideoData.videoId%>&quality=medium"><i style="display: block;" title="Standard Definition" class="fa-light fa-standard-definition"></i> Standard Definition</a>
-  <a><i style="display: block;" title="2K Definition [Current]" class="fa-solid fa-high-definition"></i> 2K Definition</a>
-  <% if (fourKAvailable) { %>
-    <a href="/watch?v=<%=VideoData.videoId%>&quality=4k"><i style="display: block;" title="4K Definition" class="fa-light fa-high-definition"></i> 4K Definition</a>
-  <% } %>
-<% } %>
-
-<% if (qua === "4k" && fourKAvailable) { %> 
-  <a href="/watch?v=<%=VideoData.videoId%>"><i style="display: block;" title="High Definition" class="fa-light fa-high-definition"></i> High Definition</a>
-  <a href="/watch?v=<%=VideoData.videoId%>&quality=medium"><i style="display: block;" title="Standard Definition" class="fa-light fa-standard-definition"></i> Standard Definition</a>
-  <% if (uhdAvailable) { %>
-    <a href="/watch?v=<%=VideoData.videoId%>&quality=ultrahigh"><i style="display: block;" title="2K Definition" class="fa-light fa-high-definition"></i> 2K Definition</a>
-  <% } %>
-  <a><i style="display: block;" title="4K Definition [Current]" class="fa-solid fa-high-definition"></i> 4K Definition</a>
-<% } %>
-
-
-      <input type="checkbox" class="v" id="box" style="display:none">
-      <label class="h" for="box">
-        <div class="fnt">
-    <% if (Math.floor(Math.random() * 50) === 0) { %>
-          <i title="Stats for nerdys" class="fa-light fa-bug"></i> Stats For Puppies
-    <% } else { %>
-          <i title="Stats for nerdys" class="fa-light fa-bug"></i> Stats For Nerds
+<% } else { %>
+  <% if (!qua) { %> 
+    <a><i style="display: block;" title="High Definition [Current]" class="fa-solid fa-high-definition"></i> High Definition</a>
+    <a href="/watch?v=<%=VideoData.videoId%>&quality=medium"><i style="display: block;" title="Standard Definition" class="fa-light fa-standard-definition"></i> Standard Definition</a>
+    <% if (hasUHD) { %>
+      <a href="/watch?v=<%=VideoData.videoId%>&quality=ultrahigh"><i style="display: block;" title="2K Definition" class="fa-light fa-high-definition"></i> 2K Definition</a>
     <% } %>
-        </div>
-      </label>
+    <% if (has4K) { %>
+      <a href="/watch?v=<%=VideoData.videoId%>&quality=4k"><i style="display: block;" title="4K Definition" class="fa-light fa-high-definition"></i> 4K Definition</a>
+    <% } %>
+  <% } %>
+  <% if (qua === "medium") { %> 
+    <a href="/watch?v=<%=VideoData.videoId%>"><i style="display: block;" title="High Definition" class="fa-light fa-high-definition"></i> High Definition</a>
+    <a><i style="display: block;" title="Standard Definition [Current]" class="fa-solid fa-standard-definition"></i> Standard Definition</a>
+    <% if (hasUHD) { %>
+      <a href="/watch?v=<%=VideoData.videoId%>&quality=ultrahigh"><i style="display: block;" title="2K Definition" class="fa-light fa-high-definition"></i> 2K Definition</a>
+    <% } %>
+    <% if (has4K) { %>
+      <a href="/watch?v=<%=VideoData.videoId%>&quality=4k"><i style="display: block;" title="4K Definition" class="fa-light fa-high-definition"></i> 4K Definition</a>
+    <% } %>
+  <% } %>
+  <% if (qua === "ultrahigh" && hasUHD) { %> 
+    <a href="/watch?v=<%=VideoData.videoId%>"><i style="display: block;" title="High Definition" class="fa-light fa-high-definition"></i> High Definition</a>
+    <a href="/watch?v=<%=VideoData.videoId%>&quality=medium"><i style="display: block;" title="Standard Definition" class="fa-light fa-standard-definition"></i> Standard Definition</a>
+    <a><i style="display: block;" title="2K Definition [Current]" class="fa-solid fa-high-definition"></i> 2K Definition</a>
+    <% if (has4K) { %>
+      <a href="/watch?v=<%=VideoData.videoId%>&quality=4k"><i style="display: block;" title="4K Definition" class="fa-light fa-high-definition"></i> 4K Definition</a>
+    <% } %>
+  <% } %>
+  <% if (qua === "4k" && has4K) { %> 
+    <a href="/watch?v=<%=VideoData.videoId%>"><i style="display: block;" title="High Definition" class="fa-light fa-high-definition"></i> High Definition</a>
+    <a href="/watch?v=<%=VideoData.videoId%>&quality=medium"><i style="display: block;" title="Standard Definition" class="fa-light fa-standard-definition"></i> Standard Definition</a>
+    <% if (hasUHD) { %>
+      <a href="/watch?v=<%=VideoData.videoId%>&quality=ultrahigh"><i style="display: block;" title="2K Definition" class="fa-light fa-high-definition"></i> 2K Definition</a>
+    <% } %>
+    <a><i style="display: block;" title="4K Definition [Current]" class="fa-solid fa-high-definition"></i> 4K Definition</a>
+  <% } %>
+<% } %>
+
+<input type="checkbox" class="v" id="box" style="display:none">
+<label class="h" for="box">
+  <div class="fnt">
+    <% if (Math.floor(Math.random() * 50) === 0) { %>
+      <i title="Stats for nerdys" class="fa-light fa-bug"></i> Stats For Puppies
+    <% } else { %>
+      <i title="Stats for nerdys" class="fa-light fa-bug"></i> Stats For Nerds
+    <% } %>
+  </div>
+</label>
+ 
 
  
                                                                         

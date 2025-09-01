@@ -28,13 +28,7 @@ app.get("/api/get-channel-subs", async function (req, res) {
   app.get("/api/remove-channel-sub", async function (req, res) {
     const userid = req.query.ID;
     const channelToRemove = req.query.channelID;
-
-    if (channelId === "ALL") {
-      db.delete(`user.${userId}.subs`);
-      db.set(`user.${userId}.subs`, {});
-      return res.json({ ok: true, message: "all subscriptions removed", remaining: 0 });
-    }
-
+ 
     // Check if the user has a 'subs' object in the database
     if (db.get(`user.${userid}.subs.${channelToRemove}`)) {
         // If the subscription exists, remove it from the database

@@ -28,11 +28,7 @@
             pointer-events: none;
             transition: 1s height;
         }
-
-        h2 {
-            font-size: 42px;
-        }
-
+        h2 { font-size: 42px; }
         p#abstract {
             position: fixed;
             top: 50%;
@@ -45,13 +41,11 @@
             pointer-events: none;
             transition: 1s transform;
         }
-
         @media only screen and (max-width: 790px) {
             p#abstract {
                 transform: translate(-50%, -50%) rotate(90deg) !important;
             }
         }
-
         .error {
             position: fixed;
             top: 50%;
@@ -62,7 +56,6 @@
             max-width: 600px;
             width: 100%;
         }
-
         .error-footer {
             position: fixed;
             bottom: 24px;
@@ -75,9 +68,7 @@
             text-decoration: none;
             margin: 0px 12px;
         }
-        .error-footer a:hover {
-            color: #d69cc8;
-        }
+        .error-footer a:hover { color: #d69cc8; }
         .countdown {
             margin-top: 16px;
             color: #ccc;
@@ -88,34 +79,49 @@
     <% const RESTART_MSG = "there could be few reasons why this could happen. see https://codeberg.org/ashley/poke/src/branch/main/why-error.md for info "; %>
     <% if (description === RESTART_MSG) { %>
     <script>
-        // Client-side reload logic
-        let reloadCount = parseInt(localStorage.getItem('reloadCount') || '0', 10);
-        reloadCount++;
-        localStorage.setItem('reloadCount', reloadCount);
+        // Alternating delay: 5s -> 10s -> 5s -> 10s -> ...
+        const PHASE_KEY = 'reloadPhase';     // 0 or 1
+        const COUNT_KEY = 'reloadCount';     // simple counter
+        const DELAYS = [5, 10];
 
-        let seconds = reloadCount > 90 ? 30 : 5;
+        // Pick delay for this attempt, then advance the phase for next time
+        const currentPhase = parseInt(localStorage.getItem(PHASE_KEY) || '0', 10) % DELAYS.length;
+        let seconds = DELAYS[currentPhase];
+        localStorage.setItem(PHASE_KEY, ((currentPhase + 1) % DELAYS.length).toString());
+        
+        function hardReload() {
+            // Hard reload to bypass cache if possible
+            location.reload();
+        }
 
         function updateCountdown() {
             const el = document.getElementById('countdown');
-            if (el) {
-                if (reloadCount > 90) {
-                    document.querySelector('.error p').textContent = "This is taking so long...";
-                }
-                el.textContent = "Trying again in " + seconds + " seconds...";
-            }
+            if (el) el.textContent = "Trying again in " + seconds + " seconds...";
             if (seconds <= 0) {
-                location.reload();
+                hardReload();
             } else {
                 seconds--;
                 setTimeout(updateCountdown, 1000);
             }
         }
-        window.addEventListener('DOMContentLoaded', updateCountdown); 
+
+        window.addEventListener('DOMContentLoaded', () => {
+            updateCountdown();
+            // Wire up footer refresh link (if present)
+            const refreshLink = document.getElementById('refresh-link');
+            if (refreshLink) {
+                refreshLink.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    hardReload();
+                });
+            }
+        });
     </script>
     <% } else { %>
     <script>
-        // Clear reload count on non-restart errors
+        // Clear counters on non-restart errors
         localStorage.removeItem('reloadCount');
+        localStorage.removeItem('reloadPhase');
     </script>
     <% } %>
 </head>
@@ -139,7 +145,7 @@
         <a href="https://discord.poketube.fun">Report on our Discord</a>
         <% if (description === RESTART_MSG) { %>
             <a href="https://github.com/iv-org/invidious/issues">See Invidious issues</a>
-            <a href="">Refresh Page</a>
+            <a href="#" id="refresh-link">Refresh Page</a>
         <% } %>
     </div>
 </body>

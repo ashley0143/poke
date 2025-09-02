@@ -180,7 +180,7 @@ app.get("/weather", async (req, res) => {
     res.redirect("/studio/piano")
   });
 
-  app.get("/studio/piano.ejs", function (req, res) {
+  app.get("/studio/piano", function (req, res) {
     renderTemplate(res, req, "piano.ejs");
   });
 

@@ -188,6 +188,10 @@ app.get("/weather", async (req, res) => {
     renderTemplate(res, req, "drums.ejs");
   });
 
+  app.get("/studio/strings", function (req, res) {
+    renderTemplate(res, req, "strings.ejs");
+  });
+
    app.get("/studio", function (req, res) {
     renderTemplate(res, req, "studio-landing.ejs");
   });

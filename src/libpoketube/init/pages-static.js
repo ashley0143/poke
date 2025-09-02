@@ -176,6 +176,10 @@ app.get("/weather", async (req, res) => {
     renderTemplate(res, req, "rewind.ejs");
   });
 
+ app.get("/piano", function (req, res) {
+    renderTemplate(res, req, "piano.ejs");
+  });
+
 app.get("/notepad", function (req, res) {
     renderTemplate(res, req, "pokepad.ejs");
   });

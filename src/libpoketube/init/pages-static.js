@@ -177,7 +177,15 @@ app.get("/weather", async (req, res) => {
   });
 
  app.get("/piano", function (req, res) {
+    res.redirect("/studio/piano")
+  });
+
+  app.get("/studio/piano.ejs", function (req, res) {
     renderTemplate(res, req, "piano.ejs");
+  });
+
+   app.get("/studio", function (req, res) {
+    renderTemplate(res, req, "studio-landing.ejs");
   });
 
 app.get("/notepad", function (req, res) {

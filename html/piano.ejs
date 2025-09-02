@@ -1,0 +1,742 @@
+<!--
+
+    This Source Code Form is subject to the terms of the GNU General Public License:
+
+    Copyright (C) 2021-2025 Poke (https://codeberg.org/ashley/poke)
+    
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program. If not, see https://www.gnu.org/licenses/.
+--->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Poke Piano</title>
+ <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+ <meta content="website" property="og:type">
+    <meta content="PokePiano" property="og:title">
+    <meta content="PIANO! on web!" property="twitter:description">
+       <meta content="https://cdn.glitch.me/d68d17bb-f2c0-4bc3-993f-50902734f652/aa70111e-5bcd-4379-8b23-332a33012b78.image.png?v=1701898829884" property="og:image"  />
+  <meta content="summary_large_image" name="twitter:card">
+  <link href="/css/yt-ukraine.svg?v=7" rel=icon>
+
+    <style>
+  
+
+    :root {
+      --bg: #0d0f12;
+      --bg-soft: #141820;
+      --fg: #f3f5f7;
+      --muted: #9aa4b2;
+      --brand: #7a5cff;
+      --accent: #00d3a7;
+      --danger: #ff5577;
+      --key-white: #f7f8fb;
+      --key-black: #111317;
+      --key-pressed: #ffce4a;
+      --key-outline: #1a2030;
+      --shadow: 0 12px 34px rgba(0,0,0,.40), 0 2px 10px rgba(0,0,0,.25);
+      --radius: 16px;
+      --glass: linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.02));
+    }
+    .light {
+      --bg: #f7f8fb;
+      --bg-soft: #ffffff;
+      --fg: #0e1116;
+      --muted: #4a5568;
+      --brand: #6a5cff;
+      --accent: #00b394;
+      --key-white: #fff;
+      --key-black: #0e1116;
+      --key-pressed: #ffd24d;
+      --key-outline: #cfd8e3;
+      --shadow: 0 12px 30px rgba(0,0,0,.12), 0 2px 10px rgba(0,0,0,.08);
+      --glass: linear-gradient(180deg, rgba(255,255,255,.7), rgba(255,255,255,.6));
+    }
+
+    * { box-sizing: border-box; }
+    html, body { height: 100%; }
+    body {
+      margin: 0;
+      background:
+        radial-gradient(1200px 600px at 15% -10%, rgba(122,92,255,.18), transparent 60%),
+        radial-gradient(1200px 700px at 100% 0%, rgba(0,211,167,.12), transparent 45%),
+        linear-gradient(180deg, var(--bg), var(--bg-soft));
+      color: var(--fg);
+      font: 14px/1.4 system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, "Noto Sans", Arial, "Apple Color Emoji", "Segoe UI Emoji";
+      display: grid;
+      grid-template-rows: auto auto 1fr auto;
+      gap: 14px;
+    }
+
+     header {
+      padding: 10px 16px 0;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 10px;
+      align-items: center;
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .logo {
+      width: 28px; height: 28px; border-radius: 10px;
+      background: conic-gradient(from 220deg, var(--brand), var(--accent), var(--brand));
+      box-shadow: 0 6px 18px rgba(122,92,255,.28);
+      border: 1px solid var(--key-outline);
+    }
+    h1 {
+      margin: 0;
+      font-size: 18px;
+      letter-spacing: 0.2px;
+    }
+    .header-actions { display: flex; gap: 6px; }
+    .chip {
+      padding: 8px 12px;
+      border-radius: 999px;
+      border: 1px solid var(--key-outline);
+      background: var(--bg-soft);
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .toolbar {
+      display: grid;
+      gap: 8px;
+      grid-template-columns: repeat(12, 1fr);
+      padding: 0 16px;
+    }
+    .card {
+      background: var(--bg-soft);
+      border: 1px solid var(--key-outline);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 12px;
+      min-width: 0;
+      position: relative;
+      overflow: hidden;
+    }
+    .card::after {
+      content:""; position:absolute; inset:0; pointer-events:none;
+      background:
+        radial-gradient(600px 160px at 10% 0%, rgba(255,255,255,.06), transparent 60%),
+        radial-gradient(500px 140px at 90% 0%, rgba(122,92,255,.12), transparent 50%);
+      mix-blend-mode: overlay;
+    }
+    .card > .title {
+      font-size: 12px; color: var(--muted); margin-bottom: 8px; letter-spacing:.3px; text-transform: uppercase;
+    }
+
+    .group { display: grid; gap: 10px; }
+
+     .row {
+      display: grid;
+      grid-auto-flow: column;
+      grid-auto-columns: minmax(0, 1fr);
+      gap: 12px;
+      align-items: end;
+    }
+    .pair {
+      display: grid;
+      grid-template-columns: max-content 1fr;
+      gap: 8px;
+      align-items: center;
+      min-width: 0;
+    }
+    .pair > label { color: var(--muted); font-size: 12px; }
+
+    select, input[type="range"], input[type="number"], input[type="text"], button, .toggle {
+      width: 100%;
+      border-radius: 12px;
+      border: 1px solid var(--key-outline);
+      background: #0f131b;
+      color: var(--fg);
+      padding: 8px 10px;
+      outline: none;
+      transition: transform .06s ease, box-shadow .06s ease, border-color .12s ease;
+      min-height: 32px;
+    }
+    .light select, .light input[type="range"], .light input[type="number"], .light input[type="text"], .light button, .light .toggle {
+      background: #fff;
+    }
+    input[type="range"] { height: 28px; }
+    input[type="number"] { text-align: center; }
+
+    button {
+      cursor: pointer;
+      background: linear-gradient(180deg, var(--brand), #4a3aff);
+      border: none;
+      color: white;
+      font-weight: 700;
+      letter-spacing:.2px;
+    }
+    button.secondary { background: var(--bg-soft); color: var(--fg); border: 1px solid var(--key-outline); }
+    button.danger { background: var(--danger); }
+    button:active { transform: translateY(1px); }
+    button:focus-visible, select:focus-visible, input:focus-visible {
+      box-shadow: 0 0 0 3px rgba(122,92,255,.35);
+      border-color: var(--brand);
+    }
+
+    .kbd { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace; background: #1a2230; padding: 2px 6px; border-radius: 8px; border: 1px solid var(--key-outline); }
+    .light .kbd { background: #eef2ff; }
+
+    .piano-wrap { padding: 0 16px 16px; }
+    .piano {
+      position: relative;
+      height: clamp(200px, 36vh, 340px);
+      user-select: none;
+      touch-action: none;
+      background: var(--glass);
+      border-radius: var(--radius);
+      border: 1px solid var(--key-outline);
+      overflow: hidden;
+      box-shadow: var(--shadow);
+    }
+
+    .white-keys, .black-keys { position: absolute; inset: 0; display: grid; align-items: end; }
+    .white-keys { grid-auto-flow: column; grid-auto-columns: 1fr; gap: 0; z-index: 1; }
+    .black-keys { grid-auto-flow: column; grid-auto-columns: 1fr; gap: 0; z-index: 2; pointer-events: none; }
+
+    .key { position: relative; border-right: 1px solid var(--key-outline); }
+    .key:last-child { border-right: none; }
+
+    .key.white { height: 100%; background: var(--key-white); }
+    .key.white.pressed { background: linear-gradient(180deg, #ffe694, var(--key-white)); box-shadow: inset 0 0 0 3px rgba(0,0,0,.08); }
+
+    .key.black { pointer-events: auto; justify-self: center; width: 60%; height: 62%; margin-bottom: 38%; background: #0b0d12; border: 1px solid #000; border-bottom: 6px solid #000; border-radius: 0 0 8px 8px; box-shadow: inset 0 -10px 0 rgba(255,255,255,.04), 0 8px 22px rgba(0,0,0,.4); }
+    .light .key.black { background: var(--key-black); }
+    .key.black.pressed { background: #333842; }
+
+    .label { position: absolute; left: 6px; bottom: 6px; font-size: 11px; color: #5b6475; pointer-events: none; }
+    .key.pressed .label { color: #222; }
+
+    .black-slot { position: relative; }
+    .black-slot.hide { visibility: hidden; }
+
+    .footer { display: grid; grid-template-columns: 1fr auto; align-items: center; gap: 8px; padding: 0 16px 16px; }
+    canvas { width: 100%; height: 72px; border-radius: var(--radius); background: #0b0f16; border: 1px solid var(--key-outline); box-shadow: var(--shadow); }
+
+    .grid-col-3 { grid-column: span 3; }
+    .grid-col-4 { grid-column: span 4; }
+    .grid-col-5 { grid-column: span 5; }
+    .grid-col-6 { grid-column: span 6; }
+    .grid-col-7 { grid-column: span 7; }
+    .grid-col-8 { grid-column: span 8; }
+    .grid-col-12 { grid-column: span 12; }
+
+    .metro-dots { display:flex; gap:8px; align-items:center; flex-wrap:wrap; }
+    .dot { width:14px; height:14px; border-radius:999px; border:1px solid var(--key-outline); background:#12151c; box-shadow: inset 0 0 0 2px rgba(0,0,0,.2); }
+    .light .dot { background:#fff; }
+    .dot.on { background: var(--brand); box-shadow: 0 0 0 6px rgba(122,92,255,.20), 0 4px 12px rgba(0,0,0,.25); }
+    .dot.accent { border-color: var(--accent); }
+    .dot.on.accent { background: var(--accent); box-shadow: 0 0 0 6px rgba(0,211,167,.22), 0 4px 12px rgba(0,0,0,.25); }
+
+    @media (max-width: 900px) {
+      .toolbar { grid-template-columns: repeat(6, 1fr); }
+      .grid-col-8, .grid-col-7, .grid-col-6, .grid-col-5 { grid-column: span 6; }
+      .grid-col-4 { grid-column: span 3; }
+      .grid-col-3 { grid-column: span 3; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="brand">
+      <div class="logo"></div>
+      <h1>Poke Piano BETA!!</h1>
+    </div>
+    <div class="header-actions">
+      <button id="power">Start Audio</button>
+      <button style="display:none"; id="theme" class="secondary">Theme</button>
+    </div>
+  </header>
+
+  <section class="toolbar">
+    <div class="card grid-col-3 group">
+      <div class="title">Setup</div>
+      <div class="row">
+        <div class="pair"><label for="octaves">Octaves</label><input id="octaves" type="range" min="1" max="7" step="1" value="3"></div>
+        <div class="pair"><label for="baseOct">Base Octave</label><input id="baseOct" type="number" min="0" max="8" value="3"></div>
+      </div>
+      <div class="row">
+        <div class="pair"><label for="a4">A4 (Hz)</label><input id="a4" type="number" min="400" max="480" step="0.1" value="440"></div>
+        <div class="pair"><label for="poly">Polyphony</label><input id="poly" type="number" min="1" max="64" value="16"></div>
+      </div>
+      <div class="row">
+        <div class="pair"><label for="vol">Volume</label><input id="vol" type="range" min="0" max="1" step="0.001" value="0.7"></div>
+      </div>
+    </div>
+
+    <div class="card grid-col-4 group">
+      <div class="title">Oscillator</div>
+      <div class="row">
+        <div class="pair"><label for="wave">Wave</label><select id="wave"><option>sine</option><option>triangle</option><option selected>square</option><option>sawtooth</option></select></div>
+        <div class="pair"><label for="detune">Detune (cents)</label><input id="detune" type="range" min="-100" max="100" value="0"></div>
+      </div>
+      <div class="row">
+        <div class="pair"><label for="port">Glide (ms)</label><input id="port" type="range" min="0" max="400" value="0"></div>
+        <div class="pair"><label for="lp">LP Cutoff (Hz)</label><input id="lp" type="range" min="200" max="18000" step="1" value="16000"></div>
+      </div>
+    </div>
+
+    <div class="card grid-col-4 group">
+      <div class="title">Envelope</div>
+      <div class="row">
+        <div class="pair"><label for="atk">Attack</label><input id="atk" type="range" min="0.001" max="2" step="0.001" value="0.01"></div>
+        <div class="pair"><label for="dec">Decay</label><input id="dec" type="range" min="0.001" max="2" step="0.001" value="0.15"></div>
+      </div>
+      <div class="row">
+        <div class="pair"><label for="sus">Sustain</label><input id="sus" type="range" min="0" max="1" step="0.001" value="0.6"></div>
+        <div class="pair"><label for="rel">Release</label><input id="rel" type="range" min="0.001" max="4" step="0.001" value="0.3"></div>
+      </div>
+    </div>
+
+    <div class="card grid-col-12 group">
+      <div class="title">FX & Utilities</div>
+      <div class="row">
+        <div class="pair"><label for="dtime">Delay Time (ms)</label><input id="dtime" type="range" min="0" max="900" value="0"></div>
+        <div class="pair"><label for="dfeed">Feedback</label><input id="dfeed" type="range" min="0" max="0.95" step="0.01" value="0.3"></div>
+        <div class="pair"><label for="dmix">Mix</label><input id="dmix" type="range" min="0" max="1" step="0.01" value="0.2"></div>
+        <div class="pair"><label for="sustain">Sustain</label><button id="sustain" class="secondary">Off</button></div>
+        <div class="pair"><label for="labels">Key Labels</label><button id="labels" class="secondary">On</button></div>
+        <div class="pair"><label for="panic">Panic</label><button id="panic" class="danger">All Off</button></div>
+        <div class="pair"><label for="rec">Record</label><button id="rec" class="secondary">Start</button></div>
+      </div>
+    </div>
+
+    <div class="card grid-col-5 group">
+      <div class="title">Metronome</div>
+      <div class="row">
+        <div class="pair"><label for="metroBtn">Control</label><button id="metroBtn" class="secondary">Start</button></div>
+        <div class="pair"><label for="bpm">BPM</label><input id="bpm" type="range" min="20" max="300" step="1" value="120"></div>
+      </div>
+      <div class="row">
+        <div class="pair"><label for="sig">Beats/Bar</label>
+          <select id="sig"><option>2</option><option>3</option><option selected>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>12</option></select>
+        </div>
+        <div class="pair"><label for="mvol">Volume</label><input id="mvol" type="range" min="0" max="1" step="0.01" value="0.8"></div>
+        <div class="pair"><label for="accent">Accent</label><button id="accent" class="secondary">On</button></div>
+      </div>
+      <div class="metro-dots" id="metroDots" aria-hidden="true"></div>
+    </div>
+
+    <div class="card grid-col-7 group">
+      <div class="title">Visualizer</div>
+      <canvas id="viz" width="900" height="120"></canvas>
+    </div>
+  </section>
+
+  <section class="piano-wrap">
+    <div class="piano" id="piano">
+      <div class="white-keys" id="white"></div>
+      <div class="black-keys" id="black"></div>
+    </div>
+  </section>
+
+  <section class="footer">
+    <div></div>
+    <div class="chip"><span id="status">Ready</span></div>
+  </section>
+
+  <script>
+    ;(() => {
+      const $ = sel => document.querySelector(sel)
+      const $$ = sel => Array.from(document.querySelectorAll(sel))
+
+      const els = {
+        power: $('#power'), theme: $('#theme'), octaves: $('#octaves'), baseOct: $('#baseOct'), a4: $('#a4'),
+        wave: $('#wave'), detune: $('#detune'), port: $('#port'), poly: $('#poly'), vol: $('#vol'),
+        atk: $('#atk'), dec: $('#dec'), sus: $('#sus'), rel: $('#rel'), lp: $('#lp'),
+        dtime: $('#dtime'), dfeed: $('#dfeed'), dmix: $('#dmix'), sustainBtn: $('#sustain'), labelsBtn: $('#labels'), panic: $('#panic'), recBtn: $('#rec'),
+        white: $('#white'), black: $('#black'), piano: $('#piano'), viz: $('#viz'),
+        metroBtn: $('#metroBtn'), bpm: $('#bpm'), sig: $('#sig'), mvol: $('#mvol'), accent: $('#accent'), metroDots: $('#metroDots'),
+        status: $('#status')
+      }
+
+      const storageKey = 'poke-piano-v2'
+      const defaults = {
+        theme: 'dark', octaves: 3, baseOct: 3, a4: 440, wave: 'square', detune: 0, port: 0,
+        poly: 16, vol: 0.7, atk: 0.01, dec: 0.15, sus: 0.6, rel: 0.3, lp: 16000,
+        dtime: 0, dfeed: 0.3, dmix: 0.2, sustain: false, labels: true,
+        bpm: 120, sig: 4, mvol: 0.8, accent: true
+      }
+      let conf = { ...defaults }
+      try { const saved = JSON.parse(localStorage.getItem(storageKey)||'{}'); conf = { ...conf, ...saved } } catch {}
+
+      function setStatus(t){ els.status.textContent = t }
+
+      function syncUI() {
+        if (conf.theme === 'light') document.body.classList.add('light'); else document.body.classList.remove('light')
+        els.octaves.value = conf.octaves
+        els.baseOct.value = conf.baseOct
+        els.a4.value = conf.a4
+        els.wave.value = conf.wave
+        els.detune.value = conf.detune
+        els.port.value = conf.port
+        els.poly.value = conf.poly
+        els.vol.value = conf.vol
+        els.atk.value = conf.atk
+        els.dec.value = conf.dec
+        els.sus.value = conf.sus
+        els.rel.value = conf.rel
+        els.lp.value = conf.lp
+        els.dtime.value = conf.dtime
+        els.dfeed.value = conf.dfeed
+        els.dmix.value = conf.dmix
+        els.sustainBtn.textContent = conf.sustain ? 'On' : 'Off'
+        els.labelsBtn.textContent = conf.labels ? 'On' : 'Off'
+        els.bpm.value = conf.bpm
+        els.sig.value = String(conf.sig)
+        els.mvol.value = conf.mvol
+        els.accent.textContent = conf.accent ? 'On' : 'Off'
+      }
+      syncUI()
+
+      function save() { localStorage.setItem(storageKey, JSON.stringify(conf)) }
+
+      let ctx, master, filter, analyser, delay, delayGain, feedback, merger, recDest, recorder, recChunks = [], recording = false
+      let mGain
+      let metroTimer = null, nextBeatTime = 0, beatIndex = 0, metroRunning = false
+
+      function initAudio() {
+        if (ctx) return
+        ctx = new (window.AudioContext || window.webkitAudioContext)()
+        master = ctx.createGain(); master.gain.value = conf.vol
+        filter = ctx.createBiquadFilter(); filter.type = 'lowpass'; filter.frequency.value = conf.lp
+        analyser = ctx.createAnalyser(); analyser.fftSize = 2048
+        delay = ctx.createDelay(1.0); delay.delayTime.value = conf.dtime/1000
+        feedback = ctx.createGain(); feedback.gain.value = conf.dfeed
+        delayGain = ctx.createGain(); delayGain.gain.value = conf.dmix
+        recDest = ctx.createMediaStreamDestination()
+        merger = ctx.createGain()
+        mGain = ctx.createGain(); mGain.gain.value = conf.mvol
+
+        merger.connect(filter)
+        filter.connect(master)
+        master.connect(ctx.destination)
+        master.connect(analyser)
+        mGain.connect(master)
+
+        const delayIn = ctx.createGain()
+        filter.connect(delayIn)
+        delayIn.connect(delay)
+        delay.connect(feedback)
+        feedback.connect(delay)
+        delay.connect(delayGain)
+        delayGain.connect(master)
+
+        master.connect(recDest)
+
+        drawViz()
+      }
+
+      function drawViz() {
+        const c = els.viz, g = c.getContext('2d')
+        const data = new Uint8Array(analyser.frequencyBinCount)
+        function loop() {
+          requestAnimationFrame(loop)
+          analyser.getByteFrequencyData(data)
+          g.clearRect(0,0,c.width,c.height)
+          const w = c.width / data.length
+          for (let i=0;i<data.length;i++) {
+            const v = data[i]
+            const h = (v/255) * (c.height-8)
+            g.fillStyle = '#4a70ff'
+            g.fillRect(i*w, c.height-h, Math.max(1,w-1), h)
+          }
+        }
+        loop()
+      }
+
+      function freqFromMidi(n) { return conf.a4 * Math.pow(2, (n-69)/12) }
+
+      const keyMap = {
+        'z': 60, 's': 61, 'x': 62, 'd': 63, 'c': 64, 'v': 65, 'g': 66, 'b': 67, 'h': 68, 'n': 69, 'j': 70, 'm': 71,
+        ',': 72, 'l': 73, '.': 74, ';': 75, '/': 76
+      }
+
+      const ACTIVE = new Map()
+      const HELD = new Set()
+      const SUSTAINED = new Set()
+
+      function voiceOn(midi, velocity=1) {
+        if (!ctx) initAudio()
+        if (ACTIVE.size >= conf.poly && !ACTIVE.has(midi)) {
+          const oldest = ACTIVE.keys().next().value
+          voiceOff(oldest)
+        }
+
+        const t = ctx.currentTime
+        const dest = merger
+
+        const osc = ctx.createOscillator()
+        osc.type = conf.wave
+        osc.frequency.setValueAtTime(freqFromMidi(midi), t)
+        if (conf.port > 0 && ACTIVE.has('__lastFreq')) {
+          const last = ACTIVE.get('__lastFreq')
+          osc.frequency.setValueAtTime(last, t)
+          osc.frequency.linearRampToValueAtTime(freqFromMidi(midi), t + conf.port/1000)
+        }
+        osc.detune.value = conf.detune
+
+        const env = ctx.createGain(); env.gain.setValueAtTime(0, t)
+        env.gain.cancelScheduledValues(t)
+        env.gain.linearRampToValueAtTime(1, t + conf.atk)
+        env.gain.linearRampToValueAtTime(conf.sus, t + conf.atk + conf.dec)
+
+        osc.connect(env)
+        env.connect(dest)
+        osc.start()
+
+        ACTIVE.set(midi, { osc, env })
+        ACTIVE.set('__lastFreq', freqFromMidi(midi))
+
+        const keyEl = document.querySelector(`[data-midi="${midi}"]`)
+        if (keyEl) keyEl.classList.add('pressed')
+      }
+
+      function voiceOff(midi) {
+        const v = ACTIVE.get(midi)
+        if (!v) return
+        const t = ctx.currentTime
+        v.env.gain.cancelScheduledValues(t)
+        v.env.gain.setValueAtTime(v.env.gain.value, t)
+        v.env.gain.linearRampToValueAtTime(0, t + conf.rel)
+        try { v.osc.stop(t + conf.rel + 0.01) } catch {}
+        setTimeout(() => {
+          try { v.osc.disconnect(); v.env.disconnect() } catch {}
+        }, (conf.rel*1000)+20)
+        ACTIVE.delete(midi)
+        const keyEl = document.querySelector(`[data-midi="${midi}"]`)
+        if (keyEl) keyEl.classList.remove('pressed')
+      }
+
+      function allOff() { Array.from(ACTIVE.keys()).filter(k=>k!=='__lastFreq').forEach(voiceOff); SUSTAINED.clear(); HELD.clear() }
+
+      function buildKeys() {
+        els.white.innerHTML = ''
+        els.black.innerHTML = ''
+        const octs = conf.octaves|0
+        const base = conf.baseOct|0
+        const whiteOrder = ['C','D','E','F','G','A','B']
+        const hasSharp = { 'C':true,'D':true,'F':true,'G':true,'A':true }
+
+        let midi = (base+1)*12
+        for (let o=0; o<octs; o++) {
+          for (const n of whiteOrder) {
+            const w = document.createElement('div')
+            w.className = 'key white'
+            w.dataset.midi = String(midi)
+            const label = document.createElement('div')
+            label.className = 'label'
+            label.textContent = midiToName(midi)
+            w.appendChild(label)
+            els.white.appendChild(w)
+
+            const slot = document.createElement('div')
+            slot.className = 'black-slot'
+            els.black.appendChild(slot)
+
+            if (hasSharp[n]) {
+              const b = document.createElement('div')
+              b.className = 'key black'
+              b.dataset.midi = String(midi+1)
+              const bl = document.createElement('div')
+              bl.className = 'label'
+              bl.textContent = midiToName(midi+1)
+              b.appendChild(bl)
+              slot.appendChild(b)
+            } else {
+              slot.classList.add('hide')
+            }
+
+            midi += (n==='E'||n==='B') ? 1 : 2
+          }
+        }
+
+        attachKeyHandlers()
+        applyLabelVisibility()
+      }
+
+      function midiToName(m) {
+        const names = ['C','C#','D','D#','E','F','F#','G','G#','A','A#','B']
+        const name = names[m%12]
+        const oct = Math.floor(m/12)-1
+        return name+oct
+      }
+
+      function attachKeyHandlers() {
+        const down = e => { const el = e.target.closest('.key'); if (!el) return; const m = +el.dataset.midi; HELD.add(m); voiceOn(m) }
+        const up = e => { const el = e.target.closest('.key'); if (!el) return; const m = +el.dataset.midi; HELD.delete(m); if (conf.sustain) SUSTAINED.add(m); else voiceOff(m) }
+        $$('.key.white,.key.black').forEach(k => {
+          k.onmousedown = down
+          k.onmouseup = up
+          k.onmouseleave = e => { if (HELD.has(+k.dataset.midi)) up(e) }
+          k.ontouchstart = e => { e.preventDefault(); down(e) }
+          k.ontouchend = e => { e.preventDefault(); up(e) }
+        })
+      }
+
+      function applyLabelVisibility() { $$('.label').forEach(l => l.style.display = conf.labels ? 'block' : 'none') }
+
+      function handleKey(e, isDown) {
+        if (e.repeat) return
+        const key = e.key.toLowerCase()
+        if (key === ' ') { e.preventDefault(); if (isDown) toggleSustain(); return }
+        if (key === 'escape' && isDown) { allOff(); return }
+        if (!keyMap.hasOwnProperty(key)) return
+        const base = (conf.baseOct+1)*12
+        const offset = keyMap[key] - 60
+        const m = base + 60 + offset
+        if (isDown) { if (!HELD.has(m)) { HELD.add(m); voiceOn(m) } }
+        else { HELD.delete(m); if (conf.sustain) SUSTAINED.add(m); else voiceOff(m) }
+      }
+
+      function releaseSustained() { Array.from(SUSTAINED).forEach(m => { if (!HELD.has(m)) { voiceOff(m); SUSTAINED.delete(m) } }) }
+
+      function toggleSustain() { conf.sustain = !conf.sustain; els.sustainBtn.textContent = conf.sustain ? 'On' : 'Off'; if (!conf.sustain) releaseSustained(); save() }
+
+      document.addEventListener('keydown', e => handleKey(e, true))
+      document.addEventListener('keyup', e => handleKey(e, false))
+
+      els.panic.onclick = () => { allOff(); setStatus('All notes off') }
+
+      els.power.onclick = () => { initAudio(); els.power.textContent = 'Audio On'; setStatus('Audio ready') }
+      els.theme.onclick = () => { conf.theme = conf.theme==='dark'?'light':'dark'; save(); syncUI() }
+      els.octaves.oninput = e => { conf.octaves = +e.target.value; save(); buildKeys() }
+      els.baseOct.oninput = e => { conf.baseOct = Math.min(8, Math.max(0, +e.target.value|0)); save(); buildKeys() }
+      els.a4.oninput = e => { conf.a4 = +e.target.value; save() }
+      els.wave.oninput = e => { conf.wave = e.target.value; save() }
+      els.detune.oninput = e => { conf.detune = +e.target.value; save() }
+      els.port.oninput = e => { conf.port = +e.target.value; save() }
+      els.poly.oninput = e => { conf.poly = Math.max(1, Math.min(64, +e.target.value|0)); e.target.value = conf.poly; save() }
+      els.vol.oninput = e => { conf.vol = +e.target.value; if (master) master.gain.value = conf.vol; save() }
+      els.atk.oninput = e => { conf.atk = +e.target.value; save() }
+      els.dec.oninput = e => { conf.dec = +e.target.value; save() }
+      els.sus.oninput = e => { conf.sus = +e.target.value; save() }
+      els.rel.oninput = e => { conf.rel = +e.target.value; save() }
+      els.lp.oninput = e => { conf.lp = +e.target.value; if (filter) filter.frequency.value = conf.lp; save() }
+      els.dtime.oninput = e => { conf.dtime = +e.target.value; if (delay) delay.delayTime.value = conf.dtime/1000; save() }
+      els.dfeed.oninput = e => { conf.dfeed = +e.target.value; if (feedback) feedback.gain.value = conf.dfeed; save() }
+      els.dmix.oninput = e => { conf.dmix = +e.target.value; if (delayGain) delayGain.gain.value = conf.dmix; save() }
+      els.sustainBtn.onclick = () => toggleSustain()
+      els.labelsBtn.onclick = () => { conf.labels = !conf.labels; save(); applyLabelVisibility(); els.labelsBtn.textContent = conf.labels ? 'On' : 'Off' }
+
+      function startRecording() {
+        if (!ctx) initAudio()
+        try { recorder = new MediaRecorder(recDest.stream) } catch { alert('Recording not supported in this browser.'); return }
+        recChunks = []
+        recorder.ondataavailable = e => { if (e.data.size > 0) recChunks.push(e.data) }
+        recorder.onstop = () => {
+          const blob = new Blob(recChunks, { type: recorder.mimeType || 'audio/webm' })
+          const url = URL.createObjectURL(blob)
+          const a = document.createElement('a')
+          a.href = url
+          a.download = `poke-piano-${Date.now()}.webm`
+          a.textContent = 'Download recording'
+          a.className = 'kbd'
+          els.recBtn.replaceWith(a)
+          setTimeout(() => { URL.revokeObjectURL(url) }, 60000)
+        }
+        recorder.start()
+        recording = true
+        els.recBtn.textContent = 'Stop'
+        setStatus('Recording…')
+      }
+      function stopRecording() { if (!recorder) return; recorder.stop(); recording = false; setStatus('Recording saved') }
+      els.recBtn.onclick = () => { recording ? stopRecording() : startRecording() }
+
+      function buildDots() {
+        els.metroDots.innerHTML = ''
+        for (let i=0;i<conf.sig;i++) {
+          const d = document.createElement('div')
+          d.className = 'dot' + (i===0 ? ' accent' : '')
+          els.metroDots.appendChild(d)
+        }
+      }
+
+      function setDotActive(i) {
+        const nodes = els.metroDots.children
+        for (let k=0;k<nodes.length;k++) nodes[k].classList.toggle('on', k===i)
+      }
+
+      function metroClick(time, isAccent) {
+        const osc = ctx.createOscillator()
+        const env = ctx.createGain()
+        osc.type = 'square'
+        osc.frequency.setValueAtTime(isAccent ? 2000 : 1300, time)
+        env.gain.setValueAtTime(0, time)
+        env.gain.linearRampToValueAtTime(1, time + 0.002)
+        env.gain.exponentialRampToValueAtTime(0.0001, time + 0.05)
+        osc.connect(env); env.connect(mGain)
+        osc.start(time)
+        osc.stop(time + 0.06)
+      }
+
+      function metroSchedule() {
+        if (!ctx) initAudio()
+        const ahead = 0.1
+        const interval = 60 / conf.bpm
+        while (nextBeatTime < ctx.currentTime + ahead) {
+          const idx = beatIndex % conf.sig
+          const accentBeat = idx === 0 && conf.accent
+          metroClick(nextBeatTime, accentBeat)
+          const uiDelay = Math.max(0, nextBeatTime - ctx.currentTime)
+          setTimeout(() => setDotActive(idx), uiDelay*1000)
+          beatIndex++
+          nextBeatTime += interval
+        }
+      }
+
+      function metroStart() {
+        if (!ctx) initAudio()
+        if (metroRunning) return
+        metroRunning = true
+        beatIndex = 0
+        nextBeatTime = ctx.currentTime + 0.06
+        metroTimer = setInterval(metroSchedule, 25)
+        els.metroBtn.textContent = 'Stop'
+        setStatus(`Metronome ${conf.bpm} BPM`)
+      }
+      function metroStop() {
+        if (!metroRunning) return
+        metroRunning = false
+        clearInterval(metroTimer); metroTimer = null
+        setDotActive(-1)
+        els.metroBtn.textContent = 'Start'
+        setStatus('Metronome off')
+      }
+
+      els.metroBtn.onclick = () => { metroRunning ? metroStop() : metroStart() }
+      els.bpm.oninput = e => { conf.bpm = +e.target.value; save(); if (metroRunning) { metroStop(); metroStart() } }
+      els.sig.oninput = e => { conf.sig = +e.target.value; save(); buildDots(); if (metroRunning) { metroStop(); metroStart() } }
+      els.mvol.oninput = e => { conf.mvol = +e.target.value; if (mGain) mGain.gain.value = conf.mvol; save() }
+      els.accent.onclick = () => { conf.accent = !conf.accent; els.accent.textContent = conf.accent ? 'On' : 'Off'; save() }
+
+      function initUI() { buildKeys(); buildDots() }
+      initUI()
+
+      window.addEventListener('blur', () => { allOff(); metroStop() })
+      document.addEventListener('visibilitychange', () => { if (document.hidden) { allOff(); metroStop() } })
+
+      window.addEventListener('keydown', (e) => { if (e.key === 'Escape') { allOff() } })
+    })()
+  </script>
+</body>
+</html>

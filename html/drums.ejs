@@ -1,0 +1,483 @@
+<!--
+
+    This Source Code Form is subject to the terms of the GNU General Public License:
+
+    Copyright (C) 2021-2025 Poke (https://codeberg.org/ashley/poke)
+    
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program. If not, see https://www.gnu.org/licenses/.
+--->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Poke Drums</title>
+     <meta content="website" property="og:type">
+    <meta content="PokeDrums" property="og:title">
+    <meta content="8-voice drum synth with 16/32-step sequencer" property="twitter:description">
+       <meta content="https://cdn.glitch.me/d68d17bb-f2c0-4bc3-993f-50902734f652/aa70111e-5bcd-4379-8b23-332a33012b78.image.png?v=1701898829884" property="og:image"  />
+  <meta content="summary_large_image" name="twitter:card">
+
+  <meta name="theme-color" content="#111111" />
+   <style>
+    
+
+    :root{
+      --bg:#0d0f12;--bg-soft:#141820;--fg:#f3f5f7;--muted:#9aa4b2;
+      --brand:#7a5cff;--accent:#00d3a7;--danger:#ff5577;
+      --key-outline:#1a2030;--radius:16px;
+      --shadow:0 12px 34px rgba(0,0,0,.40),0 2px 10px rgba(0,0,0,.25);
+      --glass:linear-gradient(180deg,rgba(255,255,255,.05),rgba(255,255,255,.02));
+      --step-on:#4a70ff;--step-accent:#00c9aa;
+    }
+    .light{
+      --bg:#f7f8fb;--bg-soft:#ffffff;--fg:#0e1116;--muted:#4a5568;
+      --brand:#6a5cff;--accent:#00b394;--key-outline:#cfd8e3;
+      --shadow:0 12px 30px rgba(0,0,0,.12),0 2px 10px rgba(0,0,0,.08);
+      --glass:linear-gradient(180deg,rgba(255,255,255,.7),rgba(255,255,255,.6));
+      --step-on:#6a5cff;--step-accent:#00b394;
+    }
+
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      background:
+        radial-gradient(1200px 600px at 15% -10%, rgba(122,92,255,.18), transparent 60%),
+        radial-gradient(1200px 700px at 100% 0%, rgba(0,211,167,.12), transparent 45%),
+        linear-gradient(180deg,var(--bg),var(--bg-soft));
+      color:var(--fg);
+      font:14px/1.4 system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,"Noto Sans",Arial,"Apple Color Emoji","Segoe UI Emoji";
+      display:grid;grid-template-rows:auto auto 1fr auto;gap:14px;
+    }
+
+    header{
+      padding:10px 16px 0;
+      display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center;
+    }
+    .brand{display:flex;align-items:center;gap:10px}
+    .logo{width:28px;height:28px;border-radius:10px;background:conic-gradient(from 220deg,var(--brand),var(--accent),var(--brand));box-shadow:0 6px 18px rgba(122,92,255,.28);border:1px solid var(--key-outline)}
+    h1{margin:0;font-size:18px;letter-spacing:.2px}
+    .header-actions{display:flex;gap:6px}
+
+    .toolbar{display:grid;gap:8px;grid-template-columns:repeat(12,1fr);padding:0 16px}
+    .card{
+      background:var(--bg-soft);border:1px solid var(--key-outline);border-radius:var(--radius);
+      box-shadow:var(--shadow);padding:12px;min-width:0;position:relative;overflow:hidden;
+    }
+    .card::after{content:"";position:absolute;inset:0;pointer-events:none;background:
+      radial-gradient(600px 160px at 10% 0%, rgba(255,255,255,.06), transparent 60%),
+      radial-gradient(500px 140px at 90% 0%, rgba(122,92,255,.12), transparent 50%);mix-blend-mode:overlay}
+    .title{font-size:12px;color:var(--muted);margin-bottom:8px;letter-spacing:.3px;text-transform:uppercase}
+    .group{display:grid;gap:10px}
+
+    .row{display:grid;grid-auto-flow:column;grid-auto-columns:minmax(0,1fr);gap:12px;align-items:end}
+    .pair{display:grid;grid-template-columns:max-content 1fr;gap:8px;align-items:center;min-width:0}
+    .pair>label{color:var(--muted);font-size:12px}
+
+    select,input[type="range"],input[type="number"],button{
+      width:100%;border-radius:12px;border:1px solid var(--key-outline);background:#0f131b;color:var(--fg);
+      padding:8px 10px;outline:none;transition:transform .06s ease,box-shadow .06s ease,border-color .12s ease;min-height:32px
+    }
+    .light select,.light input[type="range"],.light input[type="number"],.light button{background:#fff}
+    input[type="range"]{height:28px}
+    input[type="number"]{text-align:center}
+    button{cursor:pointer;background:linear-gradient(180deg,var(--brand),#4a3aff);border:none;color:#fff;font-weight:700;letter-spacing:.2px}
+    button.secondary{background:var(--bg-soft);color:var(--fg);border:1px solid var(--key-outline)}
+    button.danger{background:var(--danger)}
+    button:active{transform:translateY(1px)}
+    button:focus-visible,select:focus-visible,input:focus-visible{box-shadow:0 0 0 3px rgba(122,92,255,.35);border-color:var(--brand)}
+
+    .pads{display:grid;grid-template-columns:repeat(8,1fr);gap:10px}
+    .pad{
+      user-select:none;text-align:center;border:1px solid var(--key-outline);border-radius:14px;padding:14px 8px;
+      background:linear-gradient(180deg,#111723,#0f131b);box-shadow:inset 0 -10px 0 rgba(255,255,255,.02),0 10px 24px rgba(0,0,0,.25);
+      font-weight:700;letter-spacing:.3px
+    }
+    .pad:active,.pad.playing{transform:translateY(1px);filter:brightness(1.08);box-shadow:0 6px 18px rgba(0,0,0,.35)}
+    .pad .sub{display:block;color:var(--muted);font-size:11px;margin-top:4px}
+
+    .seq{--cols:16;display:grid;grid-template-columns:180px repeat(var(--cols),1fr);gap:6px}
+    .seq .rowlab{display:flex;align-items:center;justify-content:space-between;background:#0f131b;border:1px solid var(--key-outline);border-radius:12px;padding:8px 10px;font-weight:700}
+    .seq .steps{display:grid;grid-template-columns:repeat(var(--cols),1fr);gap:6px}
+    .cell{
+      height:28px;border-radius:8px;border:1px solid var(--key-outline);background:#0e1219;box-shadow:inset 0 -6px 0 rgba(255,255,255,.02);
+      cursor:pointer;position:relative;transition:transform .06s ease, background .12s ease, border-color .12s ease
+    }
+    .cell.on{background:var(--step-on);border-color:transparent}
+    .cell.on.acc{background:var(--step-accent)}
+    .cell.playhead::after{content:"";position:absolute;inset:-3px -2px;outline:2px dashed rgba(122,92,255,.55);border-radius:10px;pointer-events:none}
+    .footer{display:grid;grid-template-columns:1fr auto;align-items:center;gap:8px;padding:0 16px 16px}
+    .chip{padding:8px 12px;border-radius:999px;border:1px solid var(--key-outline);background:var(--bg-soft);display:inline-flex;gap:8px;align-items:center}
+
+    .grid-col-3{grid-column:span 3}.grid-col-4{grid-column:span 4}.grid-col-5{grid-column:span 5}
+    .grid-col-6{grid-column:span 6}.grid-col-7{grid-column:span 7}.grid-col-8{grid-column:span 8}.grid-col-12{grid-column:span 12}
+
+    @media (max-width:1000px){
+      .toolbar{grid-template-columns:repeat(6,1fr)}
+      .grid-col-8,.grid-col-7,.grid-col-6,.grid-col-5{grid-column:span 6}
+      .grid-col-4{grid-column:span 3}.grid-col-3{grid-column:span 3}
+      .pads{grid-template-columns:repeat(4,1fr)}
+      .seq{grid-template-columns:140px repeat(var(--cols),1fr)}
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="brand">
+      <div class="logo"></div>
+      <h1>Poke Drums</h1>
+    </div>
+    <div class="header-actions">
+      <button id="power">Start Audio</button>
+      <button id="theme" style="display:none" class="secondary">Theme</button>
+    </div>
+  </header>
+
+  <section class="toolbar">
+    <div class="card grid-col-4 group">
+      <div class="title">Transport</div>
+      <div class="row">
+        <div class="pair"><label for="playBtn">State</label><button id="playBtn" class="secondary">Play</button></div>
+        <div class="pair"><label for="bpm">BPM</label><input id="bpm" type="range" min="40" max="240" step="1" value="120"></div>
+      </div>
+      <div class="row">
+        <div class="pair"><label for="swing">Swing</label><input id="swing" type="range" min="0" max="0.6" step="0.01" value="0"></div>
+        <div class="pair"><label for="clear">Pattern</label>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+            <button id="clear" class="secondary">Clear</button>
+            <button id="random" class="secondary">Random</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card grid-col-4 group">
+      <div class="title">Kit Mixer</div>
+      <div class="row">
+        <div class="pair"><label for="vol-kick">Kick</label><input id="vol-kick" type="range" min="0" max="1" step="0.01" value="0.9"></div>
+        <div class="pair"><label for="vol-snare">Snare</label><input id="vol-snare" type="range" min="0" max="1" step="0.01" value="0.9"></div>
+      </div>
+      <div class="row">
+        <div class="pair"><label for="vol-hh">Hi-Hat</label><input id="vol-hh" type="range" min="0" max="1" step="0.01" value="0.8"></div>
+        <div class="pair"><label for="vol-oh">Open Hat</label><input id="vol-oh" type="range" min="0" max="1" step="0.01" value="0.7"></div>
+      </div>
+      <div class="row">
+        <div class="pair"><label for="vol-clap">Clap</label><input id="vol-clap" type="range" min="0" max="1" step="0.01" value="0.9"></div>
+        <div class="pair"><label for="vol-tom">Tom</label><input id="vol-tom" type="range" min="0" max="1" step="0.01" value="0.8"></div>
+      </div>
+      <div class="row">
+        <div class="pair"><label for="vol-rim">Rim</label><input id="vol-rim" type="range" min="0" max="1" step="0.01" value="0.7"></div>
+        <div class="pair"><label for="vol-crash">Crash</label><input id="vol-crash" type="range" min="0" max="1" step="0.01" value="0.7"></div>
+      </div>
+    </div>
+
+    <div class="card grid-col-4 group">
+      <div class="title">Utilities</div>
+      <div class="row">
+        <div class="pair"><label for="rec">Record</label><button id="rec" class="secondary">Start</button></div>
+        <div class="pair"><label for="panic">Panic</label><button id="panic" class="danger">All Off</button></div>
+      </div>
+      <div class="row">
+        <div class="pair"><label for="length">Steps</label>
+          <select id="length">
+            <option selected>16</option><option>8</option><option>12</option><option>32</option>
+          </select>
+        </div>
+        <div class="pair"><label for="shuf">Shuffle Seed</label><input id="shuf" type="number" min="0" max="9999" value="0"></div>
+      </div>
+    </div>
+
+    <div class="card grid-col-12 group">
+      <div class="title">Pads (keyboard: Q W E R T Y U I)</div>
+      <div class="pads" id="pads"></div>
+    </div>
+
+    <div class="card grid-col-12 group">
+      <div class="title">Sequencer</div>
+      <div class="seq" id="seq"></div>
+    </div>
+  </section>
+
+  <section class="footer">
+    <div></div>
+    <div class="chip"><span id="status">Ready</span></div>
+  </section>
+
+  <script>
+    ;(() => {
+      const $ = s => document.querySelector(s)
+      const $$ = s => Array.from(document.querySelectorAll(s))
+
+      const els = {
+        power: $('#power'), theme: $('#theme'), playBtn: $('#playBtn'),
+        bpm: $('#bpm'), swing: $('#swing'), clear: $('#clear'), random: $('#random'),
+        recBtn: $('#rec'), panic: $('#panic'), lenSel: $('#length'), shuf: $('#shuf'),
+        pads: $('#pads'), seq: $('#seq'), status: $('#status'),
+        v: {
+          kick: $('#vol-kick'), snare: $('#vol-snare'), hh: $('#vol-hh'), oh: $('#vol-oh'),
+          clap: $('#vol-clap'), tom: $('#vol-tom'), rim: $('#vol-rim'), crash: $('#vol-crash')
+        }
+      }
+
+      const storageKey = 'pokedrums-v1'
+      const defaults = {
+        theme:'dark', bpm:120, swing:0, length:16, seed:0,
+        vol:{kick:.9,snare:.9,hh:.8,oh:.7,clap:.9,tom:.8,rim:.7,crash:.7},
+        grid:{} // filled per voice
+      }
+      const voices = ['kick','snare','hh','oh','clap','tom','rim','crash']
+      let conf = JSON.parse(localStorage.getItem(storageKey)||'null') || structuredClone(defaults)
+
+      function save(){ localStorage.setItem(storageKey, JSON.stringify(conf)) }
+      function setStatus(t){ els.status.textContent = t }
+
+      if (!conf.grid || Object.keys(conf.grid).length===0){
+        conf.grid = Object.fromEntries(voices.map(v => [v, Array(conf.length).fill(false)]))
+      }
+
+      // AUDIO
+      let ctx, master, comp, limiter, recDest, recorder, recChunks=[]
+      const trackGains = Object.fromEntries(voices.map(v=>[v,null]))
+      let transportTimer=null, scheduleAhead=0.12, lookaheadMs=25, nextTime=0, step=0, playing=false
+
+      function initAudio(){
+        if (ctx) return
+        ctx = new (window.AudioContext||window.webkitAudioContext)()
+        master = ctx.createGain(); master.gain.value = 0.95
+        comp = ctx.createDynamicsCompressor()
+        comp.threshold.value = -14; comp.knee.value = 24; comp.ratio.value = 6
+        limiter = ctx.createDynamicsCompressor(); limiter.threshold.value = -1; limiter.knee.value = 0; limiter.ratio.value = 20; limiter.attack.value=0.003; limiter.release.value=0.05
+        recDest = ctx.createMediaStreamDestination()
+        master.connect(comp); comp.connect(limiter); limiter.connect(ctx.destination); limiter.connect(recDest)
+
+        voices.forEach(v => { trackGains[v] = ctx.createGain(); trackGains[v].gain.value = conf.vol[v]; trackGains[v].connect(master) })
+        buildPads()
+        buildSeq()
+        setStatus('Audio ready')
+      }
+
+      function noiseBuffer(){
+        const len = ctx.sampleRate * 2
+        const buf = ctx.createBuffer(1, len, ctx.sampleRate)
+        const data = buf.getChannelData(0)
+        for(let i=0;i<len;i++) data[i] = Math.random()*2-1
+        return buf
+      }
+      let _noise
+      function ensureNoise(){ if(!_noise) _noise = noiseBuffer(); return _noise }
+
+      function hit(name, time){
+        if (!ctx) initAudio()
+        const out = trackGains[name]
+        if (name==='kick'){
+          const o = ctx.createOscillator(), g = ctx.createGain()
+          o.type='sine'; o.frequency.setValueAtTime(150,time); o.frequency.exponentialRampToValueAtTime(50,time+0.12)
+          g.gain.setValueAtTime(0.0001,time); g.gain.exponentialRampToValueAtTime(1,time+0.002); g.gain.exponentialRampToValueAtTime(0.0001,time+0.35)
+          o.connect(g); g.connect(out); o.start(time); o.stop(time+0.4)
+        } else if (name==='snare'){
+          const n = ctx.createBufferSource(); n.buffer = ensureNoise()
+          const nf = ctx.createBiquadFilter(); nf.type='bandpass'; nf.frequency.setValueAtTime(1800,time); nf.Q.value=0.8
+          const ng = ctx.createGain(); ng.gain.setValueAtTime(0.0001,time); ng.gain.exponentialRampToValueAtTime(1,time+0.002); ng.gain.exponentialRampToValueAtTime(0.0001,time+0.18)
+          n.connect(nf); nf.connect(ng); ng.connect(out); n.start(time); n.stop(time+0.2)
+          const tone = ctx.createOscillator(), tg = ctx.createGain()
+          tone.type='triangle'; tone.frequency.setValueAtTime(200,time); tg.gain.setValueAtTime(0.0001,time); tg.gain.exponentialRampToValueAtTime(0.3,time+0.01); tg.gain.exponentialRampToValueAtTime(0.0001,time+0.12)
+          tone.connect(tg); tg.connect(out); tone.start(time); tone.stop(time+0.13)
+        } else if (name==='hh'){
+          const n = ctx.createBufferSource(); n.buffer = ensureNoise()
+          const hp = ctx.createBiquadFilter(); hp.type='highpass'; hp.frequency.value=6000
+          const g = ctx.createGain(); g.gain.setValueAtTime(0.7,time); g.gain.exponentialRampToValueAtTime(0.0001,time+0.06)
+          n.connect(hp); hp.connect(g); g.connect(out); n.start(time); n.stop(time+0.07)
+        } else if (name==='oh'){
+          const n = ctx.createBufferSource(); n.buffer = ensureNoise()
+          const hp = ctx.createBiquadFilter(); hp.type='highpass'; hp.frequency.value=5000
+          const g = ctx.createGain(); g.gain.setValueAtTime(0.6,time); g.gain.exponentialRampToValueAtTime(0.0001,time+0.35)
+          n.connect(hp); hp.connect(g); g.connect(out); n.start(time); n.stop(time+0.4)
+        } else if (name==='clap'){
+          for(let k=0;k<3;k++){
+            const n = ctx.createBufferSource(); n.buffer = ensureNoise()
+            const bp = ctx.createBiquadFilter(); bp.type='bandpass'; bp.frequency.value=1500; bp.Q.value=0.8
+            const g = ctx.createGain(); const t = time + k*0.012
+            g.gain.setValueAtTime(0.5,t); g.gain.exponentialRampToValueAtTime(0.0001,t+0.18)
+            n.connect(bp); bp.connect(g); g.connect(out); n.start(t); n.stop(t+0.2)
+          }
+        } else if (name==='tom'){
+          const o = ctx.createOscillator(), g = ctx.createGain()
+          o.type='sine'; o.frequency.setValueAtTime(180,time); o.frequency.exponentialRampToValueAtTime(110,time+0.18)
+          g.gain.setValueAtTime(0.0001,time); g.gain.exponentialRampToValueAtTime(1,time+0.003); g.gain.exponentialRampToValueAtTime(0.0001,time+0.28)
+          o.connect(g); g.connect(out); o.start(time); o.stop(time+0.3)
+        } else if (name==='rim'){
+          const o = ctx.createOscillator(), g = ctx.createGain()
+          o.type='square'; o.frequency.value=1200
+          g.gain.setValueAtTime(0.8,time); g.gain.exponentialRampToValueAtTime(0.0001,time+0.04)
+          o.connect(g); g.connect(out); o.start(time); o.stop(time+0.05)
+        } else if (name==='crash'){
+          const n = ctx.createBufferSource(); n.buffer = ensureNoise()
+          const hp = ctx.createBiquadFilter(); hp.type='highpass'; hp.frequency.value=3000
+          const g = ctx.createGain(); g.gain.setValueAtTime(0.5,time); g.gain.exponentialRampToValueAtTime(0.0001,time+1.2)
+          n.connect(hp); hp.connect(g); g.connect(out); n.start(time); n.stop(time+1.25)
+        }
+      }
+
+      // UI BUILD
+      function buildPads(){
+        els.pads.innerHTML = ''
+        const map = ['Q','W','E','R','T','Y','U','I']
+        voices.forEach((v,i)=>{
+          const b = document.createElement('button')
+          b.className='pad'; b.dataset.name=v
+          b.innerHTML = v.toUpperCase() + `<span style="display:none" class="sub">${map[i]}</span>`
+          b.onclick=()=>{ if(!ctx) initAudio(); const t = ctx.currentTime+0.001; b.classList.add('playing'); setTimeout(()=>b.classList.remove('playing'),80); hit(v,t) }
+          els.pads.appendChild(b)
+        })
+      }
+
+      function buildSeq(){
+        els.seq.style.setProperty('--cols', conf.length)
+        els.seq.innerHTML = ''
+        voices.forEach((v,ri)=>{
+          const lab = document.createElement('div'); lab.className='rowlab'; lab.textContent=v.toUpperCase()
+          const row = document.createElement('div'); row.className='steps'; row.dataset.voice=v
+          for(let i=0;i<conf.length;i++){
+            const c = document.createElement('div'); c.className='cell'; c.dataset.step=String(i); if (conf.grid[v][i]) c.classList.add('on')
+            if ((i%4)===0) c.classList.add('bar')
+            c.onclick=()=>{ conf.grid[v][i] = !conf.grid[v][i]; c.classList.toggle('on'); save() }
+            row.appendChild(c)
+          }
+          els.seq.appendChild(lab); els.seq.appendChild(row)
+        })
+      }
+
+      // PLAYBACK
+      function calcStepDur(){ return 60 / conf.bpm / 4 }
+      function schedule(){
+        const stepDur = calcStepDur()
+        while(nextTime < ctx.currentTime + scheduleAhead){
+          const col = step % conf.length
+          // trigger
+          voices.forEach(v => { if(conf.grid[v][col]) hit(v, nextTime) })
+          // UI playhead
+          const rows = $$('.steps')
+          rows.forEach(r=>{
+            const children = r.children
+            for(let i=0;i<children.length;i++) children[i].classList.toggle('playhead', i===col)
+          })
+          // advance with swing
+          if (conf.swing>0){
+            const sw = stepDur*conf.swing
+            if (step%2===0) nextTime += stepDur + sw; else nextTime += stepDur - sw
+          } else nextTime += stepDur
+          step = (step+1) % conf.length
+        }
+      }
+      function start(){
+        if (!ctx) initAudio()
+        if (playing) return
+        playing = true
+        nextTime = ctx.currentTime + 0.06
+        step = 0
+        transportTimer = setInterval(schedule, lookaheadMs)
+        els.playBtn.textContent='Stop'
+        setStatus(`Playing @ ${conf.bpm} BPM`)
+      }
+      function stop(){
+        if (!playing) return
+        playing = false
+        clearInterval(transportTimer); transportTimer=null
+        $$('.cell.playhead').forEach(c=>c.classList.remove('playhead'))
+        els.playBtn.textContent='Play'
+        setStatus('Stopped')
+      }
+
+      // EVENTS
+      els.power.onclick = () => { initAudio(); els.power.textContent='Audio On' }
+      els.theme.onclick = () => { document.body.classList.toggle('light'); conf.theme = document.body.classList.contains('light')?'light':'dark'; save() }
+      if (conf.theme==='light') document.body.classList.add('light')
+
+      els.playBtn.onclick = () => playing ? stop() : start()
+      els.bpm.oninput = e => { conf.bpm = +e.target.value; save(); if (playing){ stop(); start() } }
+      els.swing.oninput = e => { conf.swing = +e.target.value; save(); if (playing){ stop(); start() } }
+      els.clear.onclick = () => { voices.forEach(v=>conf.grid[v].fill(false)); buildSeq(); save() }
+      els.random.onclick = () => {
+        const seed = conf.seed|0
+        let x = seed || Math.floor(Math.random()*1e6)
+        function rnd(){ x ^= x<<13; x ^= x>>17; x ^= x<<5; return (x>>>0)/4294967295 }
+        const dens = {kick:.35,snare:.3,hh:.6,oh:.18,clap:.22,tom:.18,rim:.15,crash:.1}
+        voices.forEach(v=>{
+          conf.grid[v] = conf.grid[v].map((_,i)=>{
+            const base = dens[v] * ( (i%4===0 && (v==='kick'||v==='snare')) ? 1.2 : 1 )
+            return rnd() < base
+          })
+        })
+        buildSeq(); save()
+      }
+      els.lenSel.oninput = e => {
+        const n = Math.max(4, Math.min(32, +e.target.value|0))
+        conf.length = n
+        voices.forEach(v=>{
+          const old = conf.grid[v]; const next = Array(n).fill(false)
+          for(let i=0;i<Math.min(old.length,n);i++) next[i]=old[i]
+          conf.grid[v]=next
+        })
+        buildSeq(); if (playing){ stop(); start() } save()
+      }
+      els.shuf.oninput = e => { conf.seed = Math.max(0, +e.target.value|0); save() }
+
+      voices.forEach(v => { els.v[v].oninput = e => { conf.vol[v] = +e.target.value; if (trackGains[v]) trackGains[v].gain.value = conf.vol[v]; save() } })
+
+      els.panic.onclick = () => { stop(); setStatus('All off') }
+
+      // RECORD
+      let recording=false
+      els.recBtn.onclick = () => {
+        if (!ctx) initAudio()
+        if (!recording){
+          try{ recorder = new MediaRecorder(recDest.stream) }catch{ alert('Recording not supported in this browser.'); return }
+          recChunks=[]; recorder.ondataavailable=e=>{ if(e.data.size>0) recChunks.push(e.data) }
+          recorder.onstop=()=>{
+            const blob=new Blob(recChunks,{type:recorder.mimeType||'audio/webm'})
+            const url=URL.createObjectURL(blob)
+            const a=document.createElement('a'); a.href=url; a.download=`pokedrums-${Date.now()}.webm`; a.textContent='Download recording'; a.className='chip'
+            els.recBtn.replaceWith(a); setTimeout(()=>URL.revokeObjectURL(url),60000)
+          }
+          recorder.start(); recording=true; els.recBtn.textContent='Stop'; setStatus('Recording…')
+        } else { recorder.stop(); recording=false; setStatus('Recording saved') }
+      }
+
+       const keyMap = {q:'kick',w:'snare',e:'clap',r:'hh',t:'oh',y:'tom',u:'rim',i:'crash'}
+      window.addEventListener('keydown',e=>{
+        if (e.repeat) return
+        const k = e.key.toLowerCase()
+        if (k===' ') { e.preventDefault(); playing?stop():start(); return }
+        const v = keyMap[k]; if (!v) return
+        const pad = [...els.pads.children].find(x=>x.dataset.name===v)
+        if (pad){ pad.classList.add('playing'); setTimeout(()=>pad.classList.remove('playing'),90) }
+        hit(v, ctx?ctx.currentTime+0.001:0)
+      })
+
+      // INIT
+      ;(() => {
+        if (conf.theme==='light') document.body.classList.add('light')
+        els.bpm.value = conf.bpm
+        els.swing.value = conf.swing
+        els.lenSel.value = conf.length
+        els.shuf.value = conf.seed
+        Object.entries(conf.vol).forEach(([k,v])=>{ els.v[k].value = v })
+        buildPads(); buildSeq()
+      })()
+    })()
+  </script>
+</body>
+</html>

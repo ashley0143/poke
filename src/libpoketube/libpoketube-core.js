@@ -155,7 +155,7 @@ class InnerTubePokeVidious {
 
         return this.cache[v].result;
       } else {
-        this.initError(`Invalid video object (ID: ${v})`, vid);
+        this.initError( vid,`ID: ${v}` );
       }
     } catch (error) {
       this.initError(`Error getting video ${v}`, error);

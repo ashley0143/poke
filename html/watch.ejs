@@ -749,12 +749,14 @@ background-color: #0000;
 
 <% if (VideoData.author !== "twenty one pilots") { %> 
  
-              <a title="Poke Homepage" class="class" href="/143" style=font-family:Inter,sans-serif;color:var(--text-color)>  <img  style="transform: scale(1.3);padding-left:0.9em;width: 8.5em;display: block;margin-left: auto;margin-right: auto;" src="/css/logo-poke.svg?v=5"></a>
+              <a title="Poke Homepage" class="class" href="/143" style=font-family:Inter,sans-serif;color:var(--text-color)>  
+              
+              <img  style="padding-left:0.9em;width: 8.5em;display: block;margin-left: auto;margin-right: auto;" src="/css/logo-poke.svg?v=5"></a>
                                      		 	                    
                                              
      <% if (secure) { %> 
        
-                 <i style="margin-left: 2em;" class="fa-light fa-lock"
+                 <i style="margin-left: 1em;" class="fa-light fa-lock"
                   title="This is a secure and/or offical instance!
 you can trust this instance becuase:
 
@@ -783,8 +785,8 @@ if your domain matches this code you are probably in poketube.fun owo:3
  
 <% if (VideoData.author === "twenty one pilots") { %> 
  
-<a title="Poke Homepage" class="class" href="/143" style="font-family:Inter,sans-serif;color:var(--text-color);display: flex;">  <img style="transform: scale(1.3);padding-left:0.9em;width: 8.5em;display: block;margin-left: auto;margin-right: auto;" src="/css/logo-poke.svg?v=5">
-                <img src="/css/red-tape.png?v=5" style="opacity: 0.9;height: 41px;margin-left: -10em;"></a>
+<a title="Poke Homepage" class="class" href="/143" style="font-family:Inter,sans-serif;color:var(--text-color);display: flex;">  <img style="padding-left:0.9em;width: 8.5em;display: block;margin-left: auto;margin-right: auto;" src="/css/logo-poke.svg?v=5">
+                <img src="/css/red-tape.png?v=5" style="opacity: 0.9;height: 2em;margin-left: -10em;"></a>
                 
                 
                                              
@@ -1381,7 +1383,7 @@ Offical Discord Server! :3
                                        <% if (VideoData?.authorVerified) { %> 
                    <div>
 <a href="https://support.google.com/youtube/answer/3046484?hl=en">
-            <i class="icon ion ion-md-checkmark-circle" title="verified channel" style="color:cyan" alt="verfied"></i></a>
+            <i class="icon ion ion-md-checkmark-circle" title="verified channel" alt="verfied"></i></a>
                          </div>
 
   <% } %> 
@@ -1933,7 +1935,7 @@ WIP!                                                 </a>
   </p>    
                                         
                                                    </div>
-<% inv.comments.forEach(x =>{ %> <div class="fade-in<%- x.commentId %><%- btoa(x.commentId) %>"><div class="_ comment_<%- x.commentId %><%- btoa(btoa(x.commentId)) %>" style="padding:10px"><div class="comment-list left-padding" style="background:#333;padding-top:1px;padding:10px;border-radius:30px;padding-top:0"><div class="d-flex justify-content-between single-comment" style="padding-top:none"><div class="d-flex justify-content-between user"><div class="desc"><h5 style="display:flex;margin-top:7px;padding-top:10px"><div class="thumb"><a href="/channel?id=<%- x.authorId%>@youtube.com" style="width:40px;height:40px" class="avatar"><img loading="lazy" src="<%- media_proxy_url %>/proxy?url=<%= x.authorThumbnails[0].url.replace("https://yt3.ggpht.com/", "https://vid.puffyan.us/ggpht/") %>"></a></div> <% if (!x.authorIsChannelOwner) { %> <p class="comments-author"><a href="/channel?id=<%- x.authorId%>" style="color:var(--text-color);text-decoration:none"> <%- x.author%><% if (x.verified) { %><i class="icon ion ion-md-checkmark-circle"></i><% } %> <p class="date-publish"><%- x.publishedText %></p></a></p> <% } %><% if (x.authorIsChannelOwner) { %> <p class="comments-author owner"><a href="/channel?id=<%- x.authorId%>@youtube.com" style="color:var(--text-color);text-decoration:none"> <%- x.author%><% if (x.verified) { %><i class="icon ion ion-md-checkmark-circle"></i><% } %> <p class="date-publish"><%- x.publishedText %></p></a> <% } %> </p></h5><p class="comment" style="font-weight:700"> <%- x.contentHtml.replace(/\n/g, "<br />"); %><br><br> <% if (x.likeCount === 0) { %><i class="fa-light fa-thumbs-up"></i>|<i class="fa-light fa-thumbs-down"></i><% } else { %><i class="fa-light fa-thumbs-up"></i> <%= convert(x.likeCount) %> |<i class="fa-light fa-thumbs-down" style="margin-right: 5px;"></i><% } %>    <% if (x.replies?.replyCount != 0) { %> <i class="fa-light fa-reply"></i> <%- x.replies?.replyCount || "0" %> <% } %> <% if(x.creatorHeart) { %> <i class="icon creator-heart-small-container ion-ios-heart" style="color:#ffabcc" title="<%= x.creatorHeart.creatorName%> marked it with a ❤ owo"></i><% } %> </p></div></div></div></div></div></div> <% }) %>
+<% inv.comments.forEach(x =>{ %> <div class="fade-in<%- x.commentId %><%- btoa(x.commentId) %>"><div class="_ comment_<%- x.commentId %><%- btoa(btoa(x.commentId)) %>" style="padding:10px"><div class="comment-list left-padding" style="background:#333;padding-top:1px;padding:10px;border-radius:30px;padding-top:0"><div class="d-flex justify-content-between single-comment" style="padding-top:none"><div class="d-flex justify-content-between user"><div class="desc"><h5 style="display:flex;margin-top:7px;padding-top:10px"><div class="thumb"><a href="/channel?id=<%- x.authorId%>@youtube.com" style="width:40px;height:40px" class="avatar"><img loading="lazy" src="<%- media_proxy_url %>/proxy?url=<%= x.authorThumbnails[0].url.replace("https://yt3.ggpht.com/", "https://vid.puffyan.us/ggpht/") %>"></a></div> <% if (!x.authorIsChannelOwner) { %> <p class="comments-author"><a href="/channel?id=<%- x.authorId%>" style="color:var(--text-color);text-decoration:none"> <%- x.author%><% if (x.verified) { %><i class="icon ion ion-md-checkmark-circle"></i><% } %> <p class="date-publish"><%- x.publishedText %></p></a></p> <% } %><% if (x.authorIsChannelOwner) { %> <p class="comments-author owner"><a href="/channel?id=<%- x.authorId%>@youtube.com" style="color:var(--text-color);text-decoration:none"> <%- x.author%><% if (x.verified) { %><i class="icon ion ion-md-checkmark-circle"></i><% } %> <p class="date-publish"><%- x.publishedText %></p></a> <% } %> </p></h5><p class="comment" style="font-weight:700"> <%- x.contentHtml.replace(/\n/g, "<br />"); %><br><br> <% if (x.likeCount === 0) { %><i class="fa-light fa-thumbs-up"></i>|<i class="fa-light fa-thumbs-down"></i><% } else { %><i class="fa-light fa-thumbs-up"></i> <%= convert(x.likeCount) %> |<i class="fa-light fa-thumbs-down" style="margin-left: 2px;"></i><% } %>    <% if (x.replies?.replyCount != 0) { %> <i class="fa-light fa-reply"></i> <%- x.replies?.replyCount || "0" %> <% } %> <% if(x.creatorHeart) { %> <i class="icon creator-heart-small-container ion-ios-heart" style="color:#ffabcc" title="<%= x.creatorHeart.creatorName%> marked it with a ❤ owo"></i><% } %> </p></div></div></div></div></div></div> <% }) %>
       <center>
                   <a href="#top">Go To Top</a>
                     </center>

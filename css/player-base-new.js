@@ -285,7 +285,7 @@ var _yt_player = videojs;
         video.on('ended', () => { try { audio.pause(); } catch {}; clearSyncLoop(); });
         audio.addEventListener('ended', () => { try { video.pause(); } catch {}; clearSyncLoop(); });
 
-        // pause when exiting full screen :3 (your existing behavior)
+        // pause when exiting full screen :3 
         document.addEventListener('fullscreenchange', () => {
             if (!document.fullscreenElement) {
                 video.pause();
@@ -369,7 +369,7 @@ var _yt_player = videojs;
 
             const keepTime = Number(video.currentTime());
 
-            // pause & clear sync while we refetch (quiet, no UI flicker)
+            // pause & clear sync while we refetch (quiet)
             try { video.pause(); } catch {}
             try { audio.pause(); } catch {}
             clearSyncLoop();

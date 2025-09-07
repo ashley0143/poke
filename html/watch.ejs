@@ -406,11 +406,28 @@ button:hover, a:hover {
     transform: none;
     filter: none;
 }
+
+/* these should be this way, i think it looks waaaaaaaay better on channel pill without the effects, honestly */
+.avatar:hover {
+  transform: none;
+}
+
+.video-info-pill-channelname:hover {
+  transform: none;
+}
    </style>
  
   <!-- css files -->
   <!-- these files are cached for 24 hours -->
-  <link href="/css/app-cdn.min.css?v=9893448" rel=stylesheet><link href="/css/app.main.css?v=446008" rel=stylesheet><link href="/css/watch.main.css?v=9893448" rel=stylesheet> <link href="/css/watch-util.css?v=9893448" rel=stylesheet><link href="/css/watch-navbar.css?v=9893448" rel=stylesheet><link href="/css/poketube.css?v=9445645" rel=stylesheet>
+ 
+ <!-- app-cdn-min.css should to be deprecated soon -->
+  <link href="/css/app-cdn.min.css?v=9893448" rel=stylesheet>
+
+
+  <link href="/css/app.main.css?v=446008" rel=stylesheet>
+  <link href="/css/watch.main.css?v=9893448" rel=stylesheet> 
+  <link href="/css/watch-util.css?v=9893448" rel=stylesheet><link href="/css/watch-navbar.css?v=9893448" rel=stylesheet><!-- the css for the watch page, spesifcally, this is very important. --><link href="/css/poketube.css?v=9445645" rel=stylesheet>
+
 
   <!-- player -->
   <link href="/css/videojs-v8.16.0.css?v=5949545" rel="stylesheet" />
@@ -734,6 +751,8 @@ background-color: #0000;
 //--><!]]>
 </script>
 <ptd-app-ejs>
+
+<!-- ppst: add #secret-theme to the search bar :D -->
 <div class="app" id="secret-theme" canHaveAmbientMode="true" style="color:var(--text-color)">
  
  <div id="loopedIndicator"></div>
@@ -866,9 +885,9 @@ if your domain matches this code you are probably in poketube.fun owo:3
                       Customize Poke
         </a>
     
-		<a href="/account-create" style="text-decoration: none;display:none;" class="dropdown__item">
+		<a href="/account-create" style="text-decoration: none" class="dropdown__item">
                             <i  class="fa-light fa-user"></i>
-My Account
+My Poke
         </a>
     	<a href="/discover" style="text-decoration: none;" class="dropdown__item">
                             <i  class="fa-light fa-compass"></i>
@@ -1005,7 +1024,7 @@ Offical Discord Server! :3
                                                                              <hr style="clear: both;display: block;border: none;border-bottom: 0.5px solid #1a1111;/*! width: 4.5em; */height: 0;">
 <div >
           <a href="https://codeberg.org/ashley/poke/issues/new?template=issue_template%2fplayer-bug.yml" style="color: #fff;">
-      <i class="fa-light fa-flag"></i>    Report a video player bug</a>
+      <i class="fa-light fa-flag"></i>    Report a bug</a>
               </div>
   <div >
           <a href="https://codeberg.org/ashley/poke/src/branch/main/fix-videoplayback-issues.md" style="color: #fff;">
@@ -1293,7 +1312,7 @@ Offical Discord Server! :3
         PokeEncryptID: <%=sha384(VideoData.videoId)%> <br>
                       <% if (isvidious) { %>
 
-       Proxy : <%= u.replace("https://","") %> <br>
+       Proxy/Companion URL : <%= u.replace("https://","") %> <br>
                           <% } %>
                              <% if (!isvidious) { %>
 
@@ -1304,7 +1323,7 @@ Offical Discord Server! :3
 
                                                   <% if (isvidious) { %>
 
-       Mystery text :  <%=btoa(VideoData.videoId + " i " + " lov " + " u " + u.replace("https://","") ) %> <br>
+       Mystery text?? :  <%=btoa(VideoData.videoId + " i " + " lov " + " u " + u.replace("https://","") ) %> <br>
                                                                               <% } %>  
                                                                                                                                   <% if (!isvidious) { %>
 
@@ -1764,11 +1783,13 @@ WIP!                                                 </a>
                <%  if (VideoData.genre === "Gaming") { %> 
 
         <div style="padding: 19px;background: #1f1f1f;border-radius: inherit;border: solid var(--div-border-color);margin-top: 13px;display: flex;flex-direction: row;">
-<div class="video-title loaded" style="color:var(--text-color);font-family:var(--text-font-primary);;font-weight:var(--text-header-weight);font-stretch: extra-expanded;margin-top: -15px;margin-bottom: 10px;">Poke! Games Hub</div>
+<div class="video-title loaded" style="color:var(--text-color);font-family:var(--text-font-primary);;font-weight:var(--text-header-weight);font-stretch: extra-expanded;margin-top: -15px;margin-bottom: 10px;">Poke! Games Hub! check em out</div>
 <a href="/game-hub?game=snake" style="margin-left: -12em;margin-top: 10px;padding: 10px;border: 2px solid #fff;border-radius: 10px;background: rgba(255, 255, 255, 0.1);margin-bottom: -13px;text-decoration: none;" class="loaded"> Snake </a>
           <a href="/game-hub?game=tic-tac-toe" style="margin-left: 9px;margin-top: 10px;padding: 10px;border: 2px solid #fff;border-radius: 10px;background: rgba(255, 255, 255, 0.1);margin-bottom: -13px;text-decoration: none;"> Tic Tac Toe </a>
       <a href="/game-hub?game=sudoku" style="margin-left: 9px;margin-top: 10px;padding: 10px;border: 2px solid #fff;border-radius: 10px;background: rgba(255, 255, 255, 0.1);margin-bottom: -13px;text-decoration: none;"> Sudoku </a>
       <a href="/game-hub?game=pong" style="margin-left: 9px;margin-top: 10px;padding: 10px;border: 2px solid #fff;border-radius: 10px;background: rgba(255, 255, 255, 0.1);margin-bottom: -13px;text-decoration: none;"> Ping Pong </a>
+      <a href="/game-hub?game=minesweeper" style="margin-left: 9px;margin-top: 10px;padding: 10px;border: 2px solid #fff;border-radius: 10px;background: rgba(255, 255, 255, 0.1);margin-bottom: -13px;text-decoration: none;"> Minesweeper </a>
+      <a href="/game-hub?game=breakout" style="margin-left: 9px;margin-top: 10px;padding: 10px;border: 2px solid #fff;border-radius: 10px;background: rgba(255, 255, 255, 0.1);margin-bottom: -13px;text-decoration: none;"> Breakout </a>
 
                  
             </div>

@@ -129,7 +129,7 @@
     <meta name="referrer" content="no-referrer">
     <link rel="manifest" href="/manifest.json">
    <link href="https://fonts.bunny.net/css?family=poppins:400,500,600" rel="stylesheet">
-   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+   <link href="https://fonts.bunny.net/icon?family=Material+Icons" rel="stylesheet">
    
   <style>
     :root {
@@ -264,7 +264,7 @@
       outline:none;
     }
 
-    .actions { display:flex; justify-content:center; padding-bottom:24px; }
+    .actions { display:none; justify-content:center; padding-bottom:24px; }
     .actions button {
       padding:16px 36px; font-size:1.1rem; font-weight:600; border:none;
       border-radius:var(--radius); cursor:pointer;
@@ -277,6 +277,12 @@
 
     @media (max-width:768px) { .panels { grid-template-columns:1fr; } }
   </style>
+
+  <noscript>
+  .actions {
+    display:flex
+  }
+  </noscript>
 </head>
 <body>
   <div class="glass">

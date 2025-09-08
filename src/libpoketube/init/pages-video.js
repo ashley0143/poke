@@ -191,7 +191,7 @@ module.exports = function (app, config, renderTemplate) {
   });
 
   app.get("/watch", async (req, res) => {
-    const { dm, region, hl, v, e, r, f, m, quality: q, a, universe, } = req.query; 
+    const { dm, region, hl, v, e, r, f, m, quality: q, a, universe, dyx} = req.query; 
 
     if (!v) {
       return res.redirect("/");
@@ -328,6 +328,7 @@ module.exports = function (app, config, renderTemplate) {
               channelurlfixer,
               itag_hd,
               support,
+              dyx,
               shortsui,
               u: vidurl,
               isvidious: isvidious,

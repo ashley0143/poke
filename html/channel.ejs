@@ -984,10 +984,9 @@ white-space: nowrap;text-decoration: none;" href="/feeds/videos.xml?channel_id=<
                                            <% } %>
                                                <% if (isMobile) { %>  
                    <div class="channel-info-container" style="text-align: center;">
+                                       <% if (cinv.authorBanners) { %>
 
-                                      <% if (j.Channel?.Metadata.Banners.Thumbnail) { %>
-
-          <img src="https://p.poketube.fun/<%=j.Channel?.Metadata.Banners.Thumbnail[3].$t%>">
+          <img src="<%- media_proxy_url %>/proxy?url=<%=cinv.authorBanners[3].url%>">
                                <% } %>
                                  
  
@@ -1019,7 +1018,7 @@ width: fit-content;
  			</div>
       <p style="padding:0;font-weight:bold;"> 
    <%-getFirstLine(cinv.description)%> <a href="/channel?id=<%=ID%>&tab=about">
-<i class="fa-thin fa-angle-right"></i></a>
+..more</a>
         </p>
          <a href="/feeds/videos.xml?channel_id=<%=ID%>"><button class="subscribe-button">Rss feed</button>
 </a> 

@@ -1025,7 +1025,7 @@ margin-left: 10px;
 </a> 
 
     
-        
+        <!-- MOBILE TABS -->
   <% if (isMobile) { %>  
  
                
@@ -1042,6 +1042,12 @@ margin-left: 10px;
 
                    <a href="/channel?id=<%=ID%>&tab=shorts" class="tab">Shorts</a>
   <% } %>
+
+  <%  if (turntomins(stream?.videos[0]?.lengthSeconds)  != "aN:aN" ) { %> 
+                     <a href="/channel?id=<%=ID%>&tab=live" class="tab">Live</a>
+
+  <% } %>
+
     
               <%  if (Array.isArray(c.comments)) { %> 
 
@@ -1064,7 +1070,11 @@ margin-left: 10px;
 
                    <a href="/channel?id=<%=ID%>&tab=shorts" class="tab">Shorts</a>
   <% } %>
-      <% } %>
+      <% } %>  <%  if (turntomins(stream?.videos[0]?.lengthSeconds)  != "aN:aN" ) { %> 
+                     <a href="/channel?id=<%=ID%>&tab=live" class="tab">Live</a>
+
+  <% } %>
+
                 <a href="/channel?id=<%=ID%>&tab=community"  class="tab">Community</a>
                                                                 <% } %>
                                                                  
@@ -1078,6 +1088,11 @@ margin-left: 10px;
                    <a href="/channel?id=<%=ID%>&tab=shorts" class="tab">Shorts</a>
   <% } %>
       <% } %>
+        <%  if (turntomins(stream?.videos[0]?.lengthSeconds)  != "aN:aN" ) { %> 
+                     <a href="/channel?id=<%=ID%>&tab=live" class="tab">Live</a>
+
+  <% } %>
+
                 <a href="/channel?id=<%=ID%>&tab=community"  class="tab active">Posts</a>
                                                                 <% } %>
         <% if (tab ==="shorts") { %>
@@ -1090,7 +1105,41 @@ margin-left: 10px;
                    <a href="/channel?id=<%=ID%>&tab=shorts" class="tab active">Shorts</a>
   <% } %>
       <% } %>
-                <a href="/channel?id=<%=ID%>&tab=community"  class="tab">Posts</a>
+        <%  if (turntomins(stream?.videos[0]?.lengthSeconds)  != "aN:aN" ) { %> 
+                     <a href="/channel?id=<%=ID%>&tab=live" class="tab">Live</a>
+
+  <% } %>
+
+   <%  if (Array.isArray(c.comments)) { %> 
+
+  <%  if (c.comments.length != "0") { %> 
+
+                <a href="/channel?id=<%=ID%>&tab=community"  class="tab">Posts</a>                                                                <% } %>
+                                                                <% } %>
+                                                                <% } %>                                                                <% } %>
+
+                                                                  <% if (tab ==="live") { %>
+
+                <a href="/channel?id=<%=ID%>" class="tab">Videos</a>
+                                                                                                                                                                                              <%  if (Array?.isArray(shorts?.videos)) { %> 
+  
+<%  if (turntomins(shorts?.videos[0]?.lengthSeconds)  != "aN:aN" ) { %> 
+
+                   <a href="/channel?id=<%=ID%>&tab=shorts" class="tab">Shorts</a>
+  <% } %>
+      <% } %>
+        <%  if (turntomins(stream?.videos[0]?.lengthSeconds)  != "aN:aN" ) { %> 
+                     <a href="/channel?id=<%=ID%>&tab=live" class="tab active">Live</a>
+
+  <% } %>
+             <%  if (Array.isArray(c.comments)) { %> 
+
+  <%  if (c.comments.length != "0") { %> 
+
+                <a href="/channel?id=<%=ID%>&tab=community"  class="tab">Posts</a>                                                                <% } %>
+                                                                <% } %>
+                                                                <% } %>
+
                                                                 <% } %>
             </div>
      

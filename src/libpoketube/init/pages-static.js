@@ -346,7 +346,8 @@ app.get('/calendar', (req, res) => {
   app.get("/css/:id", (req, res) => {
     const filePath = path.join(cssDir, req.params.id);
     if (!fs.existsSync(filePath)) {
-      res.status(404).send("File not found");
+      res.status(404)
+      renderTemplate(res, req, "404.ejs", { });
       return;
     }
     if (req.params.id.endsWith(".css") && !req.query.nomin) {
@@ -415,7 +416,8 @@ app.get("/game-hub", function (req, res) {
         const filePath = path.join(html_location, id);
 
         if (!fs.existsSync(filePath)) {
-          res.status(404).send("File not found");
+          res.status(404)
+          renderTemplate(res, req, "404.ejs", { });
           return;
         }
 

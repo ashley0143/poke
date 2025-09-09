@@ -817,8 +817,11 @@ const YoutubeAPI = {
 
 
 // player base 
-const base_player_old = "https://www.youtube.com/s/player/a87a9450/player_ias.vflset/en_US/base.js"
-const base_player = "https://www.youtube.com/s/player/2d24ba15/player_ias.vflset/en_US/base.js";
+const base_player_old_old = "https://www.youtube.com/s/player/a87a9450/player_ias.vflset/en_US/base.js"
+const base_player_old = "https://www.youtube.com/s/player/2d24ba15/player_ias.vflset/en_US/base.js";
+const base_player = "https://www.youtube.com/s/player/6740c111/player_ias.vflset/en_US/base.js";
+
+
 
 function extractPlayerData(playerUrl) {
     const segments = playerUrl.split('/');
@@ -979,15 +982,13 @@ document.head.appendChild(saa);
 
 
 window.pokePlayer = {
-    ver:`20-a87a9450-vjs-${videojs.VERSION}`,
+    ver:`21-6740c111-vjs-${videojs.VERSION}`,
     canHasAmbientMode:true,
     video:new URLSearchParams(window.location.search).get('v'),
-    supported_itag_list:["136", "140", "298", "18"],
-    formats:["SD", "HD"],
+    supported_itag_list:["136", "140", "298", "18", "400", "401", "313", "271"],
+    formats:["SD", "HD", "4k", "2k"],
 	YoutubeAPI,
-
 }
-
 
 
 /* video js plugins */

@@ -1016,9 +1016,9 @@ margin-left: 10px;
         </p>
         <p style="margin-left: 2em;margin-bottom: -3em;font-size: 0.8em;color: gray;">@<%=ID%></p>
  			</div>
-      <p style="padding:0;font-weight:bold;"> 
-     <%- getFirstLine(cinv.description).slice(0, 60) || "More from this channel (soon)"%> <a style="color:gray;" href="/channel?id=<%=ID%>&tab=about">
-..more</a>
+      <p style="padding:0;font-weight:bold;text-align:left;margin-left: 1em;margin-top: 0.2em;"> 
+     <%- getFirstLine(cinv.description).slice(0, 29) || "More from this channel (soon)"%> <a style="color:gray;" href="/channel?id=<%=ID%>&tab=about">
+...more</a>
         </p>
          <a href="/feeds/videos.xml?channel_id=<%=ID%>"><button class="subscribe-button">Rss feed</button>
 </a> 

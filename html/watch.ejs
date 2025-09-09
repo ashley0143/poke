@@ -436,17 +436,24 @@ button:hover, a:hover {
   <!-- these files are cached for 24 hours -->
  
  <!-- app-cdn-min.css should to be deprecated soon -->
-  <link href="/css/app-cdn.min.css?v=9893448" rel=stylesheet>
+  <link href="/css/app-cdn.min.css?v=a87a9450" rel=stylesheet>
 
 
   <link href="/css/app.main.css?v=446008" rel=stylesheet>
-  <link href="/css/watch.main.css?v=9893448" rel=stylesheet> 
-  <link href="/css/watch-util.css?v=9893448" rel=stylesheet><link href="/css/watch-navbar.css?v=9893448" rel=stylesheet><!-- the css for the watch page, spesifcally, this is very important. --><link href="/css/poketube.css?v=9445645" rel=stylesheet>
+  <link href="/css/watch.main.css?v=a87a9450" rel=stylesheet> 
+  <link href="/css/watch-util.css?v=a87a9450" rel=stylesheet><link href="/css/watch-navbar.css?v=a87a9450" rel=stylesheet><!-- the css for the watch page, spesifcally, this is very important. --><link href="/css/poketube.css?v=a87a9450" rel=stylesheet>
 
 
   <!-- player -->
   <link href="/css/videojs-v8.16.0.css?v=5949545" rel="stylesheet" />
-  <script src="/static/vjs.min.js?v=45959"></script><!-- custom video player for poke --><script src="/static/player-base-new.js?v=33_643522&lang=en_us&set=player_ias.vflset"> </script>
+  <script src="/static/vjs.min.js?v=45959"></script>
+
+
+
+  <!-- custom video player for poke -->
+  <!-- uses player_ias.vflset/en_US/base.js -->
+  <!-- helps with fetching video information too! -->
+  <script src="/static/player-base-new.js?ver=33_643522&videoID=<%=VideoData.videoId%>&lang=en_us&set=player_ias.vflset"> </script>
 
   <!-- ICONS -->
   <!-- Font awesome pro -->

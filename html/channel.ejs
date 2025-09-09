@@ -1015,9 +1015,10 @@ margin-left: 10px;
             			<%= subs %> subscribers <%- pronoun %>
 
         </p>
+        <p style="margin-left: 2em;margin-bottom: -3em;font-size: 0.8em;color: gray;">@<%=ID%></p>
  			</div>
       <p style="padding:0;font-weight:bold;"> 
-   <%-getFirstLine(cinv.description)%> <a style="color:gray;" href="/channel?id=<%=ID%>&tab=about">
+     <%- getFirstLine(cinv.description).slice(0, 60) || "More from this channel (soon)"%> <a style="color:gray;" href="/channel?id=<%=ID%>&tab=about">
 ..more</a>
         </p>
          <a href="/feeds/videos.xml?channel_id=<%=ID%>"><button class="subscribe-button">Rss feed</button>
@@ -1656,6 +1657,8 @@ margin-left: 10px;
                                                                                            <% } %>
 
 <script src="/css/custom-css.js?v=884"> </script>
+                                               <% if (!isMobile) { %>  
+
   <script>
       // @license magnet:?xt=urn:btih:1f739d935676111cfff4b4693e3816e664797050&dn=gpl-3.0.txt GPL-3.0-or-later  
 
@@ -1734,7 +1737,8 @@ document.getElementById('search').addEventListener('keyup', function () {
     });
 // @license-end
 
-     </script>
+     </script>                                                                                           <% } %>
+
                </body>
  
    

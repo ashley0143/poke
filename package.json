@@ -1,7 +1,7 @@
 {
   "name": "poke",
-  "version": "20.24",
-  "description": "Libre youtube and google front-end",
+  "version": "20.25",
+  "description": "Libre youtube, weather and more! front-end",
   "main": "server.js",
   "scripts": {
     "start": "node server.js"

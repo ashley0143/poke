@@ -352,7 +352,6 @@ module.exports = function (app, config, renderTemplate) {
               channel_uploads,
               secure,
               process,
-              hostname:req.hostname,
               VideoData:inv_vid,
               isSchoolProxy,
               sha384,

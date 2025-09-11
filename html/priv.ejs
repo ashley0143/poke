@@ -1,23 +1,22 @@
 <!--
 
-    This Source Code Form is subject to the terms of the GNU General Public License:
+  This Source Code Form is subject to the terms of the GNU General Public License:
 
-    Copyright (C) 2021-2025 Poke (https://codeberg.org/ashley/poke)
-    
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
+  Copyright (C) 2021-2025 Poke (https://codeberg.org/ashley/poke)
 
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
+  This program is free software: you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation, either version 3 of the License, or
+  (at your option) any later version.
 
-    You should have received a copy of the GNU General Public License
-    along with this program. If not, see https://www.gnu.org/licenses/.
---->
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
 
+  You should have received a copy of the GNU General Public License
+  along with this program. If not, see https://www.gnu.org/licenses/.
+-->
 
 <!DOCTYPE html>
 <html lang="en">
@@ -140,25 +139,93 @@
     .grid-2 {
       display: grid; gap: 12px; grid-template-columns: 1fr 1fr;
     }
+
+    /* --- Mobile enhancements (desktop unchanged) --- */
     @media (max-width: 900px) {
+      html { font-size: 17px; }
       .doc { grid-template-columns: 1fr; }
-      nav.toc { position: static; max-height: none; }
+      nav.toc { display: none; }             /* hide sidebar TOC on mobile */
+      .mobile-toc { display: block; }        /* show mobile TOC instead */
+      article.paper { padding: 20px; }
+      .doc-title { font-size: 1.6rem; }
+      .grid-2 { grid-template-columns: 1fr; }
+      .meta { font-size: .95rem; }
+      .shell { padding: 18px; }
     }
 
-    /* Details blocks */
-    details.block {
-      background: #0c0c0d; border: 1px solid #1a1a1d; border-radius: 14px;
-      padding: 10px 12px; margin: 10px 0;
+    /* Mobile TOC block (hidden on desktop) */
+    .mobile-toc {
+      display: none;
+      margin: 10px 0 16px 0;
+      background: #0f0f10;
+      border: 1px solid #1f1f22;
+      border-radius: 14px;
+      overflow: hidden;
     }
-    details.block > summary {
-      cursor: pointer; list-style: none; display: flex; align-items: center; gap: 10px;
-      font-weight: 700; color: #e6f7ff;
+    .mobile-toc summary {
+      cursor: pointer;
+      padding: 12px 14px;
+      font-weight: 700;
+      color: #e6f7ff;
+      list-style: none;
+      display: flex; align-items: center; gap: 10px;
     }
-    details.block > summary::before {
-      content: "▸"; transition: transform .15s ease; color: #8bd2ff;
+    .mobile-toc summary::before {
+      content: "▸"; color: #8bd2ff; transition: transform .15s ease;
     }
-    details[open].block > summary::before { transform: rotate(90deg); }
-    details.block p, details.block ul { margin-left: 22px; }
+    .mobile-toc[open] summary::before { transform: rotate(90deg); }
+    .mobile-toc .toc-links { padding: 8px 14px 14px; }
+    .mobile-toc .toc-links a { display: block; padding: 8px 6px; color: #cfe8ff; }
+
+    /* Floating search (works on desktop & mobile without altering layout) */
+    .search-fab {
+      position: fixed;
+      right: 20px; bottom: 24px;
+      z-index: 60;
+    }
+    .search-fab button {
+      appearance: none; border: 0; cursor: pointer;
+      border-radius: 999px;
+      padding: 10px 12px;
+      background: linear-gradient(135deg, #0ea5e9, #8b5cf6);
+      color: #0b0b0b; font-weight: 800;
+      box-shadow: 0 10px 30px rgba(0,0,0,.35);
+    }
+    .search-panel {
+      position: fixed;
+      right: 20px; bottom: 72px;
+      background: #0f0f10;
+      border: 1px solid #1f1f22;
+      border-radius: 14px;
+      padding: 10px;
+      width: min(520px, calc(100vw - 36px));
+      box-shadow: 0 12px 36px rgba(0,0,0,.45);
+      display: none;
+    }
+    .search-panel.active { display: block; }
+    .search-row {
+      display: flex; gap: 8px;
+    }
+    .search-row input[type="search"] {
+      flex: 1;
+      border-radius: 10px;
+      border: 1px solid #232327;
+      background: #0c0c0d;
+      color: #eaeaea;
+      padding: 10px 12px;
+    }
+    .search-row button {
+      appearance: none; border: 0; cursor: pointer;
+      padding: 10px 14px; border-radius: 10px;
+      background: #111; color: #ddd; border: 1px solid #222;
+    }
+    .search-row button:hover { background: #161616; border-color: #2a2a2a; }
+    .search-hint { margin-top: 6px; color: #a9a9a9; font-size: . Nine25rem; } /* small hint */
+    /* prevent overlapping on iOS safe areas */
+    @supports (padding: max(0px)) {
+      .search-fab { right: max(20px, env(safe-area-inset-right)); bottom: max(24px, env(safe-area-inset-bottom)); }
+      .search-panel { right: max(20px, env(safe-area-inset-right)); bottom: max(72px, calc(env(safe-area-inset-bottom) + 48px)); }
+    }
 
     /* Footer */
     footer.site {
@@ -169,7 +236,7 @@
 
     /* Print */
     @media print {
-      header.site, nav.toc { display: none !important; }
+      header.site, nav.toc, .mobile-toc, .search-fab, .search-panel { display: none !important; }
       body { background: #fff; color: #000; }
       article.paper { background: #fff; border-color: #999; box-shadow: none; }
       a { color: #0645ad; }
@@ -188,14 +255,14 @@
 
   <!-- Document Body -->
   <div class="shell doc" id="top">
-    <!-- Sidebar TOC -->
+    <!-- Sidebar TOC (desktop only) -->
     <nav class="toc" aria-label="Table of contents">
       <h2>Contents</h2>
       <ul>
         <li><a href="#overview">Overview</a></li>
+        <li><a href="#summary">TL;DR</a></li>
         <li><a href="#ownership">Ownership</a></li>
         <li><a href="#initiative-privacy">Initiative Site Privacy</a></li>
-        <li><a href="#summary">TL;DR</a></li>
         <li><a href="#what-we-collect">What We Do/Don’t Collect</a></li>
         <li><a href="#cookies">Cookies &amp; Storage</a></li>
         <li><a href="#openstreetmap">OpenStreetMap</a></li>
@@ -205,7 +272,6 @@
         <li><a href="#legal-bases">Legal Bases (GDPR)</a></li>
         <li><a href="#your-rights">Your Rights</a></li>
         <li><a href="#retention">Data Retention</a></li>
-        <li><a href="#security">Security</a></li>
         <li><a href="#self-host">Self-Hosting</a></li>
         <li><a href="#changes">Changes to this Policy</a></li>
         <li><a href="#history">Document History</a></li>
@@ -217,6 +283,32 @@
 
     <!-- Paper Article -->
     <article class="paper" role="article" aria-label="Poke Privacy Policy">
+      <!-- Mobile TOC (mobile only, desktop unchanged) -->
+      <details class="mobile-toc">
+        <summary>Contents</summary>
+        <div class="toc-links">
+          <a href="#overview">Overview</a>
+          <a href="#summary">TL;DR</a>
+          <a href="#ownership">Ownership</a>
+          <a href="#initiative-privacy">Initiative Site Privacy</a>
+          <a href="#what-we-collect">What We Do/Don’t Collect</a>
+          <a href="#cookies">Cookies &amp; Storage</a>
+          <a href="#openstreetmap">OpenStreetMap</a>
+          <a href="#weather">Weather Pages &amp; Services</a>
+          <a href="#translate">Translate Page (SimplyTranslate)</a>
+          <a href="#third-parties">Third-Party Requests &amp; Proxy</a>
+          <a href="#legal-bases">Legal Bases (GDPR)</a>
+          <a href="#your-rights">Your Rights</a>
+          <a href="#retention">Data Retention</a>
+          <a href="#self-host">Self-Hosting</a>
+          <a href="#changes">Changes to this Policy</a>
+          <a href="#history">Document History</a>
+          <a href="#warranty">Warranty Disclaimer</a>
+          <a href="#contact">Contact</a>
+          <a href="#license">Policy License</a>
+        </div>
+      </details>
+
       <header>
         <h1 class="doc-title">Poke Privacy Policy</h1>
         <p class="doc-lede">
@@ -235,25 +327,6 @@
           Welcome to Poke’s Privacy Policy. We don’t collect data about you and we don’t run telemetry. Poke is <strong>free software</strong> you can read, remix, and run yourself.
         </p>
         <p class="callout">Not legal advice lol</p>
-      </section>
-
-      <!-- Ownership -->
-      <section id="ownership" aria-labelledby="ownership-heading">
-        <h2 id="ownership-heading" class="section">Ownership</h2>
-        <p>
-          The Poke service and this default instance (<span class="mono">poketube.fun</span>) are owned and operated by the <strong>Poke Project</strong>.
-          Learn more at <a href="https://initiative.poketube.fun/" rel="noopener">initiative.poketube.fun</a>.
-        </p>
-      </section>
-
-      <!-- Initiative site privacy (NEW) -->
-      <section id="initiative-privacy" aria-labelledby="initiative-privacy-heading">
-        <h2 id="initiative-privacy-heading" class="section">Initiative Site Privacy</h2>
-        <p>
-          The informational website at <a href="https://initiative.poketube.fun/" rel="noopener">initiative.poketube.fun</a> does not collect personal information.
-          For hosting-related processing, the <strong>Codeberg</strong> privacy policy applies:
-          <a href="https://codeberg.org/Codeberg/org/src/branch/main/PrivacyPolicy.md" target="_blank" rel="noopener">codeberg.org/Codeberg/org/src/branch/main/PrivacyPolicy.md</a>.
-        </p>
       </section>
 
       <!-- TL;DR -->
@@ -276,6 +349,25 @@
             </ul>
           </div>
         </div>
+      </section>
+
+      <!-- Ownership -->
+      <section id="ownership" aria-labelledby="ownership-heading">
+        <h2 id="ownership-heading" class="section">Ownership</h2>
+        <p>
+          The Poke service and this default instance (<span class="mono">poketube.fun</span>) are owned and operated by the <strong>Poke Project</strong>.
+          Learn more at <a href="https://initiative.poketube.fun/" rel="noopener">initiative.poketube.fun</a>.
+        </p>
+      </section>
+
+      <!-- Initiative site privacy -->
+      <section id="initiative-privacy" aria-labelledby="initiative-privacy-heading">
+        <h2 id="initiative-privacy-heading" class="section">Initiative Site Privacy</h2>
+        <p>
+          The informational website at <a href="https://initiative.poketube.fun/" rel="noopener">initiative.poketube.fun</a> does not collect personal information.
+          For hosting-related processing, the <strong>Codeberg</strong> privacy policy applies:
+          <a href="https://codeberg.org/Codeberg/org/src/branch/main/PrivacyPolicy.md" target="_blank" rel="noopener">codeberg.org/Codeberg/org/src/branch/main/PrivacyPolicy.md</a>.
+        </p>
       </section>
 
       <!-- What we collect -->
@@ -349,7 +441,7 @@
         <h2 id="translate-heading" class="section">Translate Page (SimplyTranslate)</h2>
         <p>
           Our translate page does <strong>not</strong> send data to Google. We use the community-run
-          <a href="https://simplytranslate.org/" rel="noopener" target="_blank">SimplyTranslate</a> service (a privacy-friendly translation proxy).
+          <a href="https://simplytranslate.org/" rel="noopener" target="_blank">SimplyTranslate</a> service (a privacy-friendly translation front-end).
           SimplyTranslate is a <strong>free software</strong> project: source code at
           <a href="https://codeberg.org/ManeraKai/simplytranslate" rel="noopener" target="_blank">codeberg.org/ManeraKai/simplytranslate</a> and its
           <a href="https://codeberg.org/ManeraKai/simplytranslate/raw/branch/main/legal_notice.txt" rel="noopener" target="_blank">legal notice</a>.
@@ -398,16 +490,7 @@
         <ul>
           <li><strong>Server logs:</strong> No personal identifiers on our main instance.</li>
           <li><strong>Telemetry/analytics:</strong> Not enabled here.</li>
-          <li><strong>Optional contact data (if you added it):</strong> Kept only as long as you want it to be.</li>
         </ul>
-      </section>
-
-      <!-- Security -->
-      <section id="security" aria-labelledby="security-heading">
-        <h2 id="security-heading" class="section">Security</h2>
-        <p>
-          Connections use modern TLS. We minimize what could ever be exposed by not collecting personal data in the first place. Less data, less risk. Math checks out.
-        </p>
       </section>
 
       <!-- Self-host -->
@@ -473,5 +556,62 @@ EVEN IF SUCH HOLDER OR OTHER PARTY HAS BEEN ADVISED OF THE POSSIBILITY OF SUCH D
       </footer>
     </article>
   </div>
+
+  <!-- Floating Search (desktop + mobile, non-intrusive) -->
+  <div class="search-fab" aria-live="polite">
+    <button type="button" id="openSearch" aria-expanded="false" aria-controls="policySearchPanel" title="Search Poke">
+      🔎 Search
+    </button>
+  </div>
+
+  <div id="policySearchPanel" class="search-panel" role="dialog" aria-modal="false" aria-label="Search">
+    <form class="search-row" id="policySearchForm" action="/search" method="GET">
+      <input type="search" name="query" id="policySearchInput" placeholder="Search…"
+             aria-label="Search Poke" autocomplete="off" />
+      <button type="submit">Go</button>
+      <button type="button" id="closeSearch">Close</button>
+    </form>
+  </div>
+
+  <script>
+    (function () {
+      const openBtn = document.getElementById('openSearch');
+      const panel = document.getElementById('policySearchPanel');
+      const input = document.getElementById('policySearchInput');
+      const closeBtn = document.getElementById('closeSearch');
+      const form = document.getElementById('policySearchForm');
+
+      function openPanel() {
+        panel.classList.add('active');
+        openBtn.setAttribute('aria-expanded', 'true');
+        setTimeout(() => input && input.focus(), 0);
+      }
+      function closePanel() {
+        panel.classList.remove('active');
+        openBtn.setAttribute('aria-expanded', 'false');
+        openBtn.focus();
+      }
+
+      openBtn.addEventListener('click', () => {
+        if (panel.classList.contains('active')) closePanel(); else openPanel();
+      });
+      closeBtn.addEventListener('click', closePanel);
+
+      window.addEventListener('keydown', (e) => {
+        if (e.key === '/' && !e.metaKey && !e.ctrlKey && !e.altKey) {
+          e.preventDefault();
+          if (!panel.classList.contains('active')) openPanel();
+          input && input.focus();
+        } else if (e.key === 'Escape' && panel.classList.contains('active')) {
+          closePanel();
+        }
+      });
+
+      form.addEventListener('submit', (e) => {
+        const q = input.value.trim();
+        if (!q) { e.preventDefault(); return; }
+      });
+    })();
+  </script>
 </body>
 </html>

@@ -1,5 +1,4 @@
 <!--
-
   This Source Code Form is subject to the terms of the GNU General Public License:
 
   Copyright (C) 2021-2025 Poke (https://codeberg.org/ashley/poke)
@@ -68,16 +67,23 @@
       backdrop-filter: saturate(140%) blur(10px);
       background: color-mix(in oklab, #0b0b0b 80%, transparent);
       border-bottom: 1px solid #222;
+      width: 100%;
     }
+    /* Make header content truly full-width on mobile while keeping desktop centered */
     .site-row {
       display: flex; align-items: center; justify-content: space-between;
-      gap: 16px; padding: 12px 24px;
+      gap: 16px;
+      padding: 12px clamp(12px, 4vw, 24px);
+      max-width: 1200px;
+      margin: 0 auto;
+      width: 100%;
     }
     .brand {
       display: inline-flex; align-items: center; gap: 12px;
       text-decoration: none; color: #fff; font-weight: 800; letter-spacing: .2px;
+      min-width: 0;
     }
-    .brand img { width: 8.5em; transform: scale(1.2); }
+    .brand img { width: 8.5em; transform: scale(1.2); height: auto; }
 
     /* Two-column doc: sticky sidebar + paper article */
     .doc {
@@ -143,6 +149,7 @@
     /* --- Mobile enhancements (desktop unchanged) --- */
     @media (max-width: 900px) {
       html { font-size: 17px; }
+      .brand img { width: 7.2em; transform: none; }
       .doc { grid-template-columns: 1fr; }
       nav.toc { display: none; }             /* hide sidebar TOC on mobile */
       .mobile-toc { display: block; }        /* show mobile TOC instead */
@@ -220,7 +227,7 @@
       background: #111; color: #ddd; border: 1px solid #222;
     }
     .search-row button:hover { background: #161616; border-color: #2a2a2a; }
-    .search-hint { margin-top: 6px; color: #a9a9a9; font-size: . Nine25rem; } /* small hint */
+    .search-hint { margin-top: 6px; color: #a9a9a9; font-size: .925rem; }
     /* prevent overlapping on iOS safe areas */
     @supports (padding: max(0px)) {
       .search-fab { right: max(20px, env(safe-area-inset-right)); bottom: max(24px, env(safe-area-inset-bottom)); }
@@ -236,7 +243,7 @@
 
     /* Print */
     @media print {
-      header.site, nav.toc, .mobile-toc, .search-fab, .search-panel { display: none !important; }
+      header.site, nav.toc, .mobile-toc, .search-fab, .search-panel, noscript { display: none !important; }
       body { background: #fff; color: #000; }
       article.paper { background: #fff; border-color: #999; box-shadow: none; }
       a { color: #0645ad; }
@@ -246,10 +253,20 @@
 <body>
   <!-- Site Header -->
   <header class="site" role="banner" aria-label="Site header">
-    <div class="site-row shell">
+    <div class="site-row">
       <a class="brand" href="/" aria-label="Poke home">
         <img src="/css/logo.svg?v=5" alt="Poke logo">
       </a>
+      <!-- No-JS visible search fallback (also visible if JS disabled) -->
+      <noscript>
+        <form action="/search" method="GET" style="margin-left:auto">
+          <input type="search" name="query" placeholder="Search…" aria-label="Search Poke"
+                 style="border-radius:10px;border:1px solid #232327;background:#0c0c0d;color:#eaeaea;padding:8px 10px;">
+          <button type="submit" style="margin-left:6px;border:1px solid #222;background:#111;color:#ddd;border-radius:10px;padding:8px 12px;">
+            Go
+          </button>
+        </form>
+      </noscript>
     </div>
   </header>
 
@@ -269,9 +286,11 @@
         <li><a href="#weather">Weather Pages &amp; Services</a></li>
         <li><a href="#translate">Translate Page (SimplyTranslate)</a></li>
         <li><a href="#third-parties">Third-Party Requests &amp; Proxy</a></li>
+        <li><a href="#api-logs">API Logs Policy</a></li>
         <li><a href="#legal-bases">Legal Bases (GDPR)</a></li>
         <li><a href="#your-rights">Your Rights</a></li>
         <li><a href="#retention">Data Retention</a></li>
+        <li><a href="#javascript">JavaScript &amp; No-JS</a></li>
         <li><a href="#self-host">Self-Hosting</a></li>
         <li><a href="#changes">Changes to this Policy</a></li>
         <li><a href="#history">Document History</a></li>
@@ -297,9 +316,11 @@
           <a href="#weather">Weather Pages &amp; Services</a>
           <a href="#translate">Translate Page (SimplyTranslate)</a>
           <a href="#third-parties">Third-Party Requests &amp; Proxy</a>
+          <a href="#api-logs">API Logs Policy</a>
           <a href="#legal-bases">Legal Bases (GDPR)</a>
           <a href="#your-rights">Your Rights</a>
           <a href="#retention">Data Retention</a>
+          <a href="#javascript">JavaScript &amp; No-JS</a>
           <a href="#self-host">Self-Hosting</a>
           <a href="#changes">Changes to this Policy</a>
           <a href="#history">Document History</a>
@@ -400,6 +421,15 @@
           <li><strong>No cookies :D!</strong></li>
           <li><strong>Local storage only for preferences</strong> (e.g., theme, layout). This stays on your device.</li>
         </ul>
+        <p class="small">
+          To remove data stored in your browser, you can use your browser’s cookie/site-data controls:
+          <a href="https://support.google.com/chrome/answer/2392709" rel="noopener" target="_blank">Chrome</a> ·
+          <a href="https://support.mozilla.org/kb/clear-cookies-and-site-data-firefox" rel="noopener" target="_blank">Firefox</a> ·
+          <a href="https://support.apple.com/HT201265" rel="noopener" target="_blank">Safari (iOS)</a> ·
+          <a href="https://support.apple.com/guide/safari/manage-cookies-and-website-data-sfri11471/mac" rel="noopener" target="_blank">Safari (macOS)</a> ·
+          <a href="https://support.microsoft.com/topic/view-and-delete-browser-history-in-microsoft-edge-14bbb2f9-3b6b-0728-1c6f-4f61b6cf0b8b" rel="noopener" target="_blank">Edge</a> ·
+          <a href="https://support.brave.com/hc/en-us/articles/360048491440" rel="noopener" target="_blank">Brave</a>
+        </p>
       </section>
 
       <!-- OpenStreetMap -->
@@ -459,6 +489,35 @@
         </p>
         <p>
           Fonts and other assets are shipped locally where possible. If a third-party endpoint is necessary, we keep it behind the proxy and strip identifying headers.
+          Components or ideas from the <strong>Invidious</strong> project may also be used:
+          <a href="https://github.com/iv-org/invidious" rel="noopener" target="_blank">github.com/iv-org/invidious</a>.
+        </p>
+      </section>
+
+      <!-- API Logs Policy -->
+      <section id="api-logs" aria-labelledby="api-logs-heading">
+        <h2 id="api-logs-heading" class="section">API Logs Policy</h2>
+        <p>
+          When you request any resource from the poke api (for example: thumbnails, API endpoint) information about the request may be logged.
+        </p>
+        <p>Information about a request is limited to:</p>
+        <ul>
+          <li>the time the request was made</li>
+          <li>the status code of the response</li>
+          <li>the method of the request</li>
+          <li>the requested URL</li>
+          <li>how long it took to complete the request.</li>
+        </ul>
+        <p>
+          <strong>No identifying information is logged</strong>, such as the visitor’s cookie, user-agent, or IP address. Here are a couple lines to serve as an example:
+        </p>
+        <pre class="small" style="white-space:pre-wrap;margin:8px 0;">
+2019-01-19 16:37:47 +00:00 200 GET /api/v1/comments/xrlETJYzH-c?format=html&amp;hl=en-US 1345.88ms
+2019-01-19 16:37:53 +00:00 200 GET /vi/r5P-f5arPXE/maxres.jpg 1085.41ms
+2019-01-19 16:37:54 +00:00 200 GET /watch 7.04ms
+        </pre>
+        <p>
+          This website does not store the visitor’s user-agent or IP address and does not use fingerprinting, advertisements, or tracking of any form.
         </p>
       </section>
 
@@ -484,13 +543,21 @@
         </p>
       </section>
 
-      <!-- Retention -->
+      <!-- Data Retention -->
       <section id="retention" aria-labelledby="retention-heading">
         <h2 id="retention-heading" class="section">Data Retention</h2>
         <ul>
           <li><strong>Server logs:</strong> No personal identifiers on our main instance.</li>
           <li><strong>Telemetry/analytics:</strong> Not enabled here.</li>
         </ul>
+      </section>
+
+      <!-- JavaScript & No-JS  -->
+      <section id="javascript" aria-labelledby="javascript-heading">
+        <h2 id="javascript-heading" class="section">JavaScript &amp; No-JS</h2>
+        <p>
+          JavaScript is <strong>optional</strong> on Poke’s websites. Core features—including search—work without JavaScript.
+        </p>
       </section>
 
       <!-- Self-host -->
@@ -557,7 +624,6 @@ EVEN IF SUCH HOLDER OR OTHER PARTY HAS BEEN ADVISED OF THE POSSIBILITY OF SUCH D
     </article>
   </div>
 
-  <!-- Floating Search (desktop + mobile, non-intrusive) -->
   <div class="search-fab" aria-live="polite">
     <button type="button" id="openSearch" aria-expanded="false" aria-controls="policySearchPanel" title="Search Poke">
       🔎 Search
@@ -597,7 +663,7 @@ EVEN IF SUCH HOLDER OR OTHER PARTY HAS BEEN ADVISED OF THE POSSIBILITY OF SUCH D
       });
       closeBtn.addEventListener('click', closePanel);
 
-      window.addEventListener('keydown', (e) => {
+       window.addEventListener('keydown', (e) => {
         if (e.key === '/' && !e.metaKey && !e.ctrlKey && !e.altKey) {
           e.preventDefault();
           if (!panel.classList.contains('active')) openPanel();
@@ -607,7 +673,7 @@ EVEN IF SUCH HOLDER OR OTHER PARTY HAS BEEN ADVISED OF THE POSSIBILITY OF SUCH D
         }
       });
 
-      form.addEventListener('submit', (e) => {
+       form.addEventListener('submit', (e) => {
         const q = input.value.trim();
         if (!q) { e.preventDefault(); return; }
       });

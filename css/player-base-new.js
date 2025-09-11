@@ -649,17 +649,19 @@ const YoutubeAPI = {
   DEFAULT_API_KEY: "AIzaSyAO_FJ2SlqU8Q4STEHLGCilw_Y9_11qcW8",
   ANDROID_API_KEY: "AIzaSyA8eiZmM1FaDVjRy-df2KTyQ_vz_yYM39w",
 
-  ANDROID_APP_VERSION: "19.14.42",
-  ANDROID_USER_AGENT: "com.google.android.youtube/19.14.42 (Linux; U; Android 12; US) gzip",
-  ANDROID_SDK_VERSION: 31,
-  ANDROID_VERSION: "12",
+  ANDROID_APP_VERSION: "20.20.41",
+  ANDROID_USER_AGENT:  "com.google.android.youtube/20.20.41 (Linux; U; Android 16; en_US; SM-S908E Build/TP1A.220624.014) gzip",
+  ANDROID_SDK_VERSION: 36,
+  ANDROID_VERSION: "16",
 
   ANDROID_TS_APP_VERSION: "1.9",
-  ANDROID_TS_USER_AGENT: "com.google.android.youtube/1.9 (Linux; U; Android 12; US) gzip",
+  ANDROID_TS_USER_AGENT:
+    "com.google.android.youtube/1.9 (Linux; U; Android 1; US) gzip",
 
-  IOS_APP_VERSION: "19.16.3",
-  IOS_USER_AGENT: "com.google.ios.youtube/19.16.3 (iPhone14,5; U; CPU iOS 17_4 like Mac OS X;)",
-  IOS_VERSION: "17.4.0.21E219",
+  IOS_APP_VERSION: "20.11.6",
+  IOS_USER_AGENT:
+    "com.google.ios.youtube/20.11.6 (iPhone14,5; U; CPU iOS 18_5 like Mac OS X;)",
+  IOS_VERSION: "18.5.0.22F76",
 
   WINDOWS_VERSION: "10.0",
 
@@ -680,10 +682,11 @@ const YoutubeAPI = {
   },
 
   HARDCODED_CLIENTS: {
+    // Web
     web: {
       name: "WEB",
       name_proto: "1",
-      version: "2.20240304.00.00",
+      version: "2.20250907.10.00",
       api_key: "AIzaSyAO_FJ2SlqU8Q4STEHLGCilw_Y9_11qcW8",
       screen: "WATCH_FULL_SCREEN",
       os_name: "Windows",
@@ -693,7 +696,7 @@ const YoutubeAPI = {
     web_embedded_player: {
       name: "WEB_EMBEDDED_PLAYER",
       name_proto: "56",
-      version: "1.20240303.00.00",
+      version: "1.20250907.01.00",
       api_key: "AIzaSyAO_FJ2SlqU8Q4STEHLGCilw_Y9_11qcW8",
       screen: "EMBED",
       os_name: "Windows",
@@ -703,49 +706,53 @@ const YoutubeAPI = {
     web_mobile: {
       name: "MWEB",
       name_proto: "2",
-      version: "2.20240304.08.00",
+      version: "2.20250907.01.00",
       api_key: "AIzaSyAO_FJ2SlqU8Q4STEHLGCilw_Y9_11qcW8",
       os_name: "Android",
-      os_version: "12",
+      os_version: "16",
       platform: "MOBILE"
     },
     web_screen_embed: {
       name: "WEB",
       name_proto: "1",
-      version: "2.20240304.00.00",
+      version: "2.20250907.10.00",
       api_key: "AIzaSyAO_FJ2SlqU8Q4STEHLGCilw_Y9_11qcW8",
       screen: "EMBED",
       os_name: "Windows",
       os_version: "10.0",
       platform: "DESKTOP"
     },
+
+    // Android
     android: {
       name: "ANDROID",
       name_proto: "3",
-      version: "19.14.42",
+      version: "20.20.41",
       api_key: "AIzaSyA8eiZmM1FaDVjRy-df2KTyQ_vz_yYM39w",
-      android_sdk_version: 31,
-      user_agent: "com.google.android.youtube/19.14.42 (Linux; U; Android 12; US) gzip",
+      android_sdk_version: 36,
+      user_agent:
+        "com.google.android.youtube/20.20.41 (Linux; U; Android 16; en_US; SM-S908E Build/TP1A.220624.014) gzip",
       os_name: "Android",
-      os_version: "12",
+      os_version: "16",
       platform: "MOBILE"
     },
     android_embedded_player: {
       name: "ANDROID_EMBEDDED_PLAYER",
       name_proto: "55",
-      version: "19.14.42",
+      version: "20.20.41",
       api_key: "AIzaSyCjc_pVEDi4qsv5MtC2dMXzpIaDoRFLsxw"
     },
     android_screen_embed: {
       name: "ANDROID",
       name_proto: "3",
-      version: "19.14.42",
+      version: "20.20.41",
       api_key: "AIzaSyAO_FJ2SlqU8Q4STEHLGCilw_Y9_11qcW8",
       screen: "EMBED",
-      android_sdk_version: 31,
-      user_agent: "com.google.android.youtube/19.14.42 (Linux; U; Android 12; US) gzip",
+      android_sdk_version: 36,
+      user_agent:
+        "com.google.android.youtube/20.20.41 (Linux; U; Android 16; en_US; SM-S908E Build/TP1A.220624.014) gzip",
       os_name: "Android",
-      os_version: "12",
+      os_version: "16",
       platform: "MOBILE"
     },
     android_test_suite: {
@@ -753,52 +760,60 @@ const YoutubeAPI = {
       name_proto: "30",
       version: "1.9",
       api_key: "AIzaSyA8eiZmM1FaDVjRy-df2KTyQ_vz_yYM39w",
-      android_sdk_version: 31,
-      user_agent: "com.google.android.youtube/1.9 (Linux; U; Android 12; US) gzip",
+      android_sdk_version: 36,
+      user_agent:
+        "com.google.android.youtube/1.9 (Linux; U; Android 16; US) gzip",
       os_name: "Android",
-      os_version: "12",
+      os_version: "16",
       platform: "MOBILE"
     },
+
+    // iOS
     ios: {
       name: "IOS",
       name_proto: "5",
-      version: "19.16.3",
+      version: "20.11.6",
       api_key: "AIzaSyB-63vPrdThhKuerbB2N_l7Kwwcxj6yUAc",
-      user_agent: "com.google.ios.youtube/19.16.3 (iPhone14,5; U; CPU iOS 17_4 like Mac OS X;)",
+      user_agent:
+        "com.google.ios.youtube/20.11.6 (iPhone14,5; U; CPU iOS 18_5 like Mac OS X;)",
       device_make: "Apple",
       device_model: "iPhone14,5",
       os_name: "iPhone",
-      os_version: "17.4.0.21E219",
+      os_version: "18.5.0.22F76",
       platform: "MOBILE"
     },
     ios_embedded: {
       name: "IOS_MESSAGES_EXTENSION",
       name_proto: "66",
-      version: "19.16.3",
+      version: "20.11.6",
       api_key: "AIzaSyAO_FJ2SlqU8Q4STEHLGCilw_Y9_11qcW8",
-      user_agent: "com.google.ios.youtube/19.16.3 (iPhone14,5; U; CPU iOS 17_4 like Mac OS X;)",
+      user_agent:
+        "com.google.ios.youtube/20.11.6 (iPhone14,5; U; CPU iOS 18_5 like Mac OS X;)",
       device_make: "Apple",
       device_model: "iPhone14,5",
       os_name: "iPhone",
-      os_version: "17.4.0.21E219",
+      os_version: "18.5.0.22F76",
       platform: "MOBILE"
     },
     ios_music: {
       name: "IOS_MUSIC",
       name_proto: "26",
-      version: "6.42",
+      version: "7.14",
       api_key: "AIzaSyBAETezhkwP0ZWA02RsqT1zu78Fpt0bC_s",
-      user_agent: "com.google.ios.youtubemusic/6.42 (iPhone14,5; U; CPU iOS 17_4 like Mac OS X;)",
+      user_agent:
+        "com.google.ios.youtubemusic/7.14 (iPhone14,5; U; CPU iOS 17_6 like Mac OS X;)",
       device_make: "Apple",
       device_model: "iPhone14,5",
       os_name: "iPhone",
-      os_version: "17.4.0.21E219",
+      os_version: "18.5.0.22F76",
       platform: "MOBILE"
     },
+
+    // TV
     tv_html5: {
       name: "TVHTML5",
       name_proto: "7",
-      version: "7.20240304.10.00",
+      version: "7.20250219.14.00",
       api_key: "AIzaSyAO_FJ2SlqU8Q4STEHLGCilw_Y9_11qcW8"
     },
     tv_html5_screen_embed: {
@@ -815,6 +830,7 @@ const YoutubeAPI = {
     region: "US"
   }
 };
+
 
 
 

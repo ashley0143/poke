@@ -46,7 +46,7 @@
 <meta content="<%=color%>" name="theme-color">
 <meta content="{canplayhd: true, redesign_feburary_2023:true, poke-rebrand:true, universe:2, ImmersiveAmbientMode:true, november2023_poke_rebrand:true, rebrand_2024:true, faster_load:true, AudioSyncV2:false, AudioSyncV3:true }" name="flags">
 <meta content="<%=VideoData?.author%>" name=twitter:author>
-<meta content="https://poketube.fun/watch?v=<%=VideoData?.videoId%>" name=twitter:url>
+<meta content="https://<%=hostname %>/watch?v=<%=VideoData?.videoId%>" name=twitter:url>
 <meta content="<%=VideoData?.title%> | Poke" name=twitter:title>
 <meta content="Watch this <%- turntomins(VideoData?.lengthSeconds) || "LIVE"%> long video from <%=VideoData?.author%> On Poke! 
 👍 <%=convert(engagement?.likes)%> | 👎 <%=convert(engagement?.dislikes)%> | 📈 <%=convert(engagement.viewCount)%> Views 🗓️ <%= date.replace("Premiered", " ") %> 💬 <% if (!isNaN(inv.commentCount)) { %><%= inv.commentCount.toLocaleString() %>
@@ -55,7 +55,7 @@
 <% } %>" property=twitter:description>
 <meta content="https://i.ytimg.com/vi/<%=VideoData.videoId%>/maxresdefault.jpg" property=og:image>
 <meta content=summary_large_image name=twitter:card>
-<link href="https://poketube.fun/watch?v=<%=VideoData.videoId%>" itemprop=url>
+<link href="https://<%=hostname %>/watch?v=<%=VideoData.videoId%>" itemprop=url>
 <!-- closes the } --> <% } %> 
 <meta name="darkreader-lock"> <!-- tells dark reader that the site has a dark theme and to turn itself off -->
 <link href="/css/yt-ukraine.svg?v=7" rel=icon>

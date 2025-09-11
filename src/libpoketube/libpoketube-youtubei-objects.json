@@ -1,18 +1,18 @@
 {
   "innertube": {
     "innertubeApiVersion":"v1",
-    "pokevidious":"20.24",
-    "innertubeContextClientVersion":"2.20240214.05.00",
+    "pokevidious":"20.25",
+    "innertubeContextClientVersion":"2.20250909.02.00",
     "youtubei":"https://www.youtube.com/youtubei/v1/",
-    "PAGE_BUILD_LABEL": "youtube.desktop.web_20240214_05_RC00",
+    "PAGE_BUILD_LABEL": "youtube.desktop.web_20250909_02_RC00",
     "CLIENT": {
       "clientName": "WEB",
       "projectClientName":"PokeVidious",
-      "clientVersion": "2.20240214.05.00"
+      "clientVersion": "2.20250909.02.00"
     },
     "CONTEXT_CLIENT": {
       "INNERTUBE_CONTEXT_CLIENT_NAME": "1",
-      "INNERTUBE_CONTEXT_CLIENT_VERSION": "2.20240214.05.00",
+      "INNERTUBE_CONTEXT_CLIENT_VERSION": "2.20250909.02.00",
       "INNERTUBE_CONTEXT_GL": "US",
       "INNERTUBE_CONTEXT_HL": "en"
     },

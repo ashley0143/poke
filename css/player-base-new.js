@@ -686,7 +686,7 @@ const YoutubeAPI = {
     web: {
       name: "WEB",
       name_proto: "1",
-      version: "2.20250907.10.00",
+      version: "2.20250909.02.00",
       api_key: "AIzaSyAO_FJ2SlqU8Q4STEHLGCilw_Y9_11qcW8",
       screen: "WATCH_FULL_SCREEN",
       os_name: "Windows",
@@ -706,7 +706,7 @@ const YoutubeAPI = {
     web_mobile: {
       name: "MWEB",
       name_proto: "2",
-      version: "2.20250907.01.00",
+      version: "2.20250909.02.00",
       api_key: "AIzaSyAO_FJ2SlqU8Q4STEHLGCilw_Y9_11qcW8",
       os_name: "Android",
       os_version: "16",
@@ -715,7 +715,7 @@ const YoutubeAPI = {
     web_screen_embed: {
       name: "WEB",
       name_proto: "1",
-      version: "2.20250907.10.00",
+      version: "2.20250909.02.00",
       api_key: "AIzaSyAO_FJ2SlqU8Q4STEHLGCilw_Y9_11qcW8",
       screen: "EMBED",
       os_name: "Windows",

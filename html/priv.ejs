@@ -1,31 +1,54 @@
+
+<!--
+
+    This Source Code Form is subject to the terms of the GNU General Public License:
+
+    Copyright (C) 2021-2025 Poke (https://codeberg.org/ashley/poke)
+    
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program. If not, see https://www.gnu.org/licenses/.
+--->
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="utf-8" />
   <title>Poke — Privacy Policy</title>
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
- <meta content="website" property="og:type">
-    <meta content="PokeTube - Legal thingy to put you into sleep" property="og:title">
-    <meta content="This is the PokeTube Privacy Policy meta description. Wow, helpful meta description Poke. Thanks!" property="twitter:description">
-       <meta content="https://cdn.glitch.me/d68d17bb-f2c0-4bc3-993f-50902734f652/aa70111e-5bcd-4379-8b23-332a33012b78.image.png?v=1701898829884" property="og:image"  />
+  <meta content="website" property="og:type">
+  <meta content="PokeTube - Legal thingy to put you into sleep" property="og:title">
+  <meta content="This is the PokeTube Privacy Policy meta description. Wow, helpful meta description Poke. Thanks!" property="twitter:description">
+  <meta content="https://cdn.glitch.me/d68d17bb-f2c0-4bc3-993f-50902734f652/aa70111e-5bcd-4379-8b23-332a33012b78.image.png?v=1701898829884" property="og:image" />
   <meta content="summary_large_image" name="twitter:card">
-  <link href="/css/yt-ukraine.svg?v=7" rel=icon>
+  <link href="/css/yt-ukraine.svg?v=7" rel="icon">
 
-   <style>
-     *, *::before, *::after { box-sizing: border-box; }
+  <style>
+    /* ===== Base ===== */
+    *, *::before, *::after { box-sizing: border-box; }
     html, body { margin: 0; padding: 0; }
     html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
     body {
       font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
-      line-height: 1.55;
+      line-height: 1.6;
+      color: #eaeaea;
       background:
         radial-gradient(1200px 600px at 0% 0%, #0ea5e9 0%, #0ea5e900 60%),
         radial-gradient(1000px 700px at 100% 0%, #8b5cf6 0%, #8b5cf600 65%),
         radial-gradient(1000px 700px at 0% 100%, #14b8a6 0%, #14b8a600 65%),
         #0b0b0b;
-      color: #eaeaea;
     }
-    a { color: #54c8ff; text-decoration: none; }
+    a { color: #7dd3fc; text-decoration: none; }
     a:hover { text-decoration: underline; }
     :focus-visible { outline: 2px solid #54c8ff; outline-offset: 2px; }
     img { max-width: 100%; height: auto; }
@@ -34,424 +57,388 @@
       font-size: 0.95em;
     }
 
-    /* ===== Layout ===== */
-    .wrap {
-      max-width: 1100px;
+    /* ===== Document Layout ===== */
+    .shell {
+      max-width: 1200px;
       margin: 0 auto;
       padding: 24px;
     }
     header.site {
       position: sticky;
       top: 0;
-      z-index: 50;
+      z-index: 10;
       backdrop-filter: saturate(140%) blur(10px);
       background: color-mix(in oklab, #0b0b0b 80%, transparent);
       border-bottom: 1px solid #222;
     }
     .site-row {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 16px;
-      padding: 12px 24px;
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 16px; padding: 12px 24px;
     }
     .brand {
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
-      text-decoration: none;
-      color: #fff;
-      font-weight: 800;
-      letter-spacing: 0.2px;
+      display: inline-flex; align-items: center; gap: 12px;
+      text-decoration: none; color: #fff; font-weight: 800; letter-spacing: .2px;
     }
-    .brand-mark {
-      inline-size: 36px; block-size: 36px;
-      border-radius: 10px;
-      background: linear-gradient(135deg, #0ea5e9, #8b5cf6);
-      display: grid; place-items: center;
-      font-weight: 900;
-    }
-    .brand span { font-size: 1.05rem; }
-    .actions {
-      display: flex; align-items: center; gap: 10px;
-    }
-    .btn {
-      appearance: none; border: 0; cursor: pointer;
-      padding: 10px 14px; border-radius: 12px;
-      background: #111; color: #ddd;
-      border: 1px solid #222;
-      transition: transform .08s ease, background .2s ease, border-color .2s ease;
-    }
-    .btn:hover { background: #161616; border-color: #2a2a2a; }
-    .btn:active { transform: translateY(1px); }
-    .btn.primary {
-      background: linear-gradient(135deg, #0ea5e9, #8b5cf6);
-      color: #0b0b0b; font-weight: 700;
-      border: 0;
-    }
+    .brand img { width: 8.5em; transform: scale(1.2); }
 
-    /* ===== Hero ===== */
-    .hero {
-      padding: 28px 24px 6px;
-    }
-    .hero-card {
-      background: color-mix(in oklab, #111 86%, transparent);
-      border: 1px solid #222;
-      border-radius: 24px;
-      padding: clamp(18px, 3.5vw, 28px);
+    /* Two-column doc: sticky sidebar + paper article */
+    .doc {
       display: grid;
-      grid-template-columns: 1.2fr .8fr;
-      gap: clamp(18px, 3.5vw, 28px);
+      grid-template-columns: 280px 1fr;
+      gap: 20px;
+      margin-top: 22px;
     }
-    .hero h1 {
-      margin: 0 0 8px 0;
-      font-size: clamp(1.6rem, 3.6vw, 2.2rem);
-      letter-spacing: 0.2px;
-    }
-    .hero p.lede {
-      margin: 0 0 14px 0;
-      color: #cfcfcf;
-    }
-    .badges {
-      display: flex; flex-wrap: wrap; gap: 10px;
-      margin-top: 10px;
-    }
-    .chip {
-      display: inline-flex; align-items: center; gap: 8px;
-      padding: 8px 12px; border-radius: 999px;
-      background: #0f0f10; border: 1px solid #1f1f22; color: #dcdcdc;
-      font-weight: 600; font-size: 0.9rem;
-    }
-    .chip .dot {
-      inline-size: 10px; block-size: 10px; border-radius: 999px;
-      background: #22c55e;
-      box-shadow: 0 0 0 3px color-mix(in oklab, #22c55e 18%, transparent);
-    }
-    .hero-side {
-      display: grid; gap: 12px;
-      align-content: start;
-    }
-    .note {
-      padding: 12px 14px;
-      border-radius: 16px;
-      background: #0f1315;
-      border: 1px solid #1a2126;
-      color: #dfe9f3;
-    }
-    .note h3 { margin: 0 0 6px 0; font-size: 1rem; }
-    .muted { color: #a9a9a9; }
-
-    /* ===== TOC ===== */
-    .toc {
-      margin-top: 16px;
+    nav.toc {
+      position: sticky; top: 76px;
+      align-self: start;
       background: #0f0f10;
       border: 1px solid #1f1f22;
       border-radius: 16px;
-      padding: 12px;
+      padding: 14px;
+      max-height: calc(100vh - 96px);
+      overflow: auto;
     }
-    .toc h3 { margin: 0 0 8px 0; font-size: 1rem; }
-    .toc ul {
-      list-style: none; margin: 0; padding: 0;
-      columns: 2; column-gap: 16px;
+    nav.toc h2 {
+      margin: 0 0 10px 0; font-size: 1rem; letter-spacing: .2px; color: #e8f6ff;
     }
-    .toc li { break-inside: avoid; margin: 6px 0; }
-    .toc a { color: #cfe8ff; }
-    @media (max-width: 780px) {
-      .hero-card { grid-template-columns: 1fr; }
-      .toc ul { columns: 1; }
-    }
+    .toc ul { list-style: none; padding: 0; margin: 0; }
+    .toc li { margin: 6px 0; }
+    .toc a { color: #cfe8ff; font-size: .95rem; }
 
-    /* ===== Sections ===== */
-    section.policy {
-      margin: 22px 0;
+    article.paper {
       background: #0f0f10;
       border: 1px solid #1f1f22;
       border-radius: 18px;
-      padding: clamp(16px, 3vw, 22px);
+      padding: clamp(18px, 2.6vw, 28px);
+      box-shadow:
+        0 0 0 1px rgba(255,255,255,0.02) inset,
+        0 20px 60px rgba(0,0,0,0.35);
     }
-    section.policy h2 {
-      margin: 0 0 10px 0; font-size: clamp(1.2rem, 2.5vw, 1.6rem);
+
+    /* Article typographic styling */
+    .doc-title { margin: 0 0 6px 0; font-size: clamp(1.6rem, 3vw, 2.2rem); letter-spacing:.2px; }
+    .doc-lede { margin: 6px 0 16px 0; color: #cfcfcf; }
+    .meta-row {
+      display: flex; flex-wrap: wrap; gap: 10px; align-items: center;
+      margin: 10px 0 18px 0;
     }
-    section.policy p { margin: 10px 0; color: #e7e7e7; }
+    .meta {
+      background: #0c1114; border: 1px solid #132029; color: #d2ebff;
+      border-radius: 12px; padding: 8px 10px; font-size: .93rem;
+    }
     .callout {
       background: #0c1114; border: 1px solid #132029; color: #d2ebff;
-      padding: 12px 14px; border-radius: 14px;
+      padding: 12px 14px; border-radius: 14px; margin: 10px 0 18px 0;
     }
+    h2.section {
+      margin: 22px 0 8px 0;
+      font-size: clamp(1.24rem, 2.4vw, 1.6rem);
+      border-bottom: 1px solid #1f1f22;
+      padding-bottom: 6px;
+    }
+    p { margin: 10px 0; color: #e7e7e7; }
+    ul { margin: 10px 0 10px 22px; }
     .grid-2 {
       display: grid; gap: 12px; grid-template-columns: 1fr 1fr;
     }
-    @media (max-width: 780px) { .grid-2 { grid-template-columns: 1fr; } }
+    @media (max-width: 900px) {
+      .doc { grid-template-columns: 1fr; }
+      nav.toc { position: static; max-height: none; }
+    }
 
-    /* ===== Details blocks ===== */
+    /* Details blocks */
     details.block {
-      background: #0c0c0d; border: 1px solid #1a1a1d;
-      border-radius: 14px; padding: 10px 12px; margin: 10px 0;
+      background: #0c0c0d; border: 1px solid #1a1a1d; border-radius: 14px;
+      padding: 10px 12px; margin: 10px 0;
     }
     details.block > summary {
-      cursor: pointer; list-style: none;
-      display: flex; align-items: center; gap: 10px;
+      cursor: pointer; list-style: none; display: flex; align-items: center; gap: 10px;
       font-weight: 700; color: #e6f7ff;
     }
     details.block > summary::before {
-      content: "▸"; transition: transform .15s ease;
-      color: #8bd2ff;
+      content: "▸"; transition: transform .15s ease; color: #8bd2ff;
     }
     details[open].block > summary::before { transform: rotate(90deg); }
     details.block p, details.block ul { margin-left: 22px; }
 
-    /* ===== Footer ===== */
+    /* Footer */
     footer.site {
-      margin: 28px auto 50px;
-      color: #bdbdbd;
-      text-align: center;
+      color: #bdbdbd; text-align: center; margin: 28px auto 50px;
     }
     .small { font-size: .925rem; }
     .mono { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "DejaVu Sans Mono", monospace; }
 
-    /* ===== Theme toggle (pure CSS + a tiny bit of JS for preference) ===== */
-    .theme-toggle {
-      display: inline-flex; align-items: center; gap: 8px;
-      padding: 8px 10px; border-radius: 12px; border: 1px solid #222;
-      background: #111; color: #ddd; cursor: pointer;
-      font-size: .95rem;
-    }
-    .theme-toggle input { appearance: none; inline-size: 38px; block-size: 22px; background: #222; border-radius: 999px; position: relative; outline: none; margin: 0; }
-    .theme-toggle input::after {
-      content: ""; position: absolute; inset: 3px auto auto 3px;
-      inline-size: 16px; block-size: 16px; border-radius: 999px; background: #eee; transition: transform .2s ease;
-    }
-    .theme-toggle input:checked::after { transform: translateX(16px); }
-
-    /* ===== Print ===== */
+    /* Print */
     @media print {
-      header.site, .actions, .theme-toggle, .hero-side, .toc { display: none !important; }
+      header.site, nav.toc { display: none !important; }
       body { background: #fff; color: #000; }
-      section.policy { border-color: #999; background: #fff; }
+      article.paper { background: #fff; border-color: #999; box-shadow: none; }
       a { color: #0645ad; }
     }
   </style>
 </head>
 <body>
-  <!-- Header -->
-  <header class="site">
-    <div class="site-row wrap">
+  <!-- Site Header -->
+  <header class="site" role="banner" aria-label="Site header">
+    <div class="site-row shell">
       <a class="brand" href="/" aria-label="Poke home">
-<img style="transform: scale(1.3);width:8.5em;display: block;margin-left: auto;margin-right: auto;" src="/css/logo.svg?v=5"></a>
-       </a>
+        <img src="/css/logo.svg?v=5" alt="Poke logo">
+      </a>
     </div>
   </header>
 
-  <!-- Hero -->
-  <main class="wrap hero" id="top">
-    <div class="hero-card" role="region" aria-label="Privacy overview">
-      <div>
-        <h1>Poke Privacy Policy</h1>
-        <p class="lede">
-         <strong>We don’t collect any data about you.</strong> No telemetry, no trackers ! Because Poke is <strong>free software</strong>, you can also check the source and self-host.
-        </p>
-        <div class="badges" aria-label="Key guarantees">
-          <span class="chip"><span class="dot" aria-hidden="true"></span> No data collected</span>
-          <span class="chip"><span class="dot" aria-hidden="true"></span> No telemetry</span>
-          <span class="chip"><span class="dot" aria-hidden="true"></span> Requests proxied</span>
-        </div>
-
-        <div class="toc" aria-label="Table of contents">
-          <h3>Jump to a section</h3>
-          <ul>
-            <li><a href="#preamble">Preamble</a></li>
-            <li><a href="#summary">TL;DR</a></li>
-            <li><a href="#what-we-collect">What We Do/Don’t Collect</a></li>
-             <li><a href="#cookies">Cookies &amp; Storage</a></li>
-            <li><a href="#openstreetmap">OpenStreetMap</a></li>
-            <li><a href="#third-parties">Third-Party Requests &amp; Proxy</a></li>
-            <li><a href="#legal-bases">Legal Bases (GDPR)</a></li>
-            <li><a href="#your-rights">Your Rights</a></li>
-            <li><a href="#retention">Data Retention</a></li>
-            <li><a href="#security">Security</a></li>
-             <li><a href="#self-host">Self-Hosting</a></li>
-            <li><a href="#changes">Changes to this Policy</a></li>
-            <li><a href="#contact">Contact</a></li>
-            <li><a href="#license">Policy License</a></li>
-          </ul>
-        </div>
-      </div>
-
-      <aside class="hero-side">
-        <div class="note" role="note" aria-label="Status">
-          <h3>Current version</h3>
-          <p class="muted small">Last updated: <time datetime="2025-08-19">August 19, 2025</time></p>
-          <p class="small">This page is for the default Poke instance (<span class="mono">poketube.fun</span>). If you use a community instance or your own instance, its policy may differ.</p>
-        </div>
-     
-      </aside>
-    </div>
-
-     <section id="preamble" class="policy">
-      <h2>Preamble</h2>
-      <p>
-        Welcome to Poke’s Privacy Policy. We don’t collect data about you and we don’t run telemetry. Poke is <strong>free software</strong> you can read, remix, and run yourself.
-      </p>
-      <p class="callout">
-        Not legal advice lol
-      </p>
-    </section>
-
-    <!-- Summary -->
-    <section id="summary" class="policy">
-      <h2>TL;DR</h2>
-      <div class="grid-2">
-        <div>
-          <ul>
-            <li><strong>No data collected.</strong> at all!!</li>
-            <li><strong>No telemetry.</strong> We don’t phone home.</li>
-            <li><strong>No third‑party trackers.</strong> Yippe!!</li>
-            <li><strong>YouTube can’t see what you watch here.</strong> Its all done on the backend. </li>
-          </ul>
-        </div>
-        <div>
-          <ul>
-            <li><strong>Poke Account:</strong> no email required, no personal info needed.</li>
-            <li><strong>Poke Maps:</strong> uses OpenStreetMap data; map tiles/attribution may have separate privacy rules depending on the tile server you use.</li>
-            <li><strong>No required cookies.</strong> Preferences (like theme or layout) may live in local storage on your device.</li>
-          </ul>
-        </div>
-      </div>
-    </section>
-
-    <!-- What we collect -->
-    <section id="what-we-collect" class="policy">
-      <h2>What We Do/Don’t Collect</h2>
-      <details class="block" open>
-        <summary>We collect <em>nothing</em> about you</summary>
-        <p>
-          We don’t store IP addresses, user‑agent fingerprints, unique identifiers, emails, names—none of it. There’s no telemetry or “anonymous crash reports.”
-        </p>
-      </details>
-      <details class="block">
-        <summary>What exists briefly so the internet works</summary>
-        <p>
-          Your browser and our server exchange data to deliver pages (that’s how HTTP works). That info is handled <em>transiently</em> and not logged in a way that identifies you on our primary instance.
-        </p>
-      </details>
-      <details class="block">
-        <summary>Poke Account</summary>
-        <p>
-          If you make a Poke account, we don’t require an email or personal details.  
-        </p>
-      </details>
-    </section>
- 
-    <!-- Cookies & storage -->
-    <section id="cookies" class="policy">
-      <h2>Cookies &amp; Local Storage</h2>
+  <!-- Document Body -->
+  <div class="shell doc" id="top">
+    <!-- Sidebar TOC -->
+    <nav class="toc" aria-label="Table of contents">
+      <h2>Contents</h2>
       <ul>
-        <li><strong>No cookies :D!</strong></li>
-        <li><strong>Local storage only for preferences</strong> (e.g., theme, layout). This stays on your device.</li>
+        <li><a href="#overview">Overview</a></li>
+        <li><a href="#ownership">Ownership</a></li>
+        <li><a href="#initiative-privacy">Initiative Site Privacy</a></li>
+        <li><a href="#summary">TL;DR</a></li>
+        <li><a href="#what-we-collect">What We Do/Don’t Collect</a></li>
+        <li><a href="#cookies">Cookies &amp; Storage</a></li>
+        <li><a href="#openstreetmap">OpenStreetMap</a></li>
+        <li><a href="#weather">Weather Pages &amp; Services</a></li>
+        <li><a href="#translate">Translate Page (SimplyTranslate)</a></li>
+        <li><a href="#third-parties">Third-Party Requests &amp; Proxy</a></li>
+        <li><a href="#legal-bases">Legal Bases (GDPR)</a></li>
+        <li><a href="#your-rights">Your Rights</a></li>
+        <li><a href="#retention">Data Retention</a></li>
+        <li><a href="#security">Security</a></li>
+        <li><a href="#self-host">Self-Hosting</a></li>
+        <li><a href="#changes">Changes to this Policy</a></li>
+        <li><a href="#history">Document History</a></li>
+        <li><a href="#warranty">Warranty Disclaimer</a></li>
+        <li><a href="#contact">Contact</a></li>
+        <li><a href="#license">Policy License</a></li>
       </ul>
-    </section>
+    </nav>
 
+    <!-- Paper Article -->
+    <article class="paper" role="article" aria-label="Poke Privacy Policy">
+      <header>
+        <h1 class="doc-title">Poke Privacy Policy</h1>
+        <p class="doc-lede">
+          <strong>We don’t collect any data about you.</strong> No telemetry, no trackers! Because Poke is <strong>free software</strong>, you can also check the source and self-host.
+        </p>
+        <div class="meta-row" aria-label="Document metadata">
+          <span class="meta">Instance: <span class="mono">poketube.fun</span></span>
+          <span class="meta">Version date: <time datetime="2025-08-19">August 19, 2025</time></span>
+        </div>
+      </header>
 
+      <!-- Overview / Preamble -->
+      <section id="overview" aria-labelledby="preamble-heading">
+        <h2 id="preamble-heading" class="section">Preamble</h2>
+        <p>
+          Welcome to Poke’s Privacy Policy. We don’t collect data about you and we don’t run telemetry. Poke is <strong>free software</strong> you can read, remix, and run yourself.
+        </p>
+        <p class="callout">Not legal advice lol</p>
+      </section>
 
-<!-- OpenStreetMap -->
-<section id="openstreetmap" class="policy">
-<h2>OpenStreetMap</h2>
-<p>
-Poke Maps uses <a href="https://www.openstreetmap.org/" target="_blank" rel="noopener">OpenStreetMap</a> data. That means when you explore maps at <a href="/map">/map</a>, we embed OSM via an <strong>iframe</strong> directly into the Poke site. The tiles and geographic info are delivered from OSM contributors’ servers.
-While Poke itself doesn’t collect any of your data, OpenStreetMap’s tile servers have their own <a href="https://wiki.osmfoundation.org/wiki/Privacy_Policy" target="_blank" rel="noopener">privacy policy</a>.  
-</p>
- 
-</section>
+      <!-- Ownership -->
+      <section id="ownership" aria-labelledby="ownership-heading">
+        <h2 id="ownership-heading" class="section">Ownership</h2>
+        <p>
+          The Poke service and this default instance (<span class="mono">poketube.fun</span>) are owned and operated by the <strong>Poke Project</strong>.
+          Learn more at <a href="https://initiative.poketube.fun/" rel="noopener">initiative.poketube.fun</a>.
+        </p>
+      </section>
 
-    <!-- Third parties -->
-    <section id="third-parties" class="policy">
-      <h2>Third‑Party Requests &amp; Proxy</h2>
-      <p>
-        When Poke needs assets (videos, thumbnails, etc.), we fetch them through our proxy (e.g., <span class="mono">p.poketube.fun</span>).  
-      </p>
-      <p>
-        Fonts and other assets are shipped locally where possible. If a third‑party endpoint is necessary, we keep it behind the proxy and strip identifying headers.
-      </p>
-    </section>
+      <!-- Initiative site privacy (NEW) -->
+      <section id="initiative-privacy" aria-labelledby="initiative-privacy-heading">
+        <h2 id="initiative-privacy-heading" class="section">Initiative Site Privacy</h2>
+        <p>
+          The informational website at <a href="https://initiative.poketube.fun/" rel="noopener">initiative.poketube.fun</a> does not collect personal information.
+          For hosting-related processing, the <strong>Codeberg</strong> privacy policy applies:
+          <a href="https://codeberg.org/Codeberg/org/src/branch/main/PrivacyPolicy.md" target="_blank" rel="noopener">codeberg.org/Codeberg/org/src/branch/main/PrivacyPolicy.md</a>.
+        </p>
+      </section>
 
-<!-- Legal bases -->
-<section id="legal-bases" class="policy">
-  <h2>Legal Bases for Processing (GDPR)</h2>
-  <ul>
-    <li><strong>Legitimate interests:</strong> Running Poke smoothly while collecting exactly zero personal data.</li>
-    <li><strong>Consent:</strong> If we ever invent an optional feature that needs info, we’ll ask. But right now? There’s nothing to consent to.</li>
-    <li><strong>Legal obligation:</strong> Even if someone waves a fancy piece of paper at us, we literally have nothing personal to hand over. Empty pockets.</li>
- 
-</section>
+      <!-- TL;DR -->
+      <section id="summary" aria-labelledby="summary-heading">
+        <h2 id="summary-heading" class="section">TL;DR</h2>
+        <div class="grid-2">
+          <div>
+            <ul>
+              <li><strong>No data collected.</strong> at all!!</li>
+              <li><strong>No telemetry.</strong> We don’t phone home.</li>
+              <li><strong>No third-party trackers.</strong> Yippe!!</li>
+              <li><strong>YouTube can’t see what you watch here.</strong> Its all done on the backend.</li>
+            </ul>
+          </div>
+          <div>
+            <ul>
+              <li><strong>Poke Account:</strong> no email required, no personal info needed.</li>
+              <li><strong>Poke Maps:</strong> uses OpenStreetMap data; map tiles/attribution may have separate privacy rules depending on the tile server you use.</li>
+              <li><strong>No required cookies.</strong> Preferences (like theme or layout) may live in local storage on your device.</li>
+            </ul>
+          </div>
+        </div>
+      </section>
 
+      <!-- What we collect -->
+      <section id="what-we-collect" aria-labelledby="collect-heading">
+        <h2 id="collect-heading" class="section">What We Do/Don’t Collect</h2>
+        <details class="block" open>
+          <summary>We collect <em>nothing</em> about you</summary>
+          <p>
+            We don’t store IP addresses, user-agent fingerprints, unique identifiers, emails, names—none of it. There’s no telemetry or “anonymous crash reports.”
+          </p>
+        </details>
+        <details class="block">
+          <summary>What exists briefly so the internet works</summary>
+          <p>
+            Your browser and our server exchange data to deliver pages (that’s how HTTP works). That info is handled <em>transiently</em> and not logged in a way that identifies you on our primary instance.
+          </p>
+        </details>
+        <details class="block">
+          <summary>Poke Account</summary>
+          <p>
+            If you make a Poke account, we don’t require an email or personal details.
+          </p>
+        </details>
+      </section>
 
- <!-- Your rights -->
-<section id="your-rights" class="policy">
-  <h2>Your Privacy Rights</h2>
-  <p>
-    Since Poke doesn’t collect or store personal data, there’s basically nothing for us to give, sell, or lose about you. 
-    You don’t have to worry about “export my data” or “delete my profile” requests because we don’t have anything on you in the first place.
-  </p>
-  <p>
-    Poke Accounts don’t require an email, name, or any other identifying info — and there’s no way to add that kind of data even if you wanted to. 
-   </p>
- 
-</section>
+      <!-- Cookies & storage -->
+      <section id="cookies" aria-labelledby="cookies-heading">
+        <h2 id="cookies-heading" class="section">Cookies &amp; Local Storage</h2>
+        <ul>
+          <li><strong>No cookies :D!</strong></li>
+          <li><strong>Local storage only for preferences</strong> (e.g., theme, layout). This stays on your device.</li>
+        </ul>
+      </section>
 
-    <!-- Retention -->
-    <section id="retention" class="policy">
-      <h2>Data Retention</h2>
-      <ul>
-        <li><strong>Server logs:</strong> No personal identifiers on our main instance.</li>
-        <li><strong>Telemetry/analytics:</strong> Not enabled here.</li>
-        <li><strong>Optional contact data (if you added it):</strong> Kept only as long as you want it to be.</li>
-      </ul>
-    </section>
+      <!-- OpenStreetMap -->
+      <section id="openstreetmap" aria-labelledby="osm-heading">
+        <h2 id="osm-heading" class="section">OpenStreetMap</h2>
+        <p>
+          Poke Maps uses <a href="https://www.openstreetmap.org/" target="_blank" rel="noopener">OpenStreetMap</a> data. That means when you explore maps at <a href="/map">/map</a>, we embed OSM via an <strong>iframe</strong> directly into the Poke site. The tiles and geographic info are delivered from OSM contributors’ servers.
+          While Poke itself doesn’t collect any of your data, OpenStreetMap’s tile servers have their own
+          <a href="https://wiki.osmfoundation.org/wiki/Privacy_Policy" target="_blank" rel="noopener">privacy policy</a>.
+        </p>
+      </section>
 
-    <!-- Security -->
-    <section id="security" class="policy">
-      <h2>Security</h2>
-      <p>
-        Connections use modern TLS. We minimize what could ever be exposed by not collecting personal data in the first place. Less data, less risk. Math checks out.
-      </p>
-    </section>
- 
+      <!-- Weather -->
+      <section id="weather" aria-labelledby="weather-heading">
+        <h2 id="weather-heading" class="section">Weather Pages &amp; Services</h2>
+        <p>
+          Poke’s weather pages use third-party, privacy-respecting services to resolve places and fetch forecasts:
+        </p>
+        <ul>
+          <li>
+            <strong>Geocoding / place lookup:</strong>
+            <a href="https://nominatim.openstreetmap.org/" rel="noopener" target="_blank">nominatim.openstreetmap.org</a>
+            (OpenStreetMap Nominatim).
+            Privacy: <a href="https://osmfoundation.org/wiki/Privacy_Policy" rel="noopener" target="_blank">OSMF Privacy Policy</a>.
+          </li>
+          <li>
+            <strong>Forecast data:</strong>
+            <a href="https://open-meteo.com/" rel="noopener" target="_blank">open-meteo.com</a>.
+            Privacy: <a href="https://open-meteo.com/en/terms#privacy" rel="noopener" target="_blank">Open-Meteo Terms &amp; Privacy</a>.
+          </li>
+        </ul>
+        <p class="callout">
+          Poke does not add trackers to these requests. However, when these services are contacted, their respective privacy policies apply to those specific requests.
+        </p>
+      </section>
 
-    <!-- Self-host -->
-    <section id="self-host" class="policy">
-      <h2>Self‑Hosting</h2>
-      <p>
-        Poke is free software under the <strong>GNU GPL v3.0 or later</strong>.  
-      </p>
-    </section>
+      <!-- Translate -->
+      <section id="translate" aria-labelledby="translate-heading">
+        <h2 id="translate-heading" class="section">Translate Page (SimplyTranslate)</h2>
+        <p>
+          Our translate page does <strong>not</strong> send data to Google. We use the community-run
+          <a href="https://simplytranslate.org/" rel="noopener" target="_blank">SimplyTranslate</a> service (a privacy-friendly translation proxy).
+          SimplyTranslate is a <strong>free software</strong> project: source code at
+          <a href="https://codeberg.org/ManeraKai/simplytranslate" rel="noopener" target="_blank">codeberg.org/ManeraKai/simplytranslate</a> and its
+          <a href="https://codeberg.org/ManeraKai/simplytranslate/raw/branch/main/legal_notice.txt" rel="noopener" target="_blank">legal notice</a>.
+        </p>
+        <p>
+          We don’t know whether the text you translate contains personal information or not—that’s up to you. Please avoid submitting sensitive personal data to any translation service.
+        </p>
+      </section>
 
-    <!-- Changes -->
-    <section id="changes" class="policy">
-      <h2>Changes to this Policy</h2>
-      <p>
-        If we ever change how privacy works here, we’ll update the date at the top and announce major changes. Spoiler: changes would not include adding two bananas. this isnt minions LOL :3
-      </p>
-    </section>
+      <!-- Third parties -->
+      <section id="third-parties" aria-labelledby="third-heading">
+        <h2 id="third-heading" class="section">Third-Party Requests &amp; Proxy</h2>
+        <p>
+          When Poke needs assets (videos, thumbnails, etc.), we fetch them through our proxy (e.g., <span class="mono">p.poketube.fun</span>).
+        </p>
+        <p>
+          Fonts and other assets are shipped locally where possible. If a third-party endpoint is necessary, we keep it behind the proxy and strip identifying headers.
+        </p>
+      </section>
 
-    <!-- Contact -->
-    <section id="contact" class="policy">
-      <h2>Contact</h2>
-      <p>
-        Questions or concerns? Open an issue on our project tracker :D
-      </p>
-      <ul>
-        <li>Project: <span class="mono">codeberg.org/Ashley/poketube</span></li>
-       </ul>
-    </section>
+      <!-- Legal bases -->
+      <section id="legal-bases" aria-labelledby="gdpr-heading">
+        <h2 id="gdpr-heading" class="section">Legal Bases for Processing (GDPR)</h2>
+        <ul>
+          <li><strong>Legitimate interests:</strong> Running Poke smoothly while collecting exactly zero personal data.</li>
+          <li><strong>Consent:</strong> If we ever invent an optional feature that needs info, we’ll ask. But right now? There’s nothing to consent to.</li>
+          <li><strong>Legal obligation:</strong> Even if someone waves a fancy piece of paper at us, we literally have nothing personal to hand over. Empty pockets.</li>
+        </ul>
+      </section>
 
-    <!-- License -->
-    <section id="license" class="policy">
-      <h2>Policy License</h2>
-      <p class="small">
-        © 2021–2025 Poke. This policy is licensed under the
-        <strong>Creative Commons Attribution–ShareAlike 4.0 International</strong> (CC BY-SA 4.0).
-      </p>
-      <details class="block">
-        <summary>GPLv3 Warranty Disclaimer (excerpt)</summary>
+      <!-- Your rights -->
+      <section id="your-rights" aria-labelledby="rights-heading">
+        <h2 id="rights-heading" class="section">Your Privacy Rights</h2>
+        <p>
+          Since Poke doesn’t collect or store personal data, there’s basically nothing for us to give, sell, or lose about you.
+          You don’t have to worry about “export my data” or “delete my profile” requests because we don’t have anything on you in the first place.
+        </p>
+        <p>
+          Poke Accounts don’t require an email, name, or any other identifying info — and there’s no way to add that kind of data even if you wanted to.
+        </p>
+      </section>
+
+      <!-- Retention -->
+      <section id="retention" aria-labelledby="retention-heading">
+        <h2 id="retention-heading" class="section">Data Retention</h2>
+        <ul>
+          <li><strong>Server logs:</strong> No personal identifiers on our main instance.</li>
+          <li><strong>Telemetry/analytics:</strong> Not enabled here.</li>
+          <li><strong>Optional contact data (if you added it):</strong> Kept only as long as you want it to be.</li>
+        </ul>
+      </section>
+
+      <!-- Security -->
+      <section id="security" aria-labelledby="security-heading">
+        <h2 id="security-heading" class="section">Security</h2>
+        <p>
+          Connections use modern TLS. We minimize what could ever be exposed by not collecting personal data in the first place. Less data, less risk. Math checks out.
+        </p>
+      </section>
+
+      <!-- Self-host -->
+      <section id="self-host" aria-labelledby="selfhost-heading">
+        <h2 id="selfhost-heading" class="section">Self-Hosting</h2>
+        <p>
+          Poke is free software under the <strong>GNU GPL v3.0 or later</strong>.
+        </p>
+      </section>
+
+      <!-- Changes -->
+      <section id="changes" aria-labelledby="changes-heading">
+        <h2 id="changes-heading" class="section">Changes to this Policy</h2>
+        <p>
+          If we ever change how privacy works here, we’ll update the date at the top and announce major changes. Spoiler: changes would not include adding two bananas. this isnt minions LOL :3
+        </p>
+      </section>
+
+      <!-- Document History  -->
+      <section id="history" aria-labelledby="history-heading">
+        <h2 id="history-heading" class="section">Document History</h2>
+        <p>
+          You can view the full edit history for this policy at:
+          <a href="https://codeberg.org/ashley/poke/commits/branch/main/html/priv.ejs" target="_blank" rel="noopener">codeberg.org/ashley/poke/commits/branch/main/html/priv.ejs</a>.
+        </p>
+      </section>
+
+      <!-- Warranty Disclaimer -->
+      <section id="warranty" aria-labelledby="warranty-heading">
+        <h2 id="warranty-heading" class="section">Warranty Disclaimer</h2>
         <pre class="small" style="white-space:pre-wrap;margin:8px 0;">
 IN NO EVENT UNLESS REQUIRED BY APPLICABLE LAW OR AGREED TO IN WRITING WILL ANY COPYRIGHT HOLDER,
 OR ANY OTHER PARTY WHO MODIFIES AND/OR CONVEYS THE PROGRAM AS PERMITTED ABOVE, BE LIABLE TO YOU FOR DAMAGES,
@@ -459,18 +446,33 @@ INCLUDING ANY GENERAL, SPECIAL, INCIDENTAL OR CONSEQUENTIAL DAMAGES ARISING OUT 
 (E.G., LOSS OF DATA, DATA BEING RENDERED INACCURATE, OR FAILURES OF THE PROGRAM TO OPERATE WITH ANY OTHER PROGRAMS),
 EVEN IF SUCH HOLDER OR OTHER PARTY HAS BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGES.
         </pre>
-      </details>
-    </section>
+      </section>
 
-    <footer class="site small">
-      <p>
-       </p>
-      <p>
-        Return to <a href="#top">Top</a>!
-      </p>
-    </footer>
-  </main>
+      <!-- Contact -->
+      <section id="contact" aria-labelledby="contact-heading">
+        <h2 id="contact-heading" class="section">Contact</h2>
+        <p>
+          Questions or concerns? Open an issue on our project tracker :D
+        </p>
+        <ul>
+          <li>Project: <span class="mono">codeberg.org/Ashley/poke</span></li>
+          <li>Initiative: <a href="https://initiative.poketube.fun/" rel="noopener">initiative.poketube.fun</a></li>
+        </ul>
+      </section>
 
-   
+      <!-- License -->
+      <section id="license" aria-labelledby="license-heading">
+        <h2 id="license-heading" class="section">Policy License</h2>
+        <p class="small">
+          © 2021–2025 Poke (Poke Project). This policy is licensed under the
+          <strong>Creative Commons Attribution–ShareAlike 4.0 International</strong> (CC BY-SA 4.0).
+        </p>
+      </section>
+
+      <footer class="site small" aria-label="Document footer">
+        <p><a href="#top">Return to Top</a></p>
+      </footer>
+    </article>
+  </div>
 </body>
 </html>

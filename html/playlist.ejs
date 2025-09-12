@@ -19,7 +19,7 @@
 --><!DOCTYPE html><html style="background:#000000">
 <head>
     <title>Poke | <%- p?.title %> </title>
-     <link href=/css/yt-ukraine.svg?v=6 rel=icon>
+     <link href="/css/yt-ukraine.svg?v=6" rel=icon>
     <link rel="manifest" href="/manifest.json">
     <meta content=website property=og:type>
       <meta name="viewport" content="width=device-1200px, initial-scale=1.0, shrink-to-fit=yes, viewport-fit=cover">
@@ -30,7 +30,7 @@
     <link href=/css/app-cdn.min.css rel=stylesheet>
     <link href=/css/app.main.css?v=44600 rel=stylesheet>
     <link href="/css/watch.main.css?v=56" rel=stylesheet>
-    <link href=https://p.poketube.fun/https://site-assets.fontawesome.com/releases/v6.1.1/css/all.css rel=stylesheet>
+    <link href="https://p.poketube.fun/https://site-assets.fontawesome.com/releases/v6.1.1/css/all.css" rel=stylesheet>
 <style>
    a.class:hover {
     font-weight:bold
@@ -251,9 +251,14 @@ font-family:Ubuntu
 <div class="playlist-page" style="margin-left: auto;margin-right: auto;width: 56em;">
 <div class="playlist-info" style="max-height: 26em;border-radius: 1em;">
             <% if (!p.mixId) { %>  
+<% 
+  let videoId = null; 
+  if (p.playlistThumbnail && p.playlistThumbnail.includes("/vi/")) {
+    videoId = p.playlistThumbnail.split("/vi/")[1].split("/")[0];
+  }
+%>
 
-
-		<a href="/watch?v=<%= p.playlistThumbnail.split('/vi/')[1].split('/')[0] %>" class="thumbnail" style="background-image: url('<%- mediaproxy %>/proxy?url=<%- p.playlistThumbnail %>sqp=-oaymwEXCNACELwBSFryq4qpAwkIARUAAIhCGAE=&amp;rs=AOn4CLCLG7gzsIdtlp7ugZJH8YaAHX5bIw&amp;days_since_epoch=19755');border-radius: 13px;border: 1px solid #ff0064">
+		<a href="/watch?v==<%= videoId || '' %>" class="thumbnail" style="background-image: url('<%- mediaproxy %>/proxy?url=<%- p.playlistThumbnail %>sqp=-oaymwEXCNACELwBSFryq4qpAwkIARUAAIhCGAE=&amp;rs=AOn4CLCLG7gzsIdtlp7ugZJH8YaAHX5bIw&amp;days_since_epoch=19755');border-radius: 13px;border: 1px solid #ff0064">
         <span class="hover-text">Watch :3</span>
 		</a>	
     

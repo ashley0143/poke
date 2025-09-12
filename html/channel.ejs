@@ -1516,6 +1516,40 @@ margin-left: 10px;
 
  
           <% } %>
+               
+               <% if (tab === "releases") { %>  
+                                               
+                             
+
+             <div align="center">
+   
+ 
+    	<div class="video-grid" >
+            
+   
+             <%  if (Array.isArray(releases.playlists)) { %> 
+
+   <% releases.playlists.forEach (x =>  { %>
+			<a href="/playlist?list=<%- x.playlistId %>" class="video">
+				<div class="thumbnail" style="background-image: url('<%- media_proxy_url %>/proxy?url=<%- x.playlistThumbnail %>?sqp=-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLBy_x4UUHLNDZtJtH0PXeQGoRFTgw');border-radius: 10px;"><span class="video-length"><%- x.videoCount %> Videos </span></div>
+				<div class="info">
+					<span class="title max-lines-2" style="font-family:PokeTube flex,sans-serif;font-weight: 1000;font-stretch: ultra-expanded;"><%- x.title %></span>
+			 
+            </div>
+ 			</a>	
+ 		 	               <% }) %>   
+ <% } %>
+
+                                             
+ 
+         
+ 
+                       
+                       </div>
+          
+
+ 
+          <% } %>
             
                <% if (tab === "playlist") { %>  
                                                

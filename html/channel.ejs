@@ -780,6 +780,14 @@ white-space: nowrap;text-decoration: none;" href="/feeds/videos.xml?channel_id=<
                                                                          <% } %>
                                                                          <% } %>
 
+<%  if (Array.isArray(released?.playlists)) { %> 
+
+  <%  if (released.playlists.length != "0") { %> 
+
+     <a  href="/channel?id=<%=ID%>&tab=releases"  class="tab" style="color:pink">Releases</a>
+                                                                         <% } %>
+                                                                         <% } %>
+
  
                                                                 <% } %>
                                                                   

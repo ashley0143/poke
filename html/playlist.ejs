@@ -154,7 +154,40 @@ font-family:Ubuntu
 .closebtn:hover {
   color: black;
 }
+.thumbnail {
+  position: relative;
+  display: inline-block;
+}
 
+.thumbnail .hover-text {
+    display: none;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: white;
+  font-size: 24px;
+  font-weight: bold;
+  background-color: rgba(0, 0, 0, 0.5);  
+  padding: 5px 10px;
+  border-radius: 5px;
+  z-index: 2;
+}
+
+.thumbnail:hover .hover-text {
+  display: block;
+}
+
+.thumbnail .video-length {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  z-index: 1;
+}
+
+.thumbnail:hover .video-length {
+  display: none;
+}
 .playlist-video > .info > .title {
     border-radius:0em;
     max-height: 1.9em;
@@ -219,8 +252,12 @@ font-family:Ubuntu
 <div class="playlist-info" style="max-height: 26em;border-radius: 1em;">
             <% if (!p.mixId) { %>  
 
-		<div class="thumbnail" style="background-image: url('<%- mediaproxy %>/proxy?url=<%- p.playlistThumbnail %>sqp=-oaymwEXCNACELwBSFryq4qpAwkIARUAAIhCGAE=&amp;rs=AOn4CLCLG7gzsIdtlp7ugZJH8YaAHX5bIw&amp;days_since_epoch=19755');border-radius: 13px;border: 1px solid #ff0064">
-		</div>	  <% } %>
+
+		<a class="thumbnail" style="background-image: url('<%- mediaproxy %>/proxy?url=<%- p.playlistThumbnail %>sqp=-oaymwEXCNACELwBSFryq4qpAwkIARUAAIhCGAE=&amp;rs=AOn4CLCLG7gzsIdtlp7ugZJH8YaAHX5bIw&amp;days_since_epoch=19755');border-radius: 13px;border: 1px solid #ff0064">
+        <span class="hover-text">Watch :3</span>
+		</div>	
+    
+      <% } %>
 
 		<p class="title"><%- p.title %> </p>
           <% if (!p.mixId) { %>  

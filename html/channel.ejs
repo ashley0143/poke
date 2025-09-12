@@ -1527,9 +1527,9 @@ margin-left: 10px;
     	<div class="video-grid" >
             
    
-             <%  if (Array.isArray(released)) { %> 
+             <%  if (Array.isArray(released.playlists)) { %> 
 
-   <% released.forEach (x =>  { %>
+   <% released.playlists.forEach (x =>  { %>
 			<a href="/playlist?list=<%- x.playlistId %>" class="video">
 				<div class="thumbnail" style="background-image: url('<%- media_proxy_url %>/proxy?url=<%- x.playlistThumbnail %>?sqp=-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLBy_x4UUHLNDZtJtH0PXeQGoRFTgw');border-radius: 10px;"><span class="video-length"><%- x.videoCount %> Videos </span></div>
 				<div class="info">

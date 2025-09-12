@@ -273,9 +273,7 @@ function channelurlfixer(text) {
         ChannelTabs.playlist
       )}?hl=en-US`;
 
-   const releasesUrl = `${apiUrl}${ID}/${atob(
-        ChannelTabs.released
-      )}?hl=en-US`;
+   const releasesUrl = `${apiUrl}${ID}/releases?hl=en-US`;
 
       const channelINVUrl = `${apiUrl}${ID}/`;
 

@@ -52,7 +52,7 @@ const ChannelTabs = {
   streams: "c3RyZWFtcw==", // or "live"
   channels: "Y2hhbm5lbHM=",
   store: "c3RvcmU=",
-  released: "cmVsZWFzZWQ=",
+  released: "cmVsZWFzZXM=",
   playlist: "cGxheWxpc3Rz",
 };
 
@@ -273,16 +273,21 @@ function channelurlfixer(text) {
         ChannelTabs.playlist
       )}?hl=en-US`;
 
+   const releasesUrl = `${apiUrl}${ID}/${atob(
+        ChannelTabs.released
+      )}?hl=en-US`;
+
       const channelINVUrl = `${apiUrl}${ID}/`;
 
       const pronoun = "no pronouns :c";
 
       
 
-      var [tj, shorts, playlist, stream, c, cinv] = await Promise.all([
+      var [tj, shorts, playlist, released, stream, c, cinv] = await Promise.all([
         getChannelData(channelUrl),
         getChannelData(shortsUrl),
         getChannelData(PlaylistUrl),
+        getChannelData(releasesUrl),
         getChannelData(streamUrl),
         getChannelData(communityUrl),
         getChannelData(channelINVUrl),
@@ -320,7 +325,7 @@ function channelurlfixer(text) {
           stream,
           c,
           cinv,
-        
+        released,
         },
         timestamp: Date.now(),
       };
@@ -356,6 +361,7 @@ function channelurlfixer(text) {
         media_proxy_url: media_proxy,
         getThumbnailUrl,
         continuation,
+        released,
         wiki: "",
         getFirstLine,
         isMobile: req.useragent.isMobile,

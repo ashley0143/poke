@@ -27,9 +27,7 @@
   <meta property="og:title" content="PokeTube - Video Downloader" />
   <meta property="og:image" content="https://i.ytimg.com/vi/<%= v %>/maxresdefault.jpg" />
   <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:site" content="@PoketaleBot" />
-  <meta name="twitter:creator" content="@PoketaleBot" />
-  <meta name="twitter:description" content="You wouldn't download a car... Right? welp i would — Download this video on PokeTube for 0$!" />
+  <meta name="twitter:description" content="You wouldn't download a car... Right? welp i would — Download this video on poke for 0$!" />
   <link rel="icon" href="/css/yt-ukraine.svg?v=7" />
   <link rel="manifest" href="/manifest.json" />
   <link rel="preconnect" href="https://fonts.poketube.fun" crossorigin />
@@ -57,7 +55,7 @@
       margin:0;
       color:var(--text);
       background:var(--bg);             /* solid fallback */
-      font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,"PokeTube Flex","Inter",sans-serif;
+      font-family:"PokeTube Flex",sans-serif;
       -webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;overflow-x:hidden
     }
     /* FIX: make gradient seamless on scroll with a fixed pseudo-layer.
@@ -97,7 +95,7 @@
     @media (max-width:840px){.panel-header{grid-template-columns:1fr}}
 
     .title{display:flex;flex-direction:column;gap:10px}
-    .title h1{margin:0;font-size:clamp(20px,3.2vw,28px);letter-spacing:.2px}
+    .title h1{margin:0;font-size:clamp(20px,3.2vw,28px);letter-spacing:.2px;font-weight: 800;font-stretch: ultra-expanded;}
     .subtitle{color:var(--muted);font-size:14px}
     .subtitle a{color:var(--link);text-decoration:none}
     .subtitle a:hover{text-decoration:underline}
@@ -107,7 +105,7 @@
 
     .formats{display:flex;flex-direction:column;gap:8px;padding:0 clamp(16px,3vw,24px) clamp(16px,3vw,24px)}
     .section{margin-top:8px;padding-top:8px}
-    .section h2{font-size:clamp(16px,2.5vw,18px);font-weight:800;margin:10px 0 8px;letter-spacing:.3px}
+    .section h2{font-size:clamp(16px,2.5vw,18px);font-weight:800;margin:10px 0 8px;letter-spacing:.3px;font-stretch:ultra-expanded}
     .section p.helper{margin:4px 0 12px;color:var(--muted);font-size:13px}
 
     .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(340px,1fr));gap:12px}
@@ -177,7 +175,7 @@
         <div class="title">
           <h1 id="download-title">Download Video / Music</h1>
           <div class="subtitle">ID: <code><%= v %></code> — <a href="/watch?v=<%= v %>">Open the watch page</a></div>
-          <p class="helper" style="margin:6px 0 0;color:var(--muted)">select a format to download :3 Muxed is audio+video and Video only needs a separate audio track if you plan to mux!</p>
+          <p class="helper" style="margin:6px 0 0;color:var(--muted);font-stretch:expanded;">select a format to download :3 Muxed is audio+video and Video only needs a separate audio track if you plan to mux!</p>
         </div>
         <figure class="thumb-wrap">
           <img class="thumb" src="/vi/<%= v %>/maxresdefault.jpg" alt="Thumbnail preview for the requested video" loading="eager" decoding="async"/>
@@ -294,7 +292,7 @@
         <div class="alert" role="status" aria-live="polite">if a download fails try another container (MP4 vs WEBM) or a different quality :D</div>
 
         <section class="mux-card" aria-labelledby="combine">
-          <h2 id="combine" style="margin:0 0 6px">How2 Combine video-only + audio-only (mux)</h2>
+<h2 id="combine" style="margin:0 0 6px;font-weight: 800;font-stretch: ultra-expanded;">How2 Combine video-only + audio-only (mux)</h2>
           <p class="helper">U can pick one of these methods!!</p>
 
           <div class="mux-rows">

@@ -1,8 +1,7 @@
 // in the beginning.... god made mrrprpmnaynayaynaynayanyuwuuuwmauwnwanwaumawp :p
 var _yt_player = videojs;
 var versionclient = "youtube.player.web_20250907_22_RC00"
-
- document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", () => {
     // video.js 8 init - source can be seen in https://poketube.fun/static/vjs.min.js or the vjs.min.js file
     const video = videojs('video', {
         controls: true,
@@ -259,7 +258,11 @@ var versionclient = "youtube.player.web_20250907_22_RC00"
         });
 
         // seeks: keep tight alignment
+        // fix: remember if video was actually playing before the seek, so we don't resume wrongly
+        let wasPlayingBeforeSeek = false; // fix: track pre-seek playback state
+
         video.on('seeking', () => {
+            wasPlayingBeforeSeek = !video.paused(); // fix: snapshot state
             audio.pause();
             clearSyncLoop();
             const vt = Number(video.currentTime());
@@ -269,8 +272,19 @@ var versionclient = "youtube.player.web_20250907_22_RC00"
         video.on('seeked', () => {
             const vt = Number(video.currentTime());
             if (Math.abs(vt - Number(audio.currentTime)) > 0.05) safeSetCT(audio, vt);
-            if (audioReady) audio.play()?.catch(()=>{});
-            if (!syncInterval) startSyncLoop();
+
+            // fix: only resume if the player was playing before the seek (prevents "audio-only" after seek)
+            if (wasPlayingBeforeSeek) {
+                // make both tracks actually play; call video.play() explicitly to avoid desync where only audio resumes
+                video.play()?.catch(()=>{});
+                if (audioReady) audio.play()?.catch(()=>{});
+                if (!syncInterval) startSyncLoop();
+            } else {
+                // if the user had paused before seeking, keep both paused and fully aligned
+                try { video.pause(); } catch {}
+                try { audio.pause(); } catch {}
+                clearSyncLoop();
+            }
         });
 
         // Detects when video or audio finishes buffering; nudge sync
@@ -371,7 +385,7 @@ var versionclient = "youtube.player.web_20250907_22_RC00"
 
             const keepTime = Number(video.currentTime());
 
-            // pause & clear sync while we refetch (quiet)
+            // pause & clear sync while we refetch 
             try { video.pause(); } catch {}
             try { audio.pause(); } catch {}
             clearSyncLoop();
@@ -567,6 +581,7 @@ var versionclient = "youtube.player.web_20250907_22_RC00"
         });
     }
 });
+
  
 // hai!! if ur asking why are they here - its for smth in the future!!!!!!
 

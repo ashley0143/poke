@@ -299,14 +299,15 @@
     </noscript>
   </div>
 <script>
-   
+ 
   (function(){
     const $  = (s, root=document) => root.querySelector(s);
     const $$ = (s, root=document) => Array.from(root.querySelectorAll(s));
 
-    const nojsSections = $('#nojs-sections');
-    const app          = $('#app');
-    const grid         = $('#grid');
+    const nojsSections = $('#nojs-sections');   // static, server-rendered fallback
+    const app          = $('#app');             // JS-enhanced container
+    const grid         = $('#grid');            // managed grid
+
     const searchInput  = $('#search');
     const clearBtn     = $('#clearSearch');
     const countBadge   = $('#count');
@@ -315,47 +316,43 @@
     const revealBtn = $('#revealUID');
     const uidMask   = $('.uid .mask');
 
-    // Pull all server-rendered cards (from the no-JS sections)
-    const originalCards = $$('.card', nojsSections).map(card => {
-      const name = (card.getAttribute('data-name') || '').toLowerCase();
+    // Grab cards from server-rendered markup (keeps noscript intact if JS bails)
+    const sourceRoot   = nojsSections || document;
+    const originalCards = $$('.card', sourceRoot).map(card => {
+      const name = (card.getAttribute('data-name') || '').toLowerCase().trim();
       return { name, el: card };
     });
 
-    // If there are no cards, keep the static sections; nothing to enhance.
-    if (originalCards.length === 0) return;
+    if (originalCards.length === 0) {
+      // Nothing to enhance; keep the server sections visible
+      return;
+    }
 
-    // Build managed copies so no-JS fallback remains intact if JS fails later.
-    const managedCards = originalCards.map(({ name, el }) => {
+    // Build managed copies (don’t move originals)
+    const managedCards = originalCards.map(({name, el})=>{
       const clone = el.cloneNode(true);
-      $$('.pill', clone).forEach(a => a.classList.add('focus-ring')); // keyboard focus ring
+      $$('.pill', clone).forEach(a => a.classList.add('focus-ring')); // ensure focus styling
       return { name, el: clone };
     });
 
-    // Hide static sections; show enhanced app
-    nojsSections.style.display = 'none';
+    // Hide static sections; show enhanced UI
+    if (nojsSections) nojsSections.style.display = 'none';
     app.style.display = '';
 
-    // Initial render
-    rerender();
-
-    // Search wiring
+    // Events
     searchInput.addEventListener('input', onFilter);
-    clearBtn.addEventListener('click', () => {
-      searchInput.value = '';
-      onFilter();
-      searchInput.focus();
-    });
+    clearBtn.addEventListener('click', () => { searchInput.value=''; onFilter(); searchInput.focus(); });
 
-    // UID reveal/hide toggle (for keyboards/touch)
-    revealBtn.addEventListener('click', () => {
+    // UID reveal for keyboards/touch (CSS hover still works)
+    revealBtn.addEventListener('click', ()=>{
       const pressed = revealBtn.getAttribute('aria-pressed') === 'true';
       revealBtn.setAttribute('aria-pressed', String(!pressed));
       uidMask.style.filter = pressed ? 'blur(7px)' : 'blur(0)';
       revealBtn.textContent = pressed ? 'Reveal' : 'Hide';
     });
 
-    // Confirm on unsubscribe
-    app.addEventListener('click', (e) => {
+    // Confirm before unsubscribing (event delegation)
+    app.addEventListener('click', (e)=>{
       const a = e.target.closest('a[data-unsub]');
       if (!a) return;
       const card = e.target.closest('.card');
@@ -363,20 +360,24 @@
       if (!confirm('Unsubscribe from "' + name + '"?')) e.preventDefault();
     });
 
-    // Warm image cache for browsers without native lazy-loading
+    // Warm image cache if native lazy-loading not supported
     if (!('loading' in HTMLImageElement.prototype)) {
-      managedCards.forEach(({ el }) => {
+      managedCards.forEach(({el})=>{
         const img = el.querySelector('img');
         if (img) { const i = new Image(); i.src = img.src; }
       });
     }
 
-    // ----- State & functions -----
+    // ---------------- Logic ----------------
     let currentTerm = '';
 
     function onFilter(){
-      currentTerm = (searchInput.value || '').trim().toLowerCase();
+      currentTerm = (searchInput.value || '').toLowerCase().trim();
       rerender();
+    }
+
+    function sortAZ(arr){
+      return arr.slice().sort((a,b)=> a.name.localeCompare(b.name,'en',{sensitivity:'base'}));
     }
 
     function filterCards(arr){
@@ -386,25 +387,34 @@
 
     function rerender(){
       const filtered = filterCards(managedCards);
-      updateCount(filtered.length);
+      const sorted   = sortAZ(filtered);
+      updateCount(sorted.length);
 
-      grid.innerHTML = '';
-      if (filtered.length === 0) {
+      if (sorted.length === 0){
         emptyState.hidden = false;
+        grid.innerHTML = '';
         return;
       }
       emptyState.hidden = true;
+      renderGrid(sorted);
+    }
 
+    function renderGrid(items){
+      grid.innerHTML = '';
       const frag = document.createDocumentFragment();
-      filtered.forEach(({ el }) => frag.appendChild(el.cloneNode(true)));
+      items.forEach(({el}) => frag.appendChild(el.cloneNode(true)));
       grid.appendChild(frag);
     }
 
     function updateCount(n){
       countBadge.textContent = n + (n === 1 ? ' subscription' : ' subscriptions');
     }
+
+    // Initial paint (sorted A→Z by default)
+    rerender();
   })();
 </script>
+
 
 </body>
 </html>

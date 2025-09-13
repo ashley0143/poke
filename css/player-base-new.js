@@ -43,6 +43,34 @@ document.addEventListener("DOMContentLoaded", () => {
     const MICRO_DRIFT = 0.05;
     const SYNC_INTERVAL_MS = 250;
 
+    // fix: helpers to decide if a given time is playable for a media element (buffered or sufficiently ready)
+    const EPS = 0.15;
+    function timeInBuffered(media, t) {
+        try {
+            const br = media.buffered;
+            if (!br || br.length === 0 || !isFinite(t)) return false;
+            for (let i = 0; i < br.length; i++) {
+                const s = br.start(i) - EPS, e = br.end(i) + EPS;
+                if (t >= s && t <= e) return true;
+            }
+        } catch {}
+        return false;
+    }
+    function canPlayAt(media, t) {
+        try {
+            // readyState: 0-NOTHING,1-METADATA,2-CURRENT,3-FUTURE,4-ENOUGH
+            const rs = Number(media.readyState || 0);
+            if (!isFinite(t)) return false;
+            // fast path if we clearly have forward data
+            if (rs >= 3) return true;
+            // otherwise, require that moment to be inside buffered
+            return timeInBuffered(media, t);
+        } catch { return false; }
+    }
+    function bothPlayableAt(t) {
+        return canPlayAt(videoEl, t) && canPlayAt(audio, t);
+    }
+
     // utility: safe currentTime set (avoid DOMExceptions before ready)
     function safeSetCT(media, t) {
         try {
@@ -98,10 +126,17 @@ document.addEventListener("DOMContentLoaded", () => {
             if (isFinite(t) && Math.abs(Number(audio.currentTime) - t) > 0.1) {
                 safeSetCT(audio, t);
             }
-            // play both, ignore promise rejections to remain invisible
-            video.play()?.catch(()=>{});
-            audio.play()?.catch(()=>{});
-            startSyncLoop();
+            // fix: only kick off playback if the moment is actually playable for BOTH
+            if (bothPlayableAt(t)) {
+                video.play()?.catch(()=>{});
+                audio.play()?.catch(()=>{});
+                startSyncLoop();
+            } else {
+                // not playable yet → keep things aligned and idle
+                try { video.pause(); } catch {}
+                try { audio.pause(); } catch {}
+                clearSyncLoop();
+            }
             setupMediaSession();
         }
     }
@@ -273,14 +308,12 @@ document.addEventListener("DOMContentLoaded", () => {
             const vt = Number(video.currentTime());
             if (Math.abs(vt - Number(audio.currentTime)) > 0.05) safeSetCT(audio, vt);
 
-            // fix: only resume if the player was playing before the seek (prevents "audio-only" after seek)
-            if (wasPlayingBeforeSeek) {
-                // make both tracks actually play; call video.play() explicitly to avoid desync where only audio resumes
+            // fix: after a seek, auto-play both only if that instant is playable; otherwise keep both paused
+            if (wasPlayingBeforeSeek && bothPlayableAt(vt)) {
                 video.play()?.catch(()=>{});
                 if (audioReady) audio.play()?.catch(()=>{});
                 if (!syncInterval) startSyncLoop();
             } else {
-                // if the user had paused before seeking, keep both paused and fully aligned
                 try { video.pause(); } catch {}
                 try { audio.pause(); } catch {}
                 clearSyncLoop();
@@ -409,9 +442,16 @@ document.addEventListener("DOMContentLoaded", () => {
                             safeSetCT(audio, keepTime);
                         }
                     } catch {}
-                    video.play()?.catch(()=>{});
-                    if (audioReady) audio.play()?.catch(()=>{});
-                    if (!syncInterval) startSyncLoop();
+                    // fix: after refresh, only spin up if that point can actually play now
+                    if (bothPlayableAt(Number(video.currentTime()))) {
+                        video.play()?.catch(()=>{});
+                        if (audioReady) audio.play()?.catch(()=>{});
+                        if (!syncInterval) startSyncLoop();
+                    } else {
+                        try { video.pause(); } catch {}
+                        try { audio.pause(); } catch {}
+                        clearSyncLoop();
+                    }
                 });
             }, delay);
         }
@@ -556,10 +596,17 @@ document.addEventListener("DOMContentLoaded", () => {
                         audio.removeEventListener('loadeddata', relinkOnce);
                         try {
                             if (isFinite(keep)) safeSetCT(audio, keep);
-                            audio.play()?.catch(()=>{});
-                            if (!syncInterval) startSyncLoop();
-                            audioRetryCount = 0;
-                            audioStartWatch();
+                            // fix: only spin up audio again if both sides can actually play now
+                            const tNow = Number(video.currentTime());
+                            if (bothPlayableAt(tNow)) {
+                                audio.play()?.catch(()=>{});
+                                if (!syncInterval) startSyncLoop();
+                                audioRetryCount = 0;
+                                audioStartWatch();
+                            } else {
+                                try { audio.pause(); } catch {}
+                                clearSyncLoop();
+                            }
                         } catch {}
                     }, { once: true });
                 }, delay);
@@ -581,6 +628,7 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 });
+
 
  
 // hai!! if ur asking why are they here - its for smth in the future!!!!!!

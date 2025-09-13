@@ -149,7 +149,7 @@
     .card:hover{ transform: translateY(-2px); border-color:#ffffff26 }
 
     .avatar{
-      width:88px; height:88px; border-radius:12px; object-fit:cover; background:#00000026;
+      width:88px; height:88px; border-radius:50%; object-fit:cover; background:#00000026;
     }
     .name{
       font-weight:700; text-align:center; max-width:100%;
@@ -251,19 +251,9 @@
         <button id="sortAZ"  class="toggle focus-ring" aria-pressed="true"  title="Sort A→Z">A→Z</button>
         <button id="sortZA"  class="toggle focus-ring" aria-pressed="false" title="Sort Z→A">Z→A</button>
       </div>
-
-      <div class="group" role="group" aria-label="Layout">
-        <button id="viewGrid" class="toggle focus-ring" aria-pressed="true"  title="Grid view">Grid</button>
-        <button id="viewList" class="toggle focus-ring" aria-pressed="false" title="List view">List</button>
-      </div>
+ 
     </div>
-
-    <!-- A–Z jump links (works great without JS) -->
-    <nav class="az-nav" aria-label="Jump to letter">
-      <% letters.forEach(function(L){ %>
-        <a class="focus-ring" href="#sec-<%= L %>" title="Jump to <%= L %>"><%= L %></a>
-      <% }) %>
-    </nav>
+ 
 
     <!-- No-JS fallback: show all groups as sections, already server-sorted -->
     <div id="nojs-sections">
@@ -275,7 +265,7 @@
               <img class="avatar" loading="lazy" decoding="async"
                    src="<%= c.avatar %>"
                    alt="Avatar of <%= c.channelName %>"
-                   onerror="this.src='https://i.imgur.com/3ZQ3Z4R.png'">
+                   >
               <div class="name" title="<%= c.channelName %>"><%= c.channelName %></div>
               <div class="row" role="group" aria-label="Actions">
                 <a class="pill pill--unsub focus-ring" href="/api/remove-channel-sub?ID=<%= encodeURIComponent(userid) %>&channelID=<%= channelID %>" data-unsub data-cid="<%= channelID %>" aria-label="Unsubscribe from <%= c.channelName %>">unsub</a>

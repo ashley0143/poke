@@ -298,203 +298,113 @@
       </p>
     </noscript>
   </div>
+<script>
+   
+  (function(){
+    const $  = (s, root=document) => root.querySelector(s);
+    const $$ = (s, root=document) => Array.from(root.querySelectorAll(s));
 
-  <script>
-    /* -----------------------------------------------------
-        Notes:
-       - We read cards from the server-rendered DOM, clone them
-         into a managed container, then hide the static sections.
-        ----------------------------------------------------- */
+    const nojsSections = $('#nojs-sections');
+    const app          = $('#app');
+    const grid         = $('#grid');
+    const searchInput  = $('#search');
+    const clearBtn     = $('#clearSearch');
+    const countBadge   = $('#count');
+    const emptyState   = $('#empty');
 
-    (function(){
-      const $  = (s, root=document) => root.querySelector(s);
-      const $$ = (s, root=document) => Array.from(root.querySelectorAll(s));
+    const revealBtn = $('#revealUID');
+    const uidMask   = $('.uid .mask');
 
-      const nojsSections = $('#nojs-sections');
-      const app          = $('#app');
-      const grid         = $('#grid');
-      const list         = $('#list');
-      const searchInput  = $('#search');
-      const clearBtn     = $('#clearSearch');
-      const countBadge   = $('#count');
-      const emptyState   = $('#empty');
+    // Pull all server-rendered cards (from the no-JS sections)
+    const originalCards = $$('.card', nojsSections).map(card => {
+      const name = (card.getAttribute('data-name') || '').toLowerCase();
+      return { name, el: card };
+    });
 
-      const btnAZ   = $('#sortAZ');
-      const btnZA   = $('#sortZA');
-      const btnGrid = $('#viewGrid');
-      const btnList = $('#viewList');
+    // If there are no cards, keep the static sections; nothing to enhance.
+    if (originalCards.length === 0) return;
 
-      const revealBtn = $('#revealUID');
-      const uidMask   = $('.uid .mask');
+    // Build managed copies so no-JS fallback remains intact if JS fails later.
+    const managedCards = originalCards.map(({ name, el }) => {
+      const clone = el.cloneNode(true);
+      $$('.pill', clone).forEach(a => a.classList.add('focus-ring')); // keyboard focus ring
+      return { name, el: clone };
+    });
 
-      // Extract card data from the existing server markup (first section only is enough; all sections have .card)
-      const originalCards = $$('.card', nojsSections).map(card => {
-        const name = (card.getAttribute('data-name') || '').toLowerCase();
-        return { name, el: card };
+    // Hide static sections; show enhanced app
+    nojsSections.style.display = 'none';
+    app.style.display = '';
+
+    // Initial render
+    rerender();
+
+    // Search wiring
+    searchInput.addEventListener('input', onFilter);
+    clearBtn.addEventListener('click', () => {
+      searchInput.value = '';
+      onFilter();
+      searchInput.focus();
+    });
+
+    // UID reveal/hide toggle (for keyboards/touch)
+    revealBtn.addEventListener('click', () => {
+      const pressed = revealBtn.getAttribute('aria-pressed') === 'true';
+      revealBtn.setAttribute('aria-pressed', String(!pressed));
+      uidMask.style.filter = pressed ? 'blur(7px)' : 'blur(0)';
+      revealBtn.textContent = pressed ? 'Reveal' : 'Hide';
+    });
+
+    // Confirm on unsubscribe
+    app.addEventListener('click', (e) => {
+      const a = e.target.closest('a[data-unsub]');
+      if (!a) return;
+      const card = e.target.closest('.card');
+      const name = card ? card.querySelector('.name')?.textContent?.trim() : 'this channel';
+      if (!confirm('Unsubscribe from "' + name + '"?')) e.preventDefault();
+    });
+
+    // Warm image cache for browsers without native lazy-loading
+    if (!('loading' in HTMLImageElement.prototype)) {
+      managedCards.forEach(({ el }) => {
+        const img = el.querySelector('img');
+        if (img) { const i = new Image(); i.src = img.src; }
       });
+    }
 
-      if(originalCards.length === 0){
-        // Nothing to enhance; keep the server sections visible
+    // ----- State & functions -----
+    let currentTerm = '';
+
+    function onFilter(){
+      currentTerm = (searchInput.value || '').trim().toLowerCase();
+      rerender();
+    }
+
+    function filterCards(arr){
+      if (!currentTerm) return arr;
+      return arr.filter(c => c.name.includes(currentTerm));
+    }
+
+    function rerender(){
+      const filtered = filterCards(managedCards);
+      updateCount(filtered.length);
+
+      grid.innerHTML = '';
+      if (filtered.length === 0) {
+        emptyState.hidden = false;
         return;
       }
+      emptyState.hidden = true;
 
-      // Build managed copies (avoid moving originals to keep noscript usable if JS fails mid-way)
-      const managedCards = originalCards.map(({name, el})=>{
-        const clone = el.cloneNode(true);
-        // ensure links/buttons are keyboard-focusable
-        $$('.pill', clone).forEach(a => a.classList.add('focus-ring'));
-        return { name, el: clone };
-      });
+      const frag = document.createDocumentFragment();
+      filtered.forEach(({ el }) => frag.appendChild(el.cloneNode(true)));
+      grid.appendChild(frag);
+    }
 
-      // Hide static sections; show app containers
-      nojsSections.style.display = 'none';
-      app.style.display = '';
+    function updateCount(n){
+      countBadge.textContent = n + (n === 1 ? ' subscription' : ' subscriptions');
+    }
+  })();
+</script>
 
-      // Initial render into grid
-      renderGrid(managedCards);
-
-      // Event wiring
-      searchInput.addEventListener('input', onFilter);
-      clearBtn.addEventListener('click', () => { searchInput.value=''; onFilter(); searchInput.focus(); });
-
-      btnAZ.addEventListener('click', ()=>setSort('az'));
-      btnZA.addEventListener('click', ()=>setSort('za'));
-      btnGrid.addEventListener('click', ()=>setView('grid'));
-      btnList.addEventListener('click', ()=>setView('list'));
-
-      // Reveal UID for keyboards/touch: toggles blur programmatically
-      revealBtn.addEventListener('click', ()=>{
-        const pressed = revealBtn.getAttribute('aria-pressed') === 'true';
-        revealBtn.setAttribute('aria-pressed', String(!pressed));
-        uidMask.style.filter = pressed ? 'blur(7px)' : 'blur(0)';
-        revealBtn.textContent = pressed ? 'Reveal' : 'Hide';
-      });
-
-      // Delegate confirm() on unsub clicks
-      app.addEventListener('click', (e)=>{
-        const a = e.target.closest('a[data-unsub]');
-        if(!a) return;
-        const card = e.target.closest('.card');
-        const name = card ? card.querySelector('.name')?.textContent?.trim() : 'this channel';
-        if(!confirm('Unsubscribe from "' + name + '"?')) e.preventDefault();
-      });
-
-      // For browsers without native lazy-loading, manually warm cache
-      if (!('loading' in HTMLImageElement.prototype)) {
-        managedCards.forEach(({el})=>{
-          const img = el.querySelector('img');
-          if(img){ const i = new Image(); i.src = img.src; }
-        });
-      }
-
-      // ---------------- Functions ----------------
-      let currentView = 'grid'; // 'grid' | 'list'
-      let currentSort = 'az';   // 'az'   | 'za'
-      let currentTerm = '';
-
-      function setView(kind){
-        currentView = kind;
-        btnGrid.setAttribute('aria-pressed', String(kind === 'grid'));
-        btnList.setAttribute('aria-pressed', String(kind === 'list'));
-        grid.style.display = (kind === 'grid') ? '' : 'none';
-        list.style.display = (kind === 'list') ? '' : 'none';
-        rerender();
-      }
-
-      function setSort(kind){
-        currentSort = kind;
-        btnAZ.setAttribute('aria-pressed', String(kind === 'az'));
-        btnZA.setAttribute('aria-pressed', String(kind === 'za'));
-        rerender();
-      }
-
-      function onFilter(){
-        currentTerm = (searchInput.value || '').trim().toLowerCase();
-        rerender();
-      }
-
-      function sortCards(arr){
-        const dir = currentSort === 'az' ? 1 : -1;
-        return arr.slice().sort((a,b)=> a.name.localeCompare(b.name,'en',{sensitivity:'base'}) * dir);
-      }
-
-      function filterCards(arr){
-        if(!currentTerm) return arr;
-        return arr.filter(c => c.name.includes(currentTerm));
-      }
-
-      function rerender(){
-        const filtered = filterCards(managedCards);
-        const sorted   = sortCards(filtered);
-
-        updateCount(sorted.length);
-
-        if(sorted.length === 0){
-          emptyState.hidden = false;
-          grid.innerHTML = '';
-          list.innerHTML = '';
-          return;
-        } else {
-          emptyState.hidden = true;
-        }
-
-        if(currentView === 'grid') renderGrid(sorted);
-        else renderList(sorted);
-      }
-
-      function renderGrid(items){
-        grid.innerHTML = '';
-        const frag = document.createDocumentFragment();
-        items.forEach(({el}) => frag.appendChild(el.cloneNode(true)));
-        grid.appendChild(frag);
-        list.innerHTML = '';
-      }
-
-      function renderList(items){
-        list.innerHTML = '';
-        const frag = document.createDocumentFragment();
-        items.forEach(({el})=>{
-          // Convert card to a compact row for list view
-          const row = document.createElement('div');
-          row.className = 'card';
-          row.style.flexDirection = 'row';
-          row.style.alignItems = 'center';
-          row.style.justifyContent = 'space-between';
-          row.style.gap = '12px';
-
-          const left = document.createElement('div');
-          left.style.display = 'flex';
-          left.style.alignItems = 'center';
-          left.style.gap = '10px';
-
-          const img = el.querySelector('img').cloneNode(true);
-          img.style.width = '40px'; img.style.height = '40px'; img.style.borderRadius = '8px';
-
-          const nm  = document.createElement('div');
-          nm.className = 'name';
-          nm.textContent = el.querySelector('.name')?.textContent || '';
-
-          left.appendChild(img);
-          left.appendChild(nm);
-
-          const actions = el.querySelector('.row').cloneNode(true);
-          row.appendChild(left);
-          row.appendChild(actions);
-
-          frag.appendChild(row);
-        });
-        list.appendChild(frag);
-        grid.innerHTML = '';
-      }
-
-      function updateCount(n){
-        countBadge.textContent = n + (n === 1 ? ' subscription' : ' subscriptions');
-      }
-
-      // Initial state
-      setView('grid');
-      setSort('az');
-    })();
-  </script>
 </body>
 </html>

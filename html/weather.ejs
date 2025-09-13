@@ -39,6 +39,14 @@
   html,body{height:100%}
   body{margin:0;background:radial-gradient(1200px 800px at 20% 10%,#0c1528,var(--bg));color:var(--fg);font:15px/1.4 ui-sans-serif,system-ui,Segoe UI,Roboto,Inter,Arial}
 
+@font-face {
+  src: url("https://p.poketube.fun/https://cdn.glitch.global/43b6691a-c8db-41d4-921c-8cf6aa0d9108/robotoflex.ttf?v=16683434286881");
+  font-family: "PokeTube Flex";
+  font-style: normal;
+  font-stretch: 1% 800%;
+  font-display: swap;
+}
+
   /* Improved, stable navbar (no weird pill stretching) */
   header{position:sticky;top:0;z-index:40}
   .navwrap{backdrop-filter:saturate(1.4) blur(10px);background:linear-gradient(180deg,rgba(0,0,0,.35),rgba(0,0,0,.15));border-bottom:1px solid var(--ring)}
@@ -46,8 +54,7 @@
   .top{display:flex;align-items:center;gap:12px;justify-content:space-between;min-height:56px}
   .brand{display:flex;align-items:center;gap:10px}
   .brand .logo{width:36px;height:36px;border-radius:12px;background:linear-gradient(135deg,#00d2ff,#3a7bd5);display:grid;place-items:center;box-shadow:0 6px 20px #00d2ff44;flex:0 0 36px}
-  /* removed brand text on purpose */
-  .chip{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--ring);border-radius:999px;padding:6px 10px;background:linear-gradient(180deg,transparent,rgba(255,255,255,.03));white-space:nowrap;max-width:58vw;overflow:hidden;text-overflow:ellipsis}
+   .chip{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--ring);border-radius:999px;padding:6px 10px;background:linear-gradient(180deg,transparent,rgba(255,255,255,.03));white-space:nowrap;max-width:58vw;overflow:hidden;text-overflow:ellipsis}
   .controls{display:flex;gap:8px;flex-wrap:nowrap}
   button,.btn{border:1px solid var(--ring);background:linear-gradient(180deg,transparent,rgba(255,255,255,.03));color:var(--fg);padding:10px 12px;border-radius:12px;cursor:pointer;white-space:nowrap}
   button:active{transform:translateY(1px)}

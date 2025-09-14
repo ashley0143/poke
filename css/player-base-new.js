@@ -990,6 +990,11 @@ saa.innerHTML = `
   border-radius: 16px;
 }
 
+/* poster border radius to 16px */
+.vjs-poster img {
+  border-radius: 16px;
+}
+
 /* control bar: clean baseline */
 .vjs-control-bar{
   background:transparent!important;border:none!important;box-shadow:none!important;

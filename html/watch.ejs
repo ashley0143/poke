@@ -2616,7 +2616,7 @@ window.addEventListener("unload", cleanup)
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <link href=/css/yt-ukraine.svg?v=6 rel=icon>
 <title> <%=VideoData.title%> | PokeTube Mobile</title>
- <link href="/css/mobile.css?v=2" rel=stylesheet>
+ <link href="/css/mobile.css?v=24" rel=stylesheet>
  <link href="/css/app.main.css?v=44600" rel=stylesheet>
     <link href="<%- proxyurl %>/https://unpkg.com/ionicons@4.5.10-0/dist/css/ionicons.css" rel=stylesheet>
 
@@ -3015,7 +3015,7 @@ font-size: 13px;margin:0;padding:0;white-space: nowrap;
 
   
   <%  if (Array.isArray( inv.comments)) { %> 
-<div style="padding: 0em;background: #0009;border-radius: 16px;align-self: center;align-items: center;margin-left: 8px;margin-right: 12px;padding-bottom: 0;padding-top:1em;margin-bottom: 13px;">
+<div style="padding: 0em;background: #0009;border-radius: 16px;align-self: center;align-items: center;margin-left: 8px;margin-right: 12px;padding-bottom: 0;padding-top:1em;margin-bottom: 13px;margin-top: -4px;">
             <div class="video-title" style="font-family:'PokeTube flex';font-weight:1000;white-space:yes;margin-top: -0.5em;margin-left: 0.4em;">Comments - <%- convert(inv.commentCount) %>
                     <a id="language-button" href="#comments-container" style="float: right;margin-right: 0.5em;" class="switch">
 <i class="fa-thin fa-chevron-down"></i>
@@ -3029,7 +3029,7 @@ font-size: 13px;margin:0;padding:0;white-space: nowrap;
                      
                      <div class="thumb">
 				<a href="/channel?id=<%-  inv.comments[0].authorId%>" class="avatar" style="width: 40px;height: 40px;margin: 4px;">
-					<img src="https://p.poketube.fun/<%=  inv.comments[0].authorThumbnails[0].url %>" style="width: 24px;height: 24px;margin-right: inherit;"  >
+					<img src="<%- proxyurl %>/<%=  inv.comments[0].authorThumbnails[0].url %>" style="width: 24px;height: 24px;margin-right: inherit;"  >
                      </a>
             </div>
                       

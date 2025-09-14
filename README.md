@@ -82,10 +82,12 @@ the main parts of the project is Under GPL-3.0-OR-LATER :3
 
 see the each sections LICENSE tho!! 
 
-Copyleft 2021-202x Poke Project, mostly ashley0143 
+Copyleft 2021-202x Poke Project of poke initative, mostly ashley0143 
 Trans rights!
 
-poke does not support the ["source first"](https://sourcefirst.com/) or ["open source"](https://opensource.org) movement :3 
+https://initiative.poketube.fun/
+
+poke proudly does not support the ["source first"](https://sourcefirst.com/) or ["open source"](https://opensource.org) movement :3 
 
  we support the free software movement (fsf.org)
 
@@ -95,12 +97,13 @@ poke does not support the ["source first"](https://sourcefirst.com/) or ["open s
 [Privacy Policy](https://poketube.fun/privacy)
 
 TL;DR: we dont collect or share your personal info, that's it lol.
+<hr>
 
-  <img align="center" width="65" height="65" src="https://codeberg.org/ashley/pages/raw/branch/main/amd.jpeg"><br>
-   poketube.fun is proudly powered by amd! </p> <br>
+  <a href="https://www.amd.com/en/products/processors/server/epyc/7003-series/amd-epyc-7543.html"> <img align="center" width="65" height="65" src="https://codeberg.org/ashley/pages/raw/branch/main/amd.jpeg"> </a> <a href="https://ubuntu.com/server"><img  align="center" width="65" height="65"  src="https://res.cloudinary.com/canonical/image/fetch/f_auto,q_auto,fl_sanitize,w_317/https%3A%2F%2Fassets.ubuntu.com%2Fv1%2Ff76dd871-ubuntu-certified.png"></a> <br>
 
+   poketube.fun is proudly powered by amd and ubuntu servers! powered by skrime hosting! </p> <br>
 <div align="center">
-  <p>Parts of Poke were hosted on Glitch.com from <i>2020 to 2023</i>.</p>
+  <p>Parts of Poke were hosted on Glitch.com from <i>2021 to 2023</i>.</p>
   <a href="https://glitch.com/">
     <img src="https://cdn.glitch.global/d68d17bb-f2c0-4bc3-993f-50902734f652/glitch-fastly-lock-up.svg">
   </a>

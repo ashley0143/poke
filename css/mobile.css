@@ -1,3 +1,4 @@
+
 body {
  max-width:100%;
  overflow-x:hidden;
@@ -385,7 +386,9 @@ body {
  --div-border-color:#7c44a0;
  --div-prim-bg:#1c1c1c;
  --div-second-bg:#1a1a1a;
- --div-transparent-bg:#0009
+ --div-transparent-bg:#0009;
+ --margin-top-desc: -22.9em;
+
 }
 @font-face {
  font-family:"Ginto Nord";
@@ -510,7 +513,7 @@ body {
 }
 #desc-container {
  position:absolute;
- margin-top:-20.9em;
+ margin-top:var(--margin-top-desc);
  left:0;
  width:100%;
  height:100%
@@ -617,7 +620,7 @@ body {
 }
 #comments-container {
  position:absolute;
- margin-top:-20.9em;
+ margin-top:var(--margin-top-desc);
  left:0;
  width:100%;
  height:100%

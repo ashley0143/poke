@@ -985,6 +985,11 @@ saa.innerHTML = `
 /* move the whole controls panel up a bit so buttons fit */
 .video-js .vjs-control-bar{bottom:12px!important}
 
+/* poster border radius to 16px */
+.vjs-poster {
+  border-radius: 16px;
+}
+
 /* control bar: clean baseline */
 .vjs-control-bar{
   background:transparent!important;border:none!important;box-shadow:none!important;

@@ -3064,7 +3064,40 @@ font-size: 13px;margin:0;padding:0;white-space: nowrap;
                                  
 
   
+  <%  if (Array.isArray( inv.comments)) { %> 
+<div style="padding: 0em;background: #0009;border-radius: 16px;align-self: center;align-items: center;margin-left: 8px;margin-right: 12px;padding-bottom: 0;padding-top:1em">
+            <div class="video-title" style="font-family:'PokeTube flex';font-weight:1000;white-space:yes;margin-top: -0.5em;margin-left: 0.4em;">Comments - <%- convert(inv.commentCount) %>
+                    <a id="language-button" href="#comments-container" style="float: right;margin-right: 0.5em;" class="switch">
+<i class="fa-thin fa-chevron-down"></i>
+</a> 
+                                                       </div> 
+           <div class="" style="padding: 0em !important;margin-left: 0.3em;">
 
+<div class="desc" style="display: flex;font-size: small;padding: 0;margin: -10px;margin-left: -0.5em">
+                   <h5 style="display: flex;margin-top: 7px;padding-top: 10px;">
+                     <div class="thumb">
+                     
+                     <div class="thumb">
+				<a href="/channel?id=<%-  inv.comments[0].authorId%>" class="avatar" style="width: 40px;height: 40px;margin: 4px;">
+					<img src="https://p.poketube.fun/<%=  inv.comments[0].authorThumbnails[1].url %>" style="width: 24px;height: 24px;margin-right: inherit;"  >
+                     </a>
+            </div>
+                      
+                           
+
+              </h5>
+              <p class="comment" style="font-weight: bold;color: #fff; word-wrap: break-word; overflow: hidden; text-overflow: ellipsis; display: -webkit-box;  -webkit-line-clamp: 2; line-clamp: 2; -webkit-box-orient: vertical; text-overflow: ellipsis;  max-width: 50em;align-self:center;">
+                <%-  inv.comments[0].contentHtml %>  
+               </p>
+            </div>
+    
+      </div>
+                          
+          </div>
+
+ 
+ 
+                                                                                               <% } %>   
 
 <div id="desc-container">
   

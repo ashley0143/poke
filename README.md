@@ -22,7 +22,7 @@
   </a>
 </div>
 
-![Preview](./css/README_Preview.png)
+![Preview](https://poketube.fun/static/poke-player-landing-v2.webp)
 
 ## Welcome!
 
@@ -48,8 +48,7 @@ Poke uses OpenH264, which is free software! No non-free components included :3 V
    - Debian/Ubuntu GNU/linux: `$ sudo apt install git make gcc libcurl4-openssl-dev nodejs npm python g++`
    - Alpine Linux (non-gnu): `$ apk add git nodejs npm python make gcc g++ libcurl curl-dev`
      
-     (we dont know if it works on non-gnu systems)
-
+ 
 2. **Clone Repo**
    - Codeberg: `$ git clone https://codeberg.org/ashley/poke.git`
    - GitHub: `$ git clone https://github.com/ashley0143/poke.git`
@@ -96,17 +95,6 @@ poke proudly does not support the ["source first"](https://sourcefirst.com/) or 
 
 [Privacy Policy](https://poketube.fun/privacy)
 
-TL;DR: we dont collect or share your personal info, that's it lol.
+TL;DR: we dont collect or share your personal info that's it lol
 <hr>
-
-  <a href="https://www.amd.com/en/products/processors/server/epyc/7003-series/amd-epyc-7543.html"> <img align="center" width="65" height="65" src="https://codeberg.org/ashley/pages/raw/branch/main/amd.jpeg"> </a> <a href="https://ubuntu.com/server"><img  align="center" width="65" height="65"  src="https://res.cloudinary.com/canonical/image/fetch/f_auto,q_auto,fl_sanitize,w_317/https%3A%2F%2Fassets.ubuntu.com%2Fv1%2Ff76dd871-ubuntu-certified.png"></a> <br>
-
-   poketube.fun is proudly powered by amd and ubuntu servers! powered by skrime hosting! </p> <br>
-<div align="center">
-  <p>Parts of Poke were hosted on Glitch.com from <i>2021 to 2023</i>.</p>
-  <a href="https://glitch.com/">
-    <img src="https://cdn.glitch.global/d68d17bb-f2c0-4bc3-993f-50902734f652/glitch-fastly-lock-up.svg">
-  </a>
-  <br><hr>
-
-</div>
+<p align="center"> <a href="https://www.amd.com/en/products/processors/server/epyc/7003-series/amd-epyc-7543.html"> <img width="65" height="65" src="https://codeberg.org/ashley/pages/raw/branch/main/amd.jpeg" alt="AMD EPYC"> </a> <a href="https://ubuntu.com/server"> <img width="65" height="65" src="https://res.cloudinary.com/canonical/image/fetch/f_auto,q_auto,fl_sanitize,w_317/https%3A%2F%2Fassets.ubuntu.com%2Fv1%2Ff76dd871-ubuntu-certified.png" alt="Ubuntu Certified"> </a> </p> <p align="center"> <small>Poke is proudly powered by AMD + Ubuntu servers!!!!!!!!!! (via Skrime Hosting). Parts of Poke ran on Glitch.com from <i>2021–2023</i>.</small> </p> <p align="center"> <a href="https://glitch.com/"> <img src="https://cdn.glitch.global/d68d17bb-f2c0-4bc3-993f-50902734f652/glitch-fastly-lock-up.svg" alt="Glitch logo"> </a> </p>

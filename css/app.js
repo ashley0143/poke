@@ -70,13 +70,35 @@ document.addEventListener('DOMContentLoaded', function() {
   window.addEventListener('resize', lazyLoadBg);
 });
 
-const htmlContent = `<!DOCTYPE html><html><head><title>Browser is not supported :p</title><style>body{margin-left:auto;margin-right:auto;display:flex;max-width:43em;font-family:sans-serif;background-color:white;}</style></head><body><h1>Heyo :3</h1><br><p style="margin-top:4em;margin-left:-7.4em;">hoi - poke does and <b>will not work</b> on Internet Explorer :p<br>if u wanna use poke try using Firefox (firefox.com) or Chromium :3<br>love u :3</p></body></html>`;
+(function () {
+  var isIE = !!document.documentMode || /MSIE \d|Trident.*rv:/.test(navigator.userAgent);
+  if (!isIE) return;
 
- if (/MSIE \d|Trident.*rv:/.test(navigator.userAgent)) {
-     document.open();
-    document.write(htmlContent);
+  var html = '<!DOCTYPE html><html><head>' +
+    '<meta charset="utf-8">' +
+    '<title>Browser Not Supported</title>' +
+    '<style>' +
+    'body{margin:0;font-family:Arial,Helvetica,sans-serif;background:#fefefe;color:#222;text-align:center;padding:3em;}' +
+    'h1{font-size:2em;margin-bottom:0.5em;color:#d33;}' +
+    'p{font-size:1em;line-height:1.5em;margin:1em auto;max-width:30em;}' +
+    'b{color:#000;}' +
+    'a{color:#0645ad;text-decoration:none;}' +
+    'a:hover{text-decoration:underline;}' +
+    '</style></head><body>' +
+    '<h1>Heyo :3</h1>' +
+    '<p>hoi — poke does and <b>will not work</b> on Internet Explorer.<br>' +
+    'If u wanna use poke, try <a href="https://www.mozilla.org/firefox/new/">Firefox</a> or <a href="https://www.google.com/chrome/">Chromium</a> instead.<br>' +
+    'love u :3</p>' +
+    '</body></html>';
+
+  try {
+    document.open('text/html','replace');
+    document.write(html);
     document.close();
-}
+  } catch (e) {
+    document.documentElement.innerHTML = html;
+  }
+})();
 
 // Fade in elements on scroll or fullscreen change
 function fadeInElements() {

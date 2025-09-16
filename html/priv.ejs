@@ -324,9 +324,8 @@
   <header class="site" role="banner" aria-label="Site header">
     <div class="site-row">
       <a class="brand" href="/" aria-label="Poke home">
-        <img src="/css/logo.svg?v=5" alt="Poke logo">
+        <img src="/css/logo-poke.svg?v=5" alt="Poke logo">
       </a>
-      <!-- No-JS visible search fallback (also visible if JS disabled) -->
       <noscript>
         <form action="/search" method="GET" style="margin-left:auto">
           <input type="search" name="query" placeholder="Search…" aria-label="Search Poke"
@@ -417,7 +416,7 @@
           <span class="when">September 17, 2025</span>
         </h3>
         <p style="margin-top:6px">
-          We clarified how third-party requests work Highlights: !
+          We clarified how third-party requests work waaay better! Highlights: 
         </p>
         <ul>
           <li><strong>Translate page:</strong> Requests are <em>proxied via our backend</em>; your browser does not contact SimplyTranslate.org or Google directly. We pass only <code>from</code>, <code>to</code>, and <code>text</code> to the upstream. See code references in the section.</li>
@@ -551,7 +550,7 @@
             <ul>
               <li>If JavaScript is <strong>enabled</strong>: your browser talks directly to Nominatim (no proxy involved). ( <a href="https://codeberg.org/ashley/poke/src/branch/main/html/weather.ejs#L581"> see source </a> )</li>
               <li>If JavaScript is <strong>disabled</strong> (server-side rendering): the request is proxied through Poke’s backend 
-              (<a href="https://codeberg.org/ashley/poke/src/branch/main/src/libpoketube/init/pages-static.js#L71" target="_blank" rel="noopener">pages-static.js</a>).</li>
+              (<a href="https://codeberg.org/ashley/poke/src/branch/main/src/libpoketube/init/pages-static.js#L71" target="_blank" rel="noopener">see source </a>).</li>
             </ul>
           </li>
           <li>
@@ -681,7 +680,7 @@
         <h2 id="history-heading" class="section">Document History</h2>
         <p>
           You can view the full edit history for this policy at:
-          <a href="https://codeberg.org/ashley/poke/commits/branch/main/html/priv.ejs" target="_blank" rel="noopener">codeberg.org/ashley/poke/commits/branch/main/html/priv.ejs</a>.
+          <a href="https://codeberg.org/ashley/poke/commits/branch/main/html/priv.ejs" target="_blank" rel="noopener">codeberg.org</a>.
         </p>
       </section>
 

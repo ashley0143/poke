@@ -65,7 +65,7 @@
     getRandomInt,
     getRandomArbitrary,
   } = require("./src/libpoketube/ptutils/libpt-coreutils.js");
-
+  const { ieBlockMiddleware } = require("./src/libpoketube/ptutils/ie-blocker.js");
   initlog("Loaded libpt-coreutils");
 
   const templateDir = modules.path.resolve(
@@ -82,6 +82,7 @@ const limiter = rateLimit({
 
   var app = modules.express();
   app.use(limiter);
+  app.use(ieBlockMiddleware);
   initlog("Loaded express.js");
   app.engine("html", require("ejs").renderFile);
   app.use(modules.express.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded

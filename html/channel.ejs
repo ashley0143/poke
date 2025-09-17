@@ -688,12 +688,15 @@ height: 100%;
 
 <!-- yeah i know very funny name lol -->      
     <% 
-  function authorVerifiedChecker3000() {
-    if (tj?.videos && tj.videos.length > 0 && tj.videos[0].authorVerified) return true;
-    if (shorts?.videos && shorts.videos.length > 0 && shorts.videos[0].authorVerified) return true;
-    if (stream?.videos && stream.videos.length > 0 && stream.videos[0].authorVerified) return true;
-    return false;
-  }
+function authorVerifiedChecker3000() {
+  const sources = [tj, shorts, stream];
+
+  const hasVerified = (source) =>
+    source?.videos?.[0]?.authorVerified === true;
+
+  return sources.some(hasVerified);
+}
+
 %>
 
 <% if (authorVerifiedChecker3000()) { %>

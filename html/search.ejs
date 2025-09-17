@@ -515,22 +515,26 @@ Web              </a>
                   
                      </div>   
           </div>
- <% 
-
- const query = q.toLowerCase().trim();
+ <%  
+ <%
+const query = (q || '').toLowerCase().trim();
 let answer = '';
 
-function isMathExpression(query) {
-    return /^[0-9\s\+\-\*\/\.\x]+$/.test(query);
+function isMathExpression(s) {
+    return /^[0-9\s+\-*/.x]+$/.test(s);
 }
 
-if (/^[0-9\s+\-*/.x]+$/.test(query)) {
-        const expr = query.replace(/\s+/g, '');
-        answer = expr === '9+10' ? '21' : (() => {
-            try { return eval(expr); } catch { return 'Invalid Expression'; }
-        })();
-        return answer;
+function evaluateMathExpression(src) {
+    const expr = src.replace(/\s+/g, '');
+    if (expr === '9+10') return '21';
+    try {
+        // Safer than eval: no access to local scope; still only for simple arithmetic
+        const val = Function('"use strict";return (' + expr + ')')();
+        return String(val);
+    } catch {
+        return 'Invalid Expression';
     }
+}
 
 function getCurrentDate() {
     const now = new Date();
@@ -538,152 +542,34 @@ function getCurrentDate() {
 }
 
 function getCurrentYear() {
-    return new Date().getFullYear();
+    return String(new Date().getFullYear());
 }
 
 function getTimeInTimezone(location) {
-const tzMap = {
-    "california":           "America/Los_Angeles",
-    "new york":            "America/New_York",
-    "chicago":             "America/Chicago",
-    "denver":              "America/Denver",
-    "phoenix":             "America/Phoenix",
-    "anchorage":           "America/Anchorage",
-    "honolulu":            "Pacific/Honolulu",
-    "london":              "Europe/London",
-    "paris":               "Europe/Paris",
-    "berlin":              "Europe/Berlin",
-    "madrid":              "Europe/Madrid",
-    "rome":                "Europe/Rome",
-    "moscow":              "Europe/Moscow",
-    "athens":              "Europe/Athens",
-    "sydney":              "Australia/Sydney",
-    "melbourne":           "Australia/Melbourne",
-    "brisbane":            "Australia/Brisbane",
-    "perth":               "Australia/Perth",
-    "tokyo":               "Asia/Tokyo",
-    "osaka":               "Asia/Osaka",
-    "seoul":               "Asia/Seoul",
-    "beijing":             "Asia/Shanghai",
-    "shanghai":            "Asia/Shanghai",
-    "hong kong":           "Asia/Hong_Kong",
-    "taipei":              "Asia/Taipei",
-    "bangkok":             "Asia/Bangkok",
-    "jakarta":             "Asia/Jakarta",
-    "delhi":               "Asia/Kolkata",
-    "mumbai":              "Asia/Kolkata",
-    "karachi":             "Asia/Karachi",
-    "dubai":               "Asia/Dubai",
-    "abu dhabi":           "Asia/Dubai",
-    "riyadh":              "Asia/Riyadh",
-    "johannesburg":        "Africa/Johannesburg",
-    "cairo":               "Africa/Cairo",
-    "nairobi":             "Africa/Nairobi",
-    "lagos":               "Africa/Lagos",
-    "algiers":             "Africa/Algiers",
-    "casablanca":          "Africa/Casablanca",
-    "lisbon":              "Europe/Lisbon",
-    "dublin":              "Europe/Dublin",
-    "zurich":              "Europe/Zurich",
-    "vienna":              "Europe/Vienna",
-    "stockholm":           "Europe/Stockholm",
-    "oslo":                "Europe/Oslo",
-    "helsinki":            "Europe/Helsinki",
-    "prague":              "Europe/Prague",
-    "budapest":            "Europe/Budapest",
-    "warsaw":              "Europe/Warsaw",
-    "bucharest":           "Europe/Bucharest",
-    "sofia":               "Europe/Sofia",
-    "zagreb":              "Europe/Zagreb",
-    "belgrade":            "Europe/Belgrade",
-    "sarajevo":            "Europe/Sarajevo",
-    "podgorica":           "Europe/Podgorica",
-    "ljubljana":           "Europe/Ljubljana",
-    "tirana":              "Europe/Tirane",
-    "valletta":            "Europe/Malta",
-    "andorra la vella":    "Europe/Andorra",
-    "monaco":              "Europe/Monaco",
-    "luxembourg":          "Europe/Luxembourg",
-    "bratislava":          "Europe/Bratislava",
-    "vilnius":             "Europe/Vilnius",
-    "riga":                "Europe/Riga",
-    "tallinn":             "Europe/Tallinn",
-    "istanbul":            "Europe/Istanbul",
-    "jerusalem":           "Asia/Jerusalem",
-    "amman":               "Asia/Amman",
-    "beirut":              "Asia/Beirut",
-    "damascus":            "Asia/Damascus",
-    "baghdad":             "Asia/Baghdad",
-    "tehran":              "Asia/Tehran",
-    "islamabad":           "Asia/Karachi",
-    "kathmandu":           "Asia/Kathmandu",
-    "thimphu":             "Asia/Thimphu",
-    "dhaka":               "Asia/Dhaka",
-    "yangon":              "Asia/Yangon",
-    "hanoi":               "Asia/Ho_Chi_Minh",
-    "ho chi minh city":    "Asia/Ho_Chi_Minh",
-    "manila":              "Asia/Manila",
-    "singapore":           "Asia/Singapore",
-    "kuala lumpur":        "Asia/Kuala_Lumpur",
-    "colombo":             "Asia/Colombo",
-    "bagotville":          "America/Montreal",
-    "toronto":             "America/Toronto",
-    "vancouver":           "America/Vancouver",
-    "mexico city":         "America/Mexico_City",
-    "guadalajara":         "America/Mexico_City",
-    "monterrey":           "America/Monterrey",
-    "sao paulo":           "America/Sao_Paulo",
-    "buenos aires":        "America/Argentina/Buenos_Aires",
-    "santiago":            "America/Santiago",
-    "rio de janeiro":      "America/Sao_Paulo",
-    "caracas":             "America/Caracas",
-    "bogota":              "America/Bogota",
-    "lima":                "America/Lima",
-    "quito":               "America/Quito",
-    "georgetown":          "America/Guyana",
-    "paramaribo":          "America/Paramaribo",
-    "cayenne":             "America/Cayenne",
-    "kingston":            "America/Jamaica",
-    "port_of_spain":       "America/Port_of_Spain",
-    "st johns":            "America/St_Johns",
-    "midway":              "Pacific/Midway",
-    "apia":                "Pacific/Apia",
-    "nuku alofa":          "Pacific/Tongatapu",
-    "tarawa":              "Pacific/Tarawa",
-    "funafuti":            "Pacific/Funafuti",
-    "suva":                "Pacific/Fiji",
-    "chatham":             "Pacific/Chatham",
-    "pitcairn":            "Pacific/Pitcairn",
-    "galapagos":           "Pacific/Galapagos",
-    "easter island":       "Pacific/Easter",
-    "honiara":             "Pacific/Guadalcanal",
-    "port vila":           "Pacific/Efate",
-    "palikir":             "Pacific/Pohnpei",
-    "palau":               "Pacific/Palau",
-    "mcmurdo":             "Antarctica/McMurdo",
-    "rothera":             "Antarctica/Rothera",
-    "troll":               "Antarctica/Troll",
-    "davis":               "Antarctica/Davis",
-    "casey":               "Antarctica/Casey",
-    "mawson":              "Antarctica/Mawson",
-    "vostok":              "Antarctica/Vostok",
-    "syowa":               "Antarctica/Syowa",
-    "gmt":                 "Etc/GMT",
-    "utc":                 "UTC"
-};
-
+    const tzMap = {
+        "california":"America/Los_Angeles","new york":"America/New_York","chicago":"America/Chicago","denver":"America/Denver","phoenix":"America/Phoenix","anchorage":"America/Anchorage","honolulu":"Pacific/Honolulu",
+        "london":"Europe/London","paris":"Europe/Paris","berlin":"Europe/Berlin","madrid":"Europe/Madrid","rome":"Europe/Rome","moscow":"Europe/Moscow","athens":"Europe/Athens",
+        "sydney":"Australia/Sydney","melbourne":"Australia/Melbourne","brisbane":"Australia/Brisbane","perth":"Australia/Perth",
+        "tokyo":"Asia/Tokyo","osaka":"Asia/Osaka","seoul":"Asia/Seoul","beijing":"Asia/Shanghai","shanghai":"Asia/Shanghai","hong kong":"Asia/Hong_Kong","taipei":"Asia/Taipei","bangkok":"Asia/Bangkok","jakarta":"Asia/Jakarta","delhi":"Asia/Kolkata","mumbai":"Asia/Kolkata","karachi":"Asia/Karachi",
+        "dubai":"Asia/Dubai","abu dhabi":"Asia/Dubai","riyadh":"Asia/Riyadh",
+        "johannesburg":"Africa/Johannesburg","cairo":"Africa/Cairo","nairobi":"Africa/Nairobi","lagos":"Africa/Lagos","algiers":"Africa/Algiers","casablanca":"Africa/Casablanca",
+        "lisbon":"Europe/Lisbon","dublin":"Europe/Dublin","zurich":"Europe/Zurich","vienna":"Europe/Vienna","stockholm":"Europe/Stockholm","oslo":"Europe/Oslo","helsinki":"Europe/Helsinki","prague":"Europe/Prague","budapest":"Europe/Budapest","warsaw":"Europe/Warsaw","bucharest":"Europe/Bucharest","sofia":"Europe/Sofia","zagreb":"Europe/Zagreb","belgrade":"Europe/Belgrade","sarajevo":"Europe/Sarajevo","podgorica":"Europe/Podgorica","ljubljana":"Europe/Ljubljana","tirana":"Europe/Tirane","valletta":"Europe/Malta","andorra la vella":"Europe/Andorra","monaco":"Europe/Monaco","luxembourg":"Europe/Luxembourg","bratislava":"Europe/Bratislava","vilnius":"Europe/Vilnius","riga":"Europe/Riga","tallinn":"Europe/Tallinn","istanbul":"Europe/Istanbul",
+        "jerusalem":"Asia/Jerusalem","amman":"Asia/Amman","beirut":"Asia/Beirut","damascus":"Asia/Damascus","baghdad":"Asia/Baghdad","tehran":"Asia/Tehran","islamabad":"Asia/Karachi","kathmandu":"Asia/Kathmandu","thimphu":"Asia/Thimphu","dhaka":"Asia/Dhaka","yangon":"Asia/Yangon","hanoi":"Asia/Ho_Chi_Minh","ho chi minh city":"Asia/Ho_Chi_Minh","manila":"Asia/Manila","singapore":"Asia/Singapore","kuala lumpur":"Asia/Kuala_Lumpur","colombo":"Asia/Colombo",
+        "bagotville":"America/Montreal","toronto":"America/Toronto","vancouver":"America/Vancouver","mexico city":"America/Mexico_City","guadalajara":"America/Mexico_City","monterrey":"America/Monterrey",
+        "sao paulo":"America/Sao_Paulo","buenos aires":"America/Argentina/Buenos_Aires","santiago":"America/Santiago","rio de janeiro":"America/Sao_Paulo","caracas":"America/Caracas","bogota":"America/Bogota","lima":"America/Lima","quito":"America/Quito","georgetown":"America/Guyana","paramaribo":"America/Paramaribo","cayenne":"America/Cayenne","kingston":"America/Jamaica","port_of_spain":"America/Port_of_Spain","st johns":"America/St_Johns",
+        "midway":"Pacific/Midway","apia":"Pacific/Apia","nuku alofa":"Pacific/Tongatapu","tarawa":"Pacific/Tarawa","funafuti":"Pacific/Funafuti","suva":"Pacific/Fiji","chatham":"Pacific/Chatham","pitcairn":"Pacific/Pitcairn","galapagos":"Pacific/Galapagos","easter island":"Pacific/Easter","honiara":"Pacific/Guadalcanal","port vila":"Pacific/Efate","palikir":"Pacific/Pohnpei","palau":"Pacific/Palau",
+        "mcmurdo":"Antarctica/McMurdo","rothera":"Antarctica/Rothera","troll":"Antarctica/Troll","davis":"Antarctica/Davis","casey":"Antarctica/Casey","mawson":"Antarctica/Mawson","vostok":"Antarctica/Vostok","syowa":"Antarctica/Syowa",
+        "gmt":"Etc/GMT","utc":"UTC"
+    };
 
     const timezone = tzMap[location.toLowerCase()];
-    if (!timezone) {
-        return null;
-    }
+    if (!timezone) return null;
 
     const now = new Date();
     const options = { timeZone: timezone, timeStyle: 'medium', hour12: false };
     return now.toLocaleTimeString('en-US', options);
 }
 
- 
 function randomCompliment() {
     const compliments = [
         "You’re an awesome friend.",
@@ -706,71 +592,25 @@ function randomEncouragement() {
     return encourages[Math.floor(Math.random() * encourages.length)];
 }
 
-function base64Encode(str) {
-    return btoa(str);
-}
-
-function base64Decode(str) {
-    try {
-        return atob(str);
-    } catch {
-        return 'Invalid Base64';
-    }
-}
-
-function hexToDec(str) {
-    return parseInt(str.replace(/^0x/, ''), 16).toString();
-}
-
-function decToHex(num) {
-    return Number(num).toString(16);
-}
-
-function textToCharCodes(text) {
-    return text.split('').map(c => c.charCodeAt(0)).join(' ');
-}
-
-function charCodesToText(codes) {
-    return String.fromCharCode(...codes.split(/\s+/).map(n => +n));
-}
-
-function countWords(text) {
-    return text.trim().split(/\s+/).length;
-}
-
-function titleCase(text) {
-    return text
-        .split(' ')
-        .map(w => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase())
-        .join(' ');
-}
-
-function slugify(text) {
-    return text
-        .toLowerCase()
-        .trim()
-        .replace(/[^a-z0-9]+/g, '-')
-        .replace(/^-+|-+$/g, '');
-}
+function base64Encode(str) { return btoa(str); }
+function base64Decode(str) { try { return atob(str); } catch { return 'Invalid Base64'; } }
+function hexToDec(str) { return parseInt(str.replace(/^0x/, ''), 16).toString(); }
+function decToHex(num) { return Number(num).toString(16); }
+function textToCharCodes(text) { return text.split('').map(c => c.charCodeAt(0)).join(' '); }
+function charCodesToText(codes) { return String.fromCharCode(...codes.split(/\s+/).map(n => +n)); }
+function countWords(text) { return text.trim().split(/\s+/).length; }
+function titleCase(text) { return text.split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase()).join(' '); }
+function slugify(text) { return text.toLowerCase().trim().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, ''); }
 
 function isPrime(n) {
     n = Number(n);
     if (n < 2) return false;
-    for (let i = 2; i <= Math.sqrt(n); i++) {
-        if (n % i === 0) return false;
-    }
+    for (let i = 2; i <= Math.sqrt(n); i++) if (n % i === 0) return false;
     return true;
 }
 
-function gcd(a, b) {
-    a = Math.abs(a); b = Math.abs(b);
-    while (b) [a, b] = [b, a % b];
-    return a;
-}
-
-function lcm(a, b) {
-    return Math.abs(a * b) / gcd(a, b);
-}
+function gcd(a, b) { a = Math.abs(a); b = Math.abs(b); while (b) [a, b] = [b, a % b]; return a; }
+function lcm(a, b) { return Math.abs(a * b) / gcd(a, b); }
 
 function fibonacci(n) {
     n = Number(n);
@@ -783,9 +623,7 @@ function fibonacci(n) {
 function generatePassword(length = 8) {
     const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()';
     let pw = '';
-    for (let i = 0; i < length; i++) {
-        pw += chars.charAt(Math.floor(Math.random() * chars.length));
-    }
+    for (let i = 0; i < length; i++) pw += chars.charAt(Math.floor(Math.random() * chars.length));
     return pw;
 }
 
@@ -793,76 +631,45 @@ function daysUntil(dateStr) {
     const now = new Date();
     const then = new Date(dateStr);
     const diff = then - now;
-    return diff > 0
-        ? Math.ceil(diff / (1000 * 60 * 60 * 24)) + ' days'
-        : 'Date passed';
+    return diff > 0 ? Math.ceil(diff / (1000 * 60 * 60 * 24)) + ' days' : 'Date passed';
 }
 
 function generateUUID() {
-    return ([1e7]+-1e3+-4e3+-8e3+-1e11).replace(
-        /[018]/g,
-        c => (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
+    return ([1e7]+-1e3+-4e3+-8e3+-1e11).replace(/[018]/g, c =>
+        (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
     );
 }
 
 function generateRandomString(length = 8) {
     const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
     let s = '';
-    for (let i = 0; i < length; i++) {
-        s += chars.charAt(Math.floor(Math.random() * chars.length));
-    }
+    for (let i = 0; i < length; i++) s += chars.charAt(Math.floor(Math.random() * chars.length));
     return s;
 }
 
-
- const emojiMap = {
-    "grinning face":"😀","grin":"😁","smiley":"😃","smile":"😄","sweat smile":"😅",
-    "joy":"😂","rofl":"🤣","relaxed":"☺️","blush":"😊","innocent":"😇",
-    "slightly_smiling_face":"🙂","upside_down":"🙃","wink":"😉","relieved":"😌",
-    "heart eyes":"😍","kissing_heart":"😘","kissing":"😗","kissing_smiling_eyes":"😙",
-    "kissing_closed_eyes":"😚","yum":"😋","stuck out tongue":"😛","stuck out tongue wink":"😜",
-    "stuck out tongue closed eyes":"😝","money_mouth":"🤑","hug":"🤗","nerd":"🤓",
-    "sunglasses":"😎","star_struck":"🤩","thinking":"🤔","zipper_mouth":"🤐",
-    "raised_eyebrow":"🤨","neutral":"😐","expressionless":"😑","no_mouth":"😶",
-    "roll_eyes":"🙄","smirk":"😏","persevere":"😣","disappointed_relieved":"😥",
-    "cold_sweat":"😰","pensive":"😔","confused":"😕","worried":"😟","slightly_frowning":"🙁",
-    "frowning":"☹️","anguished":"😧","open_mouth":"😮","grimacing":"😬","hushed":"😯",
-    "astonished":"😲","flushed":"😳","pleading":"🥺","frowning2":"😦","anguished2":"😧",
-    "cry":"😢","disappointed":"😞","scream":"😱","fearful":"😨","tired_face":"😫",
-    "weary":"😩","triumph":"😤","angry":"😠","rage":"😡","poop":"💩","thumbsup":"👍",
-    "thumbsdown":"👎","clap":"👏","raised_hands":"🙌","pray":"🙏","muscle":"💪","eyes":"👀",
-    "ear":"👂","nose":"👃","tongue":"👅","lips":"👄","kiss":"💋","crown":"👑","womans hat":"👒",
-    "eyeglasses":"👓","necktie":"👔","shirt":"👕","jeans":"👖","dress":"👗","kimono":"👘",
-    "bikini":"👙","sandal":"👡","boot":"👢","mans shoe":"👞","high heel":"👠","sock":"🧦",
-    "gloves":"🧤","scarf":"🧣","tophat":"🎩","billed cap":"🧢","flag us":"🇺🇸","flag gb":"🇬🇧",
-    "flag ca":"🇨🇦","flag de":"🇩🇪","flag fr":"🇫🇷","flag es":"🇪🇸","flag it":"🇮🇹","flag jp":"🇯🇵",
-    "flag cn":"🇨🇳","flag in":"🇮🇳","flag br":"🇧🇷","flag ru":"🇷🇺","flag za":"🇿🇦","flag au":"🇦🇺",
-    "flag nz":"🇳🇿","flag ng":"🇳🇬","flag eg":"🇪🇬","flag ar":"🇦🇷","flag mx":"🇲🇽","flag kr":"🇰🇷",
-    "flag tr":"🇹🇷",
-
-    //  animals
-    "dog face":"🐶","cat face":"🐱","mouse face":"🐭","hamster":"🐹","rabbit":"🐰",
-    "fox face":"🦊","bear face":"🐻","koala":"🐨","tiger face":"🐯","lion face":"🦁",
-    "cow face":"🐮","pig face":"🐷","frog face":"🐸","octopus":"🐙","monkey face":"🐵",
-    "chicken":"🐔","penguin":"🐧","bird":"🐦","baby chick":"🐤","hatching chick":"🐣",
-
-    //  nature
-    "sun":"☀️","moon":"🌙","star":"⭐️","cloud":"☁️","umbrella":"☂️","snowflake":"❄️",
-    "fire":"🔥","droplet":"💧","ocean":"🌊","volcano":"🌋","cactus":"🌵","palm tree":"🌴",
-    "evergreen tree":"🌲","deciduous tree":"🌳","fallen leaf":"🍂","maple leaf":"🍁",
-    "seedling":"🌱","flower":"🌸","rose":"🌹","sunflower":"🌻","blossom":"🌼",
-
-    //food
-    "grapes":"🍇","watermelon":"🍉","tangerine":"🍊","banana":"🍌","pineapple":"🍍",
-    "apple":"🍎","pear":"🍐","peach":"🍑","strawberry":"🍓","cherries":"🍒","mango":"🥭",
-    "lemon":"🍋","coffee":"☕️","tea":"🍵","beer":"🍺","wine glass":"🍷","cocktail":"🍸",
-    "tropical drink":"🍹","birthday cake":"🎂","pizza":"🍕","hamburger":"🍔","fries":"🍟",
-    "hot dog":"🌭","taco":"🌮","burrito":"🌯","popcorn":"🍿","chocolate bar":"🍫",
-    "candy":"🍬","lollipop":"🍭","honey pot":"🍯"
+const emojiMap = {
+    "grinning face":"😀","grin":"😁","smiley":"😃","smile":"😄","sweat smile":"😅","joy":"😂","rofl":"🤣","relaxed":"☺️","blush":"😊","innocent":"😇",
+    "slightly_smiling_face":"🙂","upside_down":"🙃","wink":"😉","relieved":"😌","heart eyes":"😍","kissing_heart":"😘","kissing":"😗","kissing_smiling_eyes":"😙","kissing_closed_eyes":"😚",
+    "yum":"😋","stuck out tongue":"😛","stuck out tongue wink":"😜","stuck out tongue closed eyes":"😝","money_mouth":"🤑","hug":"🤗","nerd":"🤓","sunglasses":"😎","star_struck":"🤩",
+    "thinking":"🤔","zipper_mouth":"🤐","raised_eyebrow":"🤨","neutral":"😐","expressionless":"😑","no_mouth":"😶","roll_eyes":"🙄","smirk":"😏","persevere":"😣","disappointed_relieved":"😥",
+    "cold_sweat":"😰","pensive":"😔","confused":"😕","worried":"😟","slightly_frowning":"🙁","frowning":"☹️","anguished":"😧","open_mouth":"😮","grimacing":"😬","hushed":"😯","astonished":"😲",
+    "flushed":"😳","pleading":"🥺","frowning2":"😦","anguished2":"😧","cry":"😢","disappointed":"😞","scream":"😱","fearful":"😨","tired_face":"😫","weary":"😩","triumph":"😤",
+    "angry":"😠","rage":"😡","poop":"💩","thumbsup":"👍","thumbsdown":"👎","clap":"👏","raised_hands":"🙌","pray":"🙏","muscle":"💪","eyes":"👀","ear":"👂","nose":"👃","tongue":"👅",
+    "lips":"👄","kiss":"💋","crown":"👑","womans hat":"👒","eyeglasses":"👓","necktie":"👔","shirt":"👕","jeans":"👖","dress":"👗","kimono":"👘","bikini":"👙","sandal":"👡","boot":"👢",
+    "mans shoe":"👞","high heel":"👠","sock":"🧦","gloves":"🧤","scarf":"🧣","tophat":"🎩","billed cap":"🧢","flag us":"🇺🇸","flag gb":"🇬🇧","flag ca":"🇨🇦","flag de":"🇩🇪","flag fr":"🇫🇷",
+    "flag es":"🇪🇸","flag it":"🇮🇹","flag jp":"🇯🇵","flag cn":"🇨🇳","flag in":"🇮🇳","flag br":"🇧🇷","flag ru":"🇷🇺","flag za":"🇿🇦","flag au":"🇦🇺","flag nz":"🇳🇿","flag ng":"🇳🇬","flag eg":"🇪🇬",
+    "flag ar":"🇦🇷","flag mx":"🇲🇽","flag kr":"🇰🇷","flag tr":"🇹🇷",
+    "dog face":"🐶","cat face":"🐱","mouse face":"🐭","hamster":"🐹","rabbit":"🐰","fox face":"🦊","bear face":"🐻","koala":"🐨","tiger face":"🐯","lion face":"🦁","cow face":"🐮","pig face":"🐷",
+    "frog face":"🐸","octopus":"🐙","monkey face":"🐵","chicken":"🐔","penguin":"🐧","bird":"🐦","baby chick":"🐤","hatching chick":"🐣",
+    "sun":"☀️","moon":"🌙","star":"⭐️","cloud":"☁️","umbrella":"☂️","snowflake":"❄️","fire":"🔥","droplet":"💧","ocean":"🌊","volcano":"🌋","cactus":"🌵","palm tree":"🌴","evergreen tree":"🌲",
+    "deciduous tree":"🌳","fallen leaf":"🍂","maple leaf":"🍁","seedling":"🌱","flower":"🌸","rose":"🌹","sunflower":"🌻","blossom":"🌼",
+    "grapes":"🍇","watermelon":"🍉","tangerine":"🍊","banana":"🍌","pineapple":"🍍","apple":"🍎","pear":"🍐","peach":"🍑","strawberry":"🍓","cherries":"🍒","mango":"🥭","lemon":"🍋",
+    "coffee":"☕️","tea":"🍵","beer":"🍺","wine glass":"🍷","cocktail":"🍸","tropical drink":"🍹","birthday cake":"🎂","pizza":"🍕","hamburger":"🍔","fries":"🍟","hot dog":"🌭","taco":"🌮",
+    "burrito":"🌯","popcorn":"🍿","chocolate bar":"🍫","candy":"🍬","lollipop":"🍭","honey pot":"🍯"
 };
 
-
 let m;
+
 if (isMathExpression(query)) {
     answer = evaluateMathExpression(query);
 } else if (query.includes('date') || query.includes('what date is it')) {
@@ -871,7 +678,7 @@ if (isMathExpression(query)) {
     answer = getCurrentYear();
 } else if (query.includes('what time is it in')) {
     const location = query.split('what time is it in')[1].trim();
-    answer = getTimeInTimezone(location);
+    answer = getTimeInTimezone(location) || 'Unknown location';
 } else if (query.includes('what time is it')) {
     answer = new Date().toLocaleTimeString();
 } else if (query.includes('day') || query.includes('what day is it')) {
@@ -885,9 +692,7 @@ if (isMathExpression(query)) {
 } else if (query.includes('am i cute') || query.includes('am i a cutie?')) {
     answer = "yesh :3 u are ";
 } else if (query.includes('am i a good girl') || query.includes('am i a good boy?')) {
-    answer = query.includes('girl')
-        ? "yesh :3 u are a good girl"
-        : "yesh :3 u are a good boy";
+    answer = query.includes('girl') ? "yesh :3 u are a good girl" : "yesh :3 u are a good boy";
 } else if (query.includes('ur hot') || query.includes('you are hot')) {
     answer = "jrifyehgyerfgu9wdswgfsafgydwgbfwdfge >~< ";
 } else if (/^(?:emoji\s+(.+)|(.+)\s+emoji)$/.test(query)) {
@@ -895,9 +700,7 @@ if (isMathExpression(query)) {
     let name = (match[1] || match[2]).trim().toLowerCase();
     const keySpace = name.replace(/_/g, ' ');
     const keyUnderscore = name.replace(/\s+/g, '_');
-    answer = emojiMap[keySpace] 
-          || emojiMap[keyUnderscore] 
-          || 'Unknown emoji';
+    answer = emojiMap[keySpace] || emojiMap[keyUnderscore] || 'Unknown emoji';
 } else if (query.includes('compliment')) {
     answer = randomCompliment();
 } else if (query.includes('encouragement') || query.includes('encourage me')) {
@@ -908,28 +711,29 @@ if (isMathExpression(query)) {
     answer = base64Decode(query.slice(14));
 } else if ((m = /0x[0-9a-f]+/i.exec(query))) {
     answer = hexToDec(m[0]);
-} else if (query.match(/\d+\s+to\s+hex/i)) {
+} else if (/\d+\s+to\s+hex/i.test(query)) {
     answer = decToHex(query.match(/\d+/)[0]);
 } else if (query.startsWith('char codes for ')) {
     answer = textToCharCodes(query.slice(15));
 } else if (query.startsWith('text from codes ')) {
     answer = charCodesToText(query.slice(16));
 } else if (query.startsWith('word count of ')) {
-    answer = countWords(query.slice(14)).toString();
+    answer = String(countWords(query.slice(14)));
 } else if (query.startsWith('titlecase ')) {
     answer = titleCase(query.slice(10));
 } else if (query.startsWith('slugify ')) {
     answer = slugify(query.slice(8));
-} else if (query.match(/\bprime\b/)) {
-    answer = isPrime(query.match(/\d+/)[0]) ? 'Yes' : 'No';
+} else if (/\bprime\b/.test(query)) {
+    const n = query.match(/\d+/);
+    answer = n ? (isPrime(n[0]) ? 'Yes' : 'No') : 'No';
 } else if (query.includes('gcd of ')) {
     const nums = query.match(/\d+/g);
-    answer = gcd(nums[0], nums[1]).toString();
+    answer = nums ? String(gcd(nums[0], nums[1])) : 'Invalid';
 } else if (query.includes('lcm of ')) {
     const nums = query.match(/\d+/g);
-    answer = lcm(nums[0], nums[1]).toString();
-} else if (query.match(/fib(?:onacci)?\s*\d+/i)) {
-    answer = fibonacci(query.match(/\d+/)[0]).toString();
+    answer = nums ? String(lcm(nums[0], nums[1])) : 'Invalid';
+} else if (/fib(?:onacci)?\s*\d+/i.test(query)) {
+    answer = String(fibonacci(query.match(/\d+/)[0]));
 } else if (query.startsWith('generate password')) {
     const n = query.match(/\d+/);
     answer = generatePassword(n ? Number(n[0]) : undefined);
@@ -942,7 +746,6 @@ if (isMathExpression(query)) {
     answer = generateRandomString(n ? Number(n[0]) : undefined);
 }
 
-
 const upsellMessages = [
     "[new] Try searching 'What's 4+4?'",
     "[new] Ask 'What's the date today?'",
@@ -952,18 +755,22 @@ const upsellMessages = [
 ];
 
 const showUpsell = !answer && Math.random() < 0.1;
-const randomUpsellMessage = showUpsell ? upsellMessages[Math.floor(Math.random() * upsellMessages.length)] : '';
-
+const randomUpsellMessage = showUpsell
+    ? upsellMessages[Math.floor(Math.random() * upsellMessages.length)]
+    : '';
 
 function extractQueryFromUpsellMessage(message) {
-    return message.replace("[new] Try searching '", "")
-                  .replace("[new] Try '", "")
-                  .replace("[new] Ask '", "")
-                  .replace("[new] Try ", "")
-                  .replace("'", "")
-                  .replace("?", "")
-                  .trim();
+    return message
+        .replace("[new] Try searching '", "")
+        .replace("[new] Try '", "")
+        .replace("[new] Ask '", "")
+        .replace("[new] Try ", "")
+        .replace("'", "")
+        .replace("?", "")
+        .trim();
 }
+%>
+
 %>
 %>
 <% if (answer) { %>
@@ -982,7 +789,7 @@ function extractQueryFromUpsellMessage(message) {
       white-space: pre-wrap;
       word-break: break-word;
     "
-  ><%= answer %></span>
+  ><%= String(answer || '') %></span>
   <div style="display: flex; gap: 1em;">
     <button
       id="copy-btn"

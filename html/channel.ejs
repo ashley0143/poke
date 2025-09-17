@@ -686,7 +686,7 @@ height: 100%;
 			</a>
       
     
-              <% if (cinv?.authorVerified) { %>
+            <% if (tj.videos && tj.videos.length > 0 && tj.videos[0].authorVerified) { %>
                 <style>
 
                               .name {
@@ -702,14 +702,12 @@ height: 100%;
 			<div class="name" style="background: #333;border-radius: 12px;padding: 17px;height: 7em;margin-left: 4em;margin-top: 7px;gap: 3px;">
 				<p style="font-family:PokeTube Flex,sans-serif;font-weight:1000;font-stretch: ultra-expanded;margin-top: 16px;margin-bottom: 15px;"><%=cinv.author%>
           
-                <% if (firstVideo?.authorVerified) { %>
-                <span style="padding: 1px;padding-top:  2.5px !important;display: inline-flex;border-radius: 3px;">
+            <% if (tj.videos && tj.videos.length > 0 && tj.videos[0].authorVerified) { %>
+  <span style="padding:1px;padding-top:2.5px !important;display:inline-flex;border-radius:3px;">
+    <i class="fa-solid fa-badge-check" style="width:18px;margin-right:1px" title="Verified Channel"></i>
+  </span>
+<% } %>
 
-                                
- <i class="fa-solid fa-badge-check" style="width: 18px;margin-right:1px" title="Verified Channel"></i>
-
- </span> 
-                                                                 <% } %>
  <span style="font-size: 10px;color: gray;">@<%- cinv.authorId %>@youtube.com</span>
 </p>           
                     <p style="margin-bottom: -17px;" class="subs"><%= subs %> subscribers - <%- pronoun %></p>

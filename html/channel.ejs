@@ -684,9 +684,18 @@ height: 100%;
 		<a href="/avatars/<%=cinv.authorThumbnails[5].url.replace("https://yt3.googleusercontent.com/", "")%>" class="avatar">
 				<img src="/avatars/<%=cinv.authorThumbnails[5].url.replace("https://yt3.googleusercontent.com/", "")%>" alt="Channel Avatar" style="border: 1px solid gray;border-radius: 50%;">
 			</a>
-      
-    
-            <% if (tj.videos && tj.videos.length > 0 && tj.videos[0].authorVerified) { %>
+
+<!-- yeah i know very funny name lol -->      
+    <% 
+  function authorVerifiedChecker3000() {
+    if (tj?.videos && tj.videos.length > 0 && tj.videos[0].authorVerified) return true;
+    if (shorts?.videos && shorts.videos.length > 0 && shorts.videos[0].authorVerified) return true;
+    if (stream?.videos && stream.videos.length > 0 && stream.videos[0].authorVerified) return true;
+    return false;
+  }
+%>
+
+<% if (authorVerifiedChecker3000()) { %>
                 <style>
 
                               .name {
@@ -702,7 +711,7 @@ height: 100%;
 			<div class="name" style="background: #333;border-radius: 12px;padding: 17px;height: 7em;margin-left: 4em;margin-top: 7px;gap: 3px;">
 				<p style="font-family:PokeTube Flex,sans-serif;font-weight:1000;font-stretch: ultra-expanded;margin-top: 16px;margin-bottom: 15px;"><%=cinv.author%>
           
-            <% if (tj.videos && tj.videos.length > 0 && tj.videos[0].authorVerified) { %>
+<% if (authorVerifiedChecker3000()) { %>
   <span style="padding:1px;padding-top:2.5px !important;display:inline-flex;border-radius:3px;">
     <i class="fa-solid fa-badge-check" style="width:18px;margin-right:1px" title="Verified Channel"></i>
   </span>

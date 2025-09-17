@@ -1414,13 +1414,28 @@ Offical Discord Server! :3
                <div class="video-chnl-info-pill"  name="chnl">
   <a name="chnl"></a>
 
-				<a href="/channel?id=<%=video?.Channel.id || VideoData.authorId%>@youtube.com" class="avatar">
-					<img loading="lazy" src="/avatars/<%= VideoData.authorThumbnails[1].url.replace("https://yt3.ggpht.com/", "") %>" >
-				</a>
+                       <% if (!VideoData.author.endsWith("- Topic")) { %> 
+  <a href="/channel?id=<%=video?.Channel.id || VideoData.authorId%>@youtube.com" class="avatar">
+    <img loading="lazy" src="/avatars/<%= VideoData.authorThumbnails[1].url.replace("https://yt3.ggpht.com/", "") %>">
+  </a>
+<% } else { %>
+  <a href="" class="avatar">
+    <img loading="lazy" src="/avatars/<%= VideoData.authorThumbnails[1].url.replace("https://yt3.ggpht.com/", "") %>">
+  </a>
+<% } %>
+
 				<div class="name" >
 <div style="display: flex;flex-direction: row;max-width: 119px;">
-						<a title="<%=VideoData.author%> " href="/channel?id=<%=video?.Channel.id || VideoData.authorId%>@youtube.com" class="video-info-pill-channelname">  <%=VideoData.author.replace(" - Topic", "")%> 
-               </a>   
+    <% if (!VideoData.author.endsWith("- Topic")) { %>
+      <a title="<%=VideoData.author%>" href="/channel?id=<%=video?.Channel.id || VideoData.authorId%>@youtube.com" class="video-info-pill-channelname">
+        <%= VideoData.author.replace(" - Topic", "") %>
+      </a>
+    <% } else { %>
+      <a title="<%=VideoData.author%>" href="" class="video-info-pill-channelname">
+        <%= VideoData.author.replace(" - Topic", "") %>
+      </a>
+    <% } %>
+                </a>   
                                        <% if (VideoData?.authorVerified) { %> 
                    <div>
 <a href="https://support.google.com/youtube/answer/3046484?hl=en">

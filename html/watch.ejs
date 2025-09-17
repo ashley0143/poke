@@ -1419,7 +1419,7 @@ Offical Discord Server! :3
     <img loading="lazy" src="/avatars/<%= VideoData.authorThumbnails[1].url.replace("https://yt3.ggpht.com/", "") %>">
   </a>
 <% } else { %>
-  <a href="" class="avatar">
+  <a class="avatar">
     <img loading="lazy" src="/avatars/<%= VideoData.authorThumbnails[1].url.replace("https://yt3.ggpht.com/", "") %>">
   </a>
 <% } %>
@@ -1431,7 +1431,7 @@ Offical Discord Server! :3
         <%= VideoData.author.replace(" - Topic", "") %>
       </a>
     <% } else { %>
-      <a title="<%=VideoData.author%>" href="" class="video-info-pill-channelname">
+      <a title="<%=VideoData.author%>" class="video-info-pill-channelname">
         <%= VideoData.author.replace(" - Topic", "") %>
       </a>
     <% } %>

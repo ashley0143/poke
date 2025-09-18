@@ -1895,7 +1895,7 @@ document.getElementById('search').addEventListener('keyup', function () {
 // get for each
   videos.forEach(function (video) {
    // LowerCase each text content 
-    var text = video.textContent.toLowereCase();
+    var text = video.textContent.toLowerCase();
     if (text.indexOf(value) > -1) {
       video.style.visibility = 'visible';
       //if its community content, use block instead of grid 
@@ -1908,30 +1908,29 @@ document.getElementById('search').addEventListener('keyup', function () {
   });
 });
 
-        var isPopupOpen = false;
+var isPopupOpen = false;
 
-        function togglePopup() {
-            if (isPopupOpen) {
-                closePopup();
-            } else {
-                document.getElementById('popup-container').style.display = 'block';
-                document.body.style.overflow = 'hidden';
-            }
-            isPopupOpen = !isPopupOpen;
-        }
+function togglePopup() {
+if (isPopupOpen) {
+closePopup();
+} else {
+document.getElementById('popup-container').style.display = 'block';
+document.body.style.overflow = 'hidden';
+}
+isPopupOpen = !isPopupOpen;
+   }
 
-        function closePopup() {
+function closePopup() {
             document.getElementById('popup-container').style.display = 'none';
             document.body.style.overflow = 'auto';
             isPopupOpen = false;
         }
 
-        document.getElementById('popup-trigger').addEventListener('click', function (event) {
+document.getElementById('popup-trigger').addEventListener('click', function (event) {
             event.preventDefault();
             togglePopup();
         }); 
-
-       document.addEventListener('keydown', function (event) {
+   document.addEventListener('keydown', function (event) {
         if (event.key === 'Escape' && isPopupOpen) {
             closePopup();
         }

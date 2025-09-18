@@ -390,21 +390,22 @@ text-transform:uppercase;
         .subs {
     margin: 0.6em;text-align: left;margin-left: 0px;margin-top: -1em;font-family: "PokeTube flex";font-weight: 1000;font-stretch: ultra-expanded;
   }
-        #popup-container {
+
+#popup-container {
   display: none;
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background-color: #111;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-            padding: 20px;
-            border-radius: 8px;
-            z-index: 1;
+  position: fixed;               /* fixed keeps it centered when scrolling */
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #111;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  padding: 20px;
+  border-radius: 8px;
+  z-index: 9999;                 /* make sure its above other elements */
   width: 45em;
   height: 24em;
-  overflow:auto;
-        }
+  overflow: auto;
+}
 
         #close-btn {
             cursor: pointer;
@@ -1883,38 +1884,30 @@ if (userID) {
      anchor.href = "/account-create"
      // Optionally, you can set a default href or display an error message.
 }
-    
+
+// this is how the search bar works :3    
 document.getElementById('search').addEventListener('keyup', function () {
   var value = this.value.toLowerCase();
-  var videos = document.querySelectorAll('.video, .shorts-video'); 
-      
+
+  // get the videos and the community posts from the document :3
+  var videos = document.querySelectorAll('.video, .shorts-video, .community-content');
+
+// get for each
   videos.forEach(function (video) {
-    var text = video.textContent.toLowerCase();
+   // LowerCase each text content 
+    var text = video.textContent.toLowereCase();
     if (text.indexOf(value) > -1) {
       video.style.visibility = 'visible';
-      video.style.display = 'grid';
+      //if its community content, use block instead of grid 
+      video.style.display = video.classList.contains('community-content') ? 'block' : 'grid';
     } else {
+      // dont display if we cant find any, lol :3c
       video.style.visibility = 'hidden';
       video.style.display = 'none';
     }
   });
 });
-    
-    document.getElementById('search').addEventListener('keyup', function () {
-  var value = this.value.toLowerCase();
-  var videos = document.querySelectorAll('.community-content'); 
-      
-  videos.forEach(function (video) {
-    var text = video.textContent.toLowerCase();
-    if (text.indexOf(value) > -1) {
-      video.style.visibility = 'visible';
-      video.style.display = 'block';
-    } else {
-      video.style.visibility = 'hidden';
-      video.style.display = 'none';
-    }
-  });
-});
+
         var isPopupOpen = false;
 
         function togglePopup() {

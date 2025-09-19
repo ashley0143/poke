@@ -264,6 +264,10 @@ module.exports = function (app, config, renderTemplate) {
         return res.redirect("/app");
       }
 
+     if(req.query.skiplanding === "true") {
+      return res.redirect("/app")
+     }
+       
       return renderTemplate(res, req, "landing.ejs", {
         secure,
         embedtype: req.query.embedtype,

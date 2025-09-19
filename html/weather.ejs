@@ -392,7 +392,6 @@ main {
           <a class="tab" href="#daily">7-Day</a>
         </div>
 
-        <!-- SEARCH: real form so it works without JS -->
         <form class="search" role="search" aria-label="Search location" action="/weather" method="GET" id="searchForm">
           <input id="q" name="q" type="search" placeholder="Search city, place, or paste lat,lon" autocomplete="off" />
           <input type="hidden" name="units" id="unitsHidden" value="<%= (ssr && ssr.units) || 'metric' %>"/>
@@ -404,7 +403,7 @@ main {
     </div>
   </header>
 
-  <!-- ===== Server-Side Render (visible with <noscript> or if you choose to render body.no-js) ===== -->
+  <!-- ===== Server-Side Render ===== -->
   <section class="ssr">
     <div class="wrap" style="padding-top:14px">
       <article class="card" aria-live="polite">
@@ -459,8 +458,7 @@ main {
     </div>
   </section>
 
-  <!-- ===== JS APP (kept intact) ===== -->
-  <main>
+   <main>
     <section id="now" class="grid">
       <article class="card current" aria-live="polite">
         <div class="curr-top">
@@ -500,7 +498,7 @@ main {
   </main>
 
     <footer>
-      <div><a href="/privacy" style="text-decoration: none;">privacy policy </a></div>
+      <div><a href="/privacy" style="text-decoration: none;">privacy policy </a> <a href="https://open-meteo.com/">Weather data by Open-Meteo.com</a></div>
     </footer>
     
   <script>

@@ -1,8 +1,8 @@
- <!--
-    This Source Code Form is subject to the terms of the GNU General Public License:
+<!--
+    This Source Code Form is subject to the terms of the GNU General Public License.
 
-    Copyright (C) 2021-2023 POKETUBE (https://codeberg.org/Ashley/poketube)
-    
+    Copyright (C) 2021-2025 POKE
+
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
     the Free Software Foundation, either version 3 of the License, or
@@ -17,99 +17,347 @@
     along with this program. If not, see https://www.gnu.org/licenses/.
 -->
 
-<!DOCTYPE html><html class="static">
+<!DOCTYPE html>
+<html class="static" lang="en">
 <head>
-      <title>Licenses - PokeTube</title>
-      <link href=/css/yt-ukraine.svg?v=6 rel=icon>
-      <link href=/css/app-cdn.min.css rel=stylesheet>
-      <link href=/css/app.main.css?v=44600 rel=stylesheet>
-      <link href="/css/watch.main.css?v=56" rel=stylesheet>
-      <link href="https://fonts.googleapis.com/css2?family=Inter:wght@900&family=Sigmar+One&display=swap" rel=stylesheet>
-      <!-- fonts -->
-      <style>
-            @font-face {
-        font-family: 'Ginto Nord';
-        font-weight: 800;
-        src:url('https://cdn.statically.io/gh/brecert/discord-quote-generator/main/Ginto-Nord-800.woff') format("woff");
-      }
-        img {
-          float: right;
-  margin: .3em 0 1em 2em;
-}          :visited { color: #00c0ff }
-     
-a{
-  color:#0ab7f0;
-        }
- 
-      </style>
+  <meta charset="utf-8">
+  <title>Licenses - Poke</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link href="/css/yt-ukraine.svg?v=6" rel="icon">
+  <link href="/css/app-cdn.min.css" rel="stylesheet">
+  <link href="/css/app.main.css?v=44600" rel="stylesheet">
+  <link href="/css/watch.main.css?v=56" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@900&family=Sigmar+One&display=swap" rel="stylesheet">
+  <style>
+    @font-face{
+      font-family:"Ginto Nord";
+      font-weight:800;
+      src:url("https://cdn.statically.io/gh/brecert/discord-quote-generator/main/Ginto-Nord-800.woff") format("woff");
+    }
+    :root{color-scheme:dark}
+    body{color:#fff}
+    img{float:right;margin:.3em 0 1em 2em}
+    :visited{color:#00c0ff}
+    a{color:#0ab7f0}
+    .app{max-width:1000px;margin:0 auto;padding:24px}
+    h1,h2{font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans"}
+    .toc{margin:1rem 0 2rem}
+    .toc li{margin:.25rem 0}
+    pre.license{
+      font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace;
+      background:#111;padding:14px 16px;border-radius:12px;overflow-x:auto;line-height:1.45;border:1px solid #222
+    }
+    hr{border:0;border-top:1px solid #222;margin:28px 0}
+    .note{color:#bbb;font-size:.95rem}
+  </style>
 </head>
-  
-<body style="color:#fff">
-  <div class="app">
-    <h1 style="font-family: Inter;">
-Lisance
-    </h1>
-   <p>All of the <b>source code</b> to PokeTube is available under licenses which are <a href="https://www.gnu.org/philosophy/free-sw.html">free</a> licenses. </p>
 
-    <ul>
-      <li><a href="#poketube">PokeTube Source code License (GPL)</a>
-      <br><br>
-      </li>
-      <li><a href="#piwik">Piwik Source code License (GPLv3)</a>
-      <br><br>
-      </li>
+<body>
+  <div class="app">
+    <h1>Licenses</h1>
+    <p>
+      All <b>source code</b> that powers Poke is released under
+      <a href="https://www.gnu.org/philosophy/free-sw.html">free software</a> licenses.
+    </p>
+
+    <ul class="toc">
+      <li><a href="#poke">Poke (GPL-3.0-or-later)</a></li>
+      <li><a href="#invidious">Invidious (AGPL-3.0-or-later)</a></li>
+      <li><a href="#videojs">Video.js (Apache-2.0)</a></li>
+      <li><a href="#openstreetmap">OpenStreetMap Data (ODbL 1.0)</a></li>
+      <li><a href="#open-meteo">Open-Meteo (AGPL-3.0-or-later)</a></li>
+      <li><a href="#nodejs">Node.js (MIT)</a></li>
+      <li><a href="#express">Express.js (MIT)</a></li>
+      <li><a href="#ejs">EJS (MIT)</a></li>
+      <li><a href="#youtubei">YouTube.js / youtubei.js (MIT)</a></li>
+      <li><a href="#nginx">NGINX (BSD-2-Clause)</a></li>
+      <li><a href="#uglifyjs">UglifyJS (BSD-2-Clause)</a></li>
+      <li><a href="#cleancss">clean-css (MIT)</a></li>
+      <li><a href="#xmljs">xml-js (MIT)</a></li>
     </ul>
 
-  </div>
-  
-  <a name="poketube"></a>
- <h1 style="font-family: Inter;">
-PokeTube
-  </h1>
-  <p>
-     
-    Poketube Source Code Form is subject to the terms of the GNU General Public License. <a href="https://codeberg.org/Ashley/poketube">See The Source code</a> Or <a href="https://codeberg.org/Ashley/poketube/archive/main.tar.gz">Download the source code</a>.
-  </p>  
- <div style="text-align: left;" >
-   <pre style="font-family: MonoSpace;">
-   
-    Copyright (C) 2021-2023 POKETUBE (https://codeberg.org/Ashley/poketube)
-    
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
+    <!-- Poke -->
+    <a id="poke"></a>
+    <h2>Poke</h2>
+    <p>
+      Poke’s source code is licensed under the GNU General Public License.
+      <a href="https://codeberg.org/ashley/poke">See the source</a> ·
+      <a href="https://codeberg.org/ashley/poke/archive/main.tar.gz">Download</a>
+    </p>
+    <pre class="license">
+Copyright (C) 2021-2025 Poke Project
 
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
 
-    You should have received a copy of the GNU General Public License
-    along with this program. If not, see https://www.gnu.org/licenses/.
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
     </pre>
-  </div>
-<hr>
-  <a name="piwik"></a>
- <h1 style="font-family: Inter;">
-    Piwik 
-  </h1>
-  <p>We use piwik, an free web analytics tool. <a href="https://codeberg.org/Ashley/poketube/src/branch/main/t/piwik">Source Code </a></p>
-  <pre style="font-family: MonoSpace">
-   Copyright (C) 2007-2022 Matomo.org
+
+    <hr>
+
+    <!-- Invidious -->
+    <a id="invidious"></a>
+    <h2>Invidious</h2>
+    <p>
+      We use Invidious for our API and video proxy. Invidious is licensed under the GNU <em>Affero</em> GPL.
+      <span class="note">Project: <a href="https://invidious.io/">invidious.io</a> · Source: <a href="https://github.com/iv-org/invidious">iv-org/invidious</a></span>
+    </p>
+    <pre class="license">
+  Copyright (C) year name of author
 
     This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
+    it under the terms of the GNU Affero General Public License as published
+    by the Free Software Foundation, either version 3 of the License, or
     (at your option) any later version.
 
     This program is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
+    GNU Affero General Public License for more details.
 
-    You should have received a copy of the GNU General Public License
-    along with this program. If not, see http://www.gnu.org/licenses/.
-  </pre>
-  </body>
+    You should have received a copy of the GNU Affero General Public License
+    along with this program.  If not, see http://www.gnu.org/licenses.
+    </pre>
+
+    <hr>
+
+    <!-- Video.js -->
+    <a id="videojs"></a>
+    <h2>Video.js</h2>
+    <p>
+      We use Video.js for HTML5 media playback. Licensed under Apache 2.0.
+      <span class="note">Source: <a href="https://github.com/videojs/video.js">videojs/video.js</a></span>
+    </p>
+    <pre class="license">
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this work except in compliance with the License.
+You may obtain a copy of the License at
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software distributed
+under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
+CONDITIONS OF ANY KIND, either express or implied. See the License for the
+specific language governing permissions and limitations under the License.
+    </pre>
+
+    <hr>
+
+    <!-- OpenStreetMap -->
+    <a id="openstreetmap"></a>
+    <h2>OpenStreetMap Data</h2>
+    <p>
+      Used for <code>/map</code> and weather mapping. OpenStreetMap data is under ODbL 1.0 by the OSMF.
+      <span class="note">More: <a href="https://www.openstreetmap.org/copyright">OSM copyright</a> ·
+      <a href="https://opendatacommons.org/licenses/odbl/1-0/">ODbL 1.0</a></span>
+    </p>
+    <pre class="license">
+This Database is made available under the Open Database License:
+http://opendatacommons.org/licenses/odbl/1.0/.
+Any rights in individual contents of the Database are licensed under the
+Database Contents License: http://opendatacommons.org/licenses/dbcl/1.0/.
+    </pre>
+
+    <hr>
+
+    <!-- Open-Meteo -->
+    <a id="open-meteo"></a>
+    <h2>Open-Meteo</h2>
+    <p>
+      Our weather features integrate the Open-Meteo API. Server code is AGPL-3.0-or-later.
+      <span class="note">Project: <a href="https://open-meteo.com/en/license">open-meteo.com/license</a> ·
+      <a href="https://github.com/open-meteo/open-meteo">open-meteo/open-meteo</a></span>
+    </p>
+    <pre class="license">
+   Copyright (C) year name of author
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as published
+    by the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Affero General Public License for more details.
+
+    You should have received a copy of the GNU Affero General Public License
+    along with this program.  If not, see http://www.gnu.org/licenses.
+
+    </pre>
+
+    <hr>
+
+    <!-- Express.js -->
+    <a id="express"></a>
+    <h2>Express.js</h2>
+    <p>
+      Web framework used by Poke. Licensed under MIT.
+      <span class="note">Repo: <a href="https://github.com/expressjs/express">expressjs/express</a></span>
+    </p>
+    <pre class="license">
+MIT License
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included
+in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.    </pre>
+
+    <hr>
+
+    <!-- EJS -->
+    <a id="ejs"></a>
+    <h2>EJS</h2>
+    <p>
+      Templating engine used by Poke. Licensed under MIT.
+      <span class="note">Repo: <a href="https://github.com/mde/ejs">mde/ejs</a></span>
+    </p>
+    <pre class="license">
+MIT License
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included
+in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.    </pre>
+
+    <hr>
+
+    <!-- YouTube.js / youtubei.js -->
+    <a id="youtubei"></a>
+    <h2>YouTube.js / youtubei.js</h2>
+    <p>
+      Client for YouTube’s InnerTube API used for interoperability. Licensed under MIT.
+      <span class="note">Repo: <a href="https://github.com/LuanRT/YouTube.js">LuanRT/YouTube.js</a></span>
+    </p>
+    <pre class="license">
+MIT License — same text as above applies (include notice and permission terms).
+    </pre>
+
+    <hr>
+
+    <!-- NGINX -->
+    <a id="nginx"></a>
+    <h2>NGINX</h2>
+    <p>
+      Reverse proxy/web server used by Poke. Licensed under the 2-Clause BSD License.
+      <span class="note">License: <a href="https://nginx.org/LICENSE">nginx.org/LICENSE</a></span>
+    </p>
+    <pre class="license">
+BSD 2-Clause License (Simplified BSD)
+
+Redistribution and use in source and binary forms, with or without modification,
+are permitted provided that the following conditions are met:
+1. Redistributions of source code must retain the above copyright notice,
+   this list of conditions and the following disclaimer.
+2. Redistributions in binary form must reproduce the above copyright notice,
+   this list of conditions and the following disclaimer in the documentation
+   and/or other materials provided with the distribution.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+ANY EXPRESS OR IMPLIED WARRANTIES ARE DISCLAIMED.
+    </pre>
+
+    <hr>
+
+    <!-- UglifyJS -->
+    <a id="uglifyjs"></a>
+    <h2>UglifyJS</h2>
+    <p>
+      JavaScript minifier used in our build pipeline. Licensed under BSD-2-Clause.
+      <span class="note">NPM: <a href="https://www.npmjs.com/package/uglify-js">uglify-js</a></span>
+    </p>
+    <pre class="license">
+BSD 2-Clause License (Simplified BSD)
+
+Redistribution and use in source and binary forms, with or without modification,
+are permitted provided that the following conditions are met:
+1. Redistributions of source code must retain the above copyright notice,
+   this list of conditions and the following disclaimer.
+2. Redistributions in binary form must reproduce the above copyright notice,
+   this list of conditions and the following disclaimer in the documentation
+   and/or other materials provided with the distribution.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+ANY EXPRESS OR IMPLIED WARRANTIES ARE DISCLAIMED.
+    </pre>
+
+    <hr>
+
+    <!-- clean-css -->
+    <a id="cleancss"></a>
+    <h2>clean-css</h2>
+    <p>
+      CSS optimizer used in our build pipeline. Licensed under MIT.
+      <span class="note">Repo: <a href="https://github.com/clean-css/clean-css">clean-css/clean-css</a></span>
+    </p>
+    <pre class="license">
+MIT License
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included
+in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.    </pre>
+
+    <hr>
+
+    <!-- xml-js -->
+    <a id="xmljs"></a>
+    <h2>xml-js</h2>
+    <p>
+      XML ↔ JS/JSON converter used for data transforms. Licensed under MIT.
+      <span class="note">NPM: <a href="https://www.npmjs.com/package/xml-js">xml-js</a> · Repo: <a href="https://github.com/nashwaan/xml-js">nashwaan/xml-js</a></span>
+    </p>
+    <pre class="license">
+MIT License
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included
+in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.    </pre>
+
+    <hr>
+
+
+  </div>
+</body>
 </html>

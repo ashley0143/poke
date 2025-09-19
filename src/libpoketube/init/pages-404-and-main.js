@@ -261,16 +261,14 @@ module.exports = function (app, config, renderTemplate) {
 
 
      
-    const rendermainpage = () => {
-      if (req.useragent.isMobile) {
-        return res.redirect("/app");
-      }
+  const rendermainpage = () => {
+  const shouldSkip =
+    ('skiplandingpage' in req.query) &&
+    !['0','false','no','off'].includes(String(req.query.skiplandingpage).toLowerCase());
 
-            if(req.query.skiplandingpage) {
-      return res.redirect("/app");
-     }
-     
-      return renderTemplate(res, req, "landing.ejs", {
+  return (shouldSkip || req.useragent.isMobile)
+    ? res.redirect("/app")
+    : renderTemplate(res, req, "landing.ejs", {
         secure,
         embedtype: req.query.embedtype,
         banner: config.banner,
@@ -280,7 +278,8 @@ module.exports = function (app, config, renderTemplate) {
         proxyurl,
         random,
       });
-    };
+};
+
 
     if (req.params.v && /[a-zA-Z0-9]+/.test(req.params.v)) {
       const isvld = await core.isvalidvideo(req.params.v);

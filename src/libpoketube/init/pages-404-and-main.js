@@ -259,14 +259,15 @@ module.exports = function (app, config, renderTemplate) {
       req.hostname
     );
 
+     if(req.query.skiplandingpage) {
+      return res.redirect("/app")
+     }
+     
     const rendermainpage = () => {
       if (req.useragent.isMobile) {
         return res.redirect("/app");
       }
 
-     if(req.query.skiplanding === "true") {
-      return res.redirect("/app")
-     }
        
       return renderTemplate(res, req, "landing.ejs", {
         secure,

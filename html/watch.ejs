@@ -1583,9 +1583,16 @@ WIP!                                                 </a>
 				</div>
 
               			</div>
-                  					</div>
+            	</div>
 
-               			</div>
+</div>
+
+
+
+
+
+
+
 <style>
                          <% if (dyx === "true") { %> 
   .descriptionHtml {
@@ -1609,13 +1616,14 @@ WIP!                                                 </a>
            <% if (String(VideoData.descriptionHtml) != "<p></p>")  { %>
 
            <div class="descriptionHtml" style="margin-top:1em;">
+            <% if (!dyx) { %>
+                                       <a href="/watch?v=<%=VideoData.videoId%>&dyx=true" style="font-family:OpenDyslexic3"> open dyslexic mode </a> <br> <br>
+ 
+                                         <% } %>   
                                       <% if (dyx) { %>
                                       <a href="/watch?v=<%=VideoData.videoId%>"> close dyslexic mode </a> <br> <br>
                                          <% } %>           
- <% if (!dyx) { %>
-                                       <a href="/watch?v=<%=VideoData.videoId%>&dyx=true"> open dyslexic mode </a> <br> <br>
- 
-                                         <% } %>           
+        
 
 
             

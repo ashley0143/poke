@@ -249,11 +249,9 @@ module.exports = function (app, config, renderTemplate) {
     const uaos = req.useragent.os;
     const random = splash[Math.floor(Math.random() * splash.length)];
     const browser = req.useragent.browser;
-    const isOldWindows =
-      (uaos === "Windows 7" || uaos === "Windows 8") &&
-      browser === "Firefox";
+    const isOldWindows = (uaos === "Windows 7" || uaos === "Windows 8") &&browser === "Firefox";
     var proxyurl = config.p_url;
-
+   
     const secure = ["poketube.fun", "localhost"].includes(req.hostname);
     const verify = ["poketube.fun", "poke.ashley0143.xyz", "localhost"].includes(
       req.hostname
@@ -262,13 +260,11 @@ module.exports = function (app, config, renderTemplate) {
 
      
   const rendermainpage = () => {
-  const shouldSkip =
-    ('skiplandingpage' in req.query) &&
-    !['0','false','no','off'].includes(String(req.query.skiplandingpage).toLowerCase());
+  // Check if skiplandingpage query exists AND is not something like 0/false/no/off
+  const shouldSkip = ('skiplandingpage' in req.query) && !['0','false','no','off'].includes(String(req.query.skiplandingpage).toLowerCase());
 
-  return (shouldSkip || req.useragent.isMobile)
-    ? res.redirect("/app")
-    : renderTemplate(res, req, "landing.ejs", {
+  // If skiplandingpage is set OR user is on mobile redirect to /app
+  return (shouldSkip || req.useragent.isMobile) ? res.redirect("/app") : renderTemplate(res, req, "landing.ejs", {
         secure,
         embedtype: req.query.embedtype,
         banner: config.banner,
@@ -280,7 +276,7 @@ module.exports = function (app, config, renderTemplate) {
       });
 };
 
-
+// Check if the route has a "v" parameter AND make sure it only contains letters/numbers
     if (req.params.v && /[a-zA-Z0-9]+/.test(req.params.v)) {
       const isvld = await core.isvalidvideo(req.params.v);
       if (isvld && req.params.v.length >= 10) {

@@ -58,7 +58,7 @@ class InnerTubePokeVidious {
       "User-Agent": this.useragent,
     };
 
-    const fetchWithRetry = async (url, options = {}, retries = 3) => {
+    const fetchWithRetry = async (url, options = {}, retries = 6) => {
       let lastError;
       for (let attempt = 0; attempt < retries; attempt++) {
         try {

@@ -1,4 +1,3 @@
-
 <!--
    This Source Code Form is subject to the terms of the GNU General Public License:
    
@@ -100,6 +99,8 @@
     <% const RESTART_MSG = "there could be few reasons why this could happen. see https://codeberg.org/ashley/poke/src/branch/main/why-error.md for info "; %>
     <% if (description === RESTART_MSG) { %>
     <script>
+       // @license magnet:?xt=urn:btih:1f739d935676111cfff4b4693e3816e664797050&dn=gpl-3.0.txt GPL-3.0-or-later
+
         // Alternating delay: 5s -> 10s -> 5s -> 10s -> ...
         const PHASE_KEY = 'reloadPhase';     // 0 or 1
         const COUNT_KEY = 'reloadCount';     // simple counter
@@ -137,12 +138,15 @@
                 });
             }
         });
+// @license-end
     </script>
     <% } else { %>
     <script>
+        // @license magnet:?xt=urn:btih:1f739d935676111cfff4b4693e3816e664797050&dn=gpl-3.0.txt GPL-3.0-or-later
         // Clear counters on non-restart errors
         localStorage.removeItem('reloadCount');
         localStorage.removeItem('reloadPhase');
+        // @license-end
     </script>
     <% } %>
 </head>
@@ -166,6 +170,9 @@
         <a href="https://discord.poketube.fun">Report on our Discord</a>
         <% if (description === RESTART_MSG) { %>
             <a href="https://github.com/iv-org/invidious/issues">See Invidious issues</a>
+                <% if (v?.trim?.()) { %>
+                 <a href="https://youtube.com/watch?v=<%=v%>">Open on Youtube</a>
+                     <% } %>
             <a href="#" id="refresh-link">Refresh Page</a>
         <% } %>
     </div>

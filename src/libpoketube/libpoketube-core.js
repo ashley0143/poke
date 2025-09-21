@@ -60,8 +60,8 @@ class InnerTubePokeVidious {
     };
 
 
-// retry indefinitely but with a 10-second max retry window to avoid spam
-const fetchWithRetry = async (url, options = {}, maxRetryTime = 10000) => {
+// retry indefinitely but with a 5-second max retry window to avoid spam
+const fetchWithRetry = async (url, options = {}, maxRetryTime = 5000) => {
   const startTime = Date.now();
   let lastError;
 

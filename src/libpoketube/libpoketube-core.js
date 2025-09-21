@@ -58,8 +58,11 @@ class InnerTubePokeVidious {
       "User-Agent": this.useragent,
     };
 
-const fetchWithRetry = async (url, options = {}) => {
-  let attempt = 0;
+
+// retry indefinitely but with a 25-second max retry window to avoid spam
+const fetchWithRetry = async (url, options = {}, maxRetryTime = 25000) => {
+  const startTime = Date.now();
+  let lastError;
 
   while (true) {
     try {
@@ -75,23 +78,28 @@ const fetchWithRetry = async (url, options = {}) => {
         return res;
       }
 
-      // If status is 500 or 429, keep retrying forever
+      // Retry only for 500/429
       if (res.status >= 500 || res.status === 429) {
         this?.initError?.(`Retrying fetch for ${url}`, res.status);
-        attempt++;
+        if (Date.now() - startTime >= maxRetryTime) {
+          throw new Error(`Fetch failed for ${url} after ${maxRetryTime}ms`);
+        }
         continue;
       }
 
-      // If other non-OK responses, just return it
+      // Any other status: return immediately
       return res;
     } catch (err) {
+      lastError = err;
       this?.initError?.(`Fetch error for ${url}`, err);
-      attempt++;
-      // retry forever on network/other errors
+      if (Date.now() - startTime >= maxRetryTime) {
+        throw lastError;
+      }
       continue;
     }
   }
 };
+
 
 
     try {

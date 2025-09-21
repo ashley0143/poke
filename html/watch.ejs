@@ -2818,13 +2818,13 @@ a {
    <% VideoData.captions?.forEach(x => { %>
      <track src="/api/subtitles?v=<%=VideoData.videoId%>&h=<%= x.label %>" label="<%= x.label.replace("United States","Simplified - USA") %>" kind="subtitles">      
      
-        <img src="https://t.poketube.fun/t/rep.gif?v=<%=btoa(VideoData.videoId)%>&h=<%= x.label %>" id="subtitle_usage_rate" style="border:0;width: 0;visibility: hidden;"> 
+       <!-- <img src="https://t.poketube.fun/t/rep.gif?v=<%=btoa(VideoData.videoId)%>&h=<%= x.label %>" id="subtitle_usage_rate" style="border:0;width: 0;visibility: hidden;"> -->
          <% }) %>   
                                                                                                        <% } %>                     
      <%  if (!Array.isArray( VideoData.captions)) { %> 
      <track src="/api/subtitles?v=<%=VideoData.videoId%>&h=<%=   %>" label="<%=  video.Subtitles.Subtitle.language.replace("United States","Simplified - USA") %>" kind="subtitles">      
      
-        <img loading="lazy" src="https://t.poketube.fun/t/rep.gif?v=<%=btoa(VideoData.videoId)%>&h=<%= video.Subtitles.Subtitle.language %>" id="subtitle_usage_rate" style="border:0;width: 0;visibility: hidden;"> 
+       <!-- <img loading="lazy" src="https://t.poketube.fun/t/rep.gif?v=<%=btoa(VideoData.videoId)%>&h=<%= video.Subtitles.Subtitle.language %>" id="subtitle_usage_rate" style="border:0;width: 0;visibility: hidden;"> -->
             
                                                            <% } %>         
                                                      
@@ -3325,7 +3325,7 @@ font-size: 13px;margin:0;padding:0;white-space: nowrap;
 
 <div class="channel-info" name="chnl" style="padding: 0;border: none;margin-bottom:8px">
   <a href="/channel?id=<%=video?.Channel.id || VideoData.authorId%>" class="avatar">
-					<img src=" <%= VideoData.authorThumbnails[1].url %>">
+					<img src="<%- media_proxy_url %>/proxy?url=<%= VideoData.authorThumbnails[1].url %>">
 				</a>
 				<div class="name" style="font-family:var(--text-font-primary);font-weight:var(--text-header-weight);">
 		  <div>

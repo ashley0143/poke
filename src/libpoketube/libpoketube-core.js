@@ -50,6 +50,7 @@ class InnerTubePokeVidious {
       return { error: true, message: "No video ID provided" };
     }
 
+  // If cached result exists and is less than 1 hour old, return it
     if (this.cache[v] && Date.now() - this.cache[v].timestamp < 3600000) {
       return this.cache[v].result;
     }
@@ -128,9 +129,9 @@ const fetchWithRetry = async (url, options = {}, maxRetryTime = 25000) => {
       }
 
       if (this.checkUnexistingObject(vid)) {
-        let fe = { engagement: null };
+        let returnyoutubedislikesapi = { engagement: null };
         try {
-          fe = await getdislikes(v);
+          returnyoutubedislikesapi = await getdislikes(v);
         } catch (err) {
           this.initError("Dislike API error", err);
         }
@@ -138,6 +139,7 @@ const fetchWithRetry = async (url, options = {}, maxRetryTime = 25000) => {
         let color = "#0ea5e9";
         let color2 = "#111827";
         try {
+          // `sqp` is a URL parameter used by YouTube thumbnail/image servers to request a specific scale, crop or quality profile (base64-encoded), controlling how the thumbnail is sized or compressed. 
           const palette = await getColors(
             `https://i.ytimg.com/vi/${v}/hqdefault.jpg?sqp=${this.sqp}`
           );
@@ -154,7 +156,7 @@ const fetchWithRetry = async (url, options = {}, maxRetryTime = 25000) => {
             vid,
             comments,
             channel_uploads: " ",
-            engagement: fe.engagement,
+            engagement: returnyoutubedislikesapi.engagement,
             wiki: "",
             desc: "",
             color,

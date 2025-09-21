@@ -58,39 +58,41 @@ class InnerTubePokeVidious {
       "User-Agent": this.useragent,
     };
 
-    const fetchWithRetry = async (url, options = {}, retries = 6) => {
-      let lastError;
-      for (let attempt = 0; attempt < retries; attempt++) {
-        try {
-          const res = await fetch(url, {
-            ...options,
-            headers: {
-              ...options.headers,
-              ...headers,
-            },
-          });
+const fetchWithRetry = async (url, options = {}) => {
+  let attempt = 0;
 
-          if (res.ok) {
-            return res;
-          }
+  while (true) {
+    try {
+      const res = await fetch(url, {
+        ...options,
+        headers: {
+          ...options.headers,
+          ...headers,
+        },
+      });
 
-          if ((res.status >= 500 || res.status === 429) && attempt < retries - 1) {
-            this.initError(`Retrying fetch for ${url}`, res.status);
-            continue;
-          }
-
-          return res;
-        } catch (err) {
-          lastError = err;
-          this.initError(`Fetch error for ${url}`, err);
-          if (attempt < retries - 1) {
-            continue;
-          } else {
-            throw lastError;
-          }
-        }
+      if (res.ok) {
+        return res;
       }
-    };
+
+      // If status is 500 or 429, keep retrying forever
+      if (res.status >= 500 || res.status === 429) {
+        this?.initError?.(`Retrying fetch for ${url}`, res.status);
+        attempt++;
+        continue;
+      }
+
+      // If other non-OK responses, just return it
+      return res;
+    } catch (err) {
+      this?.initError?.(`Fetch error for ${url}`, err);
+      attempt++;
+      // retry forever on network/other errors
+      continue;
+    }
+  }
+};
+
 
     try {
       const [invComments, videoInfo] = await Promise.all([

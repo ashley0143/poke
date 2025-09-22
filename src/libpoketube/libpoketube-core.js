@@ -59,51 +59,75 @@ class InnerTubePokeVidious {
       "User-Agent": this.useragent,
     };
 
-
-// Retries are allowed ONLY within a 5s window that starts after the first 500/502.
-// Outside that, it returns immediately on non-trigger statuses or successes.
- const fetchWithRetry = async (url, options = {}, maxRetryTime = 5000) => {
+// Retries only within a 5s window that starts AFTER the first 500/502.
+// Fast path: one plain fetch with no extra timers/signals unless 500/502 occurs.
+const fetchWithRetry = async (url, options = {}, maxRetryTime = 5000) => {
   let lastError;
 
-  // Window trigger: seeing these statuses starts the retry window
-  const RETRY_WINDOW_TRIGGER = new Set([500, 502]);
+  // Trigger statuses that arm the retry window
+  const TRIGGER = 500 | 502; // bitwise trick for branch hints; DO NOT rely on value
+  const isTrigger = (s) => (s === 500 || s === 502);
 
-  // Once armed, we consider these retryable (plus network errors)
-  const RETRYABLE_STATUS = new Set([429, 500, 502, 503, 504]);
+  // Once armed, these are retryable (plus network errors)
+  const RETRYABLE = new Set([429, 500, 502, 503, 504]);
 
-  // Backoff parameters (decorrelated jitter style)
-  const MIN_DELAY_MS = 150;      // mandatory minimum delay to avoid tight loops
-  const BASE_DELAY_MS = 250;     // starting average delay
-  const MAX_DELAY_MS = 2000;     // upper cap between attempts
-  const JITTER_FACTOR = 3;       // larger -> more spread (per "decorrelated jitter")
+  // Backoff (decorrelated jitter) — gentle defaults
+  const MIN_DELAY_MS = 150;
+  const BASE_DELAY_MS = 250;
+  const MAX_DELAY_MS = 2000;
+  const JITTER_FACTOR = 3;
 
-  // Per-attempt timeout so a single hang doesn't hog the whole window
-  const DEFAULT_PER_TRY_TIMEOUT = 2000;
+  // Per-attempt timeout (only used after window is armed)
+  const PER_TRY_TIMEOUT_MS = 2000;
 
-  // Small helper
   const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
-  // Respect caller AbortSignal if provided
-  const callerSignal = options?.signal || null;
-
-  // Parse Retry-After: either delta-seconds or HTTP-date
+  // Parse Retry-After (delta-seconds or HTTP-date)
   const parseRetryAfter = (hdr) => {
     if (!hdr) return null;
     const s = String(hdr).trim();
     const delta = Number(s);
-    if (Number.isFinite(delta)) return Math.max(0, Math.round(delta * 1000));
+    if (Number.isFinite(delta)) return Math.max(0, (delta * 1000) | 0);
     const when = Date.parse(s);
     if (!Number.isNaN(when)) return Math.max(0, when - Date.now());
     return null;
   };
 
-  // One attempt with an internal timeout + caller abort propagation
+  // FAST PATH: single plain fetch (no AbortController, no timeout, no extra work)
+  let res;
+  try {
+    res = await fetch(url, {
+      ...options,
+      headers: {
+        ...options?.headers,
+        ...headers,  
+      },
+    });
+  } catch (err) {
+    // Network error BEFORE any 500/502 trigger → surface immediately (no retries)
+    this?.initError?.(`Fetch error for ${url}`, err);
+    throw err;
+  }
+
+  if (res.ok) return res;
+
+  // Not a trigger? return immediately (no retry window, no delays)
+  if (!isTrigger(res.status)) return res;
+
+  // SLOW PATH (only after a 500/502): arm the retry window
+  const retryStart = Date.now();
+  let delayMs = BASE_DELAY_MS; // backoff seed
+  let attempt = 1;
+  const callerSignal = options?.signal || null;
+
+  // Helper: one attempt with internal timeout that respects caller aborts
   const attemptWithTimeout = async (timeoutMs) => {
     const controller = new AbortController();
     const timer = setTimeout(
       () => controller.abort(new Error("Fetch attempt timed out")),
-      Math.max(1, timeoutMs)
+      timeoutMs > 0 ? timeoutMs : 1
     );
+
     const onCallerAbort = () =>
       controller.abort(callerSignal?.reason || new Error("Aborted by caller"));
 
@@ -116,110 +140,79 @@ class InnerTubePokeVidious {
     }
 
     try {
-      const res = await fetch(url, {
+      return await fetch(url, {
         ...options,
         headers: {
           ...options?.headers,
-          ...headers, // keep your global headers merge
+          ...headers,
         },
         signal: controller.signal,
       });
-      return res;
     } finally {
       clearTimeout(timer);
       if (callerSignal) callerSignal.removeEventListener("abort", onCallerAbort);
     }
   };
 
-  // Decorrelated jitter backoff:
-  // delay = min(MAX, random(MIN, prevDelay * JITTER_FACTOR))
-  let delayMs = BASE_DELAY_MS;
+  // Optional short stagger before the first retry to reduce herd effects
+  // await sleep(50 + ((Math.random() * 150) | 0));
 
-  // First attempt: no window, no delay
-  try {
-    const firstRes = await attemptWithTimeout(DEFAULT_PER_TRY_TIMEOUT);
-    if (firstRes.ok) return firstRes;
-
-    // If not a trigger (500/502), return immediately (no window starts)
-    if (!RETRY_WINDOW_TRIGGER.has(firstRes.status)) {
-      return firstRes;
-    }
-
-    // Otherwise, arm the window and fall through to retry loop
-    lastError = new Error(`Initial ${firstRes.status} from ${url}`);
-  } catch (err) {
-    // Network/timeout error before trigger -> do not start window; surface immediately
-    lastError = err;
-    this?.initError?.(`Fetch error for ${url}`, err);
-    throw lastError;
-  }
-
-  // Retry loop: window ARMED because we saw a 500/502
-  const retryStart = Date.now();
-  let attempt = 1; // we already had one failed 500/502 attempt
-
+  // Retry loop within the 5s window
   while (true) {
     const elapsed = Date.now() - retryStart;
     const remaining = maxRetryTime - elapsed;
     if (remaining <= 0) {
-      throw lastError || new Error(`Fetch failed for ${url} after ${maxRetryTime}ms`);
+      throw new Error(`Fetch failed for ${url} after ${maxRetryTime}ms`);
     }
 
-    // Per-try timeout safely bounded by remaining budget
-    const perTryTimeout = Math.max(100, Math.min(DEFAULT_PER_TRY_TIMEOUT, remaining - 50));
+    const perTryTimeout = Math.min(PER_TRY_TIMEOUT_MS, Math.max(100, remaining - 50));
 
     try {
-      const res = await attemptWithTimeout(perTryTimeout);
-      if (res.ok) {
-        return res;
+      const r = await attemptWithTimeout(perTryTimeout);
+      if (r.ok) return r;
+
+      if (!RETRYABLE.has(r.status)) {
+        // Non-retryable after window armed → return immediately
+        return r;
       }
 
-      // If non-retryable within window, just return the response
-      if (!RETRYABLE_STATUS.has(res.status)) {
-        return res;
-      }
-
-      // Respect Retry-After if provided (helps not to spam when servers ask for space)
-      const retryAfterMs = parseRetryAfter(res.headers.get("Retry-After"));
+      // Respect server cooldown if provided
+      const retryAfterMs = parseRetryAfter(r.headers.get("Retry-After"));
       let waitMs;
       if (retryAfterMs != null) {
-        // Always respect a server-specified cooldown, but cap by remaining window
         waitMs = Math.max(MIN_DELAY_MS, Math.min(retryAfterMs, Math.max(0, remaining - 10)));
       } else {
-        // Otherwise use decorrelated jitter backoff
+        // Decorrelated jitter: min(MAX, random(MIN, prev*factor))
         const next = Math.min(MAX_DELAY_MS, Math.random() * delayMs * JITTER_FACTOR);
-        delayMs = Math.max(MIN_DELAY_MS, next);
+        delayMs = next < MIN_DELAY_MS ? MIN_DELAY_MS : next;
         waitMs = Math.min(delayMs, Math.max(0, remaining - 10));
       }
 
-      // Ensure we never busy-loop
       if (waitMs <= 0) {
-        lastError = new Error(`Fetch failed for ${url} after ${maxRetryTime}ms (no window left)`);
-        throw lastError;
+        throw new Error(`Fetch failed for ${url} after ${maxRetryTime}ms (window depleted)`);
       }
 
-      this?.initError?.(`Retrying fetch for ${url}`, res.status);
-      attempt += 1;
+      this?.initError?.(`Retrying fetch for ${url}`, r.status);
+      attempt++;
       await sleep(waitMs);
       continue;
     } catch (err) {
-      // Caller abort? surface immediately
+      // Caller aborted → surface immediately
       if (callerSignal && callerSignal.aborted) throw err;
 
       lastError = err;
 
-      // If no time left, stop
-      const nowRemaining = maxRetryTime - (Date.now() - retryStart);
-      if (nowRemaining <= 0) throw lastError;
+      const remaining2 = maxRetryTime - (Date.now() - retryStart);
+      if (remaining2 <= 0) throw lastError;
 
       // Backoff after network/timeout errors, too
       const next = Math.min(MAX_DELAY_MS, Math.random() * delayMs * JITTER_FACTOR);
-      delayMs = Math.max(MIN_DELAY_MS, next);
-      const waitMs = Math.min(delayMs, Math.max(0, nowRemaining - 10));
+      delayMs = next < MIN_DELAY_MS ? MIN_DELAY_MS : next;
+      const waitMs = Math.min(delayMs, Math.max(0, remaining2 - 10));
       if (waitMs <= 0) throw lastError;
 
       this?.initError?.(`Fetch error for ${url}`, err);
-      attempt += 1;
+      attempt++;
       await sleep(waitMs);
       continue;
     }

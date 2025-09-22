@@ -1460,13 +1460,22 @@ Offical Discord Server! :3
 <div class="video-info-buttons pill" >
   
 <div class="new-button engagement" style="max-height: 32px;gap: 2px;height: 33px;">
-    <div title="<%=engagement?.likes.toLocaleString()%> Likes">
-  
-<div class="pill-button" style="margin-right: 5.5px;">
+   <%
+  const candidateLikes = Number(engagement?.likes);
+  const fallbackLikes  = Number(VideoData?.likeCount);
+
+  const likesValue = Number.isNaN(candidateLikes)
+    ? (Number.isNaN(fallbackLikes) ? 0 : fallbackLikes)
+    : candidateLikes;
+%>
+
+<div title="<%= likesValue.toLocaleString() %> Likes">
+  <div class="pill-button" style="margin-right: 5.5px;">
     <i class="fa-light fa-thumbs-up"></i>
-     <%=convert(engagement?.likes)%>
-       </div>
-      </div>
+    <%= convert(likesValue) %>
+  </div>
+</div>
+
       
         <div class = "vertical"></div>
       
@@ -1609,7 +1618,7 @@ WIP!                                                 </a>
     <details class="description-new">
 <% } %>         
          	<summary style="color:#fff;">
-                                <%=engagement.viewCount.toLocaleString()%> Views  •  <%=date%> • Click to toggle off description</summary>
+                                <%=engagement?.viewCount.toLocaleString()%> Views  •  <%=date%> • Click to toggle off description</summary>
    
           <% if (String(VideoData.descriptionHtml) != "undefined")  { %>
          <% if (String(VideoData.descriptionHtml) != " ")  { %>
@@ -1673,7 +1682,7 @@ WIP!                                                 </a>
  
      <p  style="font-weight: bold;">
  
-                    <span>Views : <%=engagement.viewCount.toLocaleString()%> <br>
+                    <span>Views : <%=engagement?.viewCount.toLocaleString()%> <br>
                         
                         
                          <% if (VideoData?.genre) { %> 
@@ -2846,7 +2855,7 @@ a {
 <a id="language-button" href="#desc-container" style="color: pink;
 margin: 0;
 font-size: 13px;margin:0;padding:0;white-space: nowrap;
-" class="switch"><%=engagement.viewCount.toLocaleString()%> views <%=date%> <ptd-custom-more>...more</ptd-custom-more>
+" class="switch"><%=engagement?.viewCount.toLocaleString()%> views <%=date%> <ptd-custom-more>...more</ptd-custom-more>
                     </a>
                        
                     </div>
@@ -3157,7 +3166,7 @@ font-size: 13px;margin:0;padding:0;white-space: nowrap;
     
  <div style="text-align: center;font-size: x-large;margin: 9px;">
     	<p>
-        <%=convert(engagement.viewCount)%>  
+        <%=convert(engagement?.viewCount)%>  
       <br>
  </p><p style="font-size: 17px;">Views</p>
 

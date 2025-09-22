@@ -34,21 +34,36 @@ class PokeTubeDislikesAPIManager  {
       return null;
     }
   }
-
-   /**
-   * Retrieves engagement data for the YouTube video.
-   * @returns {Promise<object|null>} A Promise that resolves with the engagement data, or null if an error occurs.
-   * @private
-   */
+/**
+ * Fetch engagement data for the current video.
+ *
+ * Attempts to retrieve vote data from the RYD proxy API.  
+ * If the request does not complete within 2 seconds, it aborts and returns `{ timeout: true }`.  
+ *
+ * @async
+ * @function _getEngagementData
+ * @returns {Promise<Object>} A promise that resolves to the engagement JSON object from the API,
+ *                            or `{ timeout: true }` if the request timed out.
+ * @throws {Error} If a non-timeout error occurs during fetch.
+ */
  async _getEngagementData() {
-    const apiUrl = `https://ryd-proxy.kavin.rocks/votes/${this.videoId}&hash=d0550b6e28c8f93533a569c314d5b4e2`;
-  
-    const { fetch } = await import("undici");
+  const apiUrl = `https://ryd-proxy.kavin.rocks/votes/${this.videoId}&hash=d0550b6e28c8f93533a569c314d5b4e2`;
+  const { fetch } = await import("undici");
 
-    const engagement = await fetch(apiUrl).then((res) => res.json());
-    return engagement;
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), 2000);
 
+  try {
+    const res = await fetch(apiUrl, { signal: controller.signal });
+    clearTimeout(timeout);
+    return await res.json();
+  } catch (err) {
+    if (err.name === "AbortError") {
+      return { timeout: true };
+    }
+    throw err;
   }
+}
 
 
 

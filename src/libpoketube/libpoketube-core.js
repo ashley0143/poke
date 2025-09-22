@@ -60,7 +60,7 @@ class InnerTubePokeVidious {
     };
 
     // Retry window is armed ONLY after seeing a 500 or 502 response
-    const fetchWithRetry = async (url, options = {}, maxRetryTime = 5000) => {
+    const fetchWithRetry = async (url, options = {}, maxRetryTime = 2000) => {
       let lastError;
 
       const RETRY_WINDOW_TRIGGER = new Set([500, 502]);

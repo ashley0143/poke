@@ -1772,7 +1772,7 @@ WIP!                                                 </a>
                       <br><span style="color: <%= likeColor %>;"><%= likePercentage %>%</span> of the users lieked the video!! <br>
                       <span style="color: <%= dislikeColor %>;"><%= dislikePercentage %>%</span> of the users dislieked the video!! <br>
                       User score: <span style="color: <%= userScoreColor %>;"><%= userScore %></span>- <span class="<%= userScoreClass %>"> <%= userScoreLabel %> </span><br><br>
-                      RYD date created : <%=engagement?.dateCreated.toLocaleString()%>  <br>
+                      RYD date created : <%=engagement?.dateCreated?.toLocaleString()%>  <br>
                       <a href="/api/getEngagementData?v=<%=VideoData.videoId%>">See in json</a>
                       
                   

@@ -22,33 +22,52 @@
 <html lang="en">
 
 <head>
-  <title>Poke | The privacy app of your dreams!</title>
-  <meta charset="UTF-8">
-  <meta name="theme-color" content="#414161">
-  <meta http-equiv="content-language" content="en-us">
-  <meta name="viewport" content="width=device-1200px, initial-scale=1.0, shrink-to-fit=yes, viewport-fit=cover">
-  <link rel="stylesheet" href="/css/landing.css?v=4545">
-  <link rel="stylesheet" href="/css/snow.css">
-  <link rel="stylesheet" href="/css/app.main.css">
-  <link href=/css/yt-ukraine.svg?v=7 rel=icon>
-  <link rel="manifest" href="/manifest.json">
-  <meta name="darkreader-lock"> <!-- tells dark reader that the site has a dark theme and to turn itself off -->
-  <meta content="Poke - The only (good) front-end in the world!" property=og:title>
+ <title>Poke | The privacy app of your dreams!</title>
+<meta charset="UTF-8">
+<meta name="theme-color" content="#414161">
+<meta http-equiv="content-language" content="en-us">
+<meta name="viewport" content="width=device-1200px, initial-scale=1.0, shrink-to-fit=yes, viewport-fit=cover">
+<link rel="stylesheet" href="/css/landing.css?v=4545">
+<link rel="stylesheet" href="/css/snow.css">
+<link rel="stylesheet" href="/css/app.main.css">
+<link href="/css/yt-ukraine.svg?v=7" rel="icon">
+<link rel="manifest" href="/manifest.json">
+<meta name="darkreader-lock">
 
-<% if(embedtype === "woke") { %>
-  <meta content="Poke is a 𝔀𝓸𝓴𝓮 software YouTube front-end, translator, 𝔀𝓸𝓴𝓮 app, and even 𝔀𝓸𝓴𝓮!! Watch 𝔀𝓸𝓴𝓮 videos, and do all of that and more 𝔀𝓸𝓴𝓮 in this all-in-one 𝔀𝓸𝓴𝓮 app!!!"
-    property="twitter:description">
-  <meta content="https://cdn.glitch.global/302c6ee0-629f-453b-9024-bad1f8d7be36/9fhFiXJ.png?v=1717357642758"
-    property="og:image">
+<!-- Open Graph -->
+<meta property="og:type" content="website">
+<meta property="og:title" content="Poke - The only (good) front-end in the world!">
+<% if (embedtype === "woke") { %>
+  <meta property="og:description" content="Poke is a 𝔀𝓸𝓴𝓮 software YouTube front-end, translator, 𝔀𝓸𝓴𝓮 app, and even 𝔀𝓸𝓴𝓮!! Watch 𝔀𝓸𝓴𝓮 videos, and do all of that and more 𝔀𝓸𝓴𝓮 in this all-in-one 𝔀𝓸𝓴𝓮 app!!!">
+  <meta property="og:image" content="https://cdn.glitch.me/302c6ee0-629f-453b-9024-bad1f8d7be36/9fhFiXJ.png?v=1717357642758">
 <% } else { %>
-  <meta content="Poke is a free software YouTube front-end, translator, map app, and more!! Watch silly videos, check your weather, and do all of that and more anonymously in this all-in-one privacy app!!!"
-    property="twitter:description">
-  <meta content="https://cdn.glitch.global/302c6ee0-629f-453b-9024-bad1f8d7be36/poke.png?v=1716216428745"
-    property="og:image">
+  <meta property="og:description" content="Poke is a free software YouTube front-end, translator, map app, and more!! Watch silly videos, check your weather, and do all of that and more anonymously in this all-in-one privacy app!!!">
+  <meta property="og:image" content="https://cdn.glitch.me/302c6ee0-629f-453b-9024-bad1f8d7be36/poke.png?v=1716216428745">
+<% } %>
+
+<!-- Twitter -->
+<meta name="twitter:title" content="Poke - The only (good) front-end in the world!">
+<% if (embedtype === "woke") { %>
+  <meta name="twitter:description" content="Poke is a 𝔀𝓸𝓴𝓮 software YouTube front-end, translator, 𝔀𝓸𝓴𝓮 app, and even 𝔀𝓸𝓴𝓮!! Watch 𝔀𝓸𝓴𝓮 videos, and do all of that and more 𝔀𝓸𝓴𝓮 in this all-in-one 𝔀𝓸𝓴𝓮 app!!!">
+  <meta name="twitter:image" content="https://cdn.glitch.me/302c6ee0-629f-453b-9024-bad1f8d7be36/9fhFiXJ.png?v=1717357642758">
+<% } else { %>
+  <meta name="twitter:description" content="Poke is a free software YouTube front-end, translator, map app, and more!! Watch silly videos, check your weather, and do all of that and more anonymously in this all-in-one privacy app!!!">
+  <meta name="twitter:image" content="https://cdn.glitch.me/302c6ee0-629f-453b-9024-bad1f8d7be36/poke.png?v=1716216428745">
+<% } %>
+<meta name="twitter:card" content="summary_large_image">
+
+<!-- Facebook -->
+<meta property="facebook:title" content="Poke - The only (good) front-end in the world!">
+<% if (embedtype === "woke") { %>
+  <meta property="facebook:description" content="Poke is a 𝔀𝓸𝓴𝓮 software YouTube front-end, translator, 𝔀𝓸𝓴𝓮 app, and even 𝔀𝓸𝓴𝓮!! Watch 𝔀𝓸𝓴𝓮 videos, and do all of that and more 𝔀𝓸𝓴𝓮 in this all-in-one 𝔀𝓸𝓴𝓮 app!!!">
+  <meta property="facebook:image" content="https://cdn.glitch.me/302c6ee0-629f-453b-9024-bad1f8d7be36/9fhFiXJ.png?v=1717357642758">
+<% } else { %>
+  <meta property="facebook:description" content="Poke is a free software YouTube front-end, translator, map app, and more!! Watch silly videos, check your weather, and do all of that and more anonymously in this all-in-one privacy app!!!">
+  <meta property="facebook:image" content="https://cdn.glitch.me/302c6ee0-629f-453b-9024-bad1f8d7be36/poke.png?v=1716216428745">
 <% } %>
 
 
-  <meta content="summary_large_image" name="twitter:card" />
+
   <% if(isOldWindows) { %>
     <style>
       @font-face {

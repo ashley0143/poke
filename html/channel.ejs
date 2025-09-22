@@ -25,16 +25,31 @@
     <!-- 🐷 🎗️ -->
     <title>Technoblade Never Dies! | Poke</title>
  <% } %>
-    <title><%=cinv.author%> | Poke</title>
-    <link rel="manifest" href="/manifest.json">
-    <link href="css/yt-ukraine.svg?v=7" rel=icon>
-    <meta content=website property=og:type>
-    <link rel="alternate" type="application/rss+xml" href="/feeds/videos.xml?channel_id=<%=ID%>">
-    <meta content="<%=cinv.author%> - Poke" property=og:title>
-    <meta content="<%- cinv?.description %>" property=twitter:description>
-    <meta name="darkreader-lock"> <!-- tells dark reader that the site has a dark theme and to turn itself off -->
-    <meta content="<%=cinv.authorThumbnails[5].url%>" property=og:image>
-        <meta name="viewport" content="width=device-width, initial-scale=1"> 
+ <title><%=cinv.author%> | Poke</title>
+<link rel="manifest" href="/manifest.json">
+<link href="css/yt-ukraine.svg?v=7" rel=icon>
+<link rel="alternate" type="application/rss+xml" href="/feeds/videos.xml?channel_id=<%=ID%>">
+<meta name="viewport" content="width=device-width, initial-scale=1"> <!-- tells dark reader that the site has a dark theme and to turn itself off -->
+<meta name="darkreader-lock">
+
+<!-- Open Graph -->
+<meta property="og:type" content="website">
+<meta property="og:title" content="<%=cinv.author%> - Poke">
+<meta property="og:description" content="<%- cinv?.description %>">
+<meta property="og:image" content="<%=cinv.authorThumbnails[5].url%>">
+<meta property="og:url" content="https://<%=hostname%>/channel?id=<%=ID%>">
+
+<!-- Twitter -->
+<meta name="twitter:title" content="<%=cinv.author%> - Poke">
+<meta name="twitter:description" content="<%- cinv?.description %>">
+<meta name="twitter:image" content="<%=cinv.authorThumbnails[5].url%>">
+<meta name="twitter:card" content="summary_large_image">
+
+<!-- Facebook -->
+<meta property="facebook:title" content="<%=cinv.author%> - Poke">
+<meta property="facebook:description" content="<%- cinv?.description %>">
+<meta property="facebook:image" content="<%=cinv.authorThumbnails[5].url%>">
+
   <style> 
     * {
       color:#fff

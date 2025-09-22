@@ -72,40 +72,7 @@
 <link href="/css/yt-ukraine.svg?v=7" rel=icon>
 <link rel="manifest" href="/manifest.json">
 <title><%= VideoData?.title %> | <%= /^[A-Z]/.test(VideoData.title) ? 'Watch' : 'watch' %></title>
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "VideoObject",
-  "name": "<%=VideoData?.title%> | Poke",
-  "description": "<%=VideoData?.description%> ",
-  "thumbnailUrl": "https://i.ytimg.com/vi/<%=VideoData.videoId%>/maxresdefault.jpg",
-  "uploadDate": "<%= date %>",
-  "duration": "<%- turntomins(VideoData?.lengthSeconds) || "LIVE"%> ",
-  "url": "https://<%=hostname %>/watch?v=<%=VideoData?.videoId%>",
-  "author": {
-    "@type": "Person",
-    "name": "<%=VideoData?.author%>"
-  },
-  "interactionStatistic": [
-    {
-      "@type": "InteractionCounter",
-      "interactionType": "https://schema.org/LikeAction",
-      "userInteractionCount": <%= isNaN(engagement?.likes) ? 0 : engagement.likes %>
-    },
-    {
-      "@type": "InteractionCounter",
-      "interactionType": "https://schema.org/DislikeAction",
-      "userInteractionCount": <%= isNaN(engagement?.dislikes) ? 0 : engagement.dislikes %>
-    },
-    {
-      "@type": "InteractionCounter",
-      "interactionType": "https://schema.org/WatchAction",
-      "userInteractionCount": <%= isNaN(engagement?.viewCount) ? 0 : engagement.viewCount %>
-    }
-  ],
-  "commentCount": <%= isNaN(inv.commentCount) ? 0 : inv.commentCount %>
-}
-</script>
+
 
 <style>     
   .comments-area {
@@ -114,8 +81,6 @@
   margin-top: 50px;
 }
  
-
-
   
   @media (max-width: 414px) {
   .comments-area {
@@ -817,6 +782,40 @@ background-color: #0000;
  */
 
 //--><!]]>
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "VideoObject",
+  "name": "<%=VideoData?.title%> | Poke",
+  "description": "<%=VideoData?.description%>",
+  "thumbnailUrl": "https://i.ytimg.com/vi/<%=VideoData.videoId%>/maxresdefault.jpg",
+  "uploadDate": "<%= date %>",
+  "duration": "<%- turntomins(VideoData?.lengthSeconds) || "LIVE"%>",
+  "url": "https://<%=hostname %>/watch?v=<%=VideoData?.videoId%>",
+  "author": {
+    "@type": "Person",
+    "name": "<%=VideoData?.author%>"
+  },
+  "interactionStatistic": [
+    {
+      "@type": "InteractionCounter",
+      "interactionType": "https://schema.org/LikeAction",
+      "userInteractionCount": <%= isNaN(engagement?.likes) ? 0 : engagement.likes %>
+    },
+    {
+      "@type": "InteractionCounter",
+      "interactionType": "https://schema.org/DislikeAction",
+      "userInteractionCount": <%= isNaN(engagement?.dislikes) ? 0 : engagement.dislikes %>
+    },
+    {
+      "@type": "InteractionCounter",
+      "interactionType": "https://schema.org/WatchAction",
+      "userInteractionCount": <%= isNaN(engagement?.viewCount) ? 0 : engagement.viewCount %>
+    }
+  ],
+  "commentCount": <%= isNaN(inv.commentCount) ? 0 : inv.commentCount %>
+}
 </script>
 <ptd-app-ejs>
 

@@ -1710,7 +1710,7 @@ WIP!                                                 </a>
                         
                      warning: returnyoutubedislikes may not be accurate, this is just an estiment ehe :3  <br>
 
-                   Rating  :  <%=engagement?.rating.toLocaleString()%> (<%=engagement?.dislikes.toLocaleString()%>/<%=engagement?.likes.toLocaleString()%> <abbr title="Like To dislike ratio - the number to the left is dislike count and the one to the right is like count :3">LTDR</abbr>) <br>
+                   Rating  :  <%=engagement?.rating?.toLocaleString()%> (<%=engagement?.dislikes?.toLocaleString()%>/<%=engagement?.likes?.toLocaleString()%> <abbr title="Like To dislike ratio - the number to the left is dislike count and the one to the right is like count :3">LTDR</abbr>) <br>
 
          <%
       const likes = parseInt(engagement?.likes) || 0;

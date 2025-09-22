@@ -78,20 +78,13 @@
 %>
 
 <!-- twitter -->
-<% twitterTags.forEach(tag => { %>
-<meta name="<%= tag.name %>" content="<%- tag.content %>">
-<% }) %>
+<% twitterTags.forEach(tag => { %><meta name="<%= tag.name %>" content="<%- tag.content %>"><% }) %>
 
 <!-- facebook -->
-<% facebookTags.forEach(tag => { %>
-<meta property="<%= tag.property %>" content="<%- tag.content %>">
-<% }) %>
+<% facebookTags.forEach(tag => { %><meta property="<%= tag.property %>" content="<%- tag.content %>"><% }) %>
 
 <!-- opengraph -->
-<% ogTags.forEach(tag => { %>
-<meta property="<%= tag.property %>" content="<%- tag.content %>">
-<% }) %>
-
+<% ogTags.forEach(tag => { %><meta property="<%= tag.property %>" content="<%- tag.content %>"><% }) %>
 
 <link href="https://<%=hostname %>/watch?v=<%=VideoData.videoId%>" itemprop=url>
 <!-- closes the } --> <% } %> 

@@ -45,22 +45,68 @@
 <meta content="<%=VideoData?.title%>" name=title>
 <meta content="<%=color%>" name="theme-color">
 <meta content="{canplayhd: true, redesign_feburary_2023:true, poke-rebrand:true, universe:2, ImmersiveAmbientMode:true, november2023_poke_rebrand:true, rebrand_2024:true, faster_load:true, AudioSyncV2:false, AudioSyncV3:true }" name="flags">
-<meta content="<%=VideoData?.author%>" name=twitter:author>
-<meta content="https://<%=hostname %>/watch?v=<%=VideoData?.videoId%>" name=twitter:url>
-<meta content="<%=VideoData?.title%> | Poke" name=twitter:title>
+<!-- twitter ->
+<meta content="<%=VideoData?.author%>" name="twitter:author">
+<meta content="https://<%=hostname %>/watch?v=<%=VideoData?.videoId%>" name="twitter:url">
+<meta content="<%=VideoData?.title%> | Poke" name="twitter:title">
 <meta content="Watch this <%- turntomins(VideoData?.lengthSeconds) || "LIVE"%> long video from <%=VideoData?.author%> On Poke! 
-👍 <%=convert(engagement?.likes)%> | 👎 <%=convert(engagement?.dislikes)%> | 📈 <%=convert(engagement?.viewCount)%> Views 🗓️ <%= date.replace("Premiered", " ") %> 💬 <% if (!isNaN(inv.commentCount)) { %><%= inv.commentCount.toLocaleString() %>
-<% } else { %>
- 0
-<% } %>" property=twitter:description>
-<meta content="https://i.ytimg.com/vi/<%=VideoData.videoId%>/maxresdefault.jpg" property=og:image>
-<meta content=summary_large_image name=twitter:card>
+👍 <%=convert(engagement?.likes)%> | 👎 <%=convert(engagement?.dislikes)%> | 📈 <%=convert(engagement?.viewCount)%> Views 🗓️ <%= date.replace("Premiered", " ") %> 💬 <% if (!isNaN(inv.commentCount)) { %><%= inv.commentCount.toLocaleString() %><% } else { %>0<% } %>" name="twitter:description">
+<meta content="https://i.ytimg.com/vi/<%=VideoData.videoId%>/maxresdefault.jpg" name="twitter:image">
+<meta content="summary_large_image" name="twitter:card">
+<!-- Facebook -->
+<meta property="facebook:title" content="<%=VideoData?.title%> | Poke">
+<meta property="facebook:description" content="Watch this <%- turntomins(VideoData?.lengthSeconds) || "LIVE"%> long video from <%=VideoData?.author%> On Poke! 
+👍 <%=convert(engagement?.likes)%> | 👎 <%=convert(engagement?.dislikes)%> | 📈 <%=convert(engagement?.viewCount)%> Views 🗓️ <%= date.replace("Premiered", " ") %> 💬 <% if (!isNaN(inv.commentCount)) { %><%= inv.commentCount.toLocaleString() %><% } else { %>0<% } %>">
+<meta property="facebook:image" content="https://i.ytimg.com/vi/<%=VideoData.videoId%>/maxresdefault.jpg">
+<!-- Open Graph -->
+<meta property="og:title" content="<%=VideoData?.title%> | Poke">
+<meta property="og:type" content="video.other">
+<meta property="og:url" content="https://<%=hostname %>/watch?v=<%=VideoData?.videoId%>">
+<meta property="og:description" content="Watch this <%- turntomins(VideoData?.lengthSeconds) || "LIVE"%> long video from <%=VideoData?.author%> On Poke! 
+👍 <%=convert(engagement?.likes)%> | 👎 <%=convert(engagement?.dislikes)%> | 📈 <%=convert(engagement?.viewCount)%> Views 🗓️ <%= date.replace("Premiered", " ") %> 💬 <% if (!isNaN(inv.commentCount)) { %><%= inv.commentCount.toLocaleString() %><% } else { %>0<% } %>">
+<meta property="og:image" content="https://i.ytimg.com/vi/<%=VideoData.videoId%>/maxresdefault.jpg">
+
 <link href="https://<%=hostname %>/watch?v=<%=VideoData.videoId%>" itemprop=url>
 <!-- closes the } --> <% } %> 
 <meta name="darkreader-lock"> <!-- tells dark reader that the site has a dark theme and to turn itself off -->
 <link href="/css/yt-ukraine.svg?v=7" rel=icon>
 <link rel="manifest" href="/manifest.json">
 <title><%= VideoData?.title %> | <%= /^[A-Z]/.test(VideoData.title) ? 'Watch' : 'watch' %></title>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "VideoObject",
+  "name": "<%=VideoData?.title%> | Poke",
+  "description": "<%=VideoData?.description%> ",
+  "thumbnailUrl": "https://i.ytimg.com/vi/<%=VideoData.videoId%>/maxresdefault.jpg",
+  "uploadDate": "<%= date %>",
+  "duration": "<%- turntomins(VideoData?.lengthSeconds) || "LIVE"%> ",
+  "url": "https://<%=hostname %>/watch?v=<%=VideoData?.videoId%>",
+  "author": {
+    "@type": "Person",
+    "name": "<%=VideoData?.author%>"
+  },
+  "interactionStatistic": [
+    {
+      "@type": "InteractionCounter",
+      "interactionType": "https://schema.org/LikeAction",
+      "userInteractionCount": <%= isNaN(engagement?.likes) ? 0 : engagement.likes %>
+    },
+    {
+      "@type": "InteractionCounter",
+      "interactionType": "https://schema.org/DislikeAction",
+      "userInteractionCount": <%= isNaN(engagement?.dislikes) ? 0 : engagement.dislikes %>
+    },
+    {
+      "@type": "InteractionCounter",
+      "interactionType": "https://schema.org/WatchAction",
+      "userInteractionCount": <%= isNaN(engagement?.viewCount) ? 0 : engagement.viewCount %>
+    }
+  ],
+  "commentCount": <%= isNaN(inv.commentCount) ? 0 : inv.commentCount %>
+}
+</script>
+
 <style>     
   .comments-area {
   background: #f1f9ff;

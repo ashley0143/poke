@@ -1704,7 +1704,7 @@ WIP!                                                 </a>
                         
                      warning: returnyoutubedislikes may not be accurate, this is just an estiment ehe :3  <br>
 
-                   Rating  :  <%=engagement.rating.toLocaleString()%> (<%=engagement?.dislikes.toLocaleString()%>/<%=engagement?.likes.toLocaleString()%> <abbr title="Like To dislike ratio - the number to the left is dislike count and the one to the right is like count :3">LTDR</abbr>) <br>
+                   Rating  :  <%=engagement?.rating.toLocaleString()%> (<%=engagement?.dislikes.toLocaleString()%>/<%=engagement?.likes.toLocaleString()%> <abbr title="Like To dislike ratio - the number to the left is dislike count and the one to the right is like count :3">LTDR</abbr>) <br>
 
          <%
       const likes = parseInt(engagement?.likes) || 0;
@@ -1766,7 +1766,7 @@ WIP!                                                 </a>
                       <br><span style="color: <%= likeColor %>;"><%= likePercentage %>%</span> of the users lieked the video!! <br>
                       <span style="color: <%= dislikeColor %>;"><%= dislikePercentage %>%</span> of the users dislieked the video!! <br>
                       User score: <span style="color: <%= userScoreColor %>;"><%= userScore %></span>- <span class="<%= userScoreClass %>"> <%= userScoreLabel %> </span><br><br>
-                      RYD date created : <%=engagement.dateCreated.toLocaleString()%>  <br>
+                      RYD date created : <%=engagement?.dateCreated.toLocaleString()%>  <br>
                       <a href="/api/getEngagementData?v=<%=VideoData.videoId%>">See in json</a>
                       
                   

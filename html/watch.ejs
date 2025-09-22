@@ -1229,6 +1229,28 @@ Offical Discord Server! :3
 <% } %>
 
 <div class="pwp">
+<style>
+  /* Hide 2K and 4K by default */
+  .quality-2k,
+  .quality-4k {
+    display: none;
+  }
+
+  /* Show 2K option only if screen height or width >= 1440px */
+  @media (min-width: 2048px), (min-height: 1440px) {
+    .quality-2k {
+      display: inline-block;
+    }
+  }
+
+  /* Show 4K option only if screen width or height >= 2160px */
+  @media (min-width: 3840px), (min-height: 2160px) {
+    .quality-4k {
+      display: inline-block;
+    }
+  }
+</style>
+
 <%
   let qualityOptions = [];
   if (hasHD) qualityOptions.push("hd");
@@ -1243,39 +1265,40 @@ Offical Discord Server! :3
     <a><i style="display: block;" title="High Definition [Current]" class="fa-solid fa-high-definition"></i> High Definition</a>
     <a href="/watch?v=<%=VideoData.videoId%>&quality=medium"><i style="display: block;" title="Standard Definition" class="fa-light fa-standard-definition"></i> Standard Definition</a>
     <% if (hasUHD) { %>
-      <a href="/watch?v=<%=VideoData.videoId%>&quality=ultrahigh"><i style="display: block;" title="2K Definition" class="fa-light fa-high-definition"></i> 2K Definition</a>
+      <a class="quality-2k" href="/watch?v=<%=VideoData.videoId%>&quality=ultrahigh"><i style="display: block;" title="2K Definition" class="fa-light fa-high-definition"></i> 2K Definition</a>
     <% } %>
     <% if (has4K) { %>
-      <a href="/watch?v=<%=VideoData.videoId%>&quality=4k"><i style="display: block;" title="4K Definition" class="fa-light fa-high-definition"></i> 4K Definition</a>
+      <a class="quality-4k" href="/watch?v=<%=VideoData.videoId%>&quality=4k"><i style="display: block;" title="4K Definition" class="fa-light fa-high-definition"></i> 4K Definition</a>
     <% } %>
   <% } %>
   <% if (qua === "medium") { %> 
     <a href="/watch?v=<%=VideoData.videoId%>"><i style="display: block;" title="High Definition" class="fa-light fa-high-definition"></i> High Definition</a>
     <a><i style="display: block;" title="Standard Definition [Current]" class="fa-solid fa-standard-definition"></i> Standard Definition</a>
     <% if (hasUHD) { %>
-      <a href="/watch?v=<%=VideoData.videoId%>&quality=ultrahigh"><i style="display: block;" title="2K Definition" class="fa-light fa-high-definition"></i> 2K Definition</a>
+      <a class="quality-2k" href="/watch?v=<%=VideoData.videoId%>&quality=ultrahigh"><i style="display: block;" title="2K Definition" class="fa-light fa-high-definition"></i> 2K Definition</a>
     <% } %>
     <% if (has4K) { %>
-      <a href="/watch?v=<%=VideoData.videoId%>&quality=4k"><i style="display: block;" title="4K Definition" class="fa-light fa-high-definition"></i> 4K Definition</a>
+      <a class="quality-4k" href="/watch?v=<%=VideoData.videoId%>&quality=4k"><i style="display: block;" title="4K Definition" class="fa-light fa-high-definition"></i> 4K Definition</a>
     <% } %>
   <% } %>
   <% if (qua === "ultrahigh" && hasUHD) { %> 
     <a href="/watch?v=<%=VideoData.videoId%>"><i style="display: block;" title="High Definition" class="fa-light fa-high-definition"></i> High Definition</a>
     <a href="/watch?v=<%=VideoData.videoId%>&quality=medium"><i style="display: block;" title="Standard Definition" class="fa-light fa-standard-definition"></i> Standard Definition</a>
-    <a><i style="display: block;" title="2K Definition [Current]" class="fa-solid fa-high-definition"></i> 2K Definition</a>
+    <a class="quality-2k"><i style="display: block;" title="2K Definition [Current]" class="fa-solid fa-high-definition"></i> 2K Definition</a>
     <% if (has4K) { %>
-      <a href="/watch?v=<%=VideoData.videoId%>&quality=4k"><i style="display: block;" title="4K Definition" class="fa-light fa-high-definition"></i> 4K Definition</a>
+      <a class="quality-4k" href="/watch?v=<%=VideoData.videoId%>&quality=4k"><i style="display: block;" title="4K Definition" class="fa-light fa-high-definition"></i> 4K Definition</a>
     <% } %>
   <% } %>
   <% if (qua === "4k" && has4K) { %> 
     <a href="/watch?v=<%=VideoData.videoId%>"><i style="display: block;" title="High Definition" class="fa-light fa-high-definition"></i> High Definition</a>
     <a href="/watch?v=<%=VideoData.videoId%>&quality=medium"><i style="display: block;" title="Standard Definition" class="fa-light fa-standard-definition"></i> Standard Definition</a>
     <% if (hasUHD) { %>
-      <a href="/watch?v=<%=VideoData.videoId%>&quality=ultrahigh"><i style="display: block;" title="2K Definition" class="fa-light fa-high-definition"></i> 2K Definition</a>
+      <a class="quality-2k" href="/watch?v=<%=VideoData.videoId%>&quality=ultrahigh"><i style="display: block;" title="2K Definition" class="fa-light fa-high-definition"></i> 2K Definition</a>
     <% } %>
-    <a><i style="display: block;" title="4K Definition [Current]" class="fa-solid fa-high-definition"></i> 4K Definition</a>
+    <a class="quality-4k"><i style="display: block;" title="4K Definition [Current]" class="fa-solid fa-high-definition"></i> 4K Definition</a>
   <% } %>
 <% } %>
+
 
 <input type="checkbox" class="v" id="box" style="display:none">
 <label class="h" for="box">

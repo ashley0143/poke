@@ -45,26 +45,53 @@
 <meta content="<%=VideoData?.title%>" name=title>
 <meta content="<%=color%>" name="theme-color">
 <meta content="{canplayhd: true, redesign_feburary_2023:true, poke-rebrand:true, universe:2, ImmersiveAmbientMode:true, november2023_poke_rebrand:true, rebrand_2024:true, faster_load:true, AudioSyncV2:false, AudioSyncV3:true }" name="flags">
+<%
+  const desc = `Watch this ${turntomins(VideoData?.lengthSeconds) || "LIVE"} long video from ${VideoData?.author} On Poke! 
+👍 ${convert(engagement?.likes)} | 👎 ${convert(engagement?.dislikes)} | 📈 ${convert(engagement?.viewCount)} Views 🗓️ ${date.replace("Premiered", " ")} 💬 ${!isNaN(inv.commentCount) ? inv.commentCount.toLocaleString() : 0}`;
+
+  const image = `https://i.ytimg.com/vi/${VideoData.videoId}/maxresdefault.jpg`;
+  const url   = `https://${hostname}/watch?v=${VideoData?.videoId}`;
+  const title = `${VideoData?.title} | Poke`;
+
+  const twitterTags = [
+    { name: "twitter:author", content: VideoData?.author },
+    { name: "twitter:url", content: url },
+    { name: "twitter:title", content: title },
+    { name: "twitter:description", content: desc },
+    { name: "twitter:image", content: image },
+    { name: "twitter:card", content: "summary_large_image" },
+  ];
+
+  const facebookTags = [
+    { property: "facebook:title", content: title },
+    { property: "facebook:description", content: desc },
+    { property: "facebook:image", content: image },
+  ];
+
+  const ogTags = [
+    { property: "og:title", content: title },
+    { property: "og:type", content: "video.other" },
+    { property: "og:url", content: url },
+    { property: "og:description", content: desc },
+    { property: "og:image", content: image },
+  ];
+%>
+
 <!-- twitter -->
-<meta content="<%=VideoData?.author%>" name="twitter:author">
-<meta content="https://<%=hostname %>/watch?v=<%=VideoData?.videoId%>" name="twitter:url">
-<meta content="<%=VideoData?.title%> | Poke" name="twitter:title">
-<meta content="Watch this <%- turntomins(VideoData?.lengthSeconds) || "LIVE"%> long video from <%=VideoData?.author%> On Poke! 
-👍 <%=convert(engagement?.likes)%> | 👎 <%=convert(engagement?.dislikes)%> | 📈 <%=convert(engagement?.viewCount)%> Views 🗓️ <%= date.replace("Premiered", " ") %> 💬 <% if (!isNaN(inv.commentCount)) { %><%= inv.commentCount.toLocaleString() %><% } else { %>0<% } %>" name="twitter:description">
-<meta content="https://i.ytimg.com/vi/<%=VideoData.videoId%>/maxresdefault.jpg" name="twitter:image">
-<meta content="summary_large_image" name="twitter:card">
-<!-- Facebook -->
-<meta property="facebook:title" content="<%=VideoData?.title%> | Poke">
-<meta property="facebook:description" content="Watch this <%- turntomins(VideoData?.lengthSeconds) || "LIVE"%> long video from <%=VideoData?.author%> On Poke! 
-👍 <%=convert(engagement?.likes)%> | 👎 <%=convert(engagement?.dislikes)%> | 📈 <%=convert(engagement?.viewCount)%> Views 🗓️ <%= date.replace("Premiered", " ") %> 💬 <% if (!isNaN(inv.commentCount)) { %><%= inv.commentCount.toLocaleString() %><% } else { %>0<% } %>">
-<meta property="facebook:image" content="https://i.ytimg.com/vi/<%=VideoData.videoId%>/maxresdefault.jpg">
-<!-- Open Graph -->
-<meta property="og:title" content="<%=VideoData?.title%> | Poke">
-<meta property="og:type" content="video.other">
-<meta property="og:url" content="https://<%=hostname %>/watch?v=<%=VideoData?.videoId%>">
-<meta property="og:description" content="Watch this <%- turntomins(VideoData?.lengthSeconds) || "LIVE"%> long video from <%=VideoData?.author%> On Poke! 
-👍 <%=convert(engagement?.likes)%> | 👎 <%=convert(engagement?.dislikes)%> | 📈 <%=convert(engagement?.viewCount)%> Views 🗓️ <%= date.replace("Premiered", " ") %> 💬 <% if (!isNaN(inv.commentCount)) { %><%= inv.commentCount.toLocaleString() %><% } else { %>0<% } %>">
-<meta property="og:image" content="https://i.ytimg.com/vi/<%=VideoData.videoId%>/maxresdefault.jpg">
+<% twitterTags.forEach(tag => { %>
+<meta name="<%= tag.name %>" content="<%- tag.content %>">
+<% }) %>
+
+<!-- facebook -->
+<% facebookTags.forEach(tag => { %>
+<meta property="<%= tag.property %>" content="<%- tag.content %>">
+<% }) %>
+
+<!-- opengraph -->
+<% ogTags.forEach(tag => { %>
+<meta property="<%= tag.property %>" content="<%- tag.content %>">
+<% }) %>
+
 
 <link href="https://<%=hostname %>/watch?v=<%=VideoData.videoId%>" itemprop=url>
 <!-- closes the } --> <% } %> 

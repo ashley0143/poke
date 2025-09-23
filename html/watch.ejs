@@ -1418,12 +1418,10 @@ Offical Discord Server! :3
     <% if (statsForNerdsQuality.bitrate) { %> | <%= statsForNerdsQuality.bitrate %> bps <% } %>
   <% } %>
      <br> 
-        <% if (VideoData.genre === "Music") { %> 
-        Audio Format: ALAC lossless (https://github.com/macosforge/alac) <br>
+         <% if (qua === "medium") { %>
+         Audio Format: 140 (AUDIO_QUALITY_MEDIUM) m4a | aac | 44100hz | STEREO(2channels)<br>
                                     <% } %>   
-    <% if (VideoData.genre !== "Music") { %> 
-        Audio Format: 140 ( High ) <br>
-                                    <% } %>   
+     
         PokeEncryptID: <%=sha384(VideoData.videoId)%> <br>
                       <% if (isvidious) { %>
 

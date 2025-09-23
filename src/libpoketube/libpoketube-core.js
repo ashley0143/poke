@@ -59,9 +59,9 @@ class InnerTubePokeVidious {
       "User-Agent": this.useragent,
     };
 
-// Retries only within a 5s window that starts AFTER the first 500/502.
+// Retries only within a 8s window that starts AFTER the first 500/502.
 // Fast path: one plain fetch with no extra timers/signals unless 500/502 occurs.
-const fetchWithRetry = async (url, options = {}, maxRetryTime = 5000) => {
+const fetchWithRetry = async (url, options = {}, maxRetryTime = 8000) => {
   let lastError;
 
   // Trigger statuses that arm the retry window
@@ -157,7 +157,7 @@ const fetchWithRetry = async (url, options = {}, maxRetryTime = 5000) => {
   // Optional short stagger before the first retry to reduce herd effects
   // await sleep(50 + ((Math.random() * 150) | 0));
 
-  // Retry loop within the 5s window
+  // Retry loop within the 8s window
   while (true) {
     const elapsed = Date.now() - retryStart;
     const remaining = maxRetryTime - elapsed;

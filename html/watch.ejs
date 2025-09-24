@@ -79,10 +79,11 @@
 
 <!-- Twitter -->
 <% twitterTags.forEach(tag => { -%>
+<meta name="twitter:card" content="summary_large_image">
 <meta name="<%= tag.name %>" content="<%- tag.content %>">
 
 <% }) -%>
-<meta name="twitter:card" content="summary_large_image">
+
 <!-- Facebook -->
 
 

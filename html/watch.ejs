@@ -1096,7 +1096,7 @@ Offical Discord Server! :3
  	<div class="primary">
       <div id="popupMenu" class="popup">
    <div >
-          <a href="<%=u%>/latest_version?id=<%=VideoData.videoId%>&itag=18&local=true" style="color: #fff;">
+          <a href="<%=u%>/companion/latest_version?id=<%=VideoData.videoId%>&itag=18&local=true" style="color: #fff;">
        <i class="fa-light fa-download"></i> Download Video (360p)</a>
               </div>   <div >
 
@@ -1148,7 +1148,7 @@ Offical Discord Server! :3
 
 <% if (itag && qua !== "medium" && itag !== '18') { %>
   <audio id="aud" preload>
-    <source src="<%=u%>/latest_version?id=<%=VideoData.videoId%>&itag=<%=itag%>&local=true" type="video/mp4" />
+    <source src="<%=u%>/companion/latest_version?id=<%=VideoData.videoId%>&itag=<%=itag%>&local=true" type="video/mp4" />
   </audio>
 <% } else { %>
   <audio id="aud"></audio>
@@ -1169,14 +1169,14 @@ Offical Discord Server! :3
           if (format.itag == '298') hdItag = '298';
         });
       %>
-        <source src="<%=u%>/latest_version?id=<%=VideoData.videoId%>&itag=<%=hdItag%>&local=true" type="video/mp4" label="hd720" selected="true">
+        <source src="<%=u%>/companion/latest_version?id=<%=VideoData.videoId%>&itag=<%=hdItag%>&local=true" type="video/mp4" label="hd720" selected="true">
       <% } else { %>
-        <source src="<%=u%>/latest_version?id=<%=VideoData.videoId%>&itag=18&local=true" type="video/mp4" label="sd360" selected="true">
+        <source src="<%=u%>/companion/latest_version?id=<%=VideoData.videoId%>&itag=18&local=true" type="video/mp4" label="sd360" selected="true">
       <% } %>
     <% } %>
 
     <% if (qua === "medium") { %>
-      <source src="<%=u%>/latest_version?id=<%=VideoData.videoId%>&itag=18&local=true" type="video/mp4" label="sd360" selected="true">
+      <source src="<%=u%>/companion/latest_version?id=<%=VideoData.videoId%>&itag=18&local=true" type="video/mp4" label="sd360" selected="true">
     <% } %>
 
     <% if (qua === "ultrahigh") { %>
@@ -1187,9 +1187,9 @@ Offical Discord Server! :3
           else if (format.itag == '271' && !ultraItag) ultraItag = '271';
         });
       %>
-        <source src="<%=u%>/latest_version?id=<%=VideoData.videoId%>&itag=<%=ultraItag%>&local=true" type="video/mp4" label="ultrahigh" selected="true">
+        <source src="<%=u%>/companion/latest_version?id=<%=VideoData.videoId%>&itag=<%=ultraItag%>&local=true" type="video/mp4" label="ultrahigh" selected="true">
       <% } else { %>
-        <source src="<%=u%>/latest_version?id=<%=VideoData.videoId%>&itag=18&local=true" type="video/mp4" label="sd360" selected="true">
+        <source src="<%=u%>/companion/latest_version?id=<%=VideoData.videoId%>&itag=18&local=true" type="video/mp4" label="sd360" selected="true">
       <% } %>
     <% } %>
 
@@ -1201,9 +1201,9 @@ Offical Discord Server! :3
           else if (format.itag == '401' && !fourKItag) fourKItag = '401';
         });
       %>
-        <source src="<%=u%>/latest_version?id=<%=VideoData.videoId%>&itag=<%=fourKItag%>&local=true" type="video/mp4" label="4k" selected="true">
+        <source src="<%=u%>/companion/latest_version?id=<%=VideoData.videoId%>&itag=<%=fourKItag%>&local=true" type="video/mp4" label="4k" selected="true">
       <% } else { %>
-        <source src="<%=u%>/latest_version?id=<%=VideoData.videoId%>&itag=18&local=true" type="video/mp4" label="sd360" selected="true">
+        <source src="<%=u%>/companion/latest_version?id=<%=VideoData.videoId%>&itag=18&local=true" type="video/mp4" label="sd360" selected="true">
       <% } %>
     <% } %>
   <% } else { %>
@@ -2907,7 +2907,7 @@ a {
 
                      
 <source
-  src="<%=u%>/latest_version?id=<%=VideoData.videoId%>&itag=18&local=true"
+  src="<%=u%>/companion/latest_version?id=<%=VideoData.videoId%>&itag=18&local=true"
   type='video/mp4; codecs="avc1.64001F, mp4a.40.2"'
   label="hd720"
   selected="true"

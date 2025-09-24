@@ -79,11 +79,18 @@
 
 <!-- Twitter -->
 <% twitterTags.forEach(tag => { -%>
-<meta name="<%= tag.name %>" content="<%- tag.content %>"><% }) -%>
+<meta name="<%= tag.name %>" content="<%- tag.content %>">
+
+<% }) -%>
 <meta name="twitter:card" content="summary_large_image">
 <!-- Facebook -->
+
+
 <% facebookTags.forEach(tag => { -%>
-<meta property="<%= tag.property %>" content="<%- tag.content %>"><% }) -%>
+<meta property="<%= tag.property %>" content="<%- tag.content %>">
+
+
+<% }) -%>
 
 <!-- Open Graph -->
 <% ogTags.forEach(tag => { -%>

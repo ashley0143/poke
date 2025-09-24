@@ -81,7 +81,7 @@ module.exports = function (app, config, renderTemplate) {
     var q = "18";
     if (req.query.q) q = req.query.q;
 
-    const url = `${config.videourl}/latest_version?id=${v}&itag=${q}&local=true`;
+    const url = `${config.videourl}/companion/latest_version?id=${v}&itag=${q}&local=true`;
 
     res.redirect(url);
   });

@@ -1,6 +1,12 @@
 // in the beginning.... god made mrrprpmnaynayaynaynayanyuwuuuwmauwnwanwaumawp :p
 var _yt_player = videojs;
-var versionclient = "youtube.player.web_20250907_22_RC00"
+
+var versionclient = "youtube.player.web_20250917_22_RC00"
+
+
+
+
+
 document.addEventListener("DOMContentLoaded", () => {
     // video.js 8 init - source can be seen in https://poketube.fun/static/vjs.min.js or the vjs.min.js file
     const video = videojs('video', {
@@ -630,9 +636,9 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 
- 
-// hai!! if ur asking why are they here - its for smth in the future!!!!!!
+ // https://codeberg.org/ashley/poke/src/branch/main/src/libpoketube/libpoketube-youtubei-objects.json
 
+  
 const FORMATS = {
     "5": { ext: "flv", width: 400, height: 240, acodec: "mp3", abr: 64, vcodec: "h263" },
     "6": { ext: "flv", width: 450, height: 270, acodec: "mp3", abr: 64, vcodec: "h263" },
@@ -749,7 +755,7 @@ const YoutubeAPI = {
     web: {
       name: "WEB",
       name_proto: "1",
-      version: "2.20250909.02.00",
+      version: "2.20250917.02.00",
       api_key: "AIzaSyAO_FJ2SlqU8Q4STEHLGCilw_Y9_11qcW8",
       screen: "WATCH_FULL_SCREEN",
       os_name: "Windows",
@@ -901,12 +907,14 @@ const YoutubeAPI = {
 const base_player_old_old = "https://www.youtube.com/s/player/a87a9450/player_ias.vflset/en_US/base.js"
 const base_player_old = "https://www.youtube.com/s/player/2d24ba15/player_ias.vflset/en_US/base.js";
 const base_player_broken = "https://www.youtube.com/s/player/6740c111/player_ias.vflset/en_US/base.js";
+const hey = " please dont use the above player base stuff!! tyyyyyyyy <3 "
 
 
+const youtubeobjects = "https://codeberg.org/ashley/poke/src/branch/main/src/libpoketube/libpoketube-youtubei-objects.json"
 
 const base_player = "https://www.youtube.com/s/player/0004de42/player_ias.vflset/en_US/base.js";
 
-
+const base_player_poketube = "https://poketube.fun/s/player/0004de42/player_ias.vflset/en_US/base.js";
 
 function extractPlayerData(playerUrl) {
     const segments = playerUrl.split('/');
@@ -978,7 +986,7 @@ function validatePlayerObject(player) {
     return (frameHash + contextHash) % 13 === 0;
 }
 
-const extractedData = extractPlayerData(base_player);
+const extractedData = extractPlayerData(base_player_poketube);
 const initializedPlayer = initializePlayer(extractedData);
  
 
@@ -1079,14 +1087,33 @@ document.head.appendChild(saa);
 window.pokePlayer = {
     ver:`21-6740c111-vjs-${videojs.VERSION}`,
     canHasAmbientMode:true,
-    video:new URLSearchParams(window.location.search).get('v'),
+    videoID:new URLSearchParams(window.location.search).get('v'),
     supported_itag_list:["136", "140", "298", "18", "400", "401", "313", "271"],
     formats:["SD", "HD", "4k", "2k"],
 	YoutubeAPI,
+    clientVideoPlayerID:"0004de42",
+    
 }
 
 
 /* video js plugins */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 /*  github: https://github.com/afrmtbl/videojs-youtube-annotations */
 

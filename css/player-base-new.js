@@ -910,7 +910,7 @@ const base_player_broken = "https://www.youtube.com/s/player/6740c111/player_ias
 const hey = " please dont use the above player base stuff!! tyyyyyyyy <3 "
 
 
-const youtubeobjects = "https://codeberg.org/ashley/poke/src/branch/main/src/libpoketube/libpoketube-youtubei-objects.json"
+const youtubeobjects = "https://codeberg.org/ashley/poke/raw/branch/main/src/libpoketube/libpoketube-youtubei-objects.json"
 
 const base_player = "https://www.youtube.com/s/player/0004de42/player_ias.vflset/en_US/base.js";
 

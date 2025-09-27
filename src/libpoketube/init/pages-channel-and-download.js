@@ -240,7 +240,7 @@ function channelurlfixer(text) {
 
       const getChannelData = async (url) => {
         try {
-          return await fetch(url, {
+          return await fetch(url + "&h=truer", {
             headers: {
               'User-Agent': config.useragent,
             },

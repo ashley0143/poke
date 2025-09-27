@@ -184,6 +184,16 @@ class InnerTubePokeVidious {
       }
     };
 
+    // pick API based on system time minute window
+    const minute = new Date().getMinutes();
+    const inFallbackWindow = minute % 20 >= 10; // 0–9 primary, 10–19 fallback
+
+    const primaryUrl = `${this.config.invapi}/videos/${v}?hl=${contentlang}&region=${contentregion}&h=${btoa(Date.now())}`;
+    const fallbackUrl = `${this.config.inv_fallback}${v}?hl=${contentlang}&region=${contentregion}&h=${btoa(Date.now())}`;
+
+    const chooseFirst = inFallbackWindow ? fallbackUrl : primaryUrl;
+    const chooseSecond = inFallbackWindow ? primaryUrl : fallbackUrl;
+
     try {
       const [invComments, videoInfo] = await Promise.all([
         fetchWithRetry(
@@ -192,26 +202,14 @@ class InnerTubePokeVidious {
           )}`
         ).then((res) => res?.text()),
         (async () => {
-          const controller = new AbortController();
-          const timeout = setTimeout(() => controller.abort(), 5000);
           try {
-            const res = await fetchWithRetry(
-              `${this.config.invapi}/videos/${v}?hl=${contentlang}&region=${contentregion}&h=${btoa(
-                Date.now()
-              )}`,
-              { signal: controller.signal }
-            );
-            return await res.text();
+            const r = await fetchWithRetry(chooseFirst);
+            if (r.ok) return await r.text();
+            throw new Error(`First API ${chooseFirst} failed with ${r.status}`);
           } catch (err) {
-            this.initError("Primary video fetch failed, trying fallback", err);
-            const fallbackRes = await fetchWithRetry(
-              `${this.config.inv_fallback}${v}?hl=${contentlang}&region=${contentregion}&h=${btoa(
-                Date.now()
-              )}`
-            );
-            return await fallbackRes.text();
-          } finally {
-            clearTimeout(timeout);
+            this.initError("Primary choice failed, trying secondary", err);
+            const r2 = await fetchWithRetry(chooseSecond);
+            return await r2.text();
           }
         })(),
       ]);

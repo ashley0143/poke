@@ -240,7 +240,7 @@ function channelurlfixer(text) {
 
       const getChannelData = async (url) => {
         try {
-          return await fetch(url + "&h=truer", {
+          return await fetch(url, {
             headers: {
               'User-Agent': config.useragent,
             },
@@ -255,27 +255,27 @@ function channelurlfixer(text) {
       const apiUrl = config.invapi + "/channels/";
       const channelUrl = `${apiUrl}${ID}/${atob(
         ChannelTabs.videos
-      )}?sort_by=${sort_by}${continuation}`;
+      )}?sort_by=${sort_by}${continuation}&h=yeahyeahy`;
 
       const shortsUrl = `${apiUrl}${ID}/${atob(
         ChannelTabs.shorts
-      )}?sort_by=${sort_by}${continuation}`;
+      )}?sort_by=${sort_by}${continuation}&h=yeah`;
 
       const streamUrl = `${apiUrl}${ID}/${atob(
         ChannelTabs.streams
-      )}?sort_by=${sort_by}${continuation}`;
+      )}?sort_by=${sort_by}${continuation}&h=yee`;
 
       const communityUrl = `${apiUrl}${ID}/${atob(
         ChannelTabs.community
-      )}?hl=en-US`;
+      )}?hl=en-US&h=ye`;
 
       const PlaylistUrl = `${apiUrl}${ID}/${atob(
         ChannelTabs.playlist
-      )}?hl=en-US`;
+      )}?hl=en-US&h=ye`;
 
-   const releasesUrl = `${apiUrl}${ID}/releases?hl=en-US`;
+   const releasesUrl = `${apiUrl}${ID}/releases?hl=en-US&h=y`;
 
-      const channelINVUrl = `${apiUrl}${ID}/`;
+      const channelINVUrl = `${apiUrl}${ID}/?h=ye`;
 
       const pronoun = "no pronouns :c";
 

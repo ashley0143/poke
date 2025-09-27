@@ -64,6 +64,17 @@ module.exports = function (app, config, renderTemplate) {
     f.body.pipe(res);
   });
 
+  app.get("s/player/:playerid/player_ias.vflset/en_US/base.js", async function (req, res) {
+    var url = `https://www.youtube.com/s/player/${req.params.playerid}/player_ias.vflset/en_US/base.js`;
+
+    let f = await modules.fetch(url + `?cachefixer=${btoa(Date.now())}`, {
+      method: req.method,
+      headers: headers,
+    });
+
+    f.body.pipe(res);
+  });
+
   app.get("/avatars/ytc/:v", async function (req, res) {
     var url = `https://yt3.googleusercontent.com/ytc/${req.params.v.replace("ytc", "")}`;
 

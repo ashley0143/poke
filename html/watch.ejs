@@ -2695,8 +2695,7 @@ window.addEventListener("unload", cleanup)
 
   <% } %>
 
-     <% if (isMobile) { %> 
-     <% if (isMobile) { %> 
+     <% if (isMobile) { %> <% if (isMobile) { %> 
      <!--
     This Source Code Form is subject to the terms of the GNU General Public License:
 
@@ -3912,7 +3911,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Set metadata
     navigator.mediaSession.metadata = new MediaMetadata({
       title: "<%- VideoData.title %>",
-      artist: "<%= video?.Channel?.Name || VideoData.author %>",
+      artist: "<%= VideoData?.author?.replace("- Topic", "") %>",
       album: "Poke",
       artwork: [
         {

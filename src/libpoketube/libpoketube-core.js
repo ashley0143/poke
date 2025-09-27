@@ -308,6 +308,7 @@ const fetchWithRetry = async (url, options = {}, maxRetryTime = 8000) => {
 
 const pokeTubeApiCore = new InnerTubePokeVidious({
   invapi: "https://invid-api.poketube.fun/bHj665PpYhUdPWuKPfZuQGoX/api/v1",
+  inv_fallback:"https://fallback-invid-api.poketube.fun/api/v1",
   useragent: config.useragent,
 });
 

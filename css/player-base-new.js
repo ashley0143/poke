@@ -900,7 +900,11 @@ const YoutubeAPI = {
 // player base 
 const base_player_old_old = "https://www.youtube.com/s/player/a87a9450/player_ias.vflset/en_US/base.js"
 const base_player_old = "https://www.youtube.com/s/player/2d24ba15/player_ias.vflset/en_US/base.js";
-const base_player = "https://www.youtube.com/s/player/6740c111/player_ias.vflset/en_US/base.js";
+const base_player_broken = "https://www.youtube.com/s/player/6740c111/player_ias.vflset/en_US/base.js";
+
+
+
+const base_player = "https://www.youtube.com/s/player/0004de42/player_ias.vflset/en_US/base.js";
 
 
 

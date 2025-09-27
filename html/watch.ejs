@@ -77,9 +77,7 @@
 
 <!-- Twitter -->
 <% twitterTags.forEach(tag => { -%>
-
 <meta name="<%= tag.name %>" content="<%- tag.content %>">
-
 <% }) -%>
 
 <!-- Facebook -->
@@ -87,13 +85,12 @@
 
 <% facebookTags.forEach(tag => { -%>
 <meta property="<%= tag.property %>" content="<%- tag.content %>">
-
-
 <% }) -%>
 
 <!-- Open Graph -->
 <% ogTags.forEach(tag => { -%>
-<meta property="<%= tag.property %>" content="<%- tag.content %>"><% }) -%>
+<meta property="<%= tag.property %>" content="<%- tag.content %>">
+<% }) -%>
 
 <link href="https://<%=hostname %>/watch?v=<%=VideoData.videoId%>" itemprop=url>
 <!-- closes the } --> <% } %> 

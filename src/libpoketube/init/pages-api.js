@@ -75,40 +75,45 @@ module.exports = function (app, config, renderTemplate) {
     f.body.pipe(res);
   });
 
-
 app.get("/api/nominatim/search", async (req, res) => {
-  const qs = new URLSearchParams(req.query).toString();
-  const url = `https://nominatim.openstreetmap.org/search?${qs}`;
   try {
-    const r = await fetch(url, {
-      headers: {
-        "Accept-Language": req.headers["accept-language"] || "en",
-        "User-Agent": "PokeWeather Proxy (pokeweather.local)"
-      }
+    const url = new URL("https://nominatim.openstreetmap.org/search");
+    // Forward all query params (format, q, limit, etc.)
+    for (const [key, value] of Object.entries(req.query)) {
+      url.searchParams.set(key, value);
+    }
+    // Force JSON output if not specified
+    if (!url.searchParams.has("format")) url.searchParams.set("format", "json");
+
+    const r = await fetch(url.toString(), {
+      headers: { "Accept-Language": req.headers["accept-language"] || "en" }
     });
-    res.status(r.status);
-    r.body.pipe(res);
+    const data = await r.json();
+    res.json(data);
   } catch (err) {
-    res.status(500).json({ error: "Failed to reach Nominatim search" });
+    res.status(500).json({ error: "Failed to fetch from nominatim" });
   }
 });
 
+// Proxy for reverse geocoding
 app.get("/api/nominatim/reverse", async (req, res) => {
-  const qs = new URLSearchParams(req.query).toString();
-  const url = `https://nominatim.openstreetmap.org/reverse?${qs}`;
   try {
-    const r = await fetch(url, {
-      headers: {
-        "Accept-Language": req.headers["accept-language"] || "en",
-        "User-Agent": "PokeWeather Proxy (pokeweather.local)"
-      }
+    const url = new URL("https://nominatim.openstreetmap.org/reverse");
+    for (const [key, value] of Object.entries(req.query)) {
+      url.searchParams.set(key, value);
+    }
+    if (!url.searchParams.has("format")) url.searchParams.set("format", "json");
+
+    const r = await fetch(url.toString(), {
+      headers: { "Accept-Language": req.headers["accept-language"] || "en" }
     });
-    res.status(r.status);
-    r.body.pipe(res);
+    const data = await r.json();
+    res.json(data);
   } catch (err) {
-    res.status(500).json({ error: "Failed to reach Nominatim reverse" });
+    res.status(500).json({ error: "Failed to fetch from nominatim" });
   }
 });
+
   app.get("/avatars/ytc/:v", async function (req, res) {
     var url = `https://yt3.googleusercontent.com/ytc/${req.params.v.replace("ytc", "")}`;
 

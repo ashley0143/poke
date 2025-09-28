@@ -17,6 +17,8 @@
   <a href="#welcome">Welcome!</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="#features">Features</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="#no-non-free-codec-needed">No Non-Free Codec</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="#hosting-poke">Hosting</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="#poke-community">Community</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="#legal">Legal</a>
   <br><br>
   <img src="https://raw.githubusercontent.com/vshymanskyy/StandWithUkraine/main/badges/StandWithUkraine.svg" alt="Stand with Ukraine">
+  <img src="https://codeberg.org/ashley/pages/raw/branch/main/images/trans-badge.svg">
+  <img src="https://codeberg.org/ashley/pages/raw/branch/main/images/free-Palestine.svg">
   <a href="./LICENSE">
     <img src="https://img.shields.io/badge/License-GPL--3-FF6666" alt="GPL-3-or-later License">
   </a>

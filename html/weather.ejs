@@ -576,7 +576,7 @@ main {
 
   async function searchPlaces(q){
     if(!q) return [];
-    const url=`https://nominatim.openstreetmap.org/search?format=json&limit=5&addressdetails=1&q=${encodeURIComponent(q)}`;
+    const url = `/api/nominatim/search?format=json&limit=5&addressdetails=1&q=${encodeURIComponent(q)}`;
     const r=await fetch(url,{headers:{'Accept-Language':navigator.language}});
     if(!r.ok) return [];
     return r.json();
@@ -695,7 +695,7 @@ main {
   });
 
   function reverseName(lat,lon){
-    const u=`https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${lat}&lon=${lon}`;
+    const u=`/api/nominatim/reverse?format=jsonv2&lat=${lat}&lon=${lon}`;
     return fetch(u).then(r=>r.ok?r.json():null).then(j=>j?.display_name?.split(',').slice(0,2).join(', ')||`${lat.toFixed(3)},${lon.toFixed(3)}`);
   }
 

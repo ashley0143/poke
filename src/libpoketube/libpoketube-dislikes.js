@@ -99,8 +99,8 @@ Returns basic data about a given YouTube video using PokeTubeAPI.
 */
 
 const getDislikesData = async (videoId) => {
-  const pokeTubeAPI = new PokeTubeDislikesAPIManager(videoId);
-  return await pokeTubeAPI.getData();
+  const pokeTubeAPIDislikes = new PokeTubeDislikesAPIManager(videoId);
+  return await pokeTubeAPIDislikes.getData();
 };
 
 module.exports = getDislikesData;

@@ -190,14 +190,14 @@ class InnerTubePokeVidious {
       }
     };
 
-    // --- New scheduling logic ---
+    // --- scheduling logic ---
     // Rotate which window
     // prefers fallback/primary every 2 hours using a custom sequence.
     //
     // Sequence: fallback, normal, fallback, normal, normal, fallback
     // each element = which API is preferred *for that 2-hour block*.
     //
-    // Within the chosen preference, the original 10-minute switching (minute % 20 >= 10)
+    // Within the chosen preference, the 10-minute switching (minute % 20 >= 10)
     // still applies, but which side corresponds to the inFallbackWindow is flipped
     // depending on the 2-hour preference.
 
@@ -212,7 +212,7 @@ class InnerTubePokeVidious {
     const currentPreference = twoHourPattern[twoHourIndex]; // 'fallback' or 'normal'
 
     // 10-minute toggle windows (true when the 10-minute 'fallback' windows happen)
-    const inFallbackWindow = minute % 20 >= 10; // preserves original 10-minute switching
+    const inFallbackWindow = minute % 20 >= 10; 
 
     // build the URLs 
     const primaryUrl = `${this.config.invapi}/videos/${v}?hl=${contentlang}&region=${contentregion}&h=${this.toBase64(Date.now())}`;

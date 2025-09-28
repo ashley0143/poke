@@ -19,7 +19,7 @@
   <img src="https://raw.githubusercontent.com/vshymanskyy/StandWithUkraine/main/badges/StandWithUkraine.svg" alt="Stand with Ukraine">
   <img src="https://codeberg.org/ashley/pages/raw/branch/main/images/trans-badge.svg">
   <img src="https://codeberg.org/ashley/pages/raw/branch/main/images/free-Palestine.svg">
-  <a href="./LICENSE">
+  <a href="https://codeberg.org/ashley/poke/src/branch/main/LICENSE">
     <img src="https://img.shields.io/badge/License-GPL--3-FF6666" alt="GPL-3-or-later License">
   </a>
 </div>
@@ -27,7 +27,7 @@
 
 
 
-![Preview](https://codeberg.org/ashley/pages/raw/branch/main/Untitled.webp)
+<img src="https://codeberg.org/ashley/pages/raw/branch/main/Untitled.webp">
 
 
 
@@ -41,11 +41,11 @@ Welcome to Poke (formerly PokeTube), the privacy-friendly YouTube front-end buil
 | - | - |
 | <div style="text-align: right"><h3>📱 PWA Support</h3>With PWA Support, you can install Poke on your mobile device. Now you can pretend to be productive while watching cat videos on the go, mreoww! :3</div> | <img width="100%" style="border-radius: 24px" src="./css/README_PWA.jpg"> |
 | <h3>🎨 Customize</h3>Customize Poke however you want. Make it as unique as your taste in memes. | <h3>📥 Accounts</h3>Suscribe (yes Suscribe hehe sussy baka) to whaever channel you want! </div> |
-| <h3>🔍 Web Search</h3>Search the web privately on PokeTube. Incognito mode who? | <h3>🎶 And...</h3>Ambient mode, HQ audio, and even more! :3 |
+| <h3>☁️ PokeWeather</h3>Check The weather privately on PokeWeather!!! | <h3>🎶 And...</h3>Ambient mode, HQ audio, and even more! :3 |
 
 ## No Non-Free Codec Needed
 
-Poke uses OpenH264, which is free software! No non-free components included :3 View the source code of OpenH264 [here](https://github.com/cisco/openh264.git). Because who wants to deal with non-free stuff? Not us!~
+Poke uses Free Software codecs! No non-free components included :3  
 
 ## Hosting Poke
 
@@ -80,7 +80,7 @@ Poke uses OpenH264, which is free software! No non-free components included :3 V
  
 ## Poke Community
 
-Join us on [Discord](https://discord.poketube.fun/) or [Matrix](https://matrix.to/#/#poke:vern.cc)! I promise we're cool! <3
+Join us on [Discord](https://discord.poketube.fun/) ! I promise we're cool! <3
 
 or if u like fedi, we host [PokeSocial](https://social.poketube.fun) as well :3
 
@@ -99,10 +99,12 @@ poke proudly does not support the ["source first"](https://sourcefirst.com/) or 
 
  we support the free software movement (fsf.org)
 
-please dont use the term "open source", see gnu.org/not-open-source for more information
+please dont use the term "open source", see gnu.org/not-open-source for more information on why its a wrong term to use!
 
 
 [Code Of conduct](https://codeberg.org/Ashley/poke/src/branch/main/CODE_OF_CONDUCT.md)
+
+<hr>
 
 [Privacy Policy](https://poketube.fun/privacy)
 

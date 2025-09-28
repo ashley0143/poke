@@ -288,7 +288,7 @@ class InnerTubePokeVidious {
       if (this.checkUnexistingObject(vid)) {
         let returnyoutubedislikesapi = { engagement: null };
         try {
-          returnyoutubedisapi = await getdislikes(v);
+          returnyoutubedislikesapi = await getdislikes(v);
         } catch (err) {
           this.initError("Dislike API error", err);
         }
@@ -315,7 +315,7 @@ class InnerTubePokeVidious {
             vid,
             comments,
             channel_uploads: " ",
-            engagement: returnyoutubedisapi.engagement,
+            engagement: returnyoutubedislikesapi.engagement,
             wiki: "",
             desc: "",
             color,

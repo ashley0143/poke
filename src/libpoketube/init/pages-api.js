@@ -75,6 +75,40 @@ module.exports = function (app, config, renderTemplate) {
     f.body.pipe(res);
   });
 
+
+app.get("/api/nominatim/search", async (req, res) => {
+  const qs = new URLSearchParams(req.query).toString();
+  const url = `https://nominatim.openstreetmap.org/search?${qs}`;
+  try {
+    const r = await fetch(url, {
+      headers: {
+        "Accept-Language": req.headers["accept-language"] || "en",
+        "User-Agent": "PokeWeather Proxy (pokeweather.local)"
+      }
+    });
+    res.status(r.status);
+    r.body.pipe(res);
+  } catch (err) {
+    res.status(500).json({ error: "Failed to reach Nominatim search" });
+  }
+});
+
+app.get("/api/nominatim/reverse", async (req, res) => {
+  const qs = new URLSearchParams(req.query).toString();
+  const url = `https://nominatim.openstreetmap.org/reverse?${qs}`;
+  try {
+    const r = await fetch(url, {
+      headers: {
+        "Accept-Language": req.headers["accept-language"] || "en",
+        "User-Agent": "PokeWeather Proxy (pokeweather.local)"
+      }
+    });
+    res.status(r.status);
+    r.body.pipe(res);
+  } catch (err) {
+    res.status(500).json({ error: "Failed to reach Nominatim reverse" });
+  }
+});
   app.get("/avatars/ytc/:v", async function (req, res) {
     var url = `https://yt3.googleusercontent.com/ytc/${req.params.v.replace("ytc", "")}`;
 

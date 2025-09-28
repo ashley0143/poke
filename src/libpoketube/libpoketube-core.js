@@ -205,13 +205,13 @@ class InnerTubePokeVidious {
     const hour = new Date().getHours();
 
     // pattern for each 2-hour block (6 blocks to cover 12 hours; repeats every 12 hours)
-    const twoHourPattern = ["fallback", "normal", "fallback", "normal", "normal", "fallback"];
+    const pattern = ["fallback", "normal", "fallback", "normal", "normal", "fallback"];
 
     // determine which 2-hour slot we're in (0..11 hours cover repeating pattern every 12 hours)
-    const twoHourIndex = Math.floor(hour / 2) % twoHourPattern.length;
-    const currentPreference = twoHourPattern[twoHourIndex]; // 'fallback' or 'normal'
+    const twoHourIndex = Math.floor(hour / 2) % pattern.length;
+    const currentPreference = pattern[twoHourIndex]; // 'fallback' or 'normal'
 
-    // 10-minute toggle windows (true when the 10-minute 'fallback' windows happen)
+    // 10-minute toggle windows 
     const inFallbackWindow = minute % 20 >= 10; 
 
     // build the URLs 
@@ -222,15 +222,7 @@ class InnerTubePokeVidious {
     // If currentPreference === 'fallback', we bias the schedule so the inFallbackWindow
     // maps to fallback being primary. If it's 'normal', we map inFallbackWindow to primary.
     const preferFallbackPrimary = currentPreference === "fallback";
-
-    const chooseFirst = preferFallbackPrimary
-      ? inFallbackWindow
-        ? fallbackUrl
-        : primaryUrl
-      : inFallbackWindow
-      ? primaryUrl
-      : fallbackUrl;
-
+    const chooseFirst = preferFallbackPrimary ? inFallbackWindow ? fallbackUrl : primaryUrl : inFallbackWindow ? primaryUrl : fallbackUrl;
     const chooseSecond = chooseFirst === primaryUrl ? fallbackUrl : primaryUrl;
 
     try {

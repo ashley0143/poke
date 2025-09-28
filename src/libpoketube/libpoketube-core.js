@@ -42,6 +42,12 @@ class InnerTubePokeVidious {
     return obj && "authorId" in obj;
   }
 
+  // safe base64 helper so btoa isn't required in Node
+  toBase64(str) {
+    if (typeof btoa !== "undefined") return btoa(str);
+    return Buffer.from(String(str)).toString("base64");
+  }
+
   async getYouTubeApiVideo(f, v, contentlang, contentregion) {
     const { fetch } = await import("undici");
 
@@ -50,7 +56,6 @@ class InnerTubePokeVidious {
       return { error: true, message: "No video ID provided" };
     }
 
-    // If cached result exists and is less than 1 hour old, return it
     if (this.cache[v] && Date.now() - this.cache[v].timestamp < 3600000) {
       return this.cache[v].result;
     }
@@ -62,24 +67,14 @@ class InnerTubePokeVidious {
     const fetchWithRetry = async (url, options = {}, maxRetryTime = 8000) => {
       let lastError;
 
-      // Trigger statuses that arm the retry window
       const isTrigger = (s) => (s === 500 || s === 502);
-
-      // Once armed, these are retryable (plus network errors)
       const RETRYABLE = new Set([429, 500, 502, 503, 504]);
-
-      // Backoff (decorrelated jitter) — gentle defaults
       const MIN_DELAY_MS = 150;
       const BASE_DELAY_MS = 250;
       const MAX_DELAY_MS = 2000;
       const JITTER_FACTOR = 3;
-
-      // Per-attempt timeout (only used after window is armed)
       const PER_TRY_TIMEOUT_MS = 2000;
-
       const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
-
-      // Parse Retry-After (delta-seconds or HTTP-date)
       const parseRetryAfter = (hdr) => {
         if (!hdr) return null;
         const s = String(hdr).trim();
@@ -90,7 +85,6 @@ class InnerTubePokeVidious {
         return null;
       };
 
-      // FAST PATH: single plain fetch (no AbortController, no timeout, no extra work)
       let res;
       try {
         res = await fetch(url, {
@@ -101,33 +95,26 @@ class InnerTubePokeVidious {
           },
         });
       } catch (err) {
-        // Network error BEFORE any 500/502 trigger → surface immediately (no retries)
         this?.initError?.(`Fetch error for ${url}`, err);
         throw err;
       }
 
       if (res.ok) return res;
-
-      // Not a trigger? return immediately (no retry window, no delays)
       if (!isTrigger(res.status)) return res;
 
-      // SLOW PATH (only after a 500/502): arm the retry window
       const retryStart = Date.now();
-      let delayMs = BASE_DELAY_MS; // backoff seed
+      let delayMs = BASE_DELAY_MS;
       let attempt = 1;
       const callerSignal = options?.signal || null;
 
-      // Helper: one attempt with internal timeout that respects caller aborts
       const attemptWithTimeout = async (timeoutMs) => {
         const controller = new AbortController();
         const timer = setTimeout(
           () => controller.abort(new Error("Fetch attempt timed out")),
           timeoutMs > 0 ? timeoutMs : 1
         );
-
         const onCallerAbort = () =>
           controller.abort(callerSignal?.reason || new Error("Aborted by caller"));
-
         if (callerSignal) {
           if (callerSignal.aborted) {
             controller.abort(callerSignal.reason || new Error("Aborted by caller"));
@@ -135,7 +122,6 @@ class InnerTubePokeVidious {
             callerSignal.addEventListener("abort", onCallerAbort, { once: true });
           }
         }
-
         try {
           return await fetch(url, {
             ...options,
@@ -151,14 +137,12 @@ class InnerTubePokeVidious {
         }
       };
 
-      // Retry loop within the maxRetryTime window
       while (true) {
         const elapsed = Date.now() - retryStart;
         const remaining = maxRetryTime - elapsed;
         if (remaining <= 0) {
           throw new Error(`Fetch failed for ${url} after ${maxRetryTime}ms`);
         }
-
         const perTryTimeout = Math.min(PER_TRY_TIMEOUT_MS, Math.max(100, remaining - 50));
 
         try {
@@ -166,17 +150,14 @@ class InnerTubePokeVidious {
           if (r.ok) return r;
 
           if (!RETRYABLE.has(r.status)) {
-            // Non-retryable after window armed → return immediately
             return r;
           }
 
-          // Respect server cooldown if provided
           const retryAfterMs = parseRetryAfter(r.headers.get("Retry-After"));
           let waitMs;
           if (retryAfterMs != null) {
             waitMs = Math.max(MIN_DELAY_MS, Math.min(retryAfterMs, Math.max(0, remaining - 10)));
           } else {
-            // Decorrelated jitter: min(MAX, random(MIN, prev*factor))
             const next = Math.min(MAX_DELAY_MS, Math.random() * delayMs * JITTER_FACTOR);
             delayMs = next < MIN_DELAY_MS ? MIN_DELAY_MS : next;
             waitMs = Math.min(delayMs, Math.max(0, remaining - 10));
@@ -191,15 +172,11 @@ class InnerTubePokeVidious {
           await sleep(waitMs);
           continue;
         } catch (err) {
-          // Caller aborted → surface immediately
           if (callerSignal && callerSignal.aborted) throw err;
-
           lastError = err;
-
           const remaining2 = maxRetryTime - (Date.now() - retryStart);
           if (remaining2 <= 0) throw lastError;
 
-          // Backoff after network/timeout errors, too
           const next = Math.min(MAX_DELAY_MS, Math.random() * delayMs * JITTER_FACTOR);
           delayMs = next < MIN_DELAY_MS ? MIN_DELAY_MS : next;
           const waitMs = Math.min(delayMs, Math.max(0, remaining2 - 10));
@@ -213,61 +190,63 @@ class InnerTubePokeVidious {
       }
     };
 
+    // --- New scheduling logic ---
+    // Rotate which window
+    // prefers fallback/primary every 2 hours using a custom sequence.
     //
-    // - Use 10-minute slots inside the hour (0-9,10-19,...,50-59) -> 6 slots per hour
-    // - A 6-step pattern determines which API to prefer in each slot:
-    //     ['fallback','normal','fallback','normal','normal','fallback']
-    // - Every 2-hour block we invert the pattern (so it becomes the opposite),
-    // - If the chosen API fails we immediately attempt the other API as a backup.
+    // Sequence: fallback, normal, fallback, normal, normal, fallback
+    // each element = which API is preferred *for that 2-hour block*.
     //
+    // Within the chosen preference, the original 10-minute switching (minute % 20 >= 10)
+    // still applies, but which side corresponds to the inFallbackWindow is flipped
+    // depending on the 2-hour preference.
 
-    // pattern: index 0..5 correspond to minutes 0-9,10-19,...50-59
-    const pattern = ["fallback", "normal", "fallback", "normal", "normal", "fallback"];
+    const minute = new Date().getMinutes();
+    const hour = new Date().getHours();
 
-    // get current time info
-    const now = new Date();
-    const minute = now.getMinutes();
-    const slotIndex = Math.floor(minute / 10) % 6; // 0..5
+    // pattern for each 2-hour block (6 blocks to cover 12 hours; repeats every 12 hours)
+    const twoHourPattern = ["fallback", "normal", "fallback", "normal", "normal", "fallback"];
 
-    // determine if we should invert the pattern for the current 2-hour block
-    // Math.floor(hours / 2) gives 0 for 0-1, 1 for 2-3, 2 for 4-5, etc.
-    // flip every other 2-hour block -> when blockIndex % 2 === 1 we invert
-    const twoHourBlockIndex = Math.floor(now.getHours() / 2);
-    const shouldInvert = (twoHourBlockIndex % 2) === 1;
+    // determine which 2-hour slot we're in (0..11 hours cover repeating pattern every 12 hours)
+    const twoHourIndex = Math.floor(hour / 2) % twoHourPattern.length;
+    const currentPreference = twoHourPattern[twoHourIndex]; // 'fallback' or 'normal'
 
-    const slotDecision = pattern[slotIndex];
-    // resolvedDecision is 'fallback' or 'normal' after possible inversion
-    const resolvedDecision = shouldInvert ? (slotDecision === "fallback" ? "normal" : "fallback") : slotDecision;
+    // 10-minute toggle windows (true when the 10-minute 'fallback' windows happen)
+    const inFallbackWindow = minute % 20 >= 10; // preserves original 10-minute switching
 
-    const primaryUrl = `${this.config.invapi}/videos/${v}?hl=${contentlang}&region=${contentregion}&h=${btoa(
-      Date.now()
-    )}`;
-    const fallbackUrl = `${this.config.inv_fallback}${v}?hl=${contentlang}&region=${contentregion}&h=${btoa(
-      Date.now()
-    )}`;
+    // build the URLs 
+    const primaryUrl = `${this.config.invapi}/videos/${v}?hl=${contentlang}&region=${contentregion}&h=${this.toBase64(Date.now())}`;
+    const fallbackUrl = `${this.config.inv_fallback}${v}?hl=${contentlang}&region=${contentregion}&h=${this.toBase64(Date.now())}`;
 
-    // chooseFirst is the one we try first based on the resolved decision
-    const chooseFirst = resolvedDecision === "fallback" ? fallbackUrl : primaryUrl;
-    const chooseSecond = resolvedDecision === "fallback" ? primaryUrl : fallbackUrl;
+    // decide which URL is chosen first based on 2-hour preference and 10-minute window
+    // If currentPreference === 'fallback', we bias the schedule so the inFallbackWindow
+    // maps to fallback being primary. If it's 'normal', we map inFallbackWindow to primary.
+    const preferFallbackPrimary = currentPreference === "fallback";
+
+    const chooseFirst = preferFallbackPrimary
+      ? inFallbackWindow
+        ? fallbackUrl
+        : primaryUrl
+      : inFallbackWindow
+      ? primaryUrl
+      : fallbackUrl;
+
+    const chooseSecond = chooseFirst === primaryUrl ? fallbackUrl : primaryUrl;
 
     try {
       const [invComments, videoInfo] = await Promise.all([
-        // comments always hit the main invapi (unchanged)
         fetchWithRetry(
-          `${this.config.invapi}/comments/${v}?hl=${contentlang}&region=${contentregion}&h=${btoa(
+          `${this.config.invapi}/comments/${v}?hl=${contentlang}&region=${contentregion}&h=${this.toBase64(
             Date.now()
           )}`
         ).then((res) => res?.text()),
-        // video info: try chosen API first, on failure try the other immediately
         (async () => {
           try {
             const r = await fetchWithRetry(chooseFirst);
             if (r.ok) return await r.text();
-            // if we get here it means response not ok but not thrown (non-trigger or status)
             throw new Error(`First API ${chooseFirst} failed with ${r.status}`);
           } catch (err) {
-            this.initError("Preferred API failed, trying backup", err);
-            // immediate attempt to the other endpoint
+            this.initError("Primary choice failed, trying secondary", err);
             const r2 = await fetchWithRetry(chooseSecond);
             return await r2.text();
           }
@@ -281,7 +260,8 @@ class InnerTubePokeVidious {
         this.initError("Video info missing/unparsable", v);
         return {
           error: true,
-          message: "Sorry nya, we couldn't find any information about that video qwq",
+          message:
+            "Sorry nya, we couldn't find any information about that video qwq",
         };
       }
 
@@ -296,7 +276,7 @@ class InnerTubePokeVidious {
         let color = "#0ea5e9";
         let color2 = "#111827";
         try {
-          // `sqp` is a URL parameter used by YouTube thumbnail/image servers
+           // `sqp` is a URL parameter used by YouTube thumbnail/image servers
           // to request a specific scale, crop or quality profile (base64-encoded),
           // controlling how the thumbnail is sized or compressed.
           const palette = await getColors(

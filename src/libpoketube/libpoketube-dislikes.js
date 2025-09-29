@@ -51,7 +51,7 @@ class PokeTubeDislikesAPIManager  {
   const { fetch } = await import("undici");
 
   const controller = new AbortController();
-  const timeout = setTimeout(() => controller.abort(), 2000);
+  const timeout = setTimeout(() => controller.abort(), 800);
 
   try {
     const res = await fetch(apiUrl, { signal: controller.signal });

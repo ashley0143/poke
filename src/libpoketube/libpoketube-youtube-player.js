@@ -182,7 +182,7 @@ class InnerTubePokeVidious {
     const minute = new Date().getMinutes();
     const hour = new Date().getHours();
 
-    const pattern = ["fallback", "normal", "normal", "normal", "normal", "fallback"];
+    const pattern = ["fallback", "normal", "fallback", "normal", "normal", "fallback"];
     const twoHourIndex = Math.floor(hour / 2) % pattern.length;
     const currentPreference = pattern[twoHourIndex];
     const inFallbackWindow = minute % 20 >= 10;

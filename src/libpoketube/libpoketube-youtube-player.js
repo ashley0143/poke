@@ -26,43 +26,8 @@ class InnerTubePokeVidious {
       "PokeTube/2.0.0 (GNU/Linux; Android 14; Trisquel 11; poketube-vidious; like FreeTube)";
     this.INNERTUBE_CONTEXT_CLIENT_VERSION = "1";
     this.region = "region=US";
-    // sqp is YouTube’s thumbnail param blob; pass-through here
     this.sqp =
       "-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLBy_x4UUHLNDZtJtH0PXeQGoRFTgw";
-
-    // host state: light leaky gaps + backoff/cooldown per host
-    this.hosts = {
-      primary: {
-        name: "primary",
-        // base for /videos/:id and /comments/:id
-        base: this.config.invapi,
-        minGapMs: 150, // soft gap between calls
-        lastAt: 0,
-        cooldownUntil: 0,
-        backoffMs: 2000, // grows on 429/5xx; shrinks on success
-      },
-      fallback: {
-        name: "fallback",
-        // this one already points to /api/v1/videos/… so video path differs
-        base: this.config.inv_fallback,
-        minGapMs: 150,
-        lastAt: 0,
-        cooldownUntil: 0,
-        backoffMs: 2000,
-      },
-    };
-  }
-
-  // small helpers
-  now() {
-    return Date.now();
-  }
-  sleep(ms) {
-    return new Promise((r) => setTimeout(r, ms));
-  }
-  // jitter adds a tiny spread so bursts don’t align
-  jitter(ms, spread = 90) {
-    return ms + Math.floor(Math.random() * spread);
   }
 
   getJson(str) {
@@ -83,302 +48,261 @@ class InnerTubePokeVidious {
     return Buffer.from(String(str)).toString("base64");
   }
 
-  // wait until a host is ready based on gap + cooldown
-  async waitSlot(h) {
-    const t = this.now();
-    const nextByGap = h.lastAt + h.minGapMs;
-    const nextByCool = h.cooldownUntil;
-    const at = Math.max(nextByGap, nextByCool);
-    const wait = Math.max(0, at - t);
-    if (wait > 0) await this.sleep(this.jitter(wait));
-  }
-
-  markSuccess(h) {
-    // success relaxes backoff a bit
-    h.backoffMs = Math.max(800, Math.floor(h.backoffMs * 0.6));
-    h.cooldownUntil = 0;
-    h.lastAt = this.now();
-  }
-
-  markSoftFail(h, reasonMs = null) {
-    // soft server hint (Retry-After) or local timeout => short cooldown
-    const base = reasonMs != null ? reasonMs : h.backoffMs;
-    h.cooldownUntil = this.now() + this.jitter(Math.min(base, 20000));
-    // keep backoff steady on hinted waits
-    h.lastAt = this.now();
-  }
-
-  markHardFail(h) {
-    // hard fail widens backoff
-    h.backoffMs = Math.min(20000, Math.max(1500, Math.floor(h.backoffMs * 1.6)));
-    h.cooldownUntil = this.now() + this.jitter(h.backoffMs);
-    h.lastAt = this.now();
-  }
-
-  hostReady(h) {
-    const t = this.now();
-    return t >= h.cooldownUntil && t >= h.lastAt + h.minGapMs;
-  }
-
-  // choose the better host at this moment without parallel fire
-  pickHost(prefer = "primary") {
-    const a = this.hosts.primary;
-    const b = this.hosts.fallback;
-
-    const aReady = this.hostReady(a);
-    const bReady = this.hostReady(b);
-
-    if (aReady && bReady) {
-      // both ready: pick the one that idled longer to even out load
-      const idleA = this.now() - Math.max(a.lastAt, a.cooldownUntil);
-      const idleB = this.now() - Math.max(b.lastAt, b.cooldownUntil);
-      if (prefer === "primary" && idleA >= idleB) return a;
-      if (prefer === "fallback" && idleB >= idleA) return b;
-      return idleA >= idleB ? a : b;
-    }
-    if (aReady) return a;
-    if (bReady) return b;
-    // none ready: pick the one that comes back first
-    const nextA = Math.max(a.cooldownUntil, a.lastAt + a.minGapMs);
-    const nextB = Math.max(b.cooldownUntil, b.lastAt + b.minGapMs);
-    return nextA <= nextB ? a : b;
-  }
-
-  // single fetch attempt with timeout; no parallel to other host
-  async oneFetch(url, headers, timeoutMs = 1500, signal = null) {
-    const { fetch } = await import("undici");
-    const ac = new AbortController();
-    const onAbort = () => ac.abort(signal?.reason || new Error("Aborted"));
-    if (signal) {
-      if (signal.aborted) ac.abort(signal.reason || new Error("Aborted"));
-      else signal.addEventListener("abort", onAbort, { once: true });
-    }
-    const timer = setTimeout(
-      () => ac.abort(new Error("Timeout")),
-      timeoutMs > 0 ? timeoutMs : 1
-    );
-    try {
-      return await fetch(url, { headers, signal: ac.signal });
-    } finally {
-      clearTimeout(timer);
-      if (signal) signal.removeEventListener("abort", onAbort);
-    }
-  }
-
-  // build URLs per host type
-  buildVideoUrl(h, v, lang, reg) {
-    const hParam = this.toBase64(this.now());
-    if (h.name === "primary") {
-      return `${h.base}/videos/${v}?hl=${lang}&region=${reg}&h=${hParam}`;
-    }
-    // fallback already includes /api/v1/videos/
-    return `${h.base}${v}?hl=${lang}&region=${reg}&h=${hParam}`;
-  }
-
-  buildCommentsUrl(h, v, lang, reg) {
-    // both endpoints support comments path in /api/v1 in most deployments
-    // if fallback path is videos-only, this call will fail fast and be skipped
-    const hParam = this.toBase64(this.now());
-    if (h.name === "primary") {
-      return `${h.base}/comments/${v}?hl=${lang}&region=${reg}&h=${hParam}`;
-    }
-    // try fallback comments as well; if not present it will 404 and be ignored
-    return `${h.base.replace(/videos\/?$/i, "")}comments/${v}?hl=${lang}&region=${reg}&h=${hParam}`;
-  }
-
-  parseRetryAfter(hdr) {
-    if (!hdr) return null;
-    const s = String(hdr).trim();
-    const n = Number(s);
-    if (Number.isFinite(n)) return Math.max(0, (n | 0) * 1000);
-    const when = Date.parse(s);
-    if (!Number.isNaN(when)) return Math.max(0, when - this.now());
-    return null;
-  }
-
   async getYouTubeApiVideo(f, v, contentlang, contentregion) {
-    const headers = { "User-Agent": this.useragent };
+    const { fetch } = await import("undici");
 
     if (!v) {
       this.initError("Missing video ID", null);
       return { error: true, message: "No video ID provided" };
     }
 
-    // simple 1-hour cache
-    if (this.cache[v] && this.now() - this.cache[v].timestamp < 3600000) {
+    if (this.cache[v] && Date.now() - this.cache[v].timestamp < 3600000) {
       return this.cache[v].result;
     }
 
-    // prefer primary by default; selection may flip based on cooldowns
-    let host = this.pickHost("primary");
+    const headers = {
+      "User-Agent": this.useragent,
+    };
 
-    const tryHost = async (h) => {
-      await this.waitSlot(h);
-      const url = this.buildVideoUrl(h, v, contentlang, contentregion);
+    const fetchWithRetry = async (url, options = {}, maxRetryTime = 5000) => {
+      let lastError;
+
+      const isTrigger = (s) => (s === 500 || s === 502);
+      const RETRYABLE = new Set([429, 500, 502, 503, 504]);
+      const MIN_DELAY_MS = 150;
+      const BASE_DELAY_MS = 250;
+      const MAX_DELAY_MS = 2000;
+      const JITTER_FACTOR = 3;
+      const PER_TRY_TIMEOUT_MS = 2000;
+      const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+      const parseRetryAfter = (hdr) => {
+        if (!hdr) return null;
+        const s = String(hdr).trim();
+        const delta = Number(s);
+        if (Number.isFinite(delta)) return Math.max(0, (delta * 1000) | 0);
+        const when = Date.parse(s);
+        if (!Number.isNaN(when)) return Math.max(0, when - Date.now());
+        return null;
+      };
+
       let res;
       try {
-        res = await this.oneFetch(url, headers, 1500);
-      } catch (e) {
-        // timeout/network
-        this.initError(`Fetch timeout/net for ${h.name}`, e);
-        this.markHardFail(h);
-        return { ok: false, status: 0, body: null, host: h };
-      }
-
-      if (res.ok) {
-        const text = await res.text();
-        this.markSuccess(h);
-        return { ok: true, status: res.status, body: text, host: h };
-      }
-
-      // 429/5xx: apply cooldowns; 4xx others return as-is
-      if (res.status === 429 || (res.status >= 500 && res.status <= 599)) {
-        const ra = this.parseRetryAfter(res.headers.get("Retry-After"));
-        if (ra != null) this.markSoftFail(h, Math.min(ra, 20000));
-        else this.markHardFail(h);
-      } else {
-        // 4xx non-429 => do not hammer
-        this.markSoftFail(h, 800);
-      }
-
-      const body = await res.text().catch(() => null);
-      return { ok: false, status: res.status, body, host: h };
-    };
-
-    // first attempt on picked host
-    let first = await tryHost(host);
-
-    // switch rules:
-    // - timeout/net or 429/5xx -> flip once to the other host
-    // - 4xx non-429 -> flip once as well (video may exist on mirror)
-    if (!first.ok) {
-      const other = host.name === "primary" ? this.hosts.fallback : this.hosts.primary;
-
-      // if both are cooling, wait the shorter one a tiny bit to avoid spam
-      if (!this.hostReady(other)) {
-        const nextA = Math.max(other.cooldownUntil, other.lastAt + other.minGapMs);
-        const wait = Math.max(0, nextA - this.now());
-        if (wait > 0 && wait <= 500) await this.sleep(this.jitter(wait));
-      }
-
-      const second = await tryHost(other);
-
-      // if second worked, use it; else return best info we have
-      if (second.ok) first = second;
-      else {
-        // prefer the response body if any (helps surface server message)
-        const msg =
-          first.body || second.body
-            ? "Remote error"
-            : "Fetch error";
-        this.initError(`Video fetch failed on both`, `${first.status}/${second.status}`);
-        return { error: true, message: msg, detail: `${first.status}/${second.status}` };
-      }
-    }
-
-    // parse video info
-    const vid = this.getJson(first.body);
-    if (!vid) {
-      this.initError("Video info missing/unparsable", v);
-      return {
-        error: true,
-        message: "Sorry nya, we couldn't find any information about that video qwq",
-      };
-    }
-
-    if (!this.checkUnexistingObject(vid)) {
-      this.initError(vid, `ID: ${v}`);
-      return { error: true, message: "Bad video payload" };
-    }
-
-    // comments are nice-to-have; run on the same host first
-    const commentsHost = first.host; // try where video succeeded
-    const tryComments = async () => {
-      // if the host is cooling, skip to avoid pressure
-      if (!this.hostReady(commentsHost)) return null;
-
-      // light attempt with short timeout
-      try {
-        await this.waitSlot(commentsHost);
-        const cu = this.buildCommentsUrl(commentsHost, v, contentlang, contentregion);
-        const r = await this.oneFetch(cu, headers, 1200);
-        if (!r.ok) {
-          // if this was a 429/5xx, cool this host a bit for comments path only
-          if (r.status === 429 || (r.status >= 500 && r.status <= 599)) {
-            const ra = this.parseRetryAfter(r.headers.get("Retry-After"));
-            if (ra != null) this.markSoftFail(commentsHost, Math.min(ra, 8000));
-            else this.markSoftFail(commentsHost, 1200);
-          }
-          return null;
-        }
-        this.markSuccess(commentsHost);
-        return this.getJson(await r.text());
-      } catch (e) {
-        this.initError("Comments fetch error", e);
-        this.markSoftFail(commentsHost, 1000);
-        return null;
-      }
-    };
-
-    // start helpers while dislikes/colors run
-    const commentsPromise = tryComments();
-
-    // dislikes + colors in parallel with tight caps
-    const dislikePromise = (async () => {
-      try {
-        return await getdislikes(v);
+        res = await fetch(url, {
+          ...options,
+          headers: {
+            ...options?.headers,
+            ...headers,
+          },
+        });
       } catch (err) {
-        this.initError("Dislike API error", err);
-        return { engagement: null };
+        this?.initError?.(`Fetch error for ${url}`, err);
+        throw err;
       }
-    })();
 
-    const colorPromise = (async () => {
-      try {
-        const imgUrl = `https://i.ytimg.com/vi/${v}/hqdefault.jpg?sqp=${this.sqp}`;
-        const p = getColors(imgUrl);
-        const t = new Promise((_, rej) =>
-          setTimeout(() => rej(new Error("Color extraction timeout")), 1000)
+      if (res.ok) return res;
+      if (!isTrigger(res.status)) return res;
+
+      const retryStart = Date.now();
+      let delayMs = BASE_DELAY_MS;
+      let attempt = 1;
+      const callerSignal = options?.signal || null;
+
+      const attemptWithTimeout = async (timeoutMs) => {
+        const controller = new AbortController();
+        const timer = setTimeout(
+          () => controller.abort(new Error("Fetch attempt timed out")),
+          timeoutMs > 0 ? timeoutMs : 1
         );
-        const palette = await Promise.race([p, t]);
-        if (Array.isArray(palette) && palette[0] && palette[1]) {
-          return [palette[0].hex(), palette[1].hex()];
+        const onCallerAbort = () =>
+          controller.abort(callerSignal?.reason || new Error("Aborted by caller"));
+        if (callerSignal) {
+          if (callerSignal.aborted) {
+            controller.abort(callerSignal.reason || new Error("Aborted by caller"));
+          } else {
+            callerSignal.addEventListener("abort", onCallerAbort, { once: true });
+          }
         }
-        return null;
-      } catch (err) {
-        this.initError("Thumbnail color extraction error", err);
-        return null;
+        try {
+          return await fetch(url, {
+            ...options,
+            headers: {
+              ...options?.headers,
+              ...headers,
+            },
+            signal: controller.signal,
+          });
+        } finally {
+          clearTimeout(timer);
+          if (callerSignal) callerSignal.removeEventListener("abort", onCallerAbort);
+        }
+      };
+
+      while (true) {
+        const elapsed = Date.now() - retryStart;
+        const remaining = maxRetryTime - elapsed;
+        if (remaining <= 0) {
+          throw new Error(`Fetch failed for ${url} after ${maxRetryTime}ms`);
+        }
+        const perTryTimeout = Math.min(PER_TRY_TIMEOUT_MS, Math.max(100, remaining - 50));
+
+        try {
+          const r = await attemptWithTimeout(perTryTimeout);
+          if (r.ok) return r;
+
+          if (!RETRYABLE.has(r.status)) {
+            return r;
+          }
+
+          const retryAfterMs = parseRetryAfter(r.headers.get("Retry-After"));
+          let waitMs;
+          if (retryAfterMs != null) {
+            waitMs = Math.max(MIN_DELAY_MS, Math.min(retryAfterMs, Math.max(0, remaining - 10)));
+          } else {
+            const next = Math.min(MAX_DELAY_MS, Math.random() * delayMs * JITTER_FACTOR);
+            delayMs = next < MIN_DELAY_MS ? MIN_DELAY_MS : next;
+            waitMs = Math.min(delayMs, Math.max(0, remaining - 10));
+          }
+
+          if (waitMs <= 0) {
+            throw new Error(`Fetch failed for ${url} after ${maxRetryTime}ms (window depleted)`);
+          }
+
+          this?.initError?.(`Retrying fetch for ${url}`, r.status);
+          attempt++;
+          await sleep(waitMs);
+          continue;
+        } catch (err) {
+          if (callerSignal && callerSignal.aborted) throw err;
+          lastError = err;
+          const remaining2 = maxRetryTime - (Date.now() - retryStart);
+          if (remaining2 <= 0) throw lastError;
+
+          const next = Math.min(MAX_DELAY_MS, Math.random() * delayMs * JITTER_FACTOR);
+          delayMs = next < MIN_DELAY_MS ? MIN_DELAY_MS : next;
+          const waitMs = Math.min(delayMs, Math.max(0, remaining2 - 10));
+          if (waitMs <= 0) throw lastError;
+
+          this?.initError?.(`Fetch error for ${url}`, err);
+          attempt++;
+          await sleep(waitMs);
+          continue;
+        }
       }
-    })();
-
-    const [comments, returnyoutubedislikesapi, paletteResult] = await Promise.all([
-      commentsPromise,
-      dislikePromise,
-      colorPromise,
-    ]);
-
-    let color = "#0ea5e9";
-    let color2 = "#111827";
-    if (Array.isArray(paletteResult) && paletteResult[0]) {
-      color = paletteResult[0] || color;
-      color2 = paletteResult[1] || color2;
-    }
-
-    this.cache[v] = {
-      result: {
-        vid,
-        comments,
-        channel_uploads: " ",
-        engagement: returnyoutubedislikesapi?.engagement ?? null,
-        wiki: "",
-        desc: "",
-        color,
-        color2,
-      },
-      timestamp: this.now(),
     };
 
-    return this.cache[v].result;
+    // --- scheduling logic ---
+    // Rotate which window
+    // prefers fallback/primary every 2 hours using a custom sequence.
+    //
+    // Sequence: fallback, normal, fallback, normal, normal, fallback
+    // each element = which API is preferred *for that 2-hour block*.
+    //
+    // Within the chosen preference, the 10-minute switching (minute % 20 >= 10)
+    // still applies, but which side corresponds to the inFallbackWindow is flipped
+    // depending on the 2-hour preference.
+
+    const minute = new Date().getMinutes();
+    const hour = new Date().getHours();
+
+    // pattern for each 2-hour block (6 blocks to cover 12 hours; repeats every 12 hours)
+    const pattern = ["fallback", "normal", "fallback", "normal", "normal", "fallback"];
+
+    // determine which 2-hour slot we're in (0..11 hours cover repeating pattern every 12 hours)
+    const twoHourIndex = Math.floor(hour / 2) % pattern.length;
+    const currentPreference = pattern[twoHourIndex]; // 'fallback' or 'normal'
+
+    // 10-minute toggle windows 
+    const inFallbackWindow = minute % 20 >= 10; 
+
+    // build the URLs 
+    const primaryUrl = `${this.config.invapi}/videos/${v}?hl=${contentlang}&region=${contentregion}&h=${this.toBase64(Date.now())}`;
+    const fallbackUrl = `${this.config.inv_fallback}${v}?hl=${contentlang}&region=${contentregion}&h=${this.toBase64(Date.now())}`;
+
+    // decide which URL is chosen first based on 2-hour preference and 10-minute window
+    // If currentPreference === 'fallback', we bias the schedule so the inFallbackWindow
+    // maps to fallback being primary. If it's 'normal', we map inFallbackWindow to primary.
+    const preferFallbackPrimary = currentPreference === "fallback";
+    const chooseFirst = preferFallbackPrimary ? inFallbackWindow ? fallbackUrl : primaryUrl : inFallbackWindow ? primaryUrl : fallbackUrl;
+    const chooseSecond = chooseFirst === primaryUrl ? fallbackUrl : primaryUrl;
+
+    try {
+      const [invComments, videoInfo] = await Promise.all([
+        fetchWithRetry(
+          `${this.config.invapi}/comments/${v}?hl=${contentlang}&region=${contentregion}&h=${this.toBase64(
+            Date.now()
+          )}`
+        ).then((res) => res?.text()),
+        (async () => {
+          try {
+            const r = await fetchWithRetry(chooseFirst);
+            if (r.ok) return await r.text();
+            throw new Error(`First API ${chooseFirst} failed with ${r.status}`);
+          } catch (err) {
+            this.initError("Primary choice failed, trying secondary", err);
+            const r2 = await fetchWithRetry(chooseSecond);
+            return await r2.text();
+          }
+        })(),
+      ]);
+
+      const comments = this.getJson(invComments);
+      const vid = this.getJson(videoInfo);
+
+      if (!vid) {
+        this.initError("Video info missing/unparsable", v);
+        return {
+          error: true,
+          message:
+            "Sorry nya, we couldn't find any information about that video qwq",
+        };
+      }
+
+      if (this.checkUnexistingObject(vid)) {
+        let returnyoutubedislikesapi = { engagement: null };
+        try {
+          returnyoutubedislikesapi = await getdislikes(v);
+        } catch (err) {
+          this.initError("Dislike API error", err);
+        }
+
+        let color = "#0ea5e9";
+        let color2 = "#111827";
+        try {
+           // `sqp` is a URL parameter used by YouTube thumbnail/image servers
+          // to request a specific scale, crop or quality profile (base64-encoded),
+          // controlling how the thumbnail is sized or compressed.
+          const palette = await getColors(
+            `https://i.ytimg.com/vi/${v}/hqdefault.jpg?sqp=${this.sqp}`
+          );
+          if (Array.isArray(palette) && palette[0] && palette[1]) {
+            color = palette[0].hex();
+            color2 = palette[1].hex();
+          }
+        } catch (err) {
+          this.initError("Thumbnail color extraction error", err);
+        }
+
+        this.cache[v] = {
+          result: {
+            vid,
+            comments,
+            channel_uploads: " ",
+            engagement: returnyoutubedislikesapi.engagement,
+            wiki: "",
+            desc: "",
+            color,
+            color2,
+          },
+          timestamp: Date.now(),
+        };
+
+        return this.cache[v].result;
+      } else {
+        this.initError(vid, `ID: ${v}`);
+      }
+    } catch (error) {
+      this.initError(`Error getting video ${v}`, error);
+    }
   }
 
   isvalidvideo(v) {

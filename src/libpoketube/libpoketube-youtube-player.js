@@ -56,6 +56,7 @@ class InnerTubePokeVidious {
       return { error: true, message: "No video ID provided" };
     }
 
+    // simple 1-hour cache
     if (this.cache[v] && Date.now() - this.cache[v].timestamp < 3600000) {
       return this.cache[v].result;
     }
@@ -64,20 +65,18 @@ class InnerTubePokeVidious {
       "User-Agent": this.useragent,
     };
 
+   
     const fetchWithRetry = async (url, options = {}, maxRetryTime = 5000) => {
       const RETRYABLE = new Set([429, 500, 502, 503, 504]);
-      const MIN_DELAY_MS = 100;
-      const BASE_DELAY_MS = 120;
-      const MAX_DELAY_MS = 800;
-      const JITTER_FACTOR = 2;
-      const PER_TRY_TIMEOUT_MS = 1500; 
+      const PER_TRY_TIMEOUT_MS = 1200; // fail fast
+      const FIXED_RETRY_DELAY_MS = 120; // quick retry gap
       const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
       const parseRetryAfter = (hdr) => {
         if (!hdr) return null;
         const s = String(hdr).trim();
-        const secs = Number(s);
-        if (Number.isFinite(secs)) return Math.max(0, (secs * 1000) | 0);
+        const numeric = Number(s);
+        if (Number.isFinite(numeric)) return Math.max(0, numeric * 1000 | 0);
         const when = Date.parse(s);
         if (!Number.isNaN(when)) return Math.max(0, when - Date.now());
         return null;
@@ -85,17 +84,11 @@ class InnerTubePokeVidious {
 
       const callerSignal = options?.signal || null;
 
-      const attemptWithTimeout = async (timeoutMs, attemptSignal) => {
+      const attemptFetch = async (timeoutMs) => {
         const controller = new AbortController();
         const timer = setTimeout(() => controller.abort(new Error("Fetch attempt timed out")), timeoutMs > 0 ? timeoutMs : 1);
         const onCallerAbort = () => controller.abort(callerSignal?.reason || new Error("Aborted by caller"));
-        if (attemptSignal) {
-          if (attemptSignal.aborted) {
-            controller.abort(attemptSignal.reason || new Error("Aborted by attemptSignal"));
-          } else {
-            attemptSignal.addEventListener("abort", onCallerAbort, { once: true });
-          }
-        } else if (callerSignal) {
+        if (callerSignal) {
           if (callerSignal.aborted) {
             controller.abort(callerSignal.reason || new Error("Aborted by caller"));
           } else {
@@ -113,14 +106,11 @@ class InnerTubePokeVidious {
           });
         } finally {
           clearTimeout(timer);
-          if (attemptSignal) attemptSignal.removeEventListener("abort", onCallerAbort);
-          if (callerSignal && !attemptSignal) callerSignal.removeEventListener("abort", onCallerAbort);
+          if (callerSignal) callerSignal.removeEventListener("abort", onCallerAbort);
         }
       };
 
       const start = Date.now();
-      let delayMs = BASE_DELAY_MS;
-      let attempt = 1;
       let lastErr = null;
 
       while (true) {
@@ -135,57 +125,39 @@ class InnerTubePokeVidious {
         const perTryTimeout = Math.min(PER_TRY_TIMEOUT_MS, Math.max(100, remaining - 50));
 
         try {
-          const res = await attemptWithTimeout(perTryTimeout, callerSignal);
-          // if success or non-retryable status, return immediately
+          const res = await attemptFetch(perTryTimeout);
           if (res.ok) return res;
           if (!RETRYABLE.has(res.status)) return res;
 
-          // retryable status -> compute wait
+          // retryable status -> respect Retry-After if present, otherwise short fixed delay
           const ra = parseRetryAfter(res.headers.get("Retry-After"));
-          let waitMs;
-          if (ra != null) {
-            waitMs = Math.max(MIN_DELAY_MS, Math.min(ra, Math.max(0, remaining - 10)));
-          } else {
-            const next = Math.min(MAX_DELAY_MS, Math.random() * delayMs * JITTER_FACTOR);
-            delayMs = next < MIN_DELAY_MS ? MIN_DELAY_MS : next;
-            waitMs = Math.min(delayMs, Math.max(0, remaining - 10));
-          }
-
-          if (waitMs <= 0) {
-            throw new Error(`Fetch failed for ${url} after ${maxRetryTime}ms (window depleted)`);
-          }
+          const waitMs = ra != null ? Math.max(50, Math.min(ra, remaining - 10)) : Math.min(FIXED_RETRY_DELAY_MS, Math.max(0, remaining - 10));
+          if (waitMs <= 0) throw new Error(`Fetch failed for ${url} after ${maxRetryTime}ms (window depleted)`);
 
           this?.initError?.(`Retrying fetch for ${url}`, res.status);
-          attempt++;
           await sleep(waitMs);
+          lastErr = new Error(`HTTP ${res.status}`);
           continue;
         } catch (err) {
-          // aborted by caller -> bubble up
           if (callerSignal && callerSignal.aborted) throw err;
           lastErr = err;
           const remaining2 = maxRetryTime - (Date.now() - start);
           if (remaining2 <= 0) throw lastErr;
-
-          const next = Math.min(MAX_DELAY_MS, Math.random() * delayMs * JITTER_FACTOR);
-          delayMs = next < MIN_DELAY_MS ? MIN_DELAY_MS : next;
-          const waitMs = Math.min(delayMs, Math.max(0, remaining2 - 10));
-          if (waitMs <= 0) throw lastErr;
-
-          this?.initError?.(`Fetch error for ${url}`, err);
-          attempt++;
-          await sleep(waitMs);
+          // short fixed pause, then retry quickly
+          await sleep(Math.min(FIXED_RETRY_DELAY_MS, Math.max(20, remaining2 - 10)));
           continue;
         }
       }
     };
 
-    const minute = new Date().getMinutes();
+      const minute = new Date().getMinutes();
     const hour = new Date().getHours();
 
-    const pattern = ["fallback", "normal", "fallback", "normal", "normal", "fallback"];
+     const pattern = ["fallback", "normal", "fallback", "normal", "normal", "fallback"];
     const twoHourIndex = Math.floor(hour / 2) % pattern.length;
     const currentPreference = pattern[twoHourIndex];
-    const inFallbackWindow = minute % 20 >= 10;
+
+     const inFallbackWindow = minute >= 20 && minute < 30;
 
     const primaryUrl = `${this.config.invapi}/videos/${v}?hl=${contentlang}&region=${contentregion}&h=${this.toBase64(Date.now())}`;
     const fallbackUrl = `${this.config.inv_fallback}${v}?hl=${contentlang}&region=${contentregion}&h=${this.toBase64(Date.now())}`;
@@ -194,61 +166,66 @@ class InnerTubePokeVidious {
     const chooseFirst = preferFallbackPrimary ? (inFallbackWindow ? fallbackUrl : primaryUrl) : (inFallbackWindow ? primaryUrl : fallbackUrl);
     const chooseSecond = chooseFirst === primaryUrl ? fallbackUrl : primaryUrl;
 
-    // Helper: race two fetch attempts but prefer whichever returns ok first.
+    // Race strategy: start both quickly; return the first OK response and abort the other.
     const fetchPrefer = async (urlA, urlB, maxRetryTime = 5000) => {
+      // controllers so we can abort the loser
       const acA = new AbortController();
       const acB = new AbortController();
+
+      // wrapped fetches return an object { url, res } on success or { url, err } on failure
       const wrapped = (url, ac) =>
         fetchWithRetry(url, { signal: ac.signal }, maxRetryTime)
           .then((res) => ({ url, res }))
           .catch((err) => ({ url, err }));
 
-      // start both in parallel immediately to reduce latency
+      // start both in parallel immediately (fast path)
       const pA = wrapped(urlA, acA);
       const pB = wrapped(urlB, acB);
 
-      // wait for any to return an ok response quickly
-      const results = await Promise.allSettled([pA, pB]);
+      // Wait for either to succeed with ok; otherwise prefer the first fulfilled response.
+      // We'll poll settled promises as they arrive instead of waiting both.
+      const settled = await Promise.allSettled([pA, pB]);
 
-      // Prefer an ok response from either promise
-      for (const r of results) {
-        if (r.status === "fulfilled" && r.value && r.value.res && r.value.res.ok) {
-          // abort the other one
-          if (r.value.url === urlA) acB.abort();
+      // 1) prefer an OK response
+      for (const s of settled) {
+        if (s.status === "fulfilled" && s.value && s.value.res && s.value.res.ok) {
+          if (s.value.url === urlA) acB.abort();
           else acA.abort();
-          return r.value.res;
+          return s.value.res;
         }
       }
 
-      // If none were ok, prefer the first fulfilled non-error response
-      for (const r of results) {
-        if (r.status === "fulfilled" && r.value && r.value.res) {
-          if (r.value.url === urlA) acB.abort();
+      // 2) prefer any fulfilled response (even non-OK)
+      for (const s of settled) {
+        if (s.status === "fulfilled" && s.value && s.value.res) {
+          if (s.value.url === urlA) acB.abort();
           else acA.abort();
-          return r.value.res;
+          return s.value.res;
         }
       }
 
-      // otherwise throw the first error we have
-      for (const r of results) {
-        if (r.status === "fulfilled" && r.value && r.value.err) throw r.value.err;
+      // 3) otherwise throw first error we have
+      for (const s of settled) {
+        if (s.status === "fulfilled" && s.value && s.value.err) throw s.value.err;
       }
-      // fallback: throw aggregated
+
       throw new Error("Both fetches failed");
     };
 
     try {
+      // fetch comments in parallel with a smaller window
       const invCommentsPromise = fetchWithRetry(
-        `${this.config.invapi}/comments/${v}?hl=${contentlang}&region=${contentregion}&h=${this.toBase64(
-          Date.now()
-        )}`,
+        `${this.config.invapi}/comments/${v}?hl=${contentlang}&region=${contentregion}&h=${this.toBase64(Date.now())}`,
         {},
         2500
-      ).then((r) => r?.text()).catch((err) => {
-        this.initError("Comments fetch error", err);
-        return null;
-      });
+      )
+        .then((r) => r?.text())
+        .catch((err) => {
+          this.initError("Comments fetch error", err);
+          return null;
+        });
 
+      // video info: pick whichever responds first (primary/fallback ordering preserved)
       const videoInfoPromise = (async () => {
         const r = await fetchPrefer(chooseFirst, chooseSecond, 5000);
         return await r.text();
@@ -269,8 +246,7 @@ class InnerTubePokeVidious {
       }
 
       if (this.checkUnexistingObject(vid)) {
-        // Run dislikes and thumbnail color extraction in parallel (don't block)
-        const dislikePromise = (async () => {
+         const dislikePromise = (async () => {
           try {
             return await getdislikes(v);
           } catch (err) {
@@ -281,15 +257,12 @@ class InnerTubePokeVidious {
 
         const colorPromise = (async () => {
           try {
-            // Fetch thumbnail colors but give it a short timeout by wrapping in Promise.race
-              // `sqp` is a URL parameter used by YouTube thumbnail/image servers
-          // to request a specific scale, crop or quality profile (base64-encoded),
-          // controlling how the thumbnail is sized or compressed.
-          
+            // sqp is a URL parameter used by YouTube thumbnail/image servers 
+            // to request a specific scale, crop or quality profile (base64-encoded), 
+            // controlling how the thumbnail is sized or compressed.
             const imgUrl = `https://i.ytimg.com/vi/${v}/hqdefault.jpg?sqp=${this.sqp}`;
-            // get-image-colors may fetch internally; keep it but don't block main window too long
             const p = getColors(imgUrl);
-            const timeout = new Promise((_, rej) => setTimeout(() => rej(new Error("Color extraction timeout")), 1200));
+            const timeout = new Promise((_, rej) => setTimeout(() => rej(new Error("Color extraction timeout")), 1000));
             const palette = await Promise.race([p, timeout]);
             if (Array.isArray(palette) && palette[0] && palette[1]) {
               return [palette[0].hex(), palette[1].hex()];

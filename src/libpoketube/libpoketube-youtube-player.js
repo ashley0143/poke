@@ -10,138 +10,10 @@ const getdislikes = require("../libpoketube/libpoketube-dislikes.js");
 const getColors = require("get-image-colors");
 const config = require("../../config.json");
 
-class BackendScheduler {
-  constructor(opts = {}) {
-    this.buckets = new Map(); // key -> {tokens, lastRefill, rate, burst, cooldownUntil}
-    this.queues = new Map(); // key -> [resolveFns]
-    this.opts = {
-      defaultRatePerSec: opts.defaultRatePerSec || 4, // default steady rate
-      defaultBurst: opts.defaultBurst || 8, // allowed burst
-      refillIntervalMs: opts.refillIntervalMs || 250,
-      cooldownDefaultMs: opts.cooldownDefaultMs || 2000,
-      maxQueueSize: opts.maxQueueSize || 200,
-      ...opts,
-    };
-
-    // periodic refill
-    this._refillTimer = setInterval(() => this._refillAll(), this.opts.refillIntervalMs);
-    this._refillTimer.unref?.();
-  }
-
-  _getBucket(key) {
-    if (!this.buckets.has(key)) {
-      this.buckets.set(key, {
-        tokens: this.opts.defaultBurst,
-        lastRefill: Date.now(),
-        rate: this.opts.defaultRatePerSec,
-        burst: this.opts.defaultBurst,
-        cooldownUntil: 0,
-      });
-    }
-    return this.buckets.get(key);
-  }
-
-  _refillAll() {
-    const now = Date.now();
-    for (const [k, b] of this.buckets) {
-      if (b.cooldownUntil > now) continue;
-      const elapsed = now - b.lastRefill;
-      if (elapsed <= 0) continue;
-      const add = (elapsed / 1000) * b.rate;
-      if (add > 0) {
-        b.tokens = Math.min(b.burst, b.tokens + add);
-        b.lastRefill = now;
-      }
-    }
-    // drain small queues if tokens available
-    for (const [k, q] of this.queues) {
-      const b = this.buckets.get(k);
-      if (!b) continue;
-      while (q.length && b.tokens >= 1 && b.cooldownUntil <= now) {
-        b.tokens -= 1;
-        const fn = q.shift();
-        fn(); // resolve queued waiter
-      }
-    }
-  }
-
-  // request permission to call backend `key` within `timeoutMs`.
-  // resolves when caller may proceed, or rejects on timeout.
-  acquire(key, timeoutMs = 1000) {
-    const bucket = this._getBucket(key);
-    const now = Date.now();
-
-    // if in cooldown, wait until cooldown passes (or timeout)
-    if (bucket.cooldownUntil > now) {
-      return new Promise((res, rej) => {
-        const wait = bucket.cooldownUntil - now;
-        if (wait > timeoutMs) return rej(new Error("acquire timeout (cooldown)"));
-        const t = setTimeout(() => res(), wait);
-        // no further cleanup here; caller will proceed after resolve
-      });
-    }
-
-    // if token available, take one immediately
-    if (bucket.tokens >= 1) {
-      bucket.tokens -= 1;
-      return Promise.resolve();
-    }
-
-    // otherwise enqueue up to maxQueueSize
-    const q = this.queues.get(key) || [];
-    if (q.length >= this.opts.maxQueueSize) {
-      return Promise.reject(new Error("acquire queue full"));
-    }
-    return new Promise((resolve, reject) => {
-      const timer = setTimeout(() => {
-        // remove from queue if still present
-        const arr = this.queues.get(key);
-        if (arr) {
-          const idx = arr.indexOf(fn);
-          if (idx !== -1) arr.splice(idx, 1);
-        }
-        reject(new Error("acquire timeout"));
-      }, timeoutMs);
-
-      const fn = () => {
-        clearTimeout(timer);
-        resolve();
-      };
-
-      q.push(fn);
-      this.queues.set(key, q);
-    });
-  }
-
-  // flag backend into cooldown (on 429). Accepts ms or parsed Retry-After
-  setCooldown(key, ms) {
-    const b = this._getBucket(key);
-    const until = Date.now() + Math.max(0, ms || this.opts.cooldownDefaultMs);
-    // progressively increase if already in cooldown
-    b.cooldownUntil = Math.max(b.cooldownUntil, until);
-    // reduce tokens to zero to avoid immediate retries
-    b.tokens = 0;
-  }
-
-  // convenience: adjust rate/burst for a backend
-  configure(key, { ratePerSec, burst } = {}) {
-    const b = this._getBucket(key);
-    if (ratePerSec != null) b.rate = ratePerSec;
-    if (burst != null) { b.burst = burst; b.tokens = Math.min(b.tokens, b.burst); }
-  }
-
-  stop() {
-    clearInterval(this._refillTimer);
-    this.buckets.clear();
-    this.queues.clear();
-  }
-}
-
 class InnerTubePokeVidious {
   constructor(config) {
     this.config = config;
     this.cache = {};
-    this.inflight = new Map(); // dedupe in-flight video requests by id
     this.language = "hl=en-US";
     this.param = "2AMB";
     this.param_legacy = "CgIIAdgDAQ%3D%3D";
@@ -157,18 +29,16 @@ class InnerTubePokeVidious {
     this.sqp =
       "-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLBy_x4UUHLNDZtJtH0PXeQGoRFTgw";
 
-    // scheduler instance shared across calls
-    this.scheduler = new BackendScheduler({
-      // tune rates here if needed
-      defaultRatePerSec: (config.backendRatePerSec) || 6,
-      defaultBurst: (config.backendBurst) || 12,
-      refillIntervalMs: 200,
-      cooldownDefaultMs: 2200,
-      maxQueueSize: 400,
-    });
-
-    // small stagger when trying fallback to avoid simultaneous double hits
-    this.fallbackStaggerMs = config.fallbackStaggerMs ?? 80;
+    // rate protection state (initialized here so no new constructor is needed)
+    // small, simple tokens per host to avoid spamming either API
+    this._rl = {
+      // host keys mapped to token buckets
+      // capacity: max tokens, rate: tokens per second
+      primary: { cap: 8, tokens: 8, rate: 1.0, last: Date.now(), cooldownUntil: 0, backoffMs: 0 },
+      fallback: { cap: 8, tokens: 8, rate: 1.0, last: Date.now(), cooldownUntil: 0, backoffMs: 0 },
+      // quick switch limit: how long to wait when both are depleted (ms)
+      waitIfEmptyMs: 300,
+    };
   }
 
   getJson(str) {
@@ -183,99 +53,387 @@ class InnerTubePokeVidious {
     return obj && "authorId" in obj;
   }
 
+  // safe base64 helper so btoa isn't required in Node
   toBase64(str) {
     if (typeof btoa !== "undefined") return btoa(str);
     return Buffer.from(String(str)).toString("base64");
   }
 
-  // parse Retry-After header to ms
-  _parseRetryAfterMs(hdr) {
-    if (!hdr) return null;
-    const s = String(hdr).trim();
-    const n = Number(s);
-    if (Number.isFinite(n)) return Math.max(0, n * 1000 | 0);
-    const t = Date.parse(s);
-    if (!Number.isNaN(t)) return Math.max(0, t - Date.now());
-    return null;
+  // refill tokens for a bucket
+  _refill(bucket) {
+    const now = Date.now();
+    const elapsed = Math.max(0, (now - bucket.last) / 1000);
+    if (elapsed <= 0) return;
+    const add = elapsed * bucket.rate;
+    if (add > 0) {
+      bucket.tokens = Math.min(bucket.cap, bucket.tokens + add);
+      bucket.last = now;
+    }
   }
 
-  // streamlined fetch-with-retry that consults scheduler before calling.
-  // - always respects an overall maxRetryTime (ms)
-  async _fetchWithRetryAndSchedule(url, backendKey, options = {}, maxRetryTime = 5000) {
+  // try to acquire a token from a named bucket; returns true if acquired
+  _takeToken(name) {
+    const b = this._rl[name];
+    this._refill(b);
+    if (b.tokens >= 1) {
+      b.tokens = b.tokens - 1;
+      return true;
+    }
+    return false;
+  }
+
+  // mark a host as having had a 429/soft-fail and put it on short cooldown
+  _setCooldown(name, ms) {
+    const b = this._rl[name];
+    b.cooldownUntil = Date.now() + ms;
+    // increase backoff a bit (capped)
+    b.backoffMs = Math.min(60_000, (b.backoffMs || 0) ? Math.max(200, b.backoffMs * 1.5) : 200);
+    console.log(`[LIBPT RL] ${name} cooldown ${ms}ms backoff ${b.backoffMs}ms`);
+  }
+
+  // clear backoff when host responds well
+  _clearCooldown(name) {
+    const b = this._rl[name];
+    b.cooldownUntil = 0;
+    b.backoffMs = 0;
+  }
+
+  // kill-switch check: returns true if host is allowed to be used now
+  _hostAvailable(name) {
+    const b = this._rl[name];
+    if (!b) return true;
+    if (Date.now() < (b.cooldownUntil || 0)) return false;
+    return true;
+  }
+
+  async getYouTubeApiVideo(f, v, contentlang, contentregion) {
     const { fetch } = await import("undici");
-    const RETRYABLE = new Set([429, 500, 502, 503, 504]);
-    const PER_TRY_TIMEOUT_MS = 1100;
-    const QUICK_RETRY_MS = 80;
 
-    const start = Date.now();
-    let lastError = null;
+    if (!v) {
+      this.initError("Missing video ID", null);
+      return { error: true, message: "No video ID provided" };
+    }
 
-    while (true) {
-      const elapsed = Date.now() - start;
-      const remaining = maxRetryTime - elapsed;
-      if (remaining <= 0) {
-        const e = new Error(`fetch ${url} failed after ${maxRetryTime}ms`);
-        e.cause = lastError;
-        throw e;
-      }
+    // simple 1-hour cache
+    if (this.cache[v] && Date.now() - this.cache[v].timestamp < 3600000) {
+      return this.cache[v].result;
+    }
 
-      // acquire slot for backend (short timeout to bail quickly)
-      try {
-        await this.scheduler.acquire(backendKey, Math.min(600, remaining));
-      } catch (err) {
-        // scheduler blocked; retry loop until overall window exhausted
-        lastError = err;
-        await new Promise((r) => setTimeout(r, Math.min(QUICK_RETRY_MS, Math.max(10, remaining - 20))));
-        continue;
-      }
+    const headers = {
+      "User-Agent": this.useragent,
+    };
 
-      // make attempt with small per-try timeout
-      const ac = new AbortController();
-      const timer = setTimeout(() => ac.abort(new Error("attempt timeout")), Math.min(PER_TRY_TIMEOUT_MS, Math.max(80, remaining - 50)));
-      try {
-        const res = await fetch(url, {
-          ...options,
-          headers: {
-            ...(options?.headers || {}),
-            "User-Agent": this.useragent,
-          },
-          signal: ac.signal,
-        });
-        if (res.ok) {
+    // - short per-try timeout
+    // - small fixed sleep between tries
+    // - honors Retry-After if provided
+    const fetchWithRetry = async (url, options = {}, maxRetryTime = 5000, hostName = "primary") => {
+      const RETRYABLE = new Set([429, 500, 502, 503, 504]);
+      const PER_TRY_TIMEOUT_MS = 1200; // fail fast
+      const FIXED_RETRY_DELAY_MS = 120; // quick retry gap
+      const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+
+      const parseRetryAfter = (hdr) => {
+        if (!hdr) return null;
+        const s = String(hdr).trim();
+        const numeric = Number(s);
+        if (Number.isFinite(numeric)) return Math.max(0, numeric * 1000 | 0);
+        const when = Date.parse(s);
+        if (!Number.isNaN(when)) return Math.max(0, when - Date.now());
+        return null;
+      };
+
+      const callerSignal = options?.signal || null;
+
+      const attemptFetch = async (timeoutMs) => {
+        const controller = new AbortController();
+        const timer = setTimeout(() => controller.abort(new Error("Fetch attempt timed out")), timeoutMs > 0 ? timeoutMs : 1);
+        const onCallerAbort = () => controller.abort(callerSignal?.reason || new Error("Aborted by caller"));
+        if (callerSignal) {
+          if (callerSignal.aborted) {
+            controller.abort(callerSignal.reason || new Error("Aborted by caller"));
+          } else {
+            callerSignal.addEventListener("abort", onCallerAbort, { once: true });
+          }
+        }
+        try {
+          return await fetch(url, {
+            ...options,
+            headers: {
+              ...options?.headers,
+              ...headers,
+            },
+            signal: controller.signal,
+          });
+        } finally {
           clearTimeout(timer);
-          return res;
+          if (callerSignal) callerSignal.removeEventListener("abort", onCallerAbort);
+        }
+      };
+
+      const start = Date.now();
+      let lastErr = null;
+
+      while (true) {
+        const elapsed = Date.now() - start;
+        const remaining = maxRetryTime - elapsed;
+        if (remaining <= 0) {
+          const err = new Error(`Fetch failed for ${url} after ${maxRetryTime}ms`);
+          err.cause = lastErr;
+          throw err;
         }
 
-        // handle 429 specially: put backend into cooldown based on Retry-After or quick default
-        if (res.status === 429) {
-          const ra = this._parseRetryAfterMs(res.headers.get("Retry-After")) || 1500;
-          this.scheduler.setCooldown(backendKey, ra);
-          lastError = new Error(`HTTP 429`);
-          // small delay then retry loop
-          await new Promise((r) => setTimeout(r, Math.min(ra, Math.max(60, remaining - 20))));
-          clearTimeout(timer);
+        const perTryTimeout = Math.min(PER_TRY_TIMEOUT_MS, Math.max(100, remaining - 50));
+
+        try {
+          const res = await attemptFetch(perTryTimeout);
+          if (res.ok) {
+            // good response: reset backoff for host
+            if (hostName) this._clearCooldown(hostName);
+            return res;
+          }
+          if (!RETRYABLE.has(res.status)) return res;
+
+          // retryable status -> respect Retry-After if present, otherwise short fixed delay
+          const ra = parseRetryAfter(res.headers.get("Retry-After"));
+          const waitMs = ra != null ? Math.max(50, Math.min(ra, remaining - 10)) : Math.min(FIXED_RETRY_DELAY_MS, Math.max(0, remaining - 10));
+          if (waitMs <= 0) throw new Error(`Fetch failed for ${url} after ${maxRetryTime}ms (window depleted)`);
+
+          // if 429, put that host on short cooldown to reduce spam
+          if (res.status === 429 && hostName) {
+            // safe, short cooldown
+            this._setCooldown(hostName, Math.max(300, this._rl[hostName].backoffMs || 300));
+          }
+
+          console.log(`Retrying fetch for ${url} status=${res.status}`);
+          await sleep(waitMs);
+          lastErr = new Error(`HTTP ${res.status}`);
+          continue;
+        } catch (err) {
+          if (callerSignal && callerSignal.aborted) throw err;
+          lastErr = err;
+          const remaining2 = maxRetryTime - (Date.now() - start);
+          if (remaining2 <= 0) throw lastErr;
+          // short fixed pause, then retry quickly
+          await sleep(Math.min(FIXED_RETRY_DELAY_MS, Math.max(20, remaining2 - 10)));
           continue;
         }
+      }
+    };
 
-        // non-retryable pass-through
-        if (!RETRYABLE.has(res.status)) {
-          clearTimeout(timer);
-          return res;
+    const minute = new Date().getMinutes();
+    const hour = new Date().getHours();
+
+    const pattern = ["fallback", "normal", "fallback", "normal", "normal", "fallback"];
+    const twoHourIndex = Math.floor(hour / 2) % pattern.length;
+    const currentPreference = pattern[twoHourIndex];
+
+    const inFallbackWindow = minute >= 20 && minute < 30;
+
+    const primaryUrl = `${this.config.invapi}/videos/${v}?hl=${contentlang}&region=${contentregion}&h=${this.toBase64(Date.now())}`;
+    const fallbackUrl = `${this.config.inv_fallback}${v}?hl=${contentlang}&region=${contentregion}&h=${this.toBase64(Date.now())}`;
+
+    const preferFallbackPrimary = currentPreference === "fallback";
+    const chooseFirst = preferFallbackPrimary ? (inFallbackWindow ? fallbackUrl : primaryUrl) : (inFallbackWindow ? primaryUrl : fallbackUrl);
+    const chooseSecond = chooseFirst === primaryUrl ? fallbackUrl : primaryUrl;
+
+    // map url -> short name for RL logic
+    const urlName = (u) => (u === primaryUrl ? "primary" : "fallback");
+
+    // Race strategy adjusted to respect tokens and cooldowns
+    const fetchPrefer = async (urlA, urlB, maxRetryTime = 5000) => {
+      const nameA = urlName(urlA);
+      const nameB = urlName(urlB);
+
+      // helper to decide whether to start a request immediately or pick the other host
+      const chooseOrder = () => {
+        // if preferred host is in cooldown or has no token, try the other first
+        const aOK = this._hostAvailable(nameA);
+        const bOK = this._hostAvailable(nameB);
+
+        const aTok = this._takeToken(nameA);
+        if (aTok) {
+          // token taken for A
+          return [{ url: urlA, name: nameA, tokenAcquired: true }, { url: urlB, name: nameB, tokenAcquired: false }];
         }
 
-        // retryable status: quick wait then retry
-        lastError = new Error(`HTTP ${res.status}`);
-        await new Promise((r) => setTimeout(r, Math.min(QUICK_RETRY_MS, Math.max(20, remaining - 20))));
-        clearTimeout(timer);
-        continue;
-      } catch (err) {
-        // aborted by signal or network error
-        lastError = err;
-        // if fetch was aborted because scheduler aborts, treat as retryable
-        await new Promise((r) => setTimeout(r, Math.min(QUICK_RETRY_MS, Math.max(10, remaining - 20))));
-        clearTimeout(timer);
-        continue;
+        // couldn't get token for A; try B
+        const bTok = this._takeToken(nameB);
+        if (bTok) {
+          return [{ url: urlB, name: nameB, tokenAcquired: true }, { url: urlA, name: nameA, tokenAcquired: false }];
+        }
+
+        // both empty: small wait to allow refill, but don't stall users too long
+        return null;
+      };
+
+      let order = chooseOrder();
+      if (!order) {
+        // both were empty, wait a tiny bit to allow refill
+        await new Promise((r) => setTimeout(r, this._rl.waitIfEmptyMs));
+        order = chooseOrder();
+        if (!order) {
+          // still empty -> fall back to starting both immediately without token assumption
+          order = [{ url: urlA, name: nameA, tokenAcquired: false }, { url: urlB, name: nameB, tokenAcquired: false }];
+        }
       }
+
+      // controllers so we can abort the loser
+      const acA = new AbortController();
+      const acB = new AbortController();
+
+      const wrapped = (url, ac, hostName) =>
+        fetchWithRetry(url, { signal: ac.signal }, maxRetryTime, hostName)
+          .then((res) => ({ url, res, hostName }))
+          .catch((err) => ({ url, err, hostName }));
+
+      // start both in parallel (fast). If token was taken for one, we prefer its result.
+      const p1 = wrapped(order[0].url, acA, order[0].name);
+      const p2 = wrapped(order[1].url, acB, order[1].name);
+
+      const settled = await Promise.allSettled([p1, p2]);
+
+      // 1) prefer an OK response from whichever host we actually took a token for
+      for (const s of settled) {
+        if (s.status === "fulfilled" && s.value && s.value.res && s.value.res.ok) {
+          // abort other
+          if (s.value.url === order[0].url) acB.abort();
+          else acA.abort();
+          // clear any small cooldown if it served ok
+          this._clearCooldown(s.value.hostName);
+          return s.value.res;
+        }
+      }
+
+      // 2) prefer any OK response
+      for (const s of settled) {
+        if (s.status === "fulfilled" && s.value && s.value.res && s.value.res.ok) {
+          if (s.value.url === order[0].url) acB.abort();
+          else acA.abort();
+          this._clearCooldown(s.value.hostName);
+          return s.value.res;
+        }
+      }
+
+      // 3) prefer any fulfilled response (non-OK)
+      for (const s of settled) {
+        if (s.status === "fulfilled" && s.value && s.value.res) {
+          if (s.value.url === order[0].url) acB.abort();
+          else acA.abort();
+          // if it's 429, set cooldown
+          try {
+            const st = s.value.res.status;
+            if (st === 429) this._setCooldown(s.value.hostName, Math.max(300, this._rl[s.value.hostName].backoffMs || 300));
+          } catch (e) {}
+          return s.value.res;
+        }
+      }
+
+      // 4) throw first error
+      for (const s of settled) {
+        if (s.status === "fulfilled" && s.value && s.value.err) {
+          // if error looks like a timeout, put small backoff on that host
+          this._setCooldown(s.value.hostName, 200);
+          throw s.value.err;
+        }
+        if (s.status === "rejected" && s.reason) {
+          throw s.reason;
+        }
+      }
+
+      throw new Error("Both fetches failed");
+    };
+
+    try {
+      // fetch comments in parallel with a smaller window
+      const invCommentsPromise = fetchWithRetry(
+        `${this.config.invapi}/comments/${v}?hl=${contentlang}&region=${contentregion}&h=${this.toBase64(Date.now())}`,
+        {},
+        2500,
+        "primary"
+      )
+        .then((r) => r?.text())
+        .catch((err) => {
+          this.initError("Comments fetch error", err);
+          return null;
+        });
+
+      // video info: pick whichever responds first (primary/fallback ordering preserved)
+      const videoInfoPromise = (async () => {
+        const r = await fetchPrefer(chooseFirst, chooseSecond, 5000);
+        return await r.text();
+      })();
+
+      const [invComments, videoInfo] = await Promise.all([invCommentsPromise, videoInfoPromise]);
+
+      const comments = this.getJson(invComments);
+      const vid = this.getJson(videoInfo);
+
+      if (!vid) {
+        this.initError("Video info missing/unparsable", v);
+        return {
+          error: true,
+          message:
+            "Sorry nya, we couldn't find any information about that video qwq",
+        };
+      }
+
+      if (this.checkUnexistingObject(vid)) {
+        // Run dislikes and color extraction in parallel with short internal timeouts
+        const dislikePromise = (async () => {
+          try {
+            return await getdislikes(v);
+          } catch (err) {
+            this.initError("Dislike API error", err);
+            return { engagement: null };
+          }
+        })();
+
+        const colorPromise = (async () => {
+          try {
+            const imgUrl = `https://i.ytimg.com/vi/${v}/hqdefault.jpg?sqp=${this.sqp}`;
+            const p = getColors(imgUrl);
+            const timeout = new Promise((_, rej) => setTimeout(() => rej(new Error("Color extraction timeout")), 1000));
+            const palette = await Promise.race([p, timeout]);
+            if (Array.isArray(palette) && palette[0] && palette[1]) {
+              return [palette[0].hex(), palette[1].hex()];
+            }
+            return null;
+          } catch (err) {
+            this.initError("Thumbnail color extraction error", err);
+            return null;
+          }
+        })();
+
+        const [returnyoutubedislikesapi, paletteResult] = await Promise.all([dislikePromise, colorPromise]);
+
+        let color = "#0ea5e9";
+        let color2 = "#111827";
+        if (Array.isArray(paletteResult) && paletteResult[0]) {
+          color = paletteResult[0] || color;
+          color2 = paletteResult[1] || color2;
+        }
+
+        this.cache[v] = {
+          result: {
+            vid,
+            comments,
+            channel_uploads: " ",
+            engagement: returnyoutubedislikesapi?.engagement ?? null,
+            wiki: "",
+            desc: "",
+            color,
+            color2,
+          },
+          timestamp: Date.now(),
+        };
+
+        return this.cache[v].result;
+      } else {
+        this.initError(vid, `ID: ${v}`);
+      }
+    } catch (error) {
+      this.initError(`Error getting video ${v}`, error);
+      return { error: true, message: "Fetch error", detail: String(error) };
     }
   }
 
@@ -287,237 +445,7 @@ class InnerTubePokeVidious {
   }
 
   initError(context, error) {
-    // log with context
     console.log("[LIBPT CORE ERROR]", context, error?.stack || error || "");
-  }
-
-  // main public method
-  async getYouTubeApiVideo(f, v, contentlang = "en-US", contentregion = "US") {
-    // quick validation
-    if (!v) {
-      this.initError("Missing video ID", null);
-      return { error: true, message: "No video ID provided" };
-    }
-    if (!this.isvalidvideo(v)) {
-      this.initError("Invalid video id", v);
-      return { error: true, message: "Invalid video id" };
-    }
-
-    // cache hit
-    const cached = this.cache[v];
-    if (cached && Date.now() - cached.timestamp < 3600000) {
-      return cached.result;
-    }
-
-    // dedupe simultaneous requests for same id
-    if (this.inflight.has(v)) {
-      return this.inflight.get(v);
-    }
-
-    const promise = (async () => {
-      const { fetch } = await import("undici");
-
-      const minute = new Date().getMinutes();
-      const hour = new Date().getHours();
-
-      // pattern to bias primary vs fallback across 2-hour blocks
-      const pattern = ["fallback", "normal", "fallback", "normal", "normal", "fallback"];
-      const twoHourIndex = Math.floor(hour / 2) % pattern.length;
-      const currentPreference = pattern[twoHourIndex];
-
-      // explicit fallback window on :20 - :29
-      const inFallbackWindow = minute >= 20 && minute < 30;
-
-      const primaryUrl = `${this.config.invapi}/videos/${v}?hl=${contentlang}&region=${contentregion}&h=${this.toBase64(Date.now())}`;
-      const fallbackUrl = `${this.config.inv_fallback}${v}?hl=${contentlang}&region=${contentregion}&h=${this.toBase64(Date.now())}`;
-
-      const preferFallbackPrimary = currentPreference === "fallback";
-      const chooseFirst = preferFallbackPrimary ? (inFallbackWindow ? fallbackUrl : primaryUrl) : (inFallbackWindow ? primaryUrl : fallbackUrl);
-      const chooseSecond = chooseFirst === primaryUrl ? fallbackUrl : primaryUrl;
-
-      const backendKeyA = new URL(chooseFirst).origin;
-      const backendKeyB = new URL(chooseSecond).origin;
-
-      // comments fetch started in parallel but with small window
-      const commentsPromise = this._fetchWithRetryAndSchedule(
-        `${this.config.invapi}/comments/${v}?hl=${contentlang}&region=${contentregion}&h=${this.toBase64(Date.now())}`,
-        new URL(this.config.invapi).origin,
-        {},
-        2500
-      )
-        .then((r) => r?.text())
-        .catch((err) => {
-          this.initError("Comments fetch error", err);
-          return null;
-        });
-
-      // strategy: start primary immediately. start fallback after fallbackStaggerMs if primary still pending.
-      // both flows use scheduler to avoid rate spikes.
-      const startPrimary = async () => {
-        try {
-          const r = await this._fetchWithRetryAndSchedule(chooseFirst, backendKeyA, {}, 5000);
-          return { res: r, url: chooseFirst };
-        } catch (err) {
-          return { err, url: chooseFirst };
-        }
-      };
-
-      const startFallback = async () => {
-        try {
-          const r = await this._fetchWithRetryAndSchedule(chooseSecond, backendKeyB, {}, 5000);
-          return { res: r, url: chooseSecond };
-        } catch (err) {
-          return { err, url: chooseSecond };
-        }
-      };
-
-      // kick off primary
-      const pPrimary = startPrimary();
-
-      // schedule fallback with a small stagger
-      const fallbackTimer = new Promise((res) =>
-        setTimeout(() => res(true), this.fallbackStaggerMs)
-      );
-
-      // race logic: wait for whichever returns OK first, but prefer not to fire fallback if primary finished.
-      const raceResult = await (async () => {
-        // wait for either primary to finish quickly, or stagger timeout
-        const first = await Promise.race([pPrimary, fallbackTimer]);
-
-        if (first && first.res === undefined && first.err === undefined) {
-          // reached fallback timer: start fallback while primary may still be running
-          const pFallback = startFallback();
-          // wait for first successful OK from either
-          const settled = await Promise.allSettled([pPrimary, pFallback]);
-          // prefer OK
-          for (const s of settled) {
-            if (s.status === "fulfilled" && s.value && s.value.res && s.value.res.ok) return s.value;
-          }
-          // otherwise pick first fulfilled with res
-          for (const s of settled) {
-            if (s.status === "fulfilled" && s.value && s.value.res) return s.value;
-          }
-          // otherwise return first error
-          for (const s of settled) {
-            if (s.status === "fulfilled" && s.value && s.value.err) return s.value;
-          }
-          // if still nothing, throw aggregate
-          throw new Error("Both upstreams failed");
-        } else {
-          // primary finished before fallback timer
-          if (first && first.res) {
-            return first;
-          }
-          // primary returned error object
-          // start fallback immediately
-          const pFallback = startFallback();
-          const settled = await Promise.allSettled([pPrimary, pFallback]);
-          for (const s of settled) {
-            if (s.status === "fulfilled" && s.value && s.value.res && s.value.res.ok) return s.value;
-          }
-          for (const s of settled) {
-            if (s.status === "fulfilled" && s.value && s.value.res) return s.value;
-          }
-          for (const s of settled) {
-            if (s.status === "fulfilled" && s.value && s.value.err) return s.value;
-          }
-          throw new Error("Both upstreams failed");
-        }
-      })();
-
-      // if result is an error object, surface small message
-      if (raceResult.err) {
-        this.initError("Primary+Fallback fetch error", raceResult.err);
-        throw raceResult.err;
-      }
-
-      // got a Response-like object
-      const r = raceResult.res;
-      const videoInfoText = await r.text().catch((e) => {
-        this.initError("Reading response text failed", e);
-        return null;
-      });
-
-      const commentsText = await commentsPromise;
-      const comments = this.getJson(commentsText);
-      const vid = this.getJson(videoInfoText);
-
-      if (!vid) {
-        this.initError("Video info missing/unparsable", v);
-        return {
-          error: true,
-          message: "Couldn't parse video info",
-        };
-      }
-
-      if (this.checkUnexistingObject(vid)) {
-        // fill cache quickly with defaults so response is fast
-        const baseResult = {
-          vid,
-          comments,
-          channel_uploads: " ",
-          engagement: null,
-          wiki: "",
-          desc: "",
-          color: "#0ea5e9",
-          color2: "#111827",
-        };
-
-        this.cache[v] = {
-          result: baseResult,
-          timestamp: Date.now(),
-        };
-
-        // run heavy/slow tasks async: dislikes + color extraction update cache when done
-        (async () => {
-          try {
-            // dislikes (may be slow)
-            let dislikesRes = { engagement: null };
-            try {
-              dislikesRes = await getdislikes(v);
-            } catch (err) {
-              this.initError("Dislike API error (async)", err);
-            }
-
-            // color extraction with short timeout
-            try {
-              const imgUrl = `https://i.ytimg.com/vi/${v}/hqdefault.jpg?sqp=${this.sqp}`;
-              const p = getColors(imgUrl);
-              const to = new Promise((_, rej) => setTimeout(() => rej(new Error("color timeout")), 1000));
-              const palette = await Promise.race([p, to]).catch(() => null);
-              if (Array.isArray(palette) && palette[0] && palette[1]) {
-                baseResult.color = palette[0].hex();
-                baseResult.color2 = palette[1].hex();
-              }
-            } catch (err) {
-              this.initError("Color extraction error (async)", err);
-            }
-
-            // update engagement & cache timestamp
-            baseResult.engagement = dislikesRes?.engagement ?? baseResult.engagement;
-            this.cache[v] = {
-              result: baseResult,
-              timestamp: Date.now(),
-            };
-          } catch (err) {
-            this.initError("Async post-processing error", err);
-          }
-        })();
-
-        return baseResult;
-      } else {
-        this.initError(vid, `ID: ${v}`);
-      }
-    })();
-
-    // store and clear inflight when done
-    this.inflight.set(v, promise);
-    try {
-      const res = await promise;
-      return res;
-    } finally {
-      this.inflight.delete(v);
-    }
   }
 }
 

@@ -307,20 +307,12 @@ module.exports = function (app, config, renderTemplate) {
             (uaos === "Windows 7" || uaos === "Windows 8") &&
             browser === "Firefox";
 
-          if (uaos === "Windows XP" || uaos === "Windows Vista")
-            res.redirect("/lite?v=" + req.query.v);
-          
-          if (req.useragent.source.includes("Nintendo WiiU")) 
-            res.redirect("/lite?v=" + req.query.v);
-
-        
-
           if (req.query.from === "short") var shortsui = true;
 
           try {
             renderTemplate(res, req, "watch.ejs", {
-              color: data.color,
-              color2: data.color2,
+              color: data?.color,
+              color2: data?.color2,
               linkify,
               engagement,
               linkto,

@@ -194,7 +194,7 @@ class InnerTubePokeVidious {
     // Rotate which window
     // prefers fallback/primary every 2 hours using a custom sequence.
     //
-    // Sequence: fallback, normal, fallback, normal, normal, fallback
+    // Sequence: fallback, normal, normal, normal, normal, fallback
     // each element = which API is preferred *for that 2-hour block*.
     //
     // Within the chosen preference, the 10-minute switching (minute % 20 >= 10)
@@ -205,7 +205,7 @@ class InnerTubePokeVidious {
     const hour = new Date().getHours();
 
     // pattern for each 2-hour block (6 blocks to cover 12 hours; repeats every 12 hours)
-    const pattern = ["fallback", "normal", "fallback", "normal", "normal", "fallback"];
+    const pattern = ["fallback", "normal", "normal", "normal", "normal", "fallback"];
 
     // determine which 2-hour slot we're in (0..11 hours cover repeating pattern every 12 hours)
     const twoHourIndex = Math.floor(hour / 2) % pattern.length;

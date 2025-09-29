@@ -310,6 +310,8 @@ module.exports = function (app, config, renderTemplate) {
           if (req.query.from === "short") var shortsui = true;
 
           try {
+            
+            res.header('X-Robots-Tag', 'noindex, nofollow');
             renderTemplate(res, req, "watch.ejs", {
               color: data?.color,
               color2: data?.color2,
@@ -371,6 +373,7 @@ module.exports = function (app, config, renderTemplate) {
             });
           } catch (err) {
               res.status(500); 
+              res.header('X-Robots-Tag', 'noindex, nofollow');
               renderTemplate(res, req, "video-error.ejs", {
               v,
               err_reason:err

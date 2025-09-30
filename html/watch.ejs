@@ -1947,6 +1947,9 @@ WIP!                                                 </a>
                  
             </div>
           <% } %>  
+          
+   <div style="padding: 19px;background: #1f1f1f;border-radius: inherit;border: solid var(--div-border-color);margin-top: 13px;display: flex;flex-direction: row;">
+      <a id="connections"></a>
 
                <%  if (twitter) { %> 
                                 <%  if (discord) { %> 
@@ -1956,8 +1959,6 @@ WIP!                                                 </a>
                      
      <%  if (instagram) { %> 
 
-   <div style="padding: 19px;background: #1f1f1f;border-radius: inherit;border: solid var(--div-border-color);margin-top: 13px;display: flex;flex-direction: row;">
-      <a id="connections"></a>
 
  <div class="video-title loaded" style="color:var(--text-color);font-family:var(--text-font-primary);;font-weight:var(--text-header-weight);font-stretch: extra-expanded;margin-top: -15px;margin-bottom: 10px;">Connections</div>
 
@@ -1976,7 +1977,11 @@ WIP!                                                 </a>
      <%  if (!threads) { %> 
                      
      <%  if (!instagram) { %> 
- 
+ <style>
+ .connections {
+  display:none;
+ }
+ </style>
          <% } %>  
                                                                 <% } %>  
                                <% } %>                                 <% } %>  

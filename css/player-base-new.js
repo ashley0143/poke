@@ -12,7 +12,8 @@ document.addEventListener("DOMContentLoaded", () => {
     const video = videojs('video', {
         controls: true,
         autoplay: false,
-        preload: 'auto'
+        preload: 'auto',
+        errorDisplay: false,
     });
 
     // todo : remove this code lol
@@ -297,6 +298,18 @@ document.addEventListener("DOMContentLoaded", () => {
             if (audioReady) audio.play()?.catch(()=>{});
             if (!syncInterval) startSyncLoop();
         });
+  const errorBox = document.getElementById('loopedIndicator');
+  video.on('error', () => {
+    const mediaError = player.error();
+    let message = 'An unknown error occurred.';
+
+    if (mediaError) {
+      message = `Error ${mediaError.code}: ${mediaError.message || 'No message provided'}`;
+    }
+
+    errorBox.textContent = message;
+    errorBox.style.display = 'block';
+  });
 
         // seeks: keep tight alignment
         // fix: remember if video was actually playing before the seek, so we don't resume wrongly

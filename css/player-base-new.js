@@ -298,19 +298,26 @@ document.addEventListener("DOMContentLoaded", () => {
             if (audioReady) audio.play()?.catch(()=>{});
             if (!syncInterval) startSyncLoop();
         });
-  const errorBox = document.getElementById('loopedIndicator');
-  video.on('error', () => {
-    const mediaError = video.error();
-    let message = 'An unknown error occurred.';
 
-    if (mediaError) {
-      message = `Error ${mediaError.code} : ${mediaError.message || 'No message provided'} try to refresh the page?`;
+const errorBox = document.getElementById('loopedIndicator');
+
+video.on('error', () => {
+  const mediaError = video.error();
+  let message = 'An unknown error occurred.';
+
+  if (mediaError) {
+    // Skip showing error if code === 1
+    if (mediaError.code === 1) {
+      return;
     }
+    message = `Error ${mediaError.code} : ${mediaError.message || 'No message provided'} try to refresh the page?`;
+  }
 
-    errorBox.textContent = message;
-    errorBox.style.display = 'block';
-        errorBox.style.width = 'fit-content'; 
-  });
+  errorBox.textContent = message;
+  errorBox.style.display = 'block';
+  errorBox.style.width = 'fit-content';
+});
+
 
         // seeks: keep tight alignment
         // fix: remember if video was actually playing before the seek, so we don't resume wrongly

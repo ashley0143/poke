@@ -218,7 +218,7 @@ module.exports = function (app, config, renderTemplate) {
     const verify = req.hostname === "poketube.sudovanilla.com";
 
     
-    INNERTUBE.getYouTubeApiVideo(f, v, contentlang, contentregion).then(
+    INNERTUBE.getYouTubePlayerInfo(f, v, contentlang, contentregion).then(
       (data) => {
         try {
            const channel_uploads = data?.channel_uploads;

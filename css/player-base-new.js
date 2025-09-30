@@ -304,7 +304,7 @@ document.addEventListener("DOMContentLoaded", () => {
     let message = 'An unknown error occurred.';
 
     if (mediaError) {
-      message = `Error ${mediaError.code}: ${mediaError.message || 'No message provided'}`;
+      message = `Error ${mediaError.code} : ${mediaError.message || 'No message provided'} try to refresh the page?`;
     }
 
     errorBox.textContent = message;

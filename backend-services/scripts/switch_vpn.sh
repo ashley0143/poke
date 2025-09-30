@@ -1,5 +1,5 @@
 #!/bin/bash
-path=/root/globe/services/invidious
+path=/your/path/here/ 
 opts=("Switch to router VPN" "Switch to Cloudflare VPN" "Exit")
 PS3="Choose an option:"
 select o in "${opts[@]}"

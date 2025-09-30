@@ -309,6 +309,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     errorBox.textContent = message;
     errorBox.style.display = 'block';
+        errorBox.style.width = 'fit-content'; 
   });
 
         // seeks: keep tight alignment

@@ -48,7 +48,7 @@ class InnerTubePokeVidious {
     return Buffer.from(String(str)).toString("base64");
   }
 
-  async getYouTubeApiVideo(f, v, contentlang, contentregion) {
+  async getYouTubePlayerInfo(f, v, contentlang, contentregion) {
     const { fetch } = await import("undici");
 
     if (!v) {

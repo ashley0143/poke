@@ -300,7 +300,7 @@ document.addEventListener("DOMContentLoaded", () => {
         });
   const errorBox = document.getElementById('loopedIndicator');
   video.on('error', () => {
-    const mediaError = player.error();
+    const mediaError = video.error();
     let message = 'An unknown error occurred.';
 
     if (mediaError) {

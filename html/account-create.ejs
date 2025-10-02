@@ -54,6 +54,56 @@ function yeast() {
   return now +'.'+ encode(seed++);
 }                          %>
   
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Redirecting…</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="color-scheme" content="dark light" />
+  <meta name="theme-color" content="#000000" />
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; connect-src 'self' https://poketube.fun; img-src 'self' data:; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline'; base-uri 'self'; form-action 'self'">
+  <style>
+    :root { --bg:#0b0b0b; --fg:#e8e8e8; --muted:#9a9a9a; --accent:#71c7ff; }
+    html,body { margin:0; padding:0; height:100%; background:var(--bg); color:var(--fg); font:14px/1.4 system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, "Noto Sans", "Helvetica Neue", Arial, "Apple Color Emoji", "Noto Color Emoji", "Segoe UI Emoji"; }
+    .wrap { min-height:100%; display:grid; place-items:center; padding:24px; }
+    .card { width:100%; max-width:520px; border:1px solid #1c1c1c; border-radius:12px; background:#0f0f0f; box-shadow:0 0 0 1px #121212 inset, 0 8px 32px rgba(0,0,0,.5); }
+    .inner { padding:20px 22px; }
+    h1 { font-size:18px; margin:0 0 8px; }
+    p { margin:8px 0 0; color:var(--muted); }
+    .row { display:flex; align-items:center; gap:12px; margin-top:14px; }
+    .spinner { width:16px; height:16px; border-radius:50%; border:2px solid var(--muted); border-top-color:var(--accent); animation:spin 0.9s linear infinite; }
+    kbd { background:#171717; color:#dcdcdc; padding:2px 6px; border:1px solid #232323; border-radius:6px; font-size:12px; }
+    @keyframes spin { to { transform:rotate(360deg); } }
+    .small { font-size:12px; color:#7b7b7b; }
+    .hidden { display:none; }
+    a { color:var(--accent); text-decoration:none; }
+    a:hover { text-decoration:underline; }
+  </style>
+</head>
+<body>
+  <noscript>
+    <div class="wrap">
+      <div class="card">
+        <div class="inner">
+          <h1>JavaScript required</h1>
+          <p>This page assigns you a user ID and redirects to your account.</p>
+          <p class="small">Enable JavaScript and refresh, or go to <a href="/my-acc">/my-acc</a> and sign in manually.</p>
+        </div>
+      </div>
+    </div>
+  </noscript>
+
+  <div class="wrap" id="app">
+    <div class="card">
+      <div class="inner">
+        <h1>Preparing your account…</h1>
+        <div class="row"><div class="spinner" aria-hidden="true"></div><p>Generating an ID and redirecting securely.</p></div>
+        <p class="small hidden" id="status"></p>
+      </div>
+    </div>
+  </div>
 
   
   <script>
@@ -70,3 +120,5 @@ if(localStorage.getItem("UserID")) {
   location.href = "/my-acc?ID=" + localStorage.getItem("UserID") +  "&rparam=1"
 }
   </script>
+</body>
+</html>

@@ -355,6 +355,7 @@
         <li><a href="#translate">Translate Page (SimplyTranslate)</a></li>
         <li><a href="#third-parties">Third-Party Requests &amp; Proxy</a></li>
         <li><a href="#api-logs">API Logs Policy</a></li>
+        <li><a href="#nginx-analytics">Server Admin Tool: poke-nginx-analytics</a></li>
         <li><a href="#legal-bases">Legal Bases (GDPR)</a></li>
         <li><a href="#your-rights">Your Rights</a></li>
         <li><a href="#retention">Data Retention</a></li>
@@ -385,6 +386,7 @@
           <a href="#translate">Translate Page (SimplyTranslate)</a>
           <a href="#third-parties">Third-Party Requests &amp; Proxy</a>
           <a href="#api-logs">API Logs Policy</a>
+          <a href="#nginx-analytics">Server Admin Tool: poke-nginx-analytics</a>
           <a href="#legal-bases">Legal Bases (GDPR)</a>
           <a href="#your-rights">Your Rights</a>
           <a href="#retention">Data Retention</a>
@@ -401,64 +403,63 @@
       <header>
         <h1 class="doc-title">Poke Privacy Policy</h1>
         <p class="doc-lede">
-          <strong>We don’t collect any data about you.</strong> No telemetry, no trackers! Because Poke is <strong>free software</strong>, you can also check the source and self-host.
+<strong>We don’t collect personal data about you.</strong> No telemetry, no trackers, no profiling. The only “analytics” we ship is an optional <code>poke-nginx-analytics</code> script for server admins — and it runs <em>locally</em>, never phones home, and just reads your own logs. Because Poke is <strong>free software</strong>, you can check the source, self-host, and audit everything yourself.
         </p>
         <div class="meta-row" aria-label="Document metadata">
           <span class="meta">Instance: <span class="mono">poketube.fun</span></span>
-          <span class="meta">Version date: <time datetime="2025-09-28">September 28, 2025</time></span>
+          <span class="meta">Version date: <time datetime="2025-10-03">October 3, 2025</time></span>
         </div>
       </header>
 
       <!-- What's New / Privacy Update -->
       <section id="whats-new" class="update-box" aria-labelledby="whats-new-heading" role="region">
         <h3 id="whats-new-heading">
-          What’s New — Policy Update
-          <span class="when">September 28, 2025</span>
+          What’s New — Policy Updates
+          <span class="when">October 3, 2025</span>
         </h3>
         <p style="margin-top:6px">
-          We clarified how third-party requests work waaay better! Highlights: 
+          Added a section for our server-admin script <strong>poke-nginx-analytics</strong>. TL;DR: it’s local-only, read-only, and configurable for privacy (IP masking, bot filtering). Source code is linked.
         </p>
         <ul>
-          <li><strong>Weather pages:</strong> <em>Open-Meteo</em> forecasts are always proxied by our backend. <em>Nominatim</em> geocoding is proxied. Source links are provided for both flows.</li>
-         </ul>
-        <div class="update-actions" aria-label="Update actions">
-          <a href="#weather" aria-label="Jump to Weather section">Review weather changes</a>
-          <button type="button" id="dismissUpdate" aria-label="Dismiss this update notice">
-            Dismiss
-          </button>
-        </div>
+          <li><a href="#nginx-analytics">Read the new “Server Admin Tool” section</a></li>
+          <li>Script source: <a href="https://codeberg.org/ashley/poke/src/branch/main/backend-services/scripts/poke-nginx-analytics.sh" target="_blank" rel="noopener">backend-services/scripts/poke-nginx-analytics.sh</a></li>
+        </ul>
+ 
       </section>
+<!-- Overview / Preamble -->
+<section id="overview" aria-labelledby="preamble-heading">
+  <h2 id="preamble-heading" class="section">Preamble</h2>
+  <p>
+    Welcome to Poke’s Privacy Policy. We don’t collect personal data about you, we don’t run telemetry, and we don’t track you around the web. 
+    The only “analytics” involved is an optional <code>poke-nginx-analytics</code> script for server operators, which runs locally on their own machines, 
+    never phones home, and only summarizes their own access logs. 
+    Poke is <strong>free software</strong> you can read, remix, and run yourself.
+  </p>
+  <p class="callout">Not legal advice lol</p>
+</section>
 
-      <!-- Overview / Preamble -->
-      <section id="overview" aria-labelledby="preamble-heading">
-        <h2 id="preamble-heading" class="section">Preamble</h2>
-        <p>
-          Welcome to Poke’s Privacy Policy. We don’t collect data about you and we don’t run telemetry. Poke is <strong>free software</strong> you can read, remix, and run yourself.
-        </p>
-        <p class="callout">Not legal advice lol</p>
-      </section>
-
-      <!-- TL;DR -->
-      <section id="summary" aria-labelledby="summary-heading">
-        <h2 id="summary-heading" class="section">TL;DR</h2>
-        <div class="grid-2">
-          <div>
-            <ul>
-              <li><strong>No data collected.</strong> at all!!</li>
-              <li><strong>No telemetry.</strong> We don’t phone home.</li>
-              <li><strong>No third-party trackers.</strong> Yippe!!</li>
-              <li><strong>YouTube can’t see what you watch here.</strong> Its all done on the backend.</li>
-            </ul>
-          </div>
-          <div>
-            <ul>
-              <li><strong>Poke Account:</strong> no email required, no personal info needed.</li>
-              <li><strong>Poke Maps:</strong> uses OpenStreetMap data; map tiles/attribution may have separate privacy rules depending on the tile server you use.</li>
-              <li><strong>No required cookies.</strong> Preferences (like theme or layout) may live in local storage on your device.</li>
-            </ul>
-          </div>
-        </div>
-      </section>
+<!-- TL;DR -->
+<section id="summary" aria-labelledby="summary-heading">
+  <h2 id="summary-heading" class="section">TL;DR</h2>
+  <div class="grid-2">
+    <div>
+      <ul>
+        <li><strong>No personal data collected.</strong> nothing about you is stored.</li>
+        <li><strong>No telemetry.</strong> We don’t phone home.</li>
+        <li><strong>No third-party trackers.</strong> Yippe!!</li>
+        <li><strong>YouTube can’t see what you watch here.</strong> It’s all done on the backend.</li>
+      </ul>
+    </div>
+    <div>
+      <ul>
+        <li><strong>Poke Account:</strong> no email required, no personal info needed.</li>
+        <li><strong>Poke Maps:</strong> uses OpenStreetMap data; tile servers have their own privacy rules.</li>
+        <li><strong>Optional server admin tool:</strong> <code>poke-nginx-analytics</code> is local-only, read-only, and never sends data anywhere.</li>
+        <li><strong>No required cookies.</strong> Preferences (like theme or layout) may live in local storage on your device.</li>
+      </ul>
+    </div>
+  </div>
+</section>
 
       <!-- Ownership -->
       <section id="ownership" aria-labelledby="ownership-heading">
@@ -539,25 +540,13 @@
         <ul>
           <li>
             <strong>Geocoding / place lookup:</strong>
-            <a href="https://nominatim.openstreetmap.org/" rel="noopener" target="_blank">nominatim.openstreetmap.org</a>
-            (OpenStreetMap Nominatim).  
-            Privacy: <a href="https://osmfoundation.org/wiki/Privacy_Policy" rel="noopener" target="_blank">OSMF Privacy Policy</a>.  
-            <br>
-            How it works:
-            <ul>
-              <li> the request is proxied through Poke’s backend - always!
-              (<a href="https://codeberg.org/ashley/poke/src/branch/main/src/libpoketube/init/pages-api.js#L78" target="_blank" rel="noopener">see source </a>).</li>
-            </ul>
+            <a href="https://nominatim.openstreetmap.org/" rel="noopener" target="_blank">nominatim.openstreetmap.org</a>.
+            Requests are proxied through Poke’s backend.
           </li>
           <li>
             <strong>Forecast data:</strong>
-            <a href="https://open-meteo.com/" rel="noopener" target="_blank">open-meteo.com</a>.  
-            Privacy: <a href="https://open-meteo.com/en/terms#privacy" rel="noopener" target="_blank">Open-Meteo Terms &amp; Privacy</a>.  
-            <br>
-            Forecast queries are always <strong>proxied through Poke’s backend</strong>, so your browser never connects to Open-Meteo directly. 
-            Only the necessary query parameters (latitude, longitude, units, etc.) are forwarded by the server.  
-            see the source for this
-            <a href="https://codeberg.org/ashley/poke/src/branch/main/src/libpoketube/init/pages-api.js#L108" target="_blank" rel="noopener">here.</a>.
+            <a href="https://open-meteo.com/" rel="noopener" target="_blank">open-meteo.com</a>.
+            Forecast queries are proxied through Poke’s backend so your browser never connects to Open-Meteo directly.
           </li>
         </ul>
         <p class="callout">
@@ -576,16 +565,14 @@
           <code>from</code> (source language), <code>to</code> (target language), and <code>text</code> (the content you entered). 
           Your browser never connects to SimplyTranslate.org directly.
         </p>
+      </section>
+
+      <!-- Third-party requests -->
+      <section id="third-parties" aria-labelledby="third-parties-heading">
+        <h2 id="third-parties-heading" class="section">Third-Party Requests &amp; Proxy</h2>
         <p>
-          We rely on the community-run 
-          <a href="https://simplytranslate.org/" rel="noopener" target="_blank">SimplyTranslate</a> service (a privacy-friendly 
-          translation front-end). SimplyTranslate is a <strong>free software</strong> project: you can see the 
-          <a href="https://codeberg.org/ManeraKai/simplytranslate" rel="noopener" target="_blank">source code</a> and its 
-          <a href="https://codeberg.org/ManeraKai/simplytranslate/raw/branch/main/legal_notice.txt" rel="noopener" target="_blank">legal notice</a>. 
-          Our backend integration is handled in 
-          <a href="https://codeberg.org/ashley/poke/src/branch/main/src/libpoketube/init/pages-static.js#L208" target="_blank" rel="noopener">
-            Poke’s server code
-          </a>.
+          Where external services are necessary (maps, weather, translation), Poke uses server-side proxying to avoid exposing your browser directly.
+          We don’t inject trackers into proxied calls. External services have their own privacy terms that apply to those specific requests.
         </p>
       </section>
 
@@ -593,7 +580,7 @@
       <section id="api-logs" aria-labelledby="api-logs-heading">
         <h2 id="api-logs-heading" class="section">API Logs Policy</h2>
         <p>
-          When you request any resource from the poke api (for example: thumbnails, API endpoint) information about the request may be logged.
+          When you request any resource from the Poke API (for example: thumbnails, API endpoint) information about the request may be logged.
         </p>
         <p>Information about a request is limited to:</p>
         <ul>
@@ -612,9 +599,85 @@
 2019-01-19 16:37:54 +00:00 200 GET /watch 7.04ms
         </pre>
         <p>
-          This website does not store the visitor’s user-agent or IP address and does not use fingerprinting, advertisements, or tracking of any form.
+          This website does not store the visitor’s user-agent and does not use fingerprinting, advertisements, or tracking of any form.
         </p>
       </section>
+<section id="nginx-analytics" aria-labelledby="nginx-analytics-heading">
+  <h2 id="nginx-analytics-heading" class="section">Server Admin Tool: <span class="mono">poke-nginx-analytics</span></h2>
+  <p>
+    We ship an optional, admin-side shell script to help operators understand IPv4/IPv6 traffic and status codes from their own servers’ Nginx access logs.
+    It’s free software and lives here:
+    <a href="https://codeberg.org/ashley/poke/src/branch/main/backend-services/scripts/poke-nginx-analytics.sh" target="_blank" rel="noopener">
+      backend-services/scripts/poke-nginx-analytics.sh
+    </a>.
+  </p>
+
+  <div class="callout">
+    <strong>Privacy  :</strong> the script is <em>local-only</em> and <em>read-only</em>. It makes no network requests, writes no files by default, and sends nothing anywhere. It just reads the log files you point it at and prints aggregate counts to your terminal.
+  </div>
+
+  <h3 class="section" style="margin-top:18px;font-size:1.05rem">What it reads from your logs</h3>
+  <p>
+    The script parses standard Nginx <em>access</em> logs (including rotated <code>.1</code> and compressed <code>.gz</code>) using the fields already present in your log format:
+  </p>
+  <ul>
+    <li><strong>Client IP</strong> (first field) — used to tell IPv4 vs IPv6 and to compute counts/uniques; display can be masked via <code>--anonip</code>.</li>
+    <li><strong>Timestamp</strong> (e.g., <code>[02/Oct/2025:14:03:12 +0000]</code>) — used for <code>--date</code>, <code>--since</code>, <code>--until</code>, and hourly breakdowns.</li>
+    <li><strong>Status code</strong> (e.g., <code>200</code>, <code>404</code>, <code>502</code>) — used for success/fail tallies and “top fail reasons.”</li>
+    <li><strong>User-Agent</strong> (last quoted field) — only to optionally filter bots when <code>--ignore-bots</code> (or a custom <code>--bot-regex</code>) is used.</li>
+  </ul>
+  <p class="small">It does <strong>not</strong> collect any new data, fingerprint users, or correlate logs with other sources.</p>
+
+  <h3 class="section" style="margin-top:18px;font-size:1.05rem">How it decides “success” vs “fail”</h3>
+  <ul>
+    <li>By default, “success” is the set <code>200,301,302,304</code>.</li>
+    <li>You can override with <code>--success-codes</code> or a regex via <code>--success-regex</code> (e.g., <code>^(2..|3..)$</code>). If both are provided, regex wins.</li>
+    <li>“Fail” is simply “not success.”</li>
+  </ul>
+
+  <h3 class="section" style="margin-top:18px;font-size:1.05rem">What it outputs (to your terminal)</h3>
+  <ul>
+    <li><strong>Counts and percentages</strong> of IPv4 vs IPv6 for today (or a specified date/time window).</li>
+    <li><strong>Success-only</strong> and <strong>fail-only</strong> views; an overall <strong>success rate</strong> with totals.</li>
+    <li><strong>Hourly breakdown</strong> (v4/v6/total) and <strong>status-code breakdown</strong> for v4 or v6.</li>
+    <li><strong>Unique IP counts</strong> for v4 and v6; if <code>--anonip</code> is set, displayed IPs are masked (IPv4 → /24; IPv6 → /64).</li>
+    <li><strong>Top IPs</strong> (v4 or v6) with optional masking and bot filtering.</li>
+    <li><strong>Top 5 failure reasons</strong> (status codes aggregated across v4+v6). Some common meanings:
+      <ul>
+        <li><code>404 Not Found</code> — missing path or bad link.</li>
+        <li><code>400 Bad Request</code> — malformed client request.</li>
+        <li><code>401/403 Unauthorized/Forbidden</code> — blocked/needs auth.</li>
+        <li><code>429 Too Many Requests</code> — rate limiting kicked in.</li>
+        <li><code>500/502/503/504</code> — upstream/app issues or timeouts.</li>
+      </ul>
+    </li>
+  </ul>
+
+  <h3 class="section" style="margin-top:18px;font-size:1.05rem">How it works (under the hood)</h3>
+  <ul>
+    <li>Expands your <code>--file</code> glob (default <code>/var/log/nginx/access.log*</code>), reads each file with <code>cat</code>/<code>zcat</code>.</li>
+    <li>Uses <code>awk</code> to:
+      <ul>
+        <li>Detect <strong>IPv4</strong> vs <strong>IPv6</strong> by regex.</li>
+        <li>Match the requested <strong>date</strong> and optional <strong>time window</strong> (<code>--since</code>/<code>--until</code>).</li>
+        <li>Classify <strong>success/fail</strong> via your codes or regex.</li>
+        <li>Optionally <strong>filter bots</strong> by User-Agent (<code>--ignore-bots</code> / <code>--bot-regex</code>).</li>
+        <li>Optionally <strong>anonymize IPs</strong> for display (<code>--anonip</code>).</li>
+        <li>Aggregate counts and print sorted summaries; shows “top fails” by frequency.</li>
+      </ul>
+    </li>
+    <li>Handles rotated and <code>.gz</code> logs automatically.</li>
+    <li>Does not modify logs or your Nginx config.</li>
+  </ul>
+
+  <h3 class="section" style="margin-top:18px;font-size:1.05rem">What it does <em>not</em> do</h3>
+  <ul>
+    <li><strong>No storage by default.</strong> Output is ephemeral in your terminal unless <em>you</em> redirect it (e.g., <code>&gt; report.txt</code>).</li>
+     <li><strong>No identification or profiling.</strong> It does not attempt to identify people; it just counts what’s already in your logs.</li>
+  </ul>
+
+ 
+</section>
 
       <!-- Legal bases -->
       <section id="legal-bases" aria-labelledby="gdpr-heading">
@@ -776,7 +839,7 @@ EVEN IF SUCH HOLDER OR OTHER PARTY HAS BEEN ADVISED OF THE POSSIBILITY OF SUCH D
       // Dismissible privacy update (persists in localStorage)
       const updateBox = document.getElementById('whats-new');
       const dismissBtn = document.getElementById('dismissUpdate');
-      const STORAGE_KEY = 'poke_privacy_update_2025_09_17_dismissed';
+      const STORAGE_KEY = 'poke_privacy_update_2025_10_03_dismissed';
       try {
         if (localStorage.getItem(STORAGE_KEY) === '1') {
           updateBox && (updateBox.hidden = true);

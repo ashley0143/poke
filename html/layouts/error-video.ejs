@@ -101,10 +101,10 @@
     <script>
        // @license magnet:?xt=urn:btih:1f739d935676111cfff4b4693e3816e664797050&dn=gpl-3.0.txt GPL-3.0-or-later
 
-        // Alternating delay: 5s -> 10s -> 5s -> 10s -> ...
+        // Alternating delay
         const PHASE_KEY = 'reloadPhase';     // 0 or 1
         const COUNT_KEY = 'reloadCount';     // simple counter
-        const DELAYS = [5, 3, 4, 2];
+        const DELAYS = [6, 3, 4, 5];
 
         // Pick delay for this attempt, then advance the phase for next time
         const currentPhase = parseInt(localStorage.getItem(PHASE_KEY) || '0', 10) % DELAYS.length;

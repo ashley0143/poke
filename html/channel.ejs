@@ -1136,9 +1136,20 @@ margin-left: 10px;
 				<img  src="/avatars/<%=cinv.authorThumbnails[5].url.replace("https://yt3.googleusercontent.com/", "")%>" alt="Channel Avatar">
         
 			</a>
+         <% 
+function authorVerifiedChecker4000() {
+  const sources = [tj, shorts, stream];
+
+  const hasVerified = (source) =>
+    source?.videos?.[0]?.authorVerified === true;
+
+  return sources.some(hasVerified);
+}
+
+%>
 			<div class="name">
 				<p style="font-family:PokeTube Flex,sans-serif;font-weight:1000;font-stretch: ultra-expanded;white-space:yes;text-align: left;margin-left: 6.2em;margin-top: -7em;"> <%=cinv.author%> 
-<% if (authorVerifiedChecker3000()) { %>
+<% if (authorVerifiedChecker4000()) { %>
 <a href="https://support.google.com/youtube/answer/3046484?hl=en">
     <i class="icon ion ion-md-checkmark-circle" style="width:18px;margin-right:1px" title="Verified Channel"></i>
     </a>

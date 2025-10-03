@@ -351,7 +351,7 @@ module.exports = function (app, config, renderTemplate) {
               sha384,
               lightOrDark,
               isMobile: req.useragent.isMobile,
-              tj: data.channel,
+              tj: data?.channel,
               r,
               threads:threads_by_instagram,
               hostname:req.hostname,

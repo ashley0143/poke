@@ -374,7 +374,9 @@ app.get("/api/version.json", async (req, res) => {
   const loadavg = os.loadavg(); // [1m, 5m, 15m]
   const uptimeSeconds = Math.floor(os.uptime());
 
-  const platform = os.platform();    // 'linux', 'darwin', 'win32', etc.
+  let platform = os.platform(); // 'linux', 'darwin', 'win32', etc.
+  if (platform === 'linux') platform = 'gnu/linux';
+
   const kernelRelease = os.release(); // e.g., '6.8.0-40-generic'
   const arch = os.arch();            // e.g., 'x64', 'arm64'
   const hostname = os.hostname();
@@ -416,7 +418,7 @@ app.get("/api/version.json", async (req, res) => {
         id_like: osr.id_like,
         version_id: osr.version_id,
       } : null,
-      platform.replace("linux", "GNU/Linux"),           
+      platform,           
       kernel_release: kernelRelease,
       arch,
       hostname,

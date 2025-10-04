@@ -16,6 +16,7 @@ const cnf = require("../../../config.json");
 const innertube = require("../libpoketube-youtubei-objects.json");
 
 const { execSync } = require('child_process'); // DO NOT ABBRV THIS :SOB:
+const fs = require('fs');
 
 const verfull = "v25.2705-luna-MAJOR_UPDATE-stable-dev-nonLTS-git-MTc0NTcwNjc4MA==";
 const versmol = "v25.2705-luna";
@@ -322,67 +323,137 @@ app.get("/api/weather", async (req, res) => {
   app.get("/api/v1", async (req, res) => {
     res.redirect("https://invid-api.poketube.fun/api/v1/stats");
   });
+app.get("/api/version.json", async (req, res) => {
+  let latestCommitHash = null;
 
-  app.get("/api/version.json", async (req, res) => {
-    let latestCommitHash;
+  function getLatestCommitHash() {
+    try {
+      const out = execSync("git rev-parse --short HEAD", { stdio: ["ignore", "pipe", "pipe"] })
+        .toString()
+        .trim();
+      return out || null;
+    } catch {
+      return null;
+    }
+  }
 
-    const invidious = await modules
-      .fetch("https://invid-api.poketube.fun/bHj665PpYhUdPWuKPfZuQGoX/api/v1/stats", {
-        headers: headers, 
-      })
-      .then((res) => res.text())
-      .then((txt) => getJson(txt));
-
-    const cpus = os.cpus();
-    const totalMemory = os.totalmem() / (1024 * 1024 * 1024);
-    const roundedMemory = totalMemory.toFixed(2);
-
-    execSync('git rev-list HEAD -n 1 --abbrev-commit', (error, stdout, stderr) => {
-      if (error || stderr) {
-        console.error(`Error executing command: ${error || stderr}`);
-        return;
+  function readOsRelease() {
+    try {
+      const text = fs.readFileSync("/etc/os-release", "utf8");
+      const map = {};
+      for (const line of text.split("\n")) {
+        const m = line.match(/^([A-Z0-9_]+)=(.*)$/);
+        if (!m) continue;
+        let v = m[2];
+        if ((v.startsWith('"') && v.endsWith('"')) || (v.startsWith("'") && v.endsWith("'"))) {
+          v = v.slice(1, -1);
+        }
+        map[m[1]] = v;
       }
+      return {
+        id: map.ID || null,
+        id_like: map.ID_LIKE || null,
+        version_id: map.VERSION_ID || null,
+        name: map.NAME || null,
+        pretty_name: map.PRETTY_NAME || null,
+      };
+    } catch {
+      return null;
+    }
+  }
 
-      latestCommitHash = stdout.trim();
-    });
-const { useragent, ...configWithoutUA } = cnf;
+  const osr = readOsRelease();
 
-    const response = {
-      pt_version: {
-        version: versmol,
-        version_full: verfull,
-        commit: latestCommitHash,
-      },
-      branch,
-      updatequote,
-      relaseunixdate,
-      vernum: versionnumber,
-      codename,
-      config: configWithoutUA,
-      system: {
-        ram: `${roundedMemory} GB`,
-        cpu: cpus[0].model,
-      },
-      packages: {
-        libpt: version,
-        node: process.version,
-        v8: process.versions.v8,
-      },
-      invidious,
-      innertube,
-      flac: {
-        poketube_flac: "1.2a",
-        apple_musickit: "1.2.3",
-        poketube_normalize_volume: "1.2.23-yt",
-      },
-      piwik: "master",
-      process: process.versions,
-      dependencies: pkg.dependencies,
-      poketubeapicode: btoa(Date.now() + invidious.software.version),
-    };
+  const cpus = os.cpus() || [];
+  const totalMemoryGB = os.totalmem() / (1024 ** 3);
+  const freeMemoryGB = os.freemem() / (1024 ** 3);
 
-    res.json(response);
-  });
+  const roundedTotalGB = totalMemoryGB.toFixed(2);
+  const roundedFreeGB = freeMemoryGB.toFixed(2);
+
+  const loadavg = os.loadavg(); // [1m, 5m, 15m]
+  const uptimeSeconds = Math.floor(os.uptime());
+
+  const platform = os.platform();    // 'linux', 'darwin', 'win32', etc.
+  const kernelRelease = os.release(); // e.g., '6.8.0-40-generic'
+  const arch = os.arch();            // e.g., 'x64', 'arm64'
+  const hostname = os.hostname();
+  const cpuModel = cpus[0]?.model || "Unknown CPU";
+  const cpuCount = cpus.length;
+
+  latestCommitHash = getLatestCommitHash();
+
+  let invidious = null;
+  try {
+    const invTxt = await modules
+      .fetch("https://invid-api.poketube.fun/bHj665PpYhUdPWuKPfZuQGoX/api/v1/stats", { headers })
+      .then(r => r.text());
+    invidious = getJson(invTxt);
+  } catch {
+    invidious = null;
+  }
+
+  const { useragent, ...configWithoutUA } = cnf;
+
+  const response = {
+    pt_version: {
+      version: versmol,
+      version_full: verfull,
+      commit: latestCommitHash,
+    },
+    branch,
+    updatequote,
+    relaseunixdate,
+    vernum: versionnumber,
+    codename,
+    config: configWithoutUA,
+    system: {
+      os_name: osr?.pretty_name || osr?.name || (platform === "linux" ? "GNU/Linux" : os.type()),
+      distro: osr ? {
+        pretty_name: osr.pretty_name,
+        name: osr.name,
+        id: osr.id,
+        id_like: osr.id_like,
+        version_id: osr.version_id,
+      } : null,
+      platform,           
+      kernel_release: kernelRelease,
+      arch,
+      hostname,
+      ram_total: `${roundedTotalGB} GB`,
+      ram_free: `${roundedFreeGB} GB`,
+      cpu: cpuModel,
+      cpu_cores: cpuCount,
+      loadavg: {
+        "1m": Number(loadavg[0]?.toFixed(2) || 0),
+        "5m": Number(loadavg[1]?.toFixed(2) || 0),
+        "15m": Number(loadavg[2]?.toFixed(2) || 0),
+      },
+      uptime_seconds: uptimeSeconds,
+    },
+    packages: {
+      libpt: version,
+      node: process.version,
+      v8: process.versions.v8,
+    },
+    invidious,
+    innertube,
+    flac: {
+      poketube_flac: "1.2a",
+      apple_musickit: "1.2.3",
+      poketube_normalize_volume: "1.2.23-yt",
+    },
+    process: process.versions,
+    dependencies: pkg.dependencies,
+    poketubeapicode: (() => {
+      const invVer = invidious?.software?.version || "0";
+      return btoa(String(Date.now()) + String(invVer));
+    })(),
+  };
+
+  res.json(response);
+});
+
 
   app.get("/api/instances.json", async (req, res) => {
     const { fetch } = await import("undici");

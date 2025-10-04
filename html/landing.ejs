@@ -307,10 +307,120 @@ const randomFeatures = features.sort(() => 0.5 - Math.random()).slice(0, 3);
     </div>
   </div>
 
-  <!-- bottom logo section -->
-  <div style="text-align:center; border-top:1px solid #222; padding:40px 0 60px 0;">
-    <img src="/static/logo-poke.svg" alt="POKE logo" style="width:57em; height:auto; margin-bottom:10px;mask-image: none;border-radius: none;">
+<!-- bottom logo section -->
+<div style="text-align:center; border-top:1px solid #222; padding:40px 0 20px 0;">
+  <img src="/static/logo-poke.svg" alt="POKE logo" style="width:57em; height:auto; margin-bottom:16px; mask-image:none; border-radius:0;">
+  
+  <style>
+    .pk-marquee {
+      --gap: 32px;
+      --speed: 30s;
+      position: relative;
+      overflow: hidden;
+      border-top: 1px solid #222;
+      border-bottom: 1px solid #222;
+      margin: 0 auto;
+      max-width: 1200px;
+      height: 44px;
+      display: flex;
+      align-items: center;
+      background: #0b0b0b;
+    }
+    .pk-marquee:focus-within .pk-marquee__track,
+    .pk-marquee:hover .pk-marquee__track {
+      animation-play-state: paused;
+    }
+    .pk-marquee__track {
+      display: flex;
+      align-items: center;
+      gap: var(--gap);
+      white-space: nowrap;
+      will-change: transform;
+      animation: pk-scroll var(--speed) linear infinite;
+      padding-inline: var(--gap);
+    }
+    .pk-marquee__item a {
+      color: #bbb;
+      text-decoration: none;
+      font-size: 14px;
+      line-height: 1;
+      padding: 8px 12px;
+      border-radius: 6px;
+      border: 1px solid #1f1f1f;
+      display: inline-block;
+      transition: transform .15s ease, background-color .15s ease, color .15s ease, border-color .15s ease;
+      background: #111;
+    }
+    .pk-marquee__item a:focus-visible {
+      outline: 2px solid #4c8dff;
+      outline-offset: 2px;
+    }
+    .pk-marquee__item a:hover {
+      color: #fff;
+      background: #181818;
+      border-color: #2a2a2a;
+      transform: translateY(-1px);
+    }
+    @keyframes pk-scroll {
+      from { transform: translateX(0); }
+      to   { transform: translateX(-50%); }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .pk-marquee__track { animation: none; }
+    }
+  </style>
+
+  <% 
+    const _terms = Array.isArray(typeof searchMarquee !== 'undefined' ? searchMarquee : null) && (typeof searchMarquee !== 'undefined')
+      ? searchMarquee
+      : [
+          "Gaming videos", "Deltarune Chapter 3&4", "K-Pop mixes", "Lo-fi playlists", "Linux tips",
+          "Privacy guides", "Games hub", "News highlights", "Cozy movies", "Study music",
+          "ASMR", "Live cams", "Nature ambiences", "City pop", "Retro tech", "omori", "twenty one pilots", "smoorez"
+        ];
+    const enc = str => encodeURIComponent(String(str));
+  %>
+
+  <div class="pk-marquee" aria-label="Quick search suggestions. Hover to pause.">
+    <div class="pk-marquee__track" aria-hidden="false">
+      <% _terms.forEach(t => { %>
+        <span class="pk-marquee__item">
+          <a href="/search?query=<%= enc(t) %>" title="Search: <%= t %>"><%= t %></a>
+        </span>
+      <% }) %>
+    </div>
+    <div class="pk-marquee__track" aria-hidden="true">
+      <% _terms.forEach(t => { %>
+        <span class="pk-marquee__item">
+          <a href="/search?query=<%= enc(t) %>" title="Search: <%= t %>"><%= t %></a>
+        </span>
+      <% }) %>
+    </div>
   </div>
+
+  <script>
+    (function () {
+      var marquee = document.querySelector('.pk-marquee');
+      if (!marquee) return;
+
+      var tracks = marquee.querySelectorAll('.pk-marquee__track');
+      if (tracks.length < 2) return;
+
+      function tuneSpeed() {
+        var contentWidth = tracks[0].scrollWidth;
+        var viewport = marquee.clientWidth || 1;
+        var ratio = contentWidth / viewport;
+        var baseSeconds = 18;
+        var clamped = Math.max(baseSeconds, Math.min(60, baseSeconds * ratio));
+        marquee.style.setProperty('--speed', clamped.toFixed(2) + 's');
+      }
+
+      tuneSpeed();
+      window.addEventListener('resize', tuneSpeed);
+    })();
+  </script>
+</div>
+
 </footer>
     <script>
       // @license magnet:?xt=urn:btih:1f739d935676111cfff4b4693e3816e664797050&dn=gpl-3.0.txt GPL-3.0-or-later 

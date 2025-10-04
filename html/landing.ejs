@@ -306,7 +306,6 @@ const randomFeatures = features.sort(() => 0.5 - Math.random()).slice(0, 3);
       </div>
     </div>
   </div>
-
 <!-- bottom logo section -->
 <div style="text-align:center; border-top:1px solid #222; padding:40px 0 20px 0;">
   <img src="/static/logo-poke.svg" alt="POKE logo" style="width:57em; height:auto; margin-bottom:16px; mask-image:none; border-radius:0;">
@@ -317,14 +316,13 @@ const randomFeatures = features.sort(() => 0.5 - Math.random()).slice(0, 3);
       --speed: 30s;
       position: relative;
       overflow: hidden;
-      border-top: 1px solid #222;
-      border-bottom: 1px solid #222;
       margin: 0 auto;
       max-width: 1200px;
       height: 44px;
       display: flex;
       align-items: center;
-      background: #0b0b0b;
+      background: transparent;
+      border: none;
     }
     .pk-marquee:focus-within .pk-marquee__track,
     .pk-marquee:hover .pk-marquee__track {
@@ -340,25 +338,17 @@ const randomFeatures = features.sort(() => 0.5 - Math.random()).slice(0, 3);
       padding-inline: var(--gap);
     }
     .pk-marquee__item a {
-      color: #bbb;
+      color: #fff;
       text-decoration: none;
       font-size: 14px;
       line-height: 1;
-      padding: 8px 12px;
-      border-radius: 6px;
-      border: 1px solid #1f1f1f;
-      display: inline-block;
-      transition: transform .15s ease, background-color .15s ease, color .15s ease, border-color .15s ease;
-      background: #111;
-    }
-    .pk-marquee__item a:focus-visible {
-      outline: 2px solid #4c8dff;
-      outline-offset: 2px;
+      padding: 0;
+      background: none;
+      border: none;
+      transition: opacity .2s ease, transform .15s ease;
     }
     .pk-marquee__item a:hover {
-      color: #fff;
-      background: #181818;
-      border-color: #2a2a2a;
+      opacity: 0.7;
       transform: translateY(-1px);
     }
     @keyframes pk-scroll {
@@ -402,7 +392,6 @@ const randomFeatures = features.sort(() => 0.5 - Math.random()).slice(0, 3);
     (function () {
       var marquee = document.querySelector('.pk-marquee');
       if (!marquee) return;
-
       var tracks = marquee.querySelectorAll('.pk-marquee__track');
       if (tracks.length < 2) return;
 

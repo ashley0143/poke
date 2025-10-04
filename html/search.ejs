@@ -563,21 +563,201 @@ function getCurrentYear() {
 }
 
 function getTimeInTimezone(location) {
-    const tzMap = {
-        "california":"America/Los_Angeles","new york":"America/New_York","chicago":"America/Chicago","denver":"America/Denver","phoenix":"America/Phoenix","anchorage":"America/Anchorage","honolulu":"Pacific/Honolulu",
-        "london":"Europe/London","paris":"Europe/Paris","berlin":"Europe/Berlin","madrid":"Europe/Madrid","rome":"Europe/Rome","moscow":"Europe/Moscow","athens":"Europe/Athens",
-        "sydney":"Australia/Sydney","melbourne":"Australia/Melbourne","brisbane":"Australia/Brisbane","perth":"Australia/Perth",
-        "tokyo":"Asia/Tokyo","osaka":"Asia/Osaka","seoul":"Asia/Seoul","beijing":"Asia/Shanghai","shanghai":"Asia/Shanghai","hong kong":"Asia/Hong_Kong","taipei":"Asia/Taipei","bangkok":"Asia/Bangkok","jakarta":"Asia/Jakarta","delhi":"Asia/Kolkata","mumbai":"Asia/Kolkata","karachi":"Asia/Karachi",
-        "dubai":"Asia/Dubai","abu dhabi":"Asia/Dubai","riyadh":"Asia/Riyadh",
-        "johannesburg":"Africa/Johannesburg","cairo":"Africa/Cairo","nairobi":"Africa/Nairobi","lagos":"Africa/Lagos","algiers":"Africa/Algiers","casablanca":"Africa/Casablanca",
-        "lisbon":"Europe/Lisbon","dublin":"Europe/Dublin","zurich":"Europe/Zurich","vienna":"Europe/Vienna","stockholm":"Europe/Stockholm","oslo":"Europe/Oslo","helsinki":"Europe/Helsinki","prague":"Europe/Prague","budapest":"Europe/Budapest","warsaw":"Europe/Warsaw","bucharest":"Europe/Bucharest","sofia":"Europe/Sofia","zagreb":"Europe/Zagreb","belgrade":"Europe/Belgrade","sarajevo":"Europe/Sarajevo","podgorica":"Europe/Podgorica","ljubljana":"Europe/Ljubljana","tirana":"Europe/Tirane","valletta":"Europe/Malta","andorra la vella":"Europe/Andorra","monaco":"Europe/Monaco","luxembourg":"Europe/Luxembourg","bratislava":"Europe/Bratislava","vilnius":"Europe/Vilnius","riga":"Europe/Riga","tallinn":"Europe/Tallinn","istanbul":"Europe/Istanbul",
-        "jerusalem":"Asia/Jerusalem","amman":"Asia/Amman","beirut":"Asia/Beirut","damascus":"Asia/Damascus","baghdad":"Asia/Baghdad","tehran":"Asia/Tehran","islamabad":"Asia/Karachi","kathmandu":"Asia/Kathmandu","thimphu":"Asia/Thimphu","dhaka":"Asia/Dhaka","yangon":"Asia/Yangon","hanoi":"Asia/Ho_Chi_Minh","ho chi minh city":"Asia/Ho_Chi_Minh","manila":"Asia/Manila","singapore":"Asia/Singapore","kuala lumpur":"Asia/Kuala_Lumpur","colombo":"Asia/Colombo",
-        "bagotville":"America/Montreal","toronto":"America/Toronto","vancouver":"America/Vancouver","mexico city":"America/Mexico_City","guadalajara":"America/Mexico_City","monterrey":"America/Monterrey",
-        "sao paulo":"America/Sao_Paulo","buenos aires":"America/Argentina/Buenos_Aires","santiago":"America/Santiago","rio de janeiro":"America/Sao_Paulo","caracas":"America/Caracas","bogota":"America/Bogota","lima":"America/Lima","quito":"America/Quito","georgetown":"America/Guyana","paramaribo":"America/Paramaribo","cayenne":"America/Cayenne","kingston":"America/Jamaica","port_of_spain":"America/Port_of_Spain","st johns":"America/St_Johns",
-        "midway":"Pacific/Midway","apia":"Pacific/Apia","nuku alofa":"Pacific/Tongatapu","tarawa":"Pacific/Tarawa","funafuti":"Pacific/Funafuti","suva":"Pacific/Fiji","chatham":"Pacific/Chatham","pitcairn":"Pacific/Pitcairn","galapagos":"Pacific/Galapagos","easter island":"Pacific/Easter","honiara":"Pacific/Guadalcanal","port vila":"Pacific/Efate","palikir":"Pacific/Pohnpei","palau":"Pacific/Palau",
-        "mcmurdo":"Antarctica/McMurdo","rothera":"Antarctica/Rothera","troll":"Antarctica/Troll","davis":"Antarctica/Davis","casey":"Antarctica/Casey","mawson":"Antarctica/Mawson","vostok":"Antarctica/Vostok","syowa":"Antarctica/Syowa",
-        "gmt":"Etc/GMT","utc":"UTC"
-    };
+   const tzMap = {
+  // USA (states & major cities)
+  "california":"America/Los_Angeles","los angeles":"America/Los_Angeles","la":"America/Los_Angeles","san diego":"America/Los_Angeles","santa monica":"America/Los_Angeles","san francisco":"America/Los_Angeles","oakland":"America/Los_Angeles","san jose":"America/Los_Angeles","sacramento":"America/Los_Angeles",
+  "seattle":"America/Los_Angeles","portland":"America/Los_Angeles","las vegas":"America/Los_Angeles","reno":"America/Los_Angeles","boise":"America/Boise","spokane":"America/Los_Angeles",
+  "arizona":"America/Phoenix","phoenix":"America/Phoenix","tucson":"America/Phoenix","mesa":"America/Phoenix","scottsdale":"America/Phoenix",
+  "denver":"America/Denver","colorado springs":"America/Denver","salt lake city":"America/Denver","albuquerque":"America/Denver","santa fe":"America/Denver","cheyenne":"America/Denver",
+  "chicago":"America/Chicago","minneapolis":"America/Chicago","saint paul":"America/Chicago","st paul":"America/Chicago","milwaukee":"America/Chicago","madison":"America/Chicago","des moines":"America/Chicago","kansas city":"America/Chicago","st louis":"America/Chicago","saint louis":"America/Chicago","memphis":"America/Chicago","nashville":"America/Chicago","birmingham al":"America/Chicago","houston":"America/Chicago","dallas":"America/Chicago","austin":"America/Chicago","san antonio":"America/Chicago","oklahoma city":"America/Chicago","tulsa":"America/Chicago","new orleans":"America/Chicago","baton rouge":"America/Chicago","little rock":"America/Chicago","fargo":"America/Chicago","lincoln ne":"America/Chicago","omaha":"America/Chicago",
+  "new york":"America/New_York","nyc":"America/New_York","manhattan":"America/New_York","brooklyn":"America/New_York","queens":"America/New_York","the bronx":"America/New_York","staten island":"America/New_York","buffalo":"America/New_York","rochester ny":"America/New_York","albany ny":"America/New_York",
+  "boston":"America/New_York","cambridge ma":"America/New_York","providence":"America/New_York","hartford":"America/New_York","new haven":"America/New_York",
+  "philadelphia":"America/New_York","pittsburgh":"America/New_York","baltimore":"America/New_York","washington dc":"America/New_York","dc":"America/New_York","arlington va":"America/New_York","richmond va":"America/New_York","charlotte":"America/New_York","raleigh":"America/New_York","durham":"America/New_York","charleston sc":"America/New_York","atlanta":"America/New_York","savannah":"America/New_York","miami":"America/New_York","orlando":"America/New_York","tampa":"America/New_York","jacksonville":"America/New_York",
+  "detroit":"America/Detroit","cleveland":"America/New_York","columbus oh":"America/New_York","cincinnati":"America/New_York","indianapolis":"America/Indiana/Indianapolis","louisville":"America/Kentucky/Louisville",
+  "anchorage":"America/Anchorage","fairbanks":"America/Anchorage","juneau":"America/Juneau",
+  "honolulu":"Pacific/Honolulu","hilo":"Pacific/Honolulu","kahului":"Pacific/Honolulu","lihue":"Pacific/Honolulu",  "toronto":"America/Toronto","mississauga":"America/Toronto","ottawa":"America/Toronto","kingston on":"America/Toronto","london on":"America/Toronto",
+  "montreal":"America/Toronto","bagotville":"America/Montreal","quebec city":"America/Toronto","sherbrooke":"America/Toronto",
+  "vancouver":"America/Vancouver","victoria bc":"America/Vancouver","kelowna":"America/Vancouver","prince george":"America/Vancouver",
+  "calgary":"America/Edmonton","edmonton":"America/Edmonton","winnipeg":"America/Winnipeg","regina":"America/Regina","saskatoon":"America/Regina",
+  "st johns":"America/St_Johns","halifax":"America/Halifax","moncton":"America/Moncton","fredericton":"America/Halifax","charlottetown":"America/Halifax",
+  "mexico city":"America/Mexico_City","guadalajara":"America/Mexico_City","monterrey":"America/Monterrey","tijuana":"America/Tijuana","hermosillo":"America/Hermosillo","culiacan":"America/Mazatlan","mazatlan":"America/Mazatlan","chihuahua":"America/Chihuahua","merida":"America/Merida","cancun":"America/Cancun","quetzaltenango":"America/Guatemala",
+  "guatemala city":"America/Guatemala","belmopan":"America/Belize","belize city":"America/Belize","san salvador":"America/El_Salvador","tegucigalpa":"America/Tegucigalpa","managua":"America/Managua","san jose cr":"America/Costa_Rica","panama city":"America/Panama",
+
+  // South America & Caribbean
+  "bogota":"America/Bogota","medellin":"America/Bogota","cali":"America/Bogota",
+  "lima":"America/Lima","quito":"America/Quito","guayaquil":"America/Guayaquil",
+  "caracas":"America/Caracas","maracaibo":"America/Caracas",
+  "santiago":"America/Santiago","valparaiso":"America/Santiago","concepcion":"America/Santiago","punta arenas":"America/Punta_Arenas","easter island":"Pacific/Easter",
+  "buenos aires":"America/Argentina/Buenos_Aires","cordoba ar":"America/Argentina/Cordoba","mendoza":"America/Argentina/Mendoza","rosario":"America/Argentina/Cordoba","ushuaia":"America/Argentina/Ushuaia",
+  "sao paulo":"America/Sao_Paulo","rio de janeiro":"America/Sao_Paulo","brasilia":"America/Sao_Paulo","salvador":"America/Bahia","recife":"America/Recife","fortaleza":"America/Fortaleza","manaus":"America/Manaus","belem":"America/Belem","porto alegre":"America/Sao_Paulo","curitiba":"America/Sao_Paulo","belo horizonte":"America/Sao_Paulo","cuiaba":"America/Cuiaba","campo grande":"America/Campo_Grande","boa vista":"America/Boa_Vista","rio branco":"America/Rio_Branco","araguaina":"America/Araguaina",
+  "georgetown":"America/Guyana","paramaribo":"America/Paramaribo","cayenne":"America/Cayenne",
+  "kingston":"America/Jamaica","nassau":"America/Nassau","port au prince":"America/Port-au-Prince","santo domingo":"America/Santo_Domingo","port of spain":"America/Port_of_Spain","port_of_spain":"America/Port_of_Spain","bridgetown":"America/Barbados","castries":"America/St_Lucia","st george's":"America/Grenada","saint george's":"America/Grenada","roseau":"America/Dominica","st john's ag":"America/Antigua","the valley anguilla":"America/Anguilla","charlotte amalie":"America/St_Thomas","san juan":"America/Puerto_Rico","willemstad":"America/Curacao","oranjestad":"America/Aruba","kralendijk":"America/Kralendijk",
+
+  // Europe (West/North)
+  "london":"Europe/London","manchester":"Europe/London","birmingham uk":"Europe/London","leeds":"Europe/London","liverpool":"Europe/London","edinburgh":"Europe/London","glasgow":"Europe/London","belfast":"Europe/London","cardiff":"Europe/London","bristol":"Europe/London","oxford":"Europe/London","cambridge uk":"Europe/London",
+  "dublin":"Europe/Dublin","cork":"Europe/Dublin","galway":"Europe/Dublin","limerick":"Europe/Dublin",
+  "lisbon":"Europe/Lisbon","porto":"Europe/Lisbon","funchal":"Atlantic/Madeira","ponta delgada":"Atlantic/Azores",
+  "paris":"Europe/Paris","lyon":"Europe/Paris","marseille":"Europe/Paris","toulouse":"Europe/Paris","nice":"Europe/Paris","nantes":"Europe/Paris","strasbourg":"Europe/Paris","lille":"Europe/Paris","bordeaux":"Europe/Paris","montpellier":"Europe/Paris",
+  "brussels":"Europe/Brussels","antwerp":"Europe/Brussels","ghent":"Europe/Brussels","bruges":"Europe/Brussels",
+  "amsterdam":"Europe/Amsterdam","rotterdam":"Europe/Amsterdam","the hague":"Europe/Amsterdam","utrecht":"Europe/Amsterdam","eindhoven":"Europe/Amsterdam",
+  "luxembourg":"Europe/Luxembourg","monaco":"Europe/Monaco","andorra la vella":"Europe/Andorra","valletta":"Europe/Malta",
+
+  // Europe (Central)
+  "berlin":"Europe/Berlin","hamburg":"Europe/Berlin","munich":"Europe/Berlin","frankfurt":"Europe/Berlin","stuttgart":"Europe/Berlin","dusseldorf":"Europe/Berlin","leipzig":"Europe/Berlin","dresden":"Europe/Berlin","hannover":"Europe/Berlin","nuremberg":"Europe/Berlin","bremen":"Europe/Berlin","bonn":"Europe/Berlin","cologne":"Europe/Berlin",
+  "vienna":"Europe/Vienna","salzburg":"Europe/Vienna","graz":"Europe/Vienna","innsbruck":"Europe/Vienna","linz":"Europe/Vienna",
+  "zurich":"Europe/Zurich","geneva":"Europe/Zurich","basel":"Europe/Zurich","lausanne":"Europe/Zurich","bern":"Europe/Zurich","lugano":"Europe/Zurich",
+  "prague":"Europe/Prague","brno":"Europe/Prague","ostrava":"Europe/Prague",
+  "warsaw":"Europe/Warsaw","krakow":"Europe/Warsaw","wroclaw":"Europe/Warsaw","gdansk":"Europe/Warsaw","poznan":"Europe/Warsaw","lodz":"Europe/Warsaw",
+  "budapest":"Europe/Budapest","debrecen":"Europe/Budapest","szeged":"Europe/Budapest",
+  "bratislava":"Europe/Bratislava","kosice":"Europe/Bratislava",
+  "ljubljana":"Europe/Ljubljana","maribor":"Europe/Ljubljana","zagreb":"Europe/Zagreb","split":"Europe/Zagreb","dubrovnik":"Europe/Zagreb","sarajevo":"Europe/Sarajevo","banja luka":"Europe/Sarajevo","belgrade":"Europe/Belgrade","novi sad":"Europe/Belgrade","podgorica":"Europe/Podgorica","tirana":"Europe/Tirane","skopje":"Europe/Skopje","sofia":"Europe/Sofia","bucharest":"Europe/Bucharest","cluj napoca":"Europe/Bucharest","timisoara":"Europe/Bucharest","iasi":"Europe/Bucharest",
+
+  // Europe (South)
+  "madrid":"Europe/Madrid","barcelona":"Europe/Madrid","valencia":"Europe/Madrid","seville":"Europe/Madrid","malaga":"Europe/Madrid","bilbao":"Europe/Madrid","zaragoza":"Europe/Madrid","palma de mallorca":"Europe/Madrid","las palmas":"Atlantic/Canary","santa cruz de tenerife":"Atlantic/Canary",
+  "rome":"Europe/Rome","milan":"Europe/Rome","naples":"Europe/Rome","turin":"Europe/Rome","florence":"Europe/Rome","venice":"Europe/Rome","bologna":"Europe/Rome","genoa":"Europe/Rome","palermo":"Europe/Rome","catania":"Europe/Rome",
+  "athens":"Europe/Athens","thessaloniki":"Europe/Athens","heraklion":"Europe/Athens","patras":"Europe/Athens","rhodes":"Europe/Athens",
+  "valletta":"Europe/Malta","san marino":"Europe/Rome","vaduz":"Europe/Zurich",
+
+  // Europe (East & Russia/Türkiye/Caucasus)
+  "istanbul":"Europe/Istanbul","ankara":"Europe/Istanbul","izmir":"Europe/Istanbul","bursa":"Europe/Istanbul","antalya":"Europe/Istanbul","adana":"Europe/Istanbul","konya":"Europe/Istanbul","gaziantep":"Europe/Istanbul","trabzon":"Europe/Istanbul","diyarbakir":"Europe/Istanbul","edirne":"Europe/Istanbul",
+  "moscow":"Europe/Moscow","saint petersburg":"Europe/Moscow","st petersburg":"Europe/Moscow","kazan":"Europe/Moscow","yekaterinburg":"Asia/Yekaterinburg","novosibirsk":"Asia/Novosibirsk","omsk":"Asia/Omsk","irkutsk":"Asia/Irkutsk","krasnoyarsk":"Asia/Krasnoyarsk","vladivostok":"Asia/Vladivostok","samara":"Europe/Samara","ufa":"Asia/Yekaterinburg","perm":"Asia/Yekaterinburg","khabarovsk":"Asia/Vladivostok","tomsk":"Asia/Tomsk","barnaul":"Asia/Barnaul","novokuznetsk":"Asia/Novokuznetsk",
+  "kyiv":"Europe/Kyiv","lviv":"Europe/Kyiv","odesa":"Europe/Kyiv","kharkiv":"Europe/Kyiv","dnipro":"Europe/Kyiv",
+  "minsk":"Europe/Minsk","chisinau":"Europe/Chisinau",
+  "tbilisi":"Asia/Tbilisi","yerevan":"Asia/Yerevan","baku":"Asia/Baku",
+  "jerusalem":"Asia/Jerusalem","tel aviv":"Asia/Jerusalem","haifa":"Asia/Jerusalem",
+  "amman":"Asia/Amman","beirut":"Asia/Beirut","damascus":"Asia/Damascus","baghdad":"Asia/Baghdad","kuwait city":"Asia/Kuwait","riyadh":"Asia/Riyadh","jeddah":"Asia/Riyadh","mecca":"Asia/Riyadh","medina":"Asia/Riyadh","doha":"Asia/Qatar","manama":"Asia/Bahrain","muscat":"Asia/Muscat","dubai":"Asia/Dubai","abu dhabi":"Asia/Dubai","sharjah":"Asia/Dubai",
+
+  // Central & South Asia
+  "tehran":"Asia/Tehran","mashhad":"Asia/Tehran","isfahan":"Asia/Tehran","tabriz":"Asia/Tehran","shiraz":"Asia/Tehran",
+  "kabul":"Asia/Kabul","ashgabat":"Asia/Ashgabat","tashkent":"Asia/Tashkent","samarkand":"Asia/Samarkand","almaty":"Asia/Almaty","astana":"Asia/Almaty","nur sultan":"Asia/Almaty","bishkek":"Asia/Bishkek","dushanbe":"Asia/Dushanbe",
+  "islamabad":"Asia/Karachi","karachi":"Asia/Karachi","lahore":"Asia/Karachi","rawalpindi":"Asia/Karachi",
+  "delhi":"Asia/Kolkata","new delhi":"Asia/Kolkata","mumbai":"Asia/Kolkata","kolkata":"Asia/Kolkata","chennai":"Asia/Kolkata","bengaluru":"Asia/Kolkata","bangalore":"Asia/Kolkata","hyderabad in":"Asia/Kolkata","pune":"Asia/Kolkata","ahmedabad":"Asia/Kolkata","jaipur":"Asia/Kolkata","kochi":"Asia/Kolkata",
+  "kathmandu":"Asia/Kathmandu","thimphu":"Asia/Thimphu","colombo":"Asia/Colombo","male":"Indian/Maldives","dhaka":"Asia/Dhaka",
+
+  // Southeast Asia
+  "yangon":"Asia/Yangon","naypyidaw":"Asia/Yangon",
+  "bangkok":"Asia/Bangkok","phuket":"Asia/Bangkok","chiang mai":"Asia/Bangkok",
+  "hanoi":"Asia/Ho_Chi_Minh","ho chi minh city":"Asia/Ho_Chi_Minh","saigon":"Asia/Ho_Chi_Minh","da nang":"Asia/Ho_Chi_Minh",
+  "vientiane":"Asia/Vientiane","phnom penh":"Asia/Phnom_Penh",
+  "kuala lumpur":"Asia/Kuala_Lumpur","george town penang":"Asia/Kuala_Lumpur","kuching":"Asia/Kuching","kota kinabalu":"Asia/Kuching",
+  "singapore":"Asia/Singapore",
+  "jakarta":"Asia/Jakarta","bandung":"Asia/Jakarta","surabaya":"Asia/Jakarta","yogyakarta":"Asia/Jakarta","denpasar":"Asia/Makassar","bali":"Asia/Makassar","medan":"Asia/Jakarta","makassar":"Asia/Makassar","jayapura":"Asia/Jayapura",
+  "manila":"Asia/Manila","cebu city":"Asia/Manila","davao":"Asia/Manila","iloilo city":"Asia/Manila","bacolod":"Asia/Manila","cagayan de oro":"Asia/Manila","general santos":"Asia/Manila","taguig":"Asia/Manila","quezon city":"Asia/Manila","pasig":"Asia/Manila","makati":"Asia/Manila","pasay":"Asia/Manila","caloocan":"Asia/Manila","mandaluyong":"Asia/Manila",
+
+  // East Asia
+  "beijing":"Asia/Shanghai","shanghai":"Asia/Shanghai","shenzhen":"Asia/Shanghai","guangzhou":"Asia/Shanghai","chengdu":"Asia/Shanghai","chongqing":"Asia/Chongqing","tianjin":"Asia/Shanghai","wuhan":"Asia/Shanghai","xi'an":"Asia/Shanghai","xian":"Asia/Shanghai","hangzhou":"Asia/Shanghai","nanjing":"Asia/Shanghai","suzhou":"Asia/Shanghai","qingdao":"Asia/Shanghai","dalian":"Asia/Shanghai","harbin":"Asia/Harbin",
+  "hong kong":"Asia/Hong_Kong","macau":"Asia/Macau",
+  "taipei":"Asia/Taipei","kaohsiung":"Asia/Taipei","taichung":"Asia/Taipei",
+  "tokyo":"Asia/Tokyo","osaka":"Asia/Tokyo","kyoto":"Asia/Tokyo","yokohama":"Asia/Tokyo","sapporo":"Asia/Tokyo","fukuoka":"Asia/Tokyo","nagoya":"Asia/Tokyo","kobe":"Asia/Tokyo","hiroshima":"Asia/Tokyo","sendai":"Asia/Tokyo","naha":"Asia/Tokyo",
+  "seoul":"Asia/Seoul","incheon":"Asia/Seoul","busan":"Asia/Seoul","daegu":"Asia/Seoul","daejeon":"Asia/Seoul","gwangju kr":"Asia/Seoul","ulsan":"Asia/Seoul",
+
+  // Western Asia & Middle East (extras)
+  "isfahan":"Asia/Tehran","esfahan":"Asia/Tehran","doha":"Asia/Qatar","manama":"Asia/Bahrain","sana'a":"Asia/Aden","sanaa":"Asia/Aden","aden":"Asia/Aden",
+
+  // Africa (North & West)
+  "cairo":"Africa/Cairo","alexandria eg":"Africa/Cairo","giza":"Africa/Cairo",
+  "casablanca":"Africa/Casablanca","rabat":"Africa/Casablanca","marrakesh":"Africa/Casablanca","marrakech":"Africa/Casablanca","tangier":"Africa/Casablanca",
+  "algiers":"Africa/Algiers","oran":"Africa/Algiers","constantine":"Africa/Algiers",
+  "tunis":"Africa/Tunis","tripoli ly":"Africa/Tripoli",
+  "lagos":"Africa/Lagos","abuja":"Africa/Lagos","ibadan":"Africa/Lagos","kano":"Africa/Lagos","port harcourt":"Africa/Lagos",
+  "accra":"Africa/Accra","kumasi":"Africa/Accra",
+  "abidjan":"Africa/Abidjan","dakar":"Africa/Dakar","bamako":"Africa/Bamako","conakry":"Africa/Conakry","freetown":"Africa/Freetown","banjul":"Africa/Banjul","bissau":"Africa/Bissau","monrovia":"Africa/Monrovia","ouagadougou":"Africa/Ouagadougou","niamey":"Africa/Niamey","lome":"Africa/Lome","porto novo":"Africa/Porto-Novo","cotonou":"Africa/Porto-Novo","nouakchott":"Africa/Nouakchott","praia":"Atlantic/Cape_Verde",
+
+  // Africa (Central, East & South)
+  "nairobi":"Africa/Nairobi","mombasa":"Africa/Nairobi","kampala":"Africa/Kampala","addis ababa":"Africa/Addis_Ababa","dar es salaam":"Africa/Dar_es_Salaam","arusha":"Africa/Dar_es_Salaam","lusaka":"Africa/Lusaka","harare":"Africa/Harare","maputo":"Africa/Maputo","antananarivo":"Indian/Antananarivo","victoria seychelles":"Indian/Mahe","mahe":"Indian/Mahe","moroni":"Indian/Comoro","port louis":"Indian/Mauritius","saint denis re":"Indian/Reunion",
+  "johannesburg":"Africa/Johannesburg","pretoria":"Africa/Johannesburg","cape town":"Africa/Johannesburg","durban":"Africa/Johannesburg","gaborone":"Africa/Gaborone","windhoek":"Africa/Windhoek","mbabane":"Africa/Johannesburg","maseru":"Africa/Johannesburg","antananarivo mg":"Indian/Antananarivo",
+
+  // Oceania
+  "sydney":"Australia/Sydney","melbourne":"Australia/Melbourne","brisbane":"Australia/Brisbane","gold coast":"Australia/Brisbane","canberra":"Australia/Sydney","hobart":"Australia/Hobart","adelaide":"Australia/Adelaide","perth":"Australia/Perth","darwin":"Australia/Darwin","alice springs":"Australia/Darwin",
+  "auckland":"Pacific/Auckland","wellington":"Pacific/Auckland","christchurch":"Pacific/Auckland","dunedin":"Pacific/Auckland",
+  "suva":"Pacific/Fiji","nadi":"Pacific/Fiji","apia":"Pacific/Apia","nuku alofa":"Pacific/Tongatapu","port moresby":"Pacific/Port_Moresby","honiara":"Pacific/Guadalcanal","port vila":"Pacific/Efate","palikir":"Pacific/Pohnpei","majuro":"Pacific/Majuro","kwajalein":"Pacific/Kwajalein","tarawa":"Pacific/Tarawa","funafuti":"Pacific/Funafuti","palau":"Pacific/Palau","noumea":"Pacific/Noumea","papeete":"Pacific/Tahiti","rikitea":"Pacific/Gambier","rarotonga":"Pacific/Rarotonga","niue":"Pacific/Niue","midway":"Pacific/Midway","chatham":"Pacific/Chatham","norfolk island":"Pacific/Norfolk","lord howe":"Australia/Lord_Howe","pitcairn":"Pacific/Pitcairn","galapagos":"Pacific/Galapagos","easter island":"Pacific/Easter",
+  "port chalmers":"Pacific/Auckland",
+
+  // Antarctica
+  "mcmurdo":"Antarctica/McMurdo","rothera":"Antarctica/Rothera","troll":"Antarctica/Troll","davis":"Antarctica/Davis","casey":"Antarctica/Casey","mawson":"Antarctica/Mawson","vostok":"Antarctica/Vostok","syowa":"Antarctica/Syowa","palmer":"Antarctica/Palmer",
+
+  // Middle & South Atlantic islands
+  "st helena":"Atlantic/St_Helena","stanley":"Atlantic/Stanley","reykjavik":"Atlantic/Reykjavik","praia cv":"Atlantic/Cape_Verde","faial":"Atlantic/Azores",
+
+  // UAE & Gulf aliases (extra)
+  "al ain":"Asia/Dubai","ras al khaimah":"Asia/Dubai","fujairah":"Asia/Dubai","ajman":"Asia/Dubai",
+
+  // Additional city aliases (Europe extras)
+  "oslo":"Europe/Oslo","bergen":"Europe/Oslo","stockholm":"Europe/Stockholm","gothenburg":"Europe/Stockholm","malmo":"Europe/Stockholm","uppsala":"Europe/Stockholm",
+  "helsinki":"Europe/Helsinki","tampere":"Europe/Helsinki","turku":"Europe/Helsinki","oulu":"Europe/Helsinki",
+  "copenhagen":"Europe/Copenhagen","aarhus":"Europe/Copenhagen","odense":"Europe/Copenhagen",
+  "reykjavik":"Atlantic/Reykjavik","faroe":"Atlantic/Faroe","torshavn":"Atlantic/Faroe",
+  "vilnius":"Europe/Vilnius","kaunas":"Europe/Vilnius","klaipeda":"Europe/Vilnius",
+  "riga":"Europe/Riga","daugavpils":"Europe/Riga",
+  "tallinn":"Europe/Tallinn","tartu":"Europe/Tallinn",
+
+  // North Africa & Levant extras
+  "jericho":"Asia/Jerusalem","gaza city":"Asia/Gaza","hebron":"Asia/Hebron","nablus":"Asia/Hebron",
+  "suez":"Africa/Cairo","aswan":"Africa/Cairo","luxor":"Africa/Cairo","tripoli lb":"Asia/Beirut", // common confusion alias
+
+  // More South Asia aliases
+  "sri jayawardenepura kotte":"Asia/Colombo","kotte":"Asia/Colombo","trivandrum":"Asia/Kolkata","thiruvananthapuram":"Asia/Kolkata",
+  "goa":"Asia/Kolkata","lucknow":"Asia/Kolkata","bhopal":"Asia/Kolkata","kanpur":"Asia/Kolkata","patna":"Asia/Kolkata","guwahati":"Asia/Kolkata","ranchi":"Asia/Kolkata","coimbatore":"Asia/Kolkata","visakhapatnam":"Asia/Kolkata","vishakhapatnam":"Asia/Kolkata","kozhikode":"Asia/Kolkata","calicut":"Asia/Kolkata","mysuru":"Asia/Kolkata","mysore":"Asia/Kolkata","vijayawada":"Asia/Kolkata","erode":"Asia/Kolkata","madurai":"Asia/Kolkata","tiruchirappalli":"Asia/Kolkata","trichy":"Asia/Kolkata","varanasi":"Asia/Kolkata","agra":"Asia/Kolkata","srinagar":"Asia/Kolkata","amritsar":"Asia/Kolkata","chandigarh":"Asia/Kolkata","noida":"Asia/Kolkata","gurugram":"Asia/Kolkata","gurgaon":"Asia/Kolkata",
+  "peshawar":"Asia/Karachi","quetta":"Asia/Karachi","multan":"Asia/Karachi","faisalabad":"Asia/Karachi",
+  "chittagong":"Asia/Dhaka","khulna":"Asia/Dhaka","sylhet":"Asia/Dhaka",
+
+  // China aliases (extras)
+  "urumqi":"Asia/Urumqi","kashgar":"Asia/Urumqi","urumchi":"Asia/Urumqi","lhasa":"Asia/Urumqi", // official IANA lacks Asia/Lhasa; many map Tibet to Asia/Urumqi
+  "nanchang":"Asia/Shanghai","zhengzhou":"Asia/Shanghai","taiyuan":"Asia/Shanghai","changsha":"Asia/Shanghai","haikou":"Asia/Shanghai","sanya":"Asia/Shanghai","xiamen":"Asia/Shanghai","fuzhou":"Asia/Shanghai","jinan":"Asia/Shanghai","shenyang":"Asia/Shanghai","changchun":"Asia/Shanghai","ningbo":"Asia/Shanghai","wuxi":"Asia/Shanghai","dongguan":"Asia/Shanghai","foshan":"Asia/Shanghai","wenzhou":"Asia/Shanghai",
+
+  // Japan & Korea extras
+  "okinawa":"Asia/Tokyo","kawasaki":"Asia/Tokyo","saitama":"Asia/Tokyo","chiba":"Asia/Tokyo","kitakyushu":"Asia/Tokyo","kumamoto":"Asia/Tokyo","niigata":"Asia/Tokyo","kanazawa":"Asia/Tokyo","nagano":"Asia/Tokyo","akita":"Asia/Tokyo","aomori":"Asia/Tokyo","morioka":"Asia/Tokyo","matsuyama":"Asia/Tokyo","tokushima":"Asia/Tokyo","takamatsu":"Asia/Tokyo",
+  "gyeonggi":"Asia/Seoul","jeju":"Asia/Seoul","gwangju":"Asia/Seoul","suwon":"Asia/Seoul","ilsan":"Asia/Seoul","daegu":"Asia/Seoul",
+
+  // Indonesia & Philippines extras
+  "bandar lampung":"Asia/Jakarta","palembang":"Asia/Jakarta","padang":"Asia/Jakarta","pekanbaru":"Asia/Jakarta","batam":"Asia/Jakarta","pontianak":"Asia/Pontianak","banjarmasin":"Asia/Makassar","manado":"Asia/Makassar","ambon":"Asia/Jayapura","sorong":"Asia/Jayapura",
+  "quezon":"Asia/Manila","antipolo":"Asia/Manila","calamba":"Asia/Manila","binan":"Asia/Manila","san pedro laguna":"Asia/Manila","santa rosa laguna":"Asia/Manila","angeles city":"Asia/Manila","olongapo":"Asia/Manila","subic":"Asia/Manila","bataan":"Asia/Manila","pampanga":"Asia/Manila","baguio":"Asia/Manila","laoag":"Asia/Manila","vigan":"Asia/Manila","tacloban":"Asia/Manila","dumaguete":"Asia/Manila","roxas city":"Asia/Manila","legazpi":"Asia/Manila","naga":"Asia/Manila","butuan":"Asia/Manila","surigao":"Asia/Manila","zamboanga":"Asia/Manila","cotabato":"Asia/Manila","pagadian":"Asia/Manila","sultan kudarat":"Asia/Manila","kidapawan":"Asia/Manila",
+
+  // Australia extras
+  "geelong":"Australia/Melbourne","ballarat":"Australia/Melbourne","wollongong":"Australia/Sydney","newcastle nsw":"Australia/Sydney","townsville":"Australia/Brisbane","cairns":"Australia/Brisbane","toowoomba":"Australia/Brisbane","launceston":"Australia/Hobart","whyalla":"Australia/Adelaide","mount gambier":"Australia/Adelaide","geraldton":"Australia/Perth","broome":"Australia/Perth","kalgoorlie":"Australia/Perth",
+
+  // New Zealand extras
+  "hamilton nz":"Pacific/Auckland","tauranga":"Pacific/Auckland","napier":"Pacific/Auckland","hastings nz":"Pacific/Auckland","palmerston north":"Pacific/Auckland","nelson nz":"Pacific/Auckland","rotorua":"Pacific/Auckland","whangarei":"Pacific/Auckland","gisborne":"Pacific/Auckland","invercargill":"Pacific/Auckland",
+
+  // Central America extras
+  "antigua guatemala":"America/Guatemala","quetzaltenango":"America/Guatemala","bluefields":"America/Managua","leon ni":"America/Managua",
+
+  // South America extras
+  "arequipa":"America/Lima","trujillo pe":"America/Lima","cuzco":"America/Lima","cusco":"America/Lima",
+  "valledupar":"America/Bogota","barranquilla":"America/Bogota","cartagena co":"America/Bogota","pereira":"America/Bogota","bucaramanga":"America/Bogota",
+  "mar del plata":"America/Argentina/Buenos_Aires","neuquen":"America/Argentina/Neuquen","salta":"America/Argentina/Salta","posadas":"America/Argentina/Cordoba",
+  "curitiba":"America/Sao_Paulo","goiania":"America/Sao_Paulo","joao pessoa":"America/Fortaleza","maceio":"America/Maceio","santarem":"America/Santarem","porto velho":"America/Porto_Velho","macapa":"America/Belem",
+
+  // Caribbean extras
+  "san juan pr":"America/Puerto_Rico","caguas":"America/Puerto_Rico","ponce":"America/Puerto_Rico","mayaguez":"America/Puerto_Rico",
+  "cap haitien":"America/Port-au-Prince","santiago de los caballeros":"America/Santo_Domingo","santo domingo este":"America/Santo_Domingo","la romana":"America/Santo_Domingo",
+  "george town cayman":"America/Cayman","kingstown":"America/St_Vincent","castries lc":"America/St_Lucia",
+
+  // Indian Ocean & Subantarctic
+  "reunion":"Indian/Reunion","mauritius":"Indian/Mauritius","port louis mu":"Indian/Mauritius","antananarivo mg":"Indian/Antananarivo",
+  "kerguelen":"Indian/Kerguelen","chagos":"Indian/Chagos",
+
+  // GMT/UTC & Etc
+  "gmt":"Etc/GMT","utc":"UTC","greenwich":"Europe/London","iceland":"Atlantic/Reykjavik",
+
+  // Special territories
+  "jersey":"Europe/Jersey","guernsey":"Europe/Guernsey","isle of man":"Europe/Isle_of_Man","gibraltar":"Europe/Gibraltar","ceuta":"Africa/Ceuta","melilla":"Africa/Ceuta",
+  "madeira":"Atlantic/Madeira","azores":"Atlantic/Azores","canary islands":"Atlantic/Canary",
+
+  // Additional Middle East & Caucasus extras
+  "erbil":"Asia/Baghdad","sulaymaniyah":"Asia/Baghdad","mosul":"Asia/Baghdad","aleppo":"Asia/Damascus","homs":"Asia/Damascus",
+  "shiraz":"Asia/Tehran","ahvaz":"Asia/Tehran","qom":"Asia/Tehran","karaj":"Asia/Tehran",
+
+  // Turkey extras (aliases)
+  "izmit":"Europe/Istanbul","eskisehir":"Europe/Istanbul","kayseri":"Europe/Istanbul","samsun":"Europe/Istanbul","malatya":"Europe/Istanbul","van":"Europe/Istanbul","gaziosmanpasa":"Europe/Istanbul","mersin":"Europe/Istanbul","hatay":"Europe/Istanbul","sanliurfa":"Europe/Istanbul","kocaeli":"Europe/Istanbul",
+
+  // UAE/KSA extras
+  "al khobar":"Asia/Riyadh","dammam":"Asia/Riyadh","taif":"Asia/Riyadh","tabuk":"Asia/Riyadh","abha":"Asia/Riyadh",
+
+  // Palestine extras
+  "netanya":"Asia/Jerusalem","ashdod":"Asia/Jerusalem","beer sheva":"Asia/Jerusalem","beersheba":"Asia/Jerusalem","nazareth":"Asia/Jerusalem","ramallah":"Asia/Hebron"
+};
+
 
     const timezone = tzMap[location.toLowerCase()];
     if (!timezone) return null;

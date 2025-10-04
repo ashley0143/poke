@@ -257,7 +257,60 @@ const randomFeatures = features.sort(() => 0.5 - Math.random()).slice(0, 3);
     <div class="discover-video-button">
     <a href="/app">Start Discovering! :3</a>
     </div> 
- 
+
+ <footer style="
+    background:#000; color:#fff;
+    width:100vw;
+    margin-left:calc(50% - 50vw);
+    margin-right:calc(50% - 50vw);
+    border-top:2px solid #fff;
+    font-family:Ubuntu, sans-serif;
+    padding-top:60px;
+    overflow:hidden;
+  ">
+
+  <div style="max-width:1200px; margin:auto; padding:0 20px 60px 20px; display:flex; flex-wrap:wrap; justify-content:space-between; align-items:flex-start; gap:40px;">
+    <!-- left column -->
+    <div style="flex:1 1 300px; min-width:220px;">
+      <p style="color:#ccc; font-size:14px; line-height:1.6; margin-top:0;">Poke is a free software privacy app that lets you watch, explore and do MORE!!! — all ad-free and without tracking!!!</p>
+      <p style="margin-top:10px; color:#aaa; font-size:12px;">© <%= new Date().getFullYear() %> Poke Project Initiative With Love!! ❤️ - Licensed under GNU GPL v3+</p>
+    </div>
+
+    <!-- link groups -->
+    <div style="display:flex; flex:2 1 600px; justify-content:space-around; flex-wrap:wrap; gap:40px;">
+      <div>
+        <h3 style="color:#fff; font-size:16px; margin-bottom:10px;">Project</h3>
+        <ul style="list-style:none; padding:0; margin:0; line-height:1.8;">
+          <li><a href="/app" style="color:#ccc; text-decoration:none;">Discover</a></li>
+          <li><a href="/weather" style="color:#ccc; text-decoration:none;">Weather</a></li>
+          <li><a href="/game-hub" style="color:#ccc; text-decoration:none;">Games :D</a></li>
+        </ul>
+      </div>
+      <div>
+        <h3 style="color:#fff; font-size:16px; margin-bottom:10px;">Community</h3>
+        <ul style="list-style:none; padding:0; margin:0; line-height:1.8;">
+          <li><a href="https://discord.poketube.fun" style="color:#ccc; text-decoration:none;">Discord</a></li>
+          <li><a href="https://codeberg.org/ashley/poke" style="color:#ccc; text-decoration:none;">Codeberg</a></li>
+          <li><a href="https://social.poketube.fun" style="color:#ccc; text-decoration:none;">Mastodon</a></li>
+        </ul>
+      </div>
+      <div>
+        <h3 style="color:#fff; font-size:16px; margin-bottom:10px;">Resources</h3>
+        <ul style="list-style:none; padding:0; margin:0; line-height:1.8;">
+          <li><a href="/privacy" style="color:#ccc; text-decoration:none;">Privacy</a></li>
+           <li><a href="/license" style="color:#ccc; text-decoration:none;">Licenses</a></li>
+          <li><a href="https://codeberg.org/ashley/poke/src/branch/main/CODE_OF_CONDUCT.md" style="color:#ccc; text-decoration:none;">Code Of Conduct</a></li>
+          <li><a href="https://codeberg.org/ashley/poke/src/branch/main#hosting-poke" style="color:#ccc; text-decoration:none;">How 2 Host?</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- bottom logo section -->
+  <div style="text-align:center; border-top:1px solid #222; padding:40px 0 60px 0;">
+    <img src="/static/logo-poke.svg" alt="POKE logo" style="width:57em; height:auto; margin-bottom:10px;mask-image: none;border-radius: none;">
+  </div>
+</footer>
     <script>
       // @license magnet:?xt=urn:btih:1f739d935676111cfff4b4693e3816e664797050&dn=gpl-3.0.txt GPL-3.0-or-later 
       if ('serviceWorker' in navigator) {

@@ -416,7 +416,7 @@ app.get("/api/version.json", async (req, res) => {
         id_like: osr.id_like,
         version_id: osr.version_id,
       } : null,
-      platform,           
+      platform.replace("linux", "GNU/Linux"),           
       kernel_release: kernelRelease,
       arch,
       hostname,

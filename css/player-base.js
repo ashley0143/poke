@@ -25,6 +25,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // raw media elements
     const videoEl = document.getElementById('video');
     const audio = document.getElementById('aud');
+    const audioEl = document.getElementById('aud');
 
     // resolve initial sources robustly (works whether <audio src> or <source> children are used)
     const pickAudioSrc = () => {

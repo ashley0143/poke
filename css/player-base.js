@@ -23,7 +23,6 @@ document.addEventListener("DOMContentLoaded", () => {
     const audioEl = document.getElementById('aud');
     let volGuard = false;
     
-    // resolve initial sources robustly (works whether <audio src> or <source> children are used)
     const pickAudioSrc = () => {
         const s = audio?.getAttribute?.('src');
         if (s) return s;
@@ -186,6 +185,35 @@ document.addEventListener("DOMContentLoaded", () => {
             });
         }
     }
+	
+        video.on('ended', () => {
+            try {
+                if (video.loop() || videoEl.loop) {
+                    video.currentTime(0);
+                    audio.currentTime = 0;
+                    video.play()?.catch(()=>{});
+                    audio.play()?.catch(()=>{});
+                    if (!syncInterval) startSyncLoop();
+                } else {
+                    audio.pause();
+                    clearSyncLoop();
+                }
+            } catch {}
+        });
+        audio.addEventListener('ended', () => {
+            try {
+                if (video.loop() || videoEl.loop) {
+                    video.currentTime(0);
+                    audio.currentTime = 0;
+                    video.play()?.catch(()=>{});
+                    audio.play()?.catch(()=>{});
+                    if (!syncInterval) startSyncLoop();
+                } else {
+                    video.pause();
+                    clearSyncLoop();
+                }
+            } catch {}
+        });
 
     document.addEventListener('keydown', e => {
         switch (e.code) {

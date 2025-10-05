@@ -2,7 +2,6 @@
 var _yt_player = videojs;
 
 var versionclient = "youtube.player.web_20250917_22_RC00"
-
 document.addEventListener("DOMContentLoaded", () => {
     // video.js 8 init - source can be seen in https://poketube.fun/static/vjs.min.js or the vjs.min.js file
     const video = videojs('video', {
@@ -241,17 +240,25 @@ document.addEventListener("DOMContentLoaded", () => {
             try { audio.playbackRate = video.playbackRate(); } catch {}
         });
 
-        video.on('play', () => {
-            if (!syncInterval) startSyncLoop();
-            const vt = Number(video.currentTime());
-            if (Math.abs(vt - Number(audio.currentTime)) > 0.3) safeSetCT(audio, vt);
-            if (audioReady) audio.play()?.catch(()=>{});
-        });
-
+        // --- core sync fix for KDE/Android media controls ---
+        // ensures both pause/play reflect on each other
         video.on('pause', () => {
-            audio.pause();
+            if (!audio.paused) audio.pause();
             clearSyncLoop();
         });
+        audio.addEventListener('pause', () => {
+            if (!video.paused()) video.pause();
+            clearSyncLoop();
+        });
+        video.on('play', () => {
+            if (audio.paused) audio.play()?.catch(()=>{});
+            if (!syncInterval) startSyncLoop();
+        });
+        audio.addEventListener('play', () => {
+            if (video.paused()) video.play()?.catch(()=>{});
+            if (!syncInterval) startSyncLoop();
+        });
+        // -----------------------------------------------
 
         // pause audio when video is buffering :3
         video.on('waiting', () => {
@@ -322,6 +329,7 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 });
+
 
 
  // https://codeberg.org/ashley/poke/src/branch/main/src/libpoketube/libpoketube-youtubei-objects.json

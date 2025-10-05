@@ -4,10 +4,7 @@ var _yt_player = videojs;
 var versionclient = "youtube.player.web_20250917_22_RC00"
 
 
-
-
-
-document.addEventListener("DOMContentLoaded", () => {
+ document.addEventListener("DOMContentLoaded", () => {
   const player = videojs("video", {
     controls: true,
     autoplay: false,
@@ -15,8 +12,7 @@ document.addEventListener("DOMContentLoaded", () => {
     errorDisplay: false,
   });
 
-  // quick params + lightweight progress seed
-  const qs = new URLSearchParams(location.search);
+   const qs = new URLSearchParams(location.search);
   const qua = qs.get("quality") || "";
   const vidKey = qs.get("v");
   try { if (vidKey) localStorage.setItem(`progress-${vidKey}`, 0); } catch {}
@@ -55,6 +51,8 @@ document.addEventListener("DOMContentLoaded", () => {
   // small state bag
   let audioReady = false, videoReady = false;
   let mediaSessionReady = false;
+  let desiredPlay = false;     // user's last intent (play/pause)
+  let buffering = false;       // are we buffering right now?
 
   // sync knobs
   const BIG_DRIFT   = 0.45;  // snap threshold (s)
@@ -63,18 +61,17 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // guards
   let volGuard = false;
-  let syncGuard = false;         // block re-entrant sync
-  let couplingGuard = false;     // block play/pause echo
+  let syncGuard = false;
+  let couplingGuard = false;
+
+  // autosync + stall watchdog
   let autosyncTimer = null;
   const AUTOSYNC_MS = 400;
 
-  // “buffer hold” so neither side plays while buffering
-  let bufferHold = false;
-  let bufferHoldWasPlaying = false;
-
-  // seeking flags (so pausing audio for seeks won't pause the video)
-  let audioPauseForSeek = false;
-  let playerSeekWasPlaying = false;
+  // stall detection
+  let lastProgressCT = 0;
+  let lastProgressAt = 0;
+  const STALL_MS = 800;      // if time doesn't advance for this long → buffering
 
   // loop detection
   let lastVideoTime = 0;
@@ -91,31 +88,37 @@ document.addEventListener("DOMContentLoaded", () => {
     } catch {}
     return false;
   }
-  function haveFutureData(media) {
-    // HAVE_FUTURE_DATA (3) means “enough to keep playing”; anything lower is effectively buffering.
-    // ref: MDN readyState constants
-    try { return (media.readyState || 0) >= 3; } catch { return false; }
-  }
   function canPlayAt(media, t) {
-    // either browser already says future data is available (>=3), or the time is inside buffered ranges
-    return haveFutureData(media) || timeInBuffered(media, t);
+    try {
+      const rs = Number(media.readyState || 0);
+      if (!isFinite(t)) return false;
+      if (rs >= 3) return true; // HAVE_FUTURE_DATA
+      return timeInBuffered(media, t);
+    } catch { return false; }
   }
   function bothPlayableAt(t) { return canPlayAt(videoEl, t) && canPlayAt(audioEl, t); }
   function safeSetCT(media, t) { try { if (isFinite(t) && t >= 0) media.currentTime = t; } catch {} }
   const clamp01 = v => Math.max(0, Math.min(1, Number(v)));
   function isLooping() { try { return !!player.loop?.() || !!videoEl.loop; } catch { return !!videoEl.loop; } }
 
-  // a sober “are we buffering right now?” check
-  function bufferingNow() {
-    const t = Number(player.currentTime());
-    if (!isFinite(t)) return true;
-    // considered buffering if either side lacks future data or the current moment is outside buffered ranges
-    const vBuf = haveFutureData(videoEl) && timeInBuffered(videoEl, t + 0.04);
-    const aBuf = haveFutureData(audioEl) && timeInBuffered(audioEl, t + 0.04);
-    return !(vBuf && aBuf);
+  // quick play/pause helpers
+  function playBoth() {
+    if (buffering) return;           // do not play while buffering
+    if (couplingGuard) return;
+    couplingGuard = true;
+    player.play()?.catch(()=>{});
+    audioEl.play()?.catch(()=>{});
+    couplingGuard = false;
+  }
+  function pauseBoth() {
+    if (couplingGuard) return;
+    couplingGuard = true;
+    player.pause();
+    audioEl.pause();
+    couplingGuard = false;
   }
 
-  // keep mute/volume mirrored either way
+  // mute/volume mirror
   function mirrorFromPlayerVolumeMute() {
     if (volGuard) return; volGuard = true;
     try {
@@ -142,61 +145,29 @@ document.addEventListener("DOMContentLoaded", () => {
   audioEl.addEventListener("volumechange", mirrorFromAudioVolumeMute);
   player.ready(() => mirrorFromPlayerVolumeMute());
 
-  // one-button control helpers (respect bufferHold)
-  function playBoth() {
-    if (bufferHold || couplingGuard) return;
-    couplingGuard = true;
-    player.play()?.catch(()=>{});
-    audioEl.play()?.catch(()=>{});
-    startAutosync();
-    couplingGuard = false;
-  }
-  function pauseBoth() {
-    if (couplingGuard) return;
-    couplingGuard = true;
-    player.pause();
-    audioEl.pause();
-    stopAutosync();
-    couplingGuard = false;
-  }
-
-  // hard enter/leave buffer hold
-  function enterBufferHold() {
-    if (bufferHold) return;
-    bufferHold = true;
-    bufferHoldWasPlaying = !player.paused();
-    pauseBoth(); // guarantee neither plays while buffering
-  }
-  function leaveBufferHoldIfReady() {
-    if (!bufferHold) return;
-    const t = Number(player.currentTime());
-    if (bothPlayableAt(t) && !bufferingNow()) {
-      bufferHold = false;
-      if (bufferHoldWasPlaying) playBoth();
-    }
-  }
-
-  // video is the boss: when it plays/pauses, audio mirrors (unless buffering)
+  // track user's intent and enforce coupling
   player.on("play", () => {
-    if (bufferingNow()) { enterBufferHold(); return; }
+    desiredPlay = true;
+    if (buffering) { pauseBoth(); return; }
     if (audioEl.paused) audioEl.play()?.catch(()=>{});
-    startAutosync();
     try { if ("mediaSession" in navigator) navigator.mediaSession.playbackState = "playing"; } catch {}
   });
   player.on("pause", () => {
+    desiredPlay = false;
     if (!audioEl.paused) audioEl.pause();
-    stopAutosync();
     try { if ("mediaSession" in navigator) navigator.mediaSession.playbackState = "paused"; } catch {}
   });
 
-  // if the platform tries to play/pause audio alone, route through video
-  audioEl.addEventListener("play", () => { if (player.paused()) playBoth(); });
+  // kill autonomous audio play/pause unless matching desired state
+  audioEl.addEventListener("play", () => {
+    if (!desiredPlay) pauseBoth();
+    if (buffering) pauseBoth();
+  });
   audioEl.addEventListener("pause", () => {
-    if (audioPauseForSeek) return;           // our deliberate pause
-    if (!player.paused()) pauseBoth();       // any other pause → lockstep
+    if (desiredPlay && !buffering) playBoth();
   });
 
-  // media-session timeline (keeps OS seekbar calm)
+  // media-session timeline
   let lastMSPos = 0, lastMSAt = 0;
   const MS_THROTTLE_MS = 250;
   function getDuration() {
@@ -215,7 +186,6 @@ document.addEventListener("DOMContentLoaded", () => {
     let pos = Number(player.currentTime());
     if (!isFinite(pos) || pos < 0) pos = 0;
 
-    // avoid flicker; allow jump-back only on real loop wrap
     if (pos + 0.2 < lastMSPos && isLooping()) lastMSPos = 0;
     else {
       if (pos < lastMSPos && (lastMSPos - pos) < 0.2) pos = lastMSPos;
@@ -251,11 +221,10 @@ document.addEventListener("DOMContentLoaded", () => {
       updateMSPositionState(false);
     };
 
-    // when the OS seekbar is used, pause audio first, seek both, then restore if we were playing
     function msSeekTo(targetTime) {
-      const wasPlaying = !player.paused();
-      audioPauseForSeek = true;
-      try { audioEl.pause(); } catch {}
+      const wasDesired = desiredPlay;
+      desiredPlay = wasDesired; // keep intent
+      pauseBoth();              // pause hard during seek to avoid ping-pong
       syncGuard = true;
       try {
         if ("fastSeek" in audioEl) { try { audioEl.fastSeek(targetTime); } catch { safeSetCT(audioEl, targetTime); } }
@@ -263,29 +232,27 @@ document.addEventListener("DOMContentLoaded", () => {
         player.currentTime(targetTime);
       } finally {
         syncGuard = false;
-        audioPauseForSeek = false;
       }
       tagState();
-      if (wasPlaying && !bufferingNow()) playBoth();
+      // only resume if playable and the user wanted play
+      if (wasDesired && bothPlayableAt(Number(player.currentTime()))) playBoth();
     }
 
-    navigator.mediaSession.setActionHandler("play",  () => { if (!bufferingNow()) playBoth(); tagState(); });
-    navigator.mediaSession.setActionHandler("pause", () => { pauseBoth(); tagState(); });
+    navigator.mediaSession.setActionHandler("play",  () => { desiredPlay = true;  if (!buffering) playBoth(); tagState(); });
+    navigator.mediaSession.setActionHandler("pause", () => { desiredPlay = false; pauseBoth(); tagState(); });
     navigator.mediaSession.setActionHandler("stop",  () => {
-      pauseBoth();
+      desiredPlay = false; pauseBoth();
       try { player.currentTime(0); } catch {}
       try { audioEl.currentTime = 0; } catch {}
       tagState();
     });
     navigator.mediaSession.setActionHandler("seekbackward", ({ seekOffset }) => {
       const skip = seekOffset || 10;
-      const to = Math.max(0, Number(player.currentTime()) - skip);
-      msSeekTo(to);
+      msSeekTo(Math.max(0, Number(player.currentTime()) - skip));
     });
     navigator.mediaSession.setActionHandler("seekforward", ({ seekOffset }) => {
       const skip = seekOffset || 10;
-      const to = Number(player.currentTime()) + skip;
-      msSeekTo(to);
+      msSeekTo(Number(player.currentTime()) + skip);
     });
     navigator.mediaSession.setActionHandler("seekto", ({ seekTime }) => {
       if (!isFinite(seekTime)) return;
@@ -304,42 +271,58 @@ document.addEventListener("DOMContentLoaded", () => {
     mediaSessionReady = true;
   }
 
-  // hardware media keys (fallback)
+  // media keys fallback
   document.addEventListener("keydown", e => {
     switch (e.code) {
       case "AudioPlay":
       case "MediaPlayPause":
-        if (player.paused()) { if (!bufferingNow()) playBoth(); } else pauseBoth();
+        desiredPlay = player.paused();
+        if (desiredPlay && !buffering) playBoth(); else pauseBoth();
         break;
       case "AudioPause":
-        pauseBoth();
+        desiredPlay = false; pauseBoth();
         break;
       case "AudioNext":
       case "MediaTrackNext": {
         const t = Number(player.currentTime()) + 10;
+        pauseBoth();
         player.currentTime(t); safeSetCT(audioEl, t);
+        if (desiredPlay && bothPlayableAt(t)) playBoth();
         break;
       }
       case "AudioPrevious":
       case "MediaTrackPrevious": {
         const t = Math.max(0, Number(player.currentTime()) - 10);
+        pauseBoth();
         player.currentTime(t); safeSetCT(audioEl, t);
+        if (desiredPlay && bothPlayableAt(t)) playBoth();
         break;
       }
     }
   });
 
-  // single-shot sync step used by events + autosyncer
+  // single sync step
   function doSyncOnce() {
-    if (syncGuard || bufferHold) return;
+    if (syncGuard) return;
     const vt = Number(player.currentTime());
     const at = Number(audioEl.currentTime);
     if (!isFinite(vt) || !isFinite(at)) return;
 
-    // handle loop wrap cleanly
+    // stall watchdog: track real progress
+    if (!player.paused()) {
+      if (vt !== lastProgressCT) {
+        lastProgressCT = vt;
+        lastProgressAt = Date.now();
+      } else if ((Date.now() - lastProgressAt) > STALL_MS) {
+        // considered buffering → hard pause both
+        buffering = true;
+        pauseBoth();
+      }
+    }
+
+    // loop wrap
     if (vt + 0.02 < lastVideoTime && isLooping()) {
       safeSetCT(audioEl, vt);
-      if (!bufferingNow() && player.paused()) playBoth();
       lastMSPos = 0;
       updateMSPositionState(false);
       lastVideoTime = vt;
@@ -347,7 +330,8 @@ document.addEventListener("DOMContentLoaded", () => {
     }
     lastVideoTime = vt;
 
-    if (!bothPlayableAt(vt)) return;
+    // if buffering or not playable, skip sync
+    if (buffering || !bothPlayableAt(vt)) return;
 
     const delta = vt - at;
     if (Math.abs(delta) > BIG_DRIFT) {
@@ -363,10 +347,10 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  // event-driven sync while foregrounded
+  // event-driven sync
   player.on("timeupdate", doSyncOnce);
 
-  // cheap autosync in case timeupdate slows (background/lockscreen)
+  // small autosync (also runs stall watchdog)
   function startAutosync() {
     if (autosyncTimer) return;
     autosyncTimer = setInterval(doSyncOnce, AUTOSYNC_MS);
@@ -377,61 +361,31 @@ document.addEventListener("DOMContentLoaded", () => {
     autosyncTimer = null;
   }
 
-  // when user drags the player's own seekbar: pause audio immediately, then restore if needed
-  player.on("seeking", () => {
-    syncGuard = true;
-    playerSeekWasPlaying = !player.paused();
-    audioPauseForSeek = true;
-    try { audioEl.pause(); } catch {}
-    safeSetCT(audioEl, Number(player.currentTime()));
-    audioPauseForSeek = false;
-    updateMSPositionState(false);
-  });
-  player.on("seeked", () => {
-    safeSetCT(audioEl, Number(player.currentTime()));
-    syncGuard = false;
-    if (playerSeekWasPlaying && bothPlayableAt(Number(player.currentTime())) && !bufferingNow()) playBoth();
-    updateMSPositionState(false);
-  });
-
-  // if some platform UI seeks the audio directly, mirror time but keep lockstep
-  audioEl.addEventListener("seeking", () => {
-    const at = Number(audioEl.currentTime) || 0;
-    syncGuard = true;
-    player.currentTime(at);
-    syncGuard = false;
-    updateMSPositionState(false);
-  });
-  audioEl.addEventListener("seeked", () => {
-    const at = Number(audioEl.currentTime) || 0;
-    syncGuard = true;
-    player.currentTime(at);
-    syncGuard = false;
-    updateMSPositionState(false);
-  });
-
-  // buffering handling: as soon as we’re buffering, pause both; resume only when playable
-  function maybeEnterBufferHold() {
-    if (bufferingNow()) enterBufferHold();
+  // treat any of these as "buffering now" → pause both, resume when playable
+  function markBuffering() {
+    buffering = true;
+    pauseBoth();
   }
-  function maybeLeaveBufferHold() {
-    leaveBufferHoldIfReady();
+  function tryUnbufferAndResume() {
+    // become unbuffered only when both sides can actually play at this time
+    const t = Number(player.currentTime());
+    if (bothPlayableAt(t)) {
+      buffering = false;
+      if (desiredPlay) playBoth();
+    }
   }
 
-  // video.js will fire “waiting” when playback stalls — treat as buffering immediately
-  player.on("waiting", maybeEnterBufferHold);
-  // native element hints that help us exit buffering safely
-  videoEl.addEventListener("canplay",  maybeLeaveBufferHold);
-  videoEl.addEventListener("canplaythrough", maybeLeaveBufferHold);
-  videoEl.addEventListener("loadeddata", maybeLeaveBufferHold);
-  audioEl.addEventListener("canplay",  maybeLeaveBufferHold);
-  audioEl.addEventListener("canplaythrough", maybeLeaveBufferHold);
-  audioEl.addEventListener("loadeddata", maybeLeaveBufferHold);
-  // if we get a “playing”, still verify both sides can actually play before resuming
-  player.on("playing", () => { if (!bufferingNow()) leaveBufferHoldIfReady(); else enterBufferHold(); });
-  // progress events can also signal new data buffered
-  videoEl.addEventListener("progress", maybeLeaveBufferHold);
-  audioEl.addEventListener("progress", maybeLeaveBufferHold);
+  player.on("waiting", markBuffering);
+  player.on("stalled", markBuffering);
+  player.on("suspend", markBuffering);
+  player.on("emptied", markBuffering);
+
+  player.on("canplay", tryUnbufferAndResume);
+  player.on("canplaythrough", tryUnbufferAndResume);
+  player.on("playing", () => {
+    tryUnbufferAndResume();
+    startAutosync();
+  });
 
   // simple error surfacing
   const errorBox = document.getElementById("loopedIndicator");
@@ -449,25 +403,26 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  // loop/end: never stop on loop
+  // loop/end handling
   player.on("ended", () => {
     if (isLooping()) {
       safeSetCT(audioEl, 0);
       player.currentTime(0);
-      if (!bufferingNow()) playBoth();
+      if (!buffering && desiredPlay) playBoth();
       lastMSPos = 0;
       updateMSPositionState(false);
     } else {
-      audioEl.pause();
+      desiredPlay = false;
+      pauseBoth();
       stopAutosync();
     }
   });
   audioEl.addEventListener("ended", () => {
     if (isLooping()) {
       safeSetCT(audioEl, 0);
-      if (player.paused()) {
+      if (desiredPlay && !buffering && player.paused()) {
         player.currentTime(0);
-        if (!bufferingNow()) playBoth();
+        playBoth();
       }
       lastMSPos = 0;
       updateMSPositionState(false);
@@ -476,12 +431,15 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  // leaving fullscreen? pause cleanly
+  // leave fullscreen → match intent but never play while buffering
   document.addEventListener("fullscreenchange", () => {
-    if (!document.fullscreenElement) pauseBoth();
+    if (!document.fullscreenElement) {
+      desiredPlay = false;
+      pauseBoth();
+    }
   });
 
-  // tiny, quiet retry on load error (helps <source> vs src cases)
+  // tiny, quiet retry for <audio>/<video> load errors
   function attachReady(elm, resolveSrc, markReady) {
     const onLoaded = () => { try { markReady(); } catch {} tryStart(); };
     elm.addEventListener("loadeddata", onLoaded, { once: true });
@@ -504,8 +462,8 @@ document.addEventListener("DOMContentLoaded", () => {
     if (audioReady && videoReady) {
       const t = Number(player.currentTime());
       if (isFinite(t) && Math.abs(Number(audioEl.currentTime) - t) > 0.1) safeSetCT(audioEl, t);
-      if (!bufferingNow() && bothPlayableAt(t)) playBoth();
-      else { audioEl.pause(); player.pause(); }
+      desiredPlay = true;
+      tryUnbufferAndResume();
       setupMediaSession();
     }
   }
@@ -519,18 +477,15 @@ document.addEventListener("DOMContentLoaded", () => {
     }, () => { videoReady = true; });
   }
 
-  // one-time click to satisfy autoplay policies
+  // simple user-gesture nudge
   player.ready(() => {
     const tryKick = () => {
-      if (audioReady && videoReady && player.paused()) {
-        const t = Number(player.currentTime());
-        if (!bufferingNow() && bothPlayableAt(t)) playBoth();
-      }
+      desiredPlay = true;
+      tryUnbufferAndResume();
     };
     player.el().addEventListener("click", tryKick, { once: true });
   });
 });
-
 
 
  // https://codeberg.org/ashley/poke/src/branch/main/src/libpoketube/libpoketube-youtubei-objects.json

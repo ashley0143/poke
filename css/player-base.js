@@ -3,7 +3,7 @@ var _yt_player = videojs;
 
 var versionclient = "youtube.player.web_20250917_22_RC00"
 
-document.addEventListener("DOMContentLoaded", () => { 
+ document.addEventListener("DOMContentLoaded", () => { 
     // video.js 8 init - source can be seen in https://poketube.fun/static/vjs.min.js or the vjs.min.js file
     const video = videojs('video', {
         controls: true,
@@ -179,17 +179,16 @@ document.addEventListener("DOMContentLoaded", () => {
                 });
             } catch {}
 
+            // FIX: Only control the *video* here; audio follows via video event handlers
             navigator.mediaSession.setActionHandler('play', () => {
                 if (syncing || restarting) return;
                 syncing = true;
-                video.play()?.catch(()=>{}); audio.play()?.catch(()=>{});
-                syncing = false;
+                Promise.resolve(video.play()).finally(() => { syncing = false; }).catch(()=>{});
             });
             navigator.mediaSession.setActionHandler('pause', () => {
                 if (syncing || restarting) return;
                 syncing = true;
-                video.pause(); audio.pause();
-                syncing = false;
+                try { video.pause(); } finally { syncing = false; }
             });
             navigator.mediaSession.setActionHandler('seekbackward', ({ seekOffset }) => {
                 const skip = seekOffset || 10;
@@ -213,11 +212,12 @@ document.addEventListener("DOMContentLoaded", () => {
             navigator.mediaSession.setActionHandler('stop', () => {
                 if (syncing || restarting) return;
                 syncing = true;
-                video.pause(); audio.pause();
-                try { video.currentTime(0); } catch {}
-                try { audio.currentTime = 0; } catch {}
-                clearSyncLoop();
-                syncing = false;
+                try {
+                    video.pause(); audio.pause();
+                    try { video.currentTime(0); } catch {}
+                    try { audio.currentTime = 0; } catch {}
+                    clearSyncLoop();
+                } finally { syncing = false; }
             });
         }
     }
@@ -227,15 +227,14 @@ document.addEventListener("DOMContentLoaded", () => {
         switch (e.code) {
             case 'AudioPlay':
             case 'MediaPlayPause':
+                // FIX: toggle only the video; audio follows via handlers
                 syncing = true;
-                if (video.paused()) { video.play()?.catch(()=>{}); audio.play()?.catch(()=>{}); }
-                else { video.pause(); audio.pause(); }
-                syncing = false;
+                if (video.paused()) { Promise.resolve(video.play()).finally(() => { syncing = false; }).catch(()=>{}); }
+                else { try { video.pause(); } finally { syncing = false; } }
                 break;
             case 'AudioPause':
                 syncing = true;
-                video.pause(); audio.pause();
-                syncing = false;
+                try { video.pause(); } finally { syncing = false; }
                 break;
             case 'AudioNext':
             case 'MediaTrackNext': {
@@ -263,9 +262,8 @@ document.addEventListener("DOMContentLoaded", () => {
         video.on('volumechange', () => {
             try { audio.volume = clamp(video.volume()); audio.muted = video.muted(); } catch {}
         });
-        audio.addEventListener('volumechange', () => {
-            try { video.volume(clamp(audio.volume)); video.muted(audio.muted); } catch {}
-        });
+        // FIX: remove audio->video volume mirroring to avoid feedback loops
+        // audio.addEventListener('volumechange', () => { ... });
 
         video.on('ratechange', () => { try { audio.playbackRate = video.playbackRate(); } catch {} });
 
@@ -277,29 +275,30 @@ document.addEventListener("DOMContentLoaded", () => {
             clearSyncLoop();
             syncing = false;
         });
+
+        // FIX: do NOT mirror audio -> video; this was causing ping-pong after restarts
         audio.addEventListener('pause', () => {
             if (syncing || restarting) return;
-            syncing = true;
-            try { if (!video.paused()) video.pause(); } catch {}
+            // just stop sync loop; do not pause video from here
             clearSyncLoop();
-            syncing = false;
         });
+
         video.on('play', () => {
             if (syncing || restarting) return;
             syncing = true;
-            try { if (audio.paused) audio.play()?.catch(()=>{}); } catch {}
-            if (!syncInterval) startSyncLoop();
-            syncing = false;
-        });
-        audio.addEventListener('play', () => {
-            if (syncing || restarting) return;
-            syncing = true;
-            try { if (video.paused()) video.play()?.catch(()=>{}); } catch {}
-            if (!syncInterval) startSyncLoop();
-            syncing = false;
+            (async () => {
+                try { if (audio.paused) await audio.play(); } catch {}
+                if (!syncInterval) startSyncLoop();
+            })().finally(() => { syncing = false; });
         });
 
-        video.on('waiting', () => { if (!restarting) { audio.pause(); clearSyncLoop(); } });
+        // FIX: do NOT mirror audio -> video; only ensure loop running if audio resumes
+        audio.addEventListener('play', () => {
+            if (syncing || restarting) return;
+            if (!syncInterval) startSyncLoop();
+        });
+
+        video.on('waiting', () => { if (!restarting) { try { audio.pause(); } catch{}; clearSyncLoop(); } });
         video.on('playing', () => { if (audioReady && !restarting) audio.play()?.catch(()=>{}); if (!syncInterval) startSyncLoop(); });
 
         const errorBox = document.getElementById('loopedIndicator');
@@ -325,7 +324,8 @@ document.addEventListener("DOMContentLoaded", () => {
             if (restarting) return;
             wasPlayingBeforeSeek = !video.paused();
             suppressEndedUntil = performance.now() + 500; // short grace period after seek
-            audio.pause(); clearSyncLoop();
+            try { audio.pause(); } catch {}
+            clearSyncLoop();
             const vt = Number(video.currentTime());
             if (Math.abs(vt - Number(audio.currentTime)) > 0.1) safeSetCT(audio, vt);
         });
@@ -356,25 +356,72 @@ document.addEventListener("DOMContentLoaded", () => {
             if (Math.abs(vt - Number(audio.currentTime)) > 0.1) safeSetCT(audio, vt);
         });
 
+        // --- helpers used by restartLoop() ---
+        // FIX: robustly attempt to play(), with muted fallback if browser blocks autoplay
+        const tryPlay = async (elOrPlayer, isVjsPlayer = false) => {
+            try {
+                const p = elOrPlayer.play();
+                if (p && typeof p.then === 'function') await p;
+                return true;
+            } catch (err) {
+                const prevMuted = isVjsPlayer ? elOrPlayer.muted() : !!elOrPlayer.muted;
+                try { if (isVjsPlayer) elOrPlayer.muted(true); else elOrPlayer.muted = true; } catch {}
+                try {
+                    const p2 = elOrPlayer.play();
+                    if (p2 && typeof p2.then === 'function') await p2;
+                    setTimeout(() => { try { if (isVjsPlayer) elOrPlayer.muted(prevMuted); else elOrPlayer.muted = prevMuted; } catch {} }, 100);
+                    return true;
+                } catch {
+                    return false;
+                }
+            }
+        };
+
+        // FIX: wait until both media are actually playable around t (or timeout)
+        const waitUntilPlayable = (t, timeoutMs = 800) => new Promise(resolve => {
+            const start = performance.now();
+            const tick = () => {
+                if (bothPlayableAt(t)) return resolve(true);
+                if (performance.now() - start > timeoutMs) return resolve(false);
+                setTimeout(tick, 50);
+            };
+            tick();
+        });
+
         // --- unconditional looping with anti-pingpong ---
-        const restartLoop = () => {
+        const restartLoop = async () => {
             if (restarting) return;
             restarting = true;
             try {
                 clearSyncLoop();
 
+                // pause first to avoid race between seeks and decoders
+                try { video.pause(); } catch {}
+                try { audio.pause(); } catch {}
+
                 // FIX: actually reset BOTH media correctly; use video.js API for the player
                 const startAt = 0.001; // tiny offset so 'ended' doesn't immediately refire
+                suppressEndedUntil = performance.now() + 1000; // ignore stray 'ended' during restart
                 video.currentTime(startAt);
                 safeSetCT(audio, startAt);
 
-                setTimeout(() => {
-                    video.play()?.catch(()=>{});
-                    audio.play()?.catch(()=>{});
-                    if (!syncInterval) startSyncLoop();
-                    restarting = false;
-                }, 50);
+                // wait until both are ready to resume; don't spin forever
+                await waitUntilPlayable(startAt, 1000);
+
+                // try to start both; if blocked, muted fallback inside tryPlay()
+                const vOk = await tryPlay(video, /*isVjsPlayer*/ true);
+                const aOk = await tryPlay(audio, /*isVjsPlayer*/ false);
+
+                if (!(vOk && aOk)) {
+                    await new Promise(r => setTimeout(r, 120));
+                    await (vOk ? Promise.resolve() : tryPlay(video, true));
+                    await (aOk ? Promise.resolve() : tryPlay(audio, false));
+                }
+
+                if (!syncInterval) startSyncLoop();
             } catch {
+                // swallow and drop through
+            } finally {
                 restarting = false;
             }
         };
@@ -402,6 +449,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 });
  
+
 
  // https://codeberg.org/ashley/poke/src/branch/main/src/libpoketube/libpoketube-youtubei-objects.json
 

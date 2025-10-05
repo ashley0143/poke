@@ -45,8 +45,8 @@ document.addEventListener("DOMContentLoaded", () => {
   function mirrorFromPlayerVolumeMute() {
     if (volGuard) return; volGuard = true;
     try {
-      const m = !!player.muted();
-      const v = clamp01(player.volume());
+      const m = !!video.muted();
+      const v = clamp01(video.volume());
       audioEl.muted = m;
       if (!m) audioEl.volume = v;
       try { videoEl.muted = m; } catch {}
@@ -58,15 +58,15 @@ document.addEventListener("DOMContentLoaded", () => {
     try {
       const m = !!audioEl.muted;
       const v = clamp01(audioEl.volume);
-      player.muted(m);
-      if (!m) player.volume(v);
+      video.muted(m);
+      if (!m) video.volume(v);
       try { videoEl.muted = m; } catch {}
     } catch {}
     volGuard = false;
   }
-  player.on("volumechange", mirrorFromPlayerVolumeMute);
+  video.on("volumechange", mirrorFromPlayerVolumeMute);
   audioEl.addEventListener("volumechange", mirrorFromAudioVolumeMute);
-  player.ready(() => mirrorFromPlayerVolumeMute());
+  video.ready(() => mirrorFromPlayerVolumeMute());
 
     // readiness + sync state
     let audioReady = false, videoReady = false;

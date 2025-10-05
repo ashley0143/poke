@@ -24,6 +24,12 @@ var versionclient = "youtube.player.web_20250917_22_RC00"
     const audioEl = document.getElementById('aud');
     let volGuard = false;
 
+    // FIX:   inline playback on iOS so muted autoplay works reliably
+    try {
+        videoEl.setAttribute('playsinline', '');
+        videoEl.setAttribute('webkit-playsinline', '');
+    } catch {}
+
     // global anti-ping-pong guard
     let syncing = false; // prevents normal ping-pong
     let restarting = false; // prevents loop-end ping-pong
@@ -297,7 +303,7 @@ var versionclient = "youtube.player.web_20250917_22_RC00"
             })().finally(() => { syncing = false; });
         });
 
-        // Ensure loop running if audio resumes
+        //  loop running if audio resumes
         audio.addEventListener('play', () => {
             if (syncing || restarting) return;
             if (!syncInterval) startSyncLoop();
@@ -434,12 +440,32 @@ var versionclient = "youtube.player.web_20250917_22_RC00"
 
                 await waitUntilPlayable(startAt, 1000);
 
+                // FIX: proactively start muted on loop to satisfy autoplay policies,
+                // then restore previous mute states after playback begins.
+                const prevVideoMuted = !!video.muted();
+                const prevAudioMuted = !!audio.muted;
+                try { video.muted(true); } catch {}
+                try { audio.muted = true; } catch {}
+                // (Video.js defaultMuted helps iOS treat this as muted-at-start.)
+                try { video.defaultMuted?.(true); } catch {}
+
                 // initial start attempt
                 const vOk = await tryPlay(video, /*isVjsPlayer*/ true);
                 const aOk = await tryPlay(audio, /*isVjsPlayer*/ false);
 
+                // when the video actually starts playing, restore prior mute state
+                video.one('playing', () => {
+                    setTimeout(() => {
+                        try { video.muted(prevVideoMuted); } catch {}
+                        try { audio.muted = prevAudioMuted; } catch {}
+                        try { video.defaultMuted?.(prevVideoMuted); } catch {}
+                        // ensure audio is actually rolling after unmute
+                        try { audio.play()?.catch(()=>{}); } catch {}
+                    }, 80);
+                });
+
                 // schedule gentle retries if either failed (autoplay policy, decode lag, etc.)
-                if (!(vOk && aOk)) autoKickDuringLoop();
+                if (!(vOk && aOk)) { isLoopingCycle = true; autoKickDuringLoop(); }
 
                 if (!syncInterval) startSyncLoop();
             } catch {
@@ -471,6 +497,7 @@ var versionclient = "youtube.player.web_20250917_22_RC00"
         });
     }
 });
+ 
 
  // https://codeberg.org/ashley/poke/src/branch/main/src/libpoketube/libpoketube-youtubei-objects.json
 

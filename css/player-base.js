@@ -2,7 +2,8 @@
 var _yt_player = videojs;
 
 var versionclient = "youtube.player.web_20250917_22_RC00"
-document.addEventListener("DOMContentLoaded", () => {
+
+document.addEventListener("DOMContentLoaded", () => { 
     // video.js 8 init - source can be seen in https://poketube.fun/static/vjs.min.js or the vjs.min.js file
     const video = videojs('video', {
         controls: true,
@@ -23,15 +24,36 @@ document.addEventListener("DOMContentLoaded", () => {
     const audioEl = document.getElementById('aud');
     let volGuard = false;
 
-    let syncing = false; 
-    let restarting = false; 
+    // global anti-ping-pong guard
+    let syncing = false; // prevents normal ping-pong
+    let restarting = false; // prevents loop-end ping-pong
 
-    // determine if looping is forced
-    const shouldLoop =
-        videoEl.loop ||
+    // FIX: dynamic loop intent + disable native loop to avoid double-looping & missing 'ended'
+    let desiredLoop =
+        !!videoEl.loop ||
         qs.get("loop") === "1" ||
         qs.get("loop") === "true" ||
         window.forceLoop === true;
+
+    // turn OFF native loop so 'ended' fires and we control both tracks together
+    try { videoEl.loop = false; videoEl.removeAttribute?.('loop'); } catch {}
+    try { audio.loop = false; audio.removeAttribute?.('loop'); } catch {}
+
+    // If someone toggles the <video loop> attribute at runtime, treat it as intent,
+    // but still keep native loop off (we loop manually to keep A/V locked).
+    try {
+        const loopObserver = new MutationObserver(muts => {
+            for (const m of muts) {
+                if (m.type === 'attributes' && m.attributeName === 'loop') {
+                    desiredLoop = videoEl.hasAttribute('loop') || !!videoEl.loop;
+                    // keep native loop disabled to prevent double restarts / missing 'ended'
+                    videoEl.removeAttribute('loop');
+                    videoEl.loop = false;
+                }
+            }
+        });
+        loopObserver.observe(videoEl, { attributes: true, attributeFilter: ['loop'] });
+    } catch {}
 
     // resolve initial sources robustly (works whether <audio src> or <source> children are used)
     const pickAudioSrc = () => {
@@ -84,6 +106,7 @@ document.addEventListener("DOMContentLoaded", () => {
     function safeSetCT(media, t) {
         try {
             if (!isFinite(t) || t < 0) return;
+            // NOTE: expects a *native* media element (videoEl/audio), not the video.js player
             media.currentTime = t;
         } catch {}
     }
@@ -287,21 +310,28 @@ document.addEventListener("DOMContentLoaded", () => {
                 if (mediaError.code === 1) return;
                 message = `Error ${mediaError.code}: ${mediaError.message || 'No message provided'} try to refresh the page?`;
             }
-            errorBox.textContent = message;
-            errorBox.style.display = 'block';
-            errorBox.style.width = 'fit-content';
+            if (errorBox) {
+                errorBox.textContent = message;
+                errorBox.style.display = 'block';
+                errorBox.style.width = 'fit-content';
+            }
         });
 
+        // FIX: suppress spurious 'ended' right after seeks (mobile/browser quirk guard)
         let wasPlayingBeforeSeek = false;
+        let suppressEndedUntil = 0;
+
         video.on('seeking', () => {
             if (restarting) return;
             wasPlayingBeforeSeek = !video.paused();
+            suppressEndedUntil = performance.now() + 500; // short grace period after seek
             audio.pause(); clearSyncLoop();
             const vt = Number(video.currentTime());
             if (Math.abs(vt - Number(audio.currentTime)) > 0.1) safeSetCT(audio, vt);
         });
         video.on('seeked', () => {
             if (restarting) return;
+            suppressEndedUntil = performance.now() + 200;
             const vt = Number(video.currentTime());
             if (Math.abs(vt - Number(audio.currentTime)) > 0.05) safeSetCT(audio, vt);
             if (wasPlayingBeforeSeek && bothPlayableAt(vt)) {
@@ -326,13 +356,18 @@ document.addEventListener("DOMContentLoaded", () => {
             if (Math.abs(vt - Number(audio.currentTime)) > 0.1) safeSetCT(audio, vt);
         });
 
-         const restartLoop = () => {
+        // --- unconditional looping with anti-pingpong ---
+        const restartLoop = () => {
             if (restarting) return;
             restarting = true;
             try {
                 clearSyncLoop();
-                safeSetCT(video, 0);
-                safeSetCT(audio, 0);
+
+                // FIX: actually reset BOTH media correctly; use video.js API for the player
+                const startAt = 0.001; // tiny offset so 'ended' doesn't immediately refire
+                video.currentTime(startAt);
+                safeSetCT(audio, startAt);
+
                 setTimeout(() => {
                     video.play()?.catch(()=>{});
                     audio.play()?.catch(()=>{});
@@ -344,15 +379,21 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         };
 
+        // FIX: use desiredLoop (dynamic) and ignore 'ended' fired during the seek grace window
         video.on('ended', () => {
-            if (shouldLoop) restartLoop();
+            if (restarting) return;
+            if (performance.now() < suppressEndedUntil) return;
+            if (desiredLoop) restartLoop();
             else { try { audio.pause(); } catch {}; clearSyncLoop(); }
         });
         audio.addEventListener('ended', () => {
-            if (shouldLoop) restartLoop();
+            if (restarting) return;
+            if (performance.now() < suppressEndedUntil) return;
+            if (desiredLoop) restartLoop();
             else { try { video.pause(); } catch {}; clearSyncLoop(); }
         });
- 
+        // -----------------------------
+
         document.addEventListener('fullscreenchange', () => {
             if (!document.fullscreenElement && !restarting) {
                 video.pause(); audio.pause(); clearSyncLoop();
@@ -360,7 +401,7 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 });
-
+ 
 
  // https://codeberg.org/ashley/poke/src/branch/main/src/libpoketube/libpoketube-youtubei-objects.json
 

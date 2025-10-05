@@ -26,7 +26,8 @@ document.addEventListener("DOMContentLoaded", () => {
     const videoEl = document.getElementById('video');
     const audio = document.getElementById('aud');
     const audioEl = document.getElementById('aud');
-
+    let volGuard = false;
+    
     // resolve initial sources robustly (works whether <audio src> or <source> children are used)
     const pickAudioSrc = () => {
         const s = audio?.getAttribute?.('src');

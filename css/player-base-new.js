@@ -2,7 +2,7 @@
 var _yt_player = videojs;
 
 var versionclient = "youtube.player.web_20250917_22_RC00"
-document.addEventListener("DOMContentLoaded", () => {
+ document.addEventListener("DOMContentLoaded", () => {
     // video.js 8 init - source can be seen in https://poketube.fun/static/vjs.min.js or the vjs.min.js file
     const video = videojs('video', {
         controls: true,
@@ -30,6 +30,7 @@ document.addEventListener("DOMContentLoaded", () => {
         audio.disableRemotePlayback = true;
         videoEl.setAttribute('playsinline', '');
         audio.setAttribute('playsinline', '');
+        audio.preload = 'auto';
     } catch {}
 
     // resolve initial sources robustly (works whether <audio src> or <source> children are used)
@@ -53,14 +54,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // thresholds / constants
     const BIG_DRIFT = 0.45;     // seconds → snap
-    const MICRO_DRIFT = 0.035;  // seconds → rate nudge (inaudible)
+    const MICRO_DRIFT = 0.035;  // seconds → tiny, inaudible nudge
     const EPS = 0.12;           // buffering epsilon
 
     // guards to prevent feedback loops / re-entrancy
     let volGuard = false;
-    let pauseGuard = false;
-    let playGuard = false;
-    let seekingGuard = false;
+    let syncingGuard = false;   // single-path sync guard
+    let suppressAudioAutonomy = true; // disallow audio to start/stop on its own
 
     // last time to detect wrap (loop)
     let lastVideoTime = 0;
@@ -98,6 +98,7 @@ document.addEventListener("DOMContentLoaded", () => {
         try { return !!video.loop?.() || !!videoEl.loop; } catch { return !!videoEl.loop; }
     }
 
+    // === VOLUME / MUTE MIRROR (both ways, loop-safe) ===
     function mirrorFromPlayerVolumeMute() {
         if (volGuard) return; volGuard = true;
         try {
@@ -124,26 +125,37 @@ document.addEventListener("DOMContentLoaded", () => {
     audio.addEventListener('volumechange', mirrorFromAudioVolumeMute);
     video.ready(() => mirrorFromPlayerVolumeMute());
 
-    function playBoth() {
-        if (playGuard) return;
-        playGuard = true;
-        audio.play()?.catch(()=>{});
+    // === MASTER/SLAVE CONTROL (video is master) ==============================
+    function playMaster() {
+        syncingGuard = true;
+        // play video first so the session favors it; audio follows
         video.play()?.catch(()=>{});
-        playGuard = false;
+        audio.play()?.catch(()=>{});
+        syncingGuard = false;
     }
-    function pauseBoth() {
-        if (pauseGuard) return;
-        pauseGuard = true;
+    function pauseMaster() {
+        syncingGuard = true;
         video.pause();
         audio.pause();
-        pauseGuard = false;
+        syncingGuard = false;
     }
 
-    // reflect platform-driven audio play/pause to player (but guard against echoes)
-    audio.addEventListener('play', () => { if (video.paused()) playBoth(); });
-    audio.addEventListener('pause', () => { if (!video.paused()) pauseBoth(); });
+    // Disallow autonomous audio transitions (prevents “audio plays/pauses on its own”)
+    audio.addEventListener('play', () => {
+        if (suppressAudioAutonomy && video.paused()) {
+            // if a platform tried to play audio alone, re-route to the master
+            audio.pause();
+            playMaster();
+        }
+    });
+    audio.addEventListener('pause', () => {
+        if (suppressAudioAutonomy && !video.paused()) {
+            // if a platform tried to pause audio alone, pause master
+            pauseMaster();
+        }
+    });
 
-    let msReady = false;
+    // === MEDIA SESSION (stable timeline + working seek) ===
     let lastMSPos = 0;
     let lastMSAt = 0;
     const MS_THROTTLE_MS = 250;
@@ -202,10 +214,10 @@ document.addEventListener("DOMContentLoaded", () => {
             updateMSPositionState(false);
         }
 
-        navigator.mediaSession.setActionHandler('play', () => { playBoth(); setStateTag(); });
-        navigator.mediaSession.setActionHandler('pause', () => { pauseBoth(); setStateTag(); });
-        navigator.mediaSession.setActionHandler('stop', () => {
-            pauseBoth();
+        navigator.mediaSession.setActionHandler('play',  () => { playMaster(); setStateTag(); });
+        navigator.mediaSession.setActionHandler('pause', () => { pauseMaster(); setStateTag(); });
+        navigator.mediaSession.setActionHandler('stop',  () => {
+            pauseMaster();
             try { video.currentTime(0); } catch {}
             try { audio.currentTime = 0; } catch {}
             setStateTag();
@@ -213,24 +225,32 @@ document.addEventListener("DOMContentLoaded", () => {
         navigator.mediaSession.setActionHandler('seekbackward', ({ seekOffset }) => {
             const skip = seekOffset || 10;
             const to = Math.max(0, Number(video.currentTime()) - skip);
-            video.currentTime(to); safeSetCT(audio, to);
+            syncingGuard = true;
+            video.currentTime(to);
+            safeSetCT(audio, to);
+            syncingGuard = false;
             setStateTag();
-            if (!video.paused()) playBoth();
+            if (!video.paused()) playMaster();
         });
         navigator.mediaSession.setActionHandler('seekforward', ({ seekOffset }) => {
             const skip = seekOffset || 10;
             const to = Number(video.currentTime()) + skip;
-            video.currentTime(to); safeSetCT(audio, to);
+            syncingGuard = true;
+            video.currentTime(to);
+            safeSetCT(audio, to);
+            syncingGuard = false;
             setStateTag();
-            if (!video.paused()) playBoth();
+            if (!video.paused()) playMaster();
         });
         navigator.mediaSession.setActionHandler('seekto', ({ seekTime, fastSeek }) => {
             if (!isFinite(seekTime)) return;
+            syncingGuard = true;
             if (fastSeek && 'fastSeek' in audio) { try { audio.fastSeek(seekTime); } catch { safeSetCT(audio, seekTime); } }
             else { safeSetCT(audio, seekTime); }
             video.currentTime(seekTime);
+            syncingGuard = false;
             setStateTag();
-            if (!video.paused()) playBoth();
+            if (!video.paused()) playMaster();
         });
 
         // keep MS timeline sane but light (no rAF)
@@ -238,8 +258,8 @@ document.addEventListener("DOMContentLoaded", () => {
         video.on('ratechange', () => updateMSPositionState(false));
         video.on('loadedmetadata', () => { lastMSPos = 0; updateMSPositionState(false); });
         video.on('durationchange', () => updateMSPositionState(false));
-        video.on('play', () => { try { navigator.mediaSession.playbackState = 'playing'; } catch {} updateMSPositionState(false); });
-        video.on('pause', () => { try { navigator.mediaSession.playbackState = 'paused'; } catch {} updateMSPositionState(false); });
+        video.on('play',  () => { try { navigator.mediaSession.playbackState = 'playing'; } catch {} updateMSPositionState(false); });
+        video.on('pause', () => { try { navigator.mediaSession.playbackState = 'paused';  } catch {} updateMSPositionState(false); });
         audio.addEventListener('loadedmetadata', () => updateMSPositionState(false));
         audio.addEventListener('timeupdate', () => updateMSPositionState(true));
 
@@ -251,11 +271,11 @@ document.addEventListener("DOMContentLoaded", () => {
         switch (e.code) {
             case 'AudioPlay':
             case 'MediaPlayPause':
-                if (video.paused()) playBoth();
-                else pauseBoth();
+                if (video.paused()) playMaster();
+                else pauseMaster();
                 break;
             case 'AudioPause':
-                pauseBoth();
+                pauseMaster();
                 break;
             case 'AudioNext':
             case 'MediaTrackNext': {
@@ -272,21 +292,19 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 
-    // Strategy:
-    // - On every video 'timeupdate', align audio with gentle rate nudges.
-    // - Snap only on big drift or after seeks.
-    // - Avoid sync work at the exact loop boundary to prevent flicker.
+    // === EVENT-DRIVEN SYNC (no timers / no rAF) ==============================
+    // Video is master; we only adjust audio on video 'timeupdate'.
     video.on('timeupdate', () => {
+        if (syncingGuard) return;
         const vt = Number(video.currentTime());
         const at = Number(audio.currentTime);
         if (!isFinite(vt) || !isFinite(at)) return;
 
         // detect wrap (loop) via time going backwards
         if (vt + 0.02 < lastVideoTime && isLooping()) {
-            // video just wrapped to ~0 → hard reset audio to match; keep playing
             safeSetCT(audio, vt);
-            playBoth();
-            lastMSPos = 0; // keep MS timeline calm
+            playMaster();
+            lastMSPos = 0;
             updateMSPositionState(false);
             lastVideoTime = vt;
             return;
@@ -297,48 +315,51 @@ document.addEventListener("DOMContentLoaded", () => {
 
         const delta = vt - at;
 
+        // large drift → snap audio
         if (Math.abs(delta) > BIG_DRIFT) {
             safeSetCT(audio, vt);
             try { audio.playbackRate = 1; } catch {}
             return;
         }
 
+        // micro drift → rate nudge on audio (low impact)
         if (Math.abs(delta) > MICRO_DRIFT) {
             const target = 1 + (delta * 0.12);
-            try { audio.playbackRate = Math.max(0.95, Math.min(1.05, target)); } catch {}
+            try { audio.playbackRate = Math.max(0.97, Math.min(1.03, target)); } catch {}
         } else {
             try { audio.playbackRate = 1; } catch {}
         }
     });
 
+    // === SEEK COUPLING (video drives; audio follows) =========================
     let wasPlayingBeforeSeek = false;
     video.on('seeking', () => {
-        seekingGuard = true;
+        syncingGuard = true;
         wasPlayingBeforeSeek = !video.paused();
-        pauseBoth();
-        const vt = Number(video.currentTime());
-        if (Math.abs(vt - Number(audio.currentTime)) > 0.08) safeSetCT(audio, vt);
+        // don't pause video here; letting Video.js drive keeps UI smooth
+        safeSetCT(audio, Number(video.currentTime()));
         updateMSPositionState(false);
     });
     video.on('seeked', () => {
-        const vt = Number(video.currentTime());
-        if (Math.abs(vt - Number(audio.currentTime)) > 0.04) safeSetCT(audio, vt);
-        if (wasPlayingBeforeSeek && bothPlayableAt(vt)) playBoth();
-        seekingGuard = false;
+        safeSetCT(audio, Number(video.currentTime()));
+        syncingGuard = false;
+        if (wasPlayingBeforeSeek && bothPlayableAt(Number(video.currentTime()))) playMaster();
         updateMSPositionState(false);
     });
 
+    // === BUFFERING HANDLING (gentle; skip right-before-loop) =================
     video.on('waiting', () => {
-        // avoid false pauses within ~250ms of loop wrap
         const dur = Number(video.duration());
         const vt = Number(video.currentTime());
-        if (isLooping() && isFinite(dur) && isFinite(vt) && dur - vt < 0.25) return;
-        pauseBoth();
+        if (isLooping() && isFinite(dur) && isFinite(vt) && dur - vt < 0.25) return; // ignore near-loop waits
+        // let Video.js control UI; just keep audio aligned and paused
+        audio.pause();
     });
     video.on('playing', () => {
-        playBoth();
+        if (!video.paused()) audio.play()?.catch(()=>{});
     });
 
+    // === ERROR UI (ignore code 1) ============================================
     const errorBox = document.getElementById('loopedIndicator');
     video.on('error', () => {
         const mediaError = video.error();
@@ -354,30 +375,38 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 
+    // === END / LOOP BEHAVIOR (force smooth loop) =============================
     video.on('ended', () => {
         if (isLooping()) {
             safeSetCT(audio, 0);
-            playBoth();
+            video.currentTime(0);
+            playMaster();
             lastMSPos = 0;
             updateMSPositionState(false);
         } else {
-            pauseBoth();
+            // normal end: keep audio paused too
+            audio.pause();
         }
     });
     audio.addEventListener('ended', () => {
         if (isLooping()) {
             safeSetCT(audio, 0);
-            if (video.paused()) playBoth();
+            if (video.paused()) {
+                video.currentTime(0);
+                playMaster();
+            }
             lastMSPos = 0;
             updateMSPositionState(false);
         } else {
-            pauseBoth();
+            // normal end → do nothing special; video end handler governs
         }
     });
 
     // pause when exiting full screen :3 
     document.addEventListener('fullscreenchange', () => {
-        if (!document.fullscreenElement) pauseBoth();
+        if (!document.fullscreenElement) {
+            pauseMaster();
+        }
     });
 
     // generic one-shot retry helper for DOM media element (quiet)
@@ -404,11 +433,10 @@ document.addEventListener("DOMContentLoaded", () => {
             const t = Number(video.currentTime());
             if (isFinite(t) && Math.abs(Number(audio.currentTime) - t) > 0.1) safeSetCT(audio, t);
             if (bothPlayableAt(t)) {
-                // start audio first, then video to make the video own the session
-                audio.play()?.catch(()=>{});
-                video.play()?.catch(()=>{});
+                playMaster();
             } else {
-                pauseBoth();
+                audio.pause();
+                video.pause();
             }
             setupMediaSession();
         }
@@ -428,12 +456,13 @@ document.addEventListener("DOMContentLoaded", () => {
         const tryKick = () => {
             if (audioReady && videoReady && video.paused()) {
                 const t = Number(video.currentTime());
-                if (bothPlayableAt(t)) playBoth();
+                if (bothPlayableAt(t)) playMaster();
             }
         };
         video.el().addEventListener('click', tryKick, { once: true });
     });
 });
+ 
  
 
  // https://codeberg.org/ashley/poke/src/branch/main/src/libpoketube/libpoketube-youtubei-objects.json

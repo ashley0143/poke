@@ -2,7 +2,7 @@
 var _yt_player = videojs;
 
 var versionclient = "youtube.player.web_20250917_22_RC00"
-
+ 
  document.addEventListener("DOMContentLoaded", () => { 
     // video.js 8 init - source can be seen in https://poketube.fun/static/vjs.min.js or the vjs.min.js file
     const video = videojs('video', {
@@ -28,12 +28,17 @@ var versionclient = "youtube.player.web_20250917_22_RC00"
     let syncing = false; // prevents normal ping-pong
     let restarting = false; // prevents loop-end ping-pong
 
-    // FIX: dynamic loop intent + disable native loop to avoid double-looping & missing 'ended'
+    // FIX: explicit loop-state variables
     let desiredLoop =
         !!videoEl.loop ||
         qs.get("loop") === "1" ||
         qs.get("loop") === "true" ||
         window.forceLoop === true;
+
+    // FIX: tracks the short window *during* a loop restart where we auto-kick playback
+    let isLoopingCycle = false;
+    const LOOP_AUTOPLAY_RETRY_MS = 120;
+    const LOOP_AUTOPLAY_RETRIES = 10;
 
     // turn OFF native loop so 'ended' fires and we control both tracks together
     try { videoEl.loop = false; videoEl.removeAttribute?.('loop'); } catch {}
@@ -269,7 +274,8 @@ var versionclient = "youtube.player.web_20250917_22_RC00"
 
         // sync-safe play/pause handlers
         video.on('pause', () => {
-            if (syncing || restarting) return;
+            // FIX: if we’re in a loop restart, ignore transient pauses
+            if (syncing || restarting || isLoopingCycle) return;
             syncing = true;
             try { if (!audio.paused) audio.pause(); } catch {}
             clearSyncLoop();
@@ -278,8 +284,7 @@ var versionclient = "youtube.player.web_20250917_22_RC00"
 
         // FIX: do NOT mirror audio -> video; this was causing ping-pong after restarts
         audio.addEventListener('pause', () => {
-            if (syncing || restarting) return;
-            // just stop sync loop; do not pause video from here
+            if (syncing || restarting || isLoopingCycle) return;
             clearSyncLoop();
         });
 
@@ -292,14 +297,19 @@ var versionclient = "youtube.player.web_20250917_22_RC00"
             })().finally(() => { syncing = false; });
         });
 
-        // FIX: do NOT mirror audio -> video; only ensure loop running if audio resumes
+        // Ensure loop running if audio resumes
         audio.addEventListener('play', () => {
             if (syncing || restarting) return;
             if (!syncInterval) startSyncLoop();
         });
 
-        video.on('waiting', () => { if (!restarting) { try { audio.pause(); } catch{}; clearSyncLoop(); } });
-        video.on('playing', () => { if (audioReady && !restarting) audio.play()?.catch(()=>{}); if (!syncInterval) startSyncLoop(); });
+        video.on('waiting', () => { if (!restarting && !isLoopingCycle) { try { audio.pause(); } catch{}; clearSyncLoop(); } });
+        video.on('playing', () => {
+            if (audioReady && !restarting) audio.play()?.catch(()=>{});
+            if (!syncInterval) startSyncLoop();
+            // FIX: once we truly start playing after a loop, clear the loop-cycle flag
+            if (isLoopingCycle) isLoopingCycle = false;
+        });
 
         const errorBox = document.getElementById('loopedIndicator');
         video.on('error', () => {
@@ -388,6 +398,24 @@ var versionclient = "youtube.player.web_20250917_22_RC00"
             tick();
         });
 
+        // FIX: retry kicker used only during loop restarts
+        const autoKickDuringLoop = async () => {
+            let tries = 0;
+            const tick = async () => {
+                if (!isLoopingCycle) return;
+                const vPaused = video.paused();
+                const aPaused = audio.paused;
+                if (!vPaused && !aPaused) { isLoopingCycle = false; return; }
+                tries++;
+                await tryPlay(video, true);
+                await tryPlay(audio, false);
+                if (tries < LOOP_AUTOPLAY_RETRIES && isLoopingCycle) {
+                    setTimeout(tick, LOOP_AUTOPLAY_RETRY_MS);
+                }
+            };
+            setTimeout(tick, LOOP_AUTOPLAY_RETRY_MS);
+        };
+
         // --- unconditional looping with anti-pingpong ---
         const restartLoop = async () => {
             if (restarting) return;
@@ -399,44 +427,39 @@ var versionclient = "youtube.player.web_20250917_22_RC00"
                 try { video.pause(); } catch {}
                 try { audio.pause(); } catch {}
 
-                // FIX: actually reset BOTH media correctly; use video.js API for the player
                 const startAt = 0.001; // tiny offset so 'ended' doesn't immediately refire
                 suppressEndedUntil = performance.now() + 1000; // ignore stray 'ended' during restart
                 video.currentTime(startAt);
                 safeSetCT(audio, startAt);
 
-                // wait until both are ready to resume; don't spin forever
                 await waitUntilPlayable(startAt, 1000);
 
-                // try to start both; if blocked, muted fallback inside tryPlay()
+                // initial start attempt
                 const vOk = await tryPlay(video, /*isVjsPlayer*/ true);
                 const aOk = await tryPlay(audio, /*isVjsPlayer*/ false);
 
-                if (!(vOk && aOk)) {
-                    await new Promise(r => setTimeout(r, 120));
-                    await (vOk ? Promise.resolve() : tryPlay(video, true));
-                    await (aOk ? Promise.resolve() : tryPlay(audio, false));
-                }
+                // schedule gentle retries if either failed (autoplay policy, decode lag, etc.)
+                if (!(vOk && aOk)) autoKickDuringLoop();
 
                 if (!syncInterval) startSyncLoop();
             } catch {
-                // swallow and drop through
+                // swallow
             } finally {
                 restarting = false;
             }
         };
 
-        // FIX: use desiredLoop (dynamic) and ignore 'ended' fired during the seek grace window
+        // FIX: use desiredLoop (dynamic) and set isLoopingCycle so we know to auto-kick
         video.on('ended', () => {
             if (restarting) return;
             if (performance.now() < suppressEndedUntil) return;
-            if (desiredLoop) restartLoop();
+            if (desiredLoop) { isLoopingCycle = true; restartLoop(); }
             else { try { audio.pause(); } catch {}; clearSyncLoop(); }
         });
         audio.addEventListener('ended', () => {
             if (restarting) return;
             if (performance.now() < suppressEndedUntil) return;
-            if (desiredLoop) restartLoop();
+            if (desiredLoop) { isLoopingCycle = true; restartLoop(); }
             else { try { video.pause(); } catch {}; clearSyncLoop(); }
         });
         // -----------------------------
@@ -448,8 +471,6 @@ var versionclient = "youtube.player.web_20250917_22_RC00"
         });
     }
 });
- 
-
 
  // https://codeberg.org/ashley/poke/src/branch/main/src/libpoketube/libpoketube-youtubei-objects.json
 

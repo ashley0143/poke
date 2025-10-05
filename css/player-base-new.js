@@ -2,8 +2,8 @@
 var _yt_player = videojs;
 
 var versionclient = "youtube.player.web_20250917_22_RC00"
-
-document.addEventListener("DOMContentLoaded", () => {
+ 
+ document.addEventListener("DOMContentLoaded", () => {
   const player = videojs("video", {
     controls: true,
     autoplay: false,
@@ -11,6 +11,7 @@ document.addEventListener("DOMContentLoaded", () => {
     errorDisplay: false,
   });
 
+  // quick params + lightweight progress seed
   const qs = new URLSearchParams(location.search);
   const qua = qs.get("quality") || "";
   const vidKey = qs.get("v");
@@ -52,10 +53,13 @@ document.addEventListener("DOMContentLoaded", () => {
   let mediaSessionReady = false;
 
   // sync knobs
-  const BIG_DRIFT   = 0.45;   // snap threshold (s)
-  const MICRO_DRIFT = 0.035;  // subtle rate nudge (s)
-  const EPS         = 0.12;   // buffer epsilon (s)
-  const AHEAD_PAD   = 0.35;   // require this much forward buffer before resuming
+  const BIG_DRIFT   = 0.45;  // snap threshold (s)
+  const MICRO_DRIFT = 0.035; // subtle rate nudge (s)
+  const EPS         = 0.12;  // buffer epsilon (s)
+
+  // buffer gate knobs (simple, conservative)
+  const MIN_AHEAD_PLAY    = 0.20; // allow play when at least this much ahead is buffered
+  const MIN_AHEAD_UNSTALL = 0.60; // to leave a 'waiting' state, ensure a little more headroom
 
   // guards
   let volGuard = false;
@@ -64,49 +68,49 @@ document.addEventListener("DOMContentLoaded", () => {
   let autosyncTimer = null;
   const AUTOSYNC_MS = 400;
 
-  // seeking flags
+  // seeking flags (so pausing audio for seeks won't pause the video)
   let audioPauseForSeek = false;
   let playerSeekWasPlaying = false;
 
   // loop detection
   let lastVideoTime = 0;
 
-  // helpers
-  function hasBufferedRange(media) {
-    try { return media && media.buffered && media.buffered.length > 0; } catch { return false; }
-  }
-  function timeInBuffered(media, t) {
+  // --- buffer helpers (the "loading bar" checks) ---
+  function bufferedAheadSec(media, t) {
     try {
       const br = media.buffered;
-      if (!br || br.length === 0 || !isFinite(t)) return false;
+      if (!br || br.length === 0 || !isFinite(t)) return 0;
       for (let i = 0; i < br.length; i++) {
-        const s = br.start(i) - EPS, e = br.end(i) + EPS;
-        if (t >= s && t <= e) return true;
+        const s = br.start(i), e = br.end(i);
+        if (t >= s - EPS && t <= e + EPS) return Math.max(0, e - t);
       }
     } catch {}
-    return false;
+    return 0;
   }
-  function bufferedAhead(media, t, need = AHEAD_PAD) {
+  function hasBufferedAtLeast(media, t, minAhead) {
     try {
-      const br = media.buffered;
-      if (!br || br.length === 0 || !isFinite(t)) return false;
-      for (let i = 0; i < br.length; i++) {
-        const s = br.start(i) - EPS, e = br.end(i) + EPS;
-        if (t >= s && t <= e) return (e - t) >= Math.max(0.05, need);
-      }
-    } catch {}
-    return false;
+      const rs = Number(media.readyState || 0);
+      // MDN: HAVE_FUTURE_DATA (3) ≈ some future frames; HAVE_ENOUGH_DATA (4) ≈ can likely play through
+      // We still insist on a tiny ahead-buffer to be safe across browsers.
+      if (!isFinite(t)) return false;
+      const ahead = bufferedAheadSec(media, t);
+      if (rs >= 3) return ahead >= Math.max(0, minAhead); // gate by look-ahead seconds
+      return ahead >= Math.max(minAhead, 0.25); // if readyState < 3, be stricter
+    } catch { return false; }
   }
+  function bothHaveBufferedAtLeast(t, minAhead) {
+    return hasBufferedAtLeast(videoEl, t, minAhead) && hasBufferedAtLeast(audioEl, t, minAhead);
+  }
+  function timeInBuffered(media, t) { return bufferedAheadSec(media, t) > 0; }
   function canPlayAt(media, t) {
     try {
-      const rs = Number(media.readyState || 0); // 0..4
+      const rs = Number(media.readyState || 0);
       if (!isFinite(t)) return false;
-      if (rs >= 3) return true;                 // HAVE_FUTURE_DATA
+      if (rs >= 3) return true; // HAVE_FUTURE_DATA
       return timeInBuffered(media, t);
     } catch { return false; }
   }
   function bothPlayableAt(t) { return canPlayAt(videoEl, t) && canPlayAt(audioEl, t); }
-  function bothHaveForwardData(t) { return bufferedAhead(videoEl, t) && bufferedAhead(audioEl, t); }
   function safeSetCT(media, t) { try { if (isFinite(t) && t >= 0) media.currentTime = t; } catch {} }
   const clamp01 = v => Math.max(0, Math.min(1, Number(v)));
   function isLooping() { try { return !!player.loop?.() || !!videoEl.loop; } catch { return !!videoEl.loop; } }
@@ -156,26 +160,72 @@ document.addEventListener("DOMContentLoaded", () => {
     couplingGuard = false;
   }
 
-  // video is the boss
+  // buffer-gated resume (central brain)
+  let resumeWatchersAttached = false;
+  const RESUME_EVENTS = ["progress","canplay","canplaythrough","playing","loadeddata"];
+
+  function resumeIfReady() {
+    const t = Number(player.currentTime());
+    if (!isFinite(t)) return;
+    // If both already buffered enough, resume; else do nothing (stay paused quietly).
+    if (bothHaveBufferedAtLeast(t, MIN_AHEAD_UNSTALL)) {
+      detachResumeWatchers();
+      playBoth();
+      return;
+    }
+    // If user is on a fully buffered spot but very small headroom, don't spam; the watchers will retrigger soon.
+  }
+
+  function attachResumeWatchers() {
+    if (resumeWatchersAttached) return;
+    [videoEl, audioEl].forEach(el => RESUME_EVENTS.forEach(ev => el.addEventListener(ev, resumeIfReady, { passive: true })));
+    resumeWatchersAttached = true;
+  }
+  function detachResumeWatchers() {
+    if (!resumeWatchersAttached) return;
+    [videoEl, audioEl].forEach(el => RESUME_EVENTS.forEach(ev => el.removeEventListener(ev, resumeIfReady)));
+    resumeWatchersAttached = false;
+  }
+
+  function gatePauseThenResume() {
+    // Called on buffering; pauses and only resumes when we have clear headroom
+    pauseBoth();
+    attachResumeWatchers();
+    resumeIfReady();
+  }
+
+  // video is the boss: when it plays/pauses, audio mirrors (but we still gate on buffer)
   player.on("play", () => {
-    if (audioEl.paused) audioEl.play()?.catch(()=>{});
-    startAutosync();
+    const t = Number(player.currentTime());
+    if (bothHaveBufferedAtLeast(t, MIN_AHEAD_PLAY)) {
+      if (audioEl.paused) audioEl.play()?.catch(()=>{});
+      startAutosync();
+    } else {
+      gatePauseThenResume();
+    }
     try { if ("mediaSession" in navigator) navigator.mediaSession.playbackState = "playing"; } catch {}
   });
   player.on("pause", () => {
     if (!audioEl.paused) audioEl.pause();
     stopAutosync();
+    detachResumeWatchers();
     try { if ("mediaSession" in navigator) navigator.mediaSession.playbackState = "paused"; } catch {}
   });
 
-  // if the platform touches audio alone, route through video
-  audioEl.addEventListener("play", () => { if (player.paused()) playBoth(); });
+  // if the platform tries to play/pause audio alone, route through video
+  audioEl.addEventListener("play", () => {
+    if (player.paused()) {
+      const t = Number(player.currentTime());
+      if (bothHaveBufferedAtLeast(t, MIN_AHEAD_PLAY)) playBoth();
+      else gatePauseThenResume();
+    }
+  });
   audioEl.addEventListener("pause", () => {
-    if (audioPauseForSeek) return;
-    if (!player.paused()) pauseBoth();
+    if (audioPauseForSeek) return;           // our deliberate pause (do not pause video)
+    if (!player.paused()) pauseBoth();       // any other pause → keep them in lockstep
   });
 
-  // media-session timeline
+  // media-session timeline (keeps OS seekbar calm)
   let lastMSPos = 0, lastMSAt = 0;
   const MS_THROTTLE_MS = 250;
   function getDuration() {
@@ -193,6 +243,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
     let pos = Number(player.currentTime());
     if (!isFinite(pos) || pos < 0) pos = 0;
+
+    // avoid flicker; allow jump-back only on real loop wrap
     if (pos + 0.2 < lastMSPos && isLooping()) lastMSPos = 0;
     else {
       if (pos < lastMSPos && (lastMSPos - pos) < 0.2) pos = lastMSPos;
@@ -242,15 +294,13 @@ document.addEventListener("DOMContentLoaded", () => {
         audioPauseForSeek = false;
       }
       tagState();
-
-      // only resume if the spot is actually buffered enough (loading bar shows data)
-      if (wasPlaying) {
-        if (bothPlayableAt(targetTime) && bothHaveForwardData(targetTime)) playBoth();
-        else waitForBufferedThenPlay(targetTime);
-      }
+      // buffer-gated resume on OS seekbar actions
+      const t = Number(player.currentTime());
+      if (wasPlaying && bothHaveBufferedAtLeast(t, MIN_AHEAD_PLAY)) playBoth();
+      else gatePauseThenResume();
     }
 
-    navigator.mediaSession.setActionHandler("play",  () => { playBoth(); tagState(); });
+    navigator.mediaSession.setActionHandler("play",  () => { const t = Number(player.currentTime()); if (bothHaveBufferedAtLeast(t, MIN_AHEAD_PLAY)) playBoth(); else gatePauseThenResume(); tagState(); });
     navigator.mediaSession.setActionHandler("pause", () => { pauseBoth(); tagState(); });
     navigator.mediaSession.setActionHandler("stop",  () => {
       pauseBoth();
@@ -259,13 +309,18 @@ document.addEventListener("DOMContentLoaded", () => {
       tagState();
     });
     navigator.mediaSession.setActionHandler("seekbackward", ({ seekOffset }) => {
-      const skip = seekOffset || 10; msSeekTo(Math.max(0, Number(player.currentTime()) - skip));
+      const skip = seekOffset || 10;
+      const to = Math.max(0, Number(player.currentTime()) - skip);
+      msSeekTo(to);
     });
     navigator.mediaSession.setActionHandler("seekforward", ({ seekOffset }) => {
-      const skip = seekOffset || 10; msSeekTo(Number(player.currentTime()) + skip);
+      const skip = seekOffset || 10;
+      const to = Number(player.currentTime()) + skip;
+      msSeekTo(to);
     });
     navigator.mediaSession.setActionHandler("seekto", ({ seekTime }) => {
-      if (!isFinite(seekTime)) return; msSeekTo(seekTime);
+      if (!isFinite(seekTime)) return;
+      msSeekTo(seekTime);
     });
 
     player.on("timeupdate", () => updateMSPositionState(true));
@@ -284,12 +339,13 @@ document.addEventListener("DOMContentLoaded", () => {
   document.addEventListener("keydown", e => {
     switch (e.code) {
       case "AudioPlay":
-      case "MediaPlayPause":
-        if (player.paused()) playBoth(); else pauseBoth();
+      case "MediaPlayPause": {
+        const t = Number(player.currentTime());
+        if (player.paused()) { if (bothHaveBufferedAtLeast(t, MIN_AHEAD_PLAY)) playBoth(); else gatePauseThenResume(); }
+        else pauseBoth();
         break;
-      case "AudioPause":
-        pauseBoth();
-        break;
+      }
+      case "AudioPause": pauseBoth(); break;
       case "AudioNext":
       case "MediaTrackNext": {
         const t = Number(player.currentTime()) + 10;
@@ -305,28 +361,14 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  // tiny helper to resume only when “loading bar” covers the target
-  function waitForBufferedThenPlay(targetTime) {
-    const onProgress = () => {
-      // check both elements have buffered forward at targetTime
-      if (bothPlayableAt(targetTime) && bothHaveForwardData(targetTime)) {
-        videoEl.removeEventListener("progress", onProgress);
-        audioEl.removeEventListener("progress", onProgress);
-        playBoth();
-      }
-    };
-    videoEl.addEventListener("progress", onProgress);
-    audioEl.addEventListener("progress", onProgress);
-  }
-
-  // one sync step used by events + autosyncer
+  // single-shot sync step used by events + autosyncer
   function doSyncOnce() {
     if (syncGuard) return;
     const vt = Number(player.currentTime());
     const at = Number(audioEl.currentTime);
     if (!isFinite(vt) || !isFinite(at)) return;
 
-    // fast loop wrap handling
+    // handle loop wrap cleanly
     if (vt + 0.02 < lastVideoTime && isLooping()) {
       safeSetCT(audioEl, vt);
       if (player.paused()) playBoth();
@@ -367,39 +409,29 @@ document.addEventListener("DOMContentLoaded", () => {
     autosyncTimer = null;
   }
 
-  // when user drags the player's seekbar: pause audio first; if target spot isn’t buffered, wait for it
+  // when user drags the player's own seekbar: if buffered, resume immediately; if not, wait quietly
   player.on("seeking", () => {
     syncGuard = true;
     playerSeekWasPlaying = !player.paused();
-
-    const target = Number(player.currentTime());
     audioPauseForSeek = true;
     try { audioEl.pause(); } catch {}
-    safeSetCT(audioEl, target);
-    audioPauseForSeek = false;
-
-    // if the “loading bar” already covers target on both, we can resume immediately later in 'seeked'
-    // otherwise we’ll delay resume until progress says it’s buffered
-    if (playerSeekWasPlaying && !(bothPlayableAt(target) && bothHaveForwardData(target))) {
-      waitForBufferedThenPlay(target);
-    }
-
-    updateMSPositionState(false);
-  });
-
-  player.on("seeked", () => {
     const target = Number(player.currentTime());
     safeSetCT(audioEl, target);
+    audioPauseForSeek = false;
+    updateMSPositionState(false);
+  });
+  player.on("seeked", () => {
+    const t = Number(player.currentTime());
+    safeSetCT(audioEl, t);
     syncGuard = false;
-
     if (playerSeekWasPlaying) {
-      if (bothPlayableAt(target) && bothHaveForwardData(target)) playBoth();
-      // else we already registered a progress listener in seeking()
+      if (bothHaveBufferedAtLeast(t, MIN_AHEAD_PLAY)) playBoth();
+      else gatePauseThenResume();
     }
     updateMSPositionState(false);
   });
 
-  // if some platform UI seeks the audio directly, mirror time but don’t let it desync
+  // if some platform UI seeks the audio directly, mirror time but don't let it desync
   audioEl.addEventListener("seeking", () => {
     const at = Number(audioEl.currentTime) || 0;
     syncGuard = true;
@@ -415,28 +447,25 @@ document.addEventListener("DOMContentLoaded", () => {
     updateMSPositionState(false);
   });
 
-  // buffering: if we don’t have buffered-ahead at current point, keep both paused; resume only when buffer advances
+  // light buffering handling; ignore spinner right at loop boundary
   player.on("waiting", () => {
-    const t = Number(player.currentTime());
-    const d = Number(player.duration());
-    if (isLooping() && isFinite(d) && isFinite(t) && d - t < 0.25) return; // ignore spinner right at loop boundary
-
-    try { audioEl.pause(); } catch {}
-    // resume when buffer reaches us
-    const onProgress = () => {
-      if (bothPlayableAt(t) && bothHaveForwardData(t)) {
-        videoEl.removeEventListener("progress", onProgress);
-        audioEl.removeEventListener("progress", onProgress);
-        if (!player.paused()) playBoth();
-      }
-    };
-    videoEl.addEventListener("progress", onProgress);
-    audioEl.addEventListener("progress", onProgress);
+    const dur = Number(player.duration());
+    const vt = Number(player.currentTime());
+    if (isLooping() && isFinite(dur) && isFinite(vt) && dur - vt < 0.25) return;
+    gatePauseThenResume();
   });
+  // explicit network stalls behave the same
+  videoEl.addEventListener("stalled", () => { gatePauseThenResume(); }, { passive: true });
 
   player.on("playing", () => {
-    if (!player.paused()) audioEl.play()?.catch(()=>{});
-    startAutosync();
+    // only start audio if both have enough, else stay paused & wait
+    const t = Number(player.currentTime());
+    if (bothHaveBufferedAtLeast(t, MIN_AHEAD_PLAY)) {
+      if (!player.paused()) audioEl.play()?.catch(()=>{});
+      startAutosync();
+    } else {
+      gatePauseThenResume();
+    }
   });
 
   // simple error surfacing
@@ -510,8 +539,9 @@ document.addEventListener("DOMContentLoaded", () => {
     if (audioReady && videoReady) {
       const t = Number(player.currentTime());
       if (isFinite(t) && Math.abs(Number(audioEl.currentTime) - t) > 0.1) safeSetCT(audioEl, t);
-      if (bothPlayableAt(t)) playBoth();
-      else { audioEl.pause(); player.pause(); }
+      // initial start honors buffer gate strictly
+      if (bothHaveBufferedAtLeast(t, MIN_AHEAD_PLAY)) playBoth();
+      else { pauseBoth(); attachResumeWatchers(); resumeIfReady(); }
       setupMediaSession();
     }
   }
@@ -528,16 +558,16 @@ document.addEventListener("DOMContentLoaded", () => {
   // one-time click to satisfy autoplay policies
   player.ready(() => {
     const tryKick = () => {
+      const t = Number(player.currentTime());
       if (audioReady && videoReady && player.paused()) {
-        const t = Number(player.currentTime());
-        if (bothPlayableAt(t)) playBoth();
+        if (bothHaveBufferedAtLeast(t, MIN_AHEAD_PLAY)) playBoth();
+        else gatePauseThenResume();
       }
     };
     player.el().addEventListener("click", tryKick, { once: true });
   });
 });
-
-
+ 
 
  // https://codeberg.org/ashley/poke/src/branch/main/src/libpoketube/libpoketube-youtubei-objects.json
 

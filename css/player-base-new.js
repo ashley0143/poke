@@ -3,40 +3,42 @@ var _yt_player = videojs;
 
 var versionclient = "youtube.player.web_20250917_22_RC00"
 
- document.addEventListener("DOMContentLoaded", () => {
-	const player = videojs('video', {
+document.addEventListener("DOMContentLoaded", () => {
+  // --- Player init -----------------------------------------------------------
+  const player = videojs('video', {
     controls: true,
     autoplay: false,
     preload: 'auto',
     errorDisplay: false,
   });
 
-  // raw media elements
   const videoEl = document.getElementById('video'); 
   const audioEl = document.getElementById('aud');
 
-  // make the separate audio non-target for remotes
+  // harden the hidden audio so it never steals focus / session
   try {
     audioEl.controls = false;
-    audioEl.setAttribute('controls', 'false');
-    audioEl.setAttribute('playsinline', '');
     audioEl.setAttribute('aria-hidden', 'true');
     audioEl.setAttribute('tabindex', '-1');
+    audioEl.setAttribute('controlslist', 'noplaybackrate nodownload noremoteplayback');
     audioEl.disableRemotePlayback = true;
   } catch {}
+  try {
+    videoEl.setAttribute('playsinline', '');
+    audioEl.setAttribute('playsinline', '');
+  } catch {}
 
-  // todo : remove this code lol
+  // Query params / progress seed
   const qs = new URLSearchParams(location.search);
   const qua = qs.get("quality") || "";
   const vidKey = qs.get('v') || '';
   try { if (vidKey) localStorage.setItem(`progress-${vidKey}`, 0); } catch {}
 
-  // resolve initial video src/type
+  // --- Source helpers --------------------------------------------------------
   const initialSrcObj = player.src();
   const initialVideoSrc = Array.isArray(initialSrcObj) ? (initialSrcObj[0]?.src || null) : (initialSrcObj || null);
   const initialVideoType = Array.isArray(initialSrcObj) ? (initialSrcObj[0]?.type || undefined) : undefined;
 
-  // resolve initial audio src
   function pickAudioSrc() {
     try {
       const s = audioEl?.getAttribute?.('src');
@@ -49,7 +51,6 @@ var versionclient = "youtube.player.web_20250917_22_RC00"
   }
   let audioSrc = pickAudioSrc();
 
-  // helpers to read current player src/type
   function currentVideoSrc() {
     const s = player.src();
     return Array.isArray(s) ? (s[0]?.src || null) : (s || null);
@@ -59,18 +60,17 @@ var versionclient = "youtube.player.web_20250917_22_RC00"
     return Array.isArray(s) ? (s[0]?.type || undefined) : undefined;
   }
 
-  // readiness + sync state
+  // --- State -----------------------------------------------------------------
   let audioReady = false, videoReady = false;
   let syncInterval = null;
   let mediaSessionReady = false;
 
-  // thresholds / constants
-  const BIG_DRIFT = 0.5;         // snap
-  const MICRO_DRIFT = 0.05;      // gentle nudge
-  const SYNC_INTERVAL_MS = 250;  // sync cadence
-  const EPS = 0.15;              // buffered margin
+  const BIG_DRIFT = 0.5;       // hard snap
+  const MICRO_DRIFT = 0.05;    // rate nudge
+  const SYNC_INTERVAL_MS = 250;
+  const EPS = 0.15;
 
-  // fix: helpers to decide if a given time is playable
+  // --- Utils -----------------------------------------------------------------
   function timeInBuffered(media, t) {
     try {
       const br = media.buffered;
@@ -93,13 +93,27 @@ var versionclient = "youtube.player.web_20250917_22_RC00"
   function bothPlayableAt(t) {
     return canPlayAt(videoEl, t) && canPlayAt(audioEl, t);
   }
-
-  // utility: safe currentTime set
   function safeSetCT(media, t) {
     try { if (isFinite(t) && t >= 0) media.currentTime = t; } catch {}
   }
+  function clamp01(v) { return Math.max(0, Math.min(1, Number(v))); }
 
-  // micro drift loop
+  // --- Duration helpers (make Media Session seekbar work) --------------------
+  function getDuration() {
+    // prefer video’s duration, then audio’s
+    let d = Number(videoEl.duration);
+    if (!isFinite(d) || d <= 0) d = Number(player.duration());
+    if (!isFinite(d) || d <= 0) d = Number(audioEl.duration);
+    return isFinite(d) && d > 0 ? d : null;
+  }
+  function nearEnd(pad = 0.25) {
+    const d = getDuration();
+    if (!d) return false;
+    const t = Number(player.currentTime());
+    return isFinite(t) && (d - t) <= Math.max(0.05, pad);
+  }
+
+  // --- Sync loop (micro-drift) ----------------------------------------------
   function clearSyncLoop() {
     if (syncInterval) {
       clearInterval(syncInterval);
@@ -113,8 +127,14 @@ var versionclient = "youtube.player.web_20250917_22_RC00"
       const vt = Number(player.currentTime());
       const at = Number(audioEl.currentTime);
       if (!isFinite(vt) || !isFinite(at)) return;
-      const delta = vt - at;
 
+      // pre-wrap assist: if looping and we're right before end, gently steer audio to 0 soon
+      if (isLooping() && nearEnd(0.18)) {
+        try { audioEl.playbackRate = 1; } catch {}
+        return; // avoid last-millisecond snaps that can confuse timeline
+      }
+
+      const delta = vt - at;
       if (Math.abs(delta) > BIG_DRIFT) {
         safeSetCT(audioEl, vt);
         try { audioEl.playbackRate = 1; } catch {}
@@ -129,13 +149,12 @@ var versionclient = "youtube.player.web_20250917_22_RC00"
     }, SYNC_INTERVAL_MS);
   }
 
-  // generic "ready" wiring for elements
+  // --- Simple attach-ready ---------------------------------------------------
   function attachReady(elm, resolveSrc, markReady) {
     const onLoaded = () => { try { markReady && markReady(); } catch {} tryStart(); };
     elm.addEventListener('loadeddata', onLoaded, { once: true });
     elm.addEventListener('loadedmetadata', onLoaded, { once: true });
 
-    // one quiet re-load if initial <source> nodes were used
     elm.addEventListener('error', () => {
       const retryURL = resolveSrc?.();
       if (retryURL) {
@@ -149,9 +168,8 @@ var versionclient = "youtube.player.web_20250917_22_RC00"
     }, { once: true });
   }
 
-  // volume & mute mirroring (both ways) with loop guard
+  // --- Volume & mute mirroring (both directions, loop-safe) -----------------
   let volSyncGuard = false;
-  function clamp01(v) { return Math.max(0, Math.min(1, Number(v))); }
 
   function mirrorFromPlayerVolumeMute() {
     if (volSyncGuard) return;
@@ -160,7 +178,7 @@ var versionclient = "youtube.player.web_20250917_22_RC00"
       const vMuted = !!player.muted();
       const vVol = clamp01(player.volume());
       audioEl.muted = vMuted;
-      audioEl.volume = vVol; // keep values equal so UI feels one-piece
+      if (!vMuted) audioEl.volume = vVol;
       try { videoEl.muted = vMuted; } catch {}
     } catch {}
     volSyncGuard = false;
@@ -172,18 +190,17 @@ var versionclient = "youtube.player.web_20250917_22_RC00"
       const aMuted = !!audioEl.muted;
       const aVol = clamp01(audioEl.volume);
       player.muted(aMuted);
-      player.volume(aVol);
+      if (!aMuted) player.volume(aVol);
       try { videoEl.muted = aMuted; } catch {}
     } catch {}
     volSyncGuard = false;
   }
 
-  // hook mirroring
   player.on('volumechange', mirrorFromPlayerVolumeMute);
   audioEl.addEventListener('volumechange', mirrorFromAudioVolumeMute);
   player.ready(() => mirrorFromPlayerVolumeMute());
 
-  // align start when both are ready
+  // --- Play/pause + seek coupling -------------------------------------------
   function tryStart() {
     if (audioReady && videoReady) {
       const t = Number(player.currentTime());
@@ -191,7 +208,7 @@ var versionclient = "youtube.player.web_20250917_22_RC00"
         safeSetCT(audioEl, t);
       }
       if (bothPlayableAt(t)) {
-        // claim control for video: play audio first, video last
+        // IMPORTANT: call player.play() LAST so the Video element owns the session
         audioEl.play()?.catch(()=>{});
         player.play()?.catch(()=>{});
         startSyncLoop();
@@ -204,26 +221,44 @@ var versionclient = "youtube.player.web_20250917_22_RC00"
     }
   }
 
-  // if only audio gets toggled by the platform, mirror to player
+  // When only the audio is directly played/paused by platform, mirror it.
   audioEl.addEventListener('play', () => { if (player.paused()) player.play()?.catch(()=>{}); });
   audioEl.addEventListener('pause', () => { if (!player.paused()) player.pause(); });
 
-  // media session / hardware keys
-  // throttle setPositionState to avoid elapsed timer jitter on notifications
-  let lastMSPosUpdate = 0;
-  const MS_UPDATE_EVERY = 500; // ms
-  function updateMSPositionState(throttle = true) {
-    try {
-      if (!('mediaSession' in navigator)) return;
-      if (!('setPositionState' in navigator.mediaSession)) return;
-      const now = Date.now();
-      if (throttle && (now - lastMSPosUpdate) < MS_UPDATE_EVERY) return;
-      lastMSPosUpdate = now;
+  // --- Media Session (stable, seekable, monotonic) ---------------------------
+  let lastMSPos = 0;
+  let lastMSAt = 0;
+  const MS_THROTTLE_MS = 250;
 
-      const duration = Number(player.duration()) || 0;
-      const position = Math.max(0, Math.min(duration || Infinity, Number(player.currentTime()) || 0));
-      const playbackRate = Number(player.playbackRate()) || 1;
-      navigator.mediaSession.setPositionState({ duration, playbackRate, position });
+  function updateMSPositionState(throttle = true) {
+    if (!('mediaSession' in navigator)) return;
+    const now = performance.now();
+    if (throttle && (now - lastMSAt) < MS_THROTTLE_MS) return;
+
+    const dur = getDuration();
+    if (!dur) return; // without finite duration many platforms won't show a seekbar
+
+    let pos = Number(player.currentTime());
+    if (!isFinite(pos) || pos < 0) pos = 0;
+
+    // enforce monotonic position except when loop wraps
+    if (pos + 0.2 < lastMSPos && isLooping()) {
+      lastMSPos = 0; // allow wrap to 0 cleanly
+    } else {
+      // prevent tiny backward jitter that makes the elapsed time flicker
+      if (pos < lastMSPos && (lastMSPos - pos) < 0.2) pos = lastMSPos;
+      lastMSPos = pos;
+    }
+    lastMSAt = now;
+
+    try {
+      if ('setPositionState' in navigator.mediaSession) {
+        navigator.mediaSession.setPositionState({
+          duration: dur,
+          playbackRate: Number(player.playbackRate()) || 1,
+          position: Math.max(0, Math.min(dur, pos))
+        });
+      }
     } catch {}
   }
 
@@ -241,20 +276,17 @@ var versionclient = "youtube.player.web_20250917_22_RC00"
     } catch {}
 
     function setState() {
-      try {
-        navigator.mediaSession.playbackState = player.paused() ? 'paused' : 'playing';
-      } catch {}
+      try { navigator.mediaSession.playbackState = player.paused() ? 'paused' : 'playing'; } catch {}
       updateMSPositionState(false);
     }
 
-    // media actions control both tracks; play video last so it owns the session
     navigator.mediaSession.setActionHandler('play', () => {
       audioEl.play()?.catch(()=>{});
       player.play()?.catch(()=>{});
       setState();
     });
     navigator.mediaSession.setActionHandler('pause', () => {
-      player.pause(); audioEl.pause(); setState(); clearSyncLoop();
+      player.pause(); audioEl.pause(); clearSyncLoop(); setState();
     });
     navigator.mediaSession.setActionHandler('stop', () => {
       player.pause(); audioEl.pause();
@@ -266,11 +298,14 @@ var versionclient = "youtube.player.web_20250917_22_RC00"
       const skip = seekOffset || 10;
       const to = Math.max(0, Number(player.currentTime()) - skip);
       player.currentTime(to); safeSetCT(audioEl, to); setState();
+      // keep playing if we were playing
+      if (!player.paused()) { audioEl.play()?.catch(()=>{}); player.play()?.catch(()=>{}); }
     });
     navigator.mediaSession.setActionHandler('seekforward', ({ seekOffset }) => {
       const skip = seekOffset || 10;
       const to = Number(player.currentTime()) + skip;
       player.currentTime(to); safeSetCT(audioEl, to); setState();
+      if (!player.paused()) { audioEl.play()?.catch(()=>{}); player.play()?.catch(()=>{}); }
     });
     navigator.mediaSession.setActionHandler('seekto', ({ seekTime, fastSeek }) => {
       if (!isFinite(seekTime)) return;
@@ -278,28 +313,24 @@ var versionclient = "youtube.player.web_20250917_22_RC00"
       else { safeSetCT(audioEl, seekTime); }
       player.currentTime(seekTime);
       setState();
+      // ensure both keep playing after a notification-drag seek
+      if (!player.paused()) { audioEl.play()?.catch(()=>{}); player.play()?.catch(()=>{}); }
     });
 
-    // keep position state sane and not jumpy
+    mediaSessionReady = true;
+
+    // keep the timeline sane but not jittery
     player.on('timeupdate', () => updateMSPositionState(true));
     player.on('ratechange', () => updateMSPositionState(false));
+    player.on('loadedmetadata', () => { lastMSPos = 0; updateMSPositionState(false); });
     player.on('durationchange', () => updateMSPositionState(false));
-    player.on('loadedmetadata', () => updateMSPositionState(false));
+    player.on('play', () => { try { navigator.mediaSession.playbackState = 'playing'; } catch {} updateMSPositionState(false); });
+    player.on('pause', () => { try { navigator.mediaSession.playbackState = 'paused'; } catch {} updateMSPositionState(false); });
+    audioEl.addEventListener('loadedmetadata', () => updateMSPositionState(false));
     audioEl.addEventListener('timeupdate', () => updateMSPositionState(true));
-
-    // reflect play/pause from both elements to mediaSession
-    const reflectState = () => {
-      try { navigator.mediaSession.playbackState = player.paused() ? 'paused' : 'playing'; } catch {}
-    };
-    player.on('play', reflectState);
-    player.on('pause', reflectState);
-    audioEl.addEventListener('play', reflectState);
-    audioEl.addEventListener('pause', reflectState);
-
-    mediaSessionReady = true;
   }
 
-  // ** DESKTOP MEDIA-KEY FALLBACK **
+  // --- Desktop media-key fallback -------------------------------------------
   document.addEventListener('keydown', e => {
     switch (e.code) {
       case 'AudioPlay':
@@ -325,33 +356,42 @@ var versionclient = "youtube.player.web_20250917_22_RC00"
     }
   });
 
+  // --- Primary coupling (skip when qua=medium) -------------------------------
   if (qua !== "medium") {
     attachReady(audioEl, pickAudioSrc, () => { audioReady = true; });
     attachReady(videoEl, () => currentVideoSrc() || initialVideoSrc, () => { videoReady = true; });
 
-    // rate sync (keep consistent feel)
+    // Keep rate aligned
     player.on('ratechange', () => { try { audioEl.playbackRate = player.playbackRate(); } catch {} });
 
-    // start: pull audio along, then play video to own the session
+    // Start: when player starts, pull audio along (player last to claim session)
     player.on('play', () => {
       if (!syncInterval) startSyncLoop();
       const vt = Number(player.currentTime());
       if (Math.abs(vt - Number(audioEl.currentTime)) > 0.3) safeSetCT(audioEl, vt);
       audioEl.play()?.catch(()=>{});
-      updateMSPositionState(false);
+      try { if ('mediaSession' in navigator) navigator.mediaSession.playbackState = 'playing'; } catch {}
     });
 
-    // pause: stop both and clear loop
     player.on('pause', () => {
       audioEl.pause(); clearSyncLoop();
-      updateMSPositionState(false);
+      try { if ('mediaSession' in navigator) navigator.mediaSession.playbackState = 'paused'; } catch {}
     });
 
-    // buffering: pause audio to avoid drift
-    player.on('waiting', () => { audioEl.pause(); clearSyncLoop(); });
-    player.on('playing', () => { audioEl.play()?.catch(()=>{}); if (!syncInterval) startSyncLoop(); });
+    // Buffering: don't pause right at loop boundary to avoid the stop-on-loop glitch
+    player.on('waiting', () => {
+      if (isLooping() && nearEnd(0.25)) {
+        // ignore transient waiting just before loop wrap
+        return;
+      }
+      audioEl.pause(); clearSyncLoop();
+    });
+    player.on('playing', () => {
+      audioEl.play()?.catch(()=>{});
+      if (!syncInterval) startSyncLoop();
+    });
 
-    // error ui (skip code 1)
+    // Error UI (skip code 1)
     const errorBox = document.getElementById('loopedIndicator');
     player.on('error', () => {
       const mediaError = player.error();
@@ -367,7 +407,7 @@ var versionclient = "youtube.player.web_20250917_22_RC00"
       }
     });
 
-    // seeks: keep tight alignment; resume only if playable
+    // Seek coupling (resume only if previously playing and frame is playable)
     let wasPlayingBeforeSeek = false;
     player.on('seeking', () => {
       wasPlayingBeforeSeek = !player.paused();
@@ -391,7 +431,7 @@ var versionclient = "youtube.player.web_20250917_22_RC00"
       updateMSPositionState(false);
     });
 
-    // nudge on buffered readiness
+    // Small nudges when fully buffered
     player.on('canplaythrough', () => {
       const vt = Number(player.currentTime());
       if (Math.abs(vt - Number(audioEl.currentTime)) > 0.1) safeSetCT(audioEl, vt);
@@ -401,23 +441,22 @@ var versionclient = "youtube.player.web_20250917_22_RC00"
       if (Math.abs(vt - Number(audioEl.currentTime)) > 0.1) safeSetCT(audioEl, vt);
     });
 
-    // loop-safe end behavior
+    // --- LOOP-SAFE END BEHAVIOR ---------------------------------------------
     function isLooping() {
       try { return !!player.loop?.() || !!videoEl.loop; } catch { return !!videoEl.loop; }
     }
 
     player.on('ended', () => {
       if (isLooping()) {
-        try { audioEl.pause(); } catch {}
+        // reset cleanly and keep playing; keep MS timeline monotonic with a forced update
         safeSetCT(audioEl, 0);
         audioEl.play()?.catch(()=>{});
         player.play()?.catch(()=>{});
+        lastMSPos = 0; updateMSPositionState(false);
         if (!syncInterval) startSyncLoop();
-        updateMSPositionState(false);
       } else {
         try { audioEl.pause(); } catch {}
         clearSyncLoop();
-        updateMSPositionState(false);
       }
     });
 
@@ -426,38 +465,38 @@ var versionclient = "youtube.player.web_20250917_22_RC00"
         safeSetCT(audioEl, 0);
         audioEl.play()?.catch(()=>{});
         if (player.paused()) player.play()?.catch(()=>{});
+        lastMSPos = 0; updateMSPositionState(false);
         if (!syncInterval) startSyncLoop();
-        updateMSPositionState(false);
       } else {
         try { player.pause(); } catch {}
         clearSyncLoop();
-        updateMSPositionState(false);
       }
     });
 
-    // pause when exiting full screen
+    // Exit fullscreen: pause both
     document.addEventListener('fullscreenchange', () => {
-      if (!document.fullscreenElement) { player.pause(); audioEl.pause(); clearSyncLoop(); updateMSPositionState(false); }
+      if (!document.fullscreenElement) {
+        player.pause(); audioEl.pause(); clearSyncLoop(); updateMSPositionState(false);
+      }
     });
   }
 
-  // --- autoplay / user-gesture nudge (mobile etc.) ---------------------------
-  // if autoplay was blocked, first click on the player will start both
+  // --- Autoplay / user-gesture nudge (Android etc.) -------------------------
   player.ready(() => {
-    setupMediaSession(); // install handlers early so notification seek works before media fully ready
     const tryKick = () => {
-      const t = Number(player.currentTime());
-      if (audioReady && videoReady && player.paused() && bothPlayableAt(t)) {
-        audioEl.play()?.catch(()=>{});
-        player.play()?.catch(()=>{});
-        startSyncLoop();
-        updateMSPositionState(false);
+      if (audioReady && videoReady && player.paused()) {
+        const t = Number(player.currentTime());
+        if (bothPlayableAt(t)) {
+          audioEl.play()?.catch(()=>{});
+          player.play()?.catch(()=>{});
+          startSyncLoop();
+        }
       }
     };
     player.el().addEventListener('click', tryKick, { once: true });
   });
 });
- 
+
  // https://codeberg.org/ashley/poke/src/branch/main/src/libpoketube/libpoketube-youtubei-objects.json
 
   

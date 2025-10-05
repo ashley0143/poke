@@ -22,7 +22,9 @@ document.addEventListener("DOMContentLoaded", () => {
     const audio = document.getElementById('aud');
     const audioEl = document.getElementById('aud');
     let volGuard = false;
-    let syncing = false; // prevents play/pause ping-pong
+
+    let syncing = false; 
+    let restarting = false; 
 
     // determine if looping is forced
     const shouldLoop =
@@ -116,7 +118,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     function tryStart() {
-        if (audioReady && videoReady) {
+        if (audioReady && videoReady && !restarting) {
             const t = Number(video.currentTime());
             if (isFinite(t) && Math.abs(Number(audio.currentTime) - t) > 0.1) safeSetCT(audio, t);
             if (bothPlayableAt(t)) {
@@ -155,10 +157,16 @@ document.addEventListener("DOMContentLoaded", () => {
             } catch {}
 
             navigator.mediaSession.setActionHandler('play', () => {
+                if (syncing || restarting) return;
+                syncing = true;
                 video.play()?.catch(()=>{}); audio.play()?.catch(()=>{});
+                syncing = false;
             });
             navigator.mediaSession.setActionHandler('pause', () => {
+                if (syncing || restarting) return;
+                syncing = true;
                 video.pause(); audio.pause();
+                syncing = false;
             });
             navigator.mediaSession.setActionHandler('seekbackward', ({ seekOffset }) => {
                 const skip = seekOffset || 10;
@@ -180,23 +188,31 @@ document.addEventListener("DOMContentLoaded", () => {
                 video.currentTime(seekTime);
             });
             navigator.mediaSession.setActionHandler('stop', () => {
+                if (syncing || restarting) return;
+                syncing = true;
                 video.pause(); audio.pause();
                 try { video.currentTime(0); } catch {}
                 try { audio.currentTime = 0; } catch {}
                 clearSyncLoop();
+                syncing = false;
             });
         }
     }
 
     document.addEventListener('keydown', e => {
+        if (syncing || restarting) return;
         switch (e.code) {
             case 'AudioPlay':
             case 'MediaPlayPause':
+                syncing = true;
                 if (video.paused()) { video.play()?.catch(()=>{}); audio.play()?.catch(()=>{}); }
                 else { video.pause(); audio.pause(); }
+                syncing = false;
                 break;
             case 'AudioPause':
+                syncing = true;
                 video.pause(); audio.pause();
+                syncing = false;
                 break;
             case 'AudioNext':
             case 'MediaTrackNext': {
@@ -232,36 +248,36 @@ document.addEventListener("DOMContentLoaded", () => {
 
         // sync-safe play/pause handlers
         video.on('pause', () => {
-            if (syncing) return;
+            if (syncing || restarting) return;
             syncing = true;
             try { if (!audio.paused) audio.pause(); } catch {}
             clearSyncLoop();
             syncing = false;
         });
         audio.addEventListener('pause', () => {
-            if (syncing) return;
+            if (syncing || restarting) return;
             syncing = true;
             try { if (!video.paused()) video.pause(); } catch {}
             clearSyncLoop();
             syncing = false;
         });
         video.on('play', () => {
-            if (syncing) return;
+            if (syncing || restarting) return;
             syncing = true;
             try { if (audio.paused) audio.play()?.catch(()=>{}); } catch {}
             if (!syncInterval) startSyncLoop();
             syncing = false;
         });
         audio.addEventListener('play', () => {
-            if (syncing) return;
+            if (syncing || restarting) return;
             syncing = true;
             try { if (video.paused()) video.play()?.catch(()=>{}); } catch {}
             if (!syncInterval) startSyncLoop();
             syncing = false;
         });
 
-        video.on('waiting', () => { audio.pause(); clearSyncLoop(); });
-        video.on('playing', () => { if (audioReady) audio.play()?.catch(()=>{}); if (!syncInterval) startSyncLoop(); });
+        video.on('waiting', () => { if (!restarting) { audio.pause(); clearSyncLoop(); } });
+        video.on('playing', () => { if (audioReady && !restarting) audio.play()?.catch(()=>{}); if (!syncInterval) startSyncLoop(); });
 
         const errorBox = document.getElementById('loopedIndicator');
         video.on('error', () => {
@@ -278,12 +294,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
         let wasPlayingBeforeSeek = false;
         video.on('seeking', () => {
+            if (restarting) return;
             wasPlayingBeforeSeek = !video.paused();
             audio.pause(); clearSyncLoop();
             const vt = Number(video.currentTime());
             if (Math.abs(vt - Number(audio.currentTime)) > 0.1) safeSetCT(audio, vt);
         });
         video.on('seeked', () => {
+            if (restarting) return;
             const vt = Number(video.currentTime());
             if (Math.abs(vt - Number(audio.currentTime)) > 0.05) safeSetCT(audio, vt);
             if (wasPlayingBeforeSeek && bothPlayableAt(vt)) {
@@ -296,24 +314,34 @@ document.addEventListener("DOMContentLoaded", () => {
                 clearSyncLoop();
             }
         });
+
         video.on('canplaythrough', () => {
+            if (restarting) return;
             const vt = Number(video.currentTime());
             if (Math.abs(vt - Number(audio.currentTime)) > 0.1) safeSetCT(audio, vt);
         });
         audio.addEventListener('canplaythrough', () => {
+            if (restarting) return;
             const vt = Number(video.currentTime());
             if (Math.abs(vt - Number(audio.currentTime)) > 0.1) safeSetCT(audio, vt);
         });
 
-        // --- unconditional looping ---
-        const restartLoop = () => {
+         const restartLoop = () => {
+            if (restarting) return;
+            restarting = true;
             try {
+                clearSyncLoop();
                 safeSetCT(video, 0);
                 safeSetCT(audio, 0);
-                video.play()?.catch(()=>{});
-                audio.play()?.catch(()=>{});
-                if (!syncInterval) startSyncLoop();
-            } catch {}
+                setTimeout(() => {
+                    video.play()?.catch(()=>{});
+                    audio.play()?.catch(()=>{});
+                    if (!syncInterval) startSyncLoop();
+                    restarting = false;
+                }, 50);
+            } catch {
+                restarting = false;
+            }
         };
 
         video.on('ended', () => {
@@ -324,10 +352,9 @@ document.addEventListener("DOMContentLoaded", () => {
             if (shouldLoop) restartLoop();
             else { try { video.pause(); } catch {}; clearSyncLoop(); }
         });
-        // -----------------------------
-
+ 
         document.addEventListener('fullscreenchange', () => {
-            if (!document.fullscreenElement) {
+            if (!document.fullscreenElement && !restarting) {
                 video.pause(); audio.pause(); clearSyncLoop();
             }
         });

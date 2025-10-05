@@ -2,9 +2,9 @@
 var _yt_player = videojs;
 
 var versionclient = "youtube.player.web_20250917_22_RC00"
- document.addEventListener("DOMContentLoaded", () => {
-    // video.js 8 init - source can be seen in https://poketube.fun/static/vjs.min.js or the vjs.min.js file
-    const video = videojs('video', {
+ // video.js 8 init - source can be seen in https://poketube.fun/static/vjs.min.js or the vjs.min.js file
+document.addEventListener("DOMContentLoaded", () => {
+    const player = videojs('video', {
         controls: true,
         autoplay: false,
         preload: 'auto',
@@ -19,34 +19,34 @@ var versionclient = "youtube.player.web_20250917_22_RC00"
 
     // raw media elements
     const videoEl = document.getElementById('video');
-    const audio = document.getElementById('aud');
+    const audioEl = document.getElementById('aud');
 
     // harden hidden audio so it never steals session/focus
     try {
-        audio.controls = false;
-        audio.setAttribute('aria-hidden', 'true');
-        audio.setAttribute('tabindex', '-1');
-        audio.setAttribute('controlslist', 'noplaybackrate nodownload noremoteplayback');
-        audio.disableRemotePlayback = true;
+        audioEl.controls = false;
+        audioEl.setAttribute('aria-hidden', 'true');
+        audioEl.setAttribute('tabindex', '-1');
+        audioEl.setAttribute('controlslist', 'noplaybackrate nodownload noremoteplayback');
+        audioEl.disableRemotePlayback = true;
         videoEl.setAttribute('playsinline', '');
-        audio.setAttribute('playsinline', '');
-        audio.preload = 'auto';
+        audioEl.setAttribute('playsinline', '');
+        audioEl.preload = 'auto';
     } catch {}
 
     // resolve initial sources robustly (works whether <audio src> or <source> children are used)
     const pickAudioSrc = () => {
-        const s = audio?.getAttribute?.('src');
+        const s = audioEl?.getAttribute?.('src');
         if (s) return s;
-        const child = audio?.querySelector?.('source');
+        const child = audioEl?.querySelector?.('source');
         if (child?.getAttribute?.('src')) return child.getAttribute('src');
-        if (audio?.currentSrc) return audio.currentSrc;
+        if (audioEl?.currentSrc) return audioEl.currentSrc;
         return null;
     };
     let audioSrc = pickAudioSrc();
 
-    const srcObj = video.src();
-    const videoSrc = Array.isArray(srcObj) ? (srcObj[0] && srcObj[0].src) : srcObj;
-    const videoType = Array.isArray(srcObj) ? (srcObj[0] && srcObj[0].type) : undefined;
+    const srcObj = player.src();
+    const initialVideoSrc = Array.isArray(srcObj) ? (srcObj[0] && srcObj[0].src) : srcObj;
+    const initialVideoType = Array.isArray(srcObj) ? (srcObj[0] && srcObj[0].type) : undefined;
 
     // readiness + sync state
     let audioReady = false, videoReady = false;
@@ -59,8 +59,8 @@ var versionclient = "youtube.player.web_20250917_22_RC00"
 
     // guards to prevent feedback loops / re-entrancy
     let volGuard = false;
-    let syncingGuard = false;   // single-path sync guard
-    let suppressAudioAutonomy = true; // disallow audio to start/stop on its own
+    let syncGuard = false;        // prevents re-entrant sync work
+    let couplingGuard = false;    // prevents play/pause echo loops
 
     // last time to detect wrap (loop)
     let lastVideoTime = 0;
@@ -85,7 +85,7 @@ var versionclient = "youtube.player.web_20250917_22_RC00"
             return timeInBuffered(media, t);
         } catch { return false; }
     }
-    function bothPlayableAt(t) { return canPlayAt(videoEl, t) && canPlayAt(audio, t); }
+    function bothPlayableAt(t) { return canPlayAt(videoEl, t) && canPlayAt(audioEl, t); }
 
     // utility: safe currentTime set (avoid DOMExceptions before ready)
     function safeSetCT(media, t) { try { if (isFinite(t) && t >= 0) media.currentTime = t; } catch {} }
@@ -95,17 +95,17 @@ var versionclient = "youtube.player.web_20250917_22_RC00"
 
     // tiny helper: are we looping?
     function isLooping() {
-        try { return !!video.loop?.() || !!videoEl.loop; } catch { return !!videoEl.loop; }
+        try { return !!player.loop?.() || !!videoEl.loop; } catch { return !!videoEl.loop; }
     }
 
-    // === VOLUME / MUTE MIRROR (both ways, loop-safe) ===
+    // === VOLUME / MUTE MIRROR (both ways) ===
     function mirrorFromPlayerVolumeMute() {
         if (volGuard) return; volGuard = true;
         try {
-            const m = !!video.muted();
-            const v = clamp01(video.volume());
-            audio.muted = m;
-            if (!m) audio.volume = v;
+            const m = !!player.muted();
+            const v = clamp01(player.volume());
+            audioEl.muted = m;
+            if (!m) audioEl.volume = v;
             try { videoEl.muted = m; } catch {}
         } catch {}
         volGuard = false;
@@ -113,46 +113,54 @@ var versionclient = "youtube.player.web_20250917_22_RC00"
     function mirrorFromAudioVolumeMute() {
         if (volGuard) return; volGuard = true;
         try {
-            const m = !!audio.muted;
-            const v = clamp01(audio.volume);
-            video.muted(m);
-            if (!m) video.volume(v);
+            const m = !!audioEl.muted;
+            const v = clamp01(audioEl.volume);
+            player.muted(m);
+            if (!m) player.volume(v);
             try { videoEl.muted = m; } catch {}
         } catch {}
         volGuard = false;
     }
-    video.on('volumechange', mirrorFromPlayerVolumeMute);
-    audio.addEventListener('volumechange', mirrorFromAudioVolumeMute);
-    video.ready(() => mirrorFromPlayerVolumeMute());
+    player.on('volumechange', mirrorFromPlayerVolumeMute);
+    audioEl.addEventListener('volumechange', mirrorFromAudioVolumeMute);
+    player.ready(() => mirrorFromPlayerVolumeMute());
 
-    // === MASTER/SLAVE CONTROL (video is master) ==============================
-    function playMaster() {
-        syncingGuard = true;
-        // play video first so the session favors it; audio follows
-        video.play()?.catch(()=>{});
-        audio.play()?.catch(()=>{});
-        syncingGuard = false;
+    // === MASTER/SLAVE COUPLING (Video.js is master; STRICT) ===
+    function playBoth() {
+        if (couplingGuard) return;
+        couplingGuard = true;
+        // start video first so it owns the session; audio follows immediately
+        player.play()?.catch(()=>{});
+        audioEl.play()?.catch(()=>{});
+        couplingGuard = false;
     }
-    function pauseMaster() {
-        syncingGuard = true;
-        video.pause();
-        audio.pause();
-        syncingGuard = false;
+    function pauseBoth() {
+        if (couplingGuard) return;
+        couplingGuard = true;
+        player.pause();
+        audioEl.pause();
+        couplingGuard = false;
     }
 
-    // Disallow autonomous audio transitions (prevents “audio plays/pauses on its own”)
-    audio.addEventListener('play', () => {
-        if (suppressAudioAutonomy && video.paused()) {
-            // if a platform tried to play audio alone, re-route to the master
-            audio.pause();
-            playMaster();
-        }
+    // absolutely enforce: whenever video plays/pauses, audio mirrors (and vice-versa is blocked)
+    player.on('play', () => {
+        // ensure audio follows a user/UI-initiated play
+        if (audioEl.paused) audioEl.play()?.catch(()=>{});
+        // mark mediaSession state
+        try { if ('mediaSession' in navigator) navigator.mediaSession.playbackState = 'playing'; } catch {}
     });
-    audio.addEventListener('pause', () => {
-        if (suppressAudioAutonomy && !video.paused()) {
-            // if a platform tried to pause audio alone, pause master
-            pauseMaster();
-        }
+    player.on('pause', () => {
+        // ensure audio pauses when video pauses
+        if (!audioEl.paused) audioEl.pause();
+        try { if ('mediaSession' in navigator) navigator.mediaSession.playbackState = 'paused'; } catch {}
+    });
+
+    // block autonomous audio changes: if audio starts/stops by itself, force-follow the video
+    audioEl.addEventListener('play', () => {
+        if (player.paused()) playBoth();
+    });
+    audioEl.addEventListener('pause', () => {
+        if (!player.paused()) pauseBoth();
     });
 
     // === MEDIA SESSION (stable timeline + working seek) ===
@@ -162,8 +170,8 @@ var versionclient = "youtube.player.web_20250917_22_RC00"
 
     function getDuration() {
         let d = Number(videoEl.duration);
-        if (!isFinite(d) || d <= 0) d = Number(video.duration());
-        if (!isFinite(d) || d <= 0) d = Number(audio.duration);
+        if (!isFinite(d) || d <= 0) d = Number(player.duration());
+        if (!isFinite(d) || d <= 0) d = Number(audioEl.duration);
         return isFinite(d) && d > 0 ? d : null;
     }
     function updateMSPositionState(throttle = true) {
@@ -174,7 +182,7 @@ var versionclient = "youtube.player.web_20250917_22_RC00"
         const dur = getDuration();
         if (!dur) return;
 
-        let pos = Number(video.currentTime());
+        let pos = Number(player.currentTime());
         if (!isFinite(pos) || pos < 0) pos = 0;
 
         // monotonic timeline except on loop wrap
@@ -190,7 +198,7 @@ var versionclient = "youtube.player.web_20250917_22_RC00"
             if ('setPositionState' in navigator.mediaSession) {
                 navigator.mediaSession.setPositionState({
                     duration: dur,
-                    playbackRate: Number(video.playbackRate()) || 1,
+                    playbackRate: Number(player.playbackRate()) || 1,
                     position: Math.max(0, Math.min(dur, pos))
                 });
             }
@@ -209,59 +217,59 @@ var versionclient = "youtube.player.web_20250917_22_RC00"
             });
         } catch {}
 
-        function setStateTag() {
-            try { navigator.mediaSession.playbackState = video.paused() ? 'paused' : 'playing'; } catch {}
+        function tagState() {
+            try { navigator.mediaSession.playbackState = player.paused() ? 'paused' : 'playing'; } catch {}
             updateMSPositionState(false);
         }
 
-        navigator.mediaSession.setActionHandler('play',  () => { playMaster(); setStateTag(); });
-        navigator.mediaSession.setActionHandler('pause', () => { pauseMaster(); setStateTag(); });
+        navigator.mediaSession.setActionHandler('play',  () => { playBoth(); tagState(); });
+        navigator.mediaSession.setActionHandler('pause', () => { pauseBoth(); tagState(); });
         navigator.mediaSession.setActionHandler('stop',  () => {
-            pauseMaster();
-            try { video.currentTime(0); } catch {}
-            try { audio.currentTime = 0; } catch {}
-            setStateTag();
+            pauseBoth();
+            try { player.currentTime(0); } catch {}
+            try { audioEl.currentTime = 0; } catch {}
+            tagState();
         });
         navigator.mediaSession.setActionHandler('seekbackward', ({ seekOffset }) => {
             const skip = seekOffset || 10;
-            const to = Math.max(0, Number(video.currentTime()) - skip);
-            syncingGuard = true;
-            video.currentTime(to);
-            safeSetCT(audio, to);
-            syncingGuard = false;
-            setStateTag();
-            if (!video.paused()) playMaster();
+            const to = Math.max(0, Number(player.currentTime()) - skip);
+            syncGuard = true;
+            player.currentTime(to);
+            safeSetCT(audioEl, to);
+            syncGuard = false;
+            tagState();
+            if (!player.paused()) playBoth();
         });
         navigator.mediaSession.setActionHandler('seekforward', ({ seekOffset }) => {
             const skip = seekOffset || 10;
-            const to = Number(video.currentTime()) + skip;
-            syncingGuard = true;
-            video.currentTime(to);
-            safeSetCT(audio, to);
-            syncingGuard = false;
-            setStateTag();
-            if (!video.paused()) playMaster();
+            const to = Number(player.currentTime()) + skip;
+            syncGuard = true;
+            player.currentTime(to);
+            safeSetCT(audioEl, to);
+            syncGuard = false;
+            tagState();
+            if (!player.paused()) playBoth();
         });
         navigator.mediaSession.setActionHandler('seekto', ({ seekTime, fastSeek }) => {
             if (!isFinite(seekTime)) return;
-            syncingGuard = true;
-            if (fastSeek && 'fastSeek' in audio) { try { audio.fastSeek(seekTime); } catch { safeSetCT(audio, seekTime); } }
-            else { safeSetCT(audio, seekTime); }
-            video.currentTime(seekTime);
-            syncingGuard = false;
-            setStateTag();
-            if (!video.paused()) playMaster();
+            syncGuard = true;
+            if (fastSeek && 'fastSeek' in audioEl) { try { audioEl.fastSeek(seekTime); } catch { safeSetCT(audioEl, seekTime); } }
+            else { safeSetCT(audioEl, seekTime); }
+            player.currentTime(seekTime);
+            syncGuard = false;
+            tagState();
+            if (!player.paused()) playBoth();
         });
 
-        // keep MS timeline sane but light (no rAF)
-        video.on('timeupdate', () => updateMSPositionState(true));
-        video.on('ratechange', () => updateMSPositionState(false));
-        video.on('loadedmetadata', () => { lastMSPos = 0; updateMSPositionState(false); });
-        video.on('durationchange', () => updateMSPositionState(false));
-        video.on('play',  () => { try { navigator.mediaSession.playbackState = 'playing'; } catch {} updateMSPositionState(false); });
-        video.on('pause', () => { try { navigator.mediaSession.playbackState = 'paused';  } catch {} updateMSPositionState(false); });
-        audio.addEventListener('loadedmetadata', () => updateMSPositionState(false));
-        audio.addEventListener('timeupdate', () => updateMSPositionState(true));
+        // keep MS timeline sane but light
+        player.on('timeupdate', () => updateMSPositionState(true));
+        player.on('ratechange', () => updateMSPositionState(false));
+        player.on('loadedmetadata', () => { lastMSPos = 0; updateMSPositionState(false); });
+        player.on('durationchange', () => updateMSPositionState(false));
+        player.on('play',  () => { try { navigator.mediaSession.playbackState = 'playing'; } catch {} updateMSPositionState(false); });
+        player.on('pause', () => { try { navigator.mediaSession.playbackState = 'paused';  } catch {} updateMSPositionState(false); });
+        audioEl.addEventListener('loadedmetadata', () => updateMSPositionState(false));
+        audioEl.addEventListener('timeupdate', () => updateMSPositionState(true));
 
         mediaSessionReady = true;
     }
@@ -271,22 +279,22 @@ var versionclient = "youtube.player.web_20250917_22_RC00"
         switch (e.code) {
             case 'AudioPlay':
             case 'MediaPlayPause':
-                if (video.paused()) playMaster();
-                else pauseMaster();
+                if (player.paused()) playBoth();
+                else pauseBoth();
                 break;
             case 'AudioPause':
-                pauseMaster();
+                pauseBoth();
                 break;
             case 'AudioNext':
             case 'MediaTrackNext': {
-                const tFwd = Number(video.currentTime()) + 10;
-                video.currentTime(tFwd); safeSetCT(audio, tFwd);
+                const tFwd = Number(player.currentTime()) + 10;
+                player.currentTime(tFwd); safeSetCT(audioEl, tFwd);
                 break;
             }
             case 'AudioPrevious':
             case 'MediaTrackPrevious': {
-                const tBwd = Math.max(0, Number(video.currentTime()) - 10);
-                video.currentTime(tBwd); safeSetCT(audio, tBwd);
+                const tBwd = Math.max(0, Number(player.currentTime()) - 10);
+                player.currentTime(tBwd); safeSetCT(audioEl, tBwd);
                 break;
             }
         }
@@ -294,16 +302,17 @@ var versionclient = "youtube.player.web_20250917_22_RC00"
 
     // === EVENT-DRIVEN SYNC (no timers / no rAF) ==============================
     // Video is master; we only adjust audio on video 'timeupdate'.
-    video.on('timeupdate', () => {
-        if (syncingGuard) return;
-        const vt = Number(video.currentTime());
-        const at = Number(audio.currentTime);
+    player.on('timeupdate', () => {
+        if (syncGuard) return;
+        const vt = Number(player.currentTime());
+        const at = Number(audioEl.currentTime);
         if (!isFinite(vt) || !isFinite(at)) return;
 
-        // detect wrap (loop) via time going backwards
+        // detect wrap (loop) via time going backwards on the <video> element
         if (vt + 0.02 < lastVideoTime && isLooping()) {
-            safeSetCT(audio, vt);
-            playMaster();
+            safeSetCT(audioEl, vt);
+            // keep both playing right across the wrap
+            if (player.paused()) playBoth();
             lastMSPos = 0;
             updateMSPositionState(false);
             lastVideoTime = vt;
@@ -317,52 +326,51 @@ var versionclient = "youtube.player.web_20250917_22_RC00"
 
         // large drift → snap audio
         if (Math.abs(delta) > BIG_DRIFT) {
-            safeSetCT(audio, vt);
-            try { audio.playbackRate = 1; } catch {}
+            safeSetCT(audioEl, vt);
+            try { audioEl.playbackRate = 1; } catch {}
             return;
         }
 
         // micro drift → rate nudge on audio (low impact)
         if (Math.abs(delta) > MICRO_DRIFT) {
             const target = 1 + (delta * 0.12);
-            try { audio.playbackRate = Math.max(0.97, Math.min(1.03, target)); } catch {}
+            try { audioEl.playbackRate = Math.max(0.97, Math.min(1.03, target)); } catch {}
         } else {
-            try { audio.playbackRate = 1; } catch {}
+            try { audioEl.playbackRate = 1; } catch {}
         }
     });
 
     // === SEEK COUPLING (video drives; audio follows) =========================
     let wasPlayingBeforeSeek = false;
-    video.on('seeking', () => {
-        syncingGuard = true;
-        wasPlayingBeforeSeek = !video.paused();
-        // don't pause video here; letting Video.js drive keeps UI smooth
-        safeSetCT(audio, Number(video.currentTime()));
+    player.on('seeking', () => {
+        syncGuard = true;
+        wasPlayingBeforeSeek = !player.paused();
+        safeSetCT(audioEl, Number(player.currentTime()));
         updateMSPositionState(false);
     });
-    video.on('seeked', () => {
-        safeSetCT(audio, Number(video.currentTime()));
-        syncingGuard = false;
-        if (wasPlayingBeforeSeek && bothPlayableAt(Number(video.currentTime()))) playMaster();
+    player.on('seeked', () => {
+        safeSetCT(audioEl, Number(player.currentTime()));
+        syncGuard = false;
+        if (wasPlayingBeforeSeek && bothPlayableAt(Number(player.currentTime()))) playBoth();
         updateMSPositionState(false);
     });
 
     // === BUFFERING HANDLING (gentle; skip right-before-loop) =================
-    video.on('waiting', () => {
-        const dur = Number(video.duration());
-        const vt = Number(video.currentTime());
+    player.on('waiting', () => {
+        const dur = Number(player.duration());
+        const vt = Number(player.currentTime());
         if (isLooping() && isFinite(dur) && isFinite(vt) && dur - vt < 0.25) return; // ignore near-loop waits
-        // let Video.js control UI; just keep audio aligned and paused
-        audio.pause();
+        // let Video.js show spinner; keep audio paused to avoid desync noise
+        audioEl.pause();
     });
-    video.on('playing', () => {
-        if (!video.paused()) audio.play()?.catch(()=>{});
+    player.on('playing', () => {
+        if (!player.paused()) audioEl.play()?.catch(()=>{});
     });
 
     // === ERROR UI (ignore code 1) ============================================
     const errorBox = document.getElementById('loopedIndicator');
-    video.on('error', () => {
-        const mediaError = video.error();
+    player.on('error', () => {
+        const mediaError = player.error();
         let message = 'An unknown error occurred.';
         if (mediaError) {
             if (mediaError.code === 1) return;
@@ -376,37 +384,32 @@ var versionclient = "youtube.player.web_20250917_22_RC00"
     });
 
     // === END / LOOP BEHAVIOR (force smooth loop) =============================
-    video.on('ended', () => {
+    player.on('ended', () => {
         if (isLooping()) {
-            safeSetCT(audio, 0);
-            video.currentTime(0);
-            playMaster();
+            safeSetCT(audioEl, 0);
+            player.currentTime(0);
+            playBoth();
             lastMSPos = 0;
             updateMSPositionState(false);
         } else {
-            // normal end: keep audio paused too
-            audio.pause();
+            audioEl.pause();
         }
     });
-    audio.addEventListener('ended', () => {
+    audioEl.addEventListener('ended', () => {
         if (isLooping()) {
-            safeSetCT(audio, 0);
-            if (video.paused()) {
-                video.currentTime(0);
-                playMaster();
+            safeSetCT(audioEl, 0);
+            if (player.paused()) {
+                player.currentTime(0);
+                playBoth();
             }
             lastMSPos = 0;
             updateMSPositionState(false);
-        } else {
-            // normal end → do nothing special; video end handler governs
         }
     });
 
     // pause when exiting full screen :3 
     document.addEventListener('fullscreenchange', () => {
-        if (!document.fullscreenElement) {
-            pauseMaster();
-        }
+        if (!document.fullscreenElement) pauseBoth();
     });
 
     // generic one-shot retry helper for DOM media element (quiet)
@@ -430,13 +433,13 @@ var versionclient = "youtube.player.web_20250917_22_RC00"
     // align start when both are ready
     function tryStart() {
         if (audioReady && videoReady) {
-            const t = Number(video.currentTime());
-            if (isFinite(t) && Math.abs(Number(audio.currentTime) - t) > 0.1) safeSetCT(audio, t);
+            const t = Number(player.currentTime());
+            if (isFinite(t) && Math.abs(Number(audioEl.currentTime) - t) > 0.1) safeSetCT(audioEl, t);
             if (bothPlayableAt(t)) {
-                playMaster();
+                playBoth();
             } else {
-                audio.pause();
-                video.pause();
+                audioEl.pause();
+                player.pause();
             }
             setupMediaSession();
         }
@@ -444,26 +447,25 @@ var versionclient = "youtube.player.web_20250917_22_RC00"
 
     // attach ready
     if (qua !== "medium") {
-        attachReady(audio, pickAudioSrc, () => { audioReady = true; });
+        attachReady(audioEl, pickAudioSrc, () => { audioReady = true; });
         attachReady(videoEl, () => {
-            const s = video.src();
-            return Array.isArray(s) ? (s[0] && s[0].src) : (s || videoSrc);
+            const s = player.src();
+            return Array.isArray(s) ? (s[0] && s[0].src) : (s || initialVideoSrc);
         }, () => { videoReady = true; });
     }
 
     // Autoplay / user-gesture nudge (Android browsers esp.)
-    video.ready(() => {
+    player.ready(() => {
         const tryKick = () => {
-            if (audioReady && videoReady && video.paused()) {
-                const t = Number(video.currentTime());
-                if (bothPlayableAt(t)) playMaster();
+            if (audioReady && videoReady && player.paused()) {
+                const t = Number(player.currentTime());
+                if (bothPlayableAt(t)) playBoth();
             }
         };
-        video.el().addEventListener('click', tryKick, { once: true });
+        player.el().addEventListener('click', tryKick, { once: true });
     });
 });
- 
- 
+
 
  // https://codeberg.org/ashley/poke/src/branch/main/src/libpoketube/libpoketube-youtubei-objects.json
 

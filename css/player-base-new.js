@@ -3,8 +3,7 @@ var _yt_player = videojs;
 
 var versionclient = "youtube.player.web_20250917_22_RC00"
 
-
- document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", () => {
   const player = videojs("video", {
     controls: true,
     autoplay: false,
@@ -12,7 +11,7 @@ var versionclient = "youtube.player.web_20250917_22_RC00"
     errorDisplay: false,
   });
 
-   const qs = new URLSearchParams(location.search);
+  const qs = new URLSearchParams(location.search);
   const qua = qs.get("quality") || "";
   const vidKey = qs.get("v");
   try { if (vidKey) localStorage.setItem(`progress-${vidKey}`, 0); } catch {}
@@ -51,32 +50,31 @@ var versionclient = "youtube.player.web_20250917_22_RC00"
   // small state bag
   let audioReady = false, videoReady = false;
   let mediaSessionReady = false;
-  let desiredPlay = false;     // user's last intent (play/pause)
-  let buffering = false;       // are we buffering right now?
 
   // sync knobs
-  const BIG_DRIFT   = 0.45;  // snap threshold (s)
-  const MICRO_DRIFT = 0.035; // subtle rate nudge (s)
-  const EPS         = 0.12;  // buffer epsilon (s)
+  const BIG_DRIFT   = 0.45;   // snap threshold (s)
+  const MICRO_DRIFT = 0.035;  // subtle rate nudge (s)
+  const EPS         = 0.12;   // buffer epsilon (s)
+  const AHEAD_PAD   = 0.35;   // require this much forward buffer before resuming
 
   // guards
   let volGuard = false;
-  let syncGuard = false;
-  let couplingGuard = false;
-
-  // autosync + stall watchdog
+  let syncGuard = false;        // block re-entrant sync
+  let couplingGuard = false;    // block play/pause echo
   let autosyncTimer = null;
   const AUTOSYNC_MS = 400;
 
-  // stall detection
-  let lastProgressCT = 0;
-  let lastProgressAt = 0;
-  const STALL_MS = 800;      // if time doesn't advance for this long → buffering
+  // seeking flags
+  let audioPauseForSeek = false;
+  let playerSeekWasPlaying = false;
 
   // loop detection
   let lastVideoTime = 0;
 
   // helpers
+  function hasBufferedRange(media) {
+    try { return media && media.buffered && media.buffered.length > 0; } catch { return false; }
+  }
   function timeInBuffered(media, t) {
     try {
       const br = media.buffered;
@@ -88,37 +86,32 @@ var versionclient = "youtube.player.web_20250917_22_RC00"
     } catch {}
     return false;
   }
+  function bufferedAhead(media, t, need = AHEAD_PAD) {
+    try {
+      const br = media.buffered;
+      if (!br || br.length === 0 || !isFinite(t)) return false;
+      for (let i = 0; i < br.length; i++) {
+        const s = br.start(i) - EPS, e = br.end(i) + EPS;
+        if (t >= s && t <= e) return (e - t) >= Math.max(0.05, need);
+      }
+    } catch {}
+    return false;
+  }
   function canPlayAt(media, t) {
     try {
-      const rs = Number(media.readyState || 0);
+      const rs = Number(media.readyState || 0); // 0..4
       if (!isFinite(t)) return false;
-      if (rs >= 3) return true; // HAVE_FUTURE_DATA
+      if (rs >= 3) return true;                 // HAVE_FUTURE_DATA
       return timeInBuffered(media, t);
     } catch { return false; }
   }
   function bothPlayableAt(t) { return canPlayAt(videoEl, t) && canPlayAt(audioEl, t); }
+  function bothHaveForwardData(t) { return bufferedAhead(videoEl, t) && bufferedAhead(audioEl, t); }
   function safeSetCT(media, t) { try { if (isFinite(t) && t >= 0) media.currentTime = t; } catch {} }
   const clamp01 = v => Math.max(0, Math.min(1, Number(v)));
   function isLooping() { try { return !!player.loop?.() || !!videoEl.loop; } catch { return !!videoEl.loop; } }
 
-  // quick play/pause helpers
-  function playBoth() {
-    if (buffering) return;           // do not play while buffering
-    if (couplingGuard) return;
-    couplingGuard = true;
-    player.play()?.catch(()=>{});
-    audioEl.play()?.catch(()=>{});
-    couplingGuard = false;
-  }
-  function pauseBoth() {
-    if (couplingGuard) return;
-    couplingGuard = true;
-    player.pause();
-    audioEl.pause();
-    couplingGuard = false;
-  }
-
-  // mute/volume mirror
+  // keep mute/volume mirrored either way
   function mirrorFromPlayerVolumeMute() {
     if (volGuard) return; volGuard = true;
     try {
@@ -145,26 +138,41 @@ var versionclient = "youtube.player.web_20250917_22_RC00"
   audioEl.addEventListener("volumechange", mirrorFromAudioVolumeMute);
   player.ready(() => mirrorFromPlayerVolumeMute());
 
-  // track user's intent and enforce coupling
+  // one-button control helpers
+  function playBoth() {
+    if (couplingGuard) return;
+    couplingGuard = true;
+    player.play()?.catch(()=>{});
+    audioEl.play()?.catch(()=>{});
+    startAutosync();
+    couplingGuard = false;
+  }
+  function pauseBoth() {
+    if (couplingGuard) return;
+    couplingGuard = true;
+    player.pause();
+    audioEl.pause();
+    stopAutosync();
+    couplingGuard = false;
+  }
+
+  // video is the boss
   player.on("play", () => {
-    desiredPlay = true;
-    if (buffering) { pauseBoth(); return; }
     if (audioEl.paused) audioEl.play()?.catch(()=>{});
+    startAutosync();
     try { if ("mediaSession" in navigator) navigator.mediaSession.playbackState = "playing"; } catch {}
   });
   player.on("pause", () => {
-    desiredPlay = false;
     if (!audioEl.paused) audioEl.pause();
+    stopAutosync();
     try { if ("mediaSession" in navigator) navigator.mediaSession.playbackState = "paused"; } catch {}
   });
 
-  // kill autonomous audio play/pause unless matching desired state
-  audioEl.addEventListener("play", () => {
-    if (!desiredPlay) pauseBoth();
-    if (buffering) pauseBoth();
-  });
+  // if the platform touches audio alone, route through video
+  audioEl.addEventListener("play", () => { if (player.paused()) playBoth(); });
   audioEl.addEventListener("pause", () => {
-    if (desiredPlay && !buffering) playBoth();
+    if (audioPauseForSeek) return;
+    if (!player.paused()) pauseBoth();
   });
 
   // media-session timeline
@@ -185,7 +193,6 @@ var versionclient = "youtube.player.web_20250917_22_RC00"
 
     let pos = Number(player.currentTime());
     if (!isFinite(pos) || pos < 0) pos = 0;
-
     if (pos + 0.2 < lastMSPos && isLooping()) lastMSPos = 0;
     else {
       if (pos < lastMSPos && (lastMSPos - pos) < 0.2) pos = lastMSPos;
@@ -222,9 +229,9 @@ var versionclient = "youtube.player.web_20250917_22_RC00"
     };
 
     function msSeekTo(targetTime) {
-      const wasDesired = desiredPlay;
-      desiredPlay = wasDesired; // keep intent
-      pauseBoth();              // pause hard during seek to avoid ping-pong
+      const wasPlaying = !player.paused();
+      audioPauseForSeek = true;
+      try { audioEl.pause(); } catch {}
       syncGuard = true;
       try {
         if ("fastSeek" in audioEl) { try { audioEl.fastSeek(targetTime); } catch { safeSetCT(audioEl, targetTime); } }
@@ -232,31 +239,33 @@ var versionclient = "youtube.player.web_20250917_22_RC00"
         player.currentTime(targetTime);
       } finally {
         syncGuard = false;
+        audioPauseForSeek = false;
       }
       tagState();
-      // only resume if playable and the user wanted play
-      if (wasDesired && bothPlayableAt(Number(player.currentTime()))) playBoth();
+
+      // only resume if the spot is actually buffered enough (loading bar shows data)
+      if (wasPlaying) {
+        if (bothPlayableAt(targetTime) && bothHaveForwardData(targetTime)) playBoth();
+        else waitForBufferedThenPlay(targetTime);
+      }
     }
 
-    navigator.mediaSession.setActionHandler("play",  () => { desiredPlay = true;  if (!buffering) playBoth(); tagState(); });
-    navigator.mediaSession.setActionHandler("pause", () => { desiredPlay = false; pauseBoth(); tagState(); });
+    navigator.mediaSession.setActionHandler("play",  () => { playBoth(); tagState(); });
+    navigator.mediaSession.setActionHandler("pause", () => { pauseBoth(); tagState(); });
     navigator.mediaSession.setActionHandler("stop",  () => {
-      desiredPlay = false; pauseBoth();
+      pauseBoth();
       try { player.currentTime(0); } catch {}
       try { audioEl.currentTime = 0; } catch {}
       tagState();
     });
     navigator.mediaSession.setActionHandler("seekbackward", ({ seekOffset }) => {
-      const skip = seekOffset || 10;
-      msSeekTo(Math.max(0, Number(player.currentTime()) - skip));
+      const skip = seekOffset || 10; msSeekTo(Math.max(0, Number(player.currentTime()) - skip));
     });
     navigator.mediaSession.setActionHandler("seekforward", ({ seekOffset }) => {
-      const skip = seekOffset || 10;
-      msSeekTo(Number(player.currentTime()) + skip);
+      const skip = seekOffset || 10; msSeekTo(Number(player.currentTime()) + skip);
     });
     navigator.mediaSession.setActionHandler("seekto", ({ seekTime }) => {
-      if (!isFinite(seekTime)) return;
-      msSeekTo(seekTime);
+      if (!isFinite(seekTime)) return; msSeekTo(seekTime);
     });
 
     player.on("timeupdate", () => updateMSPositionState(true));
@@ -271,58 +280,56 @@ var versionclient = "youtube.player.web_20250917_22_RC00"
     mediaSessionReady = true;
   }
 
-  // media keys fallback
+  // hardware media keys (fallback)
   document.addEventListener("keydown", e => {
     switch (e.code) {
       case "AudioPlay":
       case "MediaPlayPause":
-        desiredPlay = player.paused();
-        if (desiredPlay && !buffering) playBoth(); else pauseBoth();
+        if (player.paused()) playBoth(); else pauseBoth();
         break;
       case "AudioPause":
-        desiredPlay = false; pauseBoth();
+        pauseBoth();
         break;
       case "AudioNext":
       case "MediaTrackNext": {
         const t = Number(player.currentTime()) + 10;
-        pauseBoth();
         player.currentTime(t); safeSetCT(audioEl, t);
-        if (desiredPlay && bothPlayableAt(t)) playBoth();
         break;
       }
       case "AudioPrevious":
       case "MediaTrackPrevious": {
         const t = Math.max(0, Number(player.currentTime()) - 10);
-        pauseBoth();
         player.currentTime(t); safeSetCT(audioEl, t);
-        if (desiredPlay && bothPlayableAt(t)) playBoth();
         break;
       }
     }
   });
 
-  // single sync step
+  // tiny helper to resume only when “loading bar” covers the target
+  function waitForBufferedThenPlay(targetTime) {
+    const onProgress = () => {
+      // check both elements have buffered forward at targetTime
+      if (bothPlayableAt(targetTime) && bothHaveForwardData(targetTime)) {
+        videoEl.removeEventListener("progress", onProgress);
+        audioEl.removeEventListener("progress", onProgress);
+        playBoth();
+      }
+    };
+    videoEl.addEventListener("progress", onProgress);
+    audioEl.addEventListener("progress", onProgress);
+  }
+
+  // one sync step used by events + autosyncer
   function doSyncOnce() {
     if (syncGuard) return;
     const vt = Number(player.currentTime());
     const at = Number(audioEl.currentTime);
     if (!isFinite(vt) || !isFinite(at)) return;
 
-    // stall watchdog: track real progress
-    if (!player.paused()) {
-      if (vt !== lastProgressCT) {
-        lastProgressCT = vt;
-        lastProgressAt = Date.now();
-      } else if ((Date.now() - lastProgressAt) > STALL_MS) {
-        // considered buffering → hard pause both
-        buffering = true;
-        pauseBoth();
-      }
-    }
-
-    // loop wrap
+    // fast loop wrap handling
     if (vt + 0.02 < lastVideoTime && isLooping()) {
       safeSetCT(audioEl, vt);
+      if (player.paused()) playBoth();
       lastMSPos = 0;
       updateMSPositionState(false);
       lastVideoTime = vt;
@@ -330,8 +337,7 @@ var versionclient = "youtube.player.web_20250917_22_RC00"
     }
     lastVideoTime = vt;
 
-    // if buffering or not playable, skip sync
-    if (buffering || !bothPlayableAt(vt)) return;
+    if (!bothPlayableAt(vt)) return;
 
     const delta = vt - at;
     if (Math.abs(delta) > BIG_DRIFT) {
@@ -347,10 +353,10 @@ var versionclient = "youtube.player.web_20250917_22_RC00"
     }
   }
 
-  // event-driven sync
+  // event-driven sync while foregrounded
   player.on("timeupdate", doSyncOnce);
 
-  // small autosync (also runs stall watchdog)
+  // cheap autosync in case timeupdate slows (background/lockscreen)
   function startAutosync() {
     if (autosyncTimer) return;
     autosyncTimer = setInterval(doSyncOnce, AUTOSYNC_MS);
@@ -361,29 +367,75 @@ var versionclient = "youtube.player.web_20250917_22_RC00"
     autosyncTimer = null;
   }
 
-  // treat any of these as "buffering now" → pause both, resume when playable
-  function markBuffering() {
-    buffering = true;
-    pauseBoth();
-  }
-  function tryUnbufferAndResume() {
-    // become unbuffered only when both sides can actually play at this time
-    const t = Number(player.currentTime());
-    if (bothPlayableAt(t)) {
-      buffering = false;
-      if (desiredPlay) playBoth();
+  // when user drags the player's seekbar: pause audio first; if target spot isn’t buffered, wait for it
+  player.on("seeking", () => {
+    syncGuard = true;
+    playerSeekWasPlaying = !player.paused();
+
+    const target = Number(player.currentTime());
+    audioPauseForSeek = true;
+    try { audioEl.pause(); } catch {}
+    safeSetCT(audioEl, target);
+    audioPauseForSeek = false;
+
+    // if the “loading bar” already covers target on both, we can resume immediately later in 'seeked'
+    // otherwise we’ll delay resume until progress says it’s buffered
+    if (playerSeekWasPlaying && !(bothPlayableAt(target) && bothHaveForwardData(target))) {
+      waitForBufferedThenPlay(target);
     }
-  }
 
-  player.on("waiting", markBuffering);
-  player.on("stalled", markBuffering);
-  player.on("suspend", markBuffering);
-  player.on("emptied", markBuffering);
+    updateMSPositionState(false);
+  });
 
-  player.on("canplay", tryUnbufferAndResume);
-  player.on("canplaythrough", tryUnbufferAndResume);
+  player.on("seeked", () => {
+    const target = Number(player.currentTime());
+    safeSetCT(audioEl, target);
+    syncGuard = false;
+
+    if (playerSeekWasPlaying) {
+      if (bothPlayableAt(target) && bothHaveForwardData(target)) playBoth();
+      // else we already registered a progress listener in seeking()
+    }
+    updateMSPositionState(false);
+  });
+
+  // if some platform UI seeks the audio directly, mirror time but don’t let it desync
+  audioEl.addEventListener("seeking", () => {
+    const at = Number(audioEl.currentTime) || 0;
+    syncGuard = true;
+    player.currentTime(at);
+    syncGuard = false;
+    updateMSPositionState(false);
+  });
+  audioEl.addEventListener("seeked", () => {
+    const at = Number(audioEl.currentTime) || 0;
+    syncGuard = true;
+    player.currentTime(at);
+    syncGuard = false;
+    updateMSPositionState(false);
+  });
+
+  // buffering: if we don’t have buffered-ahead at current point, keep both paused; resume only when buffer advances
+  player.on("waiting", () => {
+    const t = Number(player.currentTime());
+    const d = Number(player.duration());
+    if (isLooping() && isFinite(d) && isFinite(t) && d - t < 0.25) return; // ignore spinner right at loop boundary
+
+    try { audioEl.pause(); } catch {}
+    // resume when buffer reaches us
+    const onProgress = () => {
+      if (bothPlayableAt(t) && bothHaveForwardData(t)) {
+        videoEl.removeEventListener("progress", onProgress);
+        audioEl.removeEventListener("progress", onProgress);
+        if (!player.paused()) playBoth();
+      }
+    };
+    videoEl.addEventListener("progress", onProgress);
+    audioEl.addEventListener("progress", onProgress);
+  });
+
   player.on("playing", () => {
-    tryUnbufferAndResume();
+    if (!player.paused()) audioEl.play()?.catch(()=>{});
     startAutosync();
   });
 
@@ -403,24 +455,23 @@ var versionclient = "youtube.player.web_20250917_22_RC00"
     }
   });
 
-  // loop/end handling
+  // loop/end: never stop on loop
   player.on("ended", () => {
     if (isLooping()) {
       safeSetCT(audioEl, 0);
       player.currentTime(0);
-      if (!buffering && desiredPlay) playBoth();
+      playBoth();
       lastMSPos = 0;
       updateMSPositionState(false);
     } else {
-      desiredPlay = false;
-      pauseBoth();
+      audioEl.pause();
       stopAutosync();
     }
   });
   audioEl.addEventListener("ended", () => {
     if (isLooping()) {
       safeSetCT(audioEl, 0);
-      if (desiredPlay && !buffering && player.paused()) {
+      if (player.paused()) {
         player.currentTime(0);
         playBoth();
       }
@@ -431,15 +482,12 @@ var versionclient = "youtube.player.web_20250917_22_RC00"
     }
   });
 
-  // leave fullscreen → match intent but never play while buffering
+  // leaving fullscreen? pause cleanly
   document.addEventListener("fullscreenchange", () => {
-    if (!document.fullscreenElement) {
-      desiredPlay = false;
-      pauseBoth();
-    }
+    if (!document.fullscreenElement) pauseBoth();
   });
 
-  // tiny, quiet retry for <audio>/<video> load errors
+  // tiny, quiet retry on load error (helps <source> vs src cases)
   function attachReady(elm, resolveSrc, markReady) {
     const onLoaded = () => { try { markReady(); } catch {} tryStart(); };
     elm.addEventListener("loadeddata", onLoaded, { once: true });
@@ -462,8 +510,8 @@ var versionclient = "youtube.player.web_20250917_22_RC00"
     if (audioReady && videoReady) {
       const t = Number(player.currentTime());
       if (isFinite(t) && Math.abs(Number(audioEl.currentTime) - t) > 0.1) safeSetCT(audioEl, t);
-      desiredPlay = true;
-      tryUnbufferAndResume();
+      if (bothPlayableAt(t)) playBoth();
+      else { audioEl.pause(); player.pause(); }
       setupMediaSession();
     }
   }
@@ -477,15 +525,18 @@ var versionclient = "youtube.player.web_20250917_22_RC00"
     }, () => { videoReady = true; });
   }
 
-  // simple user-gesture nudge
+  // one-time click to satisfy autoplay policies
   player.ready(() => {
     const tryKick = () => {
-      desiredPlay = true;
-      tryUnbufferAndResume();
+      if (audioReady && videoReady && player.paused()) {
+        const t = Number(player.currentTime());
+        if (bothPlayableAt(t)) playBoth();
+      }
     };
     player.el().addEventListener("click", tryKick, { once: true });
   });
 });
+
 
 
  // https://codeberg.org/ashley/poke/src/branch/main/src/libpoketube/libpoketube-youtubei-objects.json

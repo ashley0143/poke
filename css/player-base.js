@@ -454,16 +454,6 @@ document.addEventListener("DOMContentLoaded", () => {
         }, () => { videoReady = true; });
     }
 
-    // Autoplay / user-gesture nudge (Android browsers esp.)
-    player.ready(() => {
-        const tryKick = () => {
-            if (audioReady && videoReady && player.paused()) {
-                const t = Number(player.currentTime());
-                if (bothPlayableAt(t)) playBoth();
-            }
-        };
-        player.el().addEventListener('click', tryKick, { once: true });
-    });
 });
 
 

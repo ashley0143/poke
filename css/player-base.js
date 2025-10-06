@@ -195,9 +195,15 @@ document.addEventListener("DOMContentLoaded", () => {
             try {
                 navigator.mediaSession.metadata = new MediaMetadata({
                     title: document.title || 'Video',
-                    artist: '',
+                    artist: authorchannelname,
                     album: '',
-                    artwork: []
+                    artwork: [
+                    {
+                    src: `https://i.ytimg.com/vi/${vidKey}/maxresdefault.jpg`,
+                    sizes: "1280x720",
+                    type: "image/jpeg"
+                    }
+                    ]
                 });
             } catch {}
             navigator.mediaSession.setActionHandler('play', () => playTogether());

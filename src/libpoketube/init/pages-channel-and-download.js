@@ -227,6 +227,31 @@ function channelurlfixer(text) {
       const tab = req.query.tab;
       const cache = {};
 
+async function fetchChannelPublishedJSON(id) {
+  const url = `https://www.youtube.com/feeds/videos.xml?channel_id=${encodeURIComponent(id)}`;
+  const res = await fetch(url, { headers: { accept: "application/atom+xml" } });
+  if (!res.ok) throw new Error(`HTTP ${res.status} for ${url}`);
+
+  const xml = await res.text();
+  const match = xml.match(/<feed[\s\S]*?<published>([^<]+)<\/published>/i);
+  if (!match) throw new Error("feed <published> not found");
+
+  const iso = match[1].trim();
+  const date = new Date(iso);
+  if (Number.isNaN(date.getTime())) throw new Error(`invalid date: ${iso}`);
+
+  const published = new Intl.DateTimeFormat("en-GB", {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+    timeZone: "UTC"
+  }).format(date);
+
+  return { ID: id, published };
+}
+
+const createdAccountGetDate = await fetchChannelPublishedJSON(ID);
+
       const continuation = req.query.continuation
         ? `&continuation=${req.query.continuation}`
         : "";
@@ -352,6 +377,7 @@ function channelurlfixer(text) {
         stream,
         tj,
         c,
+        createdAccountGetDate,
         cinv,
         convert,
         turntomins,

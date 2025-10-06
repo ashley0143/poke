@@ -2,7 +2,7 @@
 var _yt_player = videojs;
 
 var versionclient = "youtube.player.web_20250917_22_RC00"
- 
+
  document.addEventListener("DOMContentLoaded", () => { 
     const video = videojs('video', {
         controls: true,
@@ -253,27 +253,35 @@ var versionclient = "youtube.player.web_20250917_22_RC00"
         video.on('playing', markVPlaying);
         audio.addEventListener('playing', markAPlaying);
 
-        // simple guard fix for first-seek stuck/pingpong
+        // improved seek handling — pause only on large seeks
         let wasPlayingBeforeSeek = false;
+        let lastSeekTime = 0;
+        const SEEK_THRESHOLD = 1.5; // seconds — anything above this counts as "large seek"
+
         video.on('seeking', () => {
             if (restarting) return;
             wasPlayingBeforeSeek = !video.paused();
-            pauseTogether();
-            const vt = Number(video.currentTime());
-            safeSetCT(audio, vt);
+            lastSeekTime = Number(audio.currentTime) || 0;
         });
+
         video.on('seeked', () => {
             if (restarting) return;
             const vt = Number(video.currentTime());
+            const delta = Math.abs(vt - lastSeekTime);
+
             safeSetCT(audio, vt);
 
-            // BASIC FIX: ensure both are ready + synced before resume
-            setTimeout(() => {
-                const bothReady = bothPlayableAt(vt);
-                const bothStill = video.paused() && audio.paused;
-                if (wasPlayingBeforeSeek && bothReady) playTogether({ allowMutedRetry: true });
-                else if (!bothReady || bothStill) pauseTogether();
-            }, 180);
+            // only pause if the seek jump is large
+            if (delta > SEEK_THRESHOLD) {
+                pauseTogether();
+                setTimeout(() => {
+                    const bothReady = bothPlayableAt(vt);
+                    if (wasPlayingBeforeSeek && bothReady) playTogether({ allowMutedRetry: true });
+                }, 180);
+            } else {
+                // small seek: just keep them synced
+                if (wasPlayingBeforeSeek) playTogether({ allowMutedRetry: false });
+            }
         });
 
         async function restartLoop() {
@@ -308,7 +316,6 @@ var versionclient = "youtube.player.web_20250917_22_RC00"
         });
     }
 });
- 
  
 
  // https://codeberg.org/ashley/poke/src/branch/main/src/libpoketube/libpoketube-youtubei-objects.json

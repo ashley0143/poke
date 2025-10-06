@@ -425,67 +425,46 @@ document.addEventListener("DOMContentLoaded", () => {
             };
             tick();
         });
-        
-        // =========================================================================
-        // FIXED: SEEKING LOGIC TO PREVENT PING-PONG RACE CONDITION
-        // =========================================================================
-        
+
+        // suppress spurious 'ended' right after seeks (mobile/browser quirk guard)
+        let wasPlayingBeforeSeek = false;
+
         video.on('seeking', () => {
             if (restarting) return;
-            // FIXED: If another seek is already in progress, do nothing.
-            if (seekingInProgress) return;
-
-            seekingInProgress = true;
-            resumeAfterSeek = !video.paused(); // Capture state *before* any pauses.
-            vIsPlaying = false;
-            aIsPlaying = false;
-            
-            // Pause the audio immediately and stop the sync loop.
+            seekingInProgress = true;          // FIX
+            wasPlayingBeforeSeek = !video.paused();
+            resumeAfterSeek = wasPlayingBeforeSeek; // FIX
             try { audio.pause(); } catch {}
             clearSyncLoop();
-            
-            // Sync audio time to the video's new target time.
             const vt = Number(video.currentTime());
-            if (Math.abs(vt - Number(audio.currentTime)) > 0.1) {
-                safeSetCT(audio, vt);
-            }
+            if (Math.abs(vt - Number(audio.currentTime)) > 0.1) safeSetCT(audio, vt);
+            vIsPlaying = false; aIsPlaying = false; // FIX
         });
 
+        // ##########################################################################
+        // ## -------------------------- THE FIX IS HERE ------------------------- ##
+        // ##########################################################################
         video.on('seeked', async () => {
             if (restarting) return;
-            
-            // FIXED: This try/finally block is the core of the fix.
-            // The `finally` part ensures that our `seekingInProgress` guard is
-            // only lowered *after* all the async playback logic inside `try`
-            // has fully completed, preventing the race condition.
-            try {
-                const vt = Number(video.currentTime());
-                // Perform a final, more precise time sync.
-                if (Math.abs(vt - Number(audio.currentTime)) > 0.05) {
-                    safeSetCT(audio, vt);
-                }
 
+            const vt = Number(video.currentTime());
+            if (Math.abs(vt - Number(audio.currentTime)) > 0.05) safeSetCT(audio, vt);
+
+            try {
+                // FIX: only resume once the new point is playable; avoid first-load ping-pong
                 if (resumeAfterSeek) {
-                    // Wait until media is actually available at the new time.
                     await waitUntilPlayable(vt, 1000);
-                    // Now, tell the players to resume. The resulting 'play' events
-                    // will fire while `seekingInProgress` is still `true`, so their
-                    // handlers will correctly ignore them and not cause a loop.
                     await playTogether({ allowMutedRetry: false });
                 } else {
-                    // If we were paused before seeking, ensure we remain paused.
                     pauseTogether();
                 }
             } finally {
-                // This code will only run *after* `await playTogether` is done.
-                // It is now safe to lower the guard and reset the state for the
-                // next user interaction.
-                seekingInProgress = false;
-                resumeAfterSeek = false;
+                // By clearing the seeking flag *after* the play/pause action is complete,
+                // we prevent the 'play' and 'pause' event handlers from misfiring.
+                seekingInProgress = false; // FIX
+                resumeAfterSeek = false;   // FIX
             }
         });
-
-        // =========================================================================
 
         video.on('canplaythrough', () => {
             if (restarting || seekingInProgress) return; // FIX

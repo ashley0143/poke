@@ -54,6 +54,28 @@ var versionclient = "youtube.player.web_20250917_22_RC00"
     let seekingInProgress = false;
     let resumeAfterSeek = false;
 
+    // FIX: state arbiter watchdog (forces both to share same paused/playing state)
+    let arbiterTimer = null;
+    const ARBITER_MS = 150;
+    function startArbiter() {
+        if (arbiterTimer) clearInterval(arbiterTimer);
+        arbiterTimer = setInterval(() => {
+            if (syncing || restarting || seekingInProgress) return;
+
+            // treat "playing" strictly; ended counts as paused
+            const vPlaying = !video.paused() && !video.ended();
+            const aPlaying = !audio.paused && !audio.ended;
+
+            // if exactly one is playing, pause the one that is playing (safe + deterministic)
+            if (vPlaying && !aPlaying) {
+                try { video.pause(); } catch {}
+            } else if (aPlaying && !vPlaying) {
+                try { audio.pause(); } catch {}
+            }
+        }, ARBITER_MS);
+    }
+    function stopArbiter() { if (arbiterTimer) { clearInterval(arbiterTimer); arbiterTimer = null; } }
+
     // turn OFF native loop so 'ended' fires and we control both tracks together
     try { videoEl.loop = false; videoEl.removeAttribute?.('loop'); } catch {}
     try { audio.loop = false; audio.removeAttribute?.('loop'); } catch {}
@@ -487,6 +509,9 @@ var versionclient = "youtube.player.web_20250917_22_RC00"
                 pauseTogether();
             }
         });
+
+        // FIX: start the state-arbiter watchdog
+        startArbiter();
     }
 });
  

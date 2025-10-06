@@ -3,552 +3,543 @@ var _yt_player = videojs;
 
 var versionclient = "youtube.player.web_20250917_22_RC00"
 
-
-document.addEventListener("DOMContentLoaded", () => { 
-    // video.js 8 init - source can be seen in https://poketube.fun/static/vjs.min.js or the vjs.min.js file
-    const video = videojs('video', {
-        controls: true,
-        autoplay: false,
-        preload: 'auto',
-        errorDisplay: false,
-    });
-
-    // todo : remove this code lol
-    const qs = new URLSearchParams(window.location.search);
-    const qua = qs.get("quality") || "";
-    const vidKey = qs.get('v');
-    try { localStorage.setItem(`progress-${vidKey}`, 0); } catch {}
-
-    // raw media elements
-    const videoEl = document.getElementById('video');
-    const audio = document.getElementById('aud');
-    const audioEl = document.getElementById('aud');
-    let volGuard = false;
-
-    // FIX: inline playback hint for iOS/Safari
-    try { videoEl.setAttribute('playsinline', ''); videoEl.setAttribute('webkit-playsinline', ''); } catch {}
-
-    // global anti-ping-pong guard
-    let syncing = false; // prevents normal ping-pong
-    let restarting = false; // prevents loop-end ping-pong
-
-    // FIX: explicit loop-state variables
+ document.addEventListener("DOMContentLoaded", () => {     
+    // video.js 8 init - source can be seen in https://poketube.fun/static/vjs.min.js or the vjs.min.js file    
+    const video = videojs('video', {    
+        controls: true,    
+        autoplay: false,    
+        preload: 'auto',    
+        errorDisplay: false,    
+    });    
+    
+    // todo : remove this code lol    
+    const qs = new URLSearchParams(window.location.search);    
+    const qua = qs.get("quality") || "";    
+    const vidKey = qs.get('v');    
+    try { localStorage.setItem(`progress-${vidKey}`, 0); } catch {}    
+    
+    // raw media elements    
+    const videoEl = document.getElementById('video');    
+    const audio = document.getElementById('aud');    
+    const audioEl = document.getElementById('aud');    
+    let volGuard = false;    
+    
+    // FIX: ensure inline playback hint for iOS/Safari    
+    try { videoEl.setAttribute('playsinline', ''); videoEl.setAttribute('webkit-playsinline', ''); } catch {}    
+    
+    // global anti-ping-pong guard    
+    let syncing = false; // prevents normal ping-pong    
+    let restarting = false; // prevents loop-end ping-pong    
+    
+    // FIX: explicit loop-state variables    
     let desiredLoop =
         !!videoEl.loop ||
         qs.get("loop") === "1" ||
         qs.get("loop") === "true" ||
-        window.forceLoop === true;
+        window.forceLoop === true;    
+    
+    // FIX: tracks the short window *during* a loop restart    
+    let suppressEndedUntil = 0;    
+    
+    // FIX: co-play tracking flags (true only when each element fires 'playing')    
+    let vIsPlaying = false;    
+    let aIsPlaying = false;    
+    
+    // remember mute states for temporary autoplay retries    
+    let prevVideoMuted = false;    
+    let prevAudioMuted = false;    
+    let pendingUnmute = false;    
+    
+    // FIX: seeking coordination (prevents first-load seek ping-pong)    
+    let seekingInProgress = false;    
+    let resumeAfterSeek = false;    
 
-    // FIX: tracks the short window *during* a loop restart
-    let suppressEndedUntil = 0;
-
-    // FIX: co-play tracking flags (true only when each element fires 'playing')
-    let vIsPlaying = false;
-    let aIsPlaying = false;
-
-    // remember mute states for temporary autoplay retries
-    let prevVideoMuted = false;
-    let prevAudioMuted = false;
-    let pendingUnmute = false;
-
-    // FIX: seeking coordination (prevents first-load seek ping-pong)
-    let seekingInProgress = false;
-    let resumeAfterSeek = false;
-
-    // FIX: settle window after seek to ignore noisy events
-    let seekSettleUntil = 0;
-    const SEEK_SETTLE_MS = 500;
-    const inSeekSettle = () => performance.now() < seekSettleUntil;
-
-    // FIX: state arbiter watchdog (forces both to share same paused/playing state)
-    let arbiterTimer = null;
-    const ARBITER_MS = 150;
-    function startArbiter() {
-        if (arbiterTimer) clearInterval(arbiterTimer);
-        arbiterTimer = setInterval(() => {
-            if (syncing || restarting || seekingInProgress || inSeekSettle()) return;
-
-            // treat "playing" strictly; ended counts as paused
-            const vPlaying = !video.paused() && !video.ended();
-            const aPlaying = !audio.paused && !audio.ended;
-
-            // if exactly one is playing, pause the one that is playing (safe + deterministic)
-            if (vPlaying && !aPlaying) {
-                try { video.pause(); } catch {}
-            } else if (aPlaying && !vPlaying) {
-                try { audio.pause(); } catch {}
-            }
-        }, ARBITER_MS);
+    // NEW FIX: grace window to silence arbiter + bridge immediately after seeks / restarts
+    let suppressBridgeUntil = 0;
+    const nowPerf = () => performance?.now?.() || Date.now();
+    const bridgingSilenced = () => nowPerf() < suppressBridgeUntil;
+    function silenceBridging(ms = 900) { // tuned: long enough for decoders to settle after a seek
+        suppressBridgeUntil = nowPerf() + ms;
     }
-    function stopArbiter() { if (arbiterTimer) { clearInterval(arbiterTimer); arbiterTimer = null; } }
+    
+    // FIX: state arbiter watchdog (forces both to share same paused/playing state)    
+    let arbiterTimer = null;    
+    const ARBITER_MS = 150;    
+    function startArbiter() {    
+        if (arbiterTimer) clearInterval(arbiterTimer);    
+        arbiterTimer = setInterval(() => {    
+            if (syncing || restarting || seekingInProgress || bridgingSilenced()) return;    
+    
+            // treat "playing" strictly; ended counts as paused    
+            const vPlaying = !video.paused() && !video.ended();    
+            const aPlaying = !audio.paused && !audio.ended;    
+    
+            // if exactly one is playing, pause the one that is playing (safe + deterministic)    
+            if (vPlaying && !aPlaying) {    
+                try { video.pause(); } catch {}    
+            } else if (aPlaying && !vPlaying) {    
+                try { audio.pause(); } catch {}    
+            }    
+        }, ARBITER_MS);    
+    }    
+    function stopArbiter() { if (arbiterTimer) { clearInterval(arbiterTimer); arbiterTimer = null; } }    
+    
+    // turn OFF native loop so 'ended' fires and we control both tracks together    
+    try { videoEl.loop = false; videoEl.removeAttribute?.('loop'); } catch {}    
+    try { audio.loop = false; audio.removeAttribute?.('loop'); } catch {}    
+    
+    // If someone toggles the <video loop> attribute at runtime, treat it as intent,    
+    // but still keep native loop off (we loop manually to keep A/V locked).    
+    try {    
+        const loopObserver = new MutationObserver(muts => {    
+            for (const m of muts) {    
+                if (m.type === 'attributes' && m.attributeName === 'loop') {    
+                    desiredLoop = videoEl.hasAttribute('loop') || !!videoEl.loop;    
+                    // keep native loop disabled to prevent double restarts / missing 'ended'    
+                    videoEl.removeAttribute('loop');    
+                    videoEl.loop = false;    
+                }    
+            }    
+        });    
+        loopObserver.observe(videoEl, { attributes: true, attributeFilter: ['loop'] });    
+    } catch {}    
+    
+    // resolve initial sources robustly (works whether <audio src> or <source> children are used)    
+    const pickAudioSrc = () => {    
+        const s = audio?.getAttribute?.('src');    
+        if (s) return s;    
+        const child = audio?.querySelector?.('source');    
+        if (child?.getAttribute?.('src')) return child.getAttribute('src');    
+        if (audio?.currentSrc) return audio.currentSrc;    
+        return null;    
+    };    
+    let audioSrc = pickAudioSrc();    
+    
+    const srcObj = video.src();    
+    const videoSrc = Array.isArray(srcObj) ? (srcObj[0] && srcObj[0].src) : srcObj;    
+    const videoType = Array.isArray(srcObj) ? (srcObj[0] && srcObj[0].type) : undefined;    
+    
+    // readiness + sync state    
+    let audioReady = false, videoReady = false;    
+    let syncInterval = null;    
+    
+    // thresholds / constants    
+    const BIG_DRIFT = 0.5;    
+    const MICRO_DRIFT = 0.05;    
+    const SYNC_INTERVAL_MS = 250;    
+    
+    const EPS = 0.15;    
+    function timeInBuffered(media, t) {    
+        try {    
+            const br = media.buffered;    
+            if (!br || br.length === 0 || !isFinite(t)) return false;    
+            for (let i = 0; i < br.length; i++) {    
+                const s = br.start(i) - EPS, e = br.end(i) + EPS;    
+                if (t >= s && t <= e) return true;    
+            }    
+        } catch {}    
+        return false;    
+    }    
+    function canPlayAt(media, t) {    
+        try {    
+            const rs = Number(media.readyState || 0);    
+            if (!isFinite(t)) return false;    
+            // HAVE_FUTURE_DATA (3) or better means imminent playback    
+            if (rs >= 3) return true; // FIX: rely on readyState for can-play gate    
+            return timeInBuffered(media, t);    
+        } catch { return false; }    
+    }    
+    function bothPlayableAt(t) {    
+        return canPlayAt(videoEl, t) && canPlayAt(audio, t);    
+    }    
+    
+    function safeSetCT(media, t) {    
+        try {    
+            if (!isFinite(t) || t < 0) return;    
+            // NOTE: expects a *native* media element (videoEl/audio), not the video.js player    
+            media.currentTime = t;    
+        } catch {}    
+    }    
+    
+    function clearSyncLoop() {    
+        if (syncInterval) {    
+            clearInterval(syncInterval);    
+            syncInterval = null;    
+            try { audio.playbackRate = 1; } catch {}    
+        }    
+    }    
+    
+    function startSyncLoop() {    
+        clearSyncLoop();    
+        syncInterval = setInterval(() => {    
+            const vt = Number(video.currentTime());    
+            const at = Number(audio.currentTime);    
+            if (!isFinite(vt) || !isFinite(at)) return;    
+            const delta = vt - at;    
+            if (Math.abs(delta) > BIG_DRIFT) {    
+                safeSetCT(audio, vt);    
+                try { audio.playbackRate = 1; } catch {}    
+                return;    
+            }    
+            if (Math.abs(delta) > MICRO_DRIFT) {    
+                const targetRate = 1 + (delta * 0.12);    
+                try { audio.playbackRate = Math.max(0.85, Math.min(1.15, targetRate)); } catch {}    
+            } else {    
+                try { audio.playbackRate = 1; } catch {}    
+            }    
+        }, SYNC_INTERVAL_MS);    
+    }    
+    
+    // FIX: co-play verification    
+    const markVPlaying = () => { vIsPlaying = true; maybeUnmuteRestore(); };    
+    const markAPlaying = () => { aIsPlaying = true; maybeUnmuteRestore(); };    
+    const markVNotPlaying = () => { vIsPlaying = false; };    
+    const markANotPlaying = () => { aIsPlaying = false; };    
+    
+    function bothActivelyPlaying() { return vIsPlaying && aIsPlaying; }    
+    
+    function maybeUnmuteRestore() {    
+        if (!pendingUnmute) return;    
+        if (bothActivelyPlaying()) {    
+            pendingUnmute = false;    
+            // small defer so decoders settle    
+            setTimeout(() => {    
+                try { video.muted(prevVideoMuted); } catch {}    
+                try { audio.muted = prevAudioMuted; } catch {}    
+            }, 120);    
+        }    
+    }    
+    
+    // FIX: unified play/pause coordinators (no ping-pong)    
+    async function playTogether({ allowMutedRetry = true } = {}) {    
+        if (syncing || restarting || seekingInProgress) return; // FIX: don't start while seeking    
+        syncing = true;    
+        try {    
+            // line up clocks first    
+            const t = Number(video.currentTime());    
+            if (isFinite(t) && Math.abs(Number(audio.currentTime) - t) > 0.05) safeSetCT(audio, t);    
 
-    // turn OFF native loop so 'ended' fires and we control both tracks together
-    try { videoEl.loop = false; videoEl.removeAttribute?.('loop'); } catch {}
-    try { audio.loop = false; audio.removeAttribute?.('loop'); } catch {}
+            // Silence arbiter/bridging briefly while we spin both up in tandem
+            silenceBridging(800);
 
-    // If someone toggles the <video loop> attribute at runtime, treat it as intent,
-    // but still keep native loop off (we loop manually to keep A/V locked).
-    try {
-        const loopObserver = new MutationObserver(muts => {
-            for (const m of muts) {
-                if (m.type === 'attributes' && m.attributeName === 'loop') {
-                    desiredLoop = videoEl.hasAttribute('loop') || !!videoEl.loop;
-                    // keep native loop disabled to prevent double restarts / missing 'ended'
-                    videoEl.removeAttribute('loop');
-                    videoEl.loop = false;
-                }
-            }
-        });
-        loopObserver.observe(videoEl, { attributes: true, attributeFilter: ['loop'] });
-    } catch {}
-
-    // resolve initial sources robustly (works whether <audio src> or <source> children are used)
-    const pickAudioSrc = () => {
-        const s = audio?.getAttribute?.('src');
-        if (s) return s;
-        const child = audio?.querySelector?.('source');
-        if (child?.getAttribute?.('src')) return child.getAttribute('src');
-        if (audio?.currentSrc) return audio.currentSrc;
-        return null;
-    };
-    let audioSrc = pickAudioSrc();
-
-    const srcObj = video.src();
-    const videoSrc = Array.isArray(srcObj) ? (srcObj[0] && srcObj[0].src) : srcObj;
-    const videoType = Array.isArray(srcObj) ? (srcObj[0] && srcObj[0].type) : undefined;
-
-    // readiness + sync state
-    let audioReady = false, videoReady = false;
-    let syncInterval = null;
-
-    // thresholds / constants
-    const BIG_DRIFT = 0.5;
-    const MICRO_DRIFT = 0.05;
-    const SYNC_INTERVAL_MS = 250;
-
-    const EPS = 0.15;
-    function timeInBuffered(media, t) {
-        try {
-            const br = media.buffered;
-            if (!br || br.length === 0 || !isFinite(t)) return false;
-            for (let i = 0; i < br.length; i++) {
-                const s = br.start(i) - EPS, e = br.end(i) + EPS;
-                if (t >= s && t <= e) return true;
-            }
-        } catch {}
-        return false;
-    }
-    function canPlayAt(media, t) {
-        try {
-            const rs = Number(media.readyState || 0);
-            if (!isFinite(t)) return false;
-            // HAVE_FUTURE_DATA (3) or better means imminent playback
-            if (rs >= 3) return true; // FIX: rely on readyState for can-play gate
-            return timeInBuffered(media, t);
-        } catch { return false; }
-    }
-    function bothPlayableAt(t) {
-        return canPlayAt(videoEl, t) && canPlayAt(audio, t);
-    }
-
-    function safeSetCT(media, t) {
-        try {
-            if (!isFinite(t) || t < 0) return;
-            // NOTE: expects a *native* media element (videoEl/audio), not the video.js player
-            media.currentTime = t;
-        } catch {}
-    }
-
-    function clearSyncLoop() {
-        if (syncInterval) {
-            clearInterval(syncInterval);
-            syncInterval = null;
-            try { audio.playbackRate = 1; } catch {}
-        }
-    }
-
-    function startSyncLoop() {
-        clearSyncLoop();
-        syncInterval = setInterval(() => {
-            const vt = Number(video.currentTime());
-            const at = Number(audio.currentTime);
-            if (!isFinite(vt) || !isFinite(at)) return;
-            const delta = vt - at;
-            if (Math.abs(delta) > BIG_DRIFT) {
-                safeSetCT(audio, vt);
-                try { audio.playbackRate = 1; } catch {}
-                return;
-            }
-            if (Math.abs(delta) > MICRO_DRIFT) {
-                const targetRate = 1 + (delta * 0.12);
-                try { audio.playbackRate = Math.max(0.85, Math.min(1.15, targetRate)); } catch {}
-            } else {
-                try { audio.playbackRate = 1; } catch {}
-            }
-        }, SYNC_INTERVAL_MS);
-    }
-
-    // FIX: co-play verification
-    const markVPlaying = () => { vIsPlaying = true; maybeUnmuteRestore(); };
-    const markAPlaying = () => { aIsPlaying = true; maybeUnmuteRestore(); };
-    const markVNotPlaying = () => { vIsPlaying = false; };
-    const markANotPlaying = () => { aIsPlaying = false; };
-
-    function bothActivelyPlaying() { return vIsPlaying && aIsPlaying; }
-
-    function maybeUnmuteRestore() {
-        if (!pendingUnmute) return;
-        if (bothActivelyPlaying()) {
-            pendingUnmute = false;
-            // small defer so decoders settle
-            setTimeout(() => {
-                try { video.muted(prevVideoMuted); } catch {}
-                try { audio.muted = prevAudioMuted; } catch {}
-            }, 120);
-        }
-    }
-
-    // FIX: unified play/pause coordinators (no ping-pong)
-    async function playTogether({ allowMutedRetry = true } = {}) {
-        if (syncing || restarting || seekingInProgress || inSeekSettle()) return; // FIX: don't start while seeking/settling
-        syncing = true;
-        try {
-            // align clocks first
-            const t = Number(video.currentTime());
-            if (isFinite(t) && Math.abs(Number(audio.currentTime) - t) > 0.05) safeSetCT(audio, t);
-
-            // first attempt: keep existing mute states
-            let vOk = true, aOk = true;
-            try { const p = video.play(); if (p && p.then) await p; } catch { vOk = false; }
-            try { const p = audio.play(); if (p && p.then) await p; } catch { aOk = false; }
-
-            // if either failed due to autoplay policy, retry both muted exactly once
-            if (allowMutedRetry && (!vOk || !aOk)) {
-                prevVideoMuted = !!video.muted();
-                prevAudioMuted = !!audio.muted;
-                pendingUnmute = true;
-                try { video.muted(true); } catch {}
-                try { audio.muted = true; } catch {}
-
-                vOk = true; aOk = true;
-                try { const p = video.play(); if (p && p.then) await p; } catch { vOk = false; }
-                try { const p = audio.play(); if (p && p.then) await p; } catch { aOk = false; }
-            }
-
-            if (!syncInterval) startSyncLoop();
-        } finally {
-            syncing = false;
-        }
-    }
-
-    function pauseTogether() {
-        if (syncing) return;
-        syncing = true;
-        try {
-            try { video.pause(); } catch {}
-            try { audio.pause(); } catch {}
-            clearSyncLoop();
-        } finally {
-            syncing = false;
-        }
-    }
-
-    function tryStart() {
-        if (audioReady && videoReady && !restarting) {
-            const t = Number(video.currentTime());
-            if (isFinite(t) && Math.abs(Number(audio.currentTime) - t) > 0.1) safeSetCT(audio, t);
-            if (bothPlayableAt(t)) {
-                playTogether({ allowMutedRetry: true });
-            } else {
-                pauseTogether();
-            }
-            setupMediaSession();
-        }
-    }
-
-    function attachRetry(elm, resolveSrc, markReady) {
-        const src = resolveSrc?.();
-        const onLoaded = () => {
-            try { elm._didRetry = false; } catch {}
-            markReady();
-            tryStart();
-        };
-        elm.addEventListener('loadeddata', onLoaded, { once: true });
-        elm.addEventListener('loadedmetadata', onLoaded, { once: true });
-    }
-
-    function setupMediaSession() {
-        if ('mediaSession' in navigator) {
-            try {
-                navigator.mediaSession.metadata = new MediaMetadata({
-                    title: document.title || 'Video',
-                    artist: '',
-                    album: '',
-                    artwork: []
-                });
-            } catch {}
-
-            // Only control the *video* here; audio follows via coordinator
-            navigator.mediaSession.setActionHandler('play', () => { playTogether({ allowMutedRetry: true }); });
-            navigator.mediaSession.setActionHandler('pause', () => { pauseTogether(); });
-            navigator.mediaSession.setActionHandler('seekbackward', ({ seekOffset }) => {
-                const skip = seekOffset || 10;
-                const to = Math.max(0, Number(video.currentTime()) - skip);
-                video.currentTime(to);
-                safeSetCT(audio, to);
-            });
-            navigator.mediaSession.setActionHandler('seekforward', ({ seekOffset }) => {
-                const skip = seekOffset || 10;
-                const to = Number(video.currentTime()) + skip;
-                video.currentTime(to);
-                safeSetCT(audio, to);
-            });
-            navigator.mediaSession.setActionHandler('seekto', ({ seekTime, fastSeek }) => {
-                if (!isFinite(seekTime)) return;
+            // first attempt: keep existing mute states    
+            let vOk = true, aOk = true;    
+            try { const p = video.play(); if (p && p.then) await p; } catch { vOk = false; }    
+            try { const p = audio.play(); if (p && p.then) await p; } catch { aOk = false; }    
+    
+            // if either failed due to autoplay policy, retry both muted exactly once    
+            if (allowMutedRetry && (!vOk || !aOk)) {    
+                prevVideoMuted = !!video.muted();    
+                prevAudioMuted = !!audio.muted;    
+                pendingUnmute = true;    
+                try { video.muted(true); } catch {}    
+                try { audio.muted = true; } catch {}    
+    
+                vOk = true; aOk = true;    
+                try { const p = video.play(); if (p && p.then) await p; } catch { vOk = false; }    
+                try { const p = audio.play(); if (p && p.then) await p; } catch { aOk = false; }    
+            }    
+    
+            if (!syncInterval) startSyncLoop();    
+        } finally {    
+            syncing = false;    
+        }    
+    }    
+    
+    function pauseTogether() {    
+        if (syncing) return;    
+        syncing = true;    
+        try {    
+            try { video.pause(); } catch {}    
+            try { audio.pause(); } catch {}    
+            clearSyncLoop();    
+        } finally {    
+            syncing = false;    
+        }    
+    }    
+    
+    function tryStart() {    
+        if (audioReady && videoReady && !restarting) {    
+            const t = Number(video.currentTime());    
+            if (isFinite(t) && Math.abs(Number(audio.currentTime) - t) > 0.1) safeSetCT(audio, t);    
+            if (bothPlayableAt(t)) {    
+                silenceBridging(700); // NEW: brief grace on very first start
+                playTogether({ allowMutedRetry: true });    
+            } else {    
+                pauseTogether();    
+            }    
+            setupMediaSession();    
+        }    
+    }    
+    
+    function attachRetry(elm, resolveSrc, markReady) {    
+        const src = resolveSrc?.();    
+        const onLoaded = () => {    
+            try { elm._didRetry = false; } catch {}    
+            markReady();    
+            tryStart();    
+        };    
+        elm.addEventListener('loadeddata', onLoaded, { once: true });    
+        elm.addEventListener('loadedmetadata', onLoaded, { once: true });    
+    }    
+    
+    function setupMediaSession() {    
+        if ('mediaSession' in navigator) {    
+            try {    
+                navigator.mediaSession.metadata = new MediaMetadata({    
+                    title: document.title || 'Video',    
+                    artist: '',    
+                    album: '',    
+                    artwork: []    
+                });    
+            } catch {}    
+    
+            // Only control the *video* here; audio follows via coordinator    
+            navigator.mediaSession.setActionHandler('play', () => { playTogether({ allowMutedRetry: true }); });    
+            navigator.mediaSession.setActionHandler('pause', () => { pauseTogether(); });    
+            navigator.mediaSession.setActionHandler('seekbackward', ({ seekOffset }) => {    
+                const skip = seekOffset || 10;    
+                const to = Math.max(0, Number(video.currentTime()) - skip);    
+                video.currentTime(to);    
+                safeSetCT(audio, to);    
+            });    
+            navigator.mediaSession.setActionHandler('seekforward', ({ seekOffset }) => {    
+                const skip = seekOffset || 10;    
+                const to = Number(video.currentTime()) + skip;    
+                video.currentTime(to);    
+                safeSetCT(audio, to);    
+            });    
+            navigator.mediaSession.setActionHandler('seekto', ({ seekTime, fastSeek }) => {    
+                if (!isFinite(seekTime)) return;    
                 if (fastSeek && 'fastSeek' in audio)
-                    try { audio.fastSeek(seekTime); } catch { safeSetCT(audio, seekTime); }
-                else safeSetCT(audio, seekTime);
-                video.currentTime(seekTime);
-            });
-            navigator.mediaSession.setActionHandler('stop', () => {
-                pauseTogether();
-                try { video.currentTime(0); } catch {}
-                try { audio.currentTime = 0; } catch {}
-            });
-        }
-    }
+                    try { audio.fastSeek(seekTime); } catch { safeSetCT(audio, seekTime); }    
+                else safeSetCT(audio, seekTime);    
+                video.currentTime(seekTime);    
+            });    
+            navigator.mediaSession.setActionHandler('stop', () => {    
+                pauseTogether();    
+                try { video.currentTime(0); } catch {}    
+                try { audio.currentTime = 0; } catch {}    
+            });    
+        }    
+    }    
+    
+    document.addEventListener('keydown', e => {    
+        if (restarting) return;    
+        switch (e.code) {    
+            case 'AudioPlay':    
+            case 'MediaPlayPause':    
+                if (video.paused()) playTogether({ allowMutedRetry: true });    
+                else pauseTogether();    
+                break;    
+            case 'AudioPause':    
+                pauseTogether();    
+                break;    
+            case 'AudioNext':    
+            case 'MediaTrackNext': {    
+                const tFwd = Number(video.currentTime()) + 10;    
+                video.currentTime(tFwd); safeSetCT(audio, tFwd);    
+                break;    
+            }    
+            case 'AudioPrevious':    
+            case 'MediaTrackPrevious': {    
+                const tBwd = Math.max(0, Number(video.currentTime()) - 10);    
+                video.currentTime(tBwd); safeSetCT(audio, tBwd);    
+                break;    
+            }    
+        }    
+    });    
+    
+    // FIX: one-time "unlock" to enable later programmatic plays on Safari/iOS    
+    let mediaUnlocked = false;    
+    const unlock = () => {    
+        if (mediaUnlocked) return;    
+        mediaUnlocked = true;    
+        // Try a quick muted play/pause to grant future play permission    
+        try { audio.muted = true; audio.play().then(() => { audio.pause(); }).catch(()=>{}); } catch {}    
+        try { const was = !!video.muted(); video.muted(true); video.play().then(()=>{ video.pause(); video.muted(was); }).catch(()=>{}); } catch {}    
+    };    
+    window.addEventListener('click', unlock, { once: true, capture: true });    
+    window.addEventListener('keydown', unlock, { once: true, capture: true });    
+    
+    if (qua !== "medium") {    
+        attachRetry(audio, pickAudioSrc, () => { audioReady = true; });    
+        attachRetry(videoEl, () => {    
+            const s = video.src();    
+            return Array.isArray(s) ? (s[0] && s[0].src) : (s || videoSrc);    
+        }, () => { videoReady = true; });    
+    
+        const clamp = v => Math.max(0, Math.min(1, Number(v)));    
+        video.on('volumechange', () => {    
+            try { audio.volume = clamp(video.volume()); audio.muted = video.muted(); } catch {}    
+        });    
+        // remove audio->video volume mirroring to avoid feedback loops    
+        // audio.addEventListener('volumechange', () => { ... });    
+    
+        video.on('ratechange', () => { try { audio.playbackRate = video.playbackRate(); } catch {} });    
+    
+        // sync-safe event bridging using the coordinators (no ping-pong)    
+        video.on('play', () => {     
+            if (seekingInProgress || bridgingSilenced()) return; // FIX    
+            vIsPlaying = true;     
+            if (!aIsPlaying) playTogether({ allowMutedRetry: true });     
+        });    
+        audio.addEventListener('play', () => {     
+            if (seekingInProgress || bridgingSilenced()) return; // FIX    
+            aIsPlaying = true;     
+            if (!vIsPlaying) playTogether({ allowMutedRetry: true });     
+        });    
+    
+        video.on('pause', () => {     
+            if (restarting || seekingInProgress || bridgingSilenced()) return; // FIX    
+            vIsPlaying = false;     
+            pauseTogether();     
+        });    
+        audio.addEventListener('pause', () => {     
+            if (restarting || seekingInProgress || bridgingSilenced()) return; // FIX    
+            aIsPlaying = false;     
+            pauseTogether();     
+        });    
+    
+        video.on('waiting', () => {     
+            if (restarting || seekingInProgress || bridgingSilenced()) return; // FIX    
+            vIsPlaying = false;     
+            try { audio.pause(); } catch{};     
+            clearSyncLoop();     
+        });    
+        audio.addEventListener('waiting', () => { aIsPlaying = false; });    
+    
+        video.on('playing', markVPlaying);    
+        audio.addEventListener('playing', markAPlaying);    
+    
+        const errorBox = document.getElementById('loopedIndicator');    
+        video.on('error', () => {    
+            const mediaError = video.error();    
+            let message = 'An unknown error occurred.';    
+            if (mediaError) {    
+                if (mediaError.code === 1) return;    
+                message = `Error ${mediaError.code}: ${mediaError.message || 'No message provided'} try to refresh the page?`;    
+            }    
+            if (errorBox) {    
+                errorBox.textContent = message;    
+                errorBox.style.display = 'block';    
+                errorBox.style.width = 'fit-content';    
+            }    
+        });    
+    
+        // FIX: tiny helper to wait until both are actually playable near a time    
+        const waitUntilPlayable = (t, timeoutMs = 800) => new Promise(resolve => {    
+            const start = performance.now();    
+            const tick = () => {    
+                if (bothPlayableAt(t)) return resolve(true);    
+                if (performance.now() - start > timeoutMs) return resolve(false);    
+                setTimeout(tick, 40);    
+            };    
+            tick();    
+        });    
+    
+        // suppress spurious 'ended' right after seeks (mobile/browser quirk guard)    
+        let wasPlayingBeforeSeek = false;    
 
-    document.addEventListener('keydown', e => {
-        if (restarting) return;
-        switch (e.code) {
-            case 'AudioPlay':
-            case 'MediaPlayPause':
-                if (video.paused()) playTogether({ allowMutedRetry: true });
-                else pauseTogether();
-                break;
-            case 'AudioPause':
-                pauseTogether();
-                break;
-            case 'AudioNext':
-            case 'MediaTrackNext': {
-                const tFwd = Number(video.currentTime()) + 10;
-                video.currentTime(tFwd); safeSetCT(audio, tFwd);
-                break;
-            }
-            case 'AudioPrevious':
-            case 'MediaTrackPrevious': {
-                const tBwd = Math.max(0, Number(video.currentTime()) - 10);
-                video.currentTime(tBwd); safeSetCT(audio, tBwd);
-                break;
-            }
-        }
-    });
+        // NEW: also track audio seeking to keep state tight
+        audio.addEventListener('seeking', () => { markANotPlaying(); });
+        audio.addEventListener('seeked', () => { /* noop; video 'seeked' handles alignment */ });
 
-    // FIX: one-time "unlock" to enable later programmatic plays on Safari/iOS
-    let mediaUnlocked = false;
-    const unlock = () => {
-        if (mediaUnlocked) return;
-        mediaUnlocked = true;
-        // Try a quick muted play/pause to grant future play permission
-        try { audio.muted = true; audio.play().then(() => { audio.pause(); }).catch(()=>{}); } catch {}
-        try { const was = !!video.muted(); video.muted(true); video.play().then(()=>{ video.pause(); video.muted(was); }).catch(()=>{}); } catch {}
-    };
-    window.addEventListener('click', unlock, { once: true, capture: true });
-    window.addEventListener('keydown', unlock, { once: true, capture: true });
+        video.on('seeking', () => {    
+            if (restarting) return;    
+            seekingInProgress = true;          // FIX    
+            wasPlayingBeforeSeek = !video.paused();    
+            resumeAfterSeek = wasPlayingBeforeSeek; // FIX    
 
-    if (qua !== "medium") {
-        attachRetry(audio, pickAudioSrc, () => { audioReady = true; });
-        attachRetry(videoEl, () => {
-            const s = video.src();
-            return Array.isArray(s) ? (s[0] && s[0].src) : (s || videoSrc);
-        }, () => { videoReady = true; });
+            // Silence arbiter/bridging *immediately* as the seek begins
+            silenceBridging(1200);
 
-        const clamp = v => Math.max(0, Math.min(1, Number(v)));
-        video.on('volumechange', () => {
-            try { audio.volume = clamp(video.volume()); audio.muted = video.muted(); } catch {}
-        });
-        // remove audio->video volume mirroring to avoid feedback loops
-        // audio.addEventListener('volumechange', () => { ... });
+            try { audio.pause(); } catch {}    
+            clearSyncLoop();    
+            const vt = Number(video.currentTime());    
+            if (Math.abs(vt - Number(audio.currentTime)) > 0.1) safeSetCT(audio, vt);    
+            vIsPlaying = false; aIsPlaying = false; // FIX    
+        });    
+    
+        video.on('seeked', async () => {    
+            if (restarting) return;    
+            const vt = Number(video.currentTime());    
+            if (Math.abs(vt - Number(audio.currentTime)) > 0.05) safeSetCT(audio, vt);    
 
-        video.on('ratechange', () => { try { audio.playbackRate = video.playbackRate(); } catch {} });
+            // FIX: only resume once the new point is playable; avoid first-load ping-pong    
+            if (resumeAfterSeek) {    
+                // keep silenced while we wait, then a touch more while starting
+                silenceBridging(1100);
+                await waitUntilPlayable(vt, 1200);    
+                playTogether({ allowMutedRetry: false });    
+            } else {    
+                pauseTogether();    
+            }    
 
-        // FIX: sync-safe event bridging using the coordinators (no ping-pong)
-        video.on('play', () => { 
-            if (syncing || restarting || seekingInProgress || inSeekSettle()) return; // FIX
-            vIsPlaying = true; 
-            if (!aIsPlaying) playTogether({ allowMutedRetry: true }); 
-        });
-        audio.addEventListener('play', () => { 
-            if (syncing || restarting || seekingInProgress || inSeekSettle()) return; // FIX
-            aIsPlaying = true; 
-            if (!vIsPlaying) playTogether({ allowMutedRetry: true }); 
-        });
+            seekingInProgress = false; // FIX    
+            resumeAfterSeek = false;   // FIX    
+        });    
+    
+        video.on('canplaythrough', () => {    
+            if (restarting || seekingInProgress) return; // FIX    
+            const vt = Number(video.currentTime());    
+            if (Math.abs(vt - Number(audio.currentTime)) > 0.1) safeSetCT(audio, vt);    
+        });    
+        audio.addEventListener('canplaythrough', () => {    
+            if (restarting || seekingInProgress) return; // FIX    
+            const vt = Number(video.currentTime());    
+            if (Math.abs(vt - Number(audio.currentTime)) > 0.1) safeSetCT(audio, vt);    
+        });    
+    
+        // --- unconditional looping with anti-pingpong ---    
+        async function restartLoop() {    
+            if (restarting) return;    
+            restarting = true;    
+            try {    
+                clearSyncLoop();    
+                pauseTogether();    
+    
+                // tiny offset so 'ended' doesn't immediately refire    
+                const startAt = 0.001;    
+                suppressEndedUntil = nowPerf() + 800;    
 
-        video.on('pause', () => { 
-            if (syncing || restarting || seekingInProgress || inSeekSettle()) return; // FIX
-            vIsPlaying = false; 
-            pauseTogether(); 
-        });
-        audio.addEventListener('pause', () => { 
-            if (syncing || restarting || seekingInProgress || inSeekSettle()) return; // FIX
-            aIsPlaying = false; 
-            pauseTogether(); 
-        });
-
-        video.on('waiting', () => { 
-            if (syncing || restarting || seekingInProgress || inSeekSettle()) return; // FIX
-            vIsPlaying = false; 
-            try { audio.pause(); } catch{}; 
-            clearSyncLoop(); 
-        });
-        audio.addEventListener('waiting', () => { aIsPlaying = false; });
-
-        video.on('playing', markVPlaying);
-        audio.addEventListener('playing', markAPlaying);
-
-        const errorBox = document.getElementById('loopedIndicator');
-        video.on('error', () => {
-            const mediaError = video.error();
-            let message = 'An unknown error occurred.';
-            if (mediaError) {
-                if (mediaError.code === 1) return;
-                message = `Error ${mediaError.code}: ${mediaError.message || 'No message provided'} try to refresh the page?`;
-            }
-            if (errorBox) {
-                errorBox.textContent = message;
-                errorBox.style.display = 'block';
-                errorBox.style.width = 'fit-content';
-            }
-        });
-
-        // FIX: tiny helper to wait until both are actually playable near a time
-        const waitUntilPlayable = (t, timeoutMs = 800) => new Promise(resolve => {
-            const start = performance.now();
-            const tick = () => {
-                if (bothPlayableAt(t)) return resolve(true);
-                if (performance.now() - start > timeoutMs) return resolve(false);
-                setTimeout(tick, 40);
-            };
-            tick();
-        });
-
-        // suppress spurious 'ended' right after seeks (mobile/browser quirk guard)
-        let wasPlayingBeforeSeek = false;
-
-        // FIX: track *audio* seeks too
-        audio.addEventListener('seeking', () => {
-            if (restarting) return;
-            seekingInProgress = true;
-            seekSettleUntil = performance.now() + SEEK_SETTLE_MS;
-            try { video.pause(); } catch {}
-            try { audio.pause(); } catch {}
-            clearSyncLoop();
-            aIsPlaying = false; vIsPlaying = false;
-        });
-        audio.addEventListener('seeked', async () => {
-            if (restarting) return;
-            seekSettleUntil = performance.now() + SEEK_SETTLE_MS;
-            const vt = Number(video.currentTime());
-            if (Math.abs(vt - Number(audio.currentTime)) > 0.05) safeSetCT(audio, vt);
-            // only resume if we were playing before the seek gesture;
-            // resumeAfterSeek is keyed off the video 'seeking' handler below.
-            if (resumeAfterSeek) {
-                await waitUntilPlayable(vt, 1000);
-                playTogether({ allowMutedRetry: false });
-            } else {
-                pauseTogether();
-            }
-            seekingInProgress = false;
-        });
-
-        video.on('seeking', () => {
-            if (restarting) return;
-            seekingInProgress = true;          // FIX
-            seekSettleUntil = performance.now() + SEEK_SETTLE_MS; // FIX
-            wasPlayingBeforeSeek = !video.paused();
-            resumeAfterSeek = wasPlayingBeforeSeek; // FIX
-            try { video.pause(); } catch {}         // FIX: pause both while scrubbing
-            try { audio.pause(); } catch {}         // FIX
-            clearSyncLoop();
-            const vt = Number(video.currentTime());
-            if (Math.abs(vt - Number(audio.currentTime)) > 0.1) safeSetCT(audio, vt);
-            vIsPlaying = false; aIsPlaying = false; // FIX
-        });
-
-        video.on('seeked', async () => {
-            if (restarting) return;
-            seekSettleUntil = performance.now() + SEEK_SETTLE_MS; // FIX
-            const vt = Number(video.currentTime());
-            if (Math.abs(vt - Number(audio.currentTime)) > 0.05) safeSetCT(audio, vt);
-
-            // FIX: only resume once the new point is playable; avoid first-load ping-pong
-            if (resumeAfterSeek) {
-                await waitUntilPlayable(vt, 1000);
-                playTogether({ allowMutedRetry: false }); // user was already playing
-            } else {
-                pauseTogether();
-            }
-
-            seekingInProgress = false; // FIX
-            resumeAfterSeek = false;   // FIX
-        });
-
-        video.on('canplaythrough', () => {
-            if (restarting || seekingInProgress || inSeekSettle()) return; // FIX
-            const vt = Number(video.currentTime());
-            if (Math.abs(vt - Number(audio.currentTime)) > 0.1) safeSetCT(audio, vt);
-        });
-        audio.addEventListener('canplaythrough', () => {
-            if (restarting || seekingInProgress || inSeekSettle()) return; // FIX
-            const vt = Number(video.currentTime());
-            if (Math.abs(vt - Number(audio.currentTime)) > 0.1) safeSetCT(audio, vt);
-        });
-
-        // --- unconditional looping with anti-pingpong ---
-        async function restartLoop() {
-            if (restarting) return;
-            restarting = true;
-            try {
-                clearSyncLoop();
-                pauseTogether();
-
-                // tiny offset so 'ended' doesn't immediately refire
-                const startAt = 0.001;
-                suppressEndedUntil = performance.now() + 800;
-
-                video.currentTime(startAt);
-                safeSetCT(audio, startAt);
-
-                await waitUntilPlayable(startAt, 1000);
-                await playTogether({ allowMutedRetry: true });
-            } finally {
-                restarting = false;
-            }
-        }
-
-        video.on('ended', () => {
-            if (restarting) return;
-            if (performance.now() < suppressEndedUntil) return;
-            if (desiredLoop) restartLoop();
-            else { pauseTogether(); }
-        });
-        audio.addEventListener('ended', () => {
-            if (restarting) return;
-            if (performance.now() < suppressEndedUntil) return;
-            if (desiredLoop) restartLoop();
-            else { pauseTogether(); }
-        });
-
-        document.addEventListener('fullscreenchange', () => {
-            if (!document.fullscreenElement && !restarting) {
-                pauseTogether();
-            }
-        });
-
-        // FIX: start the state-arbiter watchdog
-        startArbiter();
-    }
-});
+                // NEW: silence bridge while we reset to head
+                silenceBridging(900);
+    
+                video.currentTime(startAt);    
+                safeSetCT(audio, startAt);    
+    
+                await waitUntilPlayable(startAt, 1000);    
+                await playTogether({ allowMutedRetry: true });    
+            } finally {    
+                restarting = false;    
+            }    
+        }    
+    
+        video.on('ended', () => {    
+            if (restarting) return;    
+            if (nowPerf() < suppressEndedUntil) return;    
+            if (desiredLoop) restartLoop();    
+            else { pauseTogether(); }    
+        });    
+        audio.addEventListener('ended', () => {    
+            if (restarting) return;    
+            if (nowPerf() < suppressEndedUntil) return;    
+            if (desiredLoop) restartLoop();    
+            else { pauseTogether(); }    
+        });    
+    
+        document.addEventListener('fullscreenchange', () => {    
+            if (!document.fullscreenElement && !restarting) {    
+                pauseTogether();    
+            }    
+        });    
+    
+        // FIX: start the state-arbiter watchdog    
+        startArbiter();    
+    }    
+});    
+ 
 
  // https://codeberg.org/ashley/poke/src/branch/main/src/libpoketube/libpoketube-youtubei-objects.json
 

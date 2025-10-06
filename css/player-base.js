@@ -260,7 +260,13 @@ document.addEventListener("DOMContentLoaded", () => {
         });
 
         video.on('play', () => { markVPlaying(); if (!aIsPlaying) playTogether(); });
-        audio.addEventListener('play', () => { markAPlaying(); if (!vIsPlaying) playTogether(); });
+        audio.addEventListener('play', () => {
+            markAPlaying();
+            if (!vIsPlaying) {
+                try { video.play().catch(()=>{}); } catch {}
+            }
+        });
+
         video.on('pause', () => { markVNotPlaying(); if (!restarting) pauseTogether(); });
         audio.addEventListener('pause', () => { markANotPlaying(); if (!restarting) pauseTogether(); });
         video.on('waiting', () => { markVNotPlaying(); if (!restarting) { try { audio.pause(); } catch{}; clearSyncLoop(); } });
@@ -271,7 +277,7 @@ document.addEventListener("DOMContentLoaded", () => {
         // --- anti play/pause spam detection ---
         let playPauseEvents = [];
         const SPAM_WINDOW_MS = 3000;
-        const SPAM_LIMIT = 4; // if more than 4 play/pause within 3s, stop both
+        const SPAM_LIMIT = 4;
 
         function recordPlayPause() {
             const now = performance.now();
@@ -288,7 +294,7 @@ document.addEventListener("DOMContentLoaded", () => {
         video.on('play', recordPlayPause);
         video.on('pause', recordPlayPause);
 
-        // --- smarter seek handling: pause only on large jumps ---
+        // --- smarter seek handling: pause only on large jumps (>= 20s) ---
         let wasPlayingBeforeSeek = false;
         let lastSeekTime = 0;
         video.on('seeking', () => {
@@ -311,7 +317,6 @@ document.addEventListener("DOMContentLoaded", () => {
                         playTogether({ allowMutedRetry: true });
                 }, 180);
             } else {
-                // small seek - just realign quietly
                 safeSetCT(audio, newTime);
             }
         });
@@ -348,6 +353,7 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 });
+
  
  
  // https://codeberg.org/ashley/poke/src/branch/main/src/libpoketube/libpoketube-youtubei-objects.json

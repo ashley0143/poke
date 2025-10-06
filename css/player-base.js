@@ -2,8 +2,8 @@
 var _yt_player = videojs;
 
 var versionclient = "youtube.player.web_20250917_22_RC00"
- 
- document.addEventListener("DOMContentLoaded", () => { 
+
+document.addEventListener("DOMContentLoaded", () => { 
     // video.js 8 init - source can be seen in https://poketube.fun/static/vjs.min.js or the vjs.min.js file
     const video = videojs('video', {
         controls: true,
@@ -220,14 +220,22 @@ var versionclient = "youtube.player.web_20250917_22_RC00"
         }
     }
 
-    // FIX: new safety check function (immediate pause if one element fails)
+    // FIX: safety check (pause both if one stuck or failed)
     function verifyPlaybackState() {
-        if (!bothActivelyPlaying() && (vIsPlaying || aIsPlaying)) {
-            // one failed to play or got stuck -> pause both
-            pauseTogether();
-        }
+        if (!bothActivelyPlaying() && (vIsPlaying || aIsPlaying)) pauseTogether();
+        // also pause if either has an error property
+        if (video.error || audio.error) pauseTogether();
     }
     setInterval(verifyPlaybackState, 500); // check every half second
+
+    // FIX: catch fatal playback errors directly
+    const handleFatalError = (type, err) => {
+        console.warn(`[A/V ERROR] ${type} failed:`, err);
+        pauseTogether();
+        clearSyncLoop();
+    };
+    videoEl.addEventListener('error', e => handleFatalError('video', videoEl.error || e));
+    audioEl.addEventListener('error', e => handleFatalError('audio', audioEl.error || e));
 
     // startup routine
     function tryStart() {

@@ -2,7 +2,6 @@
 var _yt_player = videojs;
 
 var versionclient = "youtube.player.web_20250917_22_RC00"
-
 document.addEventListener("DOMContentLoaded", () => {
     // video.js 8 init - source can be seen in https://poketube.fun/static/vjs.min.js or the vjs.min.js file
     const video = videojs('video', {
@@ -425,44 +424,49 @@ document.addEventListener("DOMContentLoaded", () => {
             };
             tick();
         });
-
-        // suppress spurious 'ended' right after seeks (mobile/browser quirk guard)
-        let wasPlayingBeforeSeek = false;
-
         video.on('seeking', () => {
             if (restarting) return;
-            seekingInProgress = true;          // FIX
-            wasPlayingBeforeSeek = !video.paused();
-            resumeAfterSeek = wasPlayingBeforeSeek; // FIX
+            seekingInProgress = true;
+            // We decide whether to resume playback *before* the browser auto-pauses for the seek.
+            resumeAfterSeek = !video.paused();
+            // Explicitly pause audio; video is paused by the browser.
             try { audio.pause(); } catch {}
             clearSyncLoop();
+            // Reset co-play flags as we enter an intermediate state.
+            vIsPlaying = false; aIsPlaying = false;
+            // Sync time early to handle various event timings across browsers.
             const vt = Number(video.currentTime());
             if (Math.abs(vt - Number(audio.currentTime)) > 0.1) safeSetCT(audio, vt);
-            vIsPlaying = false; aIsPlaying = false; // FIX
         });
 
-        // ##########################################################################
-        // ## -------------------------- THE FIX IS HERE ------------------------- ##
-        // ##########################################################################
+        // The 'seeked' handler is now async and uses try/finally to be more robust.
         video.on('seeked', async () => {
             if (restarting) return;
 
-            const vt = Number(video.currentTime());
-            if (Math.abs(vt - Number(audio.currentTime)) > 0.05) safeSetCT(audio, vt);
-
+            // A try/finally block ensures we always exit the 'seeking' state, preventing the player
+            // from getting stuck if an error occurs during the post-seek play/pause action.
             try {
-                // FIX: only resume once the new point is playable; avoid first-load ping-pong
+                const vt = Number(video.currentTime());
+                // Always re-sync on 'seeked' as this is the most accurate time after the jump.
+                if (Math.abs(vt - Number(audio.currentTime)) > 0.05) {
+                    safeSetCT(audio, vt);
+                }
+
                 if (resumeAfterSeek) {
+                    // Wait for both media elements to report they have enough data to play.
                     await waitUntilPlayable(vt, 1000);
+                    // Crucially, we now 'await' the play action. This prevents the 'finally'
+                    // block from running and clearing 'seekingInProgress' too early, which was the
+                    // cause of the original ping-pong bug.
                     await playTogether({ allowMutedRetry: false });
                 } else {
+                    // If the video was paused before seeking, ensure both elements are paused after.
                     pauseTogether();
                 }
             } finally {
-                // By clearing the seeking flag *after* the play/pause action is complete,
-                // we prevent the 'play' and 'pause' event handlers from misfiring.
-                seekingInProgress = false; // FIX
-                resumeAfterSeek = false;   // FIX
+                // This code now runs *after* playTogether() has finished.
+                seekingInProgress = false;
+                resumeAfterSeek = false;
             }
         });
 

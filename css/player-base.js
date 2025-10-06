@@ -182,9 +182,19 @@ document.addEventListener("DOMContentLoaded", () => {
         }, SYNC_INTERVAL_MS);
     }
 
-    // FIX: co-play verification
-    const markVPlaying = () => { vIsPlaying = true; maybeUnmuteRestore(); };
-    const markAPlaying = () => { aIsPlaying = true; maybeUnmuteRestore(); };
+    // FIX: a centralized function to mark the end of a seek operation.
+    // This prevents the ping-pong loop by ensuring the `seekingInProgress`
+    // flag is only cleared after both media elements confirm they are playing.
+    function finalizeSeek() {
+        if (seekingInProgress && vIsPlaying && aIsPlaying) {
+            seekingInProgress = false;
+        }
+    }
+
+    // FIX: co-play verification (now with finalizeSeek call)
+    const markVPlaying = () => { vIsPlaying = true; maybeUnmuteRestore(); finalizeSeek(); };
+    const markAPlaying = () => { aIsPlaying = true; maybeUnmuteRestore(); finalizeSeek(); };
+
     const markVNotPlaying = () => { vIsPlaying = false; };
     const markANotPlaying = () => { aIsPlaying = false; };
 
@@ -441,30 +451,27 @@ document.addEventListener("DOMContentLoaded", () => {
             vIsPlaying = false; aIsPlaying = false; // FIX
         });
 
-        // ======================================================================== //
-        // ======================= THIS IS THE CORRECTED PART ======================= //
-        // ======================================================================== //
         video.on('seeked', async () => {
             if (restarting) return;
+            const vt = Number(video.currentTime());
+            if (Math.abs(vt - Number(audio.currentTime)) > 0.05) safeSetCT(audio, vt);
 
-            // Use a try/finally block to guarantee we clear the seeking flag
-            try {
-                const vt = Number(video.currentTime());
-                if (Math.abs(vt - Number(audio.currentTime)) > 0.05) safeSetCT(audio, vt);
-
-                // FIX: only resume once the new point is playable; avoid first-load ping-pong
-                if (resumeAfterSeek) {
-                    await waitUntilPlayable(vt, 1000);
-                    // AWAIT the async playTogether function to prevent a race condition
-                    await playTogether({ allowMutedRetry: false });
-                } else {
-                    pauseTogether();
-                }
-            } finally {
-                // This now runs *after* playTogether is complete, preventing the ping-pong loop.
-                seekingInProgress = false; // FIX
-                resumeAfterSeek = false;   // FIX
+            // FIX: Logic to resume playback after a seek is now coordinated with 'playing' events.
+            // This robustly prevents the ping-pong loop.
+            if (resumeAfterSeek) {
+                // Wait until media is available at the new time, then issue play commands.
+                // The `seekingInProgress` flag will be cleared later by `finalizeSeek` once both are actually playing.
+                await waitUntilPlayable(vt, 1000);
+                playTogether({ allowMutedRetry: false });
+            } else {
+                // If we weren't playing before the seek, just ensure we're paused.
+                pauseTogether();
+                // Since we are not attempting to play, the seek operation is complete now.
+                seekingInProgress = false;
             }
+
+            // FIX: The user's intent to resume (or not) has been handled, so this flag can be reset.
+            resumeAfterSeek = false;
         });
 
         video.on('canplaythrough', () => {
@@ -522,8 +529,8 @@ document.addEventListener("DOMContentLoaded", () => {
         // FIX: start the state-arbiter watchdog
         startArbiter();
     }
-}); 
-
+});
+ 
 
  // https://codeberg.org/ashley/poke/src/branch/main/src/libpoketube/libpoketube-youtubei-objects.json
 

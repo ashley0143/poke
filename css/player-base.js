@@ -31,6 +31,11 @@ var versionclient = "youtube.player.web_20250917_22_RC00"
     let syncing = false; // prevents normal ping-pong
     let restarting = false; // prevents loop-end ping-pong
 
+    // FIX: protected seek transaction + desired state
+    let seekingActive = false;
+    let seekToken = 0;
+    let desiredPlaying = false; // tracks user intent (play/pause) during seeks
+
     // FIX: explicit loop-state variables
     let desiredLoop =
         !!videoEl.loop ||
@@ -49,11 +54,6 @@ var versionclient = "youtube.player.web_20250917_22_RC00"
     let prevVideoMuted = false;
     let prevAudioMuted = false;
     let pendingUnmute = false;
-
-    // FIX: seeking guard + transaction id to prevent ping-pong during seeks
-    let seekingGuard = false;
-    let seekTxn = 0;
-    let resumeAfterSeek = false;
 
     // turn OFF native loop so 'ended' fires and we control both tracks together
     try { videoEl.loop = false; videoEl.removeAttribute?.('loop'); } catch {}
@@ -183,25 +183,30 @@ var versionclient = "youtube.player.web_20250917_22_RC00"
 
     // FIX: unified play/pause coordinators (no ping-pong)
     async function playTogether({ allowMutedRetry = true } = {}) {
-        if (syncing || restarting || seekingGuard) return;
+        if (syncing || restarting || seekingActive) return; // don't fight seek
         syncing = true;
         try {
+            desiredPlaying = true; // remember intent
+            // align clocks first
             const t = Number(video.currentTime());
             if (isFinite(t) && Math.abs(Number(audio.currentTime) - t) > 0.05) safeSetCT(audio, t);
 
+            // first attempt: keep existing mute states
             let vOk = true, aOk = true;
             try { const p = video.play(); if (p && p.then) await p; } catch { vOk = false; }
             try { const p = audio.play(); if (p && p.then) await p; } catch { aOk = false; }
 
-            // autoplay policy retry (muted) once, then restore after both fire 'playing'
+            // autoplay policy: retry muted once and restore later
             if (allowMutedRetry && (!vOk || !aOk)) {
                 prevVideoMuted = !!video.muted();
                 prevAudioMuted = !!audio.muted;
                 pendingUnmute = true;
                 try { video.muted(true); } catch {}
                 try { audio.muted = true; } catch {}
-                try { const p = video.play(); if (p && p.then) await p; } catch {}
-                try { const p = audio.play(); if (p && p.then) await p; } catch {}
+
+                vOk = true; aOk = true;
+                try { const p = video.play(); if (p && p.then) await p; } catch { vOk = false; }
+                try { const p = audio.play(); if (p && p.then) await p; } catch { aOk = false; }
             }
 
             if (!syncInterval) startSyncLoop();
@@ -211,9 +216,10 @@ var versionclient = "youtube.player.web_20250917_22_RC00"
     }
 
     function pauseTogether() {
-        if (syncing) return;
+        if (syncing || seekingActive) return;
         syncing = true;
         try {
+            desiredPlaying = false; // remember intent
             try { video.pause(); } catch {}
             try { audio.pause(); } catch {}
             clearSyncLoop();
@@ -227,7 +233,7 @@ var versionclient = "youtube.player.web_20250917_22_RC00"
             const t = Number(video.currentTime());
             if (isFinite(t) && Math.abs(Number(audio.currentTime) - t) > 0.1) safeSetCT(audio, t);
             if (bothPlayableAt(t)) {
-                playTogether({ allowMutedRetry: true });
+                // don't force autoplay on load; just prep media session
             } else {
                 pauseTogether();
             }
@@ -341,15 +347,15 @@ var versionclient = "youtube.player.web_20250917_22_RC00"
 
         video.on('ratechange', () => { try { audio.playbackRate = video.playbackRate(); } catch {} });
 
-        // sync-safe event bridging using the coordinators (no ping-pong)
-        video.on('play', () => { if (seekingGuard || restarting) return; vIsPlaying = true; if (!aIsPlaying) playTogether({ allowMutedRetry: true }); });
-        audio.addEventListener('play', () => { if (seekingGuard || restarting) return; aIsPlaying = true; if (!vIsPlaying) playTogether({ allowMutedRetry: true }); });
+        // FIX: event bridging uses coordinators, but is disabled during seek
+        video.on('play', () => { if (seekingActive || restarting) return; vIsPlaying = true; if (!aIsPlaying) playTogether({ allowMutedRetry: true }); });
+        audio.addEventListener('play', () => { if (seekingActive || restarting) return; aIsPlaying = true; if (!vIsPlaying) playTogether({ allowMutedRetry: true }); });
 
-        video.on('pause', () => { if (seekingGuard) return; vIsPlaying = false; if (!restarting) pauseTogether(); });
-        audio.addEventListener('pause', () => { if (seekingGuard) return; aIsPlaying = false; if (!restarting) pauseTogether(); });
+        video.on('pause', () => { if (seekingActive || restarting) return; vIsPlaying = false; pauseTogether(); });
+        audio.addEventListener('pause', () => { if (seekingActive || restarting) return; aIsPlaying = false; pauseTogether(); });
 
-        video.on('waiting', () => { if (seekingGuard) return; vIsPlaying = false; if (!restarting) { try { audio.pause(); } catch{}; clearSyncLoop(); } });
-        audio.addEventListener('waiting', () => { if (seekingGuard) return; aIsPlaying = false; });
+        video.on('waiting', () => { if (restarting || seekingActive) return; vIsPlaying = false; try { audio.pause(); } catch{}; clearSyncLoop(); });
+        audio.addEventListener('waiting', () => { if (seekingActive) return; aIsPlaying = false; });
 
         video.on('playing', markVPlaying);
         audio.addEventListener('playing', markAPlaying);
@@ -369,73 +375,62 @@ var versionclient = "youtube.player.web_20250917_22_RC00"
             }
         });
 
-        // FIX: robust seek transaction — prevents ping-pong on first load + scrub
-        function waitUntilPlayableAt(t, timeoutMs = 1000) {
-            const start = performance.now();
-            return new Promise(resolve => {
-                const tick = () => {
-                    if (bothPlayableAt(t)) return resolve(true);
-                    if (performance.now() - start > timeoutMs) return resolve(false);
-                    setTimeout(tick, 40);
-                };
-                tick();
-            });
-        }
-
-        async function completeSeekIfCurrent(txn, vt) {
-            if (txn !== seekTxn) return; // another seek started
-            const ok = await waitUntilPlayableAt(vt, 1000);
-            if (txn !== seekTxn) return;
-            // once playable, either resume both or stay paused — but do it together
-            if (resumeAfterSeek && ok) {
-                seekingGuard = false; // open the gate before coordinated play to avoid stalls
-                await playTogether({ allowMutedRetry: true });
-            } else {
-                seekingGuard = false;
-                pauseTogether();
-            }
-        }
-
+        // FIX: robust seek transaction to kill ping-pong on initial load + seeks
         let wasPlayingBeforeSeek = false;
 
         video.on('seeking', () => {
             if (restarting) return;
-            // start a new seek transaction
-            seekTxn++;
-            seekingGuard = true;
-            wasPlayingBeforeSeek = !video.paused(); // true if user was actively playing
-            resumeAfterSeek = wasPlayingBeforeSeek;
-
-            // ignore ghost 'ended' that can fire around a seek jump
-            suppressEndedUntil = performance.now() + 800;
-
-            // pause both *once* and align clocks — prevents ping-pong while scrubbing
-            pauseTogether();
+            seekingActive = true;
+            seekToken++;
+            wasPlayingBeforeSeek = desiredPlaying || !video.paused(); // remember intent
+            // stop sync + keep clocks close; pause audio to avoid drift audio glitches
+            try { audio.pause(); } catch {}
+            clearSyncLoop();
             const vt = Number(video.currentTime());
-            safeSetCT(audio, vt);
+            if (Math.abs(vt - Number(audio.currentTime)) > 0.1) safeSetCT(audio, vt);
+            vIsPlaying = false; aIsPlaying = false;
+        });
+
+        const waitUntilPlayable = (t, timeoutMs = 1000) => new Promise(resolve => {
+            const start = performance.now();
+            const tick = () => {
+                const ok = bothPlayableAt(t);
+                if (ok) return resolve(true);
+                if (performance.now() - start > timeoutMs) return resolve(false);
+                setTimeout(tick, 40);
+            };
+            tick();
         });
 
         video.on('seeked', () => {
             if (restarting) return;
+            const myToken = seekToken;
             const vt = Number(video.currentTime());
-            safeSetCT(audio, vt);
-            // finish via the current transaction (wait until both are actually playable)
-            const myTxn = seekTxn;
-            completeSeekIfCurrent(myTxn, vt);
+            (async () => {
+                // wait until both can actually play at vt (or timeout)
+                await waitUntilPlayable(vt, 1000);
+                // realign just in case
+                if (Math.abs(vt - Number(audio.currentTime)) > 0.05) safeSetCT(audio, vt);
+
+                // only the latest seek unblocks
+                if (myToken !== seekToken) return;
+
+                seekingActive = false;
+                // apply remembered intent
+                if (wasPlayingBeforeSeek || desiredPlaying) playTogether({ allowMutedRetry: true });
+                else pauseTogether();
+            })().catch(()=>{ seekingActive = false; });
         });
 
-        // nudge completion if network finishes a bit later
         video.on('canplaythrough', () => {
-            if (!seekingGuard) return;
-            const myTxn = seekTxn;
+            if (restarting || seekingActive) return;
             const vt = Number(video.currentTime());
-            completeSeekIfCurrent(myTxn, vt);
+            if (Math.abs(vt - Number(audio.currentTime)) > 0.1) safeSetCT(audio, vt);
         });
         audio.addEventListener('canplaythrough', () => {
-            if (!seekingGuard) return;
-            const myTxn = seekTxn;
+            if (restarting || seekingActive) return;
             const vt = Number(video.currentTime());
-            completeSeekIfCurrent(myTxn, vt);
+            if (Math.abs(vt - Number(audio.currentTime)) > 0.1) safeSetCT(audio, vt);
         });
 
         // --- unconditional looping with anti-pingpong ---
@@ -453,6 +448,7 @@ var versionclient = "youtube.player.web_20250917_22_RC00"
                 video.currentTime(startAt);
                 safeSetCT(audio, startAt);
 
+                // resume together; allow muted retry if policy blocks
                 await playTogether({ allowMutedRetry: true });
             } finally {
                 restarting = false;

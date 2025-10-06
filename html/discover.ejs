@@ -347,10 +347,7 @@ border:solid #ff0033;
 
      
             <div class=right>
-              
-                             
-
-              <a href="/domains"><i  style="display: block;margin-left: auto;margin-right: auto;" class="fa-light fa-server"></i>  </a>
+              <a href="/weather"><i class="fa-light fa-sun"></i></a>
               <a href="/privacy"><i class="fa-light fa-shield"></i></a>
               <a href="/video/upload?from="><i class="fa-light fa-video"></i></a> 
               <a href="https://codeberg.org/Ashley/poketube/issues"><i class="fa-light fa-bug"></i></a>
@@ -362,23 +359,16 @@ border:solid #ff0033;
   
 
  <div class="channel-page" >   
-          <audio id="audio" style="display:none;" loop autoplay></audio>
-
- 
-      
-   <h1 style="font-size: 2em;margin-left: auto;margin-right: auto;text-align: center;font-family: poketube flex;font-weight: 1000;font-stretch: ultra-expanded;color: #fff;margin-bottom: 7px;margin-top: 31px;">
-Popular Videos On Poke :3   </h1>
+<h1 style="font-size: 2em;margin-left: auto;margin-right: auto;text-align: center;font-family: poketube flex;font-weight: 1000;font-stretch: ultra-expanded;color: #fff;margin-bottom: 7px;margin-top: 31px;">Discover Popular Videos On Poke :3</h1>
+<p style="text-align: center;margin-top: -9px;color: gray;font-family: &quot;poketube flex&quot;;font-weight: 400;font-stretch: extra-expanded;"> uses the united states trending page(s) from youtube!!</p>
         <% if (!tab) { %> 
 
      <div class="tabs tabs-center">
             
-                <a href="" class="tab active">Videos</a>
-                                    
+                <a href="" class="tab active">Now</a>          
                 <a href="?tab=music"class="tab">Music</a>
-
-                <a  href="?tab=gaming" class="tab">Gaming</a>
+                <a href="?tab=gaming" class="tab">Gaming</a>
                       <% if (!isMobile) { %> 
-
                  <a href="?tab=movies" class="tab">Movie Trailers</a>
 
            		 	               <% } %>   
@@ -390,16 +380,12 @@ Popular Videos On Poke :3   </h1>
      <div class="tabs tabs-center">
             
               
-                <a href="/app" class="tab">Videos</a>
-                                    
+                <a href="/app" class="tab">Now</a>      
                 <a href="" class="tab active ">Music</a>
-
                 <a  href="?tab=gaming" class="tab">Gaming</a>
-                       <% if (!isMobile) { %> 
-
-                 <a href="?tab=movies" class="tab">Movies</a>
-
-           		 	               <% } %> 
+                <% if (!isMobile) { %> 
+                 <a href="?tab=movies" class="tab">Movie Trailers</a>
+           		 <% } %> 
 
                        
 
@@ -410,13 +396,11 @@ Popular Videos On Poke :3   </h1>
      <div class="tabs tabs-center">
             
               
-                <a href="/app" class="tab">Videos</a>
-                                    
+                <a href="/app" class="tab">Now</a>     
                 <a href="?tab=music" class="tab">Music</a>
-                       <% if (!isMobile) { %> 
-
+                <% if (!isMobile) { %> 
                 <a href="" class="tab active">Gaming</a>
-                 <a href="?tab=movies" class="tab">Movies</a>
+                 <a href="?tab=movies" class="tab">Movie Trailers</a>
            		 	               <% } %>   
 
                        
@@ -427,15 +411,10 @@ Popular Videos On Poke :3   </h1>
                                                                    <% if (tab === "movies") { %> 
 
      <div class="tabs tabs-center">
-            
-              
-                <a href="/app" class="tab">Videos</a>
+                <a href="/app" class="tab">Now</a>
                 <a href="?tab=music" class="tab">Music</a>
                 <a href="?tab=gaming" class="tab">Gaming</a>
-                 <a href="" class="tab active">Movies</a>
-
-                       
-
+                 <a href="" class="tab active">Movie Trailers</a>
             </div>    
            		 	               <% } %>   
 
@@ -971,8 +950,7 @@ margin-left: auto;
                            </div>
  <div class="channel-page" style="background: #0f0f0f;">   
   
-    <img src="https://t.poketube.fun/t/rep.gif" style="width: 0;visibility: hidden;display:none;" id="discover_main">
-
+ 
   
                                             		 	               <% } %>   
 
@@ -1088,7 +1066,7 @@ Privacy
                       		 	                                         <% if (tab == "search") { %> 
  <a href="/app"><-- go to home  </a>                                        
                             <span style="display:none">
- Search videos on poke! poke is a youtube front end so all of the videos on youtube should workm!! 
+ Search videos on poke!!!
                                                                      </span>
                                <div class=search>
         
@@ -1100,8 +1078,7 @@ Privacy
         
           <button class="btn btn-success" style="border-radius:1em;display:none;" type=submit>
             <i class="fa-light fa-search" style="margin: auto;"></i></button></form>
-                               <img src="https://t.poketube.fun/t/rep.gif"  style="border:0;width: 0;visibility: hidden;"> 
- 
+  
       </div>
                                    </div>
                                                    		 	               <% } %>   
@@ -1125,15 +1102,9 @@ Privacy
                      <span style="margin-bottom: -8em;margin-top: 8px;">
   </span>
 <% (j && Array.isArray(j.results) ? j.results : []).forEach(x => { %>
-
      		<a href="/watch?v=<%- x.videoId %>"  class="video">
-				<div class="thumbnail" style="background-image: url('https://p.poketube.fun/https://i.ytimg.com/vi/<%= x.videoId %>/hqdefault.jpg?sqp=-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLBy_x4UUHLNDZtJtH0PXeQGoRFTgw');border-radius: 16px;">
-        
-         </div>
-				<div class="info">
-					<span class="title max-lines-2" title="<%- x.title %>" style="font-family:Inter,sans-serif;"><%- x.title %></span>
-            					<span class="title max-lines-2" title="Video By <%- x.author %>" style="margin-top:1px">By <%- x.author %></span>
-
+				<div class="thumbnail" style="background-image: url('https://p.poketube.fun/https://i.ytimg.com/vi/<%= x.videoId %>/hqdefault.jpg?sqp=-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLBy_x4UUHLNDZtJtH0PXeQGoRFTgw');border-radius: 16px;">  </div>
+				<div class="info"><span class="title max-lines-2" title="<%- x.title %>" style="font-family:Inter,sans-serif;"><%- x.title %></span><span class="title max-lines-2" title="Video By <%- x.author %>" style="margin-top:1px">By <%- x.author %></span>
                         </div>
             
                 <% }) %>   

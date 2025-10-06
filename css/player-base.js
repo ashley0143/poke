@@ -2,8 +2,8 @@
 var _yt_player = videojs;
 
 var versionclient = "youtube.player.web_20250917_22_RC00"
- 
- document.addEventListener("DOMContentLoaded", () => { 
+
+document.addEventListener("DOMContentLoaded", () => { 
     // video.js 8 init - source can be seen in https://poketube.fun/static/vjs.min.js or the vjs.min.js file
     const video = videojs('video', {
         controls: true,
@@ -54,13 +54,23 @@ var versionclient = "youtube.player.web_20250917_22_RC00"
     let seekingInProgress = false;
     let resumeAfterSeek = false;
 
+    // FIX: bridge freeze to stop play/pause mirroring during/after seeks
+    let bridgeDisabled = false;
+    let bridgeEnableTimer = null;
+    const BRIDGE_GRACE_MS = 600;
+    function disableBridge(ms = BRIDGE_GRACE_MS) {
+        bridgeDisabled = true;
+        if (bridgeEnableTimer) clearTimeout(bridgeEnableTimer);
+        bridgeEnableTimer = setTimeout(() => { bridgeDisabled = false; }, ms);
+    }
+
     // FIX: state arbiter watchdog (forces both to share same paused/playing state)
     let arbiterTimer = null;
     const ARBITER_MS = 150;
     function startArbiter() {
         if (arbiterTimer) clearInterval(arbiterTimer);
         arbiterTimer = setInterval(() => {
-            if (syncing || restarting || seekingInProgress) return;
+            if (syncing || restarting || seekingInProgress || bridgeDisabled) return;
 
             // treat "playing" strictly; ended counts as paused
             const vPlaying = !video.paused() && !video.ended();
@@ -204,7 +214,7 @@ var versionclient = "youtube.player.web_20250917_22_RC00"
 
     // FIX: unified play/pause coordinators (no ping-pong)
     async function playTogether({ allowMutedRetry = true } = {}) {
-        if (syncing || restarting || seekingInProgress) return; // FIX: don't start while seeking
+        if (syncing || restarting || seekingInProgress || bridgeDisabled) return; // FIX: don't start while seeking/bridged
         syncing = true;
         try {
             // align clocks first
@@ -368,23 +378,23 @@ var versionclient = "youtube.player.web_20250917_22_RC00"
 
         // sync-safe event bridging using the coordinators (no ping-pong)
         video.on('play', () => { 
-            if (seekingInProgress) return; // FIX
+            if (seekingInProgress || bridgeDisabled) return; // FIX
             vIsPlaying = true; 
             if (!aIsPlaying) playTogether({ allowMutedRetry: true }); 
         });
         audio.addEventListener('play', () => { 
-            if (seekingInProgress) return; // FIX
+            if (seekingInProgress || bridgeDisabled) return; // FIX
             aIsPlaying = true; 
             if (!vIsPlaying) playTogether({ allowMutedRetry: true }); 
         });
 
         video.on('pause', () => { 
-            if (restarting || seekingInProgress) return; // FIX
+            if (restarting || seekingInProgress || bridgeDisabled) return; // FIX
             vIsPlaying = false; 
             pauseTogether(); 
         });
         audio.addEventListener('pause', () => { 
-            if (restarting || seekingInProgress) return; // FIX
+            if (restarting || seekingInProgress || bridgeDisabled) return; // FIX
             aIsPlaying = false; 
             pauseTogether(); 
         });
@@ -426,19 +436,31 @@ var versionclient = "youtube.player.web_20250917_22_RC00"
             tick();
         });
 
+        // FIX: wait for *both* to report 'playing' (true co-play), with a short timeout
+        const waitBothPlaying = (timeoutMs = 800) => new Promise(resolve => {
+            const start = performance.now();
+            const tick = () => {
+                if (vIsPlaying && aIsPlaying) return resolve(true);
+                if (performance.now() - start > timeoutMs) return resolve(false);
+                setTimeout(tick, 30);
+            };
+            tick();
+        });
+
         // suppress spurious 'ended' right after seeks (mobile/browser quirk guard)
         let wasPlayingBeforeSeek = false;
 
         video.on('seeking', () => {
             if (restarting) return;
             seekingInProgress = true;          // FIX
+            disableBridge(1200);               // FIX: freeze mirroring while the seek settles
             wasPlayingBeforeSeek = !video.paused();
             resumeAfterSeek = wasPlayingBeforeSeek; // FIX
-            try { audio.pause(); } catch {}
-            clearSyncLoop();
+            pauseTogether();                   // FIX: atomically stop both sides during seek
             const vt = Number(video.currentTime());
             if (Math.abs(vt - Number(audio.currentTime)) > 0.1) safeSetCT(audio, vt);
             vIsPlaying = false; aIsPlaying = false; // FIX
+            stopArbiter();                     // FIX: arbiter off during seek window
         });
 
         video.on('seeked', async () => {
@@ -446,16 +468,20 @@ var versionclient = "youtube.player.web_20250917_22_RC00"
             const vt = Number(video.currentTime());
             if (Math.abs(vt - Number(audio.currentTime)) > 0.05) safeSetCT(audio, vt);
 
-            // FIX: only resume once the new point is playable; avoid first-load ping-pong
+            // FIX: only resume once the new point is playable, then wait for both to be truly "playing"
             if (resumeAfterSeek) {
                 await waitUntilPlayable(vt, 1000);
-                playTogether({ allowMutedRetry: false });
+                await playTogether({ allowMutedRetry: true });
+                await waitBothPlaying(900);
             } else {
                 pauseTogether();
             }
 
-            seekingInProgress = false; // FIX
-            resumeAfterSeek = false;   // FIX
+            // FIX: re-enable bridge after short grace (prevents first-load ping-pong)
+            disableBridge(300);
+            seekingInProgress = false;
+            resumeAfterSeek = false;
+            startArbiter(); // back on
         });
 
         video.on('canplaythrough', () => {
@@ -514,6 +540,7 @@ var versionclient = "youtube.player.web_20250917_22_RC00"
         startArbiter();
     }
 });
+ 
  
  
  // https://codeberg.org/ashley/poke/src/branch/main/src/libpoketube/libpoketube-youtubei-objects.json

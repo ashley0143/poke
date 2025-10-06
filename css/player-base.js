@@ -2,8 +2,7 @@
 var _yt_player = videojs;
 
 var versionclient = "youtube.player.web_20250917_22_RC00"
-
-document.addEventListener("DOMContentLoaded", () => { 
+ document.addEventListener("DOMContentLoaded", () => { 
     const video = videojs('video', {
         controls: true,
         autoplay: false,
@@ -147,8 +146,9 @@ document.addEventListener("DOMContentLoaded", () => {
         if (bothActivelyPlaying()) {
             pendingUnmute = false;
             setTimeout(() => {
-                try { video.muted(prevVideoMuted); } catch {}
-                try { audio.muted = prevAudioMuted; } catch {}
+                // Fix wrong mute restore
+                if (video.muted() && !prevVideoMuted) try { video.muted(false); } catch {}
+                if (audio.muted && !prevAudioMuted) try { audio.muted = false; } catch {}
             }, 120);
         }
     }
@@ -172,6 +172,14 @@ document.addEventListener("DOMContentLoaded", () => {
                 try { audio.muted = true; } catch {}
                 try { const p = video.play(); if (p && p.then) await p; } catch {}
                 try { const p = audio.play(); if (p && p.then) await p; } catch {}
+            }
+
+            // ensure no mismatch
+            if (!vOk && aOk) {
+                try { video.play().catch(() => showError('Video failed to start.')); } catch {}
+            }
+            if (vOk && !aOk) {
+                try { audio.play().catch(() => showError('Audio failed to start.')); } catch {}
             }
 
             if (!syncInterval) startSyncLoop();
@@ -198,6 +206,15 @@ document.addEventListener("DOMContentLoaded", () => {
         const onLoaded = () => { markReady(); tryStart(); };
         elm.addEventListener('loadeddata', onLoaded, { once: true });
         elm.addEventListener('loadedmetadata', onLoaded, { once: true });
+    }
+
+    const errorBox = document.getElementById('loopedIndicator');
+    function showError(msg) {
+        if (errorBox) {
+            errorBox.textContent = msg;
+            errorBox.style.display = 'block';
+            errorBox.style.width = 'fit-content';
+        }
     }
 
     function setupMediaSession() {
@@ -239,12 +256,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
         const clamp = v => Math.max(0, Math.min(1, Number(v)));
         video.on('volumechange', () => {
-            try { audio.volume = clamp(video.volume()); audio.muted = video.muted(); } catch {}
+            try {
+                if (!video.muted()) audio.volume = clamp(video.volume());
+                audio.muted = video.muted();
+            } catch {}
         });
 
         video.on('ratechange', () => { try { audio.playbackRate = video.playbackRate(); } catch {} });
 
-        const errorBox = document.getElementById('loopedIndicator');
         video.on('error', () => {
             const mediaError = video.error();
             let message = 'An unknown error occurred.';
@@ -252,18 +271,14 @@ document.addEventListener("DOMContentLoaded", () => {
                 if (mediaError.code === 1) return;
                 message = `Error ${mediaError.code}: ${mediaError.message || 'No message provided'} try to refresh the page?`;
             }
-            if (errorBox) {
-                errorBox.textContent = message;
-                errorBox.style.display = 'block';
-                errorBox.style.width = 'fit-content';
-            }
+            showError(message);
         });
 
         video.on('play', () => { markVPlaying(); if (!aIsPlaying) playTogether(); });
         audio.addEventListener('play', () => {
             markAPlaying();
             if (!vIsPlaying) {
-                try { video.play().catch(()=>{}); } catch {}
+                try { video.play().catch(() => showError('Video failed to start.')); } catch {}
             }
         });
 
@@ -294,7 +309,7 @@ document.addEventListener("DOMContentLoaded", () => {
         video.on('play', recordPlayPause);
         video.on('pause', recordPlayPause);
 
-        // --- smarter seek handling: pause only on large jumps (>= 20s) ---
+        // --- adaptive seek threshold ---
         let wasPlayingBeforeSeek = false;
         let lastSeekTime = 0;
         video.on('seeking', () => {
@@ -308,14 +323,17 @@ document.addEventListener("DOMContentLoaded", () => {
             const newTime = Number(video.currentTime());
             const seekDiff = Math.abs(newTime - lastSeekTime);
 
-            // Only pause/resync if seek is large (>20 seconds difference)
-            if (seekDiff > 20) {
+            // threshold scales with video duration
+            const dur = Number(video.duration()) || 60;
+            const threshold = Math.max(5, Math.min(dur * 0.66, 60)); // e.g., 40s for 1min, 60s max
+
+            if (seekDiff > threshold) {
                 pauseTogether();
                 safeSetCT(audio, newTime);
                 setTimeout(() => {
                     if (wasPlayingBeforeSeek && bothPlayableAt(newTime))
                         playTogether({ allowMutedRetry: true });
-                }, 180);
+                }, 200);
             } else {
                 safeSetCT(audio, newTime);
             }
@@ -353,7 +371,7 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 });
-
+ 
  
  
  // https://codeberg.org/ashley/poke/src/branch/main/src/libpoketube/libpoketube-youtubei-objects.json

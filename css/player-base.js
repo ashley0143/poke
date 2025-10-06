@@ -3,8 +3,7 @@ var _yt_player = videojs;
 
 var versionclient = "youtube.player.web_20250917_22_RC00"
 
-
-document.addEventListener("DOMContentLoaded", () => { 
+document.addEventListener("DOMContentLoaded", () => {
     // video.js 8 init - source can be seen in https://poketube.fun/static/vjs.min.js or the vjs.min.js file
     const video = videojs('video', {
         controls: true,
@@ -55,21 +54,13 @@ document.addEventListener("DOMContentLoaded", () => {
     let seekingInProgress = false;
     let resumeAfterSeek = false;
 
-    // NEW: short grace window that suspends arbiter + bridges to avoid first-seek ping-pong
-    let arbiterHoldUntil = 0;
-    let transitionInProgress = false; // brief on during coordinated play/pause transitions
-    const holdArbiter = (ms) => { arbiterHoldUntil = Math.max(arbiterHoldUntil, performance.now() + ms); };
-
     // FIX: state arbiter watchdog (forces both to share same paused/playing state)
     let arbiterTimer = null;
     const ARBITER_MS = 150;
     function startArbiter() {
         if (arbiterTimer) clearInterval(arbiterTimer);
         arbiterTimer = setInterval(() => {
-            // skip while guarded — this is the key to avoiding the first-seek ping-pong
             if (syncing || restarting || seekingInProgress) return;
-            if (performance.now() < arbiterHoldUntil) return;
-            if (transitionInProgress) return;
 
             // treat "playing" strictly; ended counts as paused
             const vPlaying = !video.paused() && !video.ended();
@@ -215,9 +206,6 @@ document.addEventListener("DOMContentLoaded", () => {
     async function playTogether({ allowMutedRetry = true } = {}) {
         if (syncing || restarting || seekingInProgress) return; // FIX: don't start while seeking
         syncing = true;
-        transitionInProgress = true;
-        // short grace so arbiter/bridges don't yank pause while the other starts
-        holdArbiter(900);
         try {
             // align clocks first
             const t = Number(video.currentTime());
@@ -225,16 +213,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
             // first attempt: keep existing mute states
             let vOk = true, aOk = true;
-
-            // NEW: start audio first, then video (reduces "video starts alone" races)
-            try { 
-                const pA = audio.play(); 
-                if (pA && pA.then) await pA; 
-            } catch { aOk = false; }
-            try { 
-                const pV = video.play(); 
-                if (pV && pV.then) await pV; 
-            } catch { vOk = false; }
+            try { const p = video.play(); if (p && p.then) await p; } catch { vOk = false; }
+            try { const p = audio.play(); if (p && p.then) await p; } catch { aOk = false; }
 
             // if either failed due to autoplay policy, retry both muted exactly once
             if (allowMutedRetry && (!vOk || !aOk)) {
@@ -244,43 +224,26 @@ document.addEventListener("DOMContentLoaded", () => {
                 try { video.muted(true); } catch {}
                 try { audio.muted = true; } catch {}
 
-                aOk = vOk = true;
-                try { const pA = audio.play(); if (pA && pA.then) await pA; } catch { aOk = false; }
-                try { const pV = video.play(); if (pV && pV.then) await pV; } catch { vOk = false; }
+                vOk = true; aOk = true;
+                try { const p = video.play(); if (p && p.then) await p; } catch { vOk = false; }
+                try { const p = audio.play(); if (p && p.then) await p; } catch { aOk = false; }
             }
 
             if (!syncInterval) startSyncLoop();
-
-            // extend grace a bit until both report 'playing'
-            const graceWatcher = setInterval(() => {
-                if (bothActivelyPlaying()) {
-                    clearInterval(graceWatcher);
-                    holdArbiter(300); // tiny extra cushion
-                } else {
-                    holdArbiter(250);  // keep extending while ramping up
-                }
-            }, 120);
-            setTimeout(() => clearInterval(graceWatcher), 3000); // hard stop, just in case
         } finally {
             syncing = false;
-            // slight defer to let events settle before re-enabling bridges/arbiter
-            setTimeout(() => { transitionInProgress = false; }, 120);
         }
     }
 
     function pauseTogether() {
         if (syncing) return;
         syncing = true;
-        transitionInProgress = true;
-        holdArbiter(250);
         try {
             try { video.pause(); } catch {}
             try { audio.pause(); } catch {}
             clearSyncLoop();
-            vIsPlaying = false; aIsPlaying = false;
         } finally {
             syncing = false;
-            setTimeout(() => { transitionInProgress = false; }, 80);
         }
     }
 
@@ -404,43 +367,35 @@ document.addEventListener("DOMContentLoaded", () => {
         video.on('ratechange', () => { try { audio.playbackRate = video.playbackRate(); } catch {} });
 
         // sync-safe event bridging using the coordinators (no ping-pong)
-        video.on('play', () => { 
-            // NEW: ignore bridge during seek/transition/hold to prevent ping-pong after first seek
-            if (seekingInProgress || restarting || transitionInProgress) return;
-            if (performance.now() < arbiterHoldUntil) return;
+        video.on('play', () => {
+            if (seekingInProgress) return; // FIX
             vIsPlaying = true;
             if (!aIsPlaying) playTogether({ allowMutedRetry: true });
         });
-        audio.addEventListener('play', () => { 
-            if (seekingInProgress || restarting || transitionInProgress) return;
-            if (performance.now() < arbiterHoldUntil) return;
+        audio.addEventListener('play', () => {
+            if (seekingInProgress) return; // FIX
             aIsPlaying = true;
             if (!vIsPlaying) playTogether({ allowMutedRetry: true });
         });
 
-        video.on('pause', () => { 
-            if (restarting || seekingInProgress || transitionInProgress) return; // FIX
-            vIsPlaying = false; 
-            pauseTogether(); 
+        video.on('pause', () => {
+            if (restarting || seekingInProgress) return; // FIX
+            vIsPlaying = false;
+            pauseTogether();
         });
-        audio.addEventListener('pause', () => { 
-            if (restarting || seekingInProgress || transitionInProgress) return; // FIX
-            aIsPlaying = false; 
-            pauseTogether(); 
+        audio.addEventListener('pause', () => {
+            if (restarting || seekingInProgress) return; // FIX
+            aIsPlaying = false;
+            pauseTogether();
         });
 
-        video.on('waiting', () => { 
+        video.on('waiting', () => {
             if (restarting || seekingInProgress) return; // FIX
-            // don't let arbiter slam the other side while one is spinning up
-            holdArbiter(400);
-            vIsPlaying = false; 
-            try { audio.pause(); } catch{}; 
-            clearSyncLoop(); 
+            vIsPlaying = false;
+            try { audio.pause(); } catch{};
+            clearSyncLoop();
         });
-        audio.addEventListener('waiting', () => { 
-            aIsPlaying = false; 
-            holdArbiter(400);
-        });
+        audio.addEventListener('waiting', () => { aIsPlaying = false; });
 
         video.on('playing', markVPlaying);
         audio.addEventListener('playing', markAPlaying);
@@ -470,41 +425,67 @@ document.addEventListener("DOMContentLoaded", () => {
             };
             tick();
         });
-
-        // suppress spurious 'ended' right after seeks (mobile/browser quirk guard)
-        let wasPlayingBeforeSeek = false;
-
+        
+        // =========================================================================
+        // FIXED: SEEKING LOGIC TO PREVENT PING-PONG RACE CONDITION
+        // =========================================================================
+        
         video.on('seeking', () => {
             if (restarting) return;
-            seekingInProgress = true;          // FIX
-            wasPlayingBeforeSeek = !video.paused();
-            resumeAfterSeek = wasPlayingBeforeSeek; // FIX
-            holdArbiter(900);                  // NEW: grace during/after seek
+            // FIXED: If another seek is already in progress, do nothing.
+            if (seekingInProgress) return;
+
+            seekingInProgress = true;
+            resumeAfterSeek = !video.paused(); // Capture state *before* any pauses.
+            vIsPlaying = false;
+            aIsPlaying = false;
+            
+            // Pause the audio immediately and stop the sync loop.
             try { audio.pause(); } catch {}
             clearSyncLoop();
+            
+            // Sync audio time to the video's new target time.
             const vt = Number(video.currentTime());
-            if (Math.abs(vt - Number(audio.currentTime)) > 0.1) safeSetCT(audio, vt);
-            vIsPlaying = false; aIsPlaying = false; // FIX
+            if (Math.abs(vt - Number(audio.currentTime)) > 0.1) {
+                safeSetCT(audio, vt);
+            }
         });
 
         video.on('seeked', async () => {
             if (restarting) return;
-            const vt = Number(video.currentTime());
-            if (Math.abs(vt - Number(audio.currentTime)) > 0.05) safeSetCT(audio, vt);
+            
+            // FIXED: This try/finally block is the core of the fix.
+            // The `finally` part ensures that our `seekingInProgress` guard is
+            // only lowered *after* all the async playback logic inside `try`
+            // has fully completed, preventing the race condition.
+            try {
+                const vt = Number(video.currentTime());
+                // Perform a final, more precise time sync.
+                if (Math.abs(vt - Number(audio.currentTime)) > 0.05) {
+                    safeSetCT(audio, vt);
+                }
 
-            // FIX: only resume once the new point is playable; avoid first-load ping-pong
-            if (resumeAfterSeek) {
-                await waitUntilPlayable(vt, 1200);
-                // extend grace right as we co-start to prevent the arbiter from pausing one early
-                holdArbiter(900);              // NEW: key part of the fix
-                playTogether({ allowMutedRetry: false });
-            } else {
-                pauseTogether();
+                if (resumeAfterSeek) {
+                    // Wait until media is actually available at the new time.
+                    await waitUntilPlayable(vt, 1000);
+                    // Now, tell the players to resume. The resulting 'play' events
+                    // will fire while `seekingInProgress` is still `true`, so their
+                    // handlers will correctly ignore them and not cause a loop.
+                    await playTogether({ allowMutedRetry: false });
+                } else {
+                    // If we were paused before seeking, ensure we remain paused.
+                    pauseTogether();
+                }
+            } finally {
+                // This code will only run *after* `await playTogether` is done.
+                // It is now safe to lower the guard and reset the state for the
+                // next user interaction.
+                seekingInProgress = false;
+                resumeAfterSeek = false;
             }
-
-            seekingInProgress = false; // FIX
-            resumeAfterSeek = false;   // FIX
         });
+
+        // =========================================================================
 
         video.on('canplaythrough', () => {
             if (restarting || seekingInProgress) return; // FIX
@@ -533,7 +514,6 @@ document.addEventListener("DOMContentLoaded", () => {
                 safeSetCT(audio, startAt);
 
                 await waitUntilPlayable(startAt, 1000);
-                holdArbiter(800); // grace while we re-start after loop end
                 await playTogether({ allowMutedRetry: true });
             } finally {
                 restarting = false;

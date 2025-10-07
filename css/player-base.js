@@ -5,7 +5,7 @@ var versionclient = "youtube.player.web_20250917_22_RC00"
 
  /**
  * @license
- * Video.js 8.16.0 <http://videojs.com/>
+ * Video.js 8.x <http://videojs.com/>
  * Copyright Brightcove, Inc. <https://www.brightcove.com/>
  * Available under Apache License Version 2.0
  * <https://github.com/videojs/video.js/blob/main/LICENSE>
@@ -14,8 +14,8 @@ var versionclient = "youtube.player.web_20250917_22_RC00"
  * Available under Apache License Version 2.0
  * <https://github.com/mozilla/vtt.js/blob/main/LICENSE>
  */
- document.addEventListener("DOMContentLoaded", () => { 
-    // video.js 8 init - source can be seen in https://poketube.fun/static/vjs.min.js or https://codeberg.org/ashley/poke/src/branch/main/css/vjs.min.js or the vjs.min.js file
+document.addEventListener("DOMContentLoaded", () => { 
+    // video.js 8 init - source can be seen in https://poketube.fun/static/vjs.min.js or the vjs.min.js file
     const video = videojs('video', {
         controls: true,
         autoplay: false,
@@ -23,12 +23,9 @@ var versionclient = "youtube.player.web_20250917_22_RC00"
         errorDisplay: false,
     });
 
-    const qs = new URLSearchParams(window.location.search);
+     const qs = new URLSearchParams(window.location.search);
     const qua = qs.get("quality") || "";
     const vidKey = qs.get('v');
-
-
-	// todo: remove this
     try { localStorage.setItem(`progress-${vidKey}`, 0); } catch {}
 
     // raw media elements
@@ -36,7 +33,7 @@ var versionclient = "youtube.player.web_20250917_22_RC00"
     const audio = document.getElementById('aud');
     const audioEl = document.getElementById('aud');
 
-    // inline playback works on iOS/Safari
+    //  inline playback works on iOS/Safari
     try { videoEl.setAttribute('playsinline', ''); videoEl.setAttribute('webkit-playsinline', ''); } catch {}
 
     // global state
@@ -44,7 +41,8 @@ var versionclient = "youtube.player.web_20250917_22_RC00"
     let restarting = false;
     let firstSeekDone = false;
 
-     let desiredLoop =
+    //  loop param or tag is respected
+    let desiredLoop =
         !!videoEl.loop ||
         qs.get("loop") === "1" ||
         qs.get("loop") === "true" ||
@@ -60,7 +58,7 @@ var versionclient = "youtube.player.web_20250917_22_RC00"
     try { videoEl.loop = false; videoEl.removeAttribute?.('loop'); } catch {}
     try { audio.loop = false; audio.removeAttribute?.('loop'); } catch {}
 
-    // we pick the right audio src
+    //  we pick the right audio src
     const pickAudioSrc = () => {
         const s = audio?.getAttribute?.('src');
         if (s) return s;
@@ -82,7 +80,7 @@ var versionclient = "youtube.player.web_20250917_22_RC00"
     const EPS = 0.15;
     const RESYNC_DRIFT_LIMIT = 3.5; // seconds difference that triggers pause+play reset
 
-    // we check if given time is buffered
+    //  we check if given time is buffered
     function timeInBuffered(media, t) {
         try {
             const br = media.buffered;
@@ -95,7 +93,7 @@ var versionclient = "youtube.player.web_20250917_22_RC00"
         return false;
     }
 
-    // we can tell if a timestamp is playable
+    //  we can tell if a timestamp is playable
     function canPlayAt(media, t) {
         try {
             const rs = Number(media.readyState || 0);
@@ -105,20 +103,19 @@ var versionclient = "youtube.player.web_20250917_22_RC00"
         } catch { return false; }
     }
 
-    // check both elements readiness
+    //  we check both elements readiness
     function bothPlayableAt(t) {
         return canPlayAt(videoEl, t) && canPlayAt(audio, t);
     }
 
-    // set currentTime
-    function safeSetCT(media, t) {
+     function safeSetCT(media, t) {
         try {
             if (!isFinite(t) || t < 0) return;
             media.currentTime = t;
         } catch {}
     }
 
-    // loop is cleared
+    //  sync loop is cleared
     function clearSyncLoop() {
         if (syncInterval) {
             clearInterval(syncInterval);
@@ -127,7 +124,7 @@ var versionclient = "youtube.player.web_20250917_22_RC00"
         }
     }
 
-    // this makes it so playback is kept in sync between both elements
+    //  playback is kept in sync between both elements
     function startSyncLoop() {
         clearSyncLoop();
         syncInterval = setInterval(() => {
@@ -156,21 +153,23 @@ var versionclient = "youtube.player.web_20250917_22_RC00"
                 try { audio.playbackRate = 1; } catch {}
             }
 
-            // this makes it so if one gets muted unexpectedly we fix it
+            //  if one gets muted unexpectedly we fix it
             if (video.muted() && !prevVideoMuted) try { video.muted(false); } catch {}
             if (audio.muted && !prevAudioMuted) try { audio.muted = false; } catch {}
 
         }, SYNC_INTERVAL_MS);
     }
 
+    //  we track playback state
     const markVPlaying = () => { vIsPlaying = true; maybeUnmuteRestore(); };
     const markAPlaying = () => { aIsPlaying = true; maybeUnmuteRestore(); };
     const markVNotPlaying = () => { vIsPlaying = false; };
     const markANotPlaying = () => { aIsPlaying = false; };
 
+    //  we know both are active
     function bothActivelyPlaying() { return vIsPlaying && aIsPlaying; }
 
-    // this makes it so both get unmuted when ready
+    //  both get unmuted when ready
     function maybeUnmuteRestore() {
         if (!pendingUnmute) return;
         if (bothActivelyPlaying()) {
@@ -182,7 +181,7 @@ var versionclient = "youtube.player.web_20250917_22_RC00"
         }
     }
 
-    // this makes it so both play in sync
+    //  both play in sync
     async function playTogether({ allowMutedRetry = true } = {}) {
         if (syncing || restarting) return;
         syncing = true;
@@ -217,7 +216,7 @@ var versionclient = "youtube.player.web_20250917_22_RC00"
         } finally { syncing = false; }
     }
 
-    // this makes it so both pause at once
+    //  both pause at once
     function pauseTogether() {
         if (syncing) return;
         syncing = true;
@@ -236,7 +235,8 @@ var versionclient = "youtube.player.web_20250917_22_RC00"
 
     const clamp = v => Math.max(0, Math.min(1, Number(v)));
 
-     function setupMediaSession() {
+    //  media session controls work
+    function setupMediaSession() {
         if ('mediaSession' in navigator) {
             try {
                 navigator.mediaSession.metadata = new MediaMetadata({
@@ -287,7 +287,7 @@ var versionclient = "youtube.player.web_20250917_22_RC00"
         video.on('pause', () => { vIsPlaying = false; if (!restarting) pauseTogether(); });
         audio.addEventListener('pause', () => { aIsPlaying = false; if (!restarting) pauseTogether(); });
 
-        // this makes it so large seeks pause and resync
+        //  large seeks pause and resync
         let wasPlayingBeforeSeek = false;
         let lastSeekTime = 0;
         video.on('seeking', () => {
@@ -321,7 +321,8 @@ var versionclient = "youtube.player.web_20250917_22_RC00"
             }
         });
 
-         async function restartLoop() {
+        //  looping restarts properly
+        async function restartLoop() {
             if (restarting) return;
             restarting = true;
             try {
@@ -335,7 +336,8 @@ var versionclient = "youtube.player.web_20250917_22_RC00"
             } finally { restarting = false; }
         }
 
-         video.on('ended', () => {
+        //  both react to ending
+        video.on('ended', () => {
             if (restarting) return;
             if (performance.now() < suppressEndedUntil) return;
             if (desiredLoop) restartLoop();
@@ -350,7 +352,6 @@ var versionclient = "youtube.player.web_20250917_22_RC00"
         });
     }
 });
- 
  
  // https://codeberg.org/ashley/poke/src/branch/main/src/libpoketube/libpoketube-youtubei-objects.json
 

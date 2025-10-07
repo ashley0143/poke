@@ -54,15 +54,14 @@ module.exports = function (app, config, renderTemplate) {
   });
 
 
-app.get("/api/geo", async function (req, res) {
+app.get("/api/geo", async (req, res) => {
   try {
     let ip =
       req.headers["x-forwarded-for"]?.split(",")[0].trim() ||
       req.socket.remoteAddress;
-
     if (ip && ip.startsWith("::ffff:")) ip = ip.slice(7);
 
-    if (
+     if (
       !ip ||
       ip === "127.0.0.1" ||
       ip === "::1" ||
@@ -73,12 +72,11 @@ app.get("/api/geo", async function (req, res) {
       return res.json({
         countryCode: "ZZ",
         isAgeRestrictedGeo: false,
-        note: "local or private IP skipped",
+        note: "local or private IP skipped"
       });
     }
 
     const result = await ip2c(ip);
-
     const countryCode = result.data.code || "??";
     const isAgeRestrictedGeo = countryCode === "GB";
 
@@ -89,11 +87,11 @@ app.get("/api/geo", async function (req, res) {
     res.status(500).json({
       error: true,
       message: "Failed to resolve country",
-      details: err.error || err,
+      details: err.error || err
     });
   }
 });
-  
+
 
   app.get("/ggpht/:v", async function (req, res) {
     var url = `https://yt3.ggpht.com/${req.params.v}`;

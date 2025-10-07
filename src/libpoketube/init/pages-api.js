@@ -53,44 +53,24 @@ module.exports = function (app, config, renderTemplate) {
     f.body.pipe(res);
   });
 
-
-app.get("/api/geo", async (req, res) => {
+app.get("/api/geo", async (_req, res) => {
   try {
-    let ip =
-      req.headers["x-forwarded-for"]?.split(",")[0].trim() ||
-      req.socket.remoteAddress;
-    if (ip && ip.startsWith("::ffff:")) ip = ip.slice(7);
+    const r = await fetch("https://ip2c.org/self");
+    const t = await r.text();
+    const parts = t.trim().split(";");
 
-     if (
-      !ip ||
-      ip === "127.0.0.1" ||
-      ip === "::1" ||
-      ip.startsWith("10.") ||
-      ip.startsWith("192.168.") ||
-      ip.startsWith("172.")
-    ) {
-      return res.json({
-        countryCode: "ZZ",
-        isAgeRestrictedGeo: false,
-        note: "local or private IP skipped"
-      });
-    }
-
-    const result = await ip2c(ip);
-    const countryCode = result.data.code || "??";
-    const isAgeRestrictedGeo = countryCode === "GB";
+    const countryCode = parts[1] || "ZZ";
 
     res.setHeader("Content-Type", "application/json");
     res.setHeader("Access-Control-Allow-Origin", "*");
-    res.json({ countryCode, isAgeRestrictedGeo });
-  } catch (err) {
-    res.status(500).json({
-      error: true,
-      message: "Failed to resolve country",
-      details: err.error || err
-    });
+    res.send(JSON.stringify({ countryCode }));
+  } catch {
+    res.setHeader("Content-Type", "application/json");
+    res.setHeader("Access-Control-Allow-Origin", "*");
+    res.send(JSON.stringify({ countryCode: "ZZ" }));
   }
 });
+
 
 
   app.get("/ggpht/:v", async function (req, res) {

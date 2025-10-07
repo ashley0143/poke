@@ -11,8 +11,7 @@ function getJson(str) {
 const pkg = require("../../../package.json");
 const os = require('os');
 const cnf = require("../../../config.json");
-const { lookup } = require("ip2c");
-
+const ip2c = require("../../../modules/ipapi"); // adjust relative path if needed
 const innertube = require("../libpoketube-youtubei-objects.json");
 
 const { execSync } = require('child_process'); // DO NOT ABBRV THIS :SOB:
@@ -56,18 +55,31 @@ module.exports = function (app, config, renderTemplate) {
 
 
 app.get("/api/geo", (req, res) => {
-   let ip =
-    req.headers["x-forwarded-for"]?.split(",")[0].trim() ||
-    req.socket.remoteAddress;
-  if (ip && ip.startsWith("::ffff:")) ip = ip.slice(7);
+  try {
+    let ip =
+      req.headers["x-forwarded-for"]?.split(",")[0].trim() ||
+      req.socket.remoteAddress;
+    if (ip && ip.startsWith("::ffff:")) ip = ip.slice(7);
 
-  const info = lookup(ip); // returns { countryCode: 'GB', countryName: 'United Kingdom', ... }
-  const countryCode = info?.countryCode || "??";
-  const isAgeRestrictedGeo = countryCode === "GB";
+    const result = await ip2c(ip);
 
-  res.setHeader("Content-Type", "application/json");
-  res.setHeader("Access-Control-Allow-Origin", "*");
-  res.json({ countryCode, isAgeRestrictedGeo });
+    const countryCode = result.data.code || "??";
+    const isAgeRestrictedGeo = countryCode === "GB";
+
+    res.setHeader("Content-Type", "application/json");
+    res.setHeader("Access-Control-Allow-Origin", "*");
+
+    res.json({
+      countryCode,
+      isAgeRestrictedGeo,
+    });
+  } catch (err) {
+    res.status(500).json({
+      error: true,
+      message: "Failed to resolve country",
+      details: err.error || err,
+    });
+  }
 });
 
   app.get("/ggpht/:v", async function (req, res) {

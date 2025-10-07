@@ -37,7 +37,7 @@
     "google-it": "^1.6.4",
     "youtubei.js": "^13.4.0",
     "terser":"^5.43.1",
-    "ip2country":"1.1.0"
+    "ip2c":"^1.0.1"
   },
   "engines": {
     "node": ">=18"

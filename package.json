@@ -35,8 +35,9 @@
     "activitypub-express": "^4.4.1",
     "duck-duck-scrape": "^2.2.5",
     "google-it": "^1.6.4",
-     "youtubei.js": "^13.4.0",
-     "terser":"^5.43.1"
+    "youtubei.js": "^13.4.0",
+    "terser":"^5.43.1",
+    "ip2country":"1.1.0"
   },
   "engines": {
     "node": ">=18"

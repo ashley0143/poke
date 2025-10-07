@@ -11,7 +11,7 @@ function getJson(str) {
 const pkg = require("../../../package.json");
 const os = require('os');
 const cnf = require("../../../config.json");
-const ip2country = require("ip2country");
+const { lookup } = require("ip2c");
 
 const innertube = require("../libpoketube-youtubei-objects.json");
 
@@ -56,15 +56,14 @@ module.exports = function (app, config, renderTemplate) {
 
 
 app.get("/api/geo", (req, res) => {
-  let ip =
+   let ip =
     req.headers["x-forwarded-for"]?.split(",")[0].trim() ||
     req.socket.remoteAddress;
+  if (ip && ip.startsWith("::ffff:")) ip = ip.slice(7);
 
-   if (ip && ip.startsWith("::ffff:")) ip = ip.substring(7);
-
-  const countryCode = ip2country(ip) || "??";
-
-  const isAgeRestrictedGeo = countryCode === "RU";
+  const info = lookup(ip); // returns { countryCode: 'GB', countryName: 'United Kingdom', ... }
+  const countryCode = info?.countryCode || "??";
+  const isAgeRestrictedGeo = countryCode === "GB";
 
   res.setHeader("Content-Type", "application/json");
   res.setHeader("Access-Control-Allow-Origin", "*");

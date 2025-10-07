@@ -3,7 +3,19 @@ var _yt_player = videojs;
 
 var versionclient = "youtube.player.web_20250917_22_RC00"
 
-document.addEventListener("DOMContentLoaded", () => { 
+ /**
+ * @license
+ * Video.js 8.16.0 <http://videojs.com/>
+ * Copyright Brightcove, Inc. <https://www.brightcove.com/>
+ * Available under Apache License Version 2.0
+ * <https://github.com/videojs/video.js/blob/main/LICENSE>
+ *
+ * Includes vtt.js <https://github.com/mozilla/vtt.js>
+ * Available under Apache License Version 2.0
+ * <https://github.com/mozilla/vtt.js/blob/main/LICENSE>
+ */
+ document.addEventListener("DOMContentLoaded", () => { 
+    // video.js 8 init - source can be seen in https://poketube.fun/static/vjs.min.js or https://codeberg.org/ashley/poke/src/branch/main/css/vjs.min.js or the vjs.min.js file
     const video = videojs('video', {
         controls: true,
         autoplay: false,
@@ -14,19 +26,25 @@ document.addEventListener("DOMContentLoaded", () => {
     const qs = new URLSearchParams(window.location.search);
     const qua = qs.get("quality") || "";
     const vidKey = qs.get('v');
+
+
+	// todo: remove this
     try { localStorage.setItem(`progress-${vidKey}`, 0); } catch {}
 
+    // raw media elements
     const videoEl = document.getElementById('video');
     const audio = document.getElementById('aud');
     const audioEl = document.getElementById('aud');
 
+    // inline playback works on iOS/Safari
     try { videoEl.setAttribute('playsinline', ''); videoEl.setAttribute('webkit-playsinline', ''); } catch {}
 
+    // global state
     let syncing = false;
     let restarting = false;
     let firstSeekDone = false;
 
-    let desiredLoop =
+     let desiredLoop =
         !!videoEl.loop ||
         qs.get("loop") === "1" ||
         qs.get("loop") === "true" ||
@@ -42,6 +60,7 @@ document.addEventListener("DOMContentLoaded", () => {
     try { videoEl.loop = false; videoEl.removeAttribute?.('loop'); } catch {}
     try { audio.loop = false; audio.removeAttribute?.('loop'); } catch {}
 
+    // we pick the right audio src
     const pickAudioSrc = () => {
         const s = audio?.getAttribute?.('src');
         if (s) return s;
@@ -56,11 +75,14 @@ document.addEventListener("DOMContentLoaded", () => {
     let audioReady = false, videoReady = false;
     let syncInterval = null;
 
+    // sync constants
     const BIG_DRIFT = 0.5;
     const MICRO_DRIFT = 0.05;
     const SYNC_INTERVAL_MS = 250;
     const EPS = 0.15;
+    const RESYNC_DRIFT_LIMIT = 3.5; // seconds difference that triggers pause+play reset
 
+    // we check if given time is buffered
     function timeInBuffered(media, t) {
         try {
             const br = media.buffered;
@@ -73,6 +95,7 @@ document.addEventListener("DOMContentLoaded", () => {
         return false;
     }
 
+    // we can tell if a timestamp is playable
     function canPlayAt(media, t) {
         try {
             const rs = Number(media.readyState || 0);
@@ -82,10 +105,12 @@ document.addEventListener("DOMContentLoaded", () => {
         } catch { return false; }
     }
 
+    // check both elements readiness
     function bothPlayableAt(t) {
         return canPlayAt(videoEl, t) && canPlayAt(audio, t);
     }
 
+    // set currentTime
     function safeSetCT(media, t) {
         try {
             if (!isFinite(t) || t < 0) return;
@@ -93,6 +118,7 @@ document.addEventListener("DOMContentLoaded", () => {
         } catch {}
     }
 
+    // loop is cleared
     function clearSyncLoop() {
         if (syncInterval) {
             clearInterval(syncInterval);
@@ -101,13 +127,23 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
+    // this makes it so playback is kept in sync between both elements
     function startSyncLoop() {
         clearSyncLoop();
         syncInterval = setInterval(() => {
             const vt = Number(video.currentTime());
             const at = Number(audio.currentTime);
             if (!isFinite(vt) || !isFinite(at)) return;
+
             const delta = vt - at;
+
+            // if drift is huge (desync >3.5s), resync both
+            if (Math.abs(delta) > RESYNC_DRIFT_LIMIT) {
+                pauseTogether();
+                setTimeout(() => playTogether({ allowMutedRetry: true }), 150);
+                return;
+            }
+
             if (Math.abs(delta) > BIG_DRIFT) {
                 safeSetCT(audio, vt);
                 try { audio.playbackRate = 1; } catch {}
@@ -119,6 +155,11 @@ document.addEventListener("DOMContentLoaded", () => {
             } else {
                 try { audio.playbackRate = 1; } catch {}
             }
+
+            // this makes it so if one gets muted unexpectedly we fix it
+            if (video.muted() && !prevVideoMuted) try { video.muted(false); } catch {}
+            if (audio.muted && !prevAudioMuted) try { audio.muted = false; } catch {}
+
         }, SYNC_INTERVAL_MS);
     }
 
@@ -129,6 +170,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     function bothActivelyPlaying() { return vIsPlaying && aIsPlaying; }
 
+    // this makes it so both get unmuted when ready
     function maybeUnmuteRestore() {
         if (!pendingUnmute) return;
         if (bothActivelyPlaying()) {
@@ -140,6 +182,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
+    // this makes it so both play in sync
     async function playTogether({ allowMutedRetry = true } = {}) {
         if (syncing || restarting) return;
         syncing = true;
@@ -162,6 +205,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 try { const p = audio.play(); if (p && p.then) await p; } catch {}
             }
 
+            // if one fails, we try again for both
             if (!vOk && aOk) {
                 try { video.play().catch(() => showError('Video failed to start.')); } catch {}
             }
@@ -173,12 +217,14 @@ document.addEventListener("DOMContentLoaded", () => {
         } finally { syncing = false; }
     }
 
+    // this makes it so both pause at once
     function pauseTogether() {
         if (syncing) return;
         syncing = true;
         try { video.pause(); audio.pause(); clearSyncLoop(); } finally { syncing = false; }
     }
 
+    // error indicator box
     const errorBox = document.getElementById('loopedIndicator');
     function showError(msg) {
         if (errorBox) {
@@ -190,19 +236,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const clamp = v => Math.max(0, Math.min(1, Number(v)));
 
-    function setupMediaSession() {
+     function setupMediaSession() {
         if ('mediaSession' in navigator) {
             try {
                 navigator.mediaSession.metadata = new MediaMetadata({
                     title: document.title || 'Video',
-                    artist: authorchannelname,
-                    album: '',
+                    artist: typeof authorchannelname !== "undefined" ? authorchannelname : "",
                     artwork: [
-                    {
-                    src: `https://i.ytimg.com/vi/${vidKey}/maxresdefault.jpg`,
-                    sizes: "1280x720",
-                    type: "image/jpeg"
-                    }
+                        { src: `https://i.ytimg.com/vi/${vidKey}/maxresdefault.jpg`, sizes: "1280x720", type: "image/jpeg" }
                     ]
                 });
             } catch {}
@@ -212,15 +253,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     if (qua !== "medium") {
-        const pickAudioSrc = () => {
-            const s = audio?.getAttribute?.('src');
-            if (s) return s;
-            const child = audio?.querySelector?.('source');
-            if (child?.getAttribute?.('src')) return child.getAttribute('src');
-            if (audio?.currentSrc) return audio.currentSrc;
-            return null;
-        };
-
         const attachRetry = (elm, resolveSrc, markReady) => {
             const onLoaded = () => { markReady(); tryStart(); };
             elm.addEventListener('loadeddata', onLoaded, { once: true });
@@ -255,6 +287,7 @@ document.addEventListener("DOMContentLoaded", () => {
         video.on('pause', () => { vIsPlaying = false; if (!restarting) pauseTogether(); });
         audio.addEventListener('pause', () => { aIsPlaying = false; if (!restarting) pauseTogether(); });
 
+        // this makes it so large seeks pause and resync
         let wasPlayingBeforeSeek = false;
         let lastSeekTime = 0;
         video.on('seeking', () => {
@@ -270,7 +303,6 @@ document.addEventListener("DOMContentLoaded", () => {
             const dur = Number(video.duration()) || 60;
             const threshold = Math.max(5, Math.min(dur * 0.66, 60));
 
-            // First seek skips pause logic entirely
             if (!firstSeekDone) {
                 safeSetCT(audio, newTime);
                 firstSeekDone = true;
@@ -289,8 +321,7 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         });
 
-        // --- loop handler ---
-        async function restartLoop() {
+         async function restartLoop() {
             if (restarting) return;
             restarting = true;
             try {
@@ -304,7 +335,7 @@ document.addEventListener("DOMContentLoaded", () => {
             } finally { restarting = false; }
         }
 
-        video.on('ended', () => {
+         video.on('ended', () => {
             if (restarting) return;
             if (performance.now() < suppressEndedUntil) return;
             if (desiredLoop) restartLoop();

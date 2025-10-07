@@ -54,7 +54,7 @@ module.exports = function (app, config, renderTemplate) {
   });
 
 
-app.get("/api/geo", (req, res) => {
+app.get("/api/geo", async function (req, res) => {
   try {
     let ip =
       req.headers["x-forwarded-for"]?.split(",")[0].trim() ||

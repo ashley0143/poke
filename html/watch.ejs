@@ -74,7 +74,6 @@
     { property: "og:image", content: image },
   ];
 %>
-
 <% twitterTags.forEach(tag => { -%>
 <meta name="<%= tag.name %>" content="<%- tag.content %>">
 <% }) -%>
@@ -84,7 +83,6 @@
 <% ogTags.forEach(tag => { -%>
 <meta property="<%= tag.property %>" content="<%- tag.content %>">
 <% }) -%>
-
 <link href="https://<%=hostname %>/watch?v=<%=VideoData.videoId%>" itemprop=url>
 <!-- closes the } --> <% } %> 
 <meta name="darkreader-lock"> <!-- tells dark reader that the site has a dark theme and to turn itself off -->

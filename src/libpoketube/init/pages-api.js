@@ -11,7 +11,7 @@ function getJson(str) {
 const pkg = require("../../../package.json");
 const os = require('os');
 const cnf = require("../../../config.json");
-
+const ip2country = require("ip2country");
 
 const innertube = require("../libpoketube-youtubei-objects.json");
 
@@ -53,6 +53,23 @@ module.exports = function (app, config, renderTemplate) {
 
     f.body.pipe(res);
   });
+
+
+app.get("/api/geo", (req, res) => {
+  let ip =
+    req.headers["x-forwarded-for"]?.split(",")[0].trim() ||
+    req.socket.remoteAddress;
+
+   if (ip && ip.startsWith("::ffff:")) ip = ip.substring(7);
+
+  const countryCode = ip2country(ip) || "??";
+
+  const isAgeRestrictedGeo = countryCode === "RU";
+
+  res.setHeader("Content-Type", "application/json");
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.json({ countryCode, isAgeRestrictedGeo });
+});
 
   app.get("/ggpht/:v", async function (req, res) {
     var url = `https://yt3.ggpht.com/${req.params.v}`;

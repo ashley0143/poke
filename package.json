@@ -36,7 +36,7 @@
     "duck-duck-scrape": "^2.2.5",
     "google-it": "^1.6.4",
     "youtubei.js": "^13.4.0",
-    "terser":"^5.43.1",
+    "terser":"^5.43.1"
   },
   "engines": {
     "node": ">=18"

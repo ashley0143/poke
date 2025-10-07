@@ -53,23 +53,29 @@ module.exports = function (app, config, renderTemplate) {
     f.body.pipe(res);
   });
 
-app.get("/api/geo", async (_req, res) => {
+app.get("/api/geo", async (req, res) => {
   try {
-    const r = await fetch("https://ip2c.org/self");
-    const t = await r.text();
-    const parts = t.trim().split(";");
+    let ip =
+      req.headers["x-forwarded-for"]?.split(",")[0].trim() ||
+      req.socket.remoteAddress;
 
+    if (ip && ip.startsWith("::ffff:")) ip = ip.slice(7);
+    if (!ip || ip.startsWith("192.") || ip.startsWith("10.") || ip === "::1") {
+      return res.json({ countryCode: "ZZ" });
+    }
+
+    const response = await fetch(`https://ip2c.org/${ip}`);
+    const text = await response.text();
+    const parts = text.trim().split(";");
     const countryCode = parts[1] || "ZZ";
 
-    res.setHeader("Content-Type", "application/json");
     res.setHeader("Access-Control-Allow-Origin", "*");
-    res.send(JSON.stringify({ countryCode }));
+    res.json({ countryCode });
   } catch {
-    res.setHeader("Content-Type", "application/json");
-    res.setHeader("Access-Control-Allow-Origin", "*");
-    res.send(JSON.stringify({ countryCode: "ZZ" }));
+    res.json({ countryCode: "ZZ" });
   }
 });
+
 
 
 

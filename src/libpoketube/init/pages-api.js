@@ -11,7 +11,7 @@ function getJson(str) {
 const pkg = require("../../../package.json");
 const os = require('os');
 const cnf = require("../../../config.json");
-const ip2c = require("../../../modules/ipapi.js");
+const ip2c = require("../../modules/ipapi");
 const innertube = require("../libpoketube-youtubei-objects.json");
 
 const { execSync } = require('child_process'); // DO NOT ABBRV THIS :SOB:

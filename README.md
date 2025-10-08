@@ -18,10 +18,15 @@
   <br><br>
   <img src="https://raw.githubusercontent.com/vshymanskyy/StandWithUkraine/main/badges/StandWithUkraine.svg" alt="Stand with Ukraine">
   <img src="https://codeberg.org/ashley/pages/raw/branch/main/images/trans-badge.svg">
-  <img src="https://codeberg.org/ashley/pages/raw/branch/main/images/free-Palestine.svg">
+  <img src="https://codeberg.org/ashley/pages/raw/branch/main/images/free-Palestine.svg"><br>
   <a href="https://codeberg.org/ashley/poke/src/branch/main/LICENSE">
-    <img src="https://img.shields.io/badge/License-GPL--3-FF6666" alt="GPL-3-or-later License">
+<img src="https://img.shields.io/badge/License-GPL--3.0--or--later-FF6666" alt="GPL-3.0-or-later SPDX License">
   </a>
+<img src="https://img.shields.io/badge/Powered%20by-GNU/Linux-333333?logo=gnu" alt="GNU/Linux">
+<img src="https://img.shields.io/badge/Web%20Server-Nginx-009639?logo=nginx&logoColor=white" alt="Nginx">
+<br> <img src="https://img.shields.io/badge/Backend-Express.js-000000?logo=express" alt="Express.js">
+ <img src="https://img.shields.io/badge/Frontend-EJS-F4D03F" alt="EJS">
+<img src="https://img.shields.io/badge/Language-JavaScript-F7DF1E?logo=javascript&logoColor=black" alt="JavaScript">
 </div>
 <br>
 

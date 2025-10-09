@@ -705,124 +705,26 @@ function validatePlayerObject(player) {
 
 const extractedData = extractPlayerData(base_player_poketube);
 const initializedPlayer = initializePlayer(extractedData);
- 
 
- const saa = document.createElement('style');
-saa.innerHTML = `
-.vjs-play-progress{background-image:linear-gradient(to right,#ff0045,#ff0e55,#ff1d79)}
 
-/* move the whole controls panel up a bit so buttons fit */
-.video-js .vjs-control-bar{bottom:12px!important}
-
-/* poster border radius to 16px */
-.vjs-poster {
-  border-radius: 16px;
-}
-
-/* poster border radius to 16px */
-.vjs-poster img {
-  border-radius: 16px;
-}
-
-/* control bar: clean baseline */
-.vjs-control-bar{
-  background:transparent!important;border:none!important;box-shadow:none!important;
-  display:flex!important;align-items:center!important;gap:2px;padding:6px 10px;border-radius:16px
-}
-.vjs-remaining-time,.vjs-fullscreen-control{background-color:transparent!important}
-
-/* glassy circular controls */
-.vjs-control-bar .vjs-button{
-  width:38px;height:38px;min-width:38px;border-radius:50%;
-  background:linear-gradient(180deg,rgba(255,255,255,.18),rgba(255,255,255,.08));
-  -webkit-backdrop-filter:blur(12px) saturate(160%);backdrop-filter:blur(12px) saturate(160%);
-  border:1px solid rgba(255,255,255,.18);
-  box-shadow:0 8px 24px rgba(0,0,0,.35),inset 0 0 0 1px rgba(255,255,255,.10);
-  display:inline-flex;align-items:center;justify-content:center;margin:0 6px;
-  transition:transform .12s ease,box-shadow .2s ease,background .2s ease;vertical-align:middle
-}
-.vjs-control-bar .vjs-button:hover{background:linear-gradient(180deg,rgba(255,255,255,.24),rgba(255,255,255,.12));box-shadow:0 10px 28px rgba(0,0,0,.4),inset 0 0 0 1px rgba(255,255,255,.16);transform:translateY(-1px)}
-.vjs-control-bar .vjs-button:active{transform:translateY(0)}
-.vjs-control-bar .vjs-button:focus-visible{outline:none;box-shadow:0 0 0 3px rgba(255,0,90,.35),inset 0 0 0 1px rgba(255,255,255,.2)}
-.vjs-control-bar .vjs-icon-placeholder:before{font-size:18px;line-height:38px}
-
-/* center the time text vertically like buttons */
-.vjs-current-time,.vjs-time-divider,.vjs-duration,.vjs-remaining-time{
-  background:transparent;padding:0 8px;border-radius:999px;box-shadow:none;margin:0;
-  height:38px;line-height:1;display:inline-flex;align-items:center
-}
-
-/* progress: glass capsule like the buttons */
-.vjs-progress-control{
-  flex:1 1 auto;display:flex!important;align-items:center!important;margin:0 6px;padding:0;height:38px
-}
-.vjs-progress-control .vjs-progress-holder{
-  height:8px!important;border-radius:999px!important;background:transparent!important;border:none;box-shadow:none;
-  position:relative;margin:0;width:100%
-}
-/* glass capsule background (same vibe as circular buttons) */
-.vjs-progress-control .vjs-progress-holder::before{
-position:absolute;inset:0;border-radius:inherit;
-  background:linear-gradient(180deg,rgba(255,255,255,.18),rgba(255,255,255,.08));
-  -webkit-backdrop-filter:blur(12px) saturate(160%);backdrop-filter:blur(12px) saturate(160%);
-  border:1px solid rgba(255,255,255,.18);
-  box-shadow:0 8px 24px rgba(0,0,0,.35),inset 0 0 0 1px rgba(255,255,255,.10);
-  pointer-events:none
-}
-/* keep bars above the capsule bg */
-.vjs-progress-control .vjs-load-progress,
-.vjs-progress-control .vjs-play-progress{position:relative;z-index:1;border-radius:inherit!important}
-.vjs-progress-control .vjs-play-progress{background-image:linear-gradient(to right,#ff0045,#ff0e55,#ff1d79)!important}
-.vjs-progress-control .vjs-slider-handle{
-  width:14px!important;height:14px!important;border-radius:50%!important;background:#fff!important;border:1px solid rgba(255,255,255,.9);
-  box-shadow:0 6px 18px rgba(0,0,0,.35),0 0 0 3px rgba(255,0,90,.20);top:-4px!important;z-index:2
-}
-
-/* volume aligned to baseline; simple track */
-.vjs-volume-panel{gap:8px;align-items:center!important;padding:0;height:38px}
-.vjs-volume-bar{height:6px!important;border-radius:999px!important;background:#2c2c2c!important;border:none;box-shadow:none;position:relative}
-.vjs-volume-level{border-radius:inherit!important;background-image:linear-gradient(to right,#ff0045,#ff1d79)!important}
-.vjs-volume-bar .vjs-slider-handle{
-  width:12px!important;height:12px!important;border-radius:50%!important;background:#fff!important;border:1px solid rgba(255,255,255,.9);
-  top:-3px!important;box-shadow:0 4px 14px rgba(0,0,0,.3),0 0 0 3px rgba(255,0,90,.18)
-}
-
-/* small screens */
-@media (max-width:640px){
-  .video-js .vjs-control-bar{bottom:10px!important}
-  .vjs-control-bar{gap:8px;padding:6px 8px}
-  .vjs-control-bar .vjs-button{width:34px;height:34px;min-width:34px}
-  .vjs-control-bar .vjs-icon-placeholder:before{font-size:16px;line-height:34px}
-  .vjs-current-time,.vjs-time-divider,.vjs-duration,.vjs-remaining-time{height:34px}
-  .vjs-progress-control{height:34px}
-  .vjs-progress-control .vjs-slider-handle{width:12px!important;height:12px!important;top:-3px!important}
-}
-`;
-document.head.appendChild(saa);
+// custom video.js ui for POKE PLAYER 
+ const customVideoJsUI = document.createElement('style');
+customVideoJsUI.innerHTML = `.vjs-play-progress{background-image:linear-gradient(to right,#ff0045,#ff0e55,#ff1d79)}.video-js .vjs-control-bar{bottom:12px!important}.vjs-poster{border-radius:16px}.vjs-poster img{border-radius:16px}.vjs-control-bar{background:transparent!important;border:none!important;box-shadow:none!important;display:flex!important;align-items:center!important;gap:2px;padding:6px 10px;border-radius:16px}.vjs-fullscreen-control,.vjs-remaining-time{background-color:transparent!important}.vjs-control-bar .vjs-button{width:38px;height:38px;min-width:38px;border-radius:50%;background:linear-gradient(180deg,rgba(255,255,255,.18),rgba(255,255,255,.08));-webkit-backdrop-filter:blur(12px) saturate(160%);backdrop-filter:blur(12px) saturate(160%);border:1px solid rgba(255,255,255,.18);box-shadow:0 8px 24px rgba(0,0,0,.35),inset 0 0 0 1px rgba(255,255,255,.10);display:inline-flex;align-items:center;justify-content:center;margin:0 6px;transition:transform 0.12s ease,box-shadow 0.2s ease,background 0.2s ease;vertical-align:middle}.vjs-control-bar .vjs-button:hover{background:linear-gradient(180deg,rgba(255,255,255,.24),rgba(255,255,255,.12));box-shadow:0 10px 28px rgba(0,0,0,.4),inset 0 0 0 1px rgba(255,255,255,.16);transform:translateY(-1px)}.vjs-control-bar .vjs-button:active{transform:translateY(0)}.vjs-control-bar .vjs-button:focus-visible{outline:none;box-shadow:0 0 0 3px rgba(255,0,90,.35),inset 0 0 0 1px rgba(255,255,255,.2)}.vjs-control-bar .vjs-icon-placeholder:before{font-size:18px;line-height:38px}.vjs-current-time,.vjs-duration,.vjs-remaining-time,.vjs-time-divider{background:transparent;padding:0 8px;border-radius:999px;box-shadow:none;margin:0;height:38px;line-height:1;display:inline-flex;align-items:center}.vjs-progress-control{flex:1 1 auto;display:flex!important;align-items:center!important;margin:0 6px;padding:0;height:38px}.vjs-progress-control .vjs-progress-holder{height:8px!important;border-radius:999px!important;background:transparent!important;border:none;box-shadow:none;position:relative;margin:0;width:100%}.vjs-progress-control .vjs-progress-holder::before{position:absolute;inset:0;border-radius:inherit;background:linear-gradient(180deg,rgba(255,255,255,.18),rgba(255,255,255,.08));-webkit-backdrop-filter:blur(12px) saturate(160%);backdrop-filter:blur(12px) saturate(160%);border:1px solid rgba(255,255,255,.18);box-shadow:0 8px 24px rgba(0,0,0,.35),inset 0 0 0 1px rgba(255,255,255,.10);pointer-events:none}.vjs-progress-control .vjs-load-progress,.vjs-progress-control .vjs-play-progress{position:relative;z-index:1;border-radius:inherit!important}.vjs-progress-control .vjs-play-progress{background-image:linear-gradient(to right,#ff0045,#ff0e55,#ff1d79)!important}.vjs-progress-control .vjs-slider-handle{width:14px!important;height:14px!important;border-radius:50%!important;background:#fff!important;border:1px solid rgba(255,255,255,.9);box-shadow:0 6px 18px rgba(0,0,0,.35),0 0 0 3px rgba(255,0,90,.20);top:-4px!important;z-index:2}.vjs-volume-panel{gap:8px;align-items:center!important;padding:0;height:38px}.vjs-volume-bar{height:6px!important;border-radius:999px!important;background:#2c2c2c!important;border:none;box-shadow:none;position:relative}.vjs-volume-level{border-radius:inherit!important;background-image:linear-gradient(to right,#ff0045,#ff1d79)!important}.vjs-volume-bar .vjs-slider-handle{width:12px!important;height:12px!important;border-radius:50%!important;background:#fff!important;border:1px solid rgba(255,255,255,.9);top:-3px!important;box-shadow:0 4px 14px rgba(0,0,0,.3),0 0 0 3px rgba(255,0,90,.18)}@media (max-width:640px){.video-js .vjs-control-bar{bottom:10px!important}.vjs-control-bar{gap:8px;padding:6px 8px}.vjs-control-bar .vjs-button{width:34px;height:34px;min-width:34px}.vjs-control-bar .vjs-icon-placeholder:before{font-size:16px;line-height:34px}.vjs-current-time,.vjs-duration,.vjs-remaining-time,.vjs-time-divider{height:34px}.vjs-progress-control{height:34px}.vjs-progress-control .vjs-slider-handle{width:12px!important;height:12px!important;top:-3px!important}}`;
+document.head.appendChild(customVideoJsUI);
 
 
 window.pokePlayer = {
     ver:`21-6740c111-vjs-${videojs.VERSION}`,
     canHasAmbientMode:true,
     videoID:new URLSearchParams(window.location.search).get('v'),
-    supported_itag_list:["136", "140", "298", "18", "400", "401", "313", "271"],
-    formats:["SD", "HD", "4k", "2k"],
+    supported_itag_list:["22","136", "140", "298", "18", "400", "401", "313", "271"],
+    formats:["SD", "HD", "4K", "2K", "UHD", "FHD"],
 	YoutubeAPI,
     clientVideoPlayerID:"0004de42",
-    
 }
 
 
 /* video js plugins */
-
-
-
-
-
-
-
-
-
 
 
 

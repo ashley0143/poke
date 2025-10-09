@@ -238,7 +238,7 @@ module.exports = function (app, config, renderTemplate) {
 
       <h1>⚠️ Configuration Error</h1>
       <p>
-        It looks like you're using <code>PokeTube</code>'s own Invidious API endpoint
+        It looks like you're using <code>Poke</code>'s own Invidious API endpoint
         (<code>${officialApi}</code>) for your custom instance.
       </p>
 

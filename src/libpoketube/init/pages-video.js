@@ -218,6 +218,15 @@ module.exports = function (app, config, renderTemplate) {
     const verify = req.hostname === "poketube.sudovanilla.com";
 
     
+  if (req.hostname !== "poketube.fun") {
+    if (config.invapi ==="https://invid-api.poketube.fun/bHj665PpYhUdPWuKPfZuQGoX/api/v1") {
+   return res.status(500).send( "Error: please edit your config.json to match your own instance, and please use your own API URL. see docs.invidious.io to how to setup invidious!");
+    }
+  }
+
+
+
+
     INNERTUBE.getYouTubePlayerInfo(f, v, contentlang, contentregion).then(
       (data) => {
         try {

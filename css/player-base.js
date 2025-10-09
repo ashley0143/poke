@@ -14,6 +14,10 @@ var versionclient = "youtube.player.web_20250917_22_RC00"
  * Available under Apache License Version 2.0
  * <https://github.com/mozilla/vtt.js/blob/main/LICENSE>
  */
+
+
+
+
 document.addEventListener("DOMContentLoaded", () => { 
     // video.js 8 init - source can be seen in https://poketube.fun/static/vjs.min.js or the vjs.min.js file
     const video = videojs('video', {
@@ -625,12 +629,9 @@ const base_player_old_old = "https://www.youtube.com/s/player/a87a9450/player_ia
 const base_player_old = "https://www.youtube.com/s/player/2d24ba15/player_ias.vflset/en_US/base.js";
 const base_player_broken = "https://www.youtube.com/s/player/6740c111/player_ias.vflset/en_US/base.js";
 const hey = " please dont use the above player base stuff!! tyyyyyyyy <3 "
-
-
 const youtubeobjects = "https://codeberg.org/ashley/poke/raw/branch/main/src/libpoketube/libpoketube-youtubei-objects.json"
-
+const watchURl = "https://youtube.com/watch"
 const base_player = "https://www.youtube.com/s/player/0004de42/player_ias.vflset/en_US/base.js";
-
 const base_player_poketube = "https://poketube.fun/s/player/0004de42/player_ias.vflset/en_US/base.js";
 
 function extractPlayerData(playerUrl) {
@@ -705,6 +706,49 @@ function validatePlayerObject(player) {
 
 const extractedData = extractPlayerData(base_player_poketube);
 const initializedPlayer = initializePlayer(extractedData);
+
+const POKEPLAYEROBJECTS = {
+  base_player_old_old: "https://www.youtube.com/s/player/a87a9450/player_ias.vflset/en_US/base.js",
+  base_player_old: "https://www.youtube.com/s/player/2d24ba15/player_ias.vflset/en_US/base.js",
+  base_player_broken: "https://www.youtube.com/s/player/6740c111/player_ias.vflset/en_US/base.js",
+  base_player: "https://www.youtube.com/s/player/0004de42/player_ias.vflset/en_US/base.js",
+  base_player_poketube: "https://poketube.fun/s/player/0004de42/player_ias.vflset/en_US/base.js",
+  youtubeobjects: "https://codeberg.org/ashley/poke/raw/branch/main/src/libpoketube/libpoketube-youtubei-objects.json",
+  watchURL: "https://youtube.com/watch",
+  youtube_home: "https://www.youtube.com/",
+  youtube_trending: "https://www.youtube.com/feed/trending",
+  youtube_music: "https://music.youtube.com/",
+  youtube_shorts: "https://www.youtube.com/shorts/",
+  youtube_subscriptions: "https://www.youtube.com/feed/subscriptions",
+  youtube_api_v1: "https://www.youtube.com/youtubei/v1/player",
+  youtube_embed: "https://www.youtube.com/embed/",
+  youtube_channel: "https://www.youtube.com/channel/",
+  youtube_search: "https://www.youtube.com/results?search_query=",
+  youtube_feed: "https://www.youtube.com/feeds/videos.xml?channel_id="
+};
+
+try {
+  console.log("[POKE PLAYER] initializing player configuration...");
+
+  for (const [name, url] of Object.entries(POKEPLAYEROBJECTS)) {
+    if (!url.startsWith("http")) {
+      console.log(`[POKE PLAYER] skipped ${name}`);
+      continue;
+    }
+
+    if (name === "base_player") {
+      const id = (url.match(/player\/([^/]+)/) || [])[1] || "unknown";
+      console.log(`[POKE PLAYER] USING PLAYER [${id}]`);
+    } else {
+      console.log(`[POKE PLAYER] loaded ${name}`);
+    }
+  }
+
+  console.log("[POKE PLAYER] all URLs registered successfully!");
+} catch (err) {
+  console.error("[POKE PLAYER] initialization error:", err.message);
+}
+
 
 
 // custom video.js ui for POKE PLAYER 

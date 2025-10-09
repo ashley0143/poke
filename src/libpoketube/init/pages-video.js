@@ -217,13 +217,50 @@ module.exports = function (app, config, renderTemplate) {
     const secure = ["poketube.fun"].includes(req.hostname);
     const verify = req.hostname === "poketube.sudovanilla.com";
 
-    
-  if (req.hostname !== "poketube.fun") {
-    if (config.invapi ==="https://invid-api.poketube.fun/bHj665PpYhUdPWuKPfZuQGoX/api/v1") {
-   return res.status(500).send( "Error: please edit your config.json to match your own instance, and please use your own API URL. see docs.invidious.io to how to setup invidious!");
-    }
-  }
+    const officialHost = "poketube.fun";
+    const officialApi ="https://invid-api.poketube.fun/bHj665PpYhUdPWuKPfZuQGoX/api/v1";
 
+   if (req.hostname !== officialHost && config.invapi === officialApi) {
+    const message = `
+      <style>
+        body {
+          background: #0d1117;
+          color: #e6edf3;
+          font-family: system-ui, sans-serif;
+          padding: 40px;
+          line-height: 1.6;
+        }
+        h1 { color: #ff6b81; font-size: 1.7rem; }
+        code { background: #161b22; padding: 4px 6px; border-radius: 6px; }
+        a { color: #58a6ff; text-decoration: none; }
+        a:hover { text-decoration: underline; }
+      </style>
+
+      <h1>⚠️ Configuration Error</h1>
+      <p>
+        It looks like you're using <code>PokeTube</code>'s own Invidious API endpoint
+        (<code>${officialApi}</code>) for your custom instance.
+      </p>
+
+      <p>
+        Please edit your <code>config.json</code> to match your own setup — using
+        Poke’s shared API is kinda lame 😅 since it also rate-limits <b>poketube.fun</b>
+        itself when too many people use it.
+      </p>
+
+      <p>
+        Set up your own Invidious instance instead — it’s easy!  
+        See the official setup guide:  
+        <a href="https://docs.invidious.io" target="_blank">docs.invidious.io</a>
+      </p>
+
+      <p style="margin-top: 1em; color: #999;">
+        Once you've updated <code>config.json</code>, restart your server and everything will work fine. 
+      </p>
+    `;
+
+    return res.status(500).send(message);
+  }
 
 
 

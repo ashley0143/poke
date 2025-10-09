@@ -1457,7 +1457,7 @@ function authorVerifiedChecker4000() {
 
    <% tj.videos.forEach (x =>  { %>
 			<a href="/watch?v=<%- x.videoId %>" class="video">
-				<div class="thumbnail" style="background-image: url('<%- media_proxy_url %>/proxy?url=https://i.ytimg.com/vi/<%= x.videoId %>/hqdefault.jpg?sqp=-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLBy_x4UUHLNDZtJtH0PXeQGoRFTgw');border-radius: 10px;"><span class="video-length"><%- turntomins(x.lengthSeconds) %></span></div>
+				<div class="thumbnail" style="background-image: url('<%- media_proxy_url %>/proxy?url=https://i.ytimg.com/vi/<%= x.videoId %>/hqdefault.jpg?sqp=-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLBy_x4UUHLNDZtJtH0PXeQGoRFTgw');border-radius: 9.5px;"><span class="video-length"><%- turntomins(x.lengthSeconds) %></span></div>
 				<div class="info">
 					<span class="title max-lines-2" style="font-family:PokeTube flex,sans-serif;font-weight: 1000;font-stretch: ultra-expanded;"><%- x.title %></span>
 			 
@@ -1550,7 +1550,7 @@ function authorVerifiedChecker4000() {
   width: 100%;
   aspect-ratio: 9/16;
   object-fit: cover;
-  border-radius: 10px;
+  border-radius: 9.5px;
 }
 .shorts-video {
   display: block;
@@ -1616,7 +1616,7 @@ function authorVerifiedChecker4000() {
 
    <% stream.videos.forEach (x =>  { %>
 			<a href="/watch?v=<%- x.videoId %>" class="video">
-				<div class="thumbnail" style="background-image: url('<%- media_proxy_url %>/proxy?url=https://i.ytimg.com/vi/<%= x.videoId %>/hqdefault.jpg?sqp=-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLBy_x4UUHLNDZtJtH0PXeQGoRFTgw');border-radius: 10px;"><span class="video-length"><%- turntomins(x.lengthSeconds) %></span></div>
+				<div class="thumbnail" style="background-image: url('<%- media_proxy_url %>/proxy?url=https://i.ytimg.com/vi/<%= x.videoId %>/hqdefault.jpg?sqp=-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLBy_x4UUHLNDZtJtH0PXeQGoRFTgw');border-radius: 9.5px;"><span class="video-length"><%- turntomins(x.lengthSeconds) %></span></div>
 				<div class="info">
 					<span class="title max-lines-2" style="font-family:PokeTube flex,sans-serif;font-weight: 1000;font-stretch: ultra-expanded;"><%- x.title %></span>
 			 
@@ -1656,7 +1656,7 @@ function authorVerifiedChecker4000() {
 
    <% released.playlists.forEach (x =>  { %>
 			<a href="/playlist?list=<%- x.playlistId %>" class="video">
-				<div class="thumbnail" style="background-image: url('<%- media_proxy_url %>/proxy?url=<%- x.playlistThumbnail %>?sqp=-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLBy_x4UUHLNDZtJtH0PXeQGoRFTgw');border-radius: 10px;"><span class="video-length"><%- x.videoCount %> Videos </span></div>
+				<div class="thumbnail" style="background-image: url('<%- media_proxy_url %>/proxy?url=<%- x.playlistThumbnail %>?sqp=-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLBy_x4UUHLNDZtJtH0PXeQGoRFTgw');border-radius: 9.5px;"><span class="video-length"><%- x.videoCount %> Videos </span></div>
 				<div class="info">
 					<span class="title max-lines-2" style="font-family:PokeTube flex,sans-serif;font-weight: 1000;font-stretch: ultra-expanded;"><%- x.title %></span>
 			 
@@ -1690,7 +1690,7 @@ function authorVerifiedChecker4000() {
 
    <% playlist.playlists.forEach (x =>  { %>
 			<a href="/playlist?list=<%- x.playlistId %>" class="video">
-				<div class="thumbnail" style="background-image: url('<%- media_proxy_url %>/proxy?url=<%- x.playlistThumbnail %>?sqp=-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLBy_x4UUHLNDZtJtH0PXeQGoRFTgw');border-radius: 10px;"><span class="video-length"><%- x.videoCount %> Videos </span></div>
+				<div class="thumbnail" style="background-image: url('<%- media_proxy_url %>/proxy?url=<%- x.playlistThumbnail %>?sqp=-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLBy_x4UUHLNDZtJtH0PXeQGoRFTgw');border-radius: 9.5px;"><span class="video-length"><%- x.videoCount %> Videos </span></div>
 				<div class="info">
 					<span class="title max-lines-2" style="font-family:PokeTube flex,sans-serif;font-weight: 1000;font-stretch: ultra-expanded;"><%- x.title %></span>
 			 

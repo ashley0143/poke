@@ -37,26 +37,25 @@ document.addEventListener("DOMContentLoaded", () => {
     const audio = document.getElementById('aud');
     const audioEl = document.getElementById('aud');
 
-  const metaTitle = document.querySelector('meta[name="title"]')?.content || "";
-  const metaAuthor = document.querySelector('meta[name="twitter:author"]')?.content || "";
-
-  const titleBar = video.addChild("TitleBar");
-  titleBar.update({
-    title: metaTitle,
-    description: metaAuthor
-  });
-
-  const bar = video.el().querySelector(".vjs-title-bar");
-  if (!bar) return;
-
-  const updateVisibility = () => {
-    const fs = document.fullscreenElement || document.webkitFullscreenElement;
-    bar.style.display = fs ? "block" : "none";
+  const createTitleBar = () => {
+    const metaTitle = document.querySelector('meta[name="title"]')?.content || "";
+    const metaAuthor = document.querySelector('meta[name="twitter:author"]')?.content || "";
+    const existing = video.getChild("TitleBar");
+    if (!existing) {
+      const titleBar = video.addChild("TitleBar");
+      titleBar.update({ title: metaTitle, description: metaAuthor });
+    }
   };
 
-  document.addEventListener("fullscreenchange", updateVisibility);
-  document.addEventListener("webkitfullscreenchange", updateVisibility);
-  updateVisibility();
+  const destroyTitleBar = () => {
+    const existing = video.getChild("TitleBar");
+    if (existing) video.removeChild(existing);
+  };
+
+  document.addEventListener("fullscreenchange", () => {
+    if (document.fullscreenElement || document.webkitFullscreenElement) createTitleBar();
+    else destroyTitleBar();
+  });
 
     //  inline playback works on iOS/Safari
     try { videoEl.setAttribute('playsinline', ''); videoEl.setAttribute('webkit-playsinline', ''); } catch {}

@@ -38,15 +38,26 @@ document.addEventListener("DOMContentLoaded", () => {
     const audioEl = document.getElementById('aud');
  
 
+ 
   video.ready(() => {
     const metaTitle = document.querySelector('meta[name="title"]')?.content || "";
-    const metaAuthor = document.querySelector('meta[name="twitter:author"]')?.content || "";
+    const metaDesc = document.querySelector('meta[name="twitter:description"]')?.content || "";
+
+    let stats = "";
+    const match = metaDesc.match(/👍\s*[^|]+\|\s*👎\s*[^|]+\|\s*📈\s*[^💬]+/);
+    if (match) {
+      stats = match[0]
+        .replace(/👍/g, "• 👍")
+        .replace(/👎/g, "• 👎")
+        .replace(/📈/g, "• 📈")
+        .replace(/\s*\|\s*/g, "   ");
+    }
 
     const createTitleBar = () => {
       const existing = video.getChild("TitleBar");
       if (!existing) {
         const titleBar = video.addChild("TitleBar");
-        titleBar.update({ title: metaTitle, description: metaAuthor });
+        titleBar.update({ title: metaTitle, description: stats });
       }
     };
 
@@ -63,7 +74,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
     document.addEventListener("fullscreenchange", handleFullscreen);
     document.addEventListener("webkitfullscreenchange", handleFullscreen);
-
     handleFullscreen();
   });
 

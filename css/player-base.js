@@ -47,7 +47,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const match = metaDesc.match(/👍\s*[^|]+\|\s*👎\s*[^|]+\|\s*📈\s*[^💬]+/);
     if (match) {
       stats = match[0]
-        .replace(/👍/g, "• 👍")
+        .replace(/👍/g, "👍")
         .replace(/👎/g, "• 👎")
         .replace(/📈/g, "• 📈")
         .replace(/\s*\|\s*/g, "   ");

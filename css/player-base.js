@@ -36,33 +36,36 @@ document.addEventListener("DOMContentLoaded", () => {
     const videoEl = document.getElementById('video');
     const audio = document.getElementById('aud');
     const audioEl = document.getElementById('aud');
+ 
 
-  const initTitleBar = () => {
+  video.ready(() => {
     const metaTitle = document.querySelector('meta[name="title"]')?.content || "";
     const metaAuthor = document.querySelector('meta[name="twitter:author"]')?.content || "";
-    const existing = video.getChild("TitleBar");
-    if (!existing) {
-      const titleBar = video.addChild("TitleBar");
-      titleBar.update({ title: metaTitle, description: metaAuthor });
-    }
-  };
 
-  const removeTitleBar = () => {
-    const existing = video.getChild("TitleBar");
-    if (existing) video.removeChild(existing);
-  };
+    const createTitleBar = () => {
+      const existing = video.getChild("TitleBar");
+      if (!existing) {
+        const titleBar = video.addChild("TitleBar");
+        titleBar.update({ title: metaTitle, description: metaAuthor });
+      }
+    };
 
-  const handleFullscreen = () => {
-    const fs = document.fullscreenElement || document.webkitFullscreenElement;
-    if (fs) {
-      video.ready(() => initTitleBar());
-    } else {
-      removeTitleBar();
-    }
-  };
+    const removeTitleBar = () => {
+      const existing = video.getChild("TitleBar");
+      if (existing) video.removeChild(existing);
+    };
 
-  document.addEventListener("fullscreenchange", handleFullscreen);
-  document.addEventListener("webkitfullscreenchange", handleFullscreen);
+    const handleFullscreen = () => {
+      const fs = document.fullscreenElement || document.webkitFullscreenElement;
+      if (fs) createTitleBar();
+      else removeTitleBar();
+    };
+
+    document.addEventListener("fullscreenchange", handleFullscreen);
+    document.addEventListener("webkitfullscreenchange", handleFullscreen);
+
+    handleFullscreen();
+  });
 
     //  inline playback works on iOS/Safari
     try { videoEl.setAttribute('playsinline', ''); videoEl.setAttribute('webkit-playsinline', ''); } catch {}

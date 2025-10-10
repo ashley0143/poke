@@ -59,7 +59,6 @@ document.addEventListener("DOMContentLoaded", () => {
     document.addEventListener('webkitfullscreenchange', updateVisibility);
     updateVisibility();
   }
-});
 
     //  inline playback works on iOS/Safari
     try { videoEl.setAttribute('playsinline', ''); videoEl.setAttribute('webkit-playsinline', ''); } catch {}

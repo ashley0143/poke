@@ -256,9 +256,9 @@ document.addEventListener("DOMContentLoaded", () => {
             }
 
             // if one fails, we try again for both
-            // and reload if like, you know, the fuccking video fails because
+            // and reload if like, you know, the fucking video fails because
 			// youtube for some reason blocks us alot i dont know why i fucking hate you youtube
-			// legit, im just hating youtube alot these days, they are terrible
+			// legit, im just hating youtube alot these days, they are terrible, youtube, FU!
 			// - ashley
 			 if (!vOk && aOk) {
                 try {
@@ -271,6 +271,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 } catch {}
             }
 
+           // the same god damn thing for audio but no retry because idk ask ummm.... idk ask john youtube
             if (vOk && !aOk) {
                 try {
                     audio.play().catch(() => showError('Audio failed to start.'));
@@ -288,7 +289,9 @@ document.addEventListener("DOMContentLoaded", () => {
         try { video.pause(); audio.pause(); clearSyncLoop(); } finally { syncing = false; }
     }
 
-    // error indicator box
+    // soooo i know what ur gonna say, its a looped indicator but ur using for errors, and what? 
+	// like, why not i use the same element for both its not illegal...i think?
+	// search it up lol
     const errorBox = document.getElementById('loopedIndicator');
     function showError(msg) {
         if (errorBox) {
@@ -300,7 +303,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const clamp = v => Math.max(0, Math.min(1, Number(v)));
 
-    //  media session controls work
+    //  media session controls work, these are legit so anoying to work with 
     function setupMediaSession() {
         if ('mediaSession' in navigator) {
             try {
@@ -337,6 +340,7 @@ document.addEventListener("DOMContentLoaded", () => {
         attachRetry(audio, pickAudioSrc, () => { audioReady = true; });
         attachRetry(videoEl, () => videoSrc, () => { videoReady = true; });
 
+        // todo: fiixxx mute stuff lol
         video.on('volumechange', () => {
             try {
                 if (!video.muted()) audio.volume = clamp(video.volume());
@@ -387,6 +391,8 @@ document.addEventListener("DOMContentLoaded", () => {
         });
 
         //  looping restarts properly
+		// doesnt work LOOOOOOOOL
+		// sooo... I guess, TODO: fix the looping??????
         async function restartLoop() {
             if (restarting) return;
             restarting = true;
@@ -401,7 +407,7 @@ document.addEventListener("DOMContentLoaded", () => {
             } finally { restarting = false; }
         }
 
-        //  both react to ending
+        // okay, this actually, legit, not working idk why guuuh
         video.on('ended', () => {
             if (restarting) return;
             if (performance.now() < suppressEndedUntil) return;

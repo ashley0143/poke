@@ -256,11 +256,25 @@ document.addEventListener("DOMContentLoaded", () => {
             }
 
             // if one fails, we try again for both
-            if (!vOk && aOk) {
-                try { video.play().catch(() => showError('Video failed to start.')); } catch {}
+            // and reload if like, you know, the fuccking video fails because
+			// youtube for some reason blocks us alot i dont know why i fucking hate you youtube
+			// legit, im just hating youtube alot these days, they are terrible
+			// - ashley
+			 if (!vOk && aOk) {
+                try {
+                    video.play().catch(() => {
+                        showError('Video failed to start.');
+                        setTimeout(() => {
+                            video.play().catch(() => showError('Video retry failed.'));
+                        }, 3000);
+                    });
+                } catch {}
             }
+
             if (vOk && !aOk) {
-                try { audio.play().catch(() => showError('Audio failed to start.')); } catch {}
+                try {
+                    audio.play().catch(() => showError('Audio failed to start.'));
+                } catch {}
             }
 
             if (!syncInterval) startSyncLoop();

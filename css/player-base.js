@@ -794,6 +794,17 @@ try {
 // custom video.js ui for POKE PLAYER 
  const customVideoJsUI = document.createElement('style');
 customVideoJsUI.innerHTML = `
+
+.vjs-title-bar-description {
+  background: #0007;
+  width: fit-content;
+  border-radius: 1em;
+  padding: 1em;
+  font-family: "poketube flex";
+  font-weight: 600;
+  font-stretch: semi-expanded;
+}
+
 .vjs-title-bar {
   background: none !important;
   border-radius: 16px;

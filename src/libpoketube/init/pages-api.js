@@ -176,7 +176,7 @@ app.get("/api/nominatim/reverse", async (req, res) => {
     const l = req.query.h;
 
     try {
-      let url = `${config.videourl}/api/v1/captions/${id}?label=${l}`;
+      let url = `${config.videourl}/companion/api/v1/captions/${id}?label=${l}`;
 
       let f = await fetch(url, {
         headers: headers, 

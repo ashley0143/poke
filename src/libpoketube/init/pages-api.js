@@ -178,13 +178,16 @@ app.get("/api/nominatim/reverse", async (req, res) => {
     try {
       let url = `${config.videourl}/companion/api/v1/captions/${id}?label=${l}`;
 
-      let f = await fetch(url, {
+      /*
+let f = await fetch(url, {
         headers: headers, 
       });
 
       const body = await f.text();
 
       res.send(body);
+      */
+
     } catch {}
   });
   

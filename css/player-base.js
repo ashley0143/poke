@@ -40,13 +40,13 @@ document.addEventListener("DOMContentLoaded", () => {
   const metaTitle = document.querySelector('meta[name="title"]')?.content || "";
   const metaAuthor = document.querySelector('meta[name="twitter:author"]')?.content || "";
 
-  const titleBar = player.addChild("TitleBar");
+  const titleBar = video.addChild("TitleBar");
   titleBar.update({
     title: metaTitle,
     description: metaAuthor
   });
 
-  const bar = player.el().querySelector(".vjs-title-bar");
+  const bar = video.el().querySelector(".vjs-title-bar");
   if (!bar) return;
 
   const updateVisibility = () => {

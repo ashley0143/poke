@@ -37,7 +37,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const audio = document.getElementById('aud');
     const audioEl = document.getElementById('aud');
 
-  const createTitleBar = () => {
+  const initTitleBar = () => {
     const metaTitle = document.querySelector('meta[name="title"]')?.content || "";
     const metaAuthor = document.querySelector('meta[name="twitter:author"]')?.content || "";
     const existing = video.getChild("TitleBar");
@@ -47,15 +47,22 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   };
 
-  const destroyTitleBar = () => {
+  const removeTitleBar = () => {
     const existing = video.getChild("TitleBar");
     if (existing) video.removeChild(existing);
   };
 
-  document.addEventListener("fullscreenchange", () => {
-    if (document.fullscreenElement || document.webkitFullscreenElement) createTitleBar();
-    else destroyTitleBar();
-  });
+  const handleFullscreen = () => {
+    const fs = document.fullscreenElement || document.webkitFullscreenElement;
+    if (fs) {
+      video.ready(() => initTitleBar());
+    } else {
+      removeTitleBar();
+    }
+  };
+
+  document.addEventListener("fullscreenchange", handleFullscreen);
+  document.addEventListener("webkitfullscreenchange", handleFullscreen);
 
     //  inline playback works on iOS/Safari
     try { videoEl.setAttribute('playsinline', ''); videoEl.setAttribute('webkit-playsinline', ''); } catch {}

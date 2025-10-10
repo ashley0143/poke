@@ -42,6 +42,13 @@ document.addEventListener("DOMContentLoaded", () => {
   video.ready(() => {
     const metaTitle = document.querySelector('meta[name="title"]')?.content || "";
     const metaDesc = document.querySelector('meta[name="twitter:description"]')?.content || "";
+    const metaAuthor = document.querySelector('meta[name="twitter:author"]')?.content || ""; 
+
+   const videoinfostuffidklol = {
+	metaTitle,
+	metaDesc,
+	metaAuthor
+   }
 
     let stats = "";
     const match = metaDesc.match(/👍\s*[^|]+\|\s*👎\s*[^|]+\|\s*📈\s*[^💬]+/);

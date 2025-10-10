@@ -37,28 +37,26 @@ document.addEventListener("DOMContentLoaded", () => {
     const audio = document.getElementById('aud');
     const audioEl = document.getElementById('aud');
 
-  const metaTitle = document.querySelector('meta[name="title"]')?.content || '';
-  const metaAuthor = document.querySelector('meta[name="twitter:author"]')?.content || '';
+  const metaTitle = document.querySelector('meta[name="title"]')?.content || "";
+  const metaAuthor = document.querySelector('meta[name="twitter:author"]')?.content || "";
 
-  const titleBar = video.addChild('TitleBar');
+  const titleBar = player.addChild("TitleBar");
   titleBar.update({
     title: metaTitle,
-    description: metaAuthor ? `by ${metaAuthor}` : ''
+    description: metaAuthor
   });
 
-   const titleEl = video.el().querySelector('.vjs-title-bar');
-  if (titleEl) {
-    titleEl.classList.add('poke-titlebar');
-    const updateVisibility = () => {
-      if (document.fullscreenElement || document.webkitFullscreenElement)
-        titleEl.style.display = 'block';
-      else
-        titleEl.style.display = 'none';
-    };
-    document.addEventListener('fullscreenchange', updateVisibility);
-    document.addEventListener('webkitfullscreenchange', updateVisibility);
-    updateVisibility();
-  }
+  const bar = player.el().querySelector(".vjs-title-bar");
+  if (!bar) return;
+
+  const updateVisibility = () => {
+    const fs = document.fullscreenElement || document.webkitFullscreenElement;
+    bar.style.display = fs ? "block" : "none";
+  };
+
+  document.addEventListener("fullscreenchange", updateVisibility);
+  document.addEventListener("webkitfullscreenchange", updateVisibility);
+  updateVisibility();
 
     //  inline playback works on iOS/Safari
     try { videoEl.setAttribute('playsinline', ''); videoEl.setAttribute('webkit-playsinline', ''); } catch {}
@@ -777,28 +775,17 @@ try {
 // custom video.js ui for POKE PLAYER 
  const customVideoJsUI = document.createElement('style');
 customVideoJsUI.innerHTML = `
-.poke-titlebar {
-    font-family: "PokeTube Flex", sans-serif !important;
-    border-radius: 16px !important;
-    overflow: hidden;
-    background: rgba(0, 0, 0, 0.55);
-    color: #fff;
-    position: absolute !important;
-    top: 12px; left: 12px;
-    padding: 10px 16px;
-    pointer-events: none;
-    max-width: 90%;
-    backdrop-filter: blur(8px) saturate(160%);
-  }
-  .vjs-title-bar-title {
-    font-weight: 600;
-    font-size: 1.15rem;
-    line-height: 1.2;
-  }
-  .vjs-title-bar-description {
-    font-size: 0.9rem;
-    opacity: 0.85;
-  }
+.vjs-title-bar {
+  background: none !important;
+  border-radius: 16px;
+  overflow: hidden;
+}
+.vjs-title-bar-title {
+  font-family: "PokeTube Flex", sans-serif !important;
+  font-stretch: expanded;
+  font-weight: 700;
+}
+
 
 .vjs-play-progress{background-image:linear-gradient(to right,#ff0045,#ff0e55,#ff1d79)}.video-js .vjs-control-bar{bottom:12px!important}.vjs-poster{border-radius:16px}.vjs-poster img{border-radius:16px}.vjs-control-bar{background:transparent!important;border:none!important;box-shadow:none!important;display:flex!important;align-items:center!important;gap:2px;padding:6px 10px;border-radius:16px}.vjs-fullscreen-control,.vjs-remaining-time{background-color:transparent!important}.vjs-control-bar .vjs-button{width:38px;height:38px;min-width:38px;border-radius:50%;background:linear-gradient(180deg,rgba(255,255,255,.18),rgba(255,255,255,.08));-webkit-backdrop-filter:blur(12px) saturate(160%);backdrop-filter:blur(12px) saturate(160%);border:1px solid rgba(255,255,255,.18);box-shadow:0 8px 24px rgba(0,0,0,.35),inset 0 0 0 1px rgba(255,255,255,.10);display:inline-flex;align-items:center;justify-content:center;margin:0 6px;transition:transform 0.12s ease,box-shadow 0.2s ease,background 0.2s ease;vertical-align:middle}.vjs-control-bar .vjs-button:hover{background:linear-gradient(180deg,rgba(255,255,255,.24),rgba(255,255,255,.12));box-shadow:0 10px 28px rgba(0,0,0,.4),inset 0 0 0 1px rgba(255,255,255,.16);transform:translateY(-1px)}.vjs-control-bar .vjs-button:active{transform:translateY(0)}.vjs-control-bar .vjs-button:focus-visible{outline:none;box-shadow:0 0 0 3px rgba(255,0,90,.35),inset 0 0 0 1px rgba(255,255,255,.2)}.vjs-control-bar .vjs-icon-placeholder:before{font-size:18px;line-height:38px}.vjs-current-time,.vjs-duration,.vjs-remaining-time,.vjs-time-divider{background:transparent;padding:0 8px;border-radius:999px;box-shadow:none;margin:0;height:38px;line-height:1;display:inline-flex;align-items:center}.vjs-progress-control{flex:1 1 auto;display:flex!important;align-items:center!important;margin:0 6px;padding:0;height:38px}.vjs-progress-control .vjs-progress-holder{height:8px!important;border-radius:999px!important;background:transparent!important;border:none;box-shadow:none;position:relative;margin:0;width:100%}.vjs-progress-control .vjs-progress-holder::before{position:absolute;inset:0;border-radius:inherit;background:linear-gradient(180deg,rgba(255,255,255,.18),rgba(255,255,255,.08));-webkit-backdrop-filter:blur(12px) saturate(160%);backdrop-filter:blur(12px) saturate(160%);border:1px solid rgba(255,255,255,.18);box-shadow:0 8px 24px rgba(0,0,0,.35),inset 0 0 0 1px rgba(255,255,255,.10);pointer-events:none}.vjs-progress-control .vjs-load-progress,.vjs-progress-control .vjs-play-progress{position:relative;z-index:1;border-radius:inherit!important}.vjs-progress-control .vjs-play-progress{background-image:linear-gradient(to right,#ff0045,#ff0e55,#ff1d79)!important}.vjs-progress-control .vjs-slider-handle{width:14px!important;height:14px!important;border-radius:50%!important;background:#fff!important;border:1px solid rgba(255,255,255,.9);box-shadow:0 6px 18px rgba(0,0,0,.35),0 0 0 3px rgba(255,0,90,.20);top:-4px!important;z-index:2}.vjs-volume-panel{gap:8px;align-items:center!important;padding:0;height:38px}.vjs-volume-bar{height:6px!important;border-radius:999px!important;background:#2c2c2c!important;border:none;box-shadow:none;position:relative}.vjs-volume-level{border-radius:inherit!important;background-image:linear-gradient(to right,#ff0045,#ff1d79)!important}.vjs-volume-bar .vjs-slider-handle{width:12px!important;height:12px!important;border-radius:50%!important;background:#fff!important;border:1px solid rgba(255,255,255,.9);top:-3px!important;box-shadow:0 4px 14px rgba(0,0,0,.3),0 0 0 3px rgba(255,0,90,.18)}@media (max-width:640px){.video-js .vjs-control-bar{bottom:10px!important}.vjs-control-bar{gap:8px;padding:6px 8px}.vjs-control-bar .vjs-button{width:34px;height:34px;min-width:34px}.vjs-control-bar .vjs-icon-placeholder:before{font-size:16px;line-height:34px}.vjs-current-time,.vjs-duration,.vjs-remaining-time,.vjs-time-divider{height:34px}.vjs-progress-control{height:34px}.vjs-progress-control .vjs-slider-handle{width:12px!important;height:12px!important;top:-3px!important}}
 `; 

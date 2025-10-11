@@ -302,37 +302,48 @@
         <a href="https://wiki.osmfoundation.org/wiki/Privacy_Policy" target="_blank" rel="noopener">privacy policy</a>.
       </p>
     </section>
+    
+<!-- Weather -->
+<section id="weather" aria-labelledby="weather-heading">
+  <h2 id="weather-heading" class="section">Weather Pages &amp; Services</h2>
+  <p>
+    Poke’s weather pages use third-party, privacy-respecting services to resolve places and fetch forecasts.
+  </p>
 
-    <!-- Weather -->
-    <section id="weather" aria-labelledby="weather-heading">
-      <h2 id="weather-heading" class="section">Weather Pages &amp; Services</h2>
-      <p>
-        Poke’s weather pages use third-party, privacy-respecting services to resolve places and fetch forecasts:
-      </p>
-      <ul>
-        <li>
-          <strong>Geocoding / place lookup:</strong>
-          <a href="https://nominatim.openstreetmap.org/" rel="noopener" target="_blank">nominatim.openstreetmap.org</a>
-          (OpenStreetMap Nominatim).  
-          Privacy: <a href="https://osmfoundation.org/wiki/Privacy_Policy" rel="noopener" target="_blank">OSMF Privacy Policy</a>.  
-          <br>
-          How it works:
-          <ul>
-            <li> the request is proxied through Poke’s backend - always!
-            (<a href="https://codeberg.org/ashley/poke/src/branch/main/src/libpoketube/init/pages-api.js#L78" target="_blank" rel="noopener">see source </a>).</li>
-          </ul>
-        </li>
-        <li>
-          <strong>Forecast data:</strong>
-          <a href="https://open-meteo.com/" rel="noopener" target="_blank">open-meteo.com</a>.  
-          Privacy: <a href="https://open-meteo.com/en/terms#privacy" rel="noopener" target="_blank">Open-Meteo Terms &amp; Privacy</a>.  
-          <br>
-          Forecast queries are always <strong>proxied through Poke’s backend</strong>, so your browser never connects to Open-Meteo directly. 
-          Only the necessary query parameters (latitude, longitude, units, etc.) are forwarded by the server.  
-          see the source for this
-          <a href="https://codeberg.org/ashley/poke/src/branch/main/src/libpoketube/init/pages-api.js#L108" target="_blank" rel="noopener">here.</a>.
-        </li>
-      </ul>
+  <details class="block">
+    <summary><strong>Geocoding / Place Lookup</strong></summary>
+    <p>
+      Uses <a href="https://nominatim.openstreetmap.org/" rel="noopener" target="_blank">nominatim.openstreetmap.org</a> (OpenStreetMap Nominatim).  
+      Privacy: <a href="https://osmfoundation.org/wiki/Privacy_Policy" rel="noopener" target="_blank">OSMF Privacy Policy</a>.
+    </p>
+    <p><strong>How it works:</strong></p>
+    <ul>
+      <li>
+        The request is always proxied through Poke’s backend — never directly from your browser.  
+        (<a href="https://codeberg.org/ashley/poke/src/branch/main/src/libpoketube/init/pages-api.js#L78" target="_blank" rel="noopener">See source</a>)
+      </li>
+    </ul>
+  </details>
+
+  <details class="block">
+    <summary><strong>Forecast Data</strong></summary>
+    <p>
+      Uses <a href="https://open-meteo.com/" rel="noopener" target="_blank">open-meteo.com</a> for weather forecasts.  
+      Privacy: <a href="https://open-meteo.com/en/terms#privacy" rel="noopener" target="_blank">Open-Meteo Terms &amp; Privacy</a>.
+    </p>
+    <p><strong>How it works:</strong></p>
+    <ul>
+      <li>
+        All forecast queries are proxied through Poke’s backend. Your browser never connects to Open-Meteo directly.
+      </li>
+      <li>
+        Only essential parameters (latitude, longitude, units, etc.) are forwarded.  
+        <a href="https://codeberg.org/ashley/poke/src/branch/main/src/libpoketube/init/pages-api.js#L108" target="_blank" rel="noopener">See source here</a>.
+      </li>
+    </ul>
+  </details>
+</section>
+
       <p class="callout">
         Poke does not add trackers to these requests. However, when third-party services are contacted (directly or via proxy), 
         their respective privacy policies apply to those specific requests.

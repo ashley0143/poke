@@ -33,6 +33,15 @@ module.exports = function (app, config, renderTemplate) {
     renderTemplate(res, req, "502.ejs");
   });
 
+ app.get("/code-of-conduct", function (req, res) {
+    renderTemplate(res, req, "coc.ejs");
+  });
+
+ app.get("/coc", function (req, res) {
+    renderTemplate(res, req, "coc.ejs");
+  });
+
+
 app.get("/143", (req, res) => {
   const numberEasterEgg = getRandomArbitrary(0, 143);
   const { number, something } = req.query;

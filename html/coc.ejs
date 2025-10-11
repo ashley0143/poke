@@ -1,0 +1,252 @@
+<!--
+  This Source Code Form is subject to the terms of the GNU General Public License:
+
+  Copyright (C) 2021-2025 Poke (https://codeberg.org/ashley/poke)
+
+  This program is free software: you can redistribute it and/or modify
+  it under the terms of the GNU General Public License, version 3 of the License,
+  or (at your option) any later version.
+
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+
+  You should have received a copy of the GNU General Public License
+  along with this program. If not, see https://www.gnu.org/licenses/.
+-->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Poke — Code of Conduct</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Poke Project — Code of Conduct">
+  <meta property="twitter:description" content="Community behavior rules and standards for the Poke Project">
+  <meta property="og:image" content="/static/poke.webp">
+  <meta name="twitter:card" content="summary_large_image">
+  <link href="/css/yt-ukraine.svg?v=7" rel="icon">
+  <style>
+    @font-face {
+      src: url("https://p.poketube.fun/https://cdn.glitch.global/43b6691a-c8db-41d4-921c-8cf6aa0d9108/robotoflex.ttf?v=16683434286881");
+      font-family: "PokeTube Flex";
+      font-style: normal;
+      font-stretch: 1% 800%;
+      font-display: swap;
+    }
+    *,*::before,*::after{box-sizing:border-box}
+    html,body{margin:0;padding:0}
+    body{
+      font-family:"poketube flex",sans-serif;
+      line-height:1.6;
+      color:#eaeaea;
+      background:
+        radial-gradient(1200px 600px at 0% 0%,#0ea5e9 0%,#0ea5e900 60%),
+        radial-gradient(1000px 700px at 100% 0%,#8b5cf6 0%,#8b5cf600 65%),
+        radial-gradient(1000px 700px at 0% 100%,#14b8a6 0%,#14b8a600 65%),
+        #0b0b0b;
+    }
+    a{color:#7dd3fc;text-decoration:none}
+    a:hover{text-decoration:underline}
+    .wrap{max-width:980px;margin:0 auto;padding:20px}
+    header.site{
+      position:sticky;top:0;z-index:10;
+      background:rgba(17,17,18,.8);
+      backdrop-filter:blur(8px);
+      border-bottom:1px solid #232323;
+    }
+    .nav-row{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 16px}
+    .brand{display:inline-flex;align-items:center;gap:10px;color:#fff;font-weight:800;text-decoration:none}
+    .brand img{height:32px}
+    h2.section{margin:22px 0 8px 0;font-size:clamp(1.24rem,2.4vw,1.6rem);padding-bottom:6px;border-bottom:1px solid #1f1f22;}
+    .doc-title{margin:0 0 6px;text-align:center;font-size:3.4rem;font-weight:900}
+    .doc-lede{margin:8px 0 16px;color:#cfcfcf;text-align:center}
+    p{margin:10px 0;color:#e7e7e7}
+    ul{margin:10px 0 10px 22px}
+    details{background:#0f1012;border:1px solid #1d2024;border-radius:10px;padding:10px 12px;margin:10px 0}
+    details summary{cursor:pointer;font-weight:600}
+    .toc{background:#101112;border:1px solid #1f1f22;border-radius:12px;padding:12px;margin:14px 0 20px}
+    .toc h2{margin:0 0 8px;font-size:1rem;color:#e8f6ff}
+    .toc ul{margin:0;padding-left:18px}
+    .toc li{margin:6px 0}
+    footer.site{text-align:center;color:#bdbdbd;margin:40px 0 60px}
+  </style>
+</head>
+<body>
+<header class="site">
+  <div class="nav-row wrap">
+    <a class="brand" href="/" aria-label="Poke home">
+      <img src="/css/logo-poke.svg?v=5" alt="Poke logo">
+    </a>
+  </div>
+</header>
+
+<main class="wrap">
+<section class="hero">
+  <h1 class="doc-title">Poke Project — Code of Conduct</h1>
+  <p class="doc-lede">
+    <strong>Respect, decency, and kindness are mandatory.</strong>  
+    Poke exists for creativity, collaboration, and freedom — not hate or bigotry.
+  </p>
+</section>
+
+<nav class="toc">
+  <h2>Contents</h2>
+  <ul>
+    <li><a href="#why">Why This Exists</a></li>
+    <li><a href="#values">Our Values</a></li>
+    <li><a href="#definitions">Key Definitions</a></li>
+    <li><a href="#prohibited">Prohibited Conduct</a></li>
+    <li><a href="#ai">AI-Generated Content Policy</a></li>
+    <li><a href="#naming">Naming & Modification Rules</a></li>
+    <li><a href="#enforcement">Enforcement & Bans</a></li>
+    <li><a href="#contact">Contact</a></li>
+    <li><a href="#license">License</a></li>
+  </ul>
+</nav>
+
+<section id="why">
+  <h2 class="section">Why This Exists</h2>
+  <p>
+    The Internet can be amazing or miserable depending on how people behave.  
+    The Poke community thrives on creative, kind, and diverse people working together on Free Software.  
+    This Code of Conduct exists to stop harassment, exclusion, or political extremism from poisoning that space.  
+  </p>
+  <p>
+    We don’t tolerate hate. We don’t tolerate far-right or fascist rhetoric disguised as “opinions.”  
+    We don’t tolerate people who defend violence, genocides, or oppression.  
+    This project values empathy and solidarity, not cruelty or ego.
+  </p>
+</section>
+
+<section id="values">
+  <h2 class="section">Our Values</h2>
+  <ul>
+    <li>Freedom — the GNU kind: the right to study, share, and change code.</li>
+    <li>Kindness — treating others like people, not usernames.</li>
+    <li>Community — diverse, queer-friendly, and inclusive by default.</li>
+    <li>Safety — a space free from hate speech, harassment, or propaganda.</li>
+  </ul>
+</section>
+
+<section id="definitions">
+  <h2 class="section">Key Definitions</h2>
+  <ul>
+    <li><strong>Hate Speech:</strong> Words or behavior targeting people for who they are — such as their race, gender, sexuality, or beliefs.</li>
+    <li><strong>Harassment:</strong> Any repeated unwanted attention, threats, or hostility, public or private.</li>
+    <li><strong>Far-Right Content:</strong> Material or advocacy promoting authoritarian, fascist, racist, or nationalist ideologies (including MAGA, anti-LGBT, or similar movements).</li>
+    <li><strong>Genocide Denial:</strong> Any attempt to justify, minimize, or deny historical or ongoing genocides.</li>
+    <li><strong>Inappropriate Content:</strong> Material that mocks victims of discrimination, celebrates violence, or idolizes abusive figures (e.g. Elon Musk defenders spreading hate or misinformation).</li>
+  </ul>
+</section>
+
+<section id="prohibited">
+  <h2 class="section">Prohibited Conduct</h2>
+  <p>The following behaviors are forbidden across all spaces related to Poke, including forks and community servers:</p>
+  <ul>
+    <li>Homophobia, transphobia, sexism, racism, or xenophobia.</li>
+    <li>Defending, promoting, or trivializing genocides or ethnic cleansing.</li>
+    <li>Posting or endorsing far-right, MAGA, or extremist material.</li>
+    <li>Defending or idolizing billionaires, fascists, or figures like Elon Musk who spread hate or disinformation.</li>
+    <li>Trolling, harassment, stalking, or impersonating contributors.</li>
+    <li>Encouraging harm, spreading conspiracy theories, or mocking minorities.</li>
+    <li>Any form of AI spam, generated hate propaganda, or image-based harassment.</li>
+  </ul>
+  <p>
+    If your words or behavior make marginalized users feel unsafe or excluded, you are part of the problem — and you will be removed.
+  </p>
+</section>
+
+<section id="ai">
+  <h2 class="section">AI-Generated Content Policy</h2>
+  <p>
+    The Poke Project values human creativity and critical thought.  
+    AI tools may be used for artwork, documentation, or writing <em>only</em> when:
+  </p>
+  <ul>
+    <li>The content does not contain hate, political propaganda, or misinformation.</li>
+    <li>The creator clearly labels when AI was used.</li>
+    <li>The generated content respects copyright and Free Software licenses.</li>
+  </ul>
+  <p>
+    AI-generated “fake people,” deepfakes, and fake community personas are forbidden.  
+    No generated political or “culture war” content is accepted.  
+    Submissions found to be AI spam, propaganda, or manipulative will be removed permanently.
+  </p>
+</section>
+
+<section id="naming">
+  <h2 class="section">Naming & Modification Rules</h2>
+  <p>
+    You may copy or modify this document under Free Software terms.  
+    However, if you change it, you <strong>cannot</strong> use names that imply official connection with Poke.  
+    Forbidden titles include but aren’t limited to:
+  </p>
+  <ul>
+    <li>Poke Code of Conduct</li>
+    <li>Poketube Code of Conduct</li>
+    <li>Poke Project Code of Conduct</li>
+    <li>Poke Community Guidelines</li>
+  </ul>
+  <p>
+    If you modify this text, rename it clearly to avoid confusion.  
+    Any fork or derivative using these names while changing the rules is misleading and may be publicly flagged.
+  </p>
+</section>
+
+<section id="enforcement">
+  <h2 class="section">Enforcement & Bans</h2>
+  <p>
+    The Poke maintainers and moderators have full authority to act on any behavior they find harmful.  
+    This includes verbal abuse, hate promotion, or anything violating the rules above.  
+  </p>
+  <p>
+    Enforcement actions can include:
+  </p>
+  <ul>
+    <li><strong>Warning:</strong> A private message explaining what happened and what must stop.</li>
+    <li><strong>Temporary Ban:</strong> Loss of access to community platforms (Discord, issues, etc.) for a period of time.</li>
+    <li><strong>Permanent Ban:</strong> Complete removal from all Poke spaces, forks, and future contributions.</li>
+  </ul>
+  <p>
+    Anyone engaging in hate speech, extremist propaganda, or repeated harassment will be banned permanently.  
+    There is no “free speech” defense for discrimination here — Free Software is about freedom for users, not freedom to harm others.  
+  </p>
+  <p>
+    Bans may also apply to forks that repeatedly host banned individuals or attempt to remove protections against hate or genocide denial.
+  </p>
+</section>
+
+<section id="contact">
+  <h2 class="section">Contact</h2>
+  <p>
+    To report abuse or violations of this Code of Conduct, contact:
+  </p>
+  <ul>
+    <li>Email: <span class="mono">iamashley@duck.com</span></li>
+    <li>Discord: <a href="https://discord.gg/pfKSQ3pMfW" target="_blank" rel="noopener">Poke Community Server</a></li>
+    <li>Repository: <a href="https://codeberg.org/ashley/poke/issues" target="_blank" rel="noopener">Open an Issue</a></li>
+  </ul>
+  <p>
+    Reports are handled confidentially and reviewed fairly.  
+    Harassers will not be contacted beyond what’s required to moderate their behavior.
+  </p>
+</section>
+
+<section id="license">
+  <h2 class="section">License</h2>
+  <p class="small">
+    © 2021–2025 Poke Project.  
+    Licensed under the <strong>Creative Commons Attribution–ShareAlike 4.0 International</strong> (CC BY-SA 4.0).  
+    You may redistribute or modify this document, but not under the name “Poke” or “Poketube” unless unchanged.
+  </p>
+</section>
+
+<footer class="site small">
+  <p><a href="#top">Return to Top</a></p>
+</footer>
+</main>
+</body>
+</html>

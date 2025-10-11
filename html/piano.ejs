@@ -40,7 +40,7 @@
       --muted: #9aa4b2;
       --border: #2a2e36;
       --border-soft: #22252c;
-      --accent: #6f8cff;  /* single accent, no gradients */
+      --accent: #6f8cff; 
       --accent-strong: #4772ff;
       --danger: #ff5577;
 
@@ -148,6 +148,7 @@
       gap: 8px;
       align-items: center;
       min-width: 0;
+      margin-top: 6px;
     }
     .pair > label { color: var(--muted); font-size: 12px; white-space: nowrap; }
 
@@ -395,12 +396,10 @@
     <!-- RIGHT: Stage (Visualizer + Piano) -->
     <section class="main">
       <div class="panel viz-wrap">
-        <div class="title">Visualizer</div>
         <canvas id="viz" width="900" height="120"></canvas>
       </div>
 
       <div class="panel piano-wrap">
-        <div class="title">Piano</div>
         <div class="piano" id="piano">
           <div class="white-keys" id="white"></div>
           <div class="black-keys" id="black"></div>

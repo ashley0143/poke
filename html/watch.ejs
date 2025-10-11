@@ -2583,7 +2583,6 @@ const init = () => {
   AMvideo.addEventListener("ended", drawPause, false)
 }
 
-
 const cleanup = () => {
   AMvideo.removeEventListener("play", drawStart)
   AMvideo.removeEventListener("pause", drawPause)
@@ -2594,6 +2593,17 @@ const cleanup = () => {
 window.addEventListener("load", init)
 window.addEventListener("unload", cleanup)
 
+// Hide ambient canvases when fullscreen and restore when exiting fullscreen
+document.addEventListener("fullscreenchange", () => {
+  const isFullscreen = !!document.fullscreenElement
+  if (isFullscreen) {
+    oddCanvas.remove()
+    evenCanvas.remove()
+  } else {
+    document.body.appendChild(oddCanvas)
+    document.body.appendChild(evenCanvas)
+  }
+})
 
 </script>
 <style>

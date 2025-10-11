@@ -16,141 +16,132 @@
 
     You should have received a copy of the GNU General Public License
     along with this program. If not, see https://www.gnu.org/licenses/.
---->
+-->
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
   <title>Poke Piano</title>
- <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
- <meta content="website" property="og:type">
-    <meta content="PokePiano" property="og:title">
-    <meta content="PIANO! on web!" property="twitter:description">
-       <meta content="https://cdn.glitch.me/d68d17bb-f2c0-4bc3-993f-50902734f652/aa70111e-5bcd-4379-8b23-332a33012b78.image.png?v=1701898829884" property="og:image"  />
+  <meta content="website" property="og:type">
+  <meta content="PokePiano" property="og:title">
+  <meta content="PIANO! on web!" property="twitter:description">
+  <meta content="https://cdn.glitch.me/d68d17bb-f2c0-4bc3-993f-50902734f652/aa70111e-5bcd-4379-8b23-332a33012b78.image.png?v=1701898829884" property="og:image" />
   <meta content="summary_large_image" name="twitter:card">
-  <link href="/css/yt-ukraine.svg?v=7" rel=icon>
+  <link href="/css/yt-ukraine.svg?v=7" rel="icon">
 
-    <style>
-  
-
+  <style>
     :root {
       --bg: #0d0f12;
-      --bg-soft: #141820;
-      --fg: #f3f5f7;
+      --panel: #15171d;
+      --panel-2: #191b22;
+      --fg: #e7e9ed;
       --muted: #9aa4b2;
-      --brand: #7a5cff;
-      --accent: #00d3a7;
+      --border: #2a2e36;
+      --border-soft: #22252c;
+      --accent: #6f8cff;  /* single accent, no gradients */
+      --accent-strong: #4772ff;
       --danger: #ff5577;
-      --key-white: #f7f8fb;
-      --key-black: #111317;
-      --key-pressed: #ffce4a;
-      --key-outline: #1a2030;
-      --shadow: 0 12px 34px rgba(0,0,0,.40), 0 2px 10px rgba(0,0,0,.25);
-      --radius: 16px;
-      --glass: linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.02));
+
+      --radius: 14px;
+      --radius-sm: 10px;
+
+      --shadow-1: 0 1px 0 rgba(255,255,255,0.04) inset, 0 8px 24px rgba(0,0,0,0.35);
+      --shadow-2: 0 1px 0 rgba(255,255,255,0.04) inset, 0 4px 16px rgba(0,0,0,0.28);
     }
+
     .light {
-      --bg: #f7f8fb;
-      --bg-soft: #ffffff;
-      --fg: #0e1116;
-      --muted: #4a5568;
-      --brand: #6a5cff;
-      --accent: #00b394;
-      --key-white: #fff;
-      --key-black: #0e1116;
-      --key-pressed: #ffd24d;
-      --key-outline: #cfd8e3;
-      --shadow: 0 12px 30px rgba(0,0,0,.12), 0 2px 10px rgba(0,0,0,.08);
-      --glass: linear-gradient(180deg, rgba(255,255,255,.7), rgba(255,255,255,.6));
+      --bg: #f6f7fb;
+      --panel: #ffffff;
+      --panel-2: #f2f3f8;
+      --fg: #121419;
+      --muted: #4f5b6a;
+      --border: #d8dee8;
+      --border-soft: #e8ecf3;
+      --accent: #3b63ff;
+      --accent-strong: #224bff;
+      --danger: #e23d5f;
     }
 
     * { box-sizing: border-box; }
     html, body { height: 100%; }
     body {
       margin: 0;
-      background:
-        radial-gradient(1200px 600px at 15% -10%, rgba(122,92,255,.18), transparent 60%),
-        radial-gradient(1200px 700px at 100% 0%, rgba(0,211,167,.12), transparent 45%),
-        linear-gradient(180deg, var(--bg), var(--bg-soft));
       color: var(--fg);
-      font: 14px/1.4 system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, "Noto Sans", Arial, "Apple Color Emoji", "Segoe UI Emoji";
+      background: var(--bg);
+      font: 14px/1.45 system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, "Noto Sans", Arial, "Apple Color Emoji", "Segoe UI Emoji";
       display: grid;
-      grid-template-rows: auto auto 1fr auto;
-      gap: 14px;
+      grid-template-rows: auto 1fr auto;
+      min-height: 100vh;
     }
 
-     header {
-      padding: 10px 16px 0;
+    /* Top bar */
+    header {
       display: grid;
       grid-template-columns: 1fr auto;
-      gap: 10px;
       align-items: center;
+      gap: 12px;
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--border);
+      background: var(--panel-2);
+      position: sticky;
+      top: 0;
+      z-index: 5;
     }
     .brand {
-      display: flex;
-      align-items: center;
-      gap: 10px;
+      display: flex; align-items: center; gap: 10px;
+      min-width: 0;
     }
     .logo {
-      width: 28px; height: 28px; border-radius: 10px;
-      background: conic-gradient(from 220deg, var(--brand), var(--accent), var(--brand));
-      box-shadow: 0 6px 18px rgba(122,92,255,.28);
-      border: 1px solid var(--key-outline);
+      width: 22px; height: 22px; border-radius: 6px;
+      background: var(--accent);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-2);
     }
     h1 {
-      margin: 0;
-      font-size: 18px;
-      letter-spacing: 0.2px;
+      margin: 0; font-size: 16px; letter-spacing: 0.2px; font-weight: 700;
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
     }
-    .header-actions { display: flex; gap: 6px; }
-    .chip {
-      padding: 8px 12px;
-      border-radius: 999px;
-      border: 1px solid var(--key-outline);
-      background: var(--bg-soft);
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
+    .header-actions { display: flex; gap: 8px; }
+
+    /* App layout: side controls + main stage */
+    .app {
+      display: grid;
+      grid-template-columns: 340px 1fr;
+      gap: 16px;
+      padding: 16px;
+    }
+    @media (max-width: 980px) {
+      .app { grid-template-columns: 1fr; }
     }
 
-    .toolbar {
-      display: grid;
-      gap: 8px;
-      grid-template-columns: repeat(12, 1fr);
-      padding: 0 16px;
-    }
-    .card {
-      background: var(--bg-soft);
-      border: 1px solid var(--key-outline);
+    .side, .main { display: grid; gap: 16px; align-content: start; }
+
+    .panel {
+      background: var(--panel);
+      border: 1px solid var(--border);
       border-radius: var(--radius);
-      box-shadow: var(--shadow);
+      box-shadow: var(--shadow-1);
       padding: 12px;
-      min-width: 0;
-      position: relative;
-      overflow: hidden;
     }
-    .card::after {
-      content:""; position:absolute; inset:0; pointer-events:none;
-      background:
-        radial-gradient(600px 160px at 10% 0%, rgba(255,255,255,.06), transparent 60%),
-        radial-gradient(500px 140px at 90% 0%, rgba(122,92,255,.12), transparent 50%);
-      mix-blend-mode: overlay;
-    }
-    .card > .title {
-      font-size: 12px; color: var(--muted); margin-bottom: 8px; letter-spacing:.3px; text-transform: uppercase;
+    .panel .title {
+      font-size: 11px; text-transform: uppercase; color: var(--muted);
+      letter-spacing: .3px; margin-bottom: 10px;
     }
 
+    /* Control grid */
     .group { display: grid; gap: 10px; }
-
-     .row {
-      display: grid;
-      grid-auto-flow: column;
-      grid-auto-columns: minmax(0, 1fr);
-      gap: 12px;
-      align-items: end;
+    .row {
+      display: grid; gap: 10px;
+      grid-template-columns: repeat(2, 1fr);
     }
+    .row-3 { grid-template-columns: repeat(3, 1fr); }
+    .row-1 { grid-template-columns: 1fr; }
+    @media (max-width: 520px) {
+      .row, .row-3 { grid-template-columns: 1fr; }
+    }
+
     .pair {
       display: grid;
       grid-template-columns: max-content 1fr;
@@ -158,18 +149,19 @@
       align-items: center;
       min-width: 0;
     }
-    .pair > label { color: var(--muted); font-size: 12px; }
+    .pair > label { color: var(--muted); font-size: 12px; white-space: nowrap; }
 
+    /* Inputs / buttons */
     select, input[type="range"], input[type="number"], input[type="text"], button, .toggle {
       width: 100%;
-      border-radius: 12px;
-      border: 1px solid var(--key-outline);
-      background: #0f131b;
-      color: var(--fg);
-      padding: 8px 10px;
-      outline: none;
-      transition: transform .06s ease, box-shadow .06s ease, border-color .12s ease;
       min-height: 32px;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border);
+      background: #0f1217;
+      color: var(--fg);
+      padding: 7px 10px;
+      outline: none;
+      transition: box-shadow .08s ease, border-color .08s ease, transform .04s ease;
     }
     .light select, .light input[type="range"], .light input[type="number"], .light input[type="text"], .light button, .light .toggle {
       background: #fff;
@@ -179,175 +171,243 @@
 
     button {
       cursor: pointer;
-      background: linear-gradient(180deg, var(--brand), #4a3aff);
-      border: none;
-      color: white;
-      font-weight: 700;
-      letter-spacing:.2px;
+      font-weight: 700; letter-spacing: .2px;
+      background: var(--accent);
+      border: 1px solid var(--accent-strong);
+      color: #fff;
     }
-    button.secondary { background: var(--bg-soft); color: var(--fg); border: 1px solid var(--key-outline); }
-    button.danger { background: var(--danger); }
+    button.secondary {
+      background: var(--panel-2);
+      border-color: var(--border);
+      color: var(--fg);
+    }
+    button.danger { background: var(--danger); border-color: #c4314e; }
     button:active { transform: translateY(1px); }
     button:focus-visible, select:focus-visible, input:focus-visible {
-      box-shadow: 0 0 0 3px rgba(122,92,255,.35);
-      border-color: var(--brand);
+      box-shadow: 0 0 0 3px rgba(111,140,255,.35);
+      border-color: var(--accent);
     }
 
-    .kbd { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace; background: #1a2230; padding: 2px 6px; border-radius: 8px; border: 1px solid var(--key-outline); }
+    .kbd {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+      background: var(--panel-2);
+      padding: 2px 6px; border-radius: 8px; border: 1px solid var(--border);
+    }
     .light .kbd { background: #eef2ff; }
 
-    .piano-wrap { padding: 0 16px 16px; }
+    /* Stage: Visualizer + Piano */
+    .stage {
+      display: grid; gap: 16px;
+      grid-template-rows: auto 1fr;
+    }
+
+    /* Visualizer */
+    .viz-wrap { padding: 10px; }
+    canvas {
+      width: 100%; height: 88px;
+      border-radius: var(--radius);
+      background: #0b0f16;
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-2);
+      display: block;
+    }
+
+    /* Piano */
+    .piano-wrap { padding: 10px; }
     .piano {
       position: relative;
-      height: clamp(200px, 36vh, 340px);
+      height: clamp(220px, 38vh, 360px);
       user-select: none;
       touch-action: none;
-      background: var(--glass);
+      background: var(--panel);
       border-radius: var(--radius);
-      border: 1px solid var(--key-outline);
+      border: 1px solid var(--border);
       overflow: hidden;
-      box-shadow: var(--shadow);
+      box-shadow: var(--shadow-1);
     }
 
     .white-keys, .black-keys { position: absolute; inset: 0; display: grid; align-items: end; }
     .white-keys { grid-auto-flow: column; grid-auto-columns: 1fr; gap: 0; z-index: 1; }
     .black-keys { grid-auto-flow: column; grid-auto-columns: 1fr; gap: 0; z-index: 2; pointer-events: none; }
 
-    .key { position: relative; border-right: 1px solid var(--key-outline); }
+    .key { position: relative; border-right: 1px solid var(--border-soft); }
     .key:last-child { border-right: none; }
 
-    .key.white { height: 100%; background: var(--key-white); }
-    .key.white.pressed { background: linear-gradient(180deg, #ffe694, var(--key-white)); box-shadow: inset 0 0 0 3px rgba(0,0,0,.08); }
+    .key.white { height: 100%; background: #f7f8fb; }
+    .light .key.white { background: #ffffff; }
+    .key.white.pressed { background: #e8ecf5; box-shadow: inset 0 0 0 3px rgba(0,0,0,.06); }
 
-    .key.black { pointer-events: auto; justify-self: center; width: 60%; height: 62%; margin-bottom: 38%; background: #0b0d12; border: 1px solid #000; border-bottom: 6px solid #000; border-radius: 0 0 8px 8px; box-shadow: inset 0 -10px 0 rgba(255,255,255,.04), 0 8px 22px rgba(0,0,0,.4); }
-    .light .key.black { background: var(--key-black); }
-    .key.black.pressed { background: #333842; }
+    .key.black {
+      pointer-events: auto; justify-self: center;
+      width: 60%; height: 62%; margin-bottom: 38%;
+      background: #0e1116;
+      border: 1px solid #000;
+      border-bottom: 6px solid #000;
+      border-radius: 0 0 8px 8px;
+      box-shadow: 0 10px 18px rgba(0,0,0,.55);
+    }
+    .light .key.black { background: #0e1116; }
+    .key.black.pressed { background: #1a1e25; }
 
-    .label { position: absolute; left: 6px; bottom: 6px; font-size: 11px; color: #5b6475; pointer-events: none; }
-    .key.pressed .label { color: #222; }
+    .label {
+      position: absolute; left: 6px; bottom: 6px;
+      font-size: 11px; color: #5b6475; pointer-events: none;
+    }
+    .key.pressed .label { color: #1e242b; }
 
     .black-slot { position: relative; }
     .black-slot.hide { visibility: hidden; }
 
-    .footer { display: grid; grid-template-columns: 1fr auto; align-items: center; gap: 8px; padding: 0 16px 16px; }
-    canvas { width: 100%; height: 72px; border-radius: var(--radius); background: #0b0f16; border: 1px solid var(--key-outline); box-shadow: var(--shadow); }
-
-    .grid-col-3 { grid-column: span 3; }
-    .grid-col-4 { grid-column: span 4; }
-    .grid-col-5 { grid-column: span 5; }
-    .grid-col-6 { grid-column: span 6; }
-    .grid-col-7 { grid-column: span 7; }
-    .grid-col-8 { grid-column: span 8; }
-    .grid-col-12 { grid-column: span 12; }
-
-    .metro-dots { display:flex; gap:8px; align-items:center; flex-wrap:wrap; }
-    .dot { width:14px; height:14px; border-radius:999px; border:1px solid var(--key-outline); background:#12151c; box-shadow: inset 0 0 0 2px rgba(0,0,0,.2); }
-    .light .dot { background:#fff; }
-    .dot.on { background: var(--brand); box-shadow: 0 0 0 6px rgba(122,92,255,.20), 0 4px 12px rgba(0,0,0,.25); }
+    /* Metronome block */
+    .metro {
+      display: grid; gap: 10px;
+    }
+    .metro-dots {
+      display:flex; gap:8px; align-items:center; flex-wrap:wrap;
+      padding: 8px 2px 0;
+    }
+    .dot {
+      width:14px; height:14px; border-radius:999px;
+      border:1px solid var(--border); background:#0f1319;
+      box-shadow: inset 0 0 0 2px rgba(0,0,0,.22);
+    }
+    .dot.on { background: var(--accent); box-shadow: 0 0 0 3px rgba(111,140,255,.25); }
     .dot.accent { border-color: var(--accent); }
-    .dot.on.accent { background: var(--accent); box-shadow: 0 0 0 6px rgba(0,211,167,.22), 0 4px 12px rgba(0,0,0,.25); }
+    .dot.on.accent { background: var(--accent); }
 
-    @media (max-width: 900px) {
-      .toolbar { grid-template-columns: repeat(6, 1fr); }
-      .grid-col-8, .grid-col-7, .grid-col-6, .grid-col-5 { grid-column: span 6; }
-      .grid-col-4 { grid-column: span 3; }
-      .grid-col-3 { grid-column: span 3; }
+    /* Footer status */
+    .footer {
+      display: grid; grid-template-columns: 1fr auto;
+      align-items: center; gap: 8px;
+      padding: 12px 16px;
+      border-top: 1px solid var(--border);
+      background: var(--panel-2);
+      position: sticky;
+      bottom: 0;
+      z-index: 5;
+    }
+    .chip {
+      padding: 6px 10px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: var(--panel);
+      display: inline-flex; align-items: center; gap: 8px;
+      color: var(--muted);
+      font-size: 12px;
     }
   </style>
 </head>
 <body>
   <header>
     <div class="brand">
-      <div class="logo"></div>
-      <h1>Poke Piano BETA!!</h1>
+      <div class="logo" aria-hidden="true"></div>
+      <h1>Poke Piano — Studio</h1>
     </div>
     <div class="header-actions">
       <button id="power">Start Audio</button>
-      <button style="display:none"; id="theme" class="secondary">Theme</button>
+      <button style="display:none" id="theme" class="secondary">Theme</button>
     </div>
   </header>
 
-  <section class="toolbar">
-    <div class="card grid-col-3 group">
-      <div class="title">Setup</div>
-      <div class="row">
-        <div class="pair"><label for="octaves">Octaves</label><input id="octaves" type="range" min="1" max="7" step="1" value="3"></div>
-        <div class="pair"><label for="baseOct">Base Octave</label><input id="baseOct" type="number" min="0" max="8" value="3"></div>
-      </div>
-      <div class="row">
-        <div class="pair"><label for="a4">A4 (Hz)</label><input id="a4" type="number" min="400" max="480" step="0.1" value="440"></div>
-        <div class="pair"><label for="poly">Polyphony</label><input id="poly" type="number" min="1" max="64" value="16"></div>
-      </div>
-      <div class="row">
-        <div class="pair"><label for="vol">Volume</label><input id="vol" type="range" min="0" max="1" step="0.001" value="0.7"></div>
-      </div>
-    </div>
-
-    <div class="card grid-col-4 group">
-      <div class="title">Oscillator</div>
-      <div class="row">
-        <div class="pair"><label for="wave">Wave</label><select id="wave"><option>sine</option><option>triangle</option><option selected>square</option><option>sawtooth</option></select></div>
-        <div class="pair"><label for="detune">Detune (cents)</label><input id="detune" type="range" min="-100" max="100" value="0"></div>
-      </div>
-      <div class="row">
-        <div class="pair"><label for="port">Glide (ms)</label><input id="port" type="range" min="0" max="400" value="0"></div>
-        <div class="pair"><label for="lp">LP Cutoff (Hz)</label><input id="lp" type="range" min="200" max="18000" step="1" value="16000"></div>
-      </div>
-    </div>
-
-    <div class="card grid-col-4 group">
-      <div class="title">Envelope</div>
-      <div class="row">
-        <div class="pair"><label for="atk">Attack</label><input id="atk" type="range" min="0.001" max="2" step="0.001" value="0.01"></div>
-        <div class="pair"><label for="dec">Decay</label><input id="dec" type="range" min="0.001" max="2" step="0.001" value="0.15"></div>
-      </div>
-      <div class="row">
-        <div class="pair"><label for="sus">Sustain</label><input id="sus" type="range" min="0" max="1" step="0.001" value="0.6"></div>
-        <div class="pair"><label for="rel">Release</label><input id="rel" type="range" min="0.001" max="4" step="0.001" value="0.3"></div>
-      </div>
-    </div>
-
-    <div class="card grid-col-12 group">
-      <div class="title">FX & Utilities</div>
-      <div class="row">
-        <div class="pair"><label for="dtime">Delay Time (ms)</label><input id="dtime" type="range" min="0" max="900" value="0"></div>
-        <div class="pair"><label for="dfeed">Feedback</label><input id="dfeed" type="range" min="0" max="0.95" step="0.01" value="0.3"></div>
-        <div class="pair"><label for="dmix">Mix</label><input id="dmix" type="range" min="0" max="1" step="0.01" value="0.2"></div>
-        <div class="pair"><label for="sustain">Sustain</label><button id="sustain" class="secondary">Off</button></div>
-        <div class="pair"><label for="labels">Key Labels</label><button id="labels" class="secondary">On</button></div>
-        <div class="pair"><label for="panic">Panic</label><button id="panic" class="danger">All Off</button></div>
-        <div class="pair"><label for="rec">Record</label><button id="rec" class="secondary">Start</button></div>
-      </div>
-    </div>
-
-    <div class="card grid-col-5 group">
-      <div class="title">Metronome</div>
-      <div class="row">
-        <div class="pair"><label for="metroBtn">Control</label><button id="metroBtn" class="secondary">Start</button></div>
-        <div class="pair"><label for="bpm">BPM</label><input id="bpm" type="range" min="20" max="300" step="1" value="120"></div>
-      </div>
-      <div class="row">
-        <div class="pair"><label for="sig">Beats/Bar</label>
-          <select id="sig"><option>2</option><option>3</option><option selected>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>12</option></select>
+  <main class="app">
+    <!-- LEFT: Controls -->
+    <section class="side">
+      <div class="panel group">
+        <div class="title">Setup</div>
+        <div class="row">
+          <div class="pair"><label for="octaves">Octaves</label><input id="octaves" type="range" min="1" max="7" step="1" value="3"></div>
+          <div class="pair"><label for="baseOct">Base Octave</label><input id="baseOct" type="number" min="0" max="8" value="3"></div>
         </div>
-        <div class="pair"><label for="mvol">Volume</label><input id="mvol" type="range" min="0" max="1" step="0.01" value="0.8"></div>
-        <div class="pair"><label for="accent">Accent</label><button id="accent" class="secondary">On</button></div>
+        <div class="row">
+          <div class="pair"><label for="a4">A4 (Hz)</label><input id="a4" type="number" min="400" max="480" step="0.1" value="440"></div>
+          <div class="pair"><label for="poly">Polyphony</label><input id="poly" type="number" min="1" max="64" value="16"></div>
+        </div>
+        <div class="row-1">
+          <div class="pair"><label for="vol">Volume</label><input id="vol" type="range" min="0" max="1" step="0.001" value="0.7"></div>
+        </div>
       </div>
-      <div class="metro-dots" id="metroDots" aria-hidden="true"></div>
-    </div>
 
-    <div class="card grid-col-7 group">
-      <div class="title">Visualizer</div>
-      <canvas id="viz" width="900" height="120"></canvas>
-    </div>
-  </section>
+      <div class="panel group">
+        <div class="title">Oscillator</div>
+        <div class="row">
+          <div class="pair"><label for="wave">Wave</label>
+            <select id="wave">
+              <option>sine</option><option>triangle</option><option selected>square</option><option>sawtooth</option>
+            </select>
+          </div>
+          <div class="pair"><label for="detune">Detune (cents)</label><input id="detune" type="range" min="-100" max="100" value="0"></div>
+        </div>
+        <div class="row">
+          <div class="pair"><label for="port">Glide (ms)</label><input id="port" type="range" min="0" max="400" value="0"></div>
+          <div class="pair"><label for="lp">LP Cutoff (Hz)</label><input id="lp" type="range" min="200" max="18000" step="1" value="16000"></div>
+        </div>
+      </div>
 
-  <section class="piano-wrap">
-    <div class="piano" id="piano">
-      <div class="white-keys" id="white"></div>
-      <div class="black-keys" id="black"></div>
-    </div>
-  </section>
+      <div class="panel group">
+        <div class="title">Envelope</div>
+        <div class="row">
+          <div class="pair"><label for="atk">Attack</label><input id="atk" type="range" min="0.001" max="2" step="0.001" value="0.01"></div>
+          <div class="pair"><label for="dec">Decay</label><input id="dec" type="range" min="0.001" max="2" step="0.001" value="0.15"></div>
+        </div>
+        <div class="row">
+          <div class="pair"><label for="sus">Sustain</label><input id="sus" type="range" min="0" max="1" step="0.001" value="0.6"></div>
+          <div class="pair"><label for="rel">Release</label><input id="rel" type="range" min="0.001" max="4" step="0.001" value="0.3"></div>
+        </div>
+      </div>
+
+      <div class="panel group">
+        <div class="title">FX & Utilities</div>
+        <div class="row-3">
+          <div class="pair"><label for="dtime">Delay (ms)</label><input id="dtime" type="range" min="0" max="900" value="0"></div>
+          <div class="pair"><label for="dfeed">Feedback</label><input id="dfeed" type="range" min="0" max="0.95" step="0.01" value="0.3"></div>
+          <div class="pair"><label for="dmix">Mix</label><input id="dmix" type="range" min="0" max="1" step="0.01" value="0.2"></div>
+        </div>
+        <div class="row-3">
+          <div class="pair"><label for="sustain">Sustain</label><button id="sustain" class="secondary">Off</button></div>
+          <div class="pair"><label for="labels">Key Labels</label><button id="labels" class="secondary">On</button></div>
+          <div class="pair"><label for="panic">Panic</label><button id="panic" class="danger">All Off</button></div>
+        </div>
+        <div class="row">
+          <div class="pair"><label for="rec">Record</label><button id="rec" class="secondary">Start</button></div>
+          <div></div>
+        </div>
+      </div>
+
+      <div class="panel group metro">
+        <div class="title">Metronome</div>
+        <div class="row">
+          <div class="pair"><label for="metroBtn">Control</label><button id="metroBtn" class="secondary">Start</button></div>
+          <div class="pair"><label for="bpm">BPM</label><input id="bpm" type="range" min="20" max="300" step="1" value="120"></div>
+        </div>
+        <div class="row">
+          <div class="pair"><label for="sig">Beats/Bar</label>
+            <select id="sig"><option>2</option><option>3</option><option selected>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>12</option></select>
+          </div>
+          <div class="pair"><label for="mvol">Volume</label><input id="mvol" type="range" min="0" max="1" step="0.01" value="0.8"></div>
+        </div>
+        <div class="row-1">
+          <div class="pair"><label for="accent">Accent</label><button id="accent" class="secondary">On</button></div>
+        </div>
+        <div class="metro-dots" id="metroDots" aria-hidden="true"></div>
+      </div>
+    </section>
+
+    <!-- RIGHT: Stage (Visualizer + Piano) -->
+    <section class="main">
+      <div class="panel viz-wrap">
+        <div class="title">Visualizer</div>
+        <canvas id="viz" width="900" height="120"></canvas>
+      </div>
+
+      <div class="panel piano-wrap">
+        <div class="title">Piano</div>
+        <div class="piano" id="piano">
+          <div class="white-keys" id="white"></div>
+          <div class="black-keys" id="black"></div>
+        </div>
+      </div>
+    </section>
+  </main>
 
   <section class="footer">
     <div></div>

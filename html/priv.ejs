@@ -376,32 +376,39 @@
     <!-- Placeholder anchor to preserve original TOC link -->
     <section id="third-parties" aria-label="Third-Party Requests & Proxy"></section>
 
-    <!-- API Logs Policy -->
-    <section id="api-logs" aria-labelledby="api-logs-heading">
-      <h2 id="api-logs-heading" class="section">API Logs Policy</h2>
-      <p>
-        When you request any resource from the poke api (for example: thumbnails, API endpoint) information about the request may be logged.
-      </p>
-      <p>Information about a request is limited to:</p>
-      <ul>
-        <li>the time the request was made</li>
-        <li>the status code of the response</li>
-        <li>the method of the request</li>
-        <li>the requested URL</li>
-        <li>how long it took to complete the request.</li>
-      </ul>
-      <p>
-        <strong>No identifying information is logged</strong>, such as the visitor’s cookie, user-agent, or IP address. Here are a couple lines to serve as an example:
-      </p>
-      <pre class="small" style="white-space:pre-wrap;margin:8px 0;">
+    
+<!-- API Logs Policy -->
+<section id="api-logs" aria-labelledby="api-logs-heading">
+  <h2 id="api-logs-heading" class="section">API Logs Policy</h2>
+  <p>
+    When you request any resource from the Poke API (for example: thumbnails, API endpoint) information about the request may be logged.
+  </p>
+  <p>Information about a request is limited to:</p>
+  <ul>
+    <li>the time the request was made</li>
+    <li>the status code of the response</li>
+    <li>the method of the request</li>
+    <li>the requested URL</li>
+    <li>how long it took to complete the request.</li>
+  </ul>
+  <p>
+    <strong>No identifying information is logged</strong>, such as the visitor’s cookie, user-agent, or IP address.
+  </p>
+
+  <details class="block">
+    <summary>Example log lines</summary>
+    <pre class="small" style="white-space:pre-wrap;margin:8px 0;">
 2019-01-19 16:37:47 +00:00 200 GET /api/v1/comments/xrlETJYzH-c?format=html&amp;hl=en-US 1345.88ms
 2019-01-19 16:37:53 +00:00 200 GET /vi/r5P-f5arPXE/maxres.jpg 1085.41ms
 2019-01-19 16:37:54 +00:00 200 GET /watch 7.04ms
-      </pre>
-      <p>
-        This website does not store the visitor’s user-agent or IP address and does not use fingerprinting, advertisements, or tracking of any form.
-      </p>
-    </section>
+    </pre>
+  </details>
+
+  <p>
+    This website does not store the visitor’s user-agent or IP address and does not use fingerprinting, advertisements, or tracking of any form.
+  </p>
+</section>
+
 
     <!-- Legal bases -->
     <section id="legal-bases" aria-labelledby="gdpr-heading">

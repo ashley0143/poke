@@ -30,102 +30,38 @@
   <link href="/css/yt-ukraine.svg?v=7" rel="icon">
 
   <style>
-  
-    /* ===== Base ===== */
-    *, *::before, *::after { box-sizing: border-box; }
-    html, body { margin: 0; padding: 0; }
-    html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
-    body {
+    *,*::before,*::after{box-sizing:border-box}
+    html,body{margin:0;padding:0}
+    html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
+    body{
       font-family: "poketube flex", sans-serif;
-      line-height: 1.6;
-      color: #eaeaea;
+      line-height:1.6;
+      color:#eaeaea;
       background:
         radial-gradient(1200px 600px at 0% 0%, #0ea5e9 0%, #0ea5e900 60%),
         radial-gradient(1000px 700px at 100% 0%, #8b5cf6 0%, #8b5cf600 65%),
         radial-gradient(1000px 700px at 0% 100%, #14b8a6 0%, #14b8a600 65%),
         #0b0b0b;
     }
-    a { color: #7dd3fc; text-decoration: none; }
-    a:hover { text-decoration: underline; }
-    :focus-visible { outline: 2px solid #54c8ff; outline-offset: 2px; }
-    img { max-width: 100%; height: auto; }
-    code, pre, kbd, samp {
-      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "DejaVu Sans Mono", monospace;
-      font-size: 0.95em;
-    }
-    @font-face {
-      src: url("https://p.poketube.fun/https://cdn.glitch.global/43b6691a-c8db-41d4-921c-8cf6aa0d9108/robotoflex.ttf?v=16683434286881");
-      font-family: "PokeTube Flex";
-      font-style: normal;
-      font-stretch: 1% 800%;
-      font-display: swap;
-    }
+    a{color:#7dd3fc;text-decoration:none}
+    a:hover{text-decoration:underline}
+    img{max-width:100%;height:auto}
+    code,pre,kbd,samp{font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","DejaVu Sans Mono",monospace;font-size:.95em}
+    .mono{font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","DejaVu Sans Mono",monospace}
 
-    /* ===== Document Layout ===== */
-    .shell {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 24px;
+    /* ===== Layout ===== */
+    .wrap{max-width:980px;margin:0 auto;padding:20px}
+    header.site{
+      position:sticky;top:0;z-index:10;
+      background:rgba(17,17,18,.8);
+      backdrop-filter:blur(8px);
+      border-bottom:1px solid #232323;
     }
-    header.site {
-      position: sticky;
-      top: 0;
-      z-index: 10;
-      backdrop-filter: saturate(140%) blur(10px);
-      background: color-mix(in oklab, #0b0b0b 80%, transparent);
-      border-bottom: 1px solid #222;
-      width: 100%;
-    }
-    .site-row {
-      display: flex; align-items: center; justify-content: space-between;
-      gap: 16px;
-      padding: 12px clamp(12px, 4vw, 24px);
-      max-width: 1200px;
-      margin: 0 auto;
-      width: 100%;
-    }
-    .brand {
-      display: inline-flex; align-items: center; gap: 12px;
-      text-decoration: none; color: #fff; font-weight: 800; letter-spacing: .2px;
-      min-width: 0;
-    }
-    .brand img { width: 8.5em; transform: scale(1.2); height: auto; }
+    .nav-row{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 16px}
+    .brand{display:inline-flex;align-items:center;gap:10px;color:#fff;font-weight:800;letter-spacing:.2px;text-decoration:none}
+    .brand img{height:32px}
 
-    /* Two-column doc: sticky sidebar + paper article */
-    .doc {
-      display: grid;
-      grid-template-columns: 280px 1fr;
-      gap: 20px;
-      margin-top: 22px;
-    }
-    nav.toc {
-      position: sticky; top: 76px;
-      align-self: start;
-      background: #0f0f10;
-      border: 1px solid #1f1f22;
-      border-radius: 16px;
-      padding: 14px;
-      max-height: calc(100vh - 96px);
-      overflow: auto;
-    }
-    nav.toc h2 {
-      margin: 0 0 10px 0; font-size: 1rem; letter-spacing: .2px; color: #e8f6ff;
-    }
-    .toc ul { list-style: none; padding: 0; margin: 0; }
-    .toc li { margin: 6px 0; }
-    .toc a { color: #cfe8ff; font-size: .95rem; }
-
-    article.paper {
-      background: #0f0f10;
-      border: 1px solid #1f1f22;
-      border-radius: 18px;
-      padding: clamp(18px, 2.6vw, 28px);
-      box-shadow:
-        0 0 0 1px rgba(255,255,255,0.02) inset,
-        0 20px 60px rgba(0,0,0,0.35);
-    }
-
-    /* Article typographic styling */
+    /* Article typography */
     .doc-title { margin: 0 0 6px 0; font-size: clamp(1.6rem, 3vw, 2.2rem); letter-spacing:.2px; font-stretch: extra-expanded;}
     .doc-lede { margin: 6px 0 16px 0; color: #cfcfcf; }
     .meta-row {
@@ -153,194 +89,88 @@
       display: grid; gap: 12px; grid-template-columns: 1fr 1fr;
     }
 
-    /* --- Mobile enhancements (desktop unchanged) --- */
-    @media (max-width: 900px) {
-      html { font-size: 17px; }
-      .brand img { width: 7.2em; transform: none; }
-      .doc { grid-template-columns: 1fr; }
-      nav.toc { display: none; }
-      .mobile-toc { display: block; }
-      article.paper { padding: 20px; }
-      .doc-title { font-size: 1.6rem; }
-      .grid-2 { grid-template-columns: 1fr; }
-      .meta { font-size: .95rem; }
-      .shell { padding: 18px; }
+    /* Simple containers */
+    .hero{padding:22px 0 8px}
+    .toc{
+      background:#101112;border:1px solid #1f1f22;border-radius:12px;
+      padding:12px;margin:14px 0 20px 0
+    }
+    .toc h2{margin:0 0 8px 0;font-size:1rem;color:#e8f6ff}
+    .toc ul{margin:0;padding-left:18px}
+    .toc li{margin:6px 0}
+
+    section{border-top:1px solid #1f1f22;padding-top:16px;margin-top:16px}
+    .small{font-size:.925rem}
+
+    details{background:#0f1012;border:1px solid #1d2024;border-radius:10px;padding:10px 12px;margin:10px 0}
+    details summary{cursor:pointer;font-weight:600}
+
+    .update-box{
+      margin:14px 0 20px 0;padding:12px;border-radius:12px;
+      background:#0e1217;border:1px solid #152234
+    }
+    .update-box h3{margin:0 0 8px 0;font-size:1.05rem;color:#e9f7ff}
+    .update-box .when{display:inline-block;margin-left:8px;padding:2px 8px;border-radius:999px;font-size:.85rem;color:#cfe8ff;background:#0c1b27;border:1px solid #193347}
+    .update-actions{margin-top:8px;display:flex;gap:8px;flex-wrap:wrap}
+    .update-actions a,.update-actions button{appearance:none;border:1px solid #234a61;background:#0d1d28;color:#cfe8ff;padding:6px 10px;border-radius:10px;cursor:pointer;font-size:.92rem}
+    .update-actions a:hover,.update-actions button:hover{background:#0f2432;border-color:#2d5d7a}
+
+    footer.site{text-align:center;color:#bdbdbd;margin:40px 0 60px}
+
+    @media (max-width:720px){
+      .wrap{padding:16px}
+      .brand img{height:28px}
+      .grid-2{grid-template-columns:1fr}
     }
 
-    /* Mobile TOC block (hidden on desktop) */
-    .mobile-toc {
-      display: none;
-      margin: 10px 0 16px 0;
-      background: #0f0f10;
-      border: 1px solid #1f1f22;
-      border-radius: 14px;
-      overflow: hidden;
-    }
-    .mobile-toc summary {
-      cursor: pointer;
-      padding: 12px 14px;
-      font-weight: 700;
-      color: #e6f7ff;
-      list-style: none;
-      display: flex; align-items: center; gap: 10px;
-    }
-    .mobile-toc summary::before {
-      content: "▸"; color: #8bd2ff; transition: transform .15s ease;
-    }
-    .mobile-toc[open] summary::before { transform: rotate(90deg); }
-    .mobile-toc .toc-links { padding: 8px 14px 14px; }
-    .mobile-toc .toc-links a { display: block; padding: 8px 6px; color: #cfe8ff; }
-
-    /* Floating search (works on desktop & mobile without altering layout) */
-    .search-fab {
-      position: fixed;
-      right: 20px; bottom: 24px;
-      z-index: 60;
-    }
-    .search-fab button {
-      appearance: none; border: 0; cursor: pointer;
-      border-radius: 999px;
-      padding: 10px 12px;
-      background: linear-gradient(135deg, #0ea5e9, #8b5cf6);
-      color: #0b0b0b; font-weight: 800;
-      box-shadow: 0 10px 30px rgba(0,0,0,.35);
-    }
-    .search-panel {
-      position: fixed;
-      right: 20px; bottom: 72px;
-      background: #0f0f10;
-      border: 1px solid #1f1f22;
-      border-radius: 14px;
-      padding: 10px;
-      width: min(520px, calc(100vw - 36px));
-      box-shadow: 0 12px 36px rgba(0,0,0,.45);
-      display: none;
-    }
-    .search-panel.active { display: block; }
-    .search-row {
-      display: flex; gap: 8px;
-    }
-    .search-row input[type="search"] {
-      flex: 1;
-      border-radius: 10px;
-      border: 1px solid #232327;
-      background: #0c0c0d;
-      color: #eaeaea;
-      padding: 10px 12px;
-    }
-    .search-row button {
-      appearance: none; border: 0; cursor: pointer;
-      padding: 10px 14px; border-radius: 10px;
-      background: #111; color: #ddd; border: 1px solid #222;
-    }
-    .search-row button:hover { background: #161616; border-color: #2a2a2a; }
-    .search-hint { margin-top: 6px; color: #a9a9a9; font-size: .925rem; }
-    @supports (padding: max(0px)) {
-      .search-fab { right: max(20px, env(safe-area-inset-right)); bottom: max(24px, env(safe-area-inset-bottom)); }
-      .search-panel { right: max(20px, env(safe-area-inset-right)); bottom: max(72px, calc(env(safe-area-inset-bottom) + 48px)); }
+    @media print{
+      header.site{display:none!important}
+      body{background:#fff;color:#000}
+      a{color:#0645ad}
+      .update-box,.callout,.toc{border-color:#999;background:#fff}
     }
 
-    /* Footer */
-    footer.site {
-      color: #bdbdbd; text-align: center; margin: 28px auto 50px;
-    }
-    .small { font-size: .925rem; }
-    .mono { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "DejaVu Sans Mono", monospace; }
-
-    /* Print */
-    @media print {
-      header.site, nav.toc, .mobile-toc, .search-fab, .search-panel, noscript { display: none !important; }
-      body { background: #fff; color: #000; }
-      article.paper { background: #fff; border-color: #999; box-shadow: none; }
-      a { color: #0645ad; }
-    }
-
-    /* ===== Update Box (What's New) ===== */
-    .update-box {
-      position: relative;
-      margin: 14px 0 22px 0;
-      padding: 14px 14px 14px 48px;
-      border-radius: 14px;
-      background:
-        radial-gradient(900px 400px at 10% 0%, #0b1220 0%, rgba(11,18,32,0) 70%),
-        linear-gradient(180deg, #0b1117, #0a0f14);
-      border: 1px solid #152234;
-      box-shadow:
-        0 0 0 1px rgba(125, 211, 252, 0.06) inset,
-        0 14px 40px rgba(0,0,0,.35);
-    }
-    .update-box::before {
-      content: "★";
-      position: absolute;
-      left: 14px; top: 12px;
-      font-size: 1.1rem;
-      color: #7dd3fc;
-      filter: drop-shadow(0 0 6px rgba(125,211,252,.25));
-    }
-    .update-box h3 {
-      margin: 0 0 8px 0;
-      font-size: 1.05rem;
-      color: #e9f7ff;
-      letter-spacing: .2px;
-    }
-    .update-box .when {
-      display: inline-block;
-      margin-left: 8px;
-      padding: 2px 8px;
-      border-radius: 999px;
-      font-size: .85rem;
-      color: #cfe8ff;
-      background: #0c1b27;
-      border: 1px solid #193347;
-    }
-    .update-box ul {
-      margin: 8px 0 0 20px;
-    }
-    .update-actions {
-      margin-top: 10px;
-      display: flex; gap: 8px; flex-wrap: wrap;
-    }
-    .update-actions a,
-    .update-actions button {
-      appearance: none;
-      border: 1px solid #234a61;
-      background: #0d1d28;
-      color: #cfe8ff;
-      padding: 6px 10px;
-      border-radius: 10px;
-      cursor: pointer;
-      font-size: .92rem;
-    }
-    .update-actions a:hover,
-    .update-actions button:hover {
-      background: #0f2432;
-      border-color: #2d5d7a;
-    }
-    .update-box[hidden] { display: none !important; }
   </style>
 </head>
 <body>
-  <!-- Site Header -->
   <header class="site" role="banner" aria-label="Site header">
-    <div class="site-row">
+    <div class="nav-row wrap">
       <a class="brand" href="/" aria-label="Poke home">
         <img src="/css/logo-poke.svg?v=5" alt="Poke logo">
       </a>
-      <noscript>
-        <form action="/search" method="GET" style="margin-left:auto">
-          <input type="search" name="query" placeholder="Search…" aria-label="Search Poke"
-                 style="border-radius:10px;border:1px solid #232327;background:#0c0c0d;color:#eaeaea;padding:8px 10px;">
-          <button type="submit" style="margin-left:6px;border:1px solid #222;background:#111;color:#ddd;border-radius:10px;padding:8px 12px;">
-            Go
-          </button>
-        </form>
-      </noscript>
     </div>
   </header>
 
-  <!-- Document Body -->
-  <div class="shell doc" id="top">
-    <!-- Sidebar TOC (desktop only) -->
+  <main class="wrap" role="main">
+<section class="hero" aria-label="Intro" style="border-top: none;">
+      <h1 class="doc-title">Poke Privacy Policy</h1>
+      <p class="doc-lede">
+        <strong>We don’t collect any data about you.</strong> No telemetry, no trackers! Because Poke is <strong>free software</strong>, you can also check the source and self-host.
+      </p>
+      <div class="meta-row" aria-label="Document metadata">
+        <span class="badge">Instance: <span class="mono">poketube.fun</span></span>
+        <span class="badge">Version date: <time datetime="2025-10-11">October 11, 2025</time></span>
+      </div>
+    </section>
+
+    <!-- What's New / Privacy Update -->
+    <section id="whats-new" class="update-box" aria-labelledby="whats-new-heading" role="region">
+      <h3 id="whats-new-heading">
+        What’s New — Policy Update
+        <span class="when">October 11, 2025</span>
+      </h3>
+      <p style="margin-top:6px">
+       Highlights:
+      </p>
+      <ul>
+        <li><strong>New UI:</strong> simpler and better layout (yay!)</li>
+      </ul>
+      <div class="update-actions" aria-label="Update actions">
+        <button type="button" id="dismissUpdate" aria-label="Dismiss this update notice">Dismiss</button>
+      </div>
+    </section>
+
+    <!-- Contents -->
     <nav class="toc" aria-label="Table of contents">
       <h2>Contents</h2>
       <ul>
@@ -368,425 +198,306 @@
       </ul>
     </nav>
 
-    <!-- Paper Article -->
-    <article class="paper" role="article" aria-label="Poke Privacy Policy">
-     
-      <details class="mobile-toc">
-        <summary>Contents</summary>
-        <div class="toc-links">
-          <a href="#overview">Overview</a>
-          <a href="#summary">TL;DR</a>
-          <a href="#ownership">Ownership</a>
-          <a href="#initiative-privacy">Initiative Site Privacy</a>
-          <a href="#what-we-collect">What We Do/Don’t Collect</a>
-          <a href="#cookies">Cookies &amp; Storage</a>
-          <a href="#openstreetmap">OpenStreetMap</a>
-          <a href="#weather">Weather Pages &amp; Services</a>
-          <a href="#translate">Translate Page (SimplyTranslate)</a>
-          <a href="#third-parties">Third-Party Requests &amp; Proxy</a>
-          <a href="#api-logs">API Logs Policy</a>
-          <a href="#legal-bases">Legal Bases (GDPR)</a>
-          <a href="#your-rights">Your Rights</a>
-          <a href="#retention">Data Retention</a>
-          <a href="#javascript">JavaScript &amp; No-JS</a>
-          <a href="#self-host">Self-Hosting</a>
-          <a href="#changes">Changes to this Policy</a>
-          <a href="#history">Document History</a>
-          <a href="#warranty">Warranty Disclaimer</a>
-          <a href="#contact">Contact</a>
-          <a href="#license">Policy License</a>
-        </div>
+    <!-- Overview / Preamble -->
+    <section id="overview" aria-labelledby="preamble-heading">
+      <h2 id="preamble-heading" class="section">Preamble</h2>
+      <p>
+        Welcome to Poke’s Privacy Policy. We don’t collect data about you and we don’t run telemetry. Poke is <strong>free software</strong> you can read, remix, and run yourself.
+      </p>
+      <p class="callout">Not legal advice lol</p>
+    </section>
+
+    <!-- TL;DR -->
+    <section id="summary" aria-labelledby="summary-heading">
+      <h2 id="summary-heading" class="section">TL;DR</h2>
+      <div>
+        <ul>
+          <li><strong>No data collected.</strong> at all!!</li>
+          <li><strong>No telemetry.</strong> We don’t phone home.</li>
+          <li><strong>No third-party trackers.</strong> Yippe!!</li>
+          <li><strong>YouTube can’t see what you watch here.</strong> Its all done on the backend.</li>
+        </ul>
+        <ul>
+          <li><strong>Poke Account:</strong> no email required, no personal info needed.</li>
+          <li><strong>Poke Maps:</strong> uses OpenStreetMap data; map tiles/attribution may have separate privacy rules depending on the tile server you use.</li>
+          <li><strong>No required cookies.</strong> Preferences (like theme or layout) may live in local storage on your device.</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- Ownership -->
+    <section id="ownership" aria-labelledby="ownership-heading">
+      <h2 id="ownership-heading" class="section">Ownership</h2>
+      <p>
+        The Poke service and this default instance (<span class="mono">poketube.fun</span>) are owned and operated by the <strong>Poke Project</strong>.
+        Learn more at <a href="https://initiative.poketube.fun/" rel="noopener">initiative.poketube.fun</a>.
+      </p>
+    </section>
+
+    <!-- Initiative site privacy -->
+    <section id="initiative-privacy" aria-labelledby="initiative-privacy-heading">
+      <h2 id="initiative-privacy-heading" class="section">Initiative Site Privacy</h2>
+      <p>
+        The informational website at <a href="https://initiative.poketube.fun/" rel="noopener">initiative.poketube.fun</a> does not collect personal information.
+        For hosting-related processing, the <strong>Codeberg</strong> privacy policy applies:
+        <a href="https://codeberg.org/Codeberg/org/src/branch/main/PrivacyPolicy.md" target="_blank" rel="noopener">codeberg.org/Codeberg/org/src/branch/main/PrivacyPolicy.md</a>.
+      </p>
+    </section>
+
+    <!-- What we collect -->
+    <section id="what-we-collect" aria-labelledby="collect-heading">
+      <h2 id="collect-heading" class="section">What We Do/Don’t Collect</h2>
+      <details class="block" open>
+        <summary>We collect <em>nothing</em> about you</summary>
+        <p>
+          We don’t store IP addresses, user-agent fingerprints, unique identifiers, emails, names—none of it. There’s no telemetry or “anonymous crash reports.”
+        </p>
       </details>
-
-      <header>
-        <h1 class="doc-title">Poke Privacy Policy</h1>
-        <p class="doc-lede">
-          <strong>We don’t collect any data about you.</strong> No telemetry, no trackers! Because Poke is <strong>free software</strong>, you can also check the source and self-host.
-        </p>
-        <div class="meta-row" aria-label="Document metadata">
-          <span class="meta">Instance: <span class="mono">poketube.fun</span></span>
-          <span class="meta">Version date: <time datetime="2025-09-28">September 28, 2025</time></span>
-        </div>
-      </header>
-
-      <!-- What's New / Privacy Update -->
-      <section id="whats-new" class="update-box" aria-labelledby="whats-new-heading" role="region">
-        <h3 id="whats-new-heading">
-          What’s New — Policy Update
-          <span class="when">September 28, 2025</span>
-        </h3>
-        <p style="margin-top:6px">
-          We clarified how third-party requests work waaay better! Highlights: 
-        </p>
-        <ul>
-          <li><strong>Weather pages:</strong> <em>Open-Meteo</em> forecasts are always proxied by our backend. <em>Nominatim</em> geocoding is proxied. Source links are provided for both flows.</li>
-         </ul>
-        <div class="update-actions" aria-label="Update actions">
-          <a href="#weather" aria-label="Jump to Weather section">Review weather changes</a>
-          <button type="button" id="dismissUpdate" aria-label="Dismiss this update notice">
-            Dismiss
-          </button>
-        </div>
-      </section>
-
-      <!-- Overview / Preamble -->
-      <section id="overview" aria-labelledby="preamble-heading">
-        <h2 id="preamble-heading" class="section">Preamble</h2>
+      <details class="block">
+        <summary>What exists briefly so the internet works</summary>
         <p>
-          Welcome to Poke’s Privacy Policy. We don’t collect data about you and we don’t run telemetry. Poke is <strong>free software</strong> you can read, remix, and run yourself.
+          Your browser and our server exchange data to deliver pages (that’s how HTTP works). That info is handled <em>transiently</em> and not logged in a way that identifies you on our primary instance.
         </p>
-        <p class="callout">Not legal advice lol</p>
-      </section>
-
-      <!-- TL;DR -->
-      <section id="summary" aria-labelledby="summary-heading">
-        <h2 id="summary-heading" class="section">TL;DR</h2>
-        <div class="grid-2">
-          <div>
-            <ul>
-              <li><strong>No data collected.</strong> at all!!</li>
-              <li><strong>No telemetry.</strong> We don’t phone home.</li>
-              <li><strong>No third-party trackers.</strong> Yippe!!</li>
-              <li><strong>YouTube can’t see what you watch here.</strong> Its all done on the backend.</li>
-            </ul>
-          </div>
-          <div>
-            <ul>
-              <li><strong>Poke Account:</strong> no email required, no personal info needed.</li>
-              <li><strong>Poke Maps:</strong> uses OpenStreetMap data; map tiles/attribution may have separate privacy rules depending on the tile server you use.</li>
-              <li><strong>No required cookies.</strong> Preferences (like theme or layout) may live in local storage on your device.</li>
-            </ul>
-          </div>
-        </div>
-      </section>
-
-      <!-- Ownership -->
-      <section id="ownership" aria-labelledby="ownership-heading">
-        <h2 id="ownership-heading" class="section">Ownership</h2>
+      </details>
+      <details class="block">
+        <summary>Poke Account</summary>
         <p>
-          The Poke service and this default instance (<span class="mono">poketube.fun</span>) are owned and operated by the <strong>Poke Project</strong>.
-          Learn more at <a href="https://initiative.poketube.fun/" rel="noopener">initiative.poketube.fun</a>.
+          If you make a Poke account, we don’t require an email or personal details.
         </p>
-      </section>
+      </details>
+    </section>
 
-      <!-- Initiative site privacy -->
-      <section id="initiative-privacy" aria-labelledby="initiative-privacy-heading">
-        <h2 id="initiative-privacy-heading" class="section">Initiative Site Privacy</h2>
-        <p>
-          The informational website at <a href="https://initiative.poketube.fun/" rel="noopener">initiative.poketube.fun</a> does not collect personal information.
-          For hosting-related processing, the <strong>Codeberg</strong> privacy policy applies:
-          <a href="https://codeberg.org/Codeberg/org/src/branch/main/PrivacyPolicy.md" target="_blank" rel="noopener">codeberg.org/Codeberg/org/src/branch/main/PrivacyPolicy.md</a>.
-        </p>
-      </section>
+    <!-- Cookies & storage -->
+    <section id="cookies" aria-labelledby="cookies-heading">
+      <h2 id="cookies-heading" class="section">Cookies &amp; Local Storage</h2>
+      <ul>
+        <li><strong>No cookies :D!</strong></li>
+        <li><strong>Local storage only for preferences</strong> (e.g., theme, layout). This stays on your device.</li>
+      </ul>
+      <p class="small">
+        To remove data stored in your browser, you can use your browser’s cookie/site-data controls: <br>
+        <a href="https://support.google.com/chrome/answer/2392709" rel="noopener" target="_blank">· Chrome</a> <br>
+        <a href="https://support.mozilla.org/kb/clear-cookies-and-site-data-firefox" rel="noopener" target="_blank">· Firefox</a> <br> 
+        <a href="https://support.apple.com/HT201265" rel="noopener" target="_blank">· Safari (iOS)</a> <br> 
+        <a href="https://support.apple.com/guide/safari/manage-cookies-and-website-data-sfri11471/mac" rel="noopener" target="_blank"> · Safari (macOS)</a> <br>
+        <a href="https://support.microsoft.com/en-us/windows/manage-cookies-in-microsoft-edge-view-allow-block-delete-and-use-168dab11-0753-043d-7c16-ede5947fc64d" rel="noopener" target="_blank">· Edge</a> <br>
+        <a href="https://support.brave.app/hc/en-us/articles/360048833872-How-Do-I-Clear-Cookies-And-Site-Data-In-Brave" rel="noopener" target="_blank">· Brave</a>
+      </p>
+    </section>
 
-      <!-- What we collect -->
-      <section id="what-we-collect" aria-labelledby="collect-heading">
-        <h2 id="collect-heading" class="section">What We Do/Don’t Collect</h2>
-        <details class="block" open>
-          <summary>We collect <em>nothing</em> about you</summary>
-          <p>
-            We don’t store IP addresses, user-agent fingerprints, unique identifiers, emails, names—none of it. There’s no telemetry or “anonymous crash reports.”
-          </p>
-        </details>
-        <details class="block">
-          <summary>What exists briefly so the internet works</summary>
-          <p>
-            Your browser and our server exchange data to deliver pages (that’s how HTTP works). That info is handled <em>transiently</em> and not logged in a way that identifies you on our primary instance.
-          </p>
-        </details>
-        <details class="block">
-          <summary>Poke Account</summary>
-          <p>
-            If you make a Poke account, we don’t require an email or personal details.
-          </p>
-        </details>
-      </section>
+    <!-- OpenStreetMap -->
+    <section id="openstreetmap" aria-labelledby="osm-heading">
+      <h2 id="osm-heading" class="section">OpenStreetMap</h2>
+      <p>
+        Poke Maps uses <a href="https://www.openstreetmap.org/" target="_blank" rel="noopener">OpenStreetMap</a> data. That means when you explore maps at <a href="/map">/map</a>, we embed OSM via an <strong>iframe</strong> directly into the Poke site. The tiles and geographic info are delivered from OSM contributors’ servers.
+        While Poke itself doesn’t collect any of your data, OpenStreetMap’s tile servers have their own
+        <a href="https://wiki.osmfoundation.org/wiki/Privacy_Policy" target="_blank" rel="noopener">privacy policy</a>.
+      </p>
+    </section>
 
-      <!-- Cookies & storage -->
-      <section id="cookies" aria-labelledby="cookies-heading">
-        <h2 id="cookies-heading" class="section">Cookies &amp; Local Storage</h2>
-        <ul>
-          <li><strong>No cookies :D!</strong></li>
-          <li><strong>Local storage only for preferences</strong> (e.g., theme, layout). This stays on your device.</li>
-        </ul>
-        <p class="small">
-          To remove data stored in your browser, you can use your browser’s cookie/site-data controls: <br>
-          <a href="https://support.google.com/chrome/answer/2392709" rel="noopener" target="_blank">· Chrome</a> <br>
-          <a href="https://support.mozilla.org/kb/clear-cookies-and-site-data-firefox" rel="noopener" target="_blank">· Firefox</a> <br> 
-          <a href="https://support.apple.com/HT201265" rel="noopener" target="_blank">· Safari (iOS)</a> <br> 
-          <a href="https://support.apple.com/guide/safari/manage-cookies-and-website-data-sfri11471/mac" rel="noopener" target="_blank"> · Safari (macOS)</a> <br>
-          <a href="https://support.microsoft.com/en-us/windows/manage-cookies-in-microsoft-edge-view-allow-block-delete-and-use-168dab11-0753-043d-7c16-ede5947fc64d" rel="noopener" target="_blank">· Edge</a> <br>
-          <a href="https://support.brave.app/hc/en-us/articles/360048833872-How-Do-I-Clear-Cookies-And-Site-Data-In-Brave" rel="noopener" target="_blank">· Brave</a>
-        </p>
-      </section>
+    <!-- Weather -->
+    <section id="weather" aria-labelledby="weather-heading">
+      <h2 id="weather-heading" class="section">Weather Pages &amp; Services</h2>
+      <p>
+        Poke’s weather pages use third-party, privacy-respecting services to resolve places and fetch forecasts:
+      </p>
+      <ul>
+        <li>
+          <strong>Geocoding / place lookup:</strong>
+          <a href="https://nominatim.openstreetmap.org/" rel="noopener" target="_blank">nominatim.openstreetmap.org</a>
+          (OpenStreetMap Nominatim).  
+          Privacy: <a href="https://osmfoundation.org/wiki/Privacy_Policy" rel="noopener" target="_blank">OSMF Privacy Policy</a>.  
+          <br>
+          How it works:
+          <ul>
+            <li> the request is proxied through Poke’s backend - always!
+            (<a href="https://codeberg.org/ashley/poke/src/branch/main/src/libpoketube/init/pages-api.js#L78" target="_blank" rel="noopener">see source </a>).</li>
+          </ul>
+        </li>
+        <li>
+          <strong>Forecast data:</strong>
+          <a href="https://open-meteo.com/" rel="noopener" target="_blank">open-meteo.com</a>.  
+          Privacy: <a href="https://open-meteo.com/en/terms#privacy" rel="noopener" target="_blank">Open-Meteo Terms &amp; Privacy</a>.  
+          <br>
+          Forecast queries are always <strong>proxied through Poke’s backend</strong>, so your browser never connects to Open-Meteo directly. 
+          Only the necessary query parameters (latitude, longitude, units, etc.) are forwarded by the server.  
+          see the source for this
+          <a href="https://codeberg.org/ashley/poke/src/branch/main/src/libpoketube/init/pages-api.js#L108" target="_blank" rel="noopener">here.</a>.
+        </li>
+      </ul>
+      <p class="callout">
+        Poke does not add trackers to these requests. However, when third-party services are contacted (directly or via proxy), 
+        their respective privacy policies apply to those specific requests.
+      </p>
+    </section>
 
-      <!-- OpenStreetMap -->
-      <section id="openstreetmap" aria-labelledby="osm-heading">
-        <h2 id="osm-heading" class="section">OpenStreetMap</h2>
-        <p>
-          Poke Maps uses <a href="https://www.openstreetmap.org/" target="_blank" rel="noopener">OpenStreetMap</a> data. That means when you explore maps at <a href="/map">/map</a>, we embed OSM via an <strong>iframe</strong> directly into the Poke site. The tiles and geographic info are delivered from OSM contributors’ servers.
-          While Poke itself doesn’t collect any of your data, OpenStreetMap’s tile servers have their own
-          <a href="https://wiki.osmfoundation.org/wiki/Privacy_Policy" target="_blank" rel="noopener">privacy policy</a>.
-        </p>
-      </section>
+    <!-- Translate -->
+    <section id="translate" aria-labelledby="translate-heading">
+      <h2 id="translate-heading" class="section">Translate Page (SimplyTranslate)</h2>
+      <p>
+        Our translate page does <strong>not</strong> send your data directly to Google or SimplyTranslate.org from your browser. 
+        Instead, all requests are proxied through our own backend servers. 
+        When you use the page, only the necessary parameters are passed securely on the server side:
+        <code>from</code> (source language), <code>to</code> (target language), and <code>text</code> (the content you entered). 
+        Your browser never connects to SimplyTranslate.org directly.
+      </p>
+      <p>
+        We rely on the community-run 
+        <a href="https://simplytranslate.org/" rel="noopener" target="_blank">SimplyTranslate</a> service (a privacy-friendly 
+        translation front-end). SimplyTranslate is a <strong>free software</strong> project: you can see the 
+        <a href="https://codeberg.org/ManeraKai/simplytranslate" rel="noopener" target="_blank">source code</a> and its 
+        <a href="https://codeberg.org/ManeraKai/simplytranslate/raw/branch/main/legal_notice.txt" rel="noopener" target="_blank">legal notice</a>. 
+        Our backend integration is handled in 
+        <a href="https://codeberg.org/ashley/poke/src/branch/main/src/libpoketube/init/pages-static.js#L208" target="_blank" rel="noopener">
+          Poke’s server code
+        </a>.
+      </p>
+    </section>
 
-      <!-- Weather -->
-      <section id="weather" aria-labelledby="weather-heading">
-        <h2 id="weather-heading" class="section">Weather Pages &amp; Services</h2>
-        <p>
-          Poke’s weather pages use third-party, privacy-respecting services to resolve places and fetch forecasts:
-        </p>
-        <ul>
-          <li>
-            <strong>Geocoding / place lookup:</strong>
-            <a href="https://nominatim.openstreetmap.org/" rel="noopener" target="_blank">nominatim.openstreetmap.org</a>
-            (OpenStreetMap Nominatim).  
-            Privacy: <a href="https://osmfoundation.org/wiki/Privacy_Policy" rel="noopener" target="_blank">OSMF Privacy Policy</a>.  
-            <br>
-            How it works:
-            <ul>
-              <li> the request is proxied through Poke’s backend - always!
-              (<a href="https://codeberg.org/ashley/poke/src/branch/main/src/libpoketube/init/pages-api.js#L78" target="_blank" rel="noopener">see source </a>).</li>
-            </ul>
-          </li>
-          <li>
-            <strong>Forecast data:</strong>
-            <a href="https://open-meteo.com/" rel="noopener" target="_blank">open-meteo.com</a>.  
-            Privacy: <a href="https://open-meteo.com/en/terms#privacy" rel="noopener" target="_blank">Open-Meteo Terms &amp; Privacy</a>.  
-            <br>
-            Forecast queries are always <strong>proxied through Poke’s backend</strong>, so your browser never connects to Open-Meteo directly. 
-            Only the necessary query parameters (latitude, longitude, units, etc.) are forwarded by the server.  
-            see the source for this
-            <a href="https://codeberg.org/ashley/poke/src/branch/main/src/libpoketube/init/pages-api.js#L108" target="_blank" rel="noopener">here.</a>.
-          </li>
-        </ul>
-        <p class="callout">
-          Poke does not add trackers to these requests. However, when third-party services are contacted (directly or via proxy), 
-          their respective privacy policies apply to those specific requests.
-        </p>
-      </section>
+    <!-- Placeholder anchor to preserve original TOC link -->
+    <section id="third-parties" aria-label="Third-Party Requests & Proxy"></section>
 
-      <!-- Translate -->
-      <section id="translate" aria-labelledby="translate-heading">
-        <h2 id="translate-heading" class="section">Translate Page (SimplyTranslate)</h2>
-        <p>
-          Our translate page does <strong>not</strong> send your data directly to Google or SimplyTranslate.org from your browser. 
-          Instead, all requests are proxied through our own backend servers. 
-          When you use the page, only the necessary parameters are passed securely on the server side:
-          <code>from</code> (source language), <code>to</code> (target language), and <code>text</code> (the content you entered). 
-          Your browser never connects to SimplyTranslate.org directly.
-        </p>
-        <p>
-          We rely on the community-run 
-          <a href="https://simplytranslate.org/" rel="noopener" target="_blank">SimplyTranslate</a> service (a privacy-friendly 
-          translation front-end). SimplyTranslate is a <strong>free software</strong> project: you can see the 
-          <a href="https://codeberg.org/ManeraKai/simplytranslate" rel="noopener" target="_blank">source code</a> and its 
-          <a href="https://codeberg.org/ManeraKai/simplytranslate/raw/branch/main/legal_notice.txt" rel="noopener" target="_blank">legal notice</a>. 
-          Our backend integration is handled in 
-          <a href="https://codeberg.org/ashley/poke/src/branch/main/src/libpoketube/init/pages-static.js#L208" target="_blank" rel="noopener">
-            Poke’s server code
-          </a>.
-        </p>
-      </section>
-
-      <!-- API Logs Policy -->
-      <section id="api-logs" aria-labelledby="api-logs-heading">
-        <h2 id="api-logs-heading" class="section">API Logs Policy</h2>
-        <p>
-          When you request any resource from the poke api (for example: thumbnails, API endpoint) information about the request may be logged.
-        </p>
-        <p>Information about a request is limited to:</p>
-        <ul>
-          <li>the time the request was made</li>
-          <li>the status code of the response</li>
-          <li>the method of the request</li>
-          <li>the requested URL</li>
-          <li>how long it took to complete the request.</li>
-        </ul>
-        <p>
-          <strong>No identifying information is logged</strong>, such as the visitor’s cookie, user-agent, or IP address. Here are a couple lines to serve as an example:
-        </p>
-        <pre class="small" style="white-space:pre-wrap;margin:8px 0;">
+    <!-- API Logs Policy -->
+    <section id="api-logs" aria-labelledby="api-logs-heading">
+      <h2 id="api-logs-heading" class="section">API Logs Policy</h2>
+      <p>
+        When you request any resource from the poke api (for example: thumbnails, API endpoint) information about the request may be logged.
+      </p>
+      <p>Information about a request is limited to:</p>
+      <ul>
+        <li>the time the request was made</li>
+        <li>the status code of the response</li>
+        <li>the method of the request</li>
+        <li>the requested URL</li>
+        <li>how long it took to complete the request.</li>
+      </ul>
+      <p>
+        <strong>No identifying information is logged</strong>, such as the visitor’s cookie, user-agent, or IP address. Here are a couple lines to serve as an example:
+      </p>
+      <pre class="small" style="white-space:pre-wrap;margin:8px 0;">
 2019-01-19 16:37:47 +00:00 200 GET /api/v1/comments/xrlETJYzH-c?format=html&amp;hl=en-US 1345.88ms
 2019-01-19 16:37:53 +00:00 200 GET /vi/r5P-f5arPXE/maxres.jpg 1085.41ms
 2019-01-19 16:37:54 +00:00 200 GET /watch 7.04ms
-        </pre>
-        <p>
-          This website does not store the visitor’s user-agent or IP address and does not use fingerprinting, advertisements, or tracking of any form.
-        </p>
-      </section>
+      </pre>
+      <p>
+        This website does not store the visitor’s user-agent or IP address and does not use fingerprinting, advertisements, or tracking of any form.
+      </p>
+    </section>
 
-      <!-- Legal bases -->
-      <section id="legal-bases" aria-labelledby="gdpr-heading">
-        <h2 id="gdpr-heading" class="section">Legal Bases for Processing (GDPR)</h2>
-        <ul>
-          <li><strong>Legitimate interests:</strong> Running Poke smoothly while collecting exactly zero personal data.</li>
-          <li><strong>Consent:</strong> If we ever invent an optional feature that needs info, we’ll ask. But right now? There’s nothing to consent to.</li>
-          <li><strong>Legal obligation:</strong> Even if someone waves a fancy piece of paper at us, we literally have nothing personal to hand over. Empty pockets.</li>
-        </ul>
-      </section>
+    <!-- Legal bases -->
+    <section id="legal-bases" aria-labelledby="gdpr-heading">
+      <h2 id="gdpr-heading" class="section">Legal Bases for Processing (GDPR)</h2>
+      <ul>
+        <li><strong>Legitimate interests:</strong> Running Poke smoothly while collecting exactly zero personal data.</li>
+        <li><strong>Consent:</strong> If we ever invent an optional feature that needs info, we’ll ask. But right now? There’s nothing to consent to.</li>
+        <li><strong>Legal obligation:</strong> Even if someone waves a fancy piece of paper at us, we literally have nothing personal to hand over. Empty pockets.</li>
+      </ul>
+    </section>
 
-      <!-- Your rights -->
-      <section id="your-rights" aria-labelledby="rights-heading">
-        <h2 id="rights-heading" class="section">Your Privacy Rights</h2>
-        <p>
-          Since Poke doesn’t collect or store personal data, there’s basically nothing for us to give, sell, or lose about you.
-          You don’t have to worry about “export my data” or “delete my profile” requests because we don’t have anything on you in the first place.
-        </p>
-        <p>
-          Poke Accounts don’t require an email, name, or any other identifying info — and there’s no way to add that kind of data even if you wanted to.
-        </p>
-      </section>
+    <!-- Your rights -->
+    <section id="your-rights" aria-labelledby="rights-heading">
+      <h2 id="rights-heading" class="section">Your Privacy Rights</h2>
+      <p>
+        Since Poke doesn’t collect or store personal data, there’s basically nothing for us to give, sell, or lose about you.
+        You don’t have to worry about “export my data” or “delete my profile” requests because we don’t have anything on you in the first place.
+      </p>
+      <p>
+        Poke Accounts don’t require an email, name, or any other identifying info — and there’s no way to add that kind of data even if you wanted to.
+      </p>
+    </section>
 
-      <!-- Data Retention -->
-      <section id="retention" aria-labelledby="retention-heading">
-        <h2 id="retention-heading" class="section">Data Retention</h2>
-        <ul>
-          <li><strong>Server logs:</strong> No personal identifiers on our main instance.</li>
-          <li><strong>Telemetry/analytics:</strong> Not enabled here.</li>
-        </ul>
-      </section>
+    <!-- Data Retention -->
+    <section id="retention" aria-labelledby="retention-heading">
+      <h2 id="retention-heading" class="section">Data Retention</h2>
+      <ul>
+        <li><strong>Server logs:</strong> No personal identifiers on our main instance.</li>
+        <li><strong>Telemetry/analytics:</strong> Not enabled here.</li>
+      </ul>
+    </section>
 
-      <!-- JavaScript & No-JS  -->
-      <section id="javascript" aria-labelledby="javascript-heading">
-        <h2 id="javascript-heading" class="section">JavaScript &amp; No-JS</h2>
-        <p>
-          JavaScript is <strong>optional</strong> on Poke’s websites. Core features—including search—work without JavaScript.
-        </p>
-      </section>
+    <!-- JavaScript & No-JS  -->
+    <section id="javascript" aria-labelledby="javascript-heading">
+      <h2 id="javascript-heading" class="section">JavaScript &amp; No-JS</h2>
+      <p>
+        JavaScript is <strong>optional</strong> on Poke’s websites. Core features—including search—work without JavaScript.
+      </p>
+    </section>
 
-      <!-- Self-host -->
-      <section id="self-host" aria-labelledby="selfhost-heading">
-        <h2 id="selfhost-heading" class="section">Self-Hosting</h2>
-        <p>
-          Poke is free software under the <strong>GNU GPL v3.0 or later</strong>. you can self-host it yourself! <a href="https://codeberg.org/ashley/poke/#hosting-poke"> see here </a>
-        </p>
-      </section>
+    <!-- Self-host -->
+    <section id="self-host" aria-labelledby="selfhost-heading">
+      <h2 id="selfhost-heading" class="section">Self-Hosting</h2>
+      <p>
+        Poke is free software under the <strong>GNU GPL v3.0 or later</strong>. you can self-host it yourself! <a href="https://codeberg.org/ashley/poke/#hosting-poke"> see here </a>
+      </p>
+    </section>
 
-      <!-- Changes -->
-      <section id="changes" aria-labelledby="changes-heading">
-        <h2 id="changes-heading" class="section">Changes to this Policy</h2>
-        <p>
-          If we ever change how privacy works here, we’ll update the date at the top and announce major changes. Spoiler: changes would not include adding two bananas. this isnt minions LOL :3
-        </p>
-      </section>
+    <!-- Changes -->
+    <section id="changes" aria-labelledby="changes-heading">
+      <h2 id="changes-heading" class="section">Changes to this Policy</h2>
+      <p>
+        If we ever change how privacy works here, we’ll update the date at the top and announce major changes. Spoiler: changes would not include adding two bananas. this isnt minions LOL :3
+      </p>
+    </section>
 
-      <!-- Document History  -->
-      <section id="history" aria-labelledby="history-heading">
-        <h2 id="history-heading" class="section">Document History</h2>
-        <p>
-          You can view the full edit history for this policy at:
-          <a href="https://codeberg.org/ashley/poke/commits/branch/main/html/priv.ejs" target="_blank" rel="noopener">codeberg.org</a>.
-        </p>
-      </section>
+    <!-- Document History  -->
+    <section id="history" aria-labelledby="history-heading">
+      <h2 id="history-heading" class="section">Document History</h2>
+      <p>
+        You can view the full edit history for this policy at:
+        <a href="https://codeberg.org/ashley/poke/commits/branch/main/html/priv.ejs" target="_blank" rel="noopener">codeberg.org</a>.
+      </p>
+    </section>
 
-      <!-- Warranty Disclaimer -->
-      <section id="warranty" aria-labelledby="warranty-heading">
-        <h2 id="warranty-heading" class="section">Warranty Disclaimer</h2>
-        <pre class="small" style="white-space:pre-wrap;margin:8px 0;">
+    <!-- Warranty Disclaimer -->
+    <section id="warranty" aria-labelledby="warranty-heading">
+      <h2 id="warranty-heading" class="section">Warranty Disclaimer</h2>
+      <pre class="small" style="white-space:pre-wrap;margin:8px 0;">
 IN NO EVENT UNLESS REQUIRED BY APPLICABLE LAW OR AGREED TO IN WRITING WILL ANY COPYRIGHT HOLDER,
 OR ANY OTHER PARTY WHO MODIFIES AND/OR CONVEYS THE PROGRAM AS PERMITTED ABOVE, BE LIABLE TO YOU FOR DAMAGES,
 INCLUDING ANY GENERAL, SPECIAL, INCIDENTAL OR CONSEQUENTIAL DAMAGES ARISING OUT OF THE USE OR INABILITY TO USE THE PROGRAM
 (E.G., LOSS OF DATA, DATA BEING RENDERED INACCURATE, OR FAILURES OF THE PROGRAM TO OPERATE WITH ANY OTHER PROGRAMS),
 EVEN IF SUCH HOLDER OR OTHER PARTY HAS BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGES.
-        </pre>
-      </section>
+      </pre>
+    </section>
 
-      <!-- Contact -->
-      <section id="contact" aria-labelledby="contact-heading">
-        <h2 id="contact-heading" class="section">Contact</h2>
-        <p>
-          Questions or concerns? Open an issue on our project tracker :D
-        </p>
-        <ul>
-          <li>Project: <span class="mono">codeberg.org/Ashley/poke</span></li>
-          <li>Initiative: <a href="https://initiative.poketube.fun/" rel="noopener">initiative.poketube.fun</a></li>
-        </ul>
-      </section>
+    <!-- Contact -->
+    <section id="contact" aria-labelledby="contact-heading">
+      <h2 id="contact-heading" class="section">Contact</h2>
+      <p>
+        Questions or concerns? Open an issue on our project tracker :D
+      </p>
+      <ul>
+        <li>Project: <span class="mono">codeberg.org/Ashley/poke</span></li>
+        <li>Initiative: <a href="https://initiative.poketube.fun/" rel="noopener">initiative.poketube.fun</a></li>
+      </ul>
+    </section>
 
-      <!-- License -->
-      <section id="license" aria-labelledby="license-heading">
-        <h2 id="license-heading" class="section">Policy License</h2>
-        <p class="small">
-          © 2021–2025 Poke (Poke Project). This policy is licensed under the
-          <strong>Creative Commons Attribution–ShareAlike 4.0 International</strong> (CC BY-SA 4.0).
-        </p>
-      </section>
+    <!-- License -->
+    <section id="license" aria-labelledby="license-heading">
+      <h2 id="license-heading" class="section">Policy License</h2>
+      <p class="small">
+        © 2021–2025 Poke (Poke Project). This policy is licensed under the
+        <strong>Creative Commons Attribution–ShareAlike 4.0 International</strong> (CC BY-SA 4.0).
+      </p>
+    </section>
 
-      <footer class="site small" aria-label="Document footer">
-        <p><a href="#top">Return to Top</a></p>
-      </footer>
-    </article>
-  </div>
-
-  <div class="search-fab" aria-live="polite">
-    <button type="button" id="openSearch" aria-expanded="false" aria-controls="policySearchPanel" title="Search Poke">
-      🔎 Search
-    </button>
-  </div>
-
-  <div id="policySearchPanel" class="search-panel" role="dialog" aria-modal="false" aria-label="Search">
-    <form class="search-row" id="policySearchForm" action="/search" method="GET">
-      <input type="search" name="query" id="policySearchInput" placeholder="Search…"
-             aria-label="Search Poke" autocomplete="off" />
-      <button type="submit">Go</button>
-      <button type="button" id="closeSearch">Close</button>
-    </form>
-  </div>
+    <footer class="site small" aria-label="Document footer">
+      <p><a href="#top">Return to Top</a></p>
+    </footer>
+  </main>
 
   <script>
-    (function () {
-      const openBtn = document.getElementById('openSearch');
-      const panel = document.getElementById('policySearchPanel');
-      const input = document.getElementById('policySearchInput');
-      const closeBtn = document.getElementById('closeSearch');
-      const form = document.getElementById('policySearchForm');
-
-      function openPanel() {
-        panel.classList.add('active');
-        openBtn.setAttribute('aria-expanded', 'true');
-        setTimeout(() => input && input.focus(), 0);
-      }
-      function closePanel() {
-        panel.classList.remove('active');
-        openBtn.setAttribute('aria-expanded', 'false');
-        openBtn.focus();
-      }
-
-      openBtn.addEventListener('click', () => {
-        if (panel.classList.contains('active')) closePanel(); else openPanel();
-      });
-      closeBtn.addEventListener('click', closePanel);
-
-      window.addEventListener('keydown', (e) => {
-        if (e.key === '/' && !e.metaKey && !e.ctrlKey && !e.altKey) {
-          e.preventDefault();
-          if (!panel.classList.contains('active')) openPanel();
-          input && input.focus();
-        } else if (e.key === 'Escape' && panel.classList.contains('active')) {
-          closePanel();
-        }
-      });
-
-      form.addEventListener('submit', (e) => {
-        const q = input.value.trim();
-        if (!q) { e.preventDefault(); return; }
-      });
-
+    (function(){
       const updateBox = document.getElementById('whats-new');
       const dismissBtn = document.getElementById('dismissUpdate');
-      const STORAGE_KEY = 'poke_privacy_update_2025_09_17_dismissed';
-      try {
-        if (localStorage.getItem(STORAGE_KEY) === '1') {
-          updateBox && (updateBox.hidden = true);
-        }
-      } catch {}
-      if (dismissBtn && updateBox) {
-        dismissBtn.addEventListener('click', () => {
-          updateBox.hidden = true;
-          try { localStorage.setItem(STORAGE_KEY, '1'); } catch {}
-        });
-      }
+      const KEY = 'poke_privacy_update_2025_10_11_dismissed';
+      try{
+        if(localStorage.getItem(KEY)==='1'){ updateBox && (updateBox.hidden = true); }
+      }catch{}
+      dismissBtn && dismissBtn.addEventListener('click', function(){
+        updateBox.hidden = true;
+        try{ localStorage.setItem(KEY,'1'); }catch{}
+      });
     })();
   </script>
 </body>

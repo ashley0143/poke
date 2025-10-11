@@ -19,29 +19,40 @@ module.exports = function (app, config, renderTemplate) {
   var html_location = "./css/";
   var location_pwa = "./pwa/";
 
-  app.get("/privacy", function (req, res) {
-    if (req.hostname == "poketube.fun") {
-      renderTemplate(res, req, "priv.ejs", {
-        isMobile: req.useragent.isMobile,
-      });
-    } else {
-      renderTemplate(res, req, "priv-custom.ejs");
-    }
-  });
+app.get("/privacy", (req, res) => {
+  res.redirect(301, "/policies/privacy");
+});
+
+app.get("/coc", (req, res) => {
+  res.redirect(301, "/policies/code-of-conduct");
+});
+
+app.get("/code-of-conduct", (req, res) => {
+  res.redirect(301, "/policies/code-of-conduct");
+});
+
+app.get("/policies/privacy", (req, res) => {
+  if (req.hostname === "poketube.fun") {
+    renderTemplate(res, req, "priv.ejs", {
+      isMobile: req.useragent.isMobile,
+    });
+  } else {
+    renderTemplate(res, req, "priv-custom.ejs");
+  }
+});
+
+app.get("/policies/code-of-conduct", (req, res) => {
+  renderTemplate(res, req, "coc.ejs");
+});
+
+app.get("/policies", (req, res) => {
+  renderTemplate(res, req, "terms.ejs");
+});
 
   app.get("/502", function (req, res) {
     renderTemplate(res, req, "502.ejs");
   });
-
- app.get("/code-of-conduct", function (req, res) {
-    renderTemplate(res, req, "coc.ejs");
-  });
-
- app.get("/coc", function (req, res) {
-    renderTemplate(res, req, "coc.ejs");
-  });
-
-
+ 
 app.get("/143", (req, res) => {
   const numberEasterEgg = getRandomArbitrary(0, 143);
   const { number, something } = req.query;

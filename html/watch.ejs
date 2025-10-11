@@ -2530,6 +2530,7 @@ let intervalId
 let oddFrame = true
 let numWorkers = navigator.hardwareConcurrency || 4
 let workers = []
+let originalParentOdd, originalParentEven // store original parent nodes
 
 const drawFrame = (workerId) => {
   if (workers[workerId].oddFrame) {
@@ -2581,6 +2582,10 @@ const init = () => {
   AMvideo.addEventListener("play", drawStart, false)
   AMvideo.addEventListener("pause", drawPause, false)
   AMvideo.addEventListener("ended", drawPause, false)
+
+  // store original parents
+  originalParentOdd = oddCanvas.parentNode
+  originalParentEven = evenCanvas.parentNode
 }
 
 const cleanup = () => {
@@ -2593,17 +2598,20 @@ const cleanup = () => {
 window.addEventListener("load", init)
 window.addEventListener("unload", cleanup)
 
-// Hide ambient canvases when fullscreen and restore when exiting fullscreen
+// Hide ambient canvases when fullscreen and restore them back after exit
 document.addEventListener("fullscreenchange", () => {
   const isFullscreen = !!document.fullscreenElement
   if (isFullscreen) {
-    oddCanvas.remove()
-    evenCanvas.remove()
+    if (oddCanvas.parentNode) oddCanvas.parentNode.removeChild(oddCanvas)
+    if (evenCanvas.parentNode) evenCanvas.parentNode.removeChild(evenCanvas)
   } else {
-    document.body.appendChild(oddCanvas)
-    document.body.appendChild(evenCanvas)
+    if (!document.getElementById("ambient-canvas-1") && originalParentOdd)
+      originalParentOdd.appendChild(oddCanvas)
+    if (!document.getElementById("ambient-canvas-2") && originalParentEven)
+      originalParentEven.appendChild(evenCanvas)
   }
 })
+
 
 </script>
 <style>

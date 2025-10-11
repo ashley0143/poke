@@ -292,16 +292,28 @@
         <a href="https://support.brave.app/hc/en-us/articles/360048833872-How-Do-I-Clear-Cookies-And-Site-Data-In-Brave" rel="noopener" target="_blank">· Brave</a>
       </p>
     </section>
+<!-- OpenStreetMap -->
+<section id="openstreetmap" aria-labelledby="osm-heading">
+  <h2 id="osm-heading" class="section">OpenStreetMap</h2>
+  <p>
+    Poke Maps uses data from <a href="https://www.openstreetmap.org/" target="_blank" rel="noopener">OpenStreetMap</a> — a community-driven, free-licensed world map built by thousands of volunteer contributors.  
+  </p>
+  <p>
+    When you visit <a href="/map">/map</a>, Poke displays OpenStreetMap through a simple <strong>&lt;iframe&gt;</strong> element embedded directly into the site.  
+    This means the map interface and tiles (streets, landmarks, terrain, etc.) are loaded from OpenStreetMap’s own tile servers rather than from Poke’s infrastructure.  
+  </p>
+  <p>
+    Poke does not proxy or modify these map requests — your browser connects directly to the third-party domain
+    <a href="https://www.openstreetmap.org/" target="_blank" rel="noopener">openstreetmap.org</a>
+    (and its associated tile servers) in order to display the map visuals.  
+  </p>
+  <p>
+    While Poke itself does not collect or log any identifying information about your visit to the map, OpenStreetMap’s servers may process standard connection details (such as IP address, timestamp, and request type) as part of normal web delivery.  
+    You can read more in their official
+    <a href="https://wiki.osmfoundation.org/wiki/Privacy_Policy" target="_blank" rel="noopener">OpenStreetMap Foundation Privacy Policy</a>.
+  </p>
+</section>
 
-    <!-- OpenStreetMap -->
-    <section id="openstreetmap" aria-labelledby="osm-heading">
-      <h2 id="osm-heading" class="section">OpenStreetMap</h2>
-      <p>
-        Poke Maps uses <a href="https://www.openstreetmap.org/" target="_blank" rel="noopener">OpenStreetMap</a> data. That means when you explore maps at <a href="/map">/map</a>, we embed OSM via an <strong>iframe</strong> directly into the Poke site. The tiles and geographic info are delivered from OSM contributors’ servers.
-        While Poke itself doesn’t collect any of your data, OpenStreetMap’s tile servers have their own
-        <a href="https://wiki.osmfoundation.org/wiki/Privacy_Policy" target="_blank" rel="noopener">privacy policy</a>.
-      </p>
-    </section>
     
 <!-- Weather -->
 <section id="weather" aria-labelledby="weather-heading">

@@ -360,25 +360,45 @@ const randomFeatures = features.sort(() => 0.5 - Math.random()).slice(0, 3);
     }
   </style>
 
-  <% 
-    const _terms = Array.isArray(typeof searchMarquee !== 'undefined' ? searchMarquee : null) && (typeof searchMarquee !== 'undefined')
-      ? searchMarquee
-      : [
-      "Gaming videos", "Deltarune Chapter 3&4", "K-Pop mixes", "Lo-fi playlists", "Linux tips",
-  "Privacy guides", "Games hub", "News highlights", "Cozy movies", "Study music",
-  "ASMR", "Live cams", "Nature ambiences", "City pop", "Retro tech", "Omori",
-  "Twenty One Pilots", "Smoorez",  "Assassin's Creed Shadows", "Elden Ring", "Monster Hunter: Wilds", "Mario Kart World",
-  "Split Fiction", "Citizen Sleeper 2", "Doom: The Dark Ages", "Helldivers 2",
-  "Call of Duty: Black Ops 6", "Fable", "Vampire: Bloodlines 2",
-  "Metallica", "Radiohead", "Coldplay", "Billie Eilish", "Taylor Swift",
-  "The Beatles", "Nirvana", "Pink Floyd", "Linkin Park", "BTS", "BLACKPINK",
-  "Stray Kids", "Ed Sheeran", "Adele", "Drake", "Kendrick Lamar", "Bad Bunny",
-  "Inception", "Interstellar", "Spirited Away", "Your Name", "Coco", "Parasite",
-  "Stranger Things", "Arcane", "Attack on Titan", "One Piece", "My Hero Academia",
-  "Looney Tunes", "Mandalorian", "Doctor Who", "Cyberpunk 2077", "Minecraft", "Nintendo Games"
-        ];
-    const enc = str => encodeURIComponent(String(str));
-  %>
+<%
+  const _terms = Array.isArray(typeof searchMarquee !== 'undefined' ? searchMarquee : null) && (typeof searchMarquee !== 'undefined')
+    ? searchMarquee
+    : [
+      "Gaming videos", "Deltarune Chapter 3&4", "K-Pop mixes", "Lo-fi playlists", "GNU/Linux tips",
+      "Privacy guides", "Games hub", "News highlights", "Cozy movies", "Study music",
+      "ASMR", "Live cams", "Nature ambiences", "City pop", "Retro tech", "Omori",
+      "Twenty One Pilots", "Smoorez", "Assassin's Creed Shadows", "Elden Ring", "Monster Hunter: Wilds",
+      "Mario Kart World", "Split Fiction", "Citizen Sleeper 2", "Doom: The Dark Ages", "Helldivers 2",
+      "Call of Duty: Black Ops 6", "Fable", "Vampire: Bloodlines 2", "Metallica", "Radiohead",
+      "Coldplay", "Billie Eilish", "Taylor Swift", "The Beatles", "Nirvana", "Pink Floyd",
+      "Linkin Park", "BTS", "BLACKPINK", "Stray Kids", "Ed Sheeran", "Adele", "Drake",
+      "Kendrick Lamar", "Bad Bunny", "Inception", "Interstellar", "Spirited Away", "Your Name",
+      "Coco", "Parasite", "Stranger Things", "Arcane", "Attack on Titan", "One Piece",
+      "My Hero Academia", "Looney Tunes", "Mandalorian", "Doctor Who", "Cyberpunk 2077",
+      "Minecraft", "Nintendo Games", "Windows 11", "GNU/Linux", "Operating Systems",
+      "macOS", "Apple", "iOS", "iPhone", "Samsung Galaxy", "Z Flip", "AMD",
+      "Free software", "OpenMW", "LibreOffice", "KDE Plasma", "GNOME Shell", "Trisquel GNU/Linux",
+      "Fedora", "Debian", "Arch GNU/Linux", "Poke Project", "PokeTube", "Privacy tools",
+      "Firefox", "LibreWolf", "DuckDuckGo", "Tor Browser", "Mastodon", "Pixelfed",
+      "PeerTube", "Matrix", "Element", "Signal", "F-Droid", "Retro computing",
+      "Pixel art", "Synthwave", "Vaporwave", "Chillstep", "Lo-fi hip hop", "Jazz nights",
+      "Beach ambience", "Cozy café", "Rain sounds", "Coding music", "Ambient chill",
+      "Indie games", "Celeste", "Hollow Knight", "Stardew Valley", "Undertale", "Sonic Frontiers",
+      "Persona 5", "Final Fantasy VII", "Kingdom Hearts", "Genshin Impact", "Honkai Star Rail",
+      "NieR: Automata", "Tekken 8", "Street Fighter 6", "Valorant", "Overwatch 2",
+      "Apex Legends", "Fortnite", "Roblox", "Terraria", "osu!", "Steam Deck", "Proton",
+      "Wine", "Lutris", "RetroArch", "PCSX2", "RPCS3", "Yuzu", "Ryujinx", "PPSSPP"
+    ];
+
+  const shuffle = arr => arr
+    .map(v => ({ v, s: Math.random() }))
+    .sort((a, b) => a.s - b.s)
+    .map(({ v }) => v);
+
+  const shuffledTerms = shuffle(_terms);
+  const enc = str => encodeURIComponent(String(str));
+%>
+
 
   <div class="pk-marquee" aria-label="Quick search suggestions. Hover to pause.">
     <div class="pk-marquee__track" aria-hidden="false">

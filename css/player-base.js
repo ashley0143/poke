@@ -15,7 +15,7 @@ var versionclient = "youtube.player.web_20250917_22_RC00"
  * <https://github.com/mozilla/vtt.js/blob/main/LICENSE>
  */
 
-       document.addEventListener("DOMContentLoaded", () => { 
+document.addEventListener("DOMContentLoaded", () => { 
     // video.js 8 init - source can be seen in https://poketube.fun/static/vjs.min.js or the vjs.min.js file
     const video = videojs('video', {
         controls: true,
@@ -24,7 +24,7 @@ var versionclient = "youtube.player.web_20250917_22_RC00"
         errorDisplay: false,
     });
 
-     const qs = new URLSearchParams(window.location.search);
+    const qs = new URLSearchParams(window.location.search);
     const qua = qs.get("quality") || "";
     const vidKey = qs.get('v');
     try { localStorage.setItem(`progress-${vidKey}`, 0); } catch {}
@@ -33,56 +33,57 @@ var versionclient = "youtube.player.web_20250917_22_RC00"
     const videoEl = document.getElementById('video');
     const audio = document.getElementById('aud');
     const audioEl = document.getElementById('aud');
- 
 
- 
-  video.ready(() => {
-    const metaTitle = document.querySelector('meta[name="title"]')?.content || "";
-    const metaDesc = document.querySelector('meta[name="twitter:description"]')?.content || "";
-    const metaAuthor = document.querySelector('meta[name="twitter:author"]')?.content || ""; 
+    video.ready(() => {
+        const metaTitle = document.querySelector('meta[name="title"]')?.content || "";
+        const metaDesc = document.querySelector('meta[name="twitter:description"]')?.content || "";
+        const metaAuthor = document.querySelector('meta[name="twitter:author"]')?.content || ""; 
 
-   const videoinfostuffidklol = {
-	metaTitle,
-	metaDesc,
-	metaAuthor
-   }
+        const videoinfostuffidklol = {
+            metaTitle,
+            metaDesc,
+            metaAuthor
+        };
 
-    let stats = "";
-    const match = metaDesc.match(/👍\s*[^|]+\|\s*👎\s*[^|]+\|\s*📈\s*[^💬]+/);
-    if (match) {
-      stats = match[0]
-        .replace(/👍/g, "👍")
-        .replace(/👎/g, "• 👎")
-        .replace(/📈/g, "• 📈")
-        .replace(/\s*\|\s*/g, "   ");
-    }
+        let stats = "";
+        const match = metaDesc.match(/👍\s*[^|]+\|\s*👎\s*[^|]+\|\s*📈\s*[^💬]+/);
+        if (match) {
+            stats = match[0]
+                .replace(/👍/g, "👍")
+                .replace(/👎/g, "• 👎")
+                .replace(/📈/g, "• 📈")
+                .replace(/\s*\|\s*/g, "   ");
+        }
 
-    const createTitleBar = () => {
-      const existing = video.getChild("TitleBar");
-      if (!existing) {
-        const titleBar = video.addChild("TitleBar");
-        titleBar.update({ title: metaTitle, description: stats });
-      }
-    };
+        const createTitleBar = () => {
+            const existing = video.getChild("TitleBar");
+            if (!existing) {
+                const titleBar = video.addChild("TitleBar");
+                titleBar.update({ title: metaTitle, description: stats });
+            }
+        };
 
-    const removeTitleBar = () => {
-      const existing = video.getChild("TitleBar");
-      if (existing) video.removeChild(existing);
-    };
+        const removeTitleBar = () => {
+            const existing = video.getChild("TitleBar");
+            if (existing) video.removeChild(existing);
+        };
 
-    const handleFullscreen = () => {
-      const fs = document.fullscreenElement || document.webkitFullscreenElement;
-      if (fs) createTitleBar();
-      else removeTitleBar();
-    };
+        const handleFullscreen = () => {
+            const fs = document.fullscreenElement || document.webkitFullscreenElement;
+            if (fs) createTitleBar();
+            else removeTitleBar();
+        };
 
-    document.addEventListener("fullscreenchange", handleFullscreen);
-    document.addEventListener("webkitfullscreenchange", handleFullscreen);
-    handleFullscreen();
-  });
+        document.addEventListener("fullscreenchange", handleFullscreen);
+        document.addEventListener("webkitfullscreenchange", handleFullscreen);
+        handleFullscreen();
+    });
 
     //  inline playback works on iOS/Safari
-    try { videoEl.setAttribute('playsinline', ''); videoEl.setAttribute('webkit-playsinline', ''); } catch {}
+    try {
+        videoEl.setAttribute('playsinline', '');
+        videoEl.setAttribute('webkit-playsinline', '');
+    } catch {}
 
     // global state
     let syncing = false;
@@ -103,8 +104,18 @@ var versionclient = "youtube.player.web_20250917_22_RC00"
     let prevAudioMuted = false;
     let pendingUnmute = false;
 
-    try { videoEl.loop = false; videoEl.removeAttribute?.('loop'); } catch {}
-    try { audio.loop = false; audio.removeAttribute?.('loop'); } catch {}
+    // New state: track whether user explicitly muted/unmuted
+    let userMutedVideo = false;
+    let userMutedAudio = false;
+
+    try {
+        videoEl.loop = false;
+        videoEl.removeAttribute?.('loop');
+    } catch {}
+    try {
+        audio.loop = false;
+        audio.removeAttribute?.('loop');
+    } catch {}
 
     //  we pick the right audio src
     const pickAudioSrc = () => {
@@ -156,14 +167,13 @@ var versionclient = "youtube.player.web_20250917_22_RC00"
         return canPlayAt(videoEl, t) && canPlayAt(audio, t);
     }
 
-     function safeSetCT(media, t) {
+    function safeSetCT(media, t) {
         try {
             if (!isFinite(t) || t < 0) return;
             media.currentTime = t;
         } catch {}
     }
 
-    //  sync loop is cleared
     function clearSyncLoop() {
         if (syncInterval) {
             clearInterval(syncInterval);
@@ -172,7 +182,6 @@ var versionclient = "youtube.player.web_20250917_22_RC00"
         }
     }
 
-    //  playback is kept in sync between both elements
     function startSyncLoop() {
         clearSyncLoop();
         syncInterval = setInterval(() => {
@@ -201,9 +210,13 @@ var versionclient = "youtube.player.web_20250917_22_RC00"
                 try { audio.playbackRate = 1; } catch {}
             }
 
-            //  if one gets muted unexpectedly we fix it
-            if (video.muted() && !prevVideoMuted) try { video.muted(false); } catch {}
-            if (audio.muted && !prevAudioMuted) try { audio.muted = false; } catch {}
+            //  if one gets muted unexpectedly we fix it (but only if not user-muted)
+            if (!userMutedVideo && video.muted() && !prevVideoMuted) {
+                try { video.muted(false); } catch {}
+            }
+            if (!userMutedAudio && audio.muted && !prevAudioMuted) {
+                try { audio.muted = false; } catch {}
+            }
 
             // keep Media Session position state fresh (when available)
             try {
@@ -218,28 +231,24 @@ var versionclient = "youtube.player.web_20250917_22_RC00"
         }, SYNC_INTERVAL_MS);
     }
 
-    //  we track playback state
     const markVPlaying = () => { vIsPlaying = true; maybeUnmuteRestore(); };
     const markAPlaying = () => { aIsPlaying = true; maybeUnmuteRestore(); };
     const markVNotPlaying = () => { vIsPlaying = false; };
     const markANotPlaying = () => { aIsPlaying = false; };
 
-    //  we know both are active
     function bothActivelyPlaying() { return vIsPlaying && aIsPlaying; }
 
-    //  both get unmuted when ready
     function maybeUnmuteRestore() {
         if (!pendingUnmute) return;
         if (bothActivelyPlaying()) {
             pendingUnmute = false;
             setTimeout(() => {
-                if (video.muted() && !prevVideoMuted) try { video.muted(false); } catch {}
-                if (audio.muted && !prevAudioMuted) try { audio.muted = false; } catch {}
+                if (!userMutedVideo && video.muted() && !prevVideoMuted) try { video.muted(false); } catch {}
+                if (!userMutedAudio && audio.muted && !prevAudioMuted) try { audio.muted = false; } catch {}
             }, 120);
         }
     }
 
-    // helper: promise play with result
     async function tryPlay(el) {
         try {
             const p = el.play();
@@ -248,19 +257,20 @@ var versionclient = "youtube.player.web_20250917_22_RC00"
         } catch { return false; }
     }
 
-    //  both play in sync
     async function playTogether({ allowMutedRetry = true } = {}) {
         if (syncing || restarting) return;
         syncing = true;
         try {
             const t = Number(video.currentTime());
-            if (isFinite(t) && Math.abs(Number(audio.currentTime) - t) > 0.05)
+            if (isFinite(t) && Math.abs(Number(audio.currentTime) - t) > 0.05) {
                 safeSetCT(audio, t);
+            }
 
             let vOk = true, aOk = true;
             try { const p = video.play(); if (p && p.then) await p; } catch { vOk = false; }
             aOk = await tryPlay(audio);
 
+            // If either fails, consider muted retry
             if (allowMutedRetry && (!vOk || !aOk)) {
                 prevVideoMuted = !!video.muted();
                 prevAudioMuted = !!audio.muted;
@@ -271,12 +281,8 @@ var versionclient = "youtube.player.web_20250917_22_RC00"
                 await tryPlay(audio);
             }
 
-            // if one fails, we try again for both
-            // and reload if like, you know, the fucking video fails because
-			// youtube for some reason blocks us alot i dont know why i fucking hate you youtube
-			// legit, im just hating youtube alot these days, they are terrible, youtube, FU!
-			// - ashley
-			 if (!vOk && aOk) {
+            // If video succeeded but audio failed, show error
+            if (!vOk && aOk) {
                 try {
                     video.play().catch(() => {
                         showError('Video failed to start.');
@@ -286,8 +292,6 @@ var versionclient = "youtube.player.web_20250917_22_RC00"
                     });
                 } catch {}
             }
-
-           // the same god damn thing for audio but no retry because idk ask ummm.... idk ask john youtube
             if (vOk && !aOk) {
                 try {
                     audio.play().catch(() => showError('Audio failed to start.'));
@@ -295,19 +299,23 @@ var versionclient = "youtube.player.web_20250917_22_RC00"
             }
 
             if (!syncInterval) startSyncLoop();
-        } finally { syncing = false; }
+        } finally {
+            syncing = false;
+        }
     }
 
-    //  both pause at once
     function pauseTogether() {
         if (syncing) return;
         syncing = true;
-        try { video.pause(); audio.pause(); clearSyncLoop(); } finally { syncing = false; }
+        try {
+            video.pause();
+            audio.pause();
+            clearSyncLoop();
+        } finally {
+            syncing = false;
+        }
     }
 
-    // soooo i know what ur gonna say, its a looped indicator but ur using for errors, and what? 
-	// like, why not i use the same element for both its not illegal...i think?
-	// search it up lol
     const errorBox = document.getElementById('loopedIndicator');
     function showError(msg) {
         if (errorBox) {
@@ -319,7 +327,6 @@ var versionclient = "youtube.player.web_20250917_22_RC00"
 
     const clamp = v => Math.max(0, Math.min(1, Number(v)));
 
-    //  media session controls work, these are legit so anoying to work with 
     function setupMediaSession() {
         if ('mediaSession' in navigator) {
             try {
@@ -333,8 +340,6 @@ var versionclient = "youtube.player.web_20250917_22_RC00"
             } catch {}
             navigator.mediaSession.setActionHandler('play', () => playTogether());
             navigator.mediaSession.setActionHandler('pause', pauseTogether);
-
-            // extra handlers for better UX on hardware keys / OS UIs
             try {
                 navigator.mediaSession.setActionHandler('seekforward', (d) => {
                     const inc = Number(d?.seekOffset) || 10;
@@ -356,7 +361,6 @@ var versionclient = "youtube.player.web_20250917_22_RC00"
         }
     }
 
-    // progress save/restore (safe bounds)
     const PROGRESS_KEY = `progress-${vidKey}`;
     function restoreProgress() {
         try {
@@ -365,60 +369,70 @@ var versionclient = "youtube.player.web_20250917_22_RC00"
             if (isFinite(saved) && saved > 3 && dur && saved < (dur - 10)) {
                 video.currentTime(saved);
                 safeSetCT(audio, saved);
-                firstSeekDone = true; // prevent immediate reseek jitter
+                firstSeekDone = true;
             }
         } catch {}
     }
     function saveProgressThrottled() {
-        // simple throttle by modulo of seconds
         try {
             const t = Math.floor(Number(video.currentTime()) || 0);
             if (t % 2 === 0) localStorage.setItem(PROGRESS_KEY, String(t));
         } catch {}
     }
 
-    // network resilience (stall/waiting recovery)
     function wireResilience(el, label) {
         try {
             el.addEventListener('waiting', () => {
-                // avoid runaway rate drift while buffering
-                try { audio.playbackRate = 1; } catch {}
+                // when video or audio goes into waiting, pause both to avoid audio ghosting
+                showError(`${label} waiting…`);
+                try { audio.pause(); } catch {}
+                try { video.pause(); } catch {}
             });
             el.addEventListener('stalled', () => {
                 showError(`${label} stalled`);
+                // also pause the other
+                try { audio.pause(); } catch {}
+                try { video.pause(); } catch {}
             });
             el.addEventListener('suspend', () => {
-                /* no-op; advisory */
+                // no-op
             });
             el.addEventListener('emptied', () => {
                 showError(`${label} source emptied`);
+                try { audio.pause(); } catch {}
+                try { video.pause(); } catch {}
             });
             el.addEventListener('error', () => {
                 showError(`${label} error`);
+                try { audio.pause(); } catch {}
+                try { video.pause(); } catch {}
             });
         } catch {}
     }
 
-    // guards to ensure elements exist before heavy sync logic
     const hasExternalAudio = !!audio && audio.tagName === 'AUDIO' && !!pickAudioSrc();
 
     if (qua !== "medium" && hasExternalAudio) {
         const attachRetry = (elm, resolveSrc, markReady) => {
             let done = false;
-            const onLoaded = () => { if (done) return; done = true; markReady(); tryStart(); };
+            const onLoaded = () => {
+                if (done) return;
+                done = true;
+                markReady();
+                tryStart();
+            };
             elm.addEventListener('loadeddata', onLoaded, { once: true });
             elm.addEventListener('loadedmetadata', onLoaded, { once: true });
-            // also consider canplay as a fallback readiness signal
             elm.addEventListener('canplay', onLoaded, { once: true });
         };
 
         const tryStart = () => {
             if (audioReady && videoReady && !restarting) {
-                // restore progress once we know duration/metadata
                 restoreProgress();
-
                 const t = Number(video.currentTime());
-                if (isFinite(t) && Math.abs(Number(audio.currentTime) - t) > 0.1) safeSetCT(audio, t);
+                if (isFinite(t) && Math.abs(Number(audio.currentTime) - t) > 0.1) {
+                    safeSetCT(audio, t);
+                }
                 if (bothPlayableAt(t)) playTogether({ allowMutedRetry: true });
                 else pauseTogether();
                 setupMediaSession();
@@ -428,23 +442,66 @@ var versionclient = "youtube.player.web_20250917_22_RC00"
         attachRetry(audio, pickAudioSrc, () => { audioReady = true; });
         attachRetry(videoEl, () => videoSrc, () => { videoReady = true; });
 
-        // todo: fiixxx mute stuff lol
+        // Listen for manual mute/unmute on video
         video.on('volumechange', () => {
             try {
-                if (!video.muted()) audio.volume = clamp(video.volume());
-                audio.muted = video.muted();
+                const isMuted = video.muted();
+                // If user toggles mute, record intent
+                if (isMuted !== userMutedVideo) {
+                    userMutedVideo = isMuted;
+                }
+                if (!isMuted && !userMutedVideo) {
+                    // sync audio mute
+                    audio.muted = false;
+                }
+                if (audio) {
+                    audio.muted = isMuted;
+                }
+                if (!video.muted()) {
+                    audio.volume = clamp(video.volume());
+                }
+            } catch {}
+        });
+
+        // Listen manual mute/unmute on audio (if exposed)
+        audio.addEventListener('volumechange', () => {
+            try {
+                const isMuted = audio.muted;
+                if (isMuted !== userMutedAudio) {
+                    userMutedAudio = isMuted;
+                }
+                if (!userMutedAudio && !userMutedAudio) {
+                    // sync video mute
+                    video.muted(false);
+                }
             } catch {}
         });
 
         video.on('ratechange', () => { try { audio.playbackRate = video.playbackRate(); } catch {} });
 
-        video.on('play', () => { vIsPlaying = true; if (!aIsPlaying) playTogether(); });
-        audio.addEventListener('play', () => { aIsPlaying = true; if (!vIsPlaying) playTogether(); });
+        video.on('play', () => {
+            vIsPlaying = true;
+            if (!aIsPlaying) playTogether();
+        });
+        audio.addEventListener('play', () => {
+            aIsPlaying = true;
+            if (!vIsPlaying) playTogether();
+        });
 
-        video.on('pause', () => { vIsPlaying = false; if (!restarting) pauseTogether(); });
-        audio.addEventListener('pause', () => { aIsPlaying = false; if (!restarting) pauseTogether(); });
+        video.on('pause', () => {
+            vIsPlaying = false;
+            if (!restarting) {
+                // ensure audio also pauses
+                try { audio.pause(); } catch {}
+            }
+        });
+        audio.addEventListener('pause', () => {
+            aIsPlaying = false;
+            if (!restarting) {
+                try { video.pause(); } catch {}
+            }
+        });
 
-        //  large seeks pause and resync
         let wasPlayingBeforeSeek = false;
         let lastSeekTime = 0;
         video.on('seeking', () => {
@@ -470,26 +527,22 @@ var versionclient = "youtube.player.web_20250917_22_RC00"
                 pauseTogether();
                 safeSetCT(audio, newTime);
                 setTimeout(() => {
-                    if (wasPlayingBeforeSeek && bothPlayableAt(newTime))
+                    if (wasPlayingBeforeSeek && bothPlayableAt(newTime)) {
                         playTogether({ allowMutedRetry: true });
+                    }
                 }, 180);
             } else {
                 safeSetCT(audio, newTime);
             }
         });
 
-        // save progress periodically
         try {
             video.on('timeupdate', saveProgressThrottled);
         } catch {}
 
-        // wire stall/err resilience
         wireResilience(videoEl, 'Video');
         wireResilience(audio, 'Audio');
 
-        //  looping restarts properly
-		// doesnt work LOOOOOOOOL
-		// sooo... I guess, TODO: fix the looping??????
         async function restartLoop() {
             if (restarting) return;
             restarting = true;
@@ -504,14 +557,12 @@ var versionclient = "youtube.player.web_20250917_22_RC00"
             } finally { restarting = false; }
         }
 
-        // okay, this actually, legit, not working idk why guuuh
         video.on('ended', () => {
             if (restarting) return;
             if (performance.now() < suppressEndedUntil) return;
             if (desiredLoop) restartLoop();
             else pauseTogether();
         });
-
         audio.addEventListener('ended', () => {
             if (restarting) return;
             if (performance.now() < suppressEndedUntil) return;
@@ -519,7 +570,6 @@ var versionclient = "youtube.player.web_20250917_22_RC00"
             else pauseTogether();
         });
 
-        // try to resume if media becomes playable again after waiting
         videoEl.addEventListener('canplay', () => {
             if (!video.paused() && !audio.paused()) return;
             const t = Number(video.currentTime());
@@ -531,14 +581,16 @@ var versionclient = "youtube.player.web_20250917_22_RC00"
             if (bothPlayableAt(t)) playTogether({ allowMutedRetry: true });
         });
 
-        // clean up on unload to avoid stray timers
         try {
             window.addEventListener('pagehide', () => { clearSyncLoop(); });
-            window.addEventListener('beforeunload', () => { try { localStorage.setItem(PROGRESS_KEY, String(Math.floor(Number(video.currentTime()) || 0))); } catch {} });
+            window.addEventListener('beforeunload', () => {
+                try {
+                    localStorage.setItem(PROGRESS_KEY, String(Math.floor(Number(video.currentTime()) || 0)));
+                } catch {}
+            });
         } catch {}
     } else {
         // fallback when medium quality (no external <audio>) or audio element missing:
-        // keep Media Session + progress for the single video element so UX is still solid
         try {
             video.on('timeupdate', () => {
                 try { localStorage.setItem(`progress-${vidKey}`, String(Math.floor(Number(video.currentTime()) || 0))); } catch {}
@@ -546,7 +598,7 @@ var versionclient = "youtube.player.web_20250917_22_RC00"
         } catch {}
         setupMediaSession();
     }
-}); 
+});
 
  
  // https://codeberg.org/ashley/poke/src/branch/main/src/libpoketube/libpoketube-youtubei-objects.json

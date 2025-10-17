@@ -14,7 +14,7 @@ var versionclient = "youtube.player.web_20250917_22_RC00"
  * Available under Apache License Version 2.0
  * <https://github.com/mozilla/vtt.js/blob/main/LICENSE>
  */
-dodocument.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", () => {
     // video.js 8 init - source can be seen in https://poketube.fun/static/vjs.min.js or the vjs.min.js file
     const video = videojs('video', {
         controls: true,

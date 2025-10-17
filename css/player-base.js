@@ -14,6 +14,7 @@ var versionclient = "youtube.player.web_20250917_22_RC00"
  * Available under Apache License Version 2.0
  * <https://github.com/mozilla/vtt.js/blob/main/LICENSE>
  */
+ 
  document.addEventListener("DOMContentLoaded", () => {
   const video = videojs('video', {
     controls: true,
@@ -94,8 +95,8 @@ var versionclient = "youtube.player.web_20250917_22_RC00"
 
   // anti-random-mute controls
   let seekingActive = false;
-  let squelchMuteEvents = 0;          // ignore mirror loops while we change mute programmatically
-  let suppressMirrorUntil = 0;        // small window after seeks/retries where we don't mirror mute
+  let squelchMuteEvents = 0;
+  let suppressMirrorUntil = 0;
   const MUTE_SQUELCH_MS = 500;
 
   // guard against element loop attrs
@@ -127,79 +128,64 @@ var versionclient = "youtube.player.web_20250917_22_RC00"
 
   let syncInterval = null;
   let lastAT = 0, lastATts = 0; // audio watchdog
+  let aligning = false;         // prevents overlapping soft-aligns
 
-  // ---------- POP / CLICK SUPPRESSION (Web Audio with fallback) ----------
-  let audioCtx = null, gainNode = null, usingWA = false, fallbackBaseVol = 1;
-  function setupWebAudio() {
-    try {
-      const ACtx = window.AudioContext || window.webkitAudioContext;
-      if (!ACtx) return;
-      audioCtx = new ACtx();
-      const src = audioCtx.createMediaElementSource(audio); // may throw if cross-origin without CORS
-      gainNode = audioCtx.createGain();
-      gainNode.gain.value = 0; // start silent until we decide
-      src.connect(gainNode).connect(audioCtx.destination);
-      usingWA = true;
-      // keep element volume at 1.0 when using WA so gainNode controls loudness
-      try { audio.volume = 1; } catch {}
-    } catch {
-      usingWA = false;
-    }
+  // ------- clickless volume ramps (no WebAudio needed) -------
+  let volAnim = null;
+  function setImmediateVolume(val) {
+    try { audio.volume = clamp01(val); } catch {}
   }
-  setupWebAudio();
-
-  function desiredGain() {
-    // target loudness from video UI (authority)
-    return (!video.muted() && !userMutedVideo) ? clamp01(video.volume()) : 0;
+  function getBaseTargetVol() {
+    const vVol = clamp01(typeof video.volume === 'function' ? video.volume() : videoEl.volume ?? 1);
+    const vMuted = typeof video.muted === 'function' ? video.muted() : videoEl.muted;
+    const hardMuted = vMuted || userMutedVideo || userMutedAudio;
+    return hardMuted ? 0 : vVol;
   }
+  function rampVolumeTo(target, ms = 60) {
+    target = clamp01(target);
+    const from = clamp01(audio.volume);
+    if (!isFinite(from)) { setImmediateVolume(target); return Promise.resolve(); }
+    if (ms <= 0 || Math.abs(target - from) < 0.001) { setImmediateVolume(target); return Promise.resolve(); }
 
-  function waRamp(to, ms) {
-    if (!usingWA || !gainNode || !audioCtx) return false;
-    try {
-      const now = audioCtx.currentTime;
-      const dur = Math.max(0.01, (ms || 120) / 1000);
-      gainNode.gain.cancelScheduledValues(now);
-      const cur = gainNode.gain.value;
-      gainNode.gain.setValueAtTime(cur, now);
-      gainNode.gain.linearRampToValueAtTime(Math.max(0, Math.min(1, to)), now + dur);
-      return true;
-    } catch { return false; }
-  }
+    if (volAnim && volAnim.cancel) volAnim.cancel(true);
+    let cancelFlag = false;
+    volAnim = { cancel: (v) => { cancelFlag = !!v; } };
 
-  // fallback ramp via element volume (small, smooth steps)
-  let fallbackRampId = 0;
-  function elRamp(to, ms) {
-    const id = ++fallbackRampId;
     const start = performance.now();
-    const from = Number(audio.volume || 0);
-    const dur = Math.max(40, ms || 120);
-    (function step(now) {
-      if (id !== fallbackRampId) return;
-      const t = Math.min(1, (now - start) / dur);
-      const val = from + (to - from) * t;
-      try { audio.volume = Math.max(0, Math.min(1, val)); } catch {}
-      if (t < 1) requestAnimationFrame(step);
-    })(start);
+    return new Promise(resolve => {
+      const step = () => {
+        if (cancelFlag) return resolve();
+        const t = Math.min(1, (performance.now() - start) / ms);
+        const val = from + (target - from) * t;
+        setImmediateVolume(val);
+        if (t < 1) requestAnimationFrame(step);
+        else resolve();
+      };
+      requestAnimationFrame(step);
+    });
+  }
+  async function softMuteAudio(ms = 40) {
+    await rampVolumeTo(0, ms);
+  }
+  async function softUnmuteAudio(ms = 60) {
+    await rampVolumeTo(getBaseTargetVol(), ms);
+  }
+  function updateAudioGainImmediate() {
+    setImmediateVolume(getBaseTargetVol());
   }
 
-  function fadeToSilence(ms) {
-    if (!userMutedAudio) {
-      if (!waRamp(0, ms)) elRamp(0, ms || 80);
+  async function softAlignAudioTo(t, fadeDown = 40, fadeUp = 60) {
+    if (aligning) return;
+    aligning = true;
+    try {
+      await softMuteAudio(fadeDown);
+      safeSetCT(audio, t);
+      if (intendedPlaying) await softUnmuteAudio(fadeUp);
+    } finally {
+      aligning = false;
     }
   }
-  function fadeToLevel(level, ms) {
-    const target = Math.max(0, Math.min(1, level));
-    if (!waRamp(target, ms)) elRamp(target, ms || 120);
-  }
-
-  async function resumeAudioContextIfNeeded() {
-    try {
-      if (usingWA && audioCtx && audioCtx.state === 'suspended') {
-        await audioCtx.resume();
-      }
-    } catch {}
-  }
-  // ----------------------------------------------------------------------
+  // ----------------------------------------------------------
 
   function timeInBuffered(media, t) {
     try {
@@ -245,11 +231,10 @@ var versionclient = "youtube.player.web_20250917_22_RC00"
     try { audio.muted = val; } catch {}
     queueMicrotask(() => { squelchMuteEvents = Math.max(0, squelchMuteEvents - 1); });
   }
-  function ensureUnmutedIfNotUserMuted() {
+  async function ensureUnmutedIfNotUserMuted() {
     if (!userMutedVideo) setVideoMuted(false);
     if (!userMutedAudio) setAudioMuted(false);
-    // also fade up to desired level to avoid pops
-    fadeToLevel(desiredGain(), 140);
+    await softUnmuteAudio(80);
   }
 
   function startSyncLoop() {
@@ -259,42 +244,35 @@ var versionclient = "youtube.player.web_20250917_22_RC00"
       const at = Number(audio.currentTime);
       if (!isFinite(vt) || !isFinite(at)) return;
 
-      // strict co-play enforcement (keep both in the same state)
+      // strict co-play enforcement
       if (intendedPlaying) {
         if (video.paused() && !audio.paused) { try { video.play(); } catch {} }
-        if (!video.paused() && audio.paused) { try { audio.play().catch(()=>{}); } catch {} }
+        if (!video.paused() && audio.paused) { try { audio.play().then(()=>softUnmuteAudio(80)).catch(()=>{}); } catch {} }
       } else {
         if (!video.paused()) { try { video.pause(); } catch {} }
         if (!audio.paused) { try { audio.pause(); } catch {} }
       }
 
-      // drift management
       const delta = vt - at;
 
       if (Math.abs(delta) > RESYNC_DRIFT_LIMIT) {
-        // big desync: silence -> snap -> play -> fade up
         intendedPlaying = true;
-        fadeToSilence(60);
         pauseHard();
-        setTimeout(() => playTogether({ allowMutedRetry: true, postFade: true }), 120);
+        setTimeout(() => playTogether({ allowMutedRetry: true }), 120);
         return;
       }
+
       if (Math.abs(delta) > BIG_DRIFT) {
-        // medium drift => snap audio to video with brief silence to avoid click
-        fadeToSilence(40);
-        safeSetCT(audio, vt);
-        try { audio.playbackRate = 1; } catch {}
-        // if we are playing, fade back up quickly
-        if (intendedPlaying) fadeToLevel(desiredGain(), 120);
+        // clickless hard realign
+        softAlignAudioTo(vt, 30, 80);
       } else if (Math.abs(delta) > MICRO_DRIFT) {
-        // micro correction using rate (limited range)
+        // gentle time-stretch
         const targetRate = 1 + (delta * 0.12);
-        try { audio.playbackRate = Math.max(0.85, Math.min(1.15, targetRate)); } catch {}
+        try { audio.playbackRate = Math.max(0.9, Math.min(1.1, targetRate)); } catch {}
       } else {
         try { audio.playbackRate = 1; } catch {}
       }
 
-      // Media Session position
       try {
         if ('mediaSession' in navigator && navigator.mediaSession.setPositionState) {
           navigator.mediaSession.setPositionState({
@@ -305,14 +283,12 @@ var versionclient = "youtube.player.web_20250917_22_RC00"
         }
       } catch {}
 
-      // audio progress watchdog (kick gently with fade)
+      // audio progress watchdog (kick without clicks)
       const now = performance.now();
       if (!audio.paused && intendedPlaying) {
         if (Math.abs(at - lastAT) < 0.001) {
           if (now - lastATts > 1500) {
-            fadeToSilence(40);
             kickAudio();
-            setTimeout(() => fadeToLevel(desiredGain(), 120), 60);
             lastATts = now;
           }
         } else {
@@ -326,12 +302,14 @@ var versionclient = "youtube.player.web_20250917_22_RC00"
     }, SYNC_INTERVAL_MS);
   }
 
-  function kickAudio() {
+  async function kickAudio() {
     try {
       const t = Number(audio.currentTime) || 0;
+      await softMuteAudio(25);
       audio.pause();
       safeSetCT(audio, t + 0.001);
-      audio.play().catch(() => {});
+      await audio.play().catch(()=>{});
+      await softUnmuteAudio(60);
     } catch {}
   }
 
@@ -343,20 +321,15 @@ var versionclient = "youtube.player.web_20250917_22_RC00"
     } catch { return false; }
   }
 
-  async function playTogether({ allowMutedRetry = true, postFade = false } = {}) {
+  async function playTogether({ allowMutedRetry = true } = {}) {
     if (syncing || restarting) return;
     syncing = true;
     intendedPlaying = true;
     lastPlayKickTs = performance.now();
     try {
-      // make sure WebAudio is running before playing
-      await resumeAudioContextIfNeeded();
-
       const t = Number(video.currentTime());
       if (isFinite(t) && Math.abs(Number(audio.currentTime) - t) > 0.05) {
-        // snap with silence to remove click
-        fadeToSilence(40);
-        safeSetCT(audio, t);
+        await softAlignAudioTo(t, 25, 70);
       }
 
       let vOk = true, aOk = true;
@@ -364,23 +337,27 @@ var versionclient = "youtube.player.web_20250917_22_RC00"
       aOk = await tryPlay(audio);
 
       if (allowMutedRetry && (!vOk || !aOk)) {
-        // policy-friendly autoplay retry (muted), then fade-in & unmute
         const prevVideoMuted = !!video.muted();
         const prevAudioMuted = !!audio.muted;
+
+        // fade down before toggling mute to avoid pop
+        await softMuteAudio(40);
         setVideoMuted(true);
         setAudioMuted(true);
-        fadeToSilence(0);
+
         try { const p = video.play(); if (p && p.then) await p; } catch {}
         await tryPlay(audio);
-        setTimeout(() => {
+
+        // restore previous user states + fade up
+        setTimeout(async () => {
           if (!userMutedVideo) setVideoMuted(prevVideoMuted);
           if (!userMutedAudio) setAudioMuted(prevAudioMuted);
-          fadeToLevel(desiredGain(), 160);
-        }, 120);
+          await softUnmuteAudio(90);
+        }, 160);
         suppressMirrorUntil = performance.now() + MUTE_SQUELCH_MS;
       } else {
-        // normal fade back up if we silenced before
-        if (postFade || usingWA) fadeToLevel(desiredGain(), 140);
+        // normal fade-in at start to avoid click
+        await softUnmuteAudio(90);
       }
 
       if (!syncInterval) startSyncLoop();
@@ -397,7 +374,6 @@ var versionclient = "youtube.player.web_20250917_22_RC00"
 
   function pauseTogether() {
     intendedPlaying = false;
-    fadeToSilence(100);
     pauseHard();
   }
 
@@ -443,10 +419,9 @@ var versionclient = "youtube.player.web_20250917_22_RC00"
       const dur = Number(video.duration()) || 0;
       if (isFinite(saved) && saved > 3 && dur && saved < (dur - 10)) {
         video.currentTime(saved);
-        // silent snap to saved position to avoid click on first resume
-        fadeToSilence(0);
         safeSetCT(audio, saved);
         firstSeekDone = true;
+        updateAudioGainImmediate();
       }
     } catch {}
   }
@@ -463,7 +438,6 @@ var versionclient = "youtube.player.web_20250917_22_RC00"
       if (now - lastPlayKickTs < STARTUP_GRACE_MS) return; // ignore startup jitters
       if (!intendedPlaying) return;
       showError(`${label} buffering…`);
-      fadeToSilence(80);
       pauseHard();
     };
     el.addEventListener('waiting', pauseIfRealStall);
@@ -471,13 +445,13 @@ var versionclient = "youtube.player.web_20250917_22_RC00"
     el.addEventListener('emptied', pauseIfRealStall);
     el.addEventListener('error', pauseIfRealStall);
 
-    const tryResume = () => {
+    const tryResume = async () => {
       hideError();
       if (!intendedPlaying) return;
       const t = Number(video.currentTime());
       if (bothPlayableAt(t)) {
-        ensureUnmutedIfNotUserMuted();
-        playTogether({ allowMutedRetry: true, postFade: true });
+        await ensureUnmutedIfNotUserMuted();
+        playTogether({ allowMutedRetry: true });
       }
     };
     el.addEventListener('canplay', tryResume);
@@ -500,41 +474,48 @@ var versionclient = "youtube.player.web_20250917_22_RC00"
       restoreProgress();
       const t = Number(video.currentTime());
       if (isFinite(t) && Math.abs(Number(audio.currentTime) - t) > 0.1) {
-        // quiet align on first start
-        fadeToSilence(0);
         safeSetCT(audio, t);
       }
       setupMediaSession();
-      // initial loudness from UI, but keep silent until user plays
-      fadeToLevel(desiredGain(), 0);
+      updateAudioGainImmediate();
     };
 
     oneShotReady(audio, () => { audioReady = true; });
     oneShotReady(videoEl, () => { videoReady = true; });
 
-    // volume/mute coupling (no random mutes; video is authority)
+    // volume/mute coupling (no random mutes; fade around mute flips)
     video.on('volumechange', () => {
       if (squelchMuteEvents) return;
       userMutedVideo = !!video.muted();
-      if (performance.now() < suppressMirrorUntil || seekingActive || restarting) return;
-      setAudioMuted(video.muted());
-      // fade to new desired loudness rather than jumping (prevents pops)
-      fadeToLevel(desiredGain(), 100);
+      if (performance.now() < suppressMirrorUntil || seekingActive || restarting) {
+        // defer mirroring during squelch; just update gain target
+        rampVolumeTo(getBaseTargetVol(), 80);
+        return;
+      }
+      if (video.muted()) {
+        softMuteAudio(80).then(() => setAudioMuted(true));
+      } else {
+        setAudioMuted(false);
+        softUnmuteAudio(100);
+      }
+      // follow volume level smoothly
+      if (!video.muted()) rampVolumeTo(getBaseTargetVol(), 120);
     });
+
     audio.addEventListener('volumechange', () => {
       if (squelchMuteEvents) return;
       userMutedAudio = !!audio.muted;
-      // we do not mirror back to video; video stays the authority
+      // audio->video mute isn't mirrored; video UI is the authority
     });
 
-    // playback rate follows video
+    // playback rate
     video.on('ratechange', () => { try { audio.playbackRate = video.playbackRate(); } catch {} });
 
     // user play/pause drives both
-    video.on('play', () => { intendedPlaying = true; ensureUnmutedIfNotUserMuted(); playTogether(); });
+    video.on('play', () => { intendedPlaying = true; ensureUnmutedIfNotUserMuted().then(()=>playTogether()); });
     video.on('pause', () => { if (!restarting) pauseTogether(); });
 
-    // seek auto-play policy with robust unmute + fade ramps around the jump
+    // seek auto-play policy with clickless alignment
     let wasPlayingBeforeSeek = false;
     let seekStartTime = 0;
 
@@ -552,33 +533,31 @@ var versionclient = "youtube.player.web_20250917_22_RC00"
       wasPlayingBeforeSeek = intendedPlaying && !video.paused();
       seekStartTime = Number(video.currentTime());
       suppressMirrorUntil = performance.now() + MUTE_SQUELCH_MS;
-      // pre-fade to zero just before the time snap to kill "puck"/clicks
-      fadeToSilence(60);
     });
 
-    video.on('seeked', () => {
+    video.on('seeked', async () => {
       if (restarting) return;
       const newTime = Number(video.currentTime());
       const diff = Math.abs(newTime - seekStartTime);
       const { small, large, huge } = computeSeekThresholds();
 
-      // align audio to video (still silent)
-      safeSetCT(audio, newTime);
+      // clickless align for anything > ~120ms, straight set for tiny nudges
+      if (diff > 0.12) await softAlignAudioTo(newTime, 30, 80);
+      else safeSetCT(audio, newTime);
 
       if (!firstSeekDone) { firstSeekDone = true; seekingActive = false; return; }
 
-      // restore unmuted state unless the user muted, then fade in
-      ensureUnmutedIfNotUserMuted();
+      await ensureUnmutedIfNotUserMuted();
 
       if (diff <= small) {
         if (wasPlayingBeforeSeek && bothPlayableAt(newTime)) {
           intendedPlaying = true;
-          playTogether({ allowMutedRetry: true, postFade: true });
+          playTogether({ allowMutedRetry: true });
         }
       } else if (diff <= large) {
         if (wasPlayingBeforeSeek) {
           intendedPlaying = true;
-          if (bothPlayableAt(newTime)) playTogether({ allowMutedRetry: true, postFade: true });
+          if (bothPlayableAt(newTime)) playTogether({ allowMutedRetry: true });
         } else {
           intendedPlaying = false;
           pauseHard();
@@ -589,11 +568,11 @@ var versionclient = "youtube.player.web_20250917_22_RC00"
       } else {
         intendedPlaying = false;
         pauseHard();
-        setTimeout(() => {
+        setTimeout(async () => {
           if (wasPlayingBeforeSeek) {
             intendedPlaying = true;
-            ensureUnmutedIfNotUserMuted();
-            playTogether({ allowMutedRetry: true, postFade: true });
+            await ensureUnmutedIfNotUserMuted();
+            playTogether({ allowMutedRetry: true });
           }
         }, 160);
       }
@@ -614,13 +593,10 @@ var versionclient = "youtube.player.web_20250917_22_RC00"
         pauseHard();
         const startAt = 0.001;
         suppressEndedUntil = performance.now() + 800;
-        // silent restart to avoid pop at loop boundary
-        fadeToSilence(0);
-        video.currentTime(startAt);
-        safeSetCT(audio, startAt);
+        await softAlignAudioTo(startAt, 30, 80);
         intendedPlaying = true;
-        ensureUnmutedIfNotUserMuted();
-        await playTogether({ postFade: true });
+        await ensureUnmutedIfNotUserMuted();
+        await playTogether();
       } finally { restarting = false; }
     }
 
@@ -638,10 +614,10 @@ var versionclient = "youtube.player.web_20250917_22_RC00"
     });
 
     // resume after either becomes ready again
-    const tryAutoResume = () => {
+    const tryAutoResume = async () => {
       if (!intendedPlaying) return;
       const t = Number(video.currentTime());
-      if (bothPlayableAt(t)) { ensureUnmutedIfNotUserMuted(); playTogether({ allowMutedRetry: true, postFade: true }); }
+      if (bothPlayableAt(t)) { await ensureUnmutedIfNotUserMuted(); playTogether({ allowMutedRetry: true }); }
     };
     videoEl.addEventListener('canplay', tryAutoResume);
     audio.addEventListener('canplay', tryAutoResume);
@@ -667,7 +643,7 @@ var versionclient = "youtube.player.web_20250917_22_RC00"
     setupMediaSession();
   }
 });
- 
+  
  // https://codeberg.org/ashley/poke/src/branch/main/src/libpoketube/libpoketube-youtubei-objects.json
 
   

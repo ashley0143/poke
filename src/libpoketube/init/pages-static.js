@@ -37,6 +37,7 @@ app.get("/terms-of-service", (req, res) => {
 
 const tosRedirects = [
   "/tos",
+  "/terms",
   "/termsofservice",
   "/policies/terms",
   "/policies/tos",

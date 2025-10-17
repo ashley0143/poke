@@ -15,9 +15,6 @@ var versionclient = "youtube.player.web_20250917_22_RC00"
  * <https://github.com/mozilla/vtt.js/blob/main/LICENSE>
  */
 
-
-
-
 document.addEventListener("DOMContentLoaded", () => { 
     // video.js 8 init - source can be seen in https://poketube.fun/static/vjs.min.js or the vjs.min.js file
     const video = videojs('video', {
@@ -27,7 +24,7 @@ document.addEventListener("DOMContentLoaded", () => {
         errorDisplay: false,
     });
 
-     const qs = new URLSearchParams(window.location.search);
+    const qs = new URLSearchParams(window.location.search);
     const qua = qs.get("quality") || "";
     const vidKey = qs.get('v');
     try { localStorage.setItem(`progress-${vidKey}`, 0); } catch {}
@@ -36,63 +33,60 @@ document.addEventListener("DOMContentLoaded", () => {
     const videoEl = document.getElementById('video');
     const audio = document.getElementById('aud');
     const audioEl = document.getElementById('aud');
- 
 
- 
-  video.ready(() => {
-    const metaTitle = document.querySelector('meta[name="title"]')?.content || "";
-    const metaDesc = document.querySelector('meta[name="twitter:description"]')?.content || "";
-    const metaAuthor = document.querySelector('meta[name="twitter:author"]')?.content || ""; 
+    video.ready(() => {
+        const metaTitle = document.querySelector('meta[name="title"]')?.content || "";
+        const metaDesc = document.querySelector('meta[name="twitter:description"]')?.content || "";
+        const metaAuthor = document.querySelector('meta[name="twitter:author"]')?.content || ""; 
 
-   const videoinfostuffidklol = {
-	metaTitle,
-	metaDesc,
-	metaAuthor
-   }
+        const videoinfostuffidklol = { metaTitle, metaDesc, metaAuthor };
 
-    let stats = "";
-    const match = metaDesc.match(/👍\s*[^|]+\|\s*👎\s*[^|]+\|\s*📈\s*[^💬]+/);
-    if (match) {
-      stats = match[0]
-        .replace(/👍/g, "👍")
-        .replace(/👎/g, "• 👎")
-        .replace(/📈/g, "• 📈")
-        .replace(/\s*\|\s*/g, "   ");
-    }
+        let stats = "";
+        const match = metaDesc.match(/👍\s*[^|]+\|\s*👎\s*[^|]+\|\s*📈\s*[^💬]+/);
+        if (match) {
+            stats = match[0]
+                .replace(/👍/g, "👍")
+                .replace(/👎/g, "• 👎")
+                .replace(/📈/g, "• 📈")
+                .replace(/\s*\|\s*/g, "   ");
+        }
 
-    const createTitleBar = () => {
-      const existing = video.getChild("TitleBar");
-      if (!existing) {
-        const titleBar = video.addChild("TitleBar");
-        titleBar.update({ title: metaTitle, description: stats });
-      }
-    };
+        const createTitleBar = () => {
+            const existing = video.getChild("TitleBar");
+            if (!existing) {
+                const titleBar = video.addChild("TitleBar");
+                titleBar.update({ title: metaTitle, description: stats });
+            }
+        };
 
-    const removeTitleBar = () => {
-      const existing = video.getChild("TitleBar");
-      if (existing) video.removeChild(existing);
-    };
+        const removeTitleBar = () => {
+            const existing = video.getChild("TitleBar");
+            if (existing) video.removeChild(existing);
+        };
 
-    const handleFullscreen = () => {
-      const fs = document.fullscreenElement || document.webkitFullscreenElement;
-      if (fs) createTitleBar();
-      else removeTitleBar();
-    };
+        const handleFullscreen = () => {
+            const fs = document.fullscreenElement || document.webkitFullscreenElement;
+            if (fs) createTitleBar();
+            else removeTitleBar();
+        };
 
-    document.addEventListener("fullscreenchange", handleFullscreen);
-    document.addEventListener("webkitfullscreenchange", handleFullscreen);
-    handleFullscreen();
-  });
+        document.addEventListener("fullscreenchange", handleFullscreen);
+        document.addEventListener("webkitfullscreenchange", handleFullscreen);
+        handleFullscreen();
+    });
 
-    //  inline playback works on iOS/Safari
-    try { videoEl.setAttribute('playsinline', ''); videoEl.setAttribute('webkit-playsinline', ''); } catch {}
+    // inline playback works on iOS/Safari
+    try {
+        videoEl.setAttribute('playsinline', '');
+        videoEl.setAttribute('webkit-playsinline', '');
+    } catch {}
 
     // global state
     let syncing = false;
     let restarting = false;
     let firstSeekDone = false;
 
-    //  loop param or tag is respected
+    // loop param or tag is respected
     let desiredLoop =
         !!videoEl.loop ||
         qs.get("loop") === "1" ||
@@ -109,7 +103,7 @@ document.addEventListener("DOMContentLoaded", () => {
     try { videoEl.loop = false; videoEl.removeAttribute?.('loop'); } catch {}
     try { audio.loop = false; audio.removeAttribute?.('loop'); } catch {}
 
-    //  we pick the right audio src
+    // we pick the right audio src
     const pickAudioSrc = () => {
         const s = audio?.getAttribute?.('src');
         if (s) return s;
@@ -129,9 +123,8 @@ document.addEventListener("DOMContentLoaded", () => {
     const MICRO_DRIFT = 0.05;
     const SYNC_INTERVAL_MS = 250;
     const EPS = 0.15;
-    const RESYNC_DRIFT_LIMIT = 3.5; // seconds difference that triggers pause+play reset
+    const RESYNC_DRIFT_LIMIT = 3.5;
 
-    //  we check if given time is buffered
     function timeInBuffered(media, t) {
         try {
             const br = media.buffered;
@@ -144,7 +137,6 @@ document.addEventListener("DOMContentLoaded", () => {
         return false;
     }
 
-    //  we can tell if a timestamp is playable
     function canPlayAt(media, t) {
         try {
             const rs = Number(media.readyState || 0);
@@ -154,19 +146,17 @@ document.addEventListener("DOMContentLoaded", () => {
         } catch { return false; }
     }
 
-    //  we check both elements readiness
     function bothPlayableAt(t) {
         return canPlayAt(videoEl, t) && canPlayAt(audio, t);
     }
 
-     function safeSetCT(media, t) {
+    function safeSetCT(media, t) {
         try {
             if (!isFinite(t) || t < 0) return;
-            media.currentTime = t;
+            if (Math.abs(media.currentTime - t) > 0.01) media.currentTime = t;
         } catch {}
     }
 
-    //  sync loop is cleared
     function clearSyncLoop() {
         if (syncInterval) {
             clearInterval(syncInterval);
@@ -175,7 +165,6 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
-    //  playback is kept in sync between both elements
     function startSyncLoop() {
         clearSyncLoop();
         syncInterval = setInterval(() => {
@@ -185,7 +174,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
             const delta = vt - at;
 
-            // if drift is huge (desync >3.5s), resync both
             if (Math.abs(delta) > RESYNC_DRIFT_LIMIT) {
                 pauseTogether();
                 setTimeout(() => playTogether({ allowMutedRetry: true }), 150);
@@ -197,6 +185,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 try { audio.playbackRate = 1; } catch {}
                 return;
             }
+
             if (Math.abs(delta) > MICRO_DRIFT) {
                 const targetRate = 1 + (delta * 0.12);
                 try { audio.playbackRate = Math.max(0.85, Math.min(1.15, targetRate)); } catch {}
@@ -207,20 +196,16 @@ document.addEventListener("DOMContentLoaded", () => {
             //  if one gets muted unexpectedly we fix it
             if (video.muted() && !prevVideoMuted) try { video.muted(false); } catch {}
             if (audio.muted && !prevAudioMuted) try { audio.muted = false; } catch {}
-
         }, SYNC_INTERVAL_MS);
     }
 
-    //  we track playback state
     const markVPlaying = () => { vIsPlaying = true; maybeUnmuteRestore(); };
     const markAPlaying = () => { aIsPlaying = true; maybeUnmuteRestore(); };
     const markVNotPlaying = () => { vIsPlaying = false; };
     const markANotPlaying = () => { aIsPlaying = false; };
 
-    //  we know both are active
     function bothActivelyPlaying() { return vIsPlaying && aIsPlaying; }
 
-    //  both get unmuted when ready
     function maybeUnmuteRestore() {
         if (!pendingUnmute) return;
         if (bothActivelyPlaying()) {
@@ -232,7 +217,6 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
-    //  both play in sync
     async function playTogether({ allowMutedRetry = true } = {}) {
         if (syncing || restarting) return;
         syncing = true;
@@ -255,43 +239,36 @@ document.addEventListener("DOMContentLoaded", () => {
                 try { const p = audio.play(); if (p && p.then) await p; } catch {}
             }
 
-            // if one fails, we try again for both
-            // and reload if like, you know, the fucking video fails because
-			// youtube for some reason blocks us alot i dont know why i fucking hate you youtube
-			// legit, im just hating youtube alot these days, they are terrible, youtube, FU!
-			// - ashley
-			 if (!vOk && aOk) {
+            if (!vOk && aOk) {
                 try {
                     video.play().catch(() => {
                         showError('Video failed to start.');
-                        setTimeout(() => {
-                            video.play().catch(() => showError('Video retry failed.'));
-                        }, 3000);
+                        setTimeout(() => video.play().catch(() => showError('Video retry failed.')), 3000);
                     });
                 } catch {}
             }
 
-           // the same god damn thing for audio but no retry because idk ask ummm.... idk ask john youtube
             if (vOk && !aOk) {
-                try {
-                    audio.play().catch(() => showError('Audio failed to start.'));
-                } catch {}
+                try { audio.play().catch(() => showError('Audio failed to start.')); } catch {}
             }
 
             if (!syncInterval) startSyncLoop();
         } finally { syncing = false; }
     }
 
-    //  both pause at once
     function pauseTogether() {
         if (syncing) return;
         syncing = true;
-        try { video.pause(); audio.pause(); clearSyncLoop(); } finally { syncing = false; }
+        try {
+            video.pause();
+            audio.pause();
+            clearSyncLoop();
+        } finally { syncing = false; }
     }
 
     // soooo i know what ur gonna say, its a looped indicator but ur using for errors, and what? 
-	// like, why not i use the same element for both its not illegal...i think?
-	// search it up lol
+    // like, why not i use the same element for both its not illegal...i think?
+    // search it up lol
     const errorBox = document.getElementById('loopedIndicator');
     function showError(msg) {
         if (errorBox) {
@@ -303,7 +280,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const clamp = v => Math.max(0, Math.min(1, Number(v)));
 
-    //  media session controls work, these are legit so anoying to work with 
+    // media session controls work, these are legit so anoying to work with 
     function setupMediaSession() {
         if ('mediaSession' in navigator) {
             try {
@@ -340,7 +317,6 @@ document.addEventListener("DOMContentLoaded", () => {
         attachRetry(audio, pickAudioSrc, () => { audioReady = true; });
         attachRetry(videoEl, () => videoSrc, () => { videoReady = true; });
 
-        // todo: fiixxx mute stuff lol
         video.on('volumechange', () => {
             try {
                 if (!video.muted()) audio.volume = clamp(video.volume());
@@ -356,7 +332,7 @@ document.addEventListener("DOMContentLoaded", () => {
         video.on('pause', () => { vIsPlaying = false; if (!restarting) pauseTogether(); });
         audio.addEventListener('pause', () => { aIsPlaying = false; if (!restarting) pauseTogether(); });
 
-        //  large seeks pause and resync
+        // large seeks pause and resync
         let wasPlayingBeforeSeek = false;
         let lastSeekTime = 0;
         video.on('seeking', () => {
@@ -390,9 +366,7 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         });
 
-        //  looping restarts properly
-		// doesnt work LOOOOOOOOL
-		// sooo... I guess, TODO: fix the looping??????
+        // looping restarts properly
         async function restartLoop() {
             if (restarting) return;
             restarting = true;
@@ -407,7 +381,6 @@ document.addEventListener("DOMContentLoaded", () => {
             } finally { restarting = false; }
         }
 
-        // okay, this actually, legit, not working idk why guuuh
         video.on('ended', () => {
             if (restarting) return;
             if (performance.now() < suppressEndedUntil) return;
@@ -423,6 +396,7 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 });
+
  
  // https://codeberg.org/ashley/poke/src/branch/main/src/libpoketube/libpoketube-youtubei-objects.json
 

@@ -67,6 +67,10 @@
     p{margin:10px 0;color:#e6e6e6}
     ul{margin:10px 0 10px 24px}
     footer.site{text-align:center;color:#bdbdbd;margin:40px 0 60px}
+    .legal{font-size:0.9rem;color:#ccc;border-top:1px solid #333;margin-top:30px;padding-top:20px}
+    .date{color:#9ca3af;font-size:0.9rem;margin-top:-6px}
+    details{background:#0f1012;border:1px solid #1d2024;border-radius:10px;padding:10px 12px;margin:10px 0}
+    details summary{cursor:pointer;font-weight:600}
   </style>
 </head>
 <body>
@@ -85,6 +89,7 @@
     </p>
 
     <h2 id="privacy">Privacy Policy</h2>
+    <p class="date">Last updated: October 11, 2025</p>
     <p>
       Learn how Poke handles user data and what information (if any) is stored.
       Spoiler: we don’t collect personal data at all.
@@ -93,6 +98,7 @@
     </p>
 
     <h2 id="conduct">Community Rules / Code of Conduct</h2>
+    <p class="date">Last updated: October 11, 2025</p>
     <p>
       Our Code of Conduct explains how we keep Poke a safe, queer-friendly, and inclusive space.
       <br>
@@ -108,17 +114,206 @@
       → <a href="/license">View Licenses</a>
     </p>
 
-    <p style="margin-top:28px;color:#d1d1d1">
-  By using Poke, you agree to the terms and policies listed on this page.  
-  These documents exist to protect both you and the project — and may grow over time as new sections are added or updated.
-      </p>
- 
-<p>
-  Poke is provided as-is, with no warranty or promise that it’ll always work perfectly.  
-  If something breaks, causes weird behavior, eats your tabs, or refuses to play nice with another program — that’s not on us.  
-  Nobody involved in developing, modifying, or distributing Poke is responsible for any loss of data, time, or sanity that might happen while using it.  
-</p>
+    <h2 id="extra">Extra Policies</h2>
 
+  
+
+    <details>
+      <summary>Content Source & Legal Basis</summary>
+      <p class="date">Last updated: October 17, 2025</p>
+      <p>
+        Poke functions as a <strong>privacy-friendly frontend for YouTube</strong>, providing an alternative interface  
+        to publicly available YouTube content. It allows users to watch videos, view metadata, and explore channels  
+        without being tracked, profiled, or exposed to intrusive advertisements.
+      </p>
+      <p>
+        All videos, thumbnails, and metadata are retrieved from YouTube’s public endpoints using  
+        reverse-engineered, community-understood protocols such as <strong>youtubei</strong> (used internally by YouTube’s own clients).  
+        We <strong>do not</strong> use the official <strong>YouTube Data API v3</strong>, nor have we ever agreed  
+        to Google’s API Terms of Service. Therefore, we are not contractually bound by those terms.  
+        A similar case involving the Invidious project was raised by YouTube’s legal team in 2023  
+        (<a href="https://github.com/iv-org/invidious/issues/3872" target="_blank">GitHub Issue #3872</a>),  
+        and no legal action was taken, as such usage is within lawful grounds.
+      </p>
+      <p>
+        Under <strong>United States law (17 U.S.C. § 512(a))</strong>, part of the Digital Millennium Copyright Act (DMCA),  
+        intermediaries that “transmit material through a system or network without modification of its content” are lawful.  
+        Poke qualifies under this protection because it only passes data between YouTube and the user without altering content.
+      </p>
+      <p>
+        In the <strong>European Union</strong>, the project is protected under Directive <strong>2001/29/EC</strong>  
+        of the European Parliament, which permits “temporary acts of reproduction that are transient or incidental  
+        and an integral part of a technological process” enabling network transmission.  
+        Poke’s operation — fetching, parsing, and displaying transient data — fully complies with this legal definition.
+      </p>
+      <p>
+        <strong>Poke is not illegal</strong>. It does not redistribute or rehost copyrighted material,  
+        nor does it bypass technological protection measures. It simply acts as a neutral layer  
+        for viewing publicly available YouTube data in a privacy-focused way.
+      </p>
+      <p>
+        Poke <strong>does not endorse, agree with, or moderate</strong> the videos, channels, or comments it displays.  
+        All such content originates directly from YouTube and remains under the control of its creators and YouTube itself.  
+        The Poke Project cannot verify, censor, or selectively remove content, as it merely provides a client-side proxy  
+        to what YouTube already serves publicly. Opinions expressed in YouTube videos do not represent the views  
+        of the Poke Project, its maintainers, or contributors.
+      </p>
+      <p>
+        If you encounter unlawful or infringing content, please report it directly to YouTube via their official tools.  
+        If you believe Poke is displaying something incorrectly, you may reach out to us at our issue tracker:  
+        <a href="https://codeberg.org/ashley/poke/issues" target="_blank">https://codeberg.org/ashley/poke/issues</a>
+      </p>
+    </details>
+
+    <details>
+      <summary>AI Training Policy</summary>
+      <p class="date">Last updated: October 17, 2025</p>
+      <p>
+        The Poke Project <strong>strictly prohibits</strong> the use of its content, data, or media streams  
+        for training, fine-tuning, or feeding any form of artificial intelligence or machine learning models.  
+        This includes, but is not limited to, video content, metadata, comments, thumbnails, transcripts,  
+        and other data accessed through the Poke interface.
+      </p>
+      <p>
+        The materials displayed through Poke are subject to copyright owned by their respective creators  
+        and may not be reproduced or processed for automated learning systems.  
+        Using YouTube data or Poke’s interface for AI dataset creation would constitute unauthorized reuse  
+        of copyrighted works and therefore violates this policy.
+        Any organization or individual found scraping, aggregating, or storing Poke content for AI training  
+        purposes will be considered in direct violation of this policy and may face reporting or blocking  
+        from our network services.
+      </p>
+    </details>
+
+    <details>
+      <summary>Coding Policy</summary>
+      <p class="date">Last updated: October 17, 2025</p>
+      <p>
+        Contributors to the Poke Project are welcome to use <strong>AI-assisted coding tools</strong>  
+        such as code autocompletion, linters, or assistants — provided that they understand and verify  
+        the code being submitted. Automated or unverified contributions that contain insecure, unclear,  
+        or copied proprietary code are <strong>not acceptable</strong>.
+      </p>
+      <p>
+        AI-assisted coding is allowed, but all contributors are responsible for ensuring their changes  
+        meet the project’s quality, security, and licensing requirements.  
+        The Poke maintainers cannot guarantee that AI-generated code will always be correct, safe,  
+        or efficient — contributors are expected to review and test thoroughly.
+      
+       AI-assisted coding is <strong>OK</strong> — but use it wisely, understand your code,  
+        and never rely on it blindly.
+      </p>
+    </details>
+
+    <details>
+      <summary>Coding Style Policy</summary>
+      <p class="date">Last updated: October 17, 2025</p>
+      <p>
+        The Poke Project values clean, readable, and consistent code across all modules and languages.  
+        Contributors are encouraged to:
+      </p>
+      <ul>
+        <li>Use <strong>two spaces</strong> for indentation (no tabs).</li>
+        <li>Keep lines under 100 characters when possible.</li>
+        <li>Write <strong>clear variable names</strong> — no cryptic one-letter identifiers.</li>
+        <li>Follow the existing structure and naming conventions of the project.</li>
+        <li>Use comments sparingly but meaningfully — explain <em>why</em> something happens, not what it does.</li>
+        <li>Keep code GPL-compliant and avoid importing non-free dependencies.</li>
+      </ul>
+      <p>
+        Code consistency helps keep Poke maintainable, accessible, and true to its free software ideals.  
+        Before submitting a pull request, contributors are encouraged to test their changes  
+        and make sure they integrate smoothly with the existing codebase.
+      </p>
+    </details>
+
+    <details>
+      <summary>Poke Free Software Policy</summary>
+      <p class="date">Last updated: October 17, 2025</p>
+      <p>
+        Poke is and shall always remain <strong>Free Software</strong> as defined by the  
+        <a href="https://www.gnu.org/philosophy/free-sw.html" target="_blank">Free Software Foundation</a>.  
+        The project is permanently licensed under the <strong>GNU General Public License version 3 (or later)</strong>,  
+        ensuring users’ rights to use, study, modify, and share the software freely.
+      </p>
+      <p>
+        The core philosophy of Poke is freedom — not monetization. Poke will never include proprietary components,  
+        paywalls, or tracking scripts. The software and all its source code shall remain fully accessible  
+        to the public for all time.
+      </p>
+      <p>
+        Community mirrors, forks, and rehosts of Poke are <strong>explicitly allowed and encouraged</strong>,  
+        provided they follow the terms of the GNU GPLv3 license and maintain proper attribution to the Poke Project.  
+        These mirrors strengthen software freedom and accessibility.
+      </p>
+    </details>
+
+    <details>
+      <summary>Warranty Policy</summary>
+      <p class="date">Last updated: October 17, 2025</p>
+      <p>
+        Poke is developed and maintained with love and care, but it is still provided entirely “as is.”  
+        We do not guarantee perfect performance, uninterrupted uptime, or freedom from bugs and technical glitches.
+      </p>
+      <p>
+        Poke is primarily developed and tested on <strong>Firefox</strong> and other standards-compliant browsers.  
+        While it should function on most modern browsers, full compatibility on Chromium-based or alternative browsers  
+        cannot be guaranteed.
+      </p>
+      <p>
+        The Poke team cannot promise that every feature will always function as expected or remain available in the future.  
+        Servers may experience downtime, network issues, or maintenance breaks without notice.
+      </p>
+      <p>
+        While we do our best to maintain stable service, no warranty is provided for uptime, speed, or data integrity.  
+        Your usage of Poke implies acceptance that unexpected behavior or interruptions may occur.
+      </p>
+      <p>
+        The project maintainers, contributors, and distributors are not liable for any damages, losses, or inconvenience  
+        caused directly or indirectly by using Poke, its APIs, or related software.
+      </p>
+      <p>
+        Poke does not offer any commercial guarantees, technical support, or service-level agreements.  
+        It is a volunteer-driven, community-based project made freely available for everyone.
+      </p>
+      <div class="legal">
+        <p><strong>LEGAL VERSION (WARRANTY POLICY):</strong></p>
+        <p>
+          THE POKE PROJECT IS PROVIDED “AS IS” WITHOUT ANY EXPRESS OR IMPLIED WARRANTY OF ANY KIND.  
+          THIS INCLUDES, BUT IS NOT LIMITED TO, WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE,  
+          AND NON-INFRINGEMENT. THE ENTIRE RISK AS TO THE QUALITY AND PERFORMANCE OF THE PROGRAM IS WITH YOU.  
+          SHOULD THE PROGRAM PROVE DEFECTIVE, YOU ASSUME THE COST OF ALL NECESSARY SERVICING, REPAIR, OR CORRECTION.  
+          IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES, OR OTHER LIABILITY,  
+          WHETHER IN AN ACTION OF CONTRACT, TORT, OR OTHERWISE, ARISING FROM, OUT OF, OR IN CONNECTION WITH THE SOFTWARE  
+          OR THE USE OR OTHER DEALINGS IN THE SOFTWARE. NO GUARANTEES OF UPTIME, PERFORMANCE, OR FUNCTIONALITY ARE PROVIDED.
+        </p>
+      </div>
+    </details>
+
+    <details>
+      <summary>Fake News Policy</summary>
+      <p class="date">Last updated: October 17, 2025</p>
+      <p>
+        Poke includes an internal filter system that identifies commonly known disinformation and conspiracy sources  
+        such as InfoWars, Breitbart, Daily Mail, RT, and others.  
+        This system serves only as a <strong>warning mechanism</strong> to encourage users to verify what they read.  
+        You are free to access or view such content — the warning does not restrict access, censor, or block anything.  
+        It merely provides informational context based on publicly available fact-checking records.
+      </p>
+      <p>
+        Users are encouraged to cross-reference claims, verify sources through reliable outlets,  
+        and remain mindful of misinformation when browsing external links or content.  
+        The Poke Project does not control, filter, or prevent access to these domains;  
+        the warnings are purely educational in nature.
+      </p>
+    </details>
+
+    <p style="margin-top:28px;color:#d1d1d1">
+      By continuing to use Poke, you confirm that you’ve read and understood these terms.  
+      These documents exist not to restrict you, but to protect your rights, our contributors, and the long-term health of the project.  
+      Poke’s policies may evolve over time to reflect legal updates, infrastructure changes, or community feedback.  
+      We encourage you to revisit this page occasionally to stay informed about the latest updates.
+    </p>
   </main>
 </body>
 </html>

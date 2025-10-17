@@ -31,6 +31,23 @@ app.get("/code-of-conduct", (req, res) => {
   res.redirect(301, "/policies/code-of-conduct");
 });
 
+app.get("/terms-of-service", (req, res) => {
+  res.redirect(301, "/policies/code-of-conduct");
+});
+
+const tosRedirects = [
+  "/tos",
+  "/termsofservice",
+  "/policies/terms",
+  "/policies/tos",
+  "/policies/termsofservice",
+];
+
+tosRedirects.forEach((path) => {
+  app.get(path, (req, res) => res.redirect(301, "/policies/code-of-conduct"));
+});
+
+
 app.get("/policies/privacy", (req, res) => {
   if (req.hostname === "poketube.fun") {
     renderTemplate(res, req, "priv.ejs", {

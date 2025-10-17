@@ -14,7 +14,33 @@ var versionclient = "youtube.player.web_20250917_22_RC00"
  * Available under Apache License Version 2.0
  * <https://github.com/mozilla/vtt.js/blob/main/LICENSE>
  */
-document.addEventListener("DOMContentLoaded", () => {
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+document.addEventListener("DOMContentLoaded", () => { 
     // video.js 8 init - source can be seen in https://poketube.fun/static/vjs.min.js or the vjs.min.js file
     const video = videojs('video', {
         controls: true,
@@ -36,7 +62,7 @@ document.addEventListener("DOMContentLoaded", () => {
     video.ready(() => {
         const metaTitle = document.querySelector('meta[name="title"]')?.content || "";
         const metaDesc = document.querySelector('meta[name="twitter:description"]')?.content || "";
-        const metaAuthor = document.querySelector('meta[name="twitter:author"]')?.content || "";
+        const metaAuthor = document.querySelector('meta[name="twitter:author"]')?.content || ""; 
 
         const videoinfostuffidklol = {
             metaTitle,
@@ -78,15 +104,18 @@ document.addEventListener("DOMContentLoaded", () => {
         handleFullscreen();
     });
 
+    //  inline playback works on iOS/Safari
     try {
         videoEl.setAttribute('playsinline', '');
         videoEl.setAttribute('webkit-playsinline', '');
     } catch {}
 
+    // global state
     let syncing = false;
     let restarting = false;
     let firstSeekDone = false;
 
+    //  loop param or tag is respected
     let desiredLoop =
         !!videoEl.loop ||
         qs.get("loop") === "1" ||
@@ -100,8 +129,18 @@ document.addEventListener("DOMContentLoaded", () => {
     let prevAudioMuted = false;
     let pendingUnmute = false;
 
+    // manual intent flags
     let userMutedVideo = false;
     let userMutedAudio = false;
+
+    // queued play while loading / buffering
+    let pendingPlayRequest = false;
+    let resumeAfterBuffer = false;
+
+    // retry audio if it randomly stops while video is playing
+    let audioRetryCount = 0;
+    const AUDIO_RETRY_LIMIT = 4;
+    let audioRetryTimer = null;
 
     try {
         videoEl.loop = false;
@@ -112,6 +151,7 @@ document.addEventListener("DOMContentLoaded", () => {
         audio.removeAttribute?.('loop');
     } catch {}
 
+    //  we pick the right audio src
     const pickAudioSrc = () => {
         const s = audio?.getAttribute?.('src');
         if (s) return s;
@@ -126,12 +166,14 @@ document.addEventListener("DOMContentLoaded", () => {
     let audioReady = false, videoReady = false;
     let syncInterval = null;
 
+    // sync constants
     const BIG_DRIFT = 0.5;
     const MICRO_DRIFT = 0.05;
     const SYNC_INTERVAL_MS = 250;
     const EPS = 0.15;
-    const RESYNC_DRIFT_LIMIT = 3.5;
+    const RESYNC_DRIFT_LIMIT = 3.5; // seconds difference that triggers pause+play reset
 
+    //  we check if given time is buffered
     function timeInBuffered(media, t) {
         try {
             const br = media.buffered;
@@ -144,15 +186,17 @@ document.addEventListener("DOMContentLoaded", () => {
         return false;
     }
 
+    //  we can tell if a timestamp is playable
     function canPlayAt(media, t) {
         try {
             const rs = Number(media.readyState || 0);
             if (!isFinite(t)) return false;
-            if (rs >= 3) return true;
+            if (rs >= 3) return true; // HAVE_FUTURE_DATA
             return timeInBuffered(media, t);
         } catch { return false; }
     }
 
+    //  we check both elements readiness
     function bothPlayableAt(t) {
         return canPlayAt(videoEl, t) && canPlayAt(audio, t);
     }
@@ -172,6 +216,30 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
+    // status / error UI using the same box
+    const errorBox = document.getElementById('loopedIndicator');
+    function showError(msg) {
+        if (errorBox) {
+            errorBox.textContent = msg;
+            errorBox.style.display = 'block';
+            errorBox.style.width = 'fit-content';
+        }
+    }
+    function showStatus(msg) {
+        if (errorBox) {
+            errorBox.textContent = msg;
+            errorBox.style.display = 'block';
+            errorBox.style.width = 'fit-content';
+        }
+    }
+    let statusHideTimer = null;
+    function hideStatus(delay = 250) {
+        try { clearTimeout(statusHideTimer); } catch {}
+        statusHideTimer = setTimeout(() => {
+            if (errorBox) errorBox.style.display = 'none';
+        }, delay);
+    }
+
     function startSyncLoop() {
         clearSyncLoop();
         syncInterval = setInterval(() => {
@@ -181,9 +249,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
             const delta = vt - at;
 
+            // if drift is huge (desync >3.5s), resync both
             if (Math.abs(delta) > RESYNC_DRIFT_LIMIT) {
                 pauseTogether();
-                setTimeout(() => playTogether({ allowMutedRetry: true }), 150);
+                setTimeout(() => requestPlayWhenReady(true), 150);
                 return;
             }
 
@@ -199,6 +268,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 try { audio.playbackRate = 1; } catch {}
             }
 
+            //  if one gets muted unexpectedly we fix it (but only if not user-muted)
             if (!userMutedVideo && video.muted() && !prevVideoMuted) {
                 try { video.muted(false); } catch {}
             }
@@ -206,6 +276,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 try { audio.muted = false; } catch {}
             }
 
+            // keep Media Session position state fresh (when available)
             try {
                 if ('mediaSession' in navigator && navigator.mediaSession.setPositionState) {
                     navigator.mediaSession.setPositionState({
@@ -244,23 +315,34 @@ document.addEventListener("DOMContentLoaded", () => {
         } catch { return false; }
     }
 
+    // block playing while loading; queue it to resume when both can actually play
+    function requestPlayWhenReady(allowMutedRetry = true) {
+        const t = Number(video.currentTime());
+        if (!bothPlayableAt(t)) {
+            pendingPlayRequest = true;
+            resumeAfterBuffer = true;
+            showStatus('Buffering…');
+            pauseTogether();
+            return;
+        }
+        playTogether({ allowMutedRetry });
+    }
+
     async function playTogether({ allowMutedRetry = true } = {}) {
         if (syncing || restarting) return;
         syncing = true;
         try {
-            // if either is still loading / not ready, don't attempt play
+            hideStatus(0); // clear any buffering text right away when attempting to start
             const t = Number(video.currentTime());
             if (!bothPlayableAt(t)) {
-                // show buffering indicator
-                showStatus("buffering...");
+                pendingPlayRequest = true;
+                resumeAfterBuffer = true;
+                showStatus('Buffering…');
+                pauseTogether();
                 return;
             }
 
-            clearStatus();  // hide any waiting message once we know play will proceed
-
-            if (isNaN(t)) return;
-
-            if (Math.abs(Number(audio.currentTime) - t) > 0.05) {
+            if (isFinite(t) && Math.abs(Number(audio.currentTime) - t) > 0.05) {
                 safeSetCT(audio, t);
             }
 
@@ -268,6 +350,7 @@ document.addEventListener("DOMContentLoaded", () => {
             try { const p = video.play(); if (p && p.then) await p; } catch { vOk = false; }
             aOk = await tryPlay(audio);
 
+            // If either fails, consider muted retry
             if (allowMutedRetry && (!vOk || !aOk)) {
                 prevVideoMuted = !!video.muted();
                 prevAudioMuted = !!audio.muted;
@@ -278,20 +361,25 @@ document.addEventListener("DOMContentLoaded", () => {
                 await tryPlay(audio);
             }
 
+            // If video succeeded but audio failed, show error and retry a bit later
             if (!vOk && aOk) {
-                video.play().catch(() => {
-                    showError('Video failed to start.');
-                    setTimeout(() => {
-                        video.play().catch(() => showError('Video retry failed.'));
-                    }, 3000);
-                });
+                try {
+                    video.play().catch(() => {
+                        showError('Video failed to start.');
+                        setTimeout(() => {
+                            video.play().catch(() => showError('Video retry failed.'));
+                        }, 3000);
+                    });
+                } catch {}
             }
             if (vOk && !aOk) {
-                audio.play().catch(() => showError('Audio failed to start.'));
+                showStatus('Buffering audio…');
+                try {
+                    audio.play().catch(() => showError('Audio failed to start.'));
+                } catch {}
             }
 
             if (!syncInterval) startSyncLoop();
-
         } finally {
             syncing = false;
         }
@@ -309,31 +397,9 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
-    const errorBox = document.getElementById('loopedIndicator');
-    const statusBox = document.getElementById('statusIndicator');  // you should create an element to show "buffering..." etc
-    function showError(msg) {
-        if (errorBox) {
-            errorBox.textContent = msg;
-            errorBox.style.display = 'block';
-            errorBox.style.width = 'fit-content';
-        }
-    }
-    function showStatus(msg) {
-        if (statusBox) {
-            statusBox.textContent = msg;
-            statusBox.style.display = 'block';
-            statusBox.style.width = 'fit-content';
-        }
-    }
-    function clearStatus() {
-        if (statusBox) {
-            statusBox.style.display = 'none';
-            statusBox.textContent = "";
-        }
-    }
-
     const clamp = v => Math.max(0, Math.min(1, Number(v)));
 
+    //  media session controls work, these are legit so anoying to work with 
     function setupMediaSession() {
         if ('mediaSession' in navigator) {
             try {
@@ -345,8 +411,10 @@ document.addEventListener("DOMContentLoaded", () => {
                     ]
                 });
             } catch {}
-            navigator.mediaSession.setActionHandler('play', () => playTogether());
+            navigator.mediaSession.setActionHandler('play', () => requestPlayWhenReady(true));
             navigator.mediaSession.setActionHandler('pause', pauseTogether);
+
+            // extra handlers for better UX on hardware keys / OS UIs
             try {
                 navigator.mediaSession.setActionHandler('seekforward', (d) => {
                     const inc = Number(d?.seekOffset) || 10;
@@ -368,6 +436,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
+    // progress save/restore (safe bounds)
     const PROGRESS_KEY = `progress-${vidKey}`;
     function restoreProgress() {
         try {
@@ -376,49 +445,74 @@ document.addEventListener("DOMContentLoaded", () => {
             if (isFinite(saved) && saved > 3 && dur && saved < (dur - 10)) {
                 video.currentTime(saved);
                 safeSetCT(audio, saved);
-                firstSeekDone = true;
+                firstSeekDone = true; // prevent immediate reseek jitter
             }
         } catch {}
     }
     function saveProgressThrottled() {
+        // simple throttle by modulo of seconds
         try {
             const t = Math.floor(Number(video.currentTime()) || 0);
             if (t % 2 === 0) localStorage.setItem(PROGRESS_KEY, String(t));
         } catch {}
     }
 
+    // network resilience (stall/waiting recovery)
+    function pauseForBuffer(label) {
+        if (!video.paused() || !audio.paused()) {
+            resumeAfterBuffer = true;
+        }
+        showStatus(`${label} buffering…`);
+        pauseTogether();
+        pendingPlayRequest = true;
+    }
+
+    function maybeResumeAfterBuffer() {
+        if (pendingPlayRequest || resumeAfterBuffer) {
+            pendingPlayRequest = false;
+            resumeAfterBuffer = false;
+            hideStatus(100);
+            requestPlayWhenReady(true);
+        } else {
+            hideStatus(200);
+        }
+    }
+
     function wireResilience(el, label) {
         try {
             el.addEventListener('waiting', () => {
-                showStatus("buffering...");
-                try { audio.pause(); } catch {}
-                try { video.pause(); } catch {}
+                // when video or audio goes into waiting, pause both to avoid audio ghosting
+                pauseForBuffer(label);
             });
             el.addEventListener('stalled', () => {
-                showStatus("buffering...");
-                try { audio.pause(); } catch {}
-                try { video.pause(); } catch {}
+                showStatus(`${label} stalled…`);
+                pauseForBuffer(label);
+            });
+            el.addEventListener('suspend', () => {
+                /* no-op; advisory */
             });
             el.addEventListener('emptied', () => {
-                showError(`${label} source emptied`);
-                try { audio.pause(); } catch {}
-                try { video.pause(); } catch {}
+                showStatus(`${label} source emptied`);
+                pauseForBuffer(label);
             });
             el.addEventListener('error', () => {
                 showError(`${label} error`);
-                try { audio.pause(); } catch {}
-                try { video.pause(); } catch {}
+                pauseForBuffer(label);
             });
             el.addEventListener('canplay', () => {
-                // when media recovers, clear status and try resume
-                clearStatus();
-                if (!video.paused() || !audio.paused()) {
-                    playTogether();
-                }
+                // hide the text after it stops; auto-resume if the user was trying to play
+                maybeResumeAfterBuffer();
+            });
+            el.addEventListener('canplaythrough', () => {
+                maybeResumeAfterBuffer();
+            });
+            el.addEventListener('playing', () => {
+                hideStatus(120);
             });
         } catch {}
     }
 
+    // guards to ensure elements exist before heavy sync logic
     const hasExternalAudio = !!audio && audio.tagName === 'AUDIO' && !!pickAudioSrc();
 
     if (qua !== "medium" && hasExternalAudio) {
@@ -432,19 +526,21 @@ document.addEventListener("DOMContentLoaded", () => {
             };
             elm.addEventListener('loadeddata', onLoaded, { once: true });
             elm.addEventListener('loadedmetadata', onLoaded, { once: true });
+            // also consider canplay as a fallback readiness signal
             elm.addEventListener('canplay', onLoaded, { once: true });
         };
 
         const tryStart = () => {
             if (audioReady && videoReady && !restarting) {
+                // restore progress once we know duration/metadata
                 restoreProgress();
+
                 const t = Number(video.currentTime());
-                if (isFinite(t) && Math.abs(Number(audio.currentTime) - t) > 0.1) {
-                    safeSetCT(audio, t);
-                }
-                if (bothPlayableAt(t)) {
-                    playTogether({ allowMutedRetry: true });
-                } else {
+                if (isFinite(t) && Math.abs(Number(audio.currentTime) - t) > 0.1) safeSetCT(audio, t);
+                if (bothPlayableAt(t)) requestPlayWhenReady(true);
+                else {
+                    pendingPlayRequest = true;
+                    showStatus('Buffering…');
                     pauseTogether();
                 }
                 setupMediaSession();
@@ -454,33 +550,22 @@ document.addEventListener("DOMContentLoaded", () => {
         attachRetry(audio, pickAudioSrc, () => { audioReady = true; });
         attachRetry(videoEl, () => videoSrc, () => { videoReady = true; });
 
+        // todo: fiixxx mute stuff lol
         video.on('volumechange', () => {
             try {
                 const isMuted = video.muted();
-                if (isMuted !== userMutedVideo) {
-                    userMutedVideo = isMuted;
-                }
-                if (!isMuted && !userMutedVideo) {
-                    audio.muted = false;
-                }
-                if (audio) {
-                    audio.muted = isMuted;
-                }
-                if (!video.muted()) {
-                    audio.volume = clamp(video.volume());
-                }
+                // record user intent
+                userMutedVideo = isMuted;
+                // sync audio mute to video
+                audio.muted = isMuted;
+                if (!isMuted) audio.volume = clamp(video.volume());
             } catch {}
         });
 
+        // do not force video mute from audio side; just track user toggle on audio if exposed
         audio.addEventListener('volumechange', () => {
             try {
-                const isMuted = audio.muted;
-                if (isMuted !== userMutedAudio) {
-                    userMutedAudio = isMuted;
-                }
-                if (!userMutedAudio) {
-                    video.muted(false);
-                }
+                userMutedAudio = !!audio.muted;
             } catch {}
         });
 
@@ -488,32 +573,56 @@ document.addEventListener("DOMContentLoaded", () => {
 
         video.on('play', () => {
             vIsPlaying = true;
-            if (!aIsPlaying) playTogether();
+            // don't let it play when loading; queue and auto start later
+            requestPlayWhenReady(true);
         });
         audio.addEventListener('play', () => {
             aIsPlaying = true;
-            if (!vIsPlaying) playTogether();
+            // if user started audio first somehow, line up with video logic
+            if (!vIsPlaying) requestPlayWhenReady(true);
         });
 
         video.on('pause', () => {
             vIsPlaying = false;
             if (!restarting) {
+                // ensure audio also pauses
                 try { audio.pause(); } catch {}
+                hideStatus(150);
             }
         });
         audio.addEventListener('pause', () => {
             aIsPlaying = false;
-            if (!restarting) {
-                try { video.pause(); } catch {}
+            // if audio stopped while video is still playing, try to recover a few times
+            if (!restarting && !video.paused()) {
+                if (audioRetryTimer) clearTimeout(audioRetryTimer);
+                if (audioRetryCount < AUDIO_RETRY_LIMIT) {
+                    audioRetryCount++;
+                    showStatus('Buffering audio…');
+                    audioRetryTimer = setTimeout(() => {
+                        requestPlayWhenReady(true);
+                    }, 300 + audioRetryCount * 200);
+                } else {
+                    showError('Audio failed repeatedly.');
+                    pauseTogether();
+                }
             }
         });
 
+        // reset retry counter when actually playing again
+        audio.addEventListener('playing', () => {
+            audioRetryCount = 0;
+            hideStatus(120);
+        });
+
+        //  large seeks pause and resync
         let wasPlayingBeforeSeek = false;
         let lastSeekTime = 0;
         video.on('seeking', () => {
             if (restarting) return;
             wasPlayingBeforeSeek = !video.paused();
             lastSeekTime = Number(video.currentTime());
+            pendingPlayRequest = true; // treat seek as potential resume-after-buffer
+            showStatus('Buffering…');
         });
 
         video.on('seeked', () => {
@@ -526,6 +635,7 @@ document.addEventListener("DOMContentLoaded", () => {
             if (!firstSeekDone) {
                 safeSetCT(audio, newTime);
                 firstSeekDone = true;
+                requestPlayWhenReady(true);
                 return;
             }
 
@@ -533,22 +643,26 @@ document.addEventListener("DOMContentLoaded", () => {
                 pauseTogether();
                 safeSetCT(audio, newTime);
                 setTimeout(() => {
-                    if (wasPlayingBeforeSeek && bothPlayableAt(newTime)) {
-                        playTogether({ allowMutedRetry: true });
-                    }
+                    if (wasPlayingBeforeSeek) requestPlayWhenReady(true);
                 }, 180);
             } else {
                 safeSetCT(audio, newTime);
+                if (wasPlayingBeforeSeek) requestPlayWhenReady(true);
             }
         });
 
+        // save progress periodically
         try {
             video.on('timeupdate', saveProgressThrottled);
         } catch {}
 
+        // wire stall/err resilience
         wireResilience(videoEl, 'Video');
         wireResilience(audio, 'Audio');
 
+        //  looping restarts properly
+		// doesnt work LOOOOOOOOL
+		// sooo... I guess, TODO: fix the looping??????
         async function restartLoop() {
             if (restarting) return;
             restarting = true;
@@ -563,12 +677,14 @@ document.addEventListener("DOMContentLoaded", () => {
             } finally { restarting = false; }
         }
 
+        // okay, this actually, legit, not working idk why guuuh
         video.on('ended', () => {
             if (restarting) return;
             if (performance.now() < suppressEndedUntil) return;
             if (desiredLoop) restartLoop();
             else pauseTogether();
         });
+
         audio.addEventListener('ended', () => {
             if (restarting) return;
             if (performance.now() < suppressEndedUntil) return;
@@ -576,19 +692,15 @@ document.addEventListener("DOMContentLoaded", () => {
             else pauseTogether();
         });
 
+        // resume automatically when either becomes playable again
         videoEl.addEventListener('canplay', () => {
-            clearStatus();
-            if (!video.paused() || !audio.paused()) {
-                playTogether();
-            }
+            maybeResumeAfterBuffer();
         });
         audio.addEventListener('canplay', () => {
-            clearStatus();
-            if (!video.paused() || !audio.paused()) {
-                playTogether();
-            }
+            maybeResumeAfterBuffer();
         });
 
+        // clean up on unload to avoid stray timers
         try {
             window.addEventListener('pagehide', () => { clearSyncLoop(); });
             window.addEventListener('beforeunload', () => {
@@ -598,12 +710,34 @@ document.addEventListener("DOMContentLoaded", () => {
             });
         } catch {}
     } else {
+        // fallback when medium quality (no external <audio>) or audio element missing:
+        // keep Media Session + progress for the single video element so UX is still solid
         try {
             video.on('timeupdate', () => {
                 try { localStorage.setItem(`progress-${vidKey}`, String(Math.floor(Number(video.currentTime()) || 0))); } catch {}
             });
         } catch {}
         setupMediaSession();
+
+        // also block play until the video itself is ready, for consistent UX
+        video.on('play', () => {
+            const t = Number(video.currentTime());
+            if (!canPlayAt(videoEl, t)) {
+                showStatus('Buffering…');
+                video.pause();
+                const onReady = () => {
+                    videoEl.removeEventListener('canplay', onReady);
+                    hideStatus(120);
+                    try { video.play(); } catch {}
+                };
+                videoEl.addEventListener('canplay', onReady, { once: true });
+            } else {
+                hideStatus(0);
+            }
+        });
+        video.on('playing', () => hideStatus(120));
+        video.on('waiting', () => showStatus('Buffering…'));
+        video.on('canplay', () => hideStatus(120));
     }
 });
 

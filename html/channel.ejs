@@ -48,6 +48,20 @@
 <meta property="facebook:title" content="<%=cinv.author%> - Poke">
 <meta property="facebook:description" content="<%- cinv?.description %>">
 <meta property="facebook:image" content="<%=cinv.authorThumbnails[5].url%>">
+
+
+                         <% if (embedchannelsubsfeed) { %>  
+ <style>
+
+.channel-info-container {
+  display: none;
+}
+nav {
+  display: none;
+}
+ </style>
+ <% } %>
+
    <style> 
     * {
       color:#fff

@@ -77,14 +77,6 @@
       -webkit-text-fill-color:transparent;
       margin:0;
     }
-    h2{
-      margin:0;
-      font-size:0.9rem;
-      font-weight:500;
-      color:var(--muted);
-      letter-spacing:0.3px;
-    }
-
     .uid{
       font-size:12px;
       color:var(--muted);
@@ -280,16 +272,12 @@
       justify-content:center;
       cursor:pointer;
       backdrop-filter:blur(10px);
+      font-size:16px;
       transition:background .2s ease, transform .2s ease;
     }
     .close-view:hover{
       background:rgba(255,255,255,0.2);
       transform:rotate(90deg);
-    }
-    .close-view svg{
-      width:16px;
-      height:16px;
-      fill:var(--ink);
     }
 
     noscript{
@@ -308,15 +296,15 @@
 <body>
   <noscript>
     JavaScript seems to be disabled (oh noes!) <br>
-    This page won’t show your subscriptions without it :c<br>
-    Please enable JavaScript or use a browser that supports scripts!!!!!!!!!!!!!!!!!!!!!!1
+    This page won’t show your subscriptions without it.<br>
+    Please enable JavaScript or use a browser that supports scripts.
   </noscript>
 
   <div class="layout">
     <aside>
       <header>
         <h1>my poke</h1>
-         <span class="uid">logged in as <%= userid %></span>
+        <span class="uid">logged in as <%= userid %></span>
         <a href="/privacy" class="privacy-link">privacy stuff</a>
       </header>
 
@@ -356,7 +344,7 @@
         <a href="/api/get-channel-subs?ID=<%= encodeURIComponent(userid) %>" class="btn">view json</a>
       </div>
       <div class="viewer" id="viewer">
-        <div class="placeholder">u can select a channel on the left to view it :D</div>
+        <div class="placeholder">u can select a channel on the left to view it</div>
       </div>
     </main>
   </div>
@@ -397,25 +385,15 @@ document.addEventListener("DOMContentLoaded",()=>{
 
   function renderIframe(id,name){
     viewer.innerHTML=`
-      <div class="close-view" title="close">
-        <svg viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12"/></svg>
-      </div>
+      <div class="close-view" title="close">✖</div>
       <iframe sandbox="allow-scripts allow-same-origin allow-popups" src="/channel?id=${encodeURIComponent(id)}&embedchannelsubsfeed=true" loading="lazy" allowfullscreen></iframe>`;
     title.textContent=name;
 
-    const iframe=viewer.querySelector("iframe");
-    iframe.addEventListener("load",()=>{
-      try{
-        const links=iframe.contentDocument.querySelectorAll("a[href]");
-        links.forEach(l=>l.setAttribute("target","_blank"));
-      }catch(e){}
-    });
-
     const closeBtn=viewer.querySelector(".close-view");
     closeBtn.addEventListener("click",()=>{
-      viewer.innerHTML='<div class="placeholder">u can select a channel on the left to view it :D</div>';
+      viewer.innerHTML='<div class="placeholder">u can select a channel on the left to view it</div>';
       channels.forEach(c=>c.classList.remove("active"));
-      title.textContent="nothing selected yet qwq";
+      title.textContent="nothing selected yet";
     });
   }
 

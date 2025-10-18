@@ -571,9 +571,11 @@ a.avatar {
   margin: 0;
   width: 300px;
   border-radius: 8px;
-  font-family: "Montserrat", sans-serif;
+  font-family: Montserrat, sans-serif;
   box-shadow: var(--border-color) 0 0 5px;
-  background-color: var(--context-menu-background); 
+  background-color: #0007;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
 }
 
 @media (min-height: 1079px) {

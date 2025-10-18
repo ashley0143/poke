@@ -250,21 +250,21 @@ a.avatar {
 }
 
 .recommended-list {
-	background-color: var(--div-prim-bg);
-	border-radius: 1.5em;
- 	/*  padding-right: 24px; */
+  background: rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 1.5em;
   margin: 10px;
-	margin-top: 0;
-	margin-left: 0;
-	height: -moz-fit-content;
-	height: fit-content;
-	/* justify-self: center; */
-	margin-right: -.9em;
-	border: var(--div-border-color);
-	border-style: solid;
-	max-width: 371px;
-	width: 20.9em;
+  margin-top: 0;
+  margin-left: 0;
+  margin-right: -0.9em;
+  width: 20.9em;
+  max-width: 371px;
+  height: fit-content;
+  backdrop-filter: blur(25px) saturate(200%);
+  -webkit-backdrop-filter: blur(25px) saturate(200%);
+  box-shadow: 0 8px 40px rgba(0, 0, 0, 0.35);
 }
+
 
 .video-views {
    white-space: -moz-pre-wrap !important;  /* Mozilla, since 1999 */
@@ -404,14 +404,17 @@ a.avatar {
 }
 
 .comments-class-or-something-i-cant-find-a-name-lol {
-  background: var(--div-prim-bg);
+  background: rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.25);
   border-radius: 1.5em;
   padding: 10px;
   padding-top: 0;
   margin: auto;
-  border: var(--div-border-color);
-  border-style: solid;
+  backdrop-filter: blur(25px) saturate(200%);
+  -webkit-backdrop-filter: blur(25px) saturate(200%);
+  box-shadow: 0 8px 40px rgba(0, 0, 0, 0.35);
 }
+
 
 .subscribe-button {
   color: #ff0033;

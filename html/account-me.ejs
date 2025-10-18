@@ -151,7 +151,6 @@
       background:rgba(255,255,255,0.05);
       border:1px solid transparent;
       transition:all .25s ease;
-      cursor:pointer;
     }
     .channel:hover{
       background:rgba(255,255,255,0.15);
@@ -174,6 +173,22 @@
       text-overflow:ellipsis;
       white-space:nowrap;
       font-size:14px;
+    }
+
+    .pill--unsub{
+      font-size:12px;
+      color:var(--ink);
+      background:rgba(255,255,255,0.08);
+      padding:4px 10px;
+      border-radius:999px;
+      border:1px solid var(--border);
+      transition:background .2s ease, color .2s ease;
+      white-space:nowrap;
+    }
+    .pill--unsub:hover{
+      background:rgba(255,80,80,0.2);
+      border-color:#ff7777;
+      color:#ffaaaa;
     }
 
     .sidebar-footer{
@@ -336,10 +351,13 @@
 
         <div class="channel-list" id="channelList">
           <% subs.forEach(c => { %>
-            <a class="channel" href="/channel?id=<%= c.id %>" data-id="<%= c.id %>" data-name="<%= c.name.toLowerCase() %>">
-              <img src="<%= c.avatar %>" alt="">
-              <div class="channel-name"><%= c.name %></div>
-            </a>
+            <div class="channel" data-id="<%= c.id %>" data-name="<%= c.name.toLowerCase() %>">
+              <a href="/channel?id=<%= c.id %>" class="channel-name-link" style="display:flex;align-items:center;gap:10px;flex:1;">
+                <img src="<%= c.avatar %>" alt="">
+                <div class="channel-name"><%= c.name %></div>
+              </a>
+              <a class="pill--unsub" href="/api/remove-channel-sub?ID=<%= encodeURIComponent(userid) %>&channelID=<%= c.id %>" data-unsub data-cid="<%= c.id %>" aria-label="Unsubscribe from <%= c.name %>">unsub</a>
+            </div>
           <% }) %>
         </div>
       </div>
@@ -378,15 +396,24 @@ document.addEventListener("DOMContentLoaded",()=>{
   const viewer=document.getElementById("viewer");
   const title=document.getElementById("channelTitle");
 
-  // hide no-js links behaviour
-  channels.forEach(ch=>ch.removeAttribute("href"));
+  // disable direct link loading when JS active
+  document.querySelectorAll(".channel-name-link").forEach(link=>{
+    link.addEventListener("click",e=>{
+      e.preventDefault();
+      const parent=link.closest(".channel");
+      const id=parent.dataset.id;
+      const name=parent.querySelector(".channel-name").textContent;
+      channels.forEach(c=>c.classList.remove("active"));
+      parent.classList.add("active");
+      renderIframe(id,name);
+    });
+  });
 
   function renderIframe(id,name){
     viewer.innerHTML=`
       <div class="close-view" title="close">✖</div>
       <iframe sandbox="allow-scripts allow-same-origin allow-popups" src="/channel?id=${encodeURIComponent(id)}&embedchannelsubsfeed=true" loading="lazy" allowfullscreen></iframe>`;
     title.textContent=name;
-
     const closeBtn=viewer.querySelector(".close-view");
     closeBtn.addEventListener("click",()=>{
       viewer.innerHTML='<div class="placeholder">select a channel on the left to view it</div>';
@@ -395,15 +422,7 @@ document.addEventListener("DOMContentLoaded",()=>{
     });
   }
 
-  channels.forEach(ch=>{
-    ch.addEventListener("click",e=>{
-      e.preventDefault();
-      channels.forEach(c=>c.classList.remove("active"));
-      ch.classList.add("active");
-      renderIframe(ch.dataset.id,ch.querySelector(".channel-name").textContent);
-    });
-  });
-
+  // search + sorting
   function filter(){
     const term=search.value.toLowerCase();
     channels.forEach(c=>{

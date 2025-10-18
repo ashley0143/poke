@@ -538,11 +538,13 @@ a.avatar {
   grid-area: description;
   font-size: 1rem;
   color: var(--text-primary);
-  background: var(--div-prim-bg);
+  background: rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.25);
   padding: 16px;
   border-radius: 1.5em;
-  border: var(--div-border-color);
-  border-style: solid;
+  backdrop-filter: blur(25px) saturate(200%);
+  -webkit-backdrop-filter: blur(25px) saturate(200%);
+  box-shadow: 0 8px 40px rgba(0, 0, 0, 0.35);
 }
 
 .dropdown {
@@ -804,15 +806,42 @@ a.new-button:hover {
   gap: 6px;
   padding: 16px 0px;
 }
-.pwp a, .fnt {
-  background: #452f37;
-  border-radius: 6px;
-  display: flex;
+
+.fnt,
+.pwp a {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.18), rgba(255, 255, 255, 0.05));
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 999px;
+  display: inline-flex;
   align-items: center;
-  gap: 12px;
-  padding: 6px 12px;
-  color: white;
+  justify-content: center;
+  gap: 8px;
+  padding: 6px 14px;
+  color: #fff;
+  font-weight: 500;
+  text-decoration: none;
+  font-size: 0.9rem;
+  line-height: 1;
+  backdrop-filter: blur(20px) saturate(200%);
+  -webkit-backdrop-filter: blur(20px) saturate(200%);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  transition: all 0.25s ease;
+  cursor: pointer;
 }
+
+.fnt:hover,
+.pwp a:hover {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.28), rgba(255, 255, 255, 0.1));
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.35);
+  transform: translateY(-2px);
+}
+
+.fnt:active,
+.pwp a:active {
+  transform: translateY(0);
+  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.25);
+}
+
 
 .hj:checked ~ .flying_cmnt {
   display: grid;

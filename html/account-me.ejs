@@ -58,6 +58,7 @@
       border-right:1px solid var(--border);
       display:flex;
       flex-direction:column;
+      justify-content:space-between;
       box-shadow:var(--shadow);
     }
 
@@ -77,25 +78,6 @@
       -webkit-text-fill-color:transparent;
       margin:0;
     }
-    .uid{
-      font-size:12px;
-      color:var(--muted);
-      background:rgba(255,255,255,0.08);
-      padding:4px 10px;
-      border-radius:999px;
-      border:1px solid var(--border);
-      align-self:flex-start;
-    }
-
-    .privacy-link{
-      margin-top:8px;
-      font-size:12.5px;
-      color:var(--accent);
-      text-decoration:none;
-      align-self:flex-start;
-      transition:opacity .2s ease;
-    }
-    .privacy-link:hover{opacity:0.7}
 
     .search-bar{
       display:flex;
@@ -193,6 +175,31 @@
       white-space:nowrap;
       font-size:14px;
     }
+
+    .sidebar-footer{
+      border-top:1px solid var(--border);
+      padding:14px;
+      display:flex;
+      flex-direction:column;
+      gap:8px;
+      background:rgba(255,255,255,0.04);
+    }
+    .uid{
+      font-size:12px;
+      color:var(--muted);
+      background:rgba(255,255,255,0.08);
+      padding:4px 10px;
+      border-radius:999px;
+      border:1px solid var(--border);
+      align-self:flex-start;
+    }
+    .privacy-link{
+      font-size:12.5px;
+      color:var(--accent);
+      text-decoration:none;
+      transition:opacity .2s ease;
+    }
+    .privacy-link:hover{opacity:0.7}
 
     main{
       position:relative;
@@ -295,83 +302,71 @@
 </head>
 <body>
   <noscript>
-    JavaScript seems to be disabled (oh noes!) <br>
+    JavaScript seems to be disabled.<br>
     This page won’t show your subscriptions without it.<br>
-    Please enable JavaScript or use a browser that supports scripts.
+    You can still open channels directly by clicking their names below.
   </noscript>
 
   <div class="layout">
     <aside>
-      <header>
-        <h1>my poke</h1>
+      <div>
+        <header>
+          <h1>my poke</h1>
+        </header>
+
+        <div class="search-bar js-only">
+          <input id="search" type="text" placeholder="search ur channels">
+          <button id="clearSearch">clear</button>
+        </div>
+
+        <div class="sort js-only">
+          <button id="sortAZ" class="active">a → z</button>
+          <button id="sortZA">z → a</button>
+        </div>
+
+        <% 
+          const subKeys = (userSubs && Object.keys(userSubs)) || [];
+          const subs = subKeys.map(id => ({
+            id,
+            name: userSubs[id]?.channelName || "unknown channel",
+            avatar: userSubs[id]?.avatar
+          }));
+          subs.sort((a,b)=>a.name.localeCompare(b.name,'en',{sensitivity:'base'}));
+        %>
+
+        <div class="channel-list" id="channelList">
+          <% subs.forEach(c => { %>
+            <a class="channel" href="/channel?id=<%= c.id %>" data-id="<%= c.id %>" data-name="<%= c.name.toLowerCase() %>">
+              <img src="<%= c.avatar %>" alt="">
+              <div class="channel-name"><%= c.name %></div>
+            </a>
+          <% }) %>
+        </div>
+      </div>
+
+      <div class="sidebar-footer">
         <span class="uid">logged in as <%= userid %></span>
-        <a href="/privacy" class="privacy-link">privacy stuff</a>
-      </header>
-
-      <div class="search-bar">
-        <input id="search" type="text" placeholder="search ur channels">
-        <button id="clearSearch">clear</button>
-      </div>
-
-      <div class="sort">
-        <button id="sortAZ" class="active">a → z</button>
-        <button id="sortZA">z → a</button>
-      </div>
-
-      <% 
-        const subKeys = (userSubs && Object.keys(userSubs)) || [];
-        const subs = subKeys.map(id => ({
-          id,
-          name: userSubs[id]?.channelName || "unknown channel",
-          avatar: userSubs[id]?.avatar
-        }));
-        subs.sort((a,b)=>a.name.localeCompare(b.name,'en',{sensitivity:'base'}));
-      %>
-
-      <div class="channel-list" id="channelList">
-        <% subs.forEach(c => { %>
-          <div class="channel" data-id="<%= c.id %>" data-name="<%= c.name.toLowerCase() %>">
-            <img src="<%= c.avatar %>" alt="">
-            <div class="channel-name"><%= c.name %></div>
-          </div>
-        <% }) %>
+        <a href="/privacy" class="privacy-link">privacy policy</a>
       </div>
     </aside>
 
-    <main>
+    <main class="js-only">
       <div class="toolbar">
         <span id="channelTitle">nothing selected yet</span>
         <a href="/api/get-channel-subs?ID=<%= encodeURIComponent(userid) %>" class="btn">view json</a>
       </div>
       <div class="viewer" id="viewer">
-        <div class="placeholder">u can select a channel on the left to view it</div>
+        <div class="placeholder">select a channel on the left to view it</div>
       </div>
     </main>
   </div>
 
 <script type="text/javascript" id="poke-subs" data-name="My Poke Subscriptions JS">
 /*    
-@licstart  The following is the entire license notice for the 
-JavaScript code in this page.
-
+@licstart
 Copyright (C) 2024 Poke Project
-
-The JavaScript code in this page is free software: you can
-redistribute it and/or modify it under the terms of the GNU
-General Public License (GNU GPL) as published by the Free Software
-Foundation, either version 3 of the License, or (at your option)
-any later version. The code is distributed WITHOUT ANY WARRANTY;
-without even the implied warranty of MERCHANTABILITY or FITNESS
-FOR A PARTICULAR PURPOSE. See the GNU GPL for more details.
-
-As additional permission under GNU GPL version 3 section 7, you
-may distribute non-source (e.g., minimized or compacted) forms of
-that code without the copy of the GNU GPL normally required by
-section 4, provided you include this license notice and a URL
-through which recipients can access the Corresponding Source.   
-
-@licend  The above is the entire license notice
-for the JavaScript code in this page.
+GPLv3-or-later notice below
+@licend
 */
 document.addEventListener("DOMContentLoaded",()=>{
   const channels=[...document.querySelectorAll(".channel")];
@@ -383,6 +378,9 @@ document.addEventListener("DOMContentLoaded",()=>{
   const viewer=document.getElementById("viewer");
   const title=document.getElementById("channelTitle");
 
+  // hide no-js links behaviour
+  channels.forEach(ch=>ch.removeAttribute("href"));
+
   function renderIframe(id,name){
     viewer.innerHTML=`
       <div class="close-view" title="close">✖</div>
@@ -391,14 +389,15 @@ document.addEventListener("DOMContentLoaded",()=>{
 
     const closeBtn=viewer.querySelector(".close-view");
     closeBtn.addEventListener("click",()=>{
-      viewer.innerHTML='<div class="placeholder">u can select a channel on the left to view it</div>';
+      viewer.innerHTML='<div class="placeholder">select a channel on the left to view it</div>';
       channels.forEach(c=>c.classList.remove("active"));
       title.textContent="nothing selected yet";
     });
   }
 
   channels.forEach(ch=>{
-    ch.addEventListener("click",()=>{
+    ch.addEventListener("click",e=>{
+      e.preventDefault();
       channels.forEach(c=>c.classList.remove("active"));
       ch.classList.add("active");
       renderIframe(ch.dataset.id,ch.querySelector(".channel-name").textContent);
@@ -411,17 +410,8 @@ document.addEventListener("DOMContentLoaded",()=>{
       c.style.display=c.dataset.name.includes(term)?'flex':'none';
     });
   }
-  search.addEventListener("input",filter);
-  clear.addEventListener("click",()=>{search.value='';filter();search.focus();});
-
-  sortAZ.addEventListener("click",()=>{
-    sortAZ.classList.add("active");sortZA.classList.remove("active");
-    sortList(true);
-  });
-  sortZA.addEventListener("click",()=>{
-    sortZA.classList.add("active");sortAZ.classList.remove("active");
-    sortList(false);
-  });
+  search?.addEventListener("input",filter);
+  clear?.addEventListener("click",()=>{search.value='';filter();search.focus();});
 
   function sortList(asc){
     const items=[...channels];
@@ -431,6 +421,15 @@ document.addEventListener("DOMContentLoaded",()=>{
     });
     items.forEach(i=>list.appendChild(i));
   }
+
+  sortAZ?.addEventListener("click",()=>{
+    sortAZ.classList.add("active");sortZA.classList.remove("active");
+    sortList(true);
+  });
+  sortZA?.addEventListener("click",()=>{
+    sortZA.classList.add("active");sortAZ.classList.remove("active");
+    sortList(false);
+  });
 });
 </script>
 </body>

@@ -9,451 +9,192 @@
 
   <style>
     :root {
-      --bg1:#10081e; --bg2:#1a0b28; --bg3:#06131a; --bg4:#090f1b;
-      --surface:rgba(255,255,255,0.04);
-      --card:rgba(255,255,255,0.08);
-      --glass-border:rgba(255,255,255,0.15);
-      --ink:#fff;
-      --muted:#c9c9c9;
+      --bg1:#0e0820; --bg2:#150c29; --bg3:#08121c; --bg4:#0c101b;
+      --glass:rgba(255,255,255,0.06);
+      --glass-border:rgba(255,255,255,0.12);
       --accent:#66ccff;
-      --danger:#ff5b6e;
-      --ok:#6fff9b;
+      --muted:#c9c9c9;
+      --ink:#fff;
       --radius:18px;
-      --focus:#93c5fd;
-      --blur-strength:18px;
-      --shadow:0 4px 30px rgba(0,0,0,0.2);
+      --blur:24px;
+      --shadow:0 4px 30px rgba(0,0,0,0.3);
     }
-
     *{box-sizing:border-box}
-    html,body{height:100%;margin:0;padding:0}
+    html,body{margin:0;padding:0;height:100%}
     body{
-      font-family: system-ui,-apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, "Helvetica Neue", Arial;
-      color:var(--ink);
-      background:radial-gradient(circle at 10% 10%,var(--bg1),var(--bg2),var(--bg3),var(--bg4));
+      background:radial-gradient(circle at 20% 20%,var(--bg1),var(--bg2),var(--bg3),var(--bg4));
       background-size:400% 400%;
       animation:bg-pan 40s ease infinite;
-      display:flex;
-      justify-content:center;
-      align-items:flex-start;
-      min-height:100vh;
+      font-family:system-ui,-apple-system,"Segoe UI",Roboto,Ubuntu;
+      color:var(--ink);
       overflow-x:hidden;
     }
-    @keyframes bg-pan {
+    @keyframes bg-pan{
       0%{background-position:0 50%}
       50%{background-position:100% 50%}
       100%{background-position:0 50%}
     }
 
-    a { color:inherit; text-decoration:none }
+    a{color:inherit;text-decoration:none}
 
-    .wrap {
-      width:100%;
-      max-width:1100px;
-      margin-top:30px;
-      padding:24px;
-      border-radius:var(--radius);
+    .wrap{
+      max-width:1200px;
+      margin:40px auto;
+      padding:20px;
       background:rgba(255,255,255,0.05);
-      backdrop-filter:blur(40px) saturate(160%);
-      -webkit-backdrop-filter:blur(40px) saturate(160%);
       border:1px solid var(--glass-border);
+      backdrop-filter:blur(var(--blur)) saturate(180%);
+      -webkit-backdrop-filter:blur(var(--blur)) saturate(180%);
+      border-radius:var(--radius);
       box-shadow:var(--shadow);
-      transition:background .4s ease, border .4s ease;
     }
 
-    header {
-      display:flex; align-items:center; gap:14px; flex-wrap:wrap;
+    header{
+      display:flex;flex-wrap:wrap;align-items:center;gap:12px;margin-bottom:18px;
     }
-    h1 {
-      margin:0;
-      font-family:"poketube flex", system-ui;
-      font-weight:800;
-      letter-spacing:.3px;
+    h1{
+      font-family:"poketube flex",system-ui;
       font-size:1.8rem;
-      background:linear-gradient(90deg,#a5e1ff,#66ccff 70%);
+      font-weight:800;
+      background:linear-gradient(90deg,#9fe6ff,#66ccff);
       -webkit-background-clip:text;
       -webkit-text-fill-color:transparent;
+      margin:0;
     }
 
-    .uid {
-      display:inline-flex; align-items:center; gap:8px;
-      font-size:12px; color:var(--muted);
-      background:rgba(255,255,255,0.08);
-      backdrop-filter:blur(var(--blur-strength));
-      -webkit-backdrop-filter:blur(var(--blur-strength));
-      border-radius:999px;
-      padding:6px 10px;
-      border:1px solid var(--glass-border);
-    }
-    .uid .mask {
-      display:inline-block; filter:blur(8px);
-      transition:filter .25s ease;
-    }
-    .uid:hover .mask,
-    .uid:focus-within .mask {
-      filter:blur(0);
-    }
-    .uid button {
-      all:unset; cursor:pointer;
-      background:rgba(255,255,255,0.12);
-      padding:3px 8px;
-      border-radius:6px;
-      border:1px solid var(--glass-border);
-      font-size:11px;
-      color:var(--ink);
-      transition:background .2s ease;
-    }
-    .uid button:hover {
-      background:rgba(255,255,255,0.25);
-    }
-
-    .toplink {
-      float:right;
-    }
-
-    .btn {
-      display:inline-flex; align-items:center; gap:8px;
-      padding:10px 14px;
-      border-radius:12px;
-      background:rgba(255,255,255,0.1);
-      border:1px solid var(--glass-border);
-      backdrop-filter:blur(var(--blur-strength));
-      -webkit-backdrop-filter:blur(var(--blur-strength));
-      transition:all .25s ease;
-    }
-    .btn:hover {
-      background:rgba(255,255,255,0.18);
-      transform:translateY(-2px);
-    }
-
-    .bar {
-      margin-top:18px;
-      display:flex; flex-wrap:wrap; gap:12px; align-items:center;
-      background:rgba(255,255,255,0.05);
-      backdrop-filter:blur(var(--blur-strength));
-      border-radius:14px;
-      padding:10px 14px;
-      border:1px solid var(--glass-border);
-    }
-
-    .search {
-      display:flex; align-items:center; gap:10px;
-      background:rgba(255,255,255,0.08);
-      border:1px solid var(--glass-border);
-      border-radius:12px;
-      padding:8px 12px;
-      flex:1 1 220px;
-      backdrop-filter:blur(var(--blur-strength));
-    }
-    .search input {
-      all:unset; flex:1; font-size:14px; color:var(--ink);
-    }
-    .search button {
-      all:unset; cursor:pointer;
-      font-size:12px;
-      padding:4px 8px;
-      border-radius:8px;
-      background:rgba(255,255,255,0.15);
-      border:1px solid var(--glass-border);
-      transition:background .2s ease;
-    }
-    .search button:hover {
-      background:rgba(255,255,255,0.3);
-    }
-
-    .chip {
-      background:rgba(255,255,255,0.1);
-      backdrop-filter:blur(var(--blur-strength));
-      border:1px solid var(--glass-border);
-      padding:8px 14px;
-      border-radius:999px;
-      font-size:13px;
-    }
-
-    .group {
-      display:flex; align-items:center; gap:8px;
-      background:rgba(255,255,255,0.08);
-      border:1px solid var(--glass-border);
-      border-radius:12px;
-      padding:6px 10px;
-      backdrop-filter:blur(var(--blur-strength));
-    }
-    .toggle {
-      all:unset;
-      cursor:pointer;
-      font-size:13px;
-      padding:8px 12px;
-      border-radius:10px;
-      border:1px solid var(--glass-border);
-      background:rgba(255,255,255,0.1);
-      transition:background .2s ease;
-    }
-    .toggle[aria-pressed="true"] {
-      background:rgba(255,255,255,0.25);
-    }
-
-    .grid {
-      margin-top:20px;
-      display:grid;
-      grid-template-columns:repeat(auto-fit,minmax(230px,1fr));
-      gap:14px;
-    }
-
-    .card {
-      background:var(--card);
-      border:1px solid var(--glass-border);
-      backdrop-filter:blur(var(--blur-strength));
-      -webkit-backdrop-filter:blur(var(--blur-strength));
-      border-radius:var(--radius);
-      padding:18px;
+    .tabs{
       display:flex;
-      flex-direction:column;
-      align-items:center;
-      gap:12px;
-      box-shadow:var(--shadow);
-      transition:transform .25s ease, background .25s ease;
-    }
-    .card:hover {
-      transform:translateY(-3px) scale(1.02);
-      background:rgba(255,255,255,0.12);
-    }
-
-    .avatar {
-      width:84px; height:84px;
-      border-radius:50%;
-      object-fit:cover;
-      background:rgba(255,255,255,0.05);
+      overflow-x:auto;
+      gap:10px;
+      background:rgba(255,255,255,0.04);
+      border-radius:var(--radius);
+      padding:8px 10px;
       border:1px solid var(--glass-border);
-      box-shadow:0 0 10px rgba(255,255,255,0.05);
+      scrollbar-width:none;
     }
-    .name {
-      font-weight:700;
-      text-align:center;
+    .tabs::-webkit-scrollbar{display:none}
+    .tab{
+      flex:0 0 auto;
+      padding:10px 16px;
+      border-radius:12px;
       font-size:15px;
-      max-width:100%;
-      overflow:hidden;
-      text-overflow:ellipsis;
+      background:rgba(255,255,255,0.08);
+      border:1px solid transparent;
+      transition:all .25s ease;
+      cursor:pointer;
       white-space:nowrap;
     }
-
-    .row {
-      display:flex;
-      gap:8px;
-      flex-wrap:wrap;
-      justify-content:center;
+    .tab:hover{
+      background:rgba(255,255,255,0.15);
     }
-    .pill {
-      padding:8px 10px;
-      border-radius:10px;
-      font-size:13px;
+    .tab.active{
+      background:linear-gradient(120deg,rgba(102,204,255,0.25),rgba(102,204,255,0.05));
+      border:1px solid var(--accent);
+      box-shadow:0 0 10px rgba(102,204,255,0.3);
+    }
+
+    .content{
+      margin-top:18px;
+      border-radius:var(--radius);
       border:1px solid var(--glass-border);
-      background:rgba(255,255,255,0.08);
-      transition:background .2s ease;
-    }
-    .pill--view {
-      background:linear-gradient(135deg,rgba(102,204,255,0.15),rgba(102,204,255,0.05));
-    }
-    .pill--unsub {
-      background:linear-gradient(135deg,rgba(255,91,110,0.15),rgba(255,91,110,0.05));
-    }
-    .pill:hover {
-      background:rgba(255,255,255,0.25);
+      background:var(--glass);
+      backdrop-filter:blur(var(--blur));
+      -webkit-backdrop-filter:blur(var(--blur));
+      box-shadow:var(--shadow);
+      height:70vh;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      overflow:hidden;
+      position:relative;
     }
 
-    .empty {
-      margin:40px auto;
-      max-width:560px;
+    iframe{
+      width:100%;
+      height:100%;
+      border:none;
+      border-radius:inherit;
+    }
+
+    .placeholder{
+      color:var(--muted);
+      font-size:15px;
       text-align:center;
-      border:1px dashed var(--glass-border);
-      border-radius:16px;
-      background:rgba(255,255,255,0.06);
-      backdrop-filter:blur(var(--blur-strength));
       padding:20px;
     }
 
-    .muted { color:var(--muted); font-size:13px }
-
-    .letter {
-      margin:18px 0 8px;
-      font-family:"poketube flex", system-ui;
-      font-size:18px;
-      letter-spacing:.3px;
-      opacity:.9;
+    .uid{
+      display:inline-flex;align-items:center;gap:6px;
+      background:rgba(255,255,255,0.08);
+      border-radius:999px;
+      padding:4px 10px;
+      border:1px solid var(--glass-border);
+      font-size:12px;
+      color:var(--muted);
     }
-
-    .focus-ring:focus-visible { outline:2px solid var(--focus); outline-offset:2px }
   </style>
 </head>
 <body>
   <div class="wrap">
-    <div class="toplink">
-      <a class="btn" href="/api/get-channel-subs?ID=<%= encodeURIComponent(userid) %>">View JSON</a>
-    </div>
-
     <header>
       <h1>My Subscriptions</h1>
-      <span class="uid" title="Keep this private">
-        <span>User:</span>
-        <span class="mask" aria-hidden="true"><%= userid %></span>
-        <button type="button" id="revealUID" class="focus-ring" aria-pressed="false" aria-controls="uidText">Reveal</button>
-        <span id="uidText" class="sr-only"><%= userid %></span>
-      </span>
+      <span class="uid">User: <%= userid %></span>
     </header>
 
     <% 
       const subKeys = (userSubs && Object.keys(userSubs)) || [];
       const subCount = subKeys.length;
-      const groups = {};
-      subKeys.forEach(function(channelID){
-        const c = userSubs[channelID] || {};
-        const nm = (c.channelName || '').trim();
-        const first = (nm[0] || '#').toUpperCase();
-        const key = /^[A-Z]$/.test(first) ? first : '#';
-        if(!groups[key]) groups[key] = [];
-        groups[key].push({ id: channelID, c: c });
-      });
-      const letters = Object.keys(groups).sort();
-      letters.forEach(function(L){ 
-        groups[L].sort(function(a,b){
-          const an = (a.c.channelName||'').toLowerCase();
-          const bn = (b.c.channelName||'').toLowerCase();
-          return an.localeCompare(bn,'en',{sensitivity:'base'});
-        });
-      });
+      const channels = subKeys.map(id => ({
+        id,
+        name: userSubs[id]?.channelName || "Unknown",
+        avatar: userSubs[id]?.avatar
+      }));
+      channels.sort((a,b)=>a.name.localeCompare(b.name,'en',{sensitivity:'base'}));
     %>
 
-    <div class="bar">
-      <div class="search">
-        <svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79L20 21.49 21.49 20zM9.5 14A4.5 4.5 0 1 1 14 9.5 4.505 4.505 0 0 1 9.5 14"/></svg>
-        <input id="search" class="focus-ring" type="text" placeholder="Search channels">
-        <button id="clearSearch">Clear</button>
-      </div>
-
-      <span id="count" class="chip"><%= subCount %> <%= subCount === 1 ? 'subscription' : 'subscriptions' %></span>
-      <span class="spacer"></span>
-
-      <div class="group">
-        <button id="sortAZ" class="toggle focus-ring" aria-pressed="true">A→Z</button>
-        <button id="sortZA" class="toggle focus-ring" aria-pressed="false">Z→A</button>
-      </div>
-    </div>
-
-    <div id="nojs-sections">
-      <% letters.forEach(function(L){ %>
-        <h2 id="sec-<%= L %>" class="letter"><%= L %></h2>
-        <div class="grid">
-          <% groups[L].forEach(function(entry){ const c = entry.c; const channelID = entry.id; %>
-            <div class="card" data-name="<%= (c.channelName||'').toLowerCase() %>">
-              <img class="avatar" loading="lazy" decoding="async" src="<%= c.avatar %>" alt="Avatar of <%= c.channelName %>">
-              <div class="name" title="<%= c.channelName %>"><%= c.channelName %></div>
-              <div class="row">
-                <a class="pill pill--unsub focus-ring" href="/api/remove-channel-sub?ID=<%= encodeURIComponent(userid) %>&channelID=<%= channelID %>" data-unsub data-cid="<%= channelID %>">Unsub</a>
-                <a class="pill pill--view focus-ring" href="/channel?id=<%= channelID %>">View</a>
-              </div>
-            </div>
-          <% }) %>
+    <div class="tabs" id="tabs">
+      <% channels.forEach(c => { %>
+        <div class="tab" data-channel="<%= c.id %>">
+          <img src="<%= c.avatar %>" alt="" width="20" height="20" style="border-radius:50%;vertical-align:middle;margin-right:6px">
+          <%= c.name %>
         </div>
       <% }) %>
     </div>
 
-    <div id="app" style="display:none">
-      <div id="empty" class="empty" hidden>
-        <div class="muted">No subscriptions found.</div>
+    <div class="content" id="content">
+      <div class="placeholder">
+        Select a channel tab above to view its content.
       </div>
-      <div id="grid" class="grid"></div>
-      <div id="list" class="list"></div>
     </div>
-
-    <noscript>
-      <details style="margin-top:12px">
-        <summary class="muted">Reveal user ID (no JavaScript)</summary>
-        <code style="background:rgba(255,255,255,0.08); padding:6px 8px; border-radius:6px; display:inline-block; margin-top:6px"><%= userid %></code>
-      </details>
-      <p class="muted" style="margin-top:12px">
-        Tip: Use your browser’s Find (Ctrl/Cmd + F) to locate a channel.
-      </p>
-    </noscript>
   </div>
 
 <script>
-(function(){
-  const $  = (s, root=document) => root.querySelector(s);
-  const $$ = (s, root=document) => Array.from(root.querySelectorAll(s));
+document.addEventListener("DOMContentLoaded",()=>{
+  const tabs=document.querySelectorAll(".tab");
+  const content=document.getElementById("content");
 
-  const nojsSections = $('#nojs-sections');
-  const app = $('#app');
-  const grid = $('#grid');
-  const searchInput = $('#search');
-  const clearBtn = $('#clearSearch');
-  const countBadge = $('#count');
-  const emptyState = $('#empty');
-  const revealBtn = $('#revealUID');
-  const uidMask = $('.uid .mask');
-
-  const originalCards = $$('.card', nojsSections).map(card => {
-    const name = (card.getAttribute('data-name') || '').toLowerCase().trim();
-    return { name, el: card };
-  });
-
-  if (originalCards.length === 0) return;
-
-  const managedCards = originalCards.map(({name, el})=>{
-    const clone = el.cloneNode(true);
-    $$('.pill', clone).forEach(a => a.classList.add('focus-ring'));
-    return { name, el: clone };
-  });
-
-  nojsSections.style.display = 'none';
-  app.style.display = '';
-
-  searchInput.addEventListener('input', onFilter);
-  clearBtn.addEventListener('click', () => { searchInput.value=''; onFilter(); searchInput.focus(); });
-
-  revealBtn.addEventListener('click', ()=>{
-    const pressed = revealBtn.getAttribute('aria-pressed') === 'true';
-    revealBtn.setAttribute('aria-pressed', String(!pressed));
-    uidMask.style.filter = pressed ? 'blur(8px)' : 'blur(0)';
-    revealBtn.textContent = pressed ? 'Reveal' : 'Hide';
-  });
-
-  app.addEventListener('click', (e)=>{
-    const a = e.target.closest('a[data-unsub]');
-    if (!a) return;
-    const card = e.target.closest('.card');
-    const name = card ? card.querySelector('.name')?.textContent?.trim() : 'this channel';
-    if (!confirm('Unsubscribe from "' + name + '"?')) e.preventDefault();
-  });
-
-  if (!('loading' in HTMLImageElement.prototype)) {
-    managedCards.forEach(({el})=>{
-      const img = el.querySelector('img');
-      if (img) { const i = new Image(); i.src = img.src; }
+  tabs.forEach(tab=>{
+    tab.addEventListener("click",()=>{
+      tabs.forEach(t=>t.classList.remove("active"));
+      tab.classList.add("active");
+      const id=tab.dataset.channel;
+      content.innerHTML=
+        `<iframe src="/channel?id=${encodeURIComponent(id)}" allowfullscreen loading="lazy"></iframe>`;
     });
-  }
+  });
 
-  let currentTerm = '';
-  function onFilter(){
-    currentTerm = (searchInput.value || '').toLowerCase().trim();
-    rerender();
-  }
-  function sortAZ(arr){ return arr.slice().sort((a,b)=> a.name.localeCompare(b.name,'en',{sensitivity:'base'})); }
-  function filterCards(arr){ return !currentTerm ? arr : arr.filter(c => c.name.includes(currentTerm)); }
-  function rerender(){
-    const filtered = filterCards(managedCards);
-    const sorted = sortAZ(filtered);
-    updateCount(sorted.length);
-    if (sorted.length === 0){ emptyState.hidden = false; grid.innerHTML = ''; return; }
-    emptyState.hidden = true;
-    renderGrid(sorted);
-  }
-  function renderGrid(items){
-    grid.innerHTML = '';
-    const frag = document.createDocumentFragment();
-    items.forEach(({el}) => frag.appendChild(el.cloneNode(true)));
-    grid.appendChild(frag);
-  }
-  function updateCount(n){ countBadge.textContent = n + (n === 1 ? ' subscription' : ' subscriptions'); }
-  rerender();
-})();
+  // Keyboard navigation
+  document.addEventListener("keydown",(e)=>{
+    const active=document.querySelector(".tab.active");
+    const index=[...tabs].indexOf(active);
+    if(e.key==="ArrowRight"&&index<tabs.length-1){
+      tabs[index+1].click();
+    }else if(e.key==="ArrowLeft"&&index>0){
+      tabs[index-1].click();
+    }else if(e.key==="Home"){tabs[0].click();}
+    else if(e.key==="End"){tabs[tabs.length-1].click();}
+  });
+});
 </script>
 </body>
 </html>

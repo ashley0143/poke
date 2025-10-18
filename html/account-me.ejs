@@ -2,8 +2,9 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>Poke | Subscriptions</title>
+  <title>My Poke | Subscriptions</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="librejs-license" content="GPL-3.0-or-later">
   <link href="/css/yt-ukraine.svg?v=6" rel="icon">
   <link href="/css/app.main.css?v=44600" rel="stylesheet">
 
@@ -64,8 +65,8 @@
       padding:16px;
       border-bottom:1px solid var(--border);
       display:flex;
-      align-items:center;
-      justify-content:space-between;
+      flex-direction:column;
+      gap:4px;
     }
     h1{
       font-family:"poketube flex",system-ui;
@@ -76,6 +77,14 @@
       -webkit-text-fill-color:transparent;
       margin:0;
     }
+    h2{
+      margin:0;
+      font-size:0.9rem;
+      font-weight:500;
+      color:var(--muted);
+      letter-spacing:0.3px;
+    }
+
     .uid{
       font-size:12px;
       color:var(--muted);
@@ -83,7 +92,18 @@
       padding:4px 10px;
       border-radius:999px;
       border:1px solid var(--border);
+      align-self:flex-start;
     }
+
+    .privacy-link{
+      margin-top:8px;
+      font-size:12.5px;
+      color:var(--accent);
+      text-decoration:none;
+      align-self:flex-start;
+      transition:opacity .2s ease;
+    }
+    .privacy-link:hover{opacity:0.7}
 
     .search-bar{
       display:flex;
@@ -271,31 +291,51 @@
       height:16px;
       fill:var(--ink);
     }
+
+    noscript{
+      display:block;
+      background:#1a101e;
+      color:#fff;
+      text-align:center;
+      padding:16px;
+      border-top:2px solid var(--accent);
+      border-bottom:2px solid var(--accent);
+      font-size:14px;
+      line-height:1.6;
+    }
   </style>
 </head>
 <body>
+  <noscript>
+    JavaScript seems to be disabled (oh noes!) <br>
+    This page won’t show your subscriptions without it :c<br>
+    Please enable JavaScript or use a browser that supports scripts!!!!!!!!!!!!!!!!!!!!!!1
+  </noscript>
+
   <div class="layout">
     <aside>
       <header>
-        <h1>Subscriptions</h1>
-        <span class="uid"><%= userid %></span>
+        <h1>my poke</h1>
+        <h2>your subs and stuff</h2>
+        <span class="uid">logged in as <%= userid %></span>
+        <a href="/privacy" class="privacy-link">privacy stuff</a>
       </header>
 
       <div class="search-bar">
-        <input id="search" type="text" placeholder="Search channels">
-        <button id="clearSearch">Clear</button>
+        <input id="search" type="text" placeholder="search ur channels">
+        <button id="clearSearch">clear</button>
       </div>
 
       <div class="sort">
-        <button id="sortAZ" class="active">A→Z</button>
-        <button id="sortZA">Z→A</button>
+        <button id="sortAZ" class="active">a → z</button>
+        <button id="sortZA">z → a</button>
       </div>
 
       <% 
         const subKeys = (userSubs && Object.keys(userSubs)) || [];
         const subs = subKeys.map(id => ({
           id,
-          name: userSubs[id]?.channelName || "Unknown",
+          name: userSubs[id]?.channelName || "unknown channel",
           avatar: userSubs[id]?.avatar
         }));
         subs.sort((a,b)=>a.name.localeCompare(b.name,'en',{sensitivity:'base'}));
@@ -313,16 +353,39 @@
 
     <main>
       <div class="toolbar">
-        <span id="channelTitle">Select a channel</span>
-        <a href="/api/get-channel-subs?ID=<%= encodeURIComponent(userid) %>" class="btn">View JSON</a>
+        <span id="channelTitle">nothing selected yet</span>
+        <a href="/api/get-channel-subs?ID=<%= encodeURIComponent(userid) %>" class="btn">view json</a>
       </div>
       <div class="viewer" id="viewer">
-        <div class="placeholder">Choose a channel from the sidebar to view its feed.</div>
+        <div class="placeholder">u can select a channel on the left to view it :D</div>
       </div>
     </main>
   </div>
 
-<script>
+<script type="text/javascript" id="poke-subs" data-name="My Poke Subscriptions JS">
+/*    
+@licstart  The following is the entire license notice for the 
+JavaScript code in this page.
+
+Copyright (C) 2024 Poke Project
+
+The JavaScript code in this page is free software: you can
+redistribute it and/or modify it under the terms of the GNU
+General Public License (GNU GPL) as published by the Free Software
+Foundation, either version 3 of the License, or (at your option)
+any later version. The code is distributed WITHOUT ANY WARRANTY;
+without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE. See the GNU GPL for more details.
+
+As additional permission under GNU GPL version 3 section 7, you
+may distribute non-source (e.g., minimized or compacted) forms of
+that code without the copy of the GNU GPL normally required by
+section 4, provided you include this license notice and a URL
+through which recipients can access the Corresponding Source.   
+
+@licend  The above is the entire license notice
+for the JavaScript code in this page.
+*/
 document.addEventListener("DOMContentLoaded",()=>{
   const channels=[...document.querySelectorAll(".channel")];
   const search=document.getElementById("search");
@@ -335,17 +398,25 @@ document.addEventListener("DOMContentLoaded",()=>{
 
   function renderIframe(id,name){
     viewer.innerHTML=`
-      <div class="close-view" title="Close">
+      <div class="close-view" title="close">
         <svg viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12"/></svg>
       </div>
-      <iframe src="/channel?id=${encodeURIComponent(id)}&embedchannelsubsfeed=true" loading="lazy" allowfullscreen></iframe>`;
+      <iframe sandbox="allow-scripts allow-same-origin allow-popups" src="/channel?id=${encodeURIComponent(id)}&embedchannelsubsfeed=true" loading="lazy" allowfullscreen></iframe>`;
     title.textContent=name;
+
+    const iframe=viewer.querySelector("iframe");
+    iframe.addEventListener("load",()=>{
+      try{
+        const links=iframe.contentDocument.querySelectorAll("a[href]");
+        links.forEach(l=>l.setAttribute("target","_blank"));
+      }catch(e){}
+    });
 
     const closeBtn=viewer.querySelector(".close-view");
     closeBtn.addEventListener("click",()=>{
-      viewer.innerHTML='<div class="placeholder">Choose a channel from the sidebar to view its feed.</div>';
+      viewer.innerHTML='<div class="placeholder">u can select a channel on the left to view it :D</div>';
       channels.forEach(c=>c.classList.remove("active"));
-      title.textContent="Select a channel";
+      title.textContent="nothing selected yet qwq";
     });
   }
 

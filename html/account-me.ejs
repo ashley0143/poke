@@ -5,207 +5,292 @@
   <title>Poke | Subscriptions</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <link href="/css/yt-ukraine.svg?v=6" rel="icon">
-   <link href="/css/app.main.css?v=44600" rel="stylesheet">
+  <link href="/css/app.main.css?v=44600" rel="stylesheet">
 
   <style>
-  
-    :root{
-      --bg1:#231638; --bg2:#2b160e; --bg3:#09250e; --bg4:#0f132b;
-      --surface:#101014;             /* surfaces behind cards */
-      --card:#15151a;
-      --ink:#ffffff;
-      --muted:#b7b7b7;
-      --line:#ffffff14;
+    :root {
+      --bg1:#10081e; --bg2:#1a0b28; --bg3:#06131a; --bg4:#090f1b;
+      --surface:rgba(255,255,255,0.04);
+      --card:rgba(255,255,255,0.08);
+      --glass-border:rgba(255,255,255,0.15);
+      --ink:#fff;
+      --muted:#c9c9c9;
       --accent:#66ccff;
-      --ok:#6fff9b; --danger:#ff5b6e;
-      --chip:#111;  --chipText:#eee;
-      --radius:14px;
+      --danger:#ff5b6e;
+      --ok:#6fff9b;
+      --radius:18px;
       --focus:#93c5fd;
+      --blur-strength:18px;
+      --shadow:0 4px 30px rgba(0,0,0,0.2);
     }
- 
+
     *{box-sizing:border-box}
-    html,body{height:100%}
+    html,body{height:100%;margin:0;padding:0}
     body{
-      margin:0;
+      font-family: system-ui,-apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, "Helvetica Neue", Arial;
       color:var(--ink);
-      font-family: system-ui,-apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, "Helvetica Neue", Arial, "Apple Color Emoji","Segoe UI Emoji";
-      background-image: radial-gradient(circle,var(--bg1),var(--bg2),var(--bg3),var(--bg4));
-      background-size: 400% 400%;
-      animation: bg-pan 64s ease infinite;
+      background:radial-gradient(circle at 10% 10%,var(--bg1),var(--bg2),var(--bg3),var(--bg4));
+      background-size:400% 400%;
+      animation:bg-pan 40s ease infinite;
+      display:flex;
+      justify-content:center;
+      align-items:flex-start;
+      min-height:100vh;
+      overflow-x:hidden;
     }
-    @media (prefers-reduced-motion: reduce){
-      body{animation: none}
+    @keyframes bg-pan {
+      0%{background-position:0 50%}
+      50%{background-position:100% 50%}
+      100%{background-position:0 50%}
     }
-    @keyframes bg-pan{0%{background-position:0 50%}50%{background-position:100% 50%}100%{background-position:0 50%}}
 
-    a{color:inherit;text-decoration:none}
+    a { color:inherit; text-decoration:none }
 
-    .wrap{
+    .wrap {
+      width:100%;
       max-width:1100px;
-      margin:0 auto;
-      padding:20px;
+      margin-top:30px;
+      padding:24px;
+      border-radius:var(--radius);
+      background:rgba(255,255,255,0.05);
+      backdrop-filter:blur(40px) saturate(160%);
+      -webkit-backdrop-filter:blur(40px) saturate(160%);
+      border:1px solid var(--glass-border);
+      box-shadow:var(--shadow);
+      transition:background .4s ease, border .4s ease;
     }
- 
-    header{
-      display:flex; align-items:center; gap:12px; flex-wrap:wrap;
+
+    header {
+      display:flex; align-items:center; gap:14px; flex-wrap:wrap;
     }
-    h1{
+    h1 {
       margin:0;
       font-family:"poketube flex", system-ui;
-      font-weight:800; letter-spacing:.3px;
+      font-weight:800;
+      letter-spacing:.3px;
+      font-size:1.8rem;
+      background:linear-gradient(90deg,#a5e1ff,#66ccff 70%);
+      -webkit-background-clip:text;
+      -webkit-text-fill-color:transparent;
     }
 
-    /* UID: blurred-by-default, reveal on hover/focus.
-       Note: privacy-by-obscurity only; ID is still in markup. */
-    .uid{
-      --pad:6px;
+    .uid {
       display:inline-flex; align-items:center; gap:8px;
       font-size:12px; color:var(--muted);
-      background: rgba(0,0,0,.25);
-      padding: var(--pad) 10px; border-radius:999px;
-      border:1px solid var(--line);
+      background:rgba(255,255,255,0.08);
+      backdrop-filter:blur(var(--blur-strength));
+      -webkit-backdrop-filter:blur(var(--blur-strength));
+      border-radius:999px;
+      padding:6px 10px;
+      border:1px solid var(--glass-border);
     }
-    .uid .mask{
-      display:inline-block; filter: blur(7px);
-      transition: filter .16s ease;
+    .uid .mask {
+      display:inline-block; filter:blur(8px);
+      transition:filter .25s ease;
     }
     .uid:hover .mask,
-    .uid:focus-within .mask{
-      filter: blur(0);
+    .uid:focus-within .mask {
+      filter:blur(0);
     }
-    .uid button{
+    .uid button {
+      all:unset; cursor:pointer;
+      background:rgba(255,255,255,0.12);
+      padding:3px 8px;
+      border-radius:6px;
+      border:1px solid var(--glass-border);
+      font-size:11px;
+      color:var(--ink);
+      transition:background .2s ease;
+    }
+    .uid button:hover {
+      background:rgba(255,255,255,0.25);
+    }
+
+    .toplink {
+      float:right;
+    }
+
+    .btn {
+      display:inline-flex; align-items:center; gap:8px;
+      padding:10px 14px;
+      border-radius:12px;
+      background:rgba(255,255,255,0.1);
+      border:1px solid var(--glass-border);
+      backdrop-filter:blur(var(--blur-strength));
+      -webkit-backdrop-filter:blur(var(--blur-strength));
+      transition:all .25s ease;
+    }
+    .btn:hover {
+      background:rgba(255,255,255,0.18);
+      transform:translateY(-2px);
+    }
+
+    .bar {
+      margin-top:18px;
+      display:flex; flex-wrap:wrap; gap:12px; align-items:center;
+      background:rgba(255,255,255,0.05);
+      backdrop-filter:blur(var(--blur-strength));
+      border-radius:14px;
+      padding:10px 14px;
+      border:1px solid var(--glass-border);
+    }
+
+    .search {
+      display:flex; align-items:center; gap:10px;
+      background:rgba(255,255,255,0.08);
+      border:1px solid var(--glass-border);
+      border-radius:12px;
+      padding:8px 12px;
+      flex:1 1 220px;
+      backdrop-filter:blur(var(--blur-strength));
+    }
+    .search input {
+      all:unset; flex:1; font-size:14px; color:var(--ink);
+    }
+    .search button {
+      all:unset; cursor:pointer;
+      font-size:12px;
+      padding:4px 8px;
+      border-radius:8px;
+      background:rgba(255,255,255,0.15);
+      border:1px solid var(--glass-border);
+      transition:background .2s ease;
+    }
+    .search button:hover {
+      background:rgba(255,255,255,0.3);
+    }
+
+    .chip {
+      background:rgba(255,255,255,0.1);
+      backdrop-filter:blur(var(--blur-strength));
+      border:1px solid var(--glass-border);
+      padding:8px 14px;
+      border-radius:999px;
+      font-size:13px;
+    }
+
+    .group {
+      display:flex; align-items:center; gap:8px;
+      background:rgba(255,255,255,0.08);
+      border:1px solid var(--glass-border);
+      border-radius:12px;
+      padding:6px 10px;
+      backdrop-filter:blur(var(--blur-strength));
+    }
+    .toggle {
       all:unset;
       cursor:pointer;
-      padding:2px 6px; border-radius:6px;
-      background:#00000040; color:#fff; font-size:11px;
-      border:1px solid var(--line);
+      font-size:13px;
+      padding:8px 12px;
+      border-radius:10px;
+      border:1px solid var(--glass-border);
+      background:rgba(255,255,255,0.1);
+      transition:background .2s ease;
     }
-    .uid button:focus-visible{outline:2px solid var(--focus); outline-offset:2px}
+    .toggle[aria-pressed="true"] {
+      background:rgba(255,255,255,0.25);
+    }
 
-    .toplink{float:right; margin-top:-6px}
-    @media (max-width:520px){.toplink{float:none; margin:0}.wrap{padding:16px}}
- 
-    .bar{
-      margin-top:14px;
-      display:flex; flex-wrap:wrap; gap:10px; align-items:center;
+    .grid {
+      margin-top:20px;
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(230px,1fr));
+      gap:14px;
     }
-    .chip{
-      background:var(--chip); color:var(--chipText);
-      padding:8px 12px; border-radius:999px; font-size:12px;
-      border:1px solid var(--line);
-    }
-    .spacer{flex:1 1 auto}
 
-    .btn{
-      display:inline-flex; align-items:center; gap:8px;
-      background:var(--card); color:#fff;
-      padding:10px 12px; border-radius:10px;
-      border:1px solid var(--line);
-      transition: transform .2s ease, border-color .2s ease;
-    }
-    .btn:hover{ transform: translateY(-1px); border-color:#ffffff2e }
-    .btn--danger{ background:linear-gradient(135deg,#2a1216,#1b0f12); border-color:#3b151c }
-    .btn--accent{ background:linear-gradient(135deg,#0f1520,#122339) }
-
-    .search{
-      display:flex; align-items:center; gap:10px;
+    .card {
       background:var(--card);
-      border:1px solid var(--line);
-      border-radius:12px; padding:8px 12px; min-width:220px;
-    }
-    .search input{all:unset; flex:1; font-size:14px}
-    .search button{
-      all:unset; cursor:pointer; font-size:12px; padding:4px 6px; border-radius:6px;
-      background:#00000040; border:1px solid var(--line)
-    }
-    .search button:focus-visible{outline:2px solid var(--focus); outline-offset:2px}
-
-    .group{
-      display:flex; align-items:center; gap:8px;
-      background:var(--surface); border:1px solid var(--line);
-      padding:6px; border-radius:12px;
-    }
-    .toggle{
-      all:unset; cursor:pointer; padding:8px 10px; border-radius:8px; font-size:13px;
-      background:#00000030; border:1px solid var(--line)
-    }
-    .toggle[aria-pressed="true"]{background:#00000055}
- 
-    .grid{
-      margin-top:18px;
-      display:grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap:12px;
-    }
-    .list{ display:none } /* toggled via JS */
-
-    .card{
-      background:var(--card);
-      border:1px solid var(--line);
+      border:1px solid var(--glass-border);
+      backdrop-filter:blur(var(--blur-strength));
+      -webkit-backdrop-filter:blur(var(--blur-strength));
       border-radius:var(--radius);
-      padding:14px;
-      display:flex; flex-direction:column; align-items:center; gap:10px;
-      transition: transform .18s ease, border-color .18s ease;
+      padding:18px;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      gap:12px;
+      box-shadow:var(--shadow);
+      transition:transform .25s ease, background .25s ease;
     }
-    .card:hover{ transform: translateY(-2px); border-color:#ffffff26 }
-
-    .avatar{
-      width:88px; height:88px; border-radius:50%; object-fit:cover; background:#00000026;
-    }
-    .name{
-      font-weight:700; text-align:center; max-width:100%;
-      overflow:hidden; text-overflow:ellipsis; white-space:nowrap;
-    }
-    .row{display:flex; gap:8px; flex-wrap:wrap; justify-content:center}
-    .pill{
-      padding:8px 10px; border-radius:10px; font-size:13px;
-      background:#111; border:1px solid var(--line);
-    }
-    .pill--view{ background:linear-gradient(135deg,#111,#0e1a26) }
-    .pill--unsub{ background:linear-gradient(135deg,#1b1113,#251016); border-color:#3b151c }
-
-    .muted{ color:var(--muted); font-size:13px }
-
-    .empty{
-      margin:40px auto; max-width:560px; text-align:center;
-      background: rgba(0,0,0,.25);
-      border:1px dashed #ffffff2e; border-radius:16px; padding:20px;
-    }
- 
-    .az-nav{
-      margin-top:12px; display:flex; flex-wrap:wrap; gap:6px;
-    }
-    .az-nav a{
-      display:inline-block; min-width:28px; text-align:center;
-      padding:6px 8px; border-radius:8px; border:1px solid var(--line);
-      background:#00000030; font-size:12px;
+    .card:hover {
+      transform:translateY(-3px) scale(1.02);
+      background:rgba(255,255,255,0.12);
     }
 
-    .letter{
+    .avatar {
+      width:84px; height:84px;
+      border-radius:50%;
+      object-fit:cover;
+      background:rgba(255,255,255,0.05);
+      border:1px solid var(--glass-border);
+      box-shadow:0 0 10px rgba(255,255,255,0.05);
+    }
+    .name {
+      font-weight:700;
+      text-align:center;
+      font-size:15px;
+      max-width:100%;
+      overflow:hidden;
+      text-overflow:ellipsis;
+      white-space:nowrap;
+    }
+
+    .row {
+      display:flex;
+      gap:8px;
+      flex-wrap:wrap;
+      justify-content:center;
+    }
+    .pill {
+      padding:8px 10px;
+      border-radius:10px;
+      font-size:13px;
+      border:1px solid var(--glass-border);
+      background:rgba(255,255,255,0.08);
+      transition:background .2s ease;
+    }
+    .pill--view {
+      background:linear-gradient(135deg,rgba(102,204,255,0.15),rgba(102,204,255,0.05));
+    }
+    .pill--unsub {
+      background:linear-gradient(135deg,rgba(255,91,110,0.15),rgba(255,91,110,0.05));
+    }
+    .pill:hover {
+      background:rgba(255,255,255,0.25);
+    }
+
+    .empty {
+      margin:40px auto;
+      max-width:560px;
+      text-align:center;
+      border:1px dashed var(--glass-border);
+      border-radius:16px;
+      background:rgba(255,255,255,0.06);
+      backdrop-filter:blur(var(--blur-strength));
+      padding:20px;
+    }
+
+    .muted { color:var(--muted); font-size:13px }
+
+    .letter {
       margin:18px 0 8px;
       font-family:"poketube flex", system-ui;
-      font-size:18px; letter-spacing:.3px;
+      font-size:18px;
+      letter-spacing:.3px;
       opacity:.9;
     }
 
-    /* ------------------------------
-       ACCESSIBILITY
-       ------------------------------ */
-    .sr-only{
-      position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); border:0;
-    }
-    .focus-ring:focus-visible{ outline:2px solid var(--focus); outline-offset:2px }
+    .focus-ring:focus-visible { outline:2px solid var(--focus); outline-offset:2px }
   </style>
 </head>
 <body>
   <div class="wrap">
     <div class="toplink">
-      <a class="btn" href="/api/get-channel-subs?ID=<%= encodeURIComponent(userid) %>">view json</a>
+      <a class="btn" href="/api/get-channel-subs?ID=<%= encodeURIComponent(userid) %>">View JSON</a>
     </div>
 
     <header>
-      <h1>My subscriptions</h1>
-
-      <!-- Hover-to-reveal UID; click-to-reveal for keyboards/touch via JS; <details> fallback lives below for no-JS -->
+      <h1>My Subscriptions</h1>
       <span class="uid" title="Keep this private">
         <span>User:</span>
         <span class="mask" aria-hidden="true"><%= userid %></span>
@@ -214,7 +299,7 @@
       </span>
     </header>
 
-     <% 
+    <% 
       const subKeys = (userSubs && Object.keys(userSubs)) || [];
       const subCount = subKeys.length;
       const groups = {};
@@ -236,40 +321,33 @@
       });
     %>
 
-    <!-- Toolbar: live features enhance with JS -->
-    <div class="bar" role="region" aria-label="Toolbar">
-      <div class="search" role="search">
+    <div class="bar">
+      <div class="search">
         <svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79L20 21.49 21.49 20zM9.5 14A4.5 4.5 0 1 1 14 9.5 4.505 4.505 0 0 1 9.5 14"/></svg>
-        <input id="search" class="focus-ring" type="text" placeholder="Search channels" aria-label="Search channels (client-side)">
-        <button id="clearSearch" title="Clear search" aria-label="Clear search">Clear</button>
+        <input id="search" class="focus-ring" type="text" placeholder="Search channels">
+        <button id="clearSearch">Clear</button>
       </div>
 
-      <span id="count" class="chip" aria-live="polite"><%= subCount %> <%= subCount === 1 ? 'subscription' : 'subscriptions' %></span>
+      <span id="count" class="chip"><%= subCount %> <%= subCount === 1 ? 'subscription' : 'subscriptions' %></span>
       <span class="spacer"></span>
 
-      <div class="group" role="group" aria-label="Sort">
-        <button id="sortAZ"  class="toggle focus-ring" aria-pressed="true"  title="Sort A→Z">A→Z</button>
-        <button id="sortZA"  class="toggle focus-ring" aria-pressed="false" title="Sort Z→A">Z→A</button>
+      <div class="group">
+        <button id="sortAZ" class="toggle focus-ring" aria-pressed="true">A→Z</button>
+        <button id="sortZA" class="toggle focus-ring" aria-pressed="false">Z→A</button>
       </div>
- 
     </div>
- 
 
-    <!-- No-JS fallback: show all groups as sections, already server-sorted -->
     <div id="nojs-sections">
       <% letters.forEach(function(L){ %>
         <h2 id="sec-<%= L %>" class="letter"><%= L %></h2>
         <div class="grid">
           <% groups[L].forEach(function(entry){ const c = entry.c; const channelID = entry.id; %>
             <div class="card" data-name="<%= (c.channelName||'').toLowerCase() %>">
-              <img class="avatar" loading="lazy" decoding="async"
-                   src="<%= c.avatar %>"
-                   alt="Avatar of <%= c.channelName %>"
-                   >
+              <img class="avatar" loading="lazy" decoding="async" src="<%= c.avatar %>" alt="Avatar of <%= c.channelName %>">
               <div class="name" title="<%= c.channelName %>"><%= c.channelName %></div>
-              <div class="row" role="group" aria-label="Actions">
-                <a class="pill pill--unsub focus-ring" href="/api/remove-channel-sub?ID=<%= encodeURIComponent(userid) %>&channelID=<%= channelID %>" data-unsub data-cid="<%= channelID %>" aria-label="Unsubscribe from <%= c.channelName %>">unsub</a>
-                <a class="pill pill--view focus-ring" href="/channel?id=<%= channelID %>" aria-label="View channel <%= c.channelName %>">view</a>
+              <div class="row">
+                <a class="pill pill--unsub focus-ring" href="/api/remove-channel-sub?ID=<%= encodeURIComponent(userid) %>&channelID=<%= channelID %>" data-unsub data-cid="<%= channelID %>">Unsub</a>
+                <a class="pill pill--view focus-ring" href="/channel?id=<%= channelID %>">View</a>
               </div>
             </div>
           <% }) %>
@@ -277,144 +355,105 @@
       <% }) %>
     </div>
 
-    <!-- JS-enhanced container: we clone & control cards here for live search/sort/list toggle -->
     <div id="app" style="display:none">
-      <div id="empty" class="empty" role="status" aria-live="polite" hidden>
+      <div id="empty" class="empty" hidden>
         <div class="muted">No subscriptions found.</div>
       </div>
-
-      <div id="grid" class="grid" aria-label="Subscriptions (grid)"></div>
-      <div id="list" class="list" aria-label="Subscriptions (list)"></div>
+      <div id="grid" class="grid"></div>
+      <div id="list" class="list"></div>
     </div>
 
-    <!-- Touch/no-JS fallback to reveal UID explicitly -->
     <noscript>
       <details style="margin-top:12px">
         <summary class="muted">Reveal user ID (no JavaScript)</summary>
-        <code style="background:#00000033; padding:6px 8px; border-radius:6px; display:inline-block; margin-top:6px"><%= userid %></code>
+        <code style="background:rgba(255,255,255,0.08); padding:6px 8px; border-radius:6px; display:inline-block; margin-top:6px"><%= userid %></code>
       </details>
       <p class="muted" style="margin-top:12px">
-        Tip: Use the A–Z jump links above or your browser’s Find (Ctrl/Cmd + F) to locate a channel.
+        Tip: Use your browser’s Find (Ctrl/Cmd + F) to locate a channel.
       </p>
     </noscript>
   </div>
+
 <script>
- 
-  (function(){
-    const $  = (s, root=document) => root.querySelector(s);
-    const $$ = (s, root=document) => Array.from(root.querySelectorAll(s));
+(function(){
+  const $  = (s, root=document) => root.querySelector(s);
+  const $$ = (s, root=document) => Array.from(root.querySelectorAll(s));
 
-    const nojsSections = $('#nojs-sections');   // static, server-rendered fallback
-    const app          = $('#app');             // JS-enhanced container
-    const grid         = $('#grid');            // managed grid
+  const nojsSections = $('#nojs-sections');
+  const app = $('#app');
+  const grid = $('#grid');
+  const searchInput = $('#search');
+  const clearBtn = $('#clearSearch');
+  const countBadge = $('#count');
+  const emptyState = $('#empty');
+  const revealBtn = $('#revealUID');
+  const uidMask = $('.uid .mask');
 
-    const searchInput  = $('#search');
-    const clearBtn     = $('#clearSearch');
-    const countBadge   = $('#count');
-    const emptyState   = $('#empty');
+  const originalCards = $$('.card', nojsSections).map(card => {
+    const name = (card.getAttribute('data-name') || '').toLowerCase().trim();
+    return { name, el: card };
+  });
 
-    const revealBtn = $('#revealUID');
-    const uidMask   = $('.uid .mask');
+  if (originalCards.length === 0) return;
 
-    // Grab cards from server-rendered markup (keeps noscript intact if JS bails)
-    const sourceRoot   = nojsSections || document;
-    const originalCards = $$('.card', sourceRoot).map(card => {
-      const name = (card.getAttribute('data-name') || '').toLowerCase().trim();
-      return { name, el: card };
+  const managedCards = originalCards.map(({name, el})=>{
+    const clone = el.cloneNode(true);
+    $$('.pill', clone).forEach(a => a.classList.add('focus-ring'));
+    return { name, el: clone };
+  });
+
+  nojsSections.style.display = 'none';
+  app.style.display = '';
+
+  searchInput.addEventListener('input', onFilter);
+  clearBtn.addEventListener('click', () => { searchInput.value=''; onFilter(); searchInput.focus(); });
+
+  revealBtn.addEventListener('click', ()=>{
+    const pressed = revealBtn.getAttribute('aria-pressed') === 'true';
+    revealBtn.setAttribute('aria-pressed', String(!pressed));
+    uidMask.style.filter = pressed ? 'blur(8px)' : 'blur(0)';
+    revealBtn.textContent = pressed ? 'Reveal' : 'Hide';
+  });
+
+  app.addEventListener('click', (e)=>{
+    const a = e.target.closest('a[data-unsub]');
+    if (!a) return;
+    const card = e.target.closest('.card');
+    const name = card ? card.querySelector('.name')?.textContent?.trim() : 'this channel';
+    if (!confirm('Unsubscribe from "' + name + '"?')) e.preventDefault();
+  });
+
+  if (!('loading' in HTMLImageElement.prototype)) {
+    managedCards.forEach(({el})=>{
+      const img = el.querySelector('img');
+      if (img) { const i = new Image(); i.src = img.src; }
     });
+  }
 
-    if (originalCards.length === 0) {
-      // Nothing to enhance; keep the server sections visible
-      return;
-    }
-
-    // Build managed copies (don’t move originals)
-    const managedCards = originalCards.map(({name, el})=>{
-      const clone = el.cloneNode(true);
-      $$('.pill', clone).forEach(a => a.classList.add('focus-ring')); // ensure focus styling
-      return { name, el: clone };
-    });
-
-    // Hide static sections; show enhanced UI
-    if (nojsSections) nojsSections.style.display = 'none';
-    app.style.display = '';
-
-    // Events
-    searchInput.addEventListener('input', onFilter);
-    clearBtn.addEventListener('click', () => { searchInput.value=''; onFilter(); searchInput.focus(); });
-
-    // UID reveal for keyboards/touch (CSS hover still works)
-    revealBtn.addEventListener('click', ()=>{
-      const pressed = revealBtn.getAttribute('aria-pressed') === 'true';
-      revealBtn.setAttribute('aria-pressed', String(!pressed));
-      uidMask.style.filter = pressed ? 'blur(7px)' : 'blur(0)';
-      revealBtn.textContent = pressed ? 'Reveal' : 'Hide';
-    });
-
-    // Confirm before unsubscribing (event delegation)
-    app.addEventListener('click', (e)=>{
-      const a = e.target.closest('a[data-unsub]');
-      if (!a) return;
-      const card = e.target.closest('.card');
-      const name = card ? card.querySelector('.name')?.textContent?.trim() : 'this channel';
-      if (!confirm('Unsubscribe from "' + name + '"?')) e.preventDefault();
-    });
-
-    // Warm image cache if native lazy-loading not supported
-    if (!('loading' in HTMLImageElement.prototype)) {
-      managedCards.forEach(({el})=>{
-        const img = el.querySelector('img');
-        if (img) { const i = new Image(); i.src = img.src; }
-      });
-    }
-
-    // ---------------- Logic ----------------
-    let currentTerm = '';
-
-    function onFilter(){
-      currentTerm = (searchInput.value || '').toLowerCase().trim();
-      rerender();
-    }
-
-    function sortAZ(arr){
-      return arr.slice().sort((a,b)=> a.name.localeCompare(b.name,'en',{sensitivity:'base'}));
-    }
-
-    function filterCards(arr){
-      if (!currentTerm) return arr;
-      return arr.filter(c => c.name.includes(currentTerm));
-    }
-
-    function rerender(){
-      const filtered = filterCards(managedCards);
-      const sorted   = sortAZ(filtered);
-      updateCount(sorted.length);
-
-      if (sorted.length === 0){
-        emptyState.hidden = false;
-        grid.innerHTML = '';
-        return;
-      }
-      emptyState.hidden = true;
-      renderGrid(sorted);
-    }
-
-    function renderGrid(items){
-      grid.innerHTML = '';
-      const frag = document.createDocumentFragment();
-      items.forEach(({el}) => frag.appendChild(el.cloneNode(true)));
-      grid.appendChild(frag);
-    }
-
-    function updateCount(n){
-      countBadge.textContent = n + (n === 1 ? ' subscription' : ' subscriptions');
-    }
-
-    // Initial paint (sorted A→Z by default)
+  let currentTerm = '';
+  function onFilter(){
+    currentTerm = (searchInput.value || '').toLowerCase().trim();
     rerender();
-  })();
+  }
+  function sortAZ(arr){ return arr.slice().sort((a,b)=> a.name.localeCompare(b.name,'en',{sensitivity:'base'})); }
+  function filterCards(arr){ return !currentTerm ? arr : arr.filter(c => c.name.includes(currentTerm)); }
+  function rerender(){
+    const filtered = filterCards(managedCards);
+    const sorted = sortAZ(filtered);
+    updateCount(sorted.length);
+    if (sorted.length === 0){ emptyState.hidden = false; grid.innerHTML = ''; return; }
+    emptyState.hidden = true;
+    renderGrid(sorted);
+  }
+  function renderGrid(items){
+    grid.innerHTML = '';
+    const frag = document.createDocumentFragment();
+    items.forEach(({el}) => frag.appendChild(el.cloneNode(true)));
+    grid.appendChild(frag);
+  }
+  function updateCount(n){ countBadge.textContent = n + (n === 1 ? ' subscription' : ' subscriptions'); }
+  rerender();
+})();
 </script>
-
-
 </body>
 </html>

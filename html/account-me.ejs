@@ -38,13 +38,7 @@
       100%{background-position:0 50%}
     }
 
-    a {
-      color:inherit;
-      text-decoration:none !important;
-    }
-    a:hover, a:focus, a:visited, a:active {
-      text-decoration:none !important;
-    }
+    a{color:inherit;text-decoration:none !important;outline:none}
 
     .layout{
       display:grid;
@@ -220,7 +214,7 @@
       text-decoration:none !important;
       transition:opacity .2s ease;
     }
-    .privacy-link:hover{opacity:0.7;text-decoration:none !important;}
+    .privacy-link:hover{opacity:0.7}
 
     main{
       position:relative;
@@ -358,11 +352,11 @@
         <div class="channel-list" id="channelList">
           <% subs.forEach(c => { %>
             <div class="channel" data-id="<%= c.id %>" data-name="<%= c.name.toLowerCase() %>">
-              <a href="/channel?id=<%= c.id %>" class="channel-name-link" style="display:flex;align-items:center;gap:10px;flex:1;">
+              <a href="/channel?id=<%= c.id %>" target="_blank" class="channel-name-link" style="display:flex;align-items:center;gap:10px;flex:1;">
                 <img src="<%= c.avatar %>" alt="">
                 <div class="channel-name"><%= c.name %></div>
               </a>
-              <a class="pill--unsub" href="/api/remove-channel-sub?ID=<%= encodeURIComponent(userid) %>&channelID=<%= c.id %>" data-unsub data-cid="<%= c.id %>" aria-label="Unsubscribe from <%= c.name %>">unsub</a>
+              <a class="pill--unsub" href="/api/remove-channel-sub?ID=<%= encodeURIComponent(userid) %>&channelID=<%= c.id %>" aria-label="Unsubscribe from <%= c.name %>">unsub</a>
             </div>
           <% }) %>
         </div>
@@ -386,6 +380,12 @@
   </div>
 
 <script type="text/javascript" id="poke-subs" data-name="My Poke Subscriptions JS">
+/*    
+@licstart
+Copyright (C) 2024 Poke Project
+GPLv3-or-later notice below
+@licend
+*/
 document.addEventListener("DOMContentLoaded",()=>{
   const channels=[...document.querySelectorAll(".channel")];
   const search=document.getElementById("search");
@@ -393,15 +393,35 @@ document.addEventListener("DOMContentLoaded",()=>{
   const sortAZ=document.getElementById("sortAZ");
   const sortZA=document.getElementById("sortZA");
   const list=document.getElementById("channelList");
+  const viewer=document.getElementById("viewer");
+  const title=document.getElementById("channelTitle");
 
-  // make channel links go directly (not iframe)
+  // JS override only if JavaScript is active
   document.querySelectorAll(".channel-name-link").forEach(link=>{
     link.addEventListener("click",e=>{
-      // no preventDefault — allow normal navigation
+      e.preventDefault();
+      const parent=link.closest(".channel");
+      const id=parent.dataset.id;
+      const name=parent.querySelector(".channel-name").textContent;
+      channels.forEach(c=>c.classList.remove("active"));
+      parent.classList.add("active");
+      renderIframe(id,name);
     });
   });
 
-  // search + sorting
+  function renderIframe(id,name){
+    viewer.innerHTML=`
+      <div class="close-view" title="close">✖</div>
+      <iframe sandbox="allow-scripts allow-same-origin allow-popups" src="/channel?id=${encodeURIComponent(id)}&embedchannelsubsfeed=true" loading="lazy" allowfullscreen></iframe>`;
+    title.textContent=name;
+    const closeBtn=viewer.querySelector(".close-view");
+    closeBtn.addEventListener("click",()=>{
+      viewer.innerHTML='<div class="placeholder">select a channel on the left to view it</div>';
+      channels.forEach(c=>c.classList.remove("active"));
+      title.textContent="nothing selected yet";
+    });
+  }
+
   function filter(){
     const term=search.value.toLowerCase();
     channels.forEach(c=>{
@@ -413,21 +433,11 @@ document.addEventListener("DOMContentLoaded",()=>{
 
   function sortList(asc){
     const items=[...channels];
-    items.sort((a,b)=>{
-      return asc? a.dataset.name.localeCompare(b.dataset.name)
-                : b.dataset.name.localeCompare(a.dataset.name);
-    });
+    items.sort((a,b)=>asc?a.dataset.name.localeCompare(b.dataset.name):b.dataset.name.localeCompare(a.dataset.name));
     items.forEach(i=>list.appendChild(i));
   }
-
-  sortAZ?.addEventListener("click",()=>{
-    sortAZ.classList.add("active");sortZA.classList.remove("active");
-    sortList(true);
-  });
-  sortZA?.addEventListener("click",()=>{
-    sortZA.classList.add("active");sortAZ.classList.remove("active");
-    sortList(false);
-  });
+  sortAZ?.addEventListener("click",()=>{sortAZ.classList.add("active");sortZA.classList.remove("active");sortList(true);});
+  sortZA?.addEventListener("click",()=>{sortZA.classList.add("active");sortAZ.classList.remove("active");sortList(false);});
 });
 </script>
 </body>

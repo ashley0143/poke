@@ -10,14 +10,15 @@
   <style>
     :root {
       --bg1:#10081e; --bg2:#1a0b28; --bg3:#06131a; --bg4:#0f132b;
-      --glass:rgba(255,255,255,0.05);
+      --glass:rgba(255,255,255,0.06);
       --border:rgba(255,255,255,0.1);
       --accent:#66ccff;
       --muted:#c9c9c9;
       --ink:#fff;
       --blur:24px;
-      --radius:16px;
+      --radius:18px;
       --shadow:0 4px 30px rgba(0,0,0,0.3);
+      --hover-glow:0 0 8px rgba(102,204,255,0.35);
     }
 
     *{box-sizing:border-box}
@@ -25,7 +26,7 @@
     body{
       font-family:system-ui,-apple-system,"Segoe UI",Roboto,Ubuntu;
       color:var(--ink);
-      background:radial-gradient(circle at 15% 15%,var(--bg1),var(--bg2),var(--bg3),var(--bg4));
+      background:radial-gradient(circle at 20% 20%,var(--bg1),var(--bg2),var(--bg3),var(--bg4));
       background-size:400% 400%;
       animation:bg-pan 60s ease infinite;
       overflow:hidden;
@@ -40,13 +41,13 @@
 
     .layout{
       display:grid;
-      grid-template-columns:300px 1fr;
+      grid-template-columns:320px 1fr;
       height:100vh;
     }
     @media(max-width:780px){
       .layout{grid-template-columns:1fr}
-      aside{height:40vh;overflow-y:auto}
-      main{height:60vh}
+      aside{height:45vh}
+      main{height:55vh}
     }
 
     aside{
@@ -68,9 +69,9 @@
     }
     h1{
       font-family:"poketube flex",system-ui;
-      font-size:1.5rem;
+      font-size:1.6rem;
       font-weight:800;
-      background:linear-gradient(90deg,#a5e1ff,#66ccff 70%);
+      background:linear-gradient(90deg,#9fe6ff,#66ccff 70%);
       -webkit-background-clip:text;
       -webkit-text-fill-color:transparent;
       margin:0;
@@ -88,11 +89,16 @@
       display:flex;
       align-items:center;
       gap:8px;
-      background:rgba(255,255,255,0.06);
+      background:rgba(255,255,255,0.07);
       border:1px solid var(--border);
       border-radius:12px;
-      margin:12px;
+      margin:14px 12px;
       padding:6px 10px;
+      transition:border .2s ease;
+    }
+    .search-bar:focus-within{
+      border-color:var(--accent);
+      box-shadow:var(--hover-glow);
     }
     .search-bar input{
       all:unset;
@@ -109,7 +115,7 @@
       border:1px solid var(--border);
       transition:background .2s ease;
     }
-    .search-bar button:hover{background:rgba(255,255,255,0.2)}
+    .search-bar button:hover{background:rgba(255,255,255,0.25)}
 
     .sort{
       display:flex;
@@ -125,10 +131,13 @@
       border:1px solid var(--border);
       font-size:13px;
       cursor:pointer;
+      transition:background .2s ease, box-shadow .2s ease;
     }
+    .sort button:hover{background:rgba(255,255,255,0.15)}
     .sort button.active{
       background:rgba(255,255,255,0.25);
       border-color:var(--accent);
+      box-shadow:var(--hover-glow);
     }
 
     .channel-list{
@@ -144,23 +153,24 @@
       align-items:center;
       gap:10px;
       padding:8px 10px;
-      border-radius:10px;
+      border-radius:12px;
       background:rgba(255,255,255,0.05);
       border:1px solid transparent;
-      transition:all .2s ease;
+      transition:all .25s ease;
       cursor:pointer;
     }
     .channel:hover{
       background:rgba(255,255,255,0.15);
+      box-shadow:var(--hover-glow);
     }
     .channel.active{
       border-color:var(--accent);
-      background:linear-gradient(135deg,rgba(102,204,255,0.15),rgba(102,204,255,0.05));
-      box-shadow:0 0 8px rgba(102,204,255,0.25);
+      background:linear-gradient(135deg,rgba(102,204,255,0.18),rgba(102,204,255,0.08));
+      box-shadow:var(--hover-glow);
     }
     .channel img{
-      width:34px;
-      height:34px;
+      width:36px;
+      height:36px;
       border-radius:50%;
       object-fit:cover;
     }
@@ -173,13 +183,15 @@
     }
 
     main{
+      position:relative;
+      display:flex;
+      flex-direction:column;
       background:rgba(255,255,255,0.03);
       backdrop-filter:blur(var(--blur));
       -webkit-backdrop-filter:blur(var(--blur));
-      display:flex;
-      flex-direction:column;
       height:100%;
     }
+
     .toolbar{
       display:flex;
       align-items:center;
@@ -187,6 +199,7 @@
       padding:12px 16px;
       border-bottom:1px solid var(--border);
       background:rgba(255,255,255,0.04);
+      z-index:5;
     }
     .toolbar .btn{
       all:unset;
@@ -196,28 +209,67 @@
       border:1px solid var(--border);
       font-size:13px;
       cursor:pointer;
-      transition:background .2s ease;
+      transition:background .2s ease, transform .2s ease;
     }
-    .toolbar .btn:hover{background:rgba(255,255,255,0.2)}
+    .toolbar .btn:hover{
+      background:rgba(255,255,255,0.2);
+      transform:translateY(-1px);
+    }
 
     .viewer{
       flex:1;
       overflow:hidden;
+      position:relative;
       display:flex;
       align-items:center;
       justify-content:center;
     }
+
     iframe{
       width:100%;
       height:100%;
       border:none;
       border-radius:0;
+      opacity:0;
+      animation:fadein .4s forwards ease;
     }
+    @keyframes fadein{
+      from{opacity:0;transform:scale(0.98);}
+      to{opacity:1;transform:scale(1);}
+    }
+
     .placeholder{
       color:var(--muted);
       font-size:15px;
       text-align:center;
       padding:20px;
+    }
+
+    .close-view{
+      position:absolute;
+      top:14px;
+      right:14px;
+      z-index:10;
+      background:rgba(255,255,255,0.08);
+      border:1px solid var(--border);
+      border-radius:50%;
+      width:32px;
+      height:32px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      cursor:pointer;
+      backdrop-filter:blur(10px);
+      transition:background .2s ease, transform .2s ease;
+    }
+    .close-view:hover{
+      background:rgba(255,255,255,0.2);
+      transform:rotate(90deg);
+    }
+    .close-view svg{
+      width:16px;
+      height:16px;
+      fill:var(--ink);
     }
   </style>
 </head>
@@ -265,7 +317,7 @@
         <a href="/api/get-channel-subs?ID=<%= encodeURIComponent(userid) %>" class="btn">View JSON</a>
       </div>
       <div class="viewer" id="viewer">
-        <div class="placeholder">Choose a channel from the sidebar to view its content.</div>
+        <div class="placeholder">Choose a channel from the sidebar to view its feed.</div>
       </div>
     </main>
   </div>
@@ -282,8 +334,19 @@ document.addEventListener("DOMContentLoaded",()=>{
   const title=document.getElementById("channelTitle");
 
   function renderIframe(id,name){
-    viewer.innerHTML=`<iframe src="/channel?id=${encodeURIComponent(id)}" loading="lazy" allowfullscreen></iframe>`;
+    viewer.innerHTML=`
+      <div class="close-view" title="Close">
+        <svg viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12"/></svg>
+      </div>
+      <iframe src="/channel?id=${encodeURIComponent(id)}&embedchannelsubsfeed=true" loading="lazy" allowfullscreen></iframe>`;
     title.textContent=name;
+
+    const closeBtn=viewer.querySelector(".close-view");
+    closeBtn.addEventListener("click",()=>{
+      viewer.innerHTML='<div class="placeholder">Choose a channel from the sidebar to view its feed.</div>';
+      channels.forEach(c=>c.classList.remove("active"));
+      title.textContent="Select a channel";
+    });
   }
 
   channels.forEach(ch=>{

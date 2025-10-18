@@ -379,24 +379,12 @@
     </main>
   </div>
 
-<script type="text/javascript" id="poke-subs" data-name="My Poke Subscriptions JS">
-/*    
-@licstart
-Copyright (C) 2024 Poke Project
-GPLv3-or-later notice below
-@licend
-*/
+<script>
 document.addEventListener("DOMContentLoaded",()=>{
-  const channels=[...document.querySelectorAll(".channel")];
-  const search=document.getElementById("search");
-  const clear=document.getElementById("clearSearch");
-  const sortAZ=document.getElementById("sortAZ");
-  const sortZA=document.getElementById("sortZA");
-  const list=document.getElementById("channelList");
+  const channels=document.querySelectorAll(".channel");
   const viewer=document.getElementById("viewer");
   const title=document.getElementById("channelTitle");
 
-  // JS override only if JavaScript is active
   document.querySelectorAll(".channel-name-link").forEach(link=>{
     link.addEventListener("click",e=>{
       e.preventDefault();
@@ -412,32 +400,27 @@ document.addEventListener("DOMContentLoaded",()=>{
   function renderIframe(id,name){
     viewer.innerHTML=`
       <div class="close-view" title="close">✖</div>
-      <iframe sandbox="allow-scripts allow-same-origin allow-popups" src="/channel?id=${encodeURIComponent(id)}&embedchannelsubsfeed=true" loading="lazy" allowfullscreen></iframe>`;
+      <iframe id="chanframe" sandbox="allow-scripts allow-same-origin allow-popups" src="/channel?id=${encodeURIComponent(id)}&embedchannelsubsfeed=true" loading="lazy"></iframe>`;
     title.textContent=name;
+
+    const frame=document.getElementById("chanframe");
     const closeBtn=viewer.querySelector(".close-view");
     closeBtn.addEventListener("click",()=>{
       viewer.innerHTML='<div class="placeholder">select a channel on the left to view it</div>';
       channels.forEach(c=>c.classList.remove("active"));
       title.textContent="nothing selected yet";
     });
-  }
 
-  function filter(){
-    const term=search.value.toLowerCase();
-    channels.forEach(c=>{
-      c.style.display=c.dataset.name.includes(term)?'flex':'none';
+    // ensure inside links open in new tabs
+    frame.addEventListener("load",()=>{
+      try{
+        const doc=frame.contentDocument||frame.contentWindow.document;
+        doc.querySelectorAll("a").forEach(a=>{
+          a.setAttribute("target","_blank");
+        });
+      }catch{}
     });
   }
-  search?.addEventListener("input",filter);
-  clear?.addEventListener("click",()=>{search.value='';filter();search.focus();});
-
-  function sortList(asc){
-    const items=[...channels];
-    items.sort((a,b)=>asc?a.dataset.name.localeCompare(b.dataset.name):b.dataset.name.localeCompare(a.dataset.name));
-    items.forEach(i=>list.appendChild(i));
-  }
-  sortAZ?.addEventListener("click",()=>{sortAZ.classList.add("active");sortZA.classList.remove("active");sortList(true);});
-  sortZA?.addEventListener("click",()=>{sortZA.classList.add("active");sortAZ.classList.remove("active");sortList(false);});
 });
 </script>
 </body>

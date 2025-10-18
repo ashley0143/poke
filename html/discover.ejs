@@ -18,31 +18,15 @@
     along with this program. If not, see https://www.gnu.org/licenses/.
 -->
      <% if (!isMobile) { %> 
-<% if (!isMobile) { %>
-<!--
-  This Source Code Form is subject to the terms of the GNU General Public License:
-
-  Copyright (C) 2021-2025 Poke (https://codeberg.org/ashley/poke)
-
-  This program is free software: you can redistribute it and/or modify
-  it under the terms of the GNU General Public License, version 3 of the License,
-  or (at your option) any later version.
-
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with this program. If not, see https://www.gnu.org/licenses/.
--->
+ <% if (!isMobile) { %>
+ 
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="utf-8" />
   <title>Poke | Discover</title>
-  <meta content="width=device-width, initial-scale=1, viewport-fit=cover" name="viewport" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <meta property="og:type" content="website" />
   <meta property="og:title" content="Poke - Discover" />
   <meta name="twitter:description" content="Discover Popular videos on poke!" />
@@ -59,242 +43,211 @@
   <link href="https://p.poketube.fun/https://site-assets.fontawesome.com/releases/v6.1.1/css/all.css" rel="stylesheet" />
 
   <style>
-    :root {
-      --bg-1: #0b0d12;
-      --bg-2: #111319;
-      --bg-3: #161925;
-
-      --brand: #df03a8;
-      --brand-2: #3ea6ff;
-
-      --text-primary: #fff;
-      --text-secondary: #c8c8c8;
-      --text-dim: #a3a3a3;
-
-      --glass-bg: rgba(255, 255, 255, 0.08);
-      --glass-border: rgba(255, 255, 255, 0.16);
-      --glass-hover: rgba(255, 255, 255, 0.12);
-
-      --card-bg: rgba(0, 0, 0, 0.38);
-      --thumbnail-bg: #0b0b0b;
-
-      --ring: rgba(223, 3, 168, 0.36);
-
-      --radius-xl: 20px;
-      --radius-lg: 16px;
-      --radius-md: 12px;
-
-      --shadow-1: 0 10px 30px rgba(0, 0, 0, 0.45);
-      --shadow-2: 0 6px 18px rgba(0, 0, 0, 0.35);
-
-      --container: 1200px;
-      --grid-gap: 14px;
+    /* -------------------------------------------------------
+     * Tokens
+     * -----------------------------------------------------*/
+    :root{
+      /* Background */
+      --bg-1:#0c0d12; --bg-2:#10131a; --bg-3:#141825;
+      /* Brand */
+      --brand:#df03a8; --brand-2:#8b5cf6; --brand-3:#3ea6ff;
+      /* Text */
+      --t-1:#fff; --t-2:#cfd3da; --t-3:#9aa3ad;
+      /* Glass Surfaces (neutral, no green cast) */
+      --glass-1:rgba(20,22,26,.46);
+      --glass-1-hover:rgba(20,22,26,.58);
+      --glass-2:rgba(18,20,24,.34);
+      --stroke:rgba(255,255,255,.10);
+      --stroke-strong:rgba(255,255,255,.16);
+      --ring:rgba(223,3,168,.40);
+      /* Radii / Shadow */
+      --r-xl:20px; --r-lg:14px; --r-md:10px; --r-pill:999px;
+      --sh-1:0 10px 26px rgba(0,0,0,.35);
+      --sh-2:0 6px 18px rgba(0,0,0,.28);
+      /* Layout */
+      --container:1140px; --gap:14px; --grid-min:268px;
     }
+    @media (max-width:1280px){:root{--container:1000px}}
+    @media (max-width:1120px){:root{--container:92vw; --grid-min:240px}}
 
-    @media (max-width: 1360px) { :root { --container: 1040px; } }
-    @media (max-width: 1180px) { :root { --container: 920px; } }
-    @media (max-width: 980px)  { :root { --container: 92vw; } }
-
-    * { box-sizing: border-box; }
-    html, body { height: 100%; }
-    body {
-      margin: 0;
-      color: var(--text-primary);
+    /* -------------------------------------------------------
+     * Base
+     * -----------------------------------------------------*/
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0; color:var(--t-1);
       background:
-        radial-gradient(1200px 800px at 15% 10%, #231638 0%, transparent 60%),
-        radial-gradient(900px 700px at 85% 20%, #2b160e 0%, transparent 60%),
-        radial-gradient(1000px 900px at 50% 90%, #09250e 0%, transparent 60%),
-        linear-gradient(180deg, var(--bg-2), var(--bg-1) 40%, var(--bg-3) 100%);
-      font-family: "poketube flex", Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
-      -webkit-font-smoothing: antialiased;
-      -moz-osx-font-smoothing: grayscale;
-      overflow-x: hidden;
+        radial-gradient(1000px 700px at 12% 6%, #2a1b47 0%, transparent 60%),
+        radial-gradient(900px 650px at 88% 18%, #351a10 0%, transparent 60%),
+        radial-gradient(1000px 800px at 50% 95%, #112b1e 0%, transparent 58%),
+        linear-gradient(180deg, var(--bg-2), var(--bg-1) 45%, var(--bg-3) 100%);
+      background-attachment: fixed, fixed, fixed, fixed;
+      font-family:"poketube flex", Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
+      -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;
+      overflow-x:hidden;
+    }
+    .container{width:min(var(--container),100%);margin:0 auto;padding:20px 24px}
+
+    /* -------------------------------------------------------
+     * Glass Surfaces
+     * -----------------------------------------------------*/
+    .glass{
+      background:var(--glass-1);
+      border:1px solid var(--stroke);
+      border-radius:var(--r-xl);
+      backdrop-filter:blur(10px) saturate(1.1);
+      -webkit-backdrop-filter:blur(10px) saturate(1.1);
+      box-shadow:var(--sh-1);
+    }
+    .glass:hover{background:var(--glass-1-hover)}
+    @supports not (backdrop-filter:blur(10px)){ .glass{background:#191c22cc} }
+
+    /* -------------------------------------------------------
+     * Top progress
+     * -----------------------------------------------------*/
+    .progress-container{position:fixed;inset:0 auto auto 0;height:3px;width:100%;z-index:9999;display:none}
+    .progress-bar{height:100%;width:0;background-image:linear-gradient(90deg,#ff2d7d,#ff66b2,#8b5cf6);transition:width .45s ease}
+
+    /* -------------------------------------------------------
+     * Nav
+     * -----------------------------------------------------*/
+    nav.navbar{position:sticky;top:10px;z-index:40;width:min(var(--container),100%);margin:12px auto 0}
+    .navbar-inner{
+      display:grid;grid-template-columns:auto minmax(360px, 1fr) auto;gap:12px;align-items:center;
+      padding:10px 12px;border-radius:var(--r-xl);
+    }
+    .brand img{height:34px;display:block}
+
+    /* Search — compact, lighter */
+    .search{
+      display:flex;align-items:center;gap:10px;padding:6px 8px;
+      border-radius:var(--r-pill);
+      background:var(--glass-2);
+      border:1px solid var(--stroke);
+      box-shadow:var(--sh-2);
+      min-height:44px;
+    }
+    .search i{opacity:.9}
+    .search input{
+      flex:1;background:transparent;border:0;outline:0;color:var(--t-1);
+      font:600 14.5px/1.2 "poketube flex", Inter, system-ui;
+      padding:6px 6px 6px 2px; min-width:140px;
+    }
+    .search input::placeholder{color:#c7cbd3}
+    .search button{
+      border:0;border-radius:var(--r-pill);padding:8px 12px;color:#fff;cursor:pointer;
+      background:linear-gradient(90deg, var(--brand), var(--brand-2));
+      box-shadow:0 0 0 0 rgba(0,0,0,0);
+    }
+    .search button:hover{box-shadow:0 0 0 3px var(--ring)}
+
+    .actions a{
+      display:inline-flex;align-items:center;justify-content:center;width:38px;height:38px;
+      border-radius:12px;color:#fff;text-decoration:none;border:1px solid transparent;
+    }
+    .actions a:hover{background:rgba(255,255,255,.08);border-color:var(--stroke)}
+
+    /* -------------------------------------------------------
+     * Hero
+     * -----------------------------------------------------*/
+    .page-head{margin-top:24px;text-align:center}
+    .page-head h1{
+      margin:0 0 6px 0;
+      font:900 clamp(1.6rem,2.4vw,2.2rem)/1.2 "poketube flex", Inter, system-ui;
+      letter-spacing:.2px; text-shadow:0 2px 18px rgba(0,0,0,.35);
+    }
+    .page-head p{margin:0;color:var(--t-2);font:600 15px/1.35 "poketube flex", Inter, system-ui}
+
+    /* -------------------------------------------------------
+     * Tabs (lighter pills)
+     * -----------------------------------------------------*/
+    .tabs-wrap{margin-top:18px}
+    .tabs{
+      display:inline-flex;gap:8px;padding:6px;border-radius:var(--r-pill);
+      background:var(--glass-2); border:1px solid var(--stroke); box-shadow:var(--sh-2);
+    }
+    .tab{
+      display:inline-flex;align-items:center;gap:8px;padding:8px 14px;border-radius:var(--r-pill);
+      color:#fff;text-decoration:none;font:800 13.5px/1 "poketube flex", Inter, system-ui;
+      letter-spacing:.18px; transition:background .15s ease, box-shadow .15s ease;
+    }
+    .tab:hover{background:rgba(255,255,255,.08)}
+    .tab.active{
+      background:linear-gradient(90deg, rgba(223,3,168,.55), rgba(139,92,246,.45));
+      box-shadow:inset 0 0 0 1px rgba(255,255,255,.2), 0 8px 22px rgba(139,92,246,.18);
+      border:1px solid var(--stroke-strong);
     }
 
-    .container {
-      width: min(var(--container), 100%);
-      margin: 0 auto;
-      padding: 24px;
-    }
+    /* -------------------------------------------------------
+     * Grid + Cards (neutral tone, crisp)
+     * -----------------------------------------------------*/
+    .section{margin-top:18px}
+    .surface{border-radius:var(--r-xl);padding:16px;background:var(--glass-2);border:1px solid var(--stroke);box-shadow:var(--sh-1)}
+    .video-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(var(--grid-min),1fr));gap:var(--gap)}
 
-    .glass {
-      background: var(--glass-bg);
-      border: 1px solid var(--glass-border);
-      border-radius: var(--radius-xl);
-      backdrop-filter: blur(14px) saturate(1.25);
-      -webkit-backdrop-filter: blur(14px) saturate(1.25);
-      box-shadow: var(--shadow-1);
+    .video{
+      display:grid;grid-template-rows:auto 1fr;text-decoration:none;color:inherit;
+      border-radius:var(--r-lg);overflow:hidden;position:relative;
+      background:rgba(0,0,0,.18);border:1px solid rgba(255,255,255,.08);
+      transition:transform .16s ease,border-color .16s ease, box-shadow .16s ease;
     }
-    .glass:hover { background: var(--glass-hover); }
-    @supports not (backdrop-filter: blur(10px)) {
-      .glass { background: rgba(25, 25, 25, 0.65); }
+    .video:hover{transform:translateY(-3px);border-color:rgba(223,3,168,.5);box-shadow:0 8px 24px rgba(223,3,168,.18)}
+    .thumbnail{
+      position:relative;background:#0e0f13 center/cover no-repeat;aspect-ratio:16/9;
+      border-bottom:1px solid rgba(255,255,255,.06);
     }
+    .thumbnail::after{
+      content:"";position:absolute;inset:0;
+      background:linear-gradient(to top, rgba(0,0,0,.35), rgba(0,0,0,0) 60%);
+      pointer-events:none;
+    }
+    .video-length{
+      position:absolute;right:8px;bottom:8px;z-index:1;
+      font:800 12px/1 "poketube flex", Inter, system-ui;
+      padding:4px 8px;border-radius:8px;background:rgba(0,0,0,.7);border:1px solid rgba(255,255,255,.16)
+    }
+    .info{
+      display:grid;gap:6px;padding:10px 12px 12px;border-top:1px solid rgba(255,255,255,.06);
+      background:rgba(0,0,0,.14);min-height:82px
+    }
+    .info .title{
+      font:900 14.5px/1.3 "poketube flex", Inter, system-ui;color:var(--t-1);
+      display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden
+    }
+    .info .byline{font:700 12.5px/1.2 "poketube flex", Inter, system-ui;color:var(--t-3);margin-top:-2px}
 
-    .progress-container {
-      position: fixed; inset: 0 auto auto 0; width: 100%; height: 3px;
-      background: transparent; z-index: 9999; display: none;
+    /* -------------------------------------------------------
+     * A11y / Tweaks
+     * -----------------------------------------------------*/
+    .tab:focus-visible, .search input:focus-visible, .search button:focus-visible, .video:focus-visible{
+      outline:0; box-shadow:0 0 0 3px var(--ring)
     }
-    .progress-bar {
-      width: 0%; height: 100%;
-      background-image: linear-gradient(90deg, #ff0045, #ff0e55, #ff1d79);
-      transition: width .5s ease-in-out;
+    @media (max-width:820px){
+      .navbar-inner{grid-template-columns:1fr auto}
+      .brand{display:none}
+      .tabs{overflow-x:auto;scrollbar-width:none}
+      .tabs::-webkit-scrollbar{display:none}
     }
-
-    nav.navbar {
-      position: sticky; top: 12px; z-index: 50;
-      width: min(var(--container), 100%);
-      margin: 12px auto 0 auto;
-    }
-    .navbar-inner {
-      display: grid;
-      grid-template-columns: auto 1fr auto;
-      align-items: center;
-      gap: 12px;
-      padding: 10px 14px;
-    }
-    .brand img { height: 36px; display: block; transform: translateZ(0); }
-
-    .search {
-      display: flex; align-items: center; gap: 8px;
-      padding: 8px 10px; border-radius: 999px;
-      font-family: "poketube flex", Inter, system-ui;
-    }
-    .search input {
-      flex: 1; background: transparent; color: var(--text-primary);
-      border: 0; outline: 0; font-size: 14.5px; padding: 6px 8px; min-width: 120px;
-      font-family: "poketube flex", Inter, system-ui;
-    }
-    .search button {
-      border: 0; padding: 8px 12px; border-radius: 999px; color: #fff;
-      background: linear-gradient(90deg, var(--brand), #ff5bcf);
-      box-shadow: 0 0 0 0 rgba(0,0,0,0); cursor: pointer;
-      font-family: "poketube flex", Inter, system-ui;
-    }
-    .search button:hover { box-shadow: 0 0 0 3px var(--ring); }
-
-    .actions a {
-      display: inline-flex; align-items: center; justify-content: center;
-      width: 40px; height: 40px; border-radius: 10px; color: #fff; text-decoration: none;
-    }
-    .actions a:hover { background: rgba(255,255,255,0.08); }
-
-    .page-head {
-      margin-top: 18px; display: grid; gap: 8px; text-align: center;
-    }
-    .page-head h1 {
-      font-family: "poketube flex", Inter, system-ui;
-      letter-spacing: 0.25px;
-      font-size: clamp(1.6rem, 2.6vw, 2.25rem);
-      margin: 0;
-    }
-    .page-head p {
-      margin: 0; color: var(--text-secondary);
-      font-family: "poketube flex", Inter, system-ui;
-      font-weight: 500;
-    }
-
-    .tabs-wrap { margin-top: 18px; }
-    .tabs {
-      display: inline-flex; gap: 6px; padding: 6px; border-radius: 999px;
-      font-family: "poketube flex", Inter, system-ui;
-    }
-    .tab {
-      display: inline-flex; align-items: center; gap: 8px;
-      padding: 10px 14px; border-radius: 999px; color: #fff; text-decoration: none;
-      font-weight: 700; letter-spacing: .2px;
-      transition: background .2s ease, color .2s ease;
-      font-family: "poketube flex", Inter, system-ui;
-    }
-    .tab:hover { background: rgba(255,255,255,0.10); }
-    .tab.active {
-      background: linear-gradient(90deg, rgba(223,3,168,0.45), rgba(96,54,255,0.35));
-      box-shadow: inset 0 0 0 1px rgba(255,255,255,0.2), var(--shadow-2);
-    }
-
-    .section-card { margin-top: 18px; padding: 16px; }
-
-    .video-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-      gap: var(--grid-gap);
-    }
-
-    .video {
-      display: grid; grid-template-rows: auto 1fr;
-      text-decoration: none; color: inherit;
-      border-radius: var(--radius-lg); overflow: hidden; position: relative;
-      background: rgba(0,0,0,0.22); border: 1px solid rgba(255,255,255,0.08);
-      box-shadow: var(--shadow-2);
-      transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
-      font-family: "poketube flex", Inter, system-ui;
-    }
-    .video:hover {
-      transform: translateY(-4px);
-      border-color: rgba(223,3,168,0.55);
-      box-shadow: 0 8px 28px rgba(223,3,168,0.22);
-    }
-
-    .thumbnail {
-      position: relative;
-      background: var(--thumbnail-bg) center/cover no-repeat;
-      aspect-ratio: 16 / 9;
-    }
-    .thumbnail::after {
-      content: ""; position: absolute; inset: 0;
-      background: linear-gradient(to top, rgba(0,0,0,0.35), rgba(0,0,0,0));
-    }
-    .video-length {
-      position: absolute; right: 8px; bottom: 8px; z-index: 2;
-      font-size: 12px; font-weight: 800; padding: 4px 8px; border-radius: 8px;
-      background: rgba(0,0,0,0.65); border: 1px solid rgba(255,255,255,0.18);
-      font-family: "poketube flex", Inter, system-ui;
-    }
-
-    .info {
-      display: grid; gap: 6px; padding: 10px 12px 12px 12px; min-height: 84px;
-      background: rgba(0,0,0,0.18); border-top: 1px solid rgba(255,255,255,0.08);
-      font-family: "poketube flex", Inter, system-ui;
-    }
-    .info .title {
-      font-weight: 800; line-height: 1.25; color: var(--text-primary);
-      display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
-      font-family: "poketube flex", Inter, system-ui;
-    }
-    .info .byline {
-      margin-top: -2px; font-size: 13px; color: var(--text-dim);
-      font-family: "poketube flex", Inter, system-ui;
-    }
-
-    @media (max-width: 780px) {
-      .navbar-inner { grid-template-columns: 1fr auto; }
-      .brand { display: none; }
-      .tabs { overflow-x: auto; scrollbar-width: none; }
-      .tabs::-webkit-scrollbar { display: none; }
-    }
-
-    @media (prefers-reduced-motion: reduce) {
-      .video, .progress-bar { transition: none !important; }
+    @media (prefers-reduced-motion:reduce){
+      .video, .progress-bar{transition:none !important}
     }
   </style>
 </head>
 
 <body>
-  <div class="progress-container" aria-hidden="true">
-    <div class="progress-bar"></div>
-  </div>
+  <!-- Progress -->
+  <div class="progress-container" aria-hidden="true"><div class="progress-bar"></div></div>
 
+  <!-- Nav -->
   <nav class="navbar">
     <div class="navbar-inner glass">
-      <a class="brand" href="/143" aria-label="Poke Home">
-        <img src="/css/logo.svg?v=5" alt="Poke logo" />
-      </a>
+      <a class="brand" href="/143" aria-label="Poke Home"><img src="/css/logo.svg?v=5" alt="Poke logo"></a>
 
-      <form class="search glass" action="/search" method="GET" role="search" aria-label="Search videos">
+      <form class="search" action="/search" method="GET" role="search" aria-label="Search videos">
         <i class="fa-light fa-search" aria-hidden="true"></i>
-        <input class="search-bar" autocomplete="on" id="fname" name="query" placeholder="Search on Poke…" />
-        <button type="submit" class="btn btn-success" aria-label="Submit search">
-          <i class="fa-light fa-arrow-right"></i>
-        </button>
+        <input id="fname" name="query" class="search-bar" autocomplete="on" placeholder="Search on Poke…">
+        <button type="submit" aria-label="Submit search"><i class="fa-light fa-arrow-right"></i></button>
       </form>
 
       <div class="actions">
@@ -306,38 +259,33 @@
     </div>
   </nav>
 
+  <!-- Hero -->
   <header class="container page-head">
     <h1>Discover Popular Videos On Poke :3</h1>
     <p>uses the United States trending page(s) from YouTube</p>
   </header>
 
+  <!-- Tabs -->
   <div class="container tabs-wrap">
-    <div class="tabs glass">
+    <div class="tabs">
       <% if (!tab) { %>
         <a href="" class="tab active"><i class="fa-light fa-fire"></i><span>Now</span></a>
         <a href="?tab=music" class="tab"><i class="fa-light fa-music"></i><span>Music</span></a>
         <a href="?tab=gaming" class="tab"><i class="fa-light fa-gamepad-modern"></i><span>Gaming</span></a>
-        <% if (!isMobile) { %>
-          <a href="?tab=movies" class="tab"><i class="fa-light fa-film"></i><span>Movie Trailers</span></a>
-        <% } %>
+        <% if (!isMobile) { %><a href="?tab=movies" class="tab"><i class="fa-light fa-film"></i><span>Movie Trailers</span></a><% } %>
       <% } %>
 
       <% if (tab === "music") { %>
         <a href="/app" class="tab"><i class="fa-light fa-fire"></i><span>Now</span></a>
         <a href="" class="tab active"><i class="fa-light fa-music"></i><span>Music</span></a>
         <a href="?tab=gaming" class="tab"><i class="fa-light fa-gamepad-modern"></i><span>Gaming</span></a>
-        <% if (!isMobile) { %>
-          <a href="?tab=movies" class="tab"><i class="fa-light fa-film"></i><span>Movie Trailers</span></a>
-        <% } %>
+        <% if (!isMobile) { %><a href="?tab=movies" class="tab"><i class="fa-light fa-film"></i><span>Movie Trailers</span></a><% } %>
       <% } %>
 
       <% if (tab === "gaming") { %>
         <a href="/app" class="tab"><i class="fa-light fa-fire"></i><span>Now</span></a>
         <a href="?tab=music" class="tab"><i class="fa-light fa-music"></i><span>Music</span></a>
-        <% if (!isMobile) { %>
-          <a href="" class="tab active"><i class="fa-light fa-gamepad-modern"></i><span>Gaming</span></a>
-          <a href="?tab=movies" class="tab"><i class="fa-light fa-film"></i><span>Movie Trailers</span></a>
-        <% } %>
+        <% if (!isMobile) { %><a href="" class="tab active"><i class="fa-light fa-gamepad-modern"></i><span>Gaming</span></a><a href="?tab=movies" class="tab"><i class="fa-light fa-film"></i><span>Movie Trailers</span></a><% } %>
       <% } %>
 
       <% if (tab === "movies") { %>
@@ -349,12 +297,13 @@
     </div>
   </div>
 
-  <main class="container">
-    <section class="section-card glass">
+  <!-- Grid -->
+  <main class="container section">
+    <section class="surface">
       <div class="video-grid">
         <% inv.forEach(x => { %>
           <a href="/watch?v=<%- x.videoId %>" class="video canloadhd" data-author="<%- x.author %>">
-            <div class="thumbnail" data-bg="/vi/<%= x.videoId %>/hqdefault.jpg?sqp=-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLBy_x4UUHLNDZtJtJtH0PXeQGoRFTgw">
+            <div class="thumbnail" data-bg="/vi/<%= x.videoId %>/hqdefault.jpg?sqp=-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLBy_x4UUHLNDZtJtH0PXeQGoRFTgw">
               <span class="video-length"><%- turntomins(x.lengthSeconds) %></span>
             </div>
             <div class="info">
@@ -367,53 +316,34 @@
     </section>
   </main>
 
+  <!-- Scripts -->
   <script>
-    (function () {
-      const bar = document.querySelector('.progress-bar');
-      const wrap = document.querySelector('.progress-container');
-      if (!bar || !wrap) return;
-      bar.style.width = '0%';
-      wrap.style.display = 'block';
-      window.addEventListener('load', () => {
-        bar.style.width = '100%';
-        setTimeout(() => { wrap.style.display = 'none'; }, 500);
-      }, { once: true });
+    // Top progress
+    (function(){
+      const bar=document.querySelector('.progress-bar');
+      const wrap=document.querySelector('.progress-container');
+      if(!bar||!wrap) return;
+      wrap.style.display='block';
+      window.addEventListener('load',()=>{ bar.style.width='100%'; setTimeout(()=>wrap.style.display='none',500) },{once:true});
     }());
 
-    (function () {
-      const nodes = Array.from(document.querySelectorAll('.thumbnail[data-bg]'));
-      if (!nodes.length) return;
-
-      function load(el) {
-        const url = el.getAttribute('data-bg');
-        if (!url) return;
-        el.style.backgroundImage = 'url(' + url + ')';
-        el.removeAttribute('data-bg');
-      }
-
-      if ('IntersectionObserver' in window) {
-        const io = new IntersectionObserver((entries, obs) => {
-          entries.forEach(entry => {
-            if (entry.isIntersecting) {
-              load(entry.target);
-              obs.unobserve(entry.target);
-            }
-          });
-        }, { rootMargin: '200px 0px' });
-
-        nodes.forEach(n => io.observe(n));
-      } else {
-        const onScroll = () => {
-          const vh = window.innerHeight || document.documentElement.clientHeight;
-          nodes.forEach(n => {
-            if (!n.hasAttribute('data-bg')) return;
-            const r = n.getBoundingClientRect();
-            if (r.top < vh + 200 && r.bottom > -200) load(n);
+    // Thumbnail lazy-load (IO + fallback)
+    (function(){
+      const nodes=[...document.querySelectorAll('.thumbnail[data-bg]')];
+      if(!nodes.length) return;
+      const load=el=>{const u=el.getAttribute('data-bg'); if(!u) return; el.style.backgroundImage='url('+u+')'; el.removeAttribute('data-bg');};
+      if('IntersectionObserver' in window){
+        const io=new IntersectionObserver((entries,obs)=>{
+          for(const e of entries){ if(e.isIntersecting){ load(e.target); obs.unobserve(e.target);} }
+        },{rootMargin:'200px 0px'});
+        nodes.forEach(n=>io.observe(n));
+      }else{
+        const onScroll=()=>{ const vh=innerHeight||document.documentElement.clientHeight;
+          nodes.forEach(n=>{ if(!n.hasAttribute('data-bg')) return; const r=n.getBoundingClientRect();
+            if(r.top<vh+200 && r.bottom>-200) load(n);
           });
         };
-        onScroll();
-        window.addEventListener('scroll', onScroll, { passive: true });
-        window.addEventListener('resize', onScroll);
+        onScroll(); addEventListener('scroll',onScroll,{passive:true}); addEventListener('resize',onScroll);
       }
     }());
   </script>
@@ -421,6 +351,7 @@
 </html>
 <% } %>
 
+ 
                 		 	               <% } %>   
 
                                        

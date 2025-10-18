@@ -18,340 +18,532 @@
     along with this program. If not, see https://www.gnu.org/licenses/.
 -->
      <% if (!isMobile) { %> 
- <% if (!isMobile) { %>
- 
 
-<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE html><html>
 <head>
-  <meta charset="utf-8" />
-  <title>Poke | Discover</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <meta property="og:type" content="website" />
-  <meta property="og:title" content="Poke - Discover" />
-  <meta name="twitter:description" content="Discover Popular videos on poke!" />
-  <meta property="og:image" content="https://cdn.glitch.global/d68d17bb-f2c0-4bc3-993f-50902734f652/aa70111e-5bcd-4379-8b23-332a33012b78.image.png?v=1701898829884" />
-  <meta name="twitter:card" content="summary_large_image" />
-  <meta name="theme-color" content="#1a1a1a" />
-  <meta name="darkreader-lock" />
-  <link rel="manifest" href="/manifest.json" />
-  <link rel="icon" href="/css/yt-ukraine.svg?v=6" />
-  <link href="/css/app-cdn.min.css" rel="stylesheet" />
-  <link href="/css/app.main.css?v=44600" rel="stylesheet" />
-  <link href="/css/search.main.css?v=57" rel="stylesheet" />
-  <link href="/css/watch.main.css" rel="stylesheet" />
-  <link href="https://p.poketube.fun/https://site-assets.fontawesome.com/releases/v6.1.1/css/all.css" rel="stylesheet" />
-
-  <style>
-    /* -------------------------------------------------------
-     * Tokens
-     * -----------------------------------------------------*/
-    :root{
-      /* Background */
-      --bg-1:#0c0d12; --bg-2:#10131a; --bg-3:#141825;
-      /* Brand */
-      --brand:#df03a8; --brand-2:#8b5cf6; --brand-3:#3ea6ff;
-      /* Text */
-      --t-1:#fff; --t-2:#cfd3da; --t-3:#9aa3ad;
-      /* Glass Surfaces (neutral, no green cast) */
-      --glass-1:rgba(20,22,26,.46);
-      --glass-1-hover:rgba(20,22,26,.58);
-      --glass-2:rgba(18,20,24,.34);
-      --stroke:rgba(255,255,255,.10);
-      --stroke-strong:rgba(255,255,255,.16);
-      --ring:rgba(223,3,168,.40);
-      /* Radii / Shadow */
-      --r-xl:20px; --r-lg:14px; --r-md:10px; --r-pill:999px;
-      --sh-1:0 10px 26px rgba(0,0,0,.35);
-      --sh-2:0 6px 18px rgba(0,0,0,.28);
-      /* Layout */
-      --container:1140px; --gap:14px; --grid-min:268px;
+    <title>Poke | Discover</title>
+    <link href="/css/yt-ukraine.svg?v=6" rel=icon>
+     <meta content=website property=og:type>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta content="Poke - Discover" property=og:title>
+    <meta content="Discover Popular videos on poke!" property=twitter:description>
+    <meta content="https://cdn.glitch.global/d68d17bb-f2c0-4bc3-993f-50902734f652/aa70111e-5bcd-4379-8b23-332a33012b78.image.png?v=1701898829884" property=og:image>
+     <meta content=summary_large_image name=twitter:card>
+      <link rel="manifest" href="/manifest.json">
+<meta name="darkreader-lock"> <!-- tells dark reader that the site has a dark theme and to turn itself off -->
+    <link href="/css/app-cdn.min.css" rel=stylesheet>
+  <link href="/css/app-cdn.min.css" rel=stylesheet>
+<link href="/css/app.main.css?v=44600" rel=stylesheet>
+<link href="/css/search.main.css?v=57" rel=stylesheet>
+ <link href=/css/watch.main.css rel=stylesheet>
+    <meta content="#1a1a1a" name="theme-color">
+  </head>
+  <style> 
+    .mn {
+     background: #181818;
+          border-radius: 26px;
+          padding: 6px;
+          margin: auto;
+          position: absolute;
+          left: 50%;
+          top: 50%;
+          transform: translate(-50%, -50%);
     }
-    @media (max-width:1280px){:root{--container:1000px}}
-    @media (max-width:1120px){:root{--container:92vw; --grid-min:240px}}
-
-    /* -------------------------------------------------------
-     * Base
-     * -----------------------------------------------------*/
-    *{box-sizing:border-box}
-    html,body{height:100%}
-    body{
-      margin:0; color:var(--t-1);
-      background:
-        radial-gradient(1000px 700px at 12% 6%, #2a1b47 0%, transparent 60%),
-        radial-gradient(900px 650px at 88% 18%, #351a10 0%, transparent 60%),
-        radial-gradient(1000px 800px at 50% 95%, #112b1e 0%, transparent 58%),
-        linear-gradient(180deg, var(--bg-2), var(--bg-1) 45%, var(--bg-3) 100%);
-      background-attachment: fixed, fixed, fixed, fixed;
-      font-family:"poketube flex", Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
-      -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;
-      overflow-x:hidden;
-    }
-    .container{width:min(var(--container),100%);margin:0 auto;padding:20px 24px}
-
-    /* -------------------------------------------------------
-     * Glass Surfaces
-     * -----------------------------------------------------*/
-    .glass{
-      background:var(--glass-1);
-      border:1px solid var(--stroke);
-      border-radius:var(--r-xl);
-      backdrop-filter:blur(10px) saturate(1.1);
-      -webkit-backdrop-filter:blur(10px) saturate(1.1);
-      box-shadow:var(--sh-1);
-    }
-    .glass:hover{background:var(--glass-1-hover)}
-    @supports not (backdrop-filter:blur(10px)){ .glass{background:#191c22cc} }
-
-    /* -------------------------------------------------------
-     * Top progress
-     * -----------------------------------------------------*/
-    .progress-container{position:fixed;inset:0 auto auto 0;height:3px;width:100%;z-index:9999;display:none}
-    .progress-bar{height:100%;width:0;background-image:linear-gradient(90deg,#ff2d7d,#ff66b2,#8b5cf6);transition:width .45s ease}
-
-    /* -------------------------------------------------------
-     * Nav
-     * -----------------------------------------------------*/
-    nav.navbar{position:sticky;top:10px;z-index:40;width:min(var(--container),100%);margin:12px auto 0}
-    .navbar-inner{
-      display:grid;grid-template-columns:auto minmax(360px, 1fr) auto;gap:12px;align-items:center;
-      padding:10px 12px;border-radius:var(--r-xl);
-    }
-    .brand img{height:34px;display:block}
-
-    /* Search — compact, lighter */
-    .search{
-      display:flex;align-items:center;gap:10px;padding:6px 8px;
-      border-radius:var(--r-pill);
-      background:var(--glass-2);
-      border:1px solid var(--stroke);
-      box-shadow:var(--sh-2);
-      min-height:44px;
-    }
-    .search i{opacity:.9}
-    .search input{
-      flex:1;background:transparent;border:0;outline:0;color:var(--t-1);
-      font:600 14.5px/1.2 "poketube flex", Inter, system-ui;
-      padding:6px 6px 6px 2px; min-width:140px;
-    }
-    .search input::placeholder{color:#c7cbd3}
-    .search button{
-      border:0;border-radius:var(--r-pill);padding:8px 12px;color:#fff;cursor:pointer;
-      background:linear-gradient(90deg, var(--brand), var(--brand-2));
-      box-shadow:0 0 0 0 rgba(0,0,0,0);
-    }
-    .search button:hover{box-shadow:0 0 0 3px var(--ring)}
-
-    .actions a{
-      display:inline-flex;align-items:center;justify-content:center;width:38px;height:38px;
-      border-radius:12px;color:#fff;text-decoration:none;border:1px solid transparent;
-    }
-    .actions a:hover{background:rgba(255,255,255,.08);border-color:var(--stroke)}
-
-    /* -------------------------------------------------------
-     * Hero
-     * -----------------------------------------------------*/
-    .page-head{margin-top:24px;text-align:center}
-    .page-head h1{
-      margin:0 0 6px 0;
-      font:900 clamp(1.6rem,2.4vw,2.2rem)/1.2 "poketube flex", Inter, system-ui;
-      letter-spacing:.2px; text-shadow:0 2px 18px rgba(0,0,0,.35);
-    }
-    .page-head p{margin:0;color:var(--t-2);font:600 15px/1.35 "poketube flex", Inter, system-ui}
-
-    /* -------------------------------------------------------
-     * Tabs (lighter pills)
-     * -----------------------------------------------------*/
-    .tabs-wrap{margin-top:18px}
-    .tabs{
-      display:inline-flex;gap:8px;padding:6px;border-radius:var(--r-pill);
-      background:var(--glass-2); border:1px solid var(--stroke); box-shadow:var(--sh-2);
-    }
-    .tab{
-      display:inline-flex;align-items:center;gap:8px;padding:8px 14px;border-radius:var(--r-pill);
-      color:#fff;text-decoration:none;font:800 13.5px/1 "poketube flex", Inter, system-ui;
-      letter-spacing:.18px; transition:background .15s ease, box-shadow .15s ease;
-    }
-    .tab:hover{background:rgba(255,255,255,.08)}
-    .tab.active{
-      background:linear-gradient(90deg, rgba(223,3,168,.55), rgba(139,92,246,.45));
-      box-shadow:inset 0 0 0 1px rgba(255,255,255,.2), 0 8px 22px rgba(139,92,246,.18);
-      border:1px solid var(--stroke-strong);
-    }
-
-    /* -------------------------------------------------------
-     * Grid + Cards (neutral tone, crisp)
-     * -----------------------------------------------------*/
-    .section{margin-top:18px}
-    .surface{border-radius:var(--r-xl);padding:16px;background:var(--glass-2);border:1px solid var(--stroke);box-shadow:var(--sh-1)}
-    .video-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(var(--grid-min),1fr));gap:var(--gap)}
-
-    .video{
-      display:grid;grid-template-rows:auto 1fr;text-decoration:none;color:inherit;
-      border-radius:var(--r-lg);overflow:hidden;position:relative;
-      background:rgba(0,0,0,.18);border:1px solid rgba(255,255,255,.08);
-      transition:transform .16s ease,border-color .16s ease, box-shadow .16s ease;
-    }
-    .video:hover{transform:translateY(-3px);border-color:rgba(223,3,168,.5);box-shadow:0 8px 24px rgba(223,3,168,.18)}
-    .thumbnail{
-      position:relative;background:#0e0f13 center/cover no-repeat;aspect-ratio:16/9;
-      border-bottom:1px solid rgba(255,255,255,.06);
-    }
-    .thumbnail::after{
-      content:"";position:absolute;inset:0;
-      background:linear-gradient(to top, rgba(0,0,0,.35), rgba(0,0,0,0) 60%);
-      pointer-events:none;
-    }
-    .video-length{
-      position:absolute;right:8px;bottom:8px;z-index:1;
-      font:800 12px/1 "poketube flex", Inter, system-ui;
-      padding:4px 8px;border-radius:8px;background:rgba(0,0,0,.7);border:1px solid rgba(255,255,255,.16)
-    }
-    .info{
-      display:grid;gap:6px;padding:10px 12px 12px;border-top:1px solid rgba(255,255,255,.06);
-      background:rgba(0,0,0,.14);min-height:82px
-    }
-    .info .title{
-      font:900 14.5px/1.3 "poketube flex", Inter, system-ui;color:var(--t-1);
-      display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden
-    }
-    .info .byline{font:700 12.5px/1.2 "poketube flex", Inter, system-ui;color:var(--t-3);margin-top:-2px}
-
-    /* -------------------------------------------------------
-     * A11y / Tweaks
-     * -----------------------------------------------------*/
-    .tab:focus-visible, .search input:focus-visible, .search button:focus-visible, .video:focus-visible{
-      outline:0; box-shadow:0 0 0 3px var(--ring)
-    }
-    @media (max-width:820px){
-      .navbar-inner{grid-template-columns:1fr auto}
-      .brand{display:none}
-      .tabs{overflow-x:auto;scrollbar-width:none}
-      .tabs::-webkit-scrollbar{display:none}
-    }
-    @media (prefers-reduced-motion:reduce){
-      .video, .progress-bar{transition:none !important}
-    }
-  </style>
-</head>
-
-<body>
-  <!-- Progress -->
-  <div class="progress-container" aria-hidden="true"><div class="progress-bar"></div></div>
-
-  <!-- Nav -->
-  <nav class="navbar">
-    <div class="navbar-inner glass">
-      <a class="brand" href="/143" aria-label="Poke Home"><img src="/css/logo.svg?v=5" alt="Poke logo"></a>
-
-      <form class="search" action="/search" method="GET" role="search" aria-label="Search videos">
-        <i class="fa-light fa-search" aria-hidden="true"></i>
-        <input id="fname" name="query" class="search-bar" autocomplete="on" placeholder="Search on Poke…">
-        <button type="submit" aria-label="Submit search"><i class="fa-light fa-arrow-right"></i></button>
-      </form>
-
-      <div class="actions">
-        <a href="/weather" title="Weather"><i class="fa-light fa-sun"></i></a>
-        <a href="/privacy" title="Privacy"><i class="fa-light fa-shield"></i></a>
-        <a href="/video/upload?from=" title="Upload"><i class="fa-light fa-video"></i></a>
-        <a href="https://codeberg.org/Ashley/poketube/issues" title="Report a bug"><i class="fa-light fa-bug"></i></a>
-      </div>
-    </div>
-  </nav>
-
-  <!-- Hero -->
-  <header class="container page-head">
-    <h1>Discover Popular Videos On Poke :3</h1>
-    <p>uses the United States trending page(s) from YouTube</p>
-  </header>
-
-  <!-- Tabs -->
-  <div class="container tabs-wrap">
-    <div class="tabs">
-      <% if (!tab) { %>
-        <a href="" class="tab active"><i class="fa-light fa-fire"></i><span>Now</span></a>
-        <a href="?tab=music" class="tab"><i class="fa-light fa-music"></i><span>Music</span></a>
-        <a href="?tab=gaming" class="tab"><i class="fa-light fa-gamepad-modern"></i><span>Gaming</span></a>
-        <% if (!isMobile) { %><a href="?tab=movies" class="tab"><i class="fa-light fa-film"></i><span>Movie Trailers</span></a><% } %>
-      <% } %>
-
-      <% if (tab === "music") { %>
-        <a href="/app" class="tab"><i class="fa-light fa-fire"></i><span>Now</span></a>
-        <a href="" class="tab active"><i class="fa-light fa-music"></i><span>Music</span></a>
-        <a href="?tab=gaming" class="tab"><i class="fa-light fa-gamepad-modern"></i><span>Gaming</span></a>
-        <% if (!isMobile) { %><a href="?tab=movies" class="tab"><i class="fa-light fa-film"></i><span>Movie Trailers</span></a><% } %>
-      <% } %>
-
-      <% if (tab === "gaming") { %>
-        <a href="/app" class="tab"><i class="fa-light fa-fire"></i><span>Now</span></a>
-        <a href="?tab=music" class="tab"><i class="fa-light fa-music"></i><span>Music</span></a>
-        <% if (!isMobile) { %><a href="" class="tab active"><i class="fa-light fa-gamepad-modern"></i><span>Gaming</span></a><a href="?tab=movies" class="tab"><i class="fa-light fa-film"></i><span>Movie Trailers</span></a><% } %>
-      <% } %>
-
-      <% if (tab === "movies") { %>
-        <a href="/app" class="tab"><i class="fa-light fa-fire"></i><span>Now</span></a>
-        <a href="?tab=music" class="tab"><i class="fa-light fa-music"></i><span>Music</span></a>
-        <a href="?tab=gaming" class="tab"><i class="fa-light fa-gamepad-modern"></i><span>Gaming</span></a>
-        <a href="" class="tab active"><i class="fa-light fa-film"></i><span>Movie Trailers</span></a>
-      <% } %>
-    </div>
-  </div>
-
-  <!-- Grid -->
-  <main class="container section">
-    <section class="surface">
-      <div class="video-grid">
-        <% inv.forEach(x => { %>
-          <a href="/watch?v=<%- x.videoId %>" class="video canloadhd" data-author="<%- x.author %>">
-            <div class="thumbnail" data-bg="/vi/<%= x.videoId %>/hqdefault.jpg?sqp=-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLBy_x4UUHLNDZtJtH0PXeQGoRFTgw">
-              <span class="video-length"><%- turntomins(x.lengthSeconds) %></span>
-            </div>
-            <div class="info">
-              <span class="title" title="<%- x.title %>"><%- x.title %></span>
-              <span class="byline" title="Video by <%- x.author %>">By <%- x.author %></span>
-            </div>
-          </a>
-        <% }) %>
-      </div>
-    </section>
-  </main>
-
-  <!-- Scripts -->
-  <script>
-    // Top progress
-    (function(){
-      const bar=document.querySelector('.progress-bar');
-      const wrap=document.querySelector('.progress-container');
-      if(!bar||!wrap) return;
-      wrap.style.display='block';
-      window.addEventListener('load',()=>{ bar.style.width='100%'; setTimeout(()=>wrap.style.display='none',500) },{once:true});
-    }());
-
-    // Thumbnail lazy-load (IO + fallback)
-    (function(){
-      const nodes=[...document.querySelectorAll('.thumbnail[data-bg]')];
-      if(!nodes.length) return;
-      const load=el=>{const u=el.getAttribute('data-bg'); if(!u) return; el.style.backgroundImage='url('+u+')'; el.removeAttribute('data-bg');};
-      if('IntersectionObserver' in window){
-        const io=new IntersectionObserver((entries,obs)=>{
-          for(const e of entries){ if(e.isIntersecting){ load(e.target); obs.unobserve(e.target);} }
-        },{rootMargin:'200px 0px'});
-        nodes.forEach(n=>io.observe(n));
-      }else{
-        const onScroll=()=>{ const vh=innerHeight||document.documentElement.clientHeight;
-          nodes.forEach(n=>{ if(!n.hasAttribute('data-bg')) return; const r=n.getBoundingClientRect();
-            if(r.top<vh+200 && r.bottom>-200) load(n);
-          });
-        };
-        onScroll(); addEventListener('scroll',onScroll,{passive:true}); addEventListener('resize',onScroll);
+            @font-face {
+        font-family: 'Ginto Nord';
+        font-weight: 800;
+        src:url('https://p.poketube.fun/https://cdn.statically.io/gh/brecert/discord-quote-generator/main/Ginto-Nord-800.woff') format("woff");
       }
-    }());
-  </script>
-</body>
-</html>
-<% } %>
 
+  </style>      
+    <style nonce="IJD3y0awTwA2dd0pWOP+ZQ">
+                #yt-masthead{line-height:0;margin:15px auto;width:440px;margin-top:25px}#logo-container{margin-right:5px;float:left;cursor:pointer;text-decoration:none}.logo{background:no-repeat url("//www.gstatic.com/youtube/img/branding/youtubelogo/1x/youtubelogo_30.png");width:125px;height:30px;cursor:pointer;display:inline-block}#masthead-search{display:flex;margin-top:3px;max-width:650px;overflow:hidden;padding:0;position:relative}.search-button{border-left:0;-moz-border-radius-topleft:0;border-top-left-radius:0;-moz-border-radius-bottomleft:0;border-bottom-left-radius:0;float:right;height:29px;padding:0;border:solid 1px transparent;border-color:#ffff;background:#999;;color:#333;cursor:pointer}.search-button:hover{border-color:#c6c6c6;background:#f0f0f0;box-shadow:0 1px 0 rgba(0,0,0,0.0)}.search-button-content{border:none;display:block;opacity:.6;padding:0;text-indent:-10000px;background:no-repeat url(//www.gstatic.com/youtube/src/web/htdocs/img/search.png);background-size:auto;width:15px;height:15px;box-shadow:none;margin:0 25px}#masthead-search-terms-border{flex:1 1 auto;border:1px solid #ccc;box-shadow:inset 0 1px 2px #eee;background-color:#fff;font-size:14px;height:29px;line-height:30px;margin:0 0 2px;overflow:hidden;position:relative;-moz-box-sizing:border-box;box-sizing:border-box;-webkit-transition:border-color .2s ease;transition:border-color .2s ease}#masthead-search-terms{background:#2c2f33;border:0;font-size:16px;height:100%;left:0;margin:0;outline:none;padding:2px 6px;position:absolute;width:100%;-moz-box-sizing:border-box;box-sizing:border-box}
+            </style>
+ <body>
+  
+   
+              <section class=youtube-video>
  
+        
+ <style>
+       @import url("https://p.poketube.fun/https://site-assets.fontawesome.com/releases/v6.1.1/css/all.css");
+
+   a.class:hover {
+    text-decoration:underline;
+    font-weight:bold
+}
+  summary{
+    color:gray;
+}
+summary:hover{
+    color:white;
+}
+</style>
+                
+   <style>
+    body{
+        overflow-x: hidden; /* Hide horizontal scrollbar */
+        color:#111111
+    }
+    
+    :root {
+    --text-primary: #fff;
+    --text-secondary: #fff;
+    --text-link: #3ea6ff;
+
+    --app-background: #111111;
+    --context-menu-background: #333;
+    --border-color: #444;
+    --item-hover-background: #373737;
+    --item-active-background: #383838;
+
+    --top-bar-background: #202020;
+    --guide-background: #212121;
+
+    --thumbnail-background: #252525;
+
+    --channel-info-background: #181818;
+    --channel-contents-background: #0f0f0f;
+}
+          @font-face {
+        font-family: 'Ginto Nord';
+        font-weight: 800;
+        src:url('https://p.poketube.fun/https://cdn.statically.io/gh/brecert/discord-quote-generator/main/Ginto-Nord-800.woff') format("woff");
+      }
+
+    .video > .info {
+  grid-area: info;
+  font-size: small;
+  margin-left: 2px;
+  height: auto;
+  width: fit-content;
+  text-align: left;
+  margin-top: -7px;
+  padding: 2px;
+    }
+      
+.progress-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  z-index: 9999;
+  display:none;
+  background-color: #f2f2f2;
+}
+
+.progress-bar {
+   position: absolute;
+  top: 0;
+  left: 0;
+  width: 0%;
+  height: 100%;
+   background-image: linear-gradient(to right, 
+    #ff0045,    
+    #ff0e55,   
+    #ff1d79  
+  );
+  transition: width 0.5s ease-in-out;
+}
+
+    .video > .info > .title {
+  color: var(--text-primary) !important;
+  font-weight: bold;
+  font-size: initial;
+  margin-bottom: 0px;
+}
+    .video-grid{
+      justify-content: center;
+      margin-left: auto;
+margin-right: auto;
+    }
+.alert {
+  padding: 20px;
+  background-color: #f44336;
+  color: white;
+  opacity: 1;
+  transition: opacity 0.6s;
+  margin-bottom: 15px;
+}
+
+.alert.success {background-color: #04AA6D;}
+.alert.info {background-color: #2196F3;}
+.alert.warning {background-color: #ff9800;}
+
+.closebtn {
+  margin-left: 15px;
+  color: white;
+  font-weight: bold;
+  float: right;
+  font-size: 22px;
+  line-height: 20px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.closebtn:hover {
+  color: black;
+}
+    
+  section p {
+ font-family:Whitney, Helvetica Neue, Helvetica, Arial, sans-serif;
+ font-weight:400;
+ color:#fff;
+ font-size:16px;
+ line-height:24px;
+ margin-top:12px
+}
+     .news {
+  margin: 2em;
+  background: #333;
+  padding: 10px;
+  border-radius: 1.5em;
+  display:none;
+}
+                      
+.sticky-top {
+	 position: sticky;
+	 top: 0px;
+	 z-index: 999;
+}
+ .responsive {
+	 width: 100%;
+	 overflow-x: auto;
+}
+ .tabs {
+display: table;
+  font-family: poketube flex;
+  border-collapse: separate;
+  table-layout: auto;
+  font-weight: 800;
+  font-stretch: extra-expanded;
+  border-spacing: 3px;
+}
+ .tabs.tabs-center {
+margin-left: auto;
+  background: #000;
+  border-radius: 1em;
+  margin-bottom: 45px;
+  margin-right: auto;
+}                 
+                     
+ .tabs.tabs-justify {
+	 width: 100%;
+	 table-layout: fixed;
+}
+                      
+                      
+.tab.active {
+  background: #1a1a1a !important;
+  border-radius: 1em !important;
+}
+                      
+ .tabs a.tab {
+	 position: relative;
+	 display: table-cell;
+	 transition: all ease 0.3s;
+	 padding: 1em 1.6em;
+	 transform: translate3d(0, 0, 0);
+	 color: #fff;
+	 white-space: nowrap;
+	 cursor: pointer;
+}
+ .tabs a.tab:hover {
+	 color: #3cb4fa;
+}
+ .tabs a.tab:after {
+	 transition: all 0.3s cubic-bezier(1, 0, 0, 1);
+	 will-change: transform, box-shadow, opacity;
+	 position: absolute;
+	 content: '';
+	 height: 3px;
+	 bottom: 0px;
+	 left: 0px;
+	 right: 0px;
+	 border-radius: 3px 3px 0px 0px;
+  	 opacity: 0;
+	 transform: scale(0, 1);
+}
+ .tabs a.tab.active {
+	 color: #fff;
+}
+ .tabs a.tab.active:after {
+	 opacity: 1;
+	 transform: scale(1, 1);
+}                 
+                
+           
+.tab:hover {
+  background: var(--not-quite-black);
+  text-decoration: none;
+  border-radius: 1em;
+}                          
+  
+ 
+@keyframes gradient {
+  0% {
+    background-position: 0 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0 50%;
+  }
+}
+
+ .app, .channel-page {
+    background-image: radial-gradient(#231638, #2b160e, #09250e, #0f132b);
+ 
+}
+        .channel-info-container > img {
+  width: 100%;
+}
+  .video-grid > .video:hover{
+border:solid #ff0033;
+}                  
+
+ .video-grid > .video {
+  border-radius: 16px;
+  background: black;
+  padding: 6px;
+  border: #333 solid;
+}
+   
+   /* nice classname am i rigth */
+   .discover-some-bitches{
+     text-align: center;
+     width: 673px;
+     margin: auto;
+   }
+      </style>
+  <body>
+
+ <div class="app"  >
+    <div class="progress-container">
+  <div class="progress-bar"></div>
+</div>
+    
+   
+       <nav>
+             <div class=left>
+
+              <a class="class" href="/143" style=font-family:Inter,sans-serif;color:#fff>  <img style="transform: scale(1.3);width:8.5em;display: block;margin-left: auto;margin-right: auto;" src="/css/logo.svg?v=5"></a>
+            </div>          
+
+  
+        <div class="middle">
+<div class="search">
+    <form action=/search>
+<input class="search-bar" autocomplete="on" id="fname" name="query" style="color:#fff;background: linear-gradient(90deg, hsla(235, 21%, 21%, 1) 0%, hsla(194, 41%, 22%, 1) 50%, hsla(174, 48%, 20%, 1) 100%);">      
+    <button class="btn btn-success" type=submit><i class="fa-light fa-search"></i></button>
+         </form>
+      </div>          </div>
+
+     
+            <div class=right>
+              <a href="/weather"><i class="fa-light fa-sun"></i></a>
+              <a href="/privacy"><i class="fa-light fa-shield"></i></a>
+              <a href="/video/upload?from="><i class="fa-light fa-video"></i></a> 
+              <a href="https://codeberg.org/Ashley/poketube/issues"><i class="fa-light fa-bug"></i></a>
+            </div>
+     
+      </nav>
+  
+  
+  
+
+ <div class="channel-page" >   
+<h1 style="font-size: 2em;margin-left: auto;margin-right: auto;text-align: center;font-family: poketube flex;font-weight: 1000;font-stretch: ultra-expanded;color: #fff;margin-bottom: 7px;margin-top: 31px;">Discover Popular Videos On Poke :3</h1>
+<p style="text-align: center;margin-top: -9px;color: gray;font-family: &quot;poketube flex&quot;;font-weight: 400;font-stretch: extra-expanded;"> uses the united states trending page(s) from youtube!!</p>
+        <% if (!tab) { %> 
+
+     <div class="tabs tabs-center">
+            
+                <a href="" class="tab active"><i class="fa-light fa-fire" style="margin-right: 4px;"></i> Now</a>          
+                <a href="?tab=music"class="tab"><i class="fa-light fa-music" style="margin-right: 4px;"></i> Music</a>
+                <a href="?tab=gaming" class="tab"><i class="fa-light fa-gamepad-modern" style="margin-right: 4px;"></i> Gaming</a>
+                      <% if (!isMobile) { %> 
+                 <a href="?tab=movies" class="tab"><i class="fa-light fa-film" style="margin-right: 4px;"></i> Movie Trailers</a>
+
+           		 	               <% } %>   
+
+            </div>    
+           		 	               <% } %>   
+  <% if (tab === "music") { %> 
+
+     <div class="tabs tabs-center">
+            
+              
+                <a href="/app" class="tab"><i class="fa-light fa-fire" style="margin-right: 4px;"></i> Now</a>      
+                <a href="" class="tab active "><i class="fa-light fa-music" style="margin-right: 4px;"></i> Music</a>
+                <a  href="?tab=gaming" class="tab"><i class="fa-light fa-gamepad-modern" style="margin-right: 4px;"></i> Gaming</a>
+                <% if (!isMobile) { %> 
+                 <a href="?tab=movies" class="tab"><i class="fa-light fa-film" style="margin-right: 4px;"></i> Movie Trailers</a>
+           		 <% } %> 
+
+                       
+
+            </div>    
+           		 	               <% } %>   
+                                  <% if (tab === "gaming") { %> 
+
+     <div class="tabs tabs-center">
+            
+              
+                <a href="/app" class="tab"><i class="fa-light fa-fire" style="margin-right: 4px;"></i> Now</a>     
+                <a href="?tab=music" class="tab"><i class="fa-light fa-music" style="margin-right: 4px;"></i> Music</a>
+                <% if (!isMobile) { %> 
+                <a href="" class="tab active"><i class="fa-light fa-gamepad-modern" style="margin-right: 4px;"></i> Gaming</a>
+                 <a href="?tab=movies" class="tab"><i class="fa-light fa-film" style="margin-right: 4px;"></i> Movie Trailers</a>
+           		 	               <% } %>   
+
+                       
+
+            </div>    
+           		 	               <% } %>   
+                                 
+                                                                   <% if (tab === "movies") { %> 
+
+     <div class="tabs tabs-center">
+                <a href="/app" class="tab"><i class="fa-light fa-fire" style="margin-right: 4px;"></i> Now</a>
+                <a href="?tab=music" class="tab"><i class="fa-light fa-music" style="margin-right: 4px;"></i> Music</a>
+                <a href="?tab=gaming" class="tab"><i class="fa-light fa-gamepad-modern" style="margin-right: 4px;"></i> Gaming</a>
+                 <a href="" class="tab active"><i class="fa-light fa-film" style="margin-right: 4px;"></i> Movie Trailers</a>
+            </div>    
+           		 	               <% } %>   
+
+
+                                 
+<div class="video-grid" style="border-top-left-radius:2em;width: 80em;border-top-right-radius: 2em;border: solid 1px #df03a8;">
+   <% inv.forEach(x =>  { %>
+			<a href="/watch?v=<%- x.videoId %>" class="video canloadhd" data-author="<%- x.author %>" >
+				<div class="thumbnail" style="background-image: url('/vi/<%= x.videoId %>/hqdefault.jpg?sqp=-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLBy_x4UUHLNDZtJtH0PXeQGoRFTgw');border-radius: 9.5px;"><span class="video-length"><%- turntomins(x.lengthSeconds) %></span></div>
+				<div class="info">
+					<span class="title max-lines-2" title="<%- x.title %>" style="font-family:Inter,sans-serif;"><%- x.title %></span>
+            					<span class="title max-lines-2" title="Video By <%- x.author %>" style="margin-top:1px">By <%- x.author %></span>
+
+             </div>
+
+ 			</a>	
+          
+
+ 		 	               <% }) %>   
+                        
+                                   </div>
+                     		 	            
+                                   </div>
+ 
+                
+ 
+  <script src="/css/custom-css.js"> </script>
+   <script>
+        // @license magnet:?xt=urn:btih:1f739d935676111cfff4b4693e3816e664797050&dn=gpl-3.0.txt GPL-3.0-or-later  
+
+
+  document.addEventListener('DOMContentLoaded', function() {
+  let bgs = document.querySelectorAll('[data-bg]');
+  let bgCount = bgs.length;
+  
+  function loadBg(index) {
+    let bg = bgs[index];
+    let bgUrl = bg.getAttribute('data-bg');
+    bg.style.backgroundImage = `url(${bgUrl})`;
+    bg.removeAttribute('data-bg');
+    bg.classList.add('loaded');
+  }
+
+  function lazyLoadBg() {
+    for (let i = 0; i < bgCount; i++) {
+      let bg = bgs[i];
+      let bgRect = bg.getBoundingClientRect();
+      if (bgRect.top < window.innerHeight && bgRect.bottom > 0) {
+        loadBg(i);
+      }
+    }
+  }
+  
+  lazyLoadBg();
+  
+  window.addEventListener('scroll', lazyLoadBg);
+  window.addEventListener('resize', lazyLoadBg);
+});    
+
+// Get the progress bar and container elements
+const progressBar1 = document.querySelector(".progress-bar");
+const progressContainer1 = document.querySelector(".progress-container");
+
+// Set the initial width of the progress bar to 0%
+progressBar1.style.width = "0%";
+progressContainer1.style.display = 'block';
+
+// Attach an event listener to the window object to listen for the 'load' event
+window.addEventListener("load", () => {
+  progressBar1.style.width = "100%";
+  setTimeout(() => {
+    progressContainer1.style.display = 'none';
+  }, 500);
+});
+
+     let isScrolling = false;
+let startY = 0;
+let currentY = 0;
+let velocityY = 0;
+let lastTimestamp = 0;
+
+const element = document.documentElement || document.body; // Use the entire page for scrolling
+
+element.addEventListener('mousedown', (e) => {
+  isScrolling = true;
+  startY = e.clientY;
+  currentY = startY;
+  velocityY = 0;
+  lastTimestamp = performance.now();
+});
+
+element.addEventListener('mousemove', (e) => {
+  if (isScrolling) {
+    const deltaY = e.clientY - currentY;
+    currentY = e.clientY;
+    const timestamp = performance.now();
+    const elapsed = timestamp - lastTimestamp;
+    lastTimestamp = timestamp;
+    velocityY = deltaY / elapsed;
+
+    // Update the scroll position based on deltaY
+    element.scrollTop += deltaY;
+  }
+});
+
+element.addEventListener('mouseup', () => {
+  isScrolling = false;
+  // Apply the kinetic scrolling effect based on the velocityY
+  const animationFrame = () => {
+    if (Math.abs(velocityY) > 0.1) {
+      element.scrollTop += velocityY;
+      velocityY *= 0.95; // Damping factor
+      requestAnimationFrame(animationFrame);
+    }
+  };
+  requestAnimationFrame(animationFrame);
+});
+
+element.addEventListener('mouseleave', () => {
+  isScrolling = false;
+});
+
+element.addEventListener('wheel', (e) => {
+  // Adjust the scrollTop based on e.deltaY
+  element.scrollTop += e.deltaY;
+});
+// @license-end
+
+      </script>
+           
+    </body >
+
+</html>
                 		 	               <% } %>   
 
                                        

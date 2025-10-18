@@ -38,7 +38,13 @@
       100%{background-position:0 50%}
     }
 
-    a{color:inherit;text-decoration:none}
+    a {
+      color:inherit;
+      text-decoration:none !important;
+    }
+    a:hover, a:focus, a:visited, a:active {
+      text-decoration:none !important;
+    }
 
     .layout{
       display:grid;
@@ -211,10 +217,10 @@
     .privacy-link{
       font-size:12.5px;
       color:var(--accent);
-      text-decoration:none;
+      text-decoration:none !important;
       transition:opacity .2s ease;
     }
-    .privacy-link:hover{opacity:0.7}
+    .privacy-link:hover{opacity:0.7;text-decoration:none !important;}
 
     main{
       position:relative;
@@ -380,12 +386,6 @@
   </div>
 
 <script type="text/javascript" id="poke-subs" data-name="My Poke Subscriptions JS">
-/*    
-@licstart
-Copyright (C) 2024 Poke Project
-GPLv3-or-later notice below
-@licend
-*/
 document.addEventListener("DOMContentLoaded",()=>{
   const channels=[...document.querySelectorAll(".channel")];
   const search=document.getElementById("search");
@@ -393,34 +393,13 @@ document.addEventListener("DOMContentLoaded",()=>{
   const sortAZ=document.getElementById("sortAZ");
   const sortZA=document.getElementById("sortZA");
   const list=document.getElementById("channelList");
-  const viewer=document.getElementById("viewer");
-  const title=document.getElementById("channelTitle");
 
-  // disable direct link loading when JS active
+  // make channel links go directly (not iframe)
   document.querySelectorAll(".channel-name-link").forEach(link=>{
     link.addEventListener("click",e=>{
-      e.preventDefault();
-      const parent=link.closest(".channel");
-      const id=parent.dataset.id;
-      const name=parent.querySelector(".channel-name").textContent;
-      channels.forEach(c=>c.classList.remove("active"));
-      parent.classList.add("active");
-      renderIframe(id,name);
+      // no preventDefault — allow normal navigation
     });
   });
-
-  function renderIframe(id,name){
-    viewer.innerHTML=`
-      <div class="close-view" title="close">✖</div>
-      <iframe sandbox="allow-scripts allow-same-origin allow-popups" src="/channel?id=${encodeURIComponent(id)}&embedchannelsubsfeed=true" loading="lazy" allowfullscreen></iframe>`;
-    title.textContent=name;
-    const closeBtn=viewer.querySelector(".close-view");
-    closeBtn.addEventListener("click",()=>{
-      viewer.innerHTML='<div class="placeholder">select a channel on the left to view it</div>';
-      channels.forEach(c=>c.classList.remove("active"));
-      title.textContent="nothing selected yet";
-    });
-  }
 
   // search + sorting
   function filter(){

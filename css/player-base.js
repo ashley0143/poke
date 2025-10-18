@@ -91,13 +91,17 @@ var versionclient = "youtube.player.web_20250917_22_RC00"
   let userMutedAudio = false;
 
   let lastPlayKickTs = 0;
-  const STARTUP_GRACE_MS = 1200;
+  const STARTUP_GRACE_MS = 2200; // longer grace to ignore early stalls
 
   // anti-random-mute controls
   let seekingActive = false;
   let squelchMuteEvents = 0;
   let suppressMirrorUntil = 0;
   const MUTE_SQUELCH_MS = 500;
+
+  // startup quiet phase to prevent play->pause jitter and audio pops
+  let startupPhase = true;
+  let firstPlayCommitted = false;
 
   // guard against element loop attrs
   try { videoEl.loop = false; videoEl.removeAttribute?.('loop'); } catch {}
@@ -231,7 +235,10 @@ var versionclient = "youtube.player.web_20250917_22_RC00"
     try { audio.muted = val; } catch {}
     queueMicrotask(() => { squelchMuteEvents = Math.max(0, squelchMuteEvents - 1); });
   }
+
   async function ensureUnmutedIfNotUserMuted() {
+    // During startup, don't change muted states — playTogether will fade-in safely
+    if (startupPhase) { updateAudioGainImmediate(); return; }
     if (!userMutedVideo) setVideoMuted(false);
     if (!userMutedAudio) setAudioMuted(false);
     await softUnmuteAudio(80);
@@ -332,6 +339,10 @@ var versionclient = "youtube.player.web_20250917_22_RC00"
         await softAlignAudioTo(t, 25, 70);
       }
 
+      // QUIET START: avoid pops by starting with volume 0 (no mute flip needed)
+      setImmediateVolume(0);
+      setAudioMuted(false);
+
       let vOk = true, aOk = true;
       try { const p = video.play(); if (p && p.then) await p; } catch { vOk = false; }
       aOk = await tryPlay(audio);
@@ -340,7 +351,6 @@ var versionclient = "youtube.player.web_20250917_22_RC00"
         const prevVideoMuted = !!video.muted();
         const prevAudioMuted = !!audio.muted;
 
-        // fade down before toggling mute to avoid pop
         await softMuteAudio(40);
         setVideoMuted(true);
         setAudioMuted(true);
@@ -348,19 +358,24 @@ var versionclient = "youtube.player.web_20250917_22_RC00"
         try { const p = video.play(); if (p && p.then) await p; } catch {}
         await tryPlay(audio);
 
-        // restore previous user states + fade up
         setTimeout(async () => {
           if (!userMutedVideo) setVideoMuted(prevVideoMuted);
           if (!userMutedAudio) setAudioMuted(prevAudioMuted);
-          await softUnmuteAudio(90);
+          await softUnmuteAudio(120);
         }, 160);
         suppressMirrorUntil = performance.now() + MUTE_SQUELCH_MS;
       } else {
-        // normal fade-in at start to avoid click
-        await softUnmuteAudio(90);
+        // Smooth fade-in after both elements are actually playing
+        await softUnmuteAudio(140);
       }
 
       if (!syncInterval) startSyncLoop();
+
+      if (!firstPlayCommitted) {
+        firstPlayCommitted = true;
+        // end startup phase shortly after first stable play
+        setTimeout(() => { startupPhase = false; }, 800);
+      }
     } finally {
       syncing = false;
     }
@@ -435,6 +450,8 @@ var versionclient = "youtube.player.web_20250917_22_RC00"
   function wireResilience(el, label) {
     const pauseIfRealStall = () => {
       const now = performance.now();
+      // Ignore early "waiting/stalled" during startup to prevent play->pause jitters
+      if (startupPhase) return;
       if (now - lastPlayKickTs < STARTUP_GRACE_MS) return; // ignore startup jitters
       if (!intendedPlaying) return;
       showError(`${label} buffering…`);
@@ -478,6 +495,8 @@ var versionclient = "youtube.player.web_20250917_22_RC00"
       }
       setupMediaSession();
       updateAudioGainImmediate();
+      // end startup phase a bit after both are primed if play didn't already commit
+      setTimeout(() => { if (!firstPlayCommitted) startupPhase = false; }, 2500);
     };
 
     oneShotReady(audio, () => { audioReady = true; });
@@ -643,6 +662,7 @@ var versionclient = "youtube.player.web_20250917_22_RC00"
     setupMediaSession();
   }
 });
+ 
   
  // https://codeberg.org/ashley/poke/src/branch/main/src/libpoketube/libpoketube-youtubei-objects.json
 

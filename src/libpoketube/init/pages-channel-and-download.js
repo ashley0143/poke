@@ -379,6 +379,7 @@ const createdAccountGetDate = await fetchChannelPublishedJSON(ID);
         c,
         createdAccountGetDate,
         cinv,
+        embedchannelsubsfeed:req.query.embedchannelsubsfeed,
         convert,
         turntomins,
         pronoun,

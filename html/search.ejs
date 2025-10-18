@@ -80,6 +80,74 @@ summary:hover{
  
 </style>    
 
+<style>
+.new-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  height: 2em;
+  padding: 0 0.6rem;
+  border-radius: 1.5em;
+  position: relative;
+  color: #fff;
+  font: 500 14px/1 sans-serif;
+  text-decoration: none;
+
+  background: rgba(51, 51, 51, 0.05);
+  backdrop-filter: blur(48px) saturate(200%);
+  -webkit-backdrop-filter: blur(48px) saturate(200%);
+
+  border: 1px solid rgba(255,255,255,0.22);
+
+  transition: transform 120ms ease, background 120ms ease;
+}
+
+.new-button::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  background:
+    radial-gradient(140% 100% at 12% -30%, rgba(255,255,255,0.55) 0%, rgba(255,255,255,0.14) 30%, rgba(255,255,255,0) 60%),
+    linear-gradient(180deg, rgba(255,255,255,0.10), rgba(255,255,255,0));
+  mix-blend-mode: screen;
+}
+
+.new-button:hover {
+  transform: translateY(-1px);
+  background: rgba(51, 51, 51, 0.08);
+}
+
+.new-button:active {
+  transform: translateY(0);
+  opacity: 0.90;
+}
+
+.new-button .icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.2em;
+  height: 1.2em;
+  border-radius: 50%;
+}
+
+.new-button .icon i {
+  font-size: 1em;
+  color: #fff;
+}
+
+.new-button[href*="youtube"] .icon i {
+  color: #ff2a2a;
+}
+
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .new-button {
+    background: rgba(51, 51, 51, 0.6);
+  }
+}
+</style>
   <link href=https://p.poketube.fun/https://site-assets.fontawesome.com/releases/v6.1.1/css/all.css rel=stylesheet>
   <link href="https://p.poketube.fun/https://cdn.jsdelivr.net/npm/ionicons@4.5.0-0/dist/css/ionicons.min.css" rel=stylesheet>
 
@@ -1460,18 +1528,18 @@ font-weight: 1000;" href="/watch?v=<%= x.videoId %>" class="title max-lines-2"><
 
 
           <div style="display: inline-flex;flex-direction: row;min-width: 6em;gap: 4px;">
-            <a href="/download?v=<%= x.videoId %>" style="background: #333;width: 7.6em;border-radius: 8px;">
-              <div style="display: flex;">
-                <i class="fa-light fa-download" style="display: flex;font-size: 16px;padding: 5px;border-radius: 18px;margin-left: 2px;"></i><span style="margin-top: 6px;">Download</span>
-              </div>
-            </a>
-            <a href="https://youtube.com/watch?v=<%= x.videoId %>" style="background: #333;width: 7.6em;border-radius: 8px;height: 2em;width: 12.5em;">
-              <div style="display: flex;">
-                <i class="fa-brands fa-youtube" style="display: flex;font-size: 16px;padding: 5px;border-radius: 18px;margin-left: 2px;"></i><span style="margin-top: 6px;">Open on YouTube :/</span>
-              </div>
-            </a>
-            </a>
+        <a href="/download?v=<%= x.videoId %>" class="new-button">
+    <span class="icon"><i class="fa-light fa-download"></i></span>
+    <span class="label">Download</span>
+  </a>
+
+  <a href="https://youtube.com/watch?v=<%= x.videoId %>" class="new-button">
+    <span class="icon"><i class="fa-brands fa-youtube"></i></span>
+    <span class="label">Open on YouTube :/</span>
+  </a>
           </div>
+
+          
         </div>
       </div>
     </div>
@@ -1515,19 +1583,15 @@ font-weight: 1000;" href="/watch?v=<%= x.videoId %>" class="title max-lines-2"><
 </div>
 
           <div style="display: inline-flex;flex-direction: row;min-width: 6em;gap: 4px;">
-            <a href="/download?v=<%= x.videoId %>" style="background: #333;width: 7.6em;border-radius: 8px;">
-              <div style="display: flex;">
-                <i class="fa-light fa-download" style="display: flex;font-size: 16px;padding: 5px;border-radius: 18px;margin-left: 2px;"></i><span style="margin-top: 6px;">Download</span>
-              </div>
-            </a>
-            <a href="https://youtube.com/watch?v=<%= x.videoId %>" style="background: #333;width: 7.6em;border-radius: 8px;height: 2em;width: 12.5em;">
-              <div style="display: flex;">
-                <i class="fa-brands fa-youtube" style="display: flex;font-size: 16px;padding: 5px;border-radius: 18px;margin-left: 2px;"></i><span style="margin-top: 6px;">Open on YouTube :/</span>
-              </div>
- 
+         <a href="/download?v=<%= x.videoId %>" class="new-button">
+    <span class="icon"><i class="fa-light fa-download"></i></span>
+    <span class="label">Download</span>
+  </a>
 
-
-            </a>
+  <a href="https://youtube.com/watch?v=<%= x.videoId %>" class="new-button">
+    <span class="icon"><i class="fa-brands fa-youtube"></i></span>
+    <span class="label">Open on YouTube :/</span>
+  </a>
           </div>
         </div>
       </div>

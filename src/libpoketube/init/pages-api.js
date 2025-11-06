@@ -100,9 +100,159 @@ if (!data.users) data.users = {}
   fs.writeFileSync(statsFile, JSON.stringify(data, null, 2))
   res.json({ ok: true })
 })
-app.get("/api/stats", (req, res) => {
-  if (!telemetryConfig.telemetry)
+ 
+  app.get("/api/stats", (req, res) => {
+  if (!telemetryConfig.telemetry) {
+    const view = (req.query.view || "").toString()
+    if (!view) {
+      return res.send(`<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Poke – Stats</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <style>
+    body {
+      margin: 0;
+      padding: 24px;
+      font-family: system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+      background: #05070a;
+      color: #e5e5e5;
+    }
+    .wrap {
+      max-width: 720px;
+      margin: 0 auto;
+    }
+    h1 {
+      font-size: 1.9rem;
+      margin-bottom: 0.4rem;
+    }
+    p { line-height: 1.6; margin: 0.4rem 0; }
+    code {
+      background: #111827;
+      padding: 2px 4px;
+      border-radius: 4px;
+      font-size: 0.92rem;
+    }
+    a { color: #7dd3fc; text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    .box {
+      margin-top: 1.2rem;
+      padding: 0.9rem 1rem;
+      border-radius: 10px;
+      background: #0b1120;
+      border: 1px solid #1f2937;
+    }
+    .small { font-size: 0.9rem; opacity: 0.85; }
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <h1>Poke stats</h1>
+    <p class="small">How Poke improves itself while keeping your browsing private.</p>
+
+    <div class="box">
+      <p>
+        This page shows information about Poke’s <strong>anonymous, local-only</strong> usage statistics feature
+        (<code>/api/stats</code>).
+      </p>
+      <p>
+        For full details on what is collected (and what is <em>not</em>), see the privacy policy section:
+        <a href="/policies/privacy#stats">/policies/privacy#stats</a>.
+      </p>
+    </div>
+
+    <div class="box">
+      <p><strong>Developers:</strong></p>
+      <p class="small">
+        • To get the aggregated stats as JSON, call:<br>
+        <code>GET /api/stats?view=json</code><br><br>
+        • The response includes:<br>
+        <code>videos</code> (top 10 most-watched), <code>browsers</code>, <code>os</code>, and <code>totalUsers</code>.
+      </p>
+    </div>
+  </main>
+</body>
+</html>`)
+    }
+
     return res.json({ videos: {}, browsers: {}, os: {}, totalUsers: 0 })
+  }
+
+  const view = (req.query.view || "").toString()
+
+  // if no ?view= param, show info page instead of raw JSON
+  if (!view) {
+    return res.send(`<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Poke – Stats</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <style>
+    body {
+      margin: 0;
+      padding: 24px;
+      font-family: system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+      background: #05070a;
+      color: #e5e5e5;
+    }
+    .wrap {
+      max-width: 720px;
+      margin: 0 auto;
+    }
+    h1 {
+      font-size: 1.9rem;
+      margin-bottom: 0.4rem;
+    }
+    p { line-height: 1.6; margin: 0.4rem 0; }
+    code {
+      background: #111827;
+      padding: 2px 4px;
+      border-radius: 4px;
+      font-size: 0.92rem;
+    }
+    a { color: #7dd3fc; text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    .box {
+      margin-top: 1.2rem;
+      padding: 0.9rem 1rem;
+      border-radius: 10px;
+      background: #0b1120;
+      border: 1px solid #1f2937;
+    }
+    .small { font-size: 0.9rem; opacity: 0.85; }
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <h1>Poke stats</h1>
+    <p class="small">How Poke improves itself while keeping your browsing private.</p>
+
+    <div class="box">
+      <p>
+        This page shows information about Poke’s <strong>anonymous, local-only</strong> usage statistics feature
+        (<code>/api/stats</code>).
+      </p>
+      <p>
+        For full details on what is collected (and what is <em>not</em>), see the privacy policy section:
+        <a href="/policies/privacy#stats">/policies/privacy#stats</a>.
+      </p>
+    </div>
+
+    <div class="box">
+      <p><strong>Developers:</strong></p>
+      <p class="small">
+        • To get the aggregated stats as JSON, call:<br>
+        <code>GET /api/stats?view=json</code><br><br>
+        • The response includes:<br>
+        <code>videos</code> (top 10 most-watched), <code>browsers</code>, <code>os</code>, and <code>totalUsers</code>.
+      </p>
+    </div>
+  </main>
+</body>
+</html>`)
+  }
 
   const raw = fs.readFileSync(statsFile, "utf8")
   const data = JSON.parse(raw)
@@ -126,6 +276,7 @@ app.get("/api/stats", (req, res) => {
     totalUsers: Object.keys(data.users).length
   })
 })
+
 
 
   app.get("/avatars/:v", async function (req, res) {

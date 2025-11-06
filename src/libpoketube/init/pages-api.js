@@ -211,8 +211,8 @@ if (!data.users) data.users = {}
 
     <h2>API usage</h2>
     <p class="note">
-      • Human view (this page): <code>/api/stats?view=human</code><br>
-      • JSON view (for scripts/tools): <code>/api/stats?view=json</code>
+      • Human view (this page): <code><a href="/api/stats?view=human">/api/stats?view=human</a></code><br>
+      • JSON view (for scripts/tools): <code><a href="/api/stats?view=json">/api/stats?view=json</a></code>
     </p>
   </div>
 
@@ -359,6 +359,12 @@ if (!data.users) data.users = {}
     </p>
 
     <hr>
+
+    <h2>API usage</h2>
+    <p class="note">
+      • Human view (stats UI): <code><a href="/api/stats?view=human">/api/stats?view=human</a></code><br>
+      • JSON view (for scripts/tools): <code><a href="/api/stats?view=json">/api/stats?view=json</a></code>
+    </p>
   </div>
 </body>
 </html>`)

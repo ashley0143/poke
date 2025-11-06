@@ -2428,14 +2428,16 @@ if (/[?&]autoplay=/.test(location.search)) {
  
 </script>
      <script>
-
-     function sendStats(videoId) {
+function sendStats(videoId) {
   if (!videoId) return
 
-  if (window.__pokeStatsSent) return
-  window.__pokeStatsSent = true
+  let userId = localStorage.getItem("poke_uid")
+  if (!userId) {
+    userId = "u_" + Math.random().toString(36).slice(2) + Date.now()
+    localStorage.setItem("poke_uid", userId)
+  }
 
-  const payload = { videoId }
+  const payload = { videoId, userId }
 
   fetch("/api/stats", {
     method: "POST",
@@ -2444,6 +2446,7 @@ if (/[?&]autoplay=/.test(location.search)) {
     keepalive: true
   }).catch(() => {})
 }
+
 
 sendStats(new URLSearchParams(location.search).get("v"))
 

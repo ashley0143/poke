@@ -290,6 +290,41 @@
         </p>
       </details>
     </section>
+<details class="block">
+  <summary>Optional Anonymous Usage Statistics (/api/stats)</summary>
+  <p>
+    This instance of Poke may optionally record <strong>basic, anonymous usage counts</strong> to help improve performance and understand what videos are popular.
+  </p>
+
+  <p><strong>This telemetry is fully optional and off by default.</strong> Instance admins may enable it manually.</p>
+
+  <p>When enabled, the system stores:</p>
+  <ul>
+    <li>Video ID that was viewed (example: <code>?v=VIDEOID</code>)</li>
+    <li>Anonymous unique instance ID stored in your browser’s localStorage (not a cookie)</li>
+    <li>Browser type (e.g. Firefox, Chromium)</li>
+    <li>Operating system type (e.g. GNU/Linux, Android)</li>
+  </ul>
+
+  <p><strong>What is NOT collected:</strong></p>
+  <ul>
+    <li>No IP addresses</li>
+    <li>No cookies</li>
+    <li>No account data</li>
+    <li>No fingerprinting</li>
+    <li>No sharing with third parties</li>
+    <li>No ads, analytics platforms, or trackers</li>
+  </ul>
+
+  <p>
+    These stats exist only locally on this instance and are used strictly to improve the service and see which videos are watched most.  
+    You can inspect the code on Codeberg to verify exactly what it does.
+  </p>
+
+  <p><strong>Disable telemetry:</strong> If you self-host, you can turn this off in <code>telemetryConfig</code> in the server code.</p>
+
+  <p style="margin-top:8px;">If telemetry is disabled, <em>/api/stats</em> will return empty data.</p>
+</details>
 
     <!-- Cookies & storage -->
     <section id="cookies" aria-labelledby="cookies-heading">

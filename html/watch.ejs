@@ -1677,9 +1677,7 @@ WIP!                                                 </a>
 
 
 
-
-<style>
-                         <% if (dyx === "true") { %> 
+     <% if (dyx === "true") { %> 
   .descriptionHtml {
     font-family:OpenDyslexic3;
   }
@@ -1702,14 +1700,12 @@ WIP!                                                 </a>
 
            <div class="descriptionHtml" style="margin-top:1em;">
             <% if (!dyx) { %>
-                                       <a href="/watch?v=<%=VideoData.videoId%>&dyx=true" style="font-family:OpenDyslexic3"> open dyslexic mode </a> <br> <br>
+                                       <a href="/watch?v=<%=VideoData.videoId%>&dyx=true" style="font-family:OpenDyslexic3" class="dyx-fallback"> open dyslexic mode </a> <br> <br>
  
                                          <% } %>   
                                       <% if (dyx) { %>
-                                      <a href="/watch?v=<%=VideoData.videoId%>"> close dyslexic mode </a> <br> <br>
+                                      <a href="/watch?v=<%=VideoData.videoId%>" class="dyx-fallback"> close dyslexic mode </a> <br> <br>
                                          <% } %>           
-        
-
 
             
               <%-String(channelurlfixer(VideoData.descriptionHtml)).replace(/\n/g, " <br> ").replace("(?i)(?<!\w)x\.com(?!\w)", "twitter.com").replace(/reddit\.com/g, "redlib.matthew.science") %>
@@ -1749,7 +1745,54 @@ WIP!                                                 </a>
  
                  
                      </p>
-                     <% } %> 
+                     <% } %>  
+
+ <script>
+document.addEventListener("DOMContentLoaded", () => {
+  const desc = document.querySelector(".descriptionHtml");
+  const openLinks = document.querySelectorAll(".dyx-fallback");
+  const videoId = "<%=VideoData.videoId%>";
+  const stored = localStorage.getItem("dyslexicMode");
+  
+  function enableDyslexicMode() {
+    if (desc) desc.style.fontFamily = "OpenDyslexic3, sans-serif";
+    document.documentElement.classList.add("dyx-on");
+    localStorage.setItem("dyslexicMode", "true");
+    updateLinks(true);
+  }
+
+  function disableDyslexicMode() {
+    if (desc) desc.style.fontFamily = "";
+    document.documentElement.classList.remove("dyx-on");
+    localStorage.setItem("dyslexicMode", "false");
+    updateLinks(false);
+  }
+
+  function updateLinks(isOn) {
+    openLinks.forEach(a => {
+      if (isOn) {
+        a.textContent = "close dyslexic mode";
+        a.style.fontFamily = "inherit";
+      } else {
+        a.textContent = "open dyslexic mode";
+        a.style.fontFamily = "OpenDyslexic3";
+      }
+      a.href = "javascript:void(0)";
+    });
+  }
+
+  openLinks.forEach(a => {
+    a.addEventListener("click", e => {
+      e.preventDefault();
+      const current = localStorage.getItem("dyslexicMode") === "true";
+      if (current) disableDyslexicMode(); else enableDyslexicMode();
+    });
+  });
+
+  if (stored === "true") enableDyslexicMode();
+});
+</script>
+ 
                        
 
               

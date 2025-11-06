@@ -1747,52 +1747,7 @@ WIP!                                                 </a>
                      </p>
                      <% } %>  
 
- <script>
-document.addEventListener("DOMContentLoaded", () => {
-  const desc = document.querySelector(".descriptionHtml");
-  const openLinks = document.querySelectorAll(".dyx-fallback");
-  const videoId = "<%=VideoData.videoId%>";
-  const stored = localStorage.getItem("dyslexicMode");
-  
-  function enableDyslexicMode() {
-    if (desc) desc.style.fontFamily = "OpenDyslexic3, sans-serif";
-    document.documentElement.classList.add("dyx-on");
-    localStorage.setItem("dyslexicMode", "true");
-    updateLinks(true);
-  }
 
-  function disableDyslexicMode() {
-    if (desc) desc.style.fontFamily = "";
-    document.documentElement.classList.remove("dyx-on");
-    localStorage.setItem("dyslexicMode", "false");
-    updateLinks(false);
-  }
-
-  function updateLinks(isOn) {
-    openLinks.forEach(a => {
-      if (isOn) {
-        a.textContent = "close dyslexic mode";
-        a.style.fontFamily = "inherit";
-      } else {
-        a.textContent = "open dyslexic mode";
-        a.style.fontFamily = "OpenDyslexic3";
-      }
-      a.href = "javascript:void(0)";
-    });
-  }
-
-  openLinks.forEach(a => {
-    a.addEventListener("click", e => {
-      e.preventDefault();
-      const current = localStorage.getItem("dyslexicMode") === "true";
-      if (current) disableDyslexicMode(); else enableDyslexicMode();
-    });
-  });
-
-  if (stored === "true") enableDyslexicMode();
-});
-</script>
- 
                        
 
               
@@ -2396,6 +2351,52 @@ VideoData?.recommendedVideos.forEach(video => {
     
 <!-- SCRIPTS -->
 <!-- AUTOPLAY -->
+ <script>
+document.addEventListener("DOMContentLoaded", () => {
+  const desc = document.querySelector(".descriptionHtml");
+  const openLinks = document.querySelectorAll(".dyx-fallback");
+  const videoId = "<%=VideoData.videoId%>";
+  const stored = localStorage.getItem("dyslexicMode");
+  
+  function enableDyslexicMode() {
+    if (desc) desc.style.fontFamily = "OpenDyslexic3, sans-serif";
+    document.documentElement.classList.add("dyx-on");
+    localStorage.setItem("dyslexicMode", "true");
+    updateLinks(true);
+  }
+
+  function disableDyslexicMode() {
+    if (desc) desc.style.fontFamily = "";
+    document.documentElement.classList.remove("dyx-on");
+    localStorage.setItem("dyslexicMode", "false");
+    updateLinks(false);
+  }
+
+  function updateLinks(isOn) {
+    openLinks.forEach(a => {
+      if (isOn) {
+        a.textContent = "close dyslexic mode";
+        a.style.fontFamily = "inherit";
+      } else {
+        a.textContent = "open dyslexic mode";
+        a.style.fontFamily = "OpenDyslexic3";
+      }
+      a.href = "javascript:void(0)";
+    });
+  }
+
+  openLinks.forEach(a => {
+    a.addEventListener("click", e => {
+      e.preventDefault();
+      const current = localStorage.getItem("dyslexicMode") === "true";
+      if (current) disableDyslexicMode(); else enableDyslexicMode();
+    });
+  });
+
+  if (stored === "true") enableDyslexicMode();
+});
+</script>
+ 
 <script>
  function removeParam(paramName) {
   let searchParams = new URLSearchParams(window.location.search);

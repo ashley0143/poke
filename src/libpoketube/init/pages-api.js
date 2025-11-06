@@ -103,8 +103,8 @@ if (!data.users) data.users = {}
  app.get("/api/stats", (req, res) => {
   const view = (req.query.view || "").toString()
 
-  // JSON view (default) – for programmatic access
-  if (!view || view === "json") {
+  // JSON view – explicit: /api/stats?view=json
+  if (view === "json") {
     if (!telemetryConfig.telemetry) {
       return res.json({ videos: {}, browsers: {}, os: {}, totalUsers: 0 })
     }
@@ -283,7 +283,7 @@ if (!data.users) data.users = {}
 </html>`)
   }
 
-  // any other view value -> landing page HTML
+  // any other view value (including "/api/stats" with no ?view) -> landing page HTML
   return res.send(`<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -363,7 +363,6 @@ if (!data.users) data.users = {}
 </body>
 </html>`)
 })
-
 
 
   app.get("/avatars/:v", async function (req, res) {

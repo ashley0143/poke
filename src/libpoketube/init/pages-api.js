@@ -100,6 +100,130 @@ if (!data.users) data.users = {}
   fs.writeFileSync(statsFile, JSON.stringify(data, null, 2))
   res.json({ ok: true })
 })
+app.get("/api/stats/optout", (req, res) => {
+  res.send(`<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Poke – Opt out of stats</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <link rel="icon" href="/favicon.ico">
+  <style>
+    :root{color-scheme:dark}
+    body{color:#fff}
+    body {
+      background:#1c1b22;
+      margin:0;
+    }
+    :visited{color:#00c0ff}
+    a{color:#0ab7f0}
+    .app{max-width:1000px;margin:0 auto;padding:24px}
+    p{
+      font-family: system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans", sans-serif;
+      line-height:1.6;
+    }
+    ul{
+      font-family:"poketube flex";
+      font-weight:500;
+      font-stretch:extra-expanded;
+      padding-left:1.2rem;
+    }
+    h2 {
+      font-family:"poketube flex", sans-serif;
+      font-weight:700;
+      font-stretch:extra-expanded;
+      margin-top:1.5rem;
+      margin-bottom:.3rem;
+    }
+    h1 {
+      font-family:"poketube flex", sans-serif;
+      font-weight:1000;
+      font-stretch:ultra-expanded;
+      margin-top:0;
+      margin-bottom:.3rem;
+    }
+    .note{color:#bbb;font-size:.95rem}
+    .btn{
+      display:inline-block;
+      margin-top:1rem;
+      padding:.5rem 1rem;
+      border-radius:999px;
+      border:1px solid #2a2a35;
+      background:#252432;
+      color:#fff;
+      font-family:system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans", sans-serif;
+      text-decoration:none;
+      font-size:.95rem;
+    }
+    .btn:hover{
+      background:#2f2e3d;
+    }
+    .status{
+      margin-top:.5rem;
+      font-size:.95rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <h1>Stats opt-out</h1>
+    <p>
+      This page lets you turn off <strong>anonymous usage stats</strong> for this browser.
+      Poke will remember this choice using <code>localStorage</code> only (no cookies).
+    </p>
+
+    <p class="note">
+      Anonymous stats help us understand which videos are popular and which platforms people use —
+      without collecting personal data. You can read the full details here:
+      <a href="/policies/privacy#stats">/policies/privacy#stats</a>.
+    </p>
+
+    <a href="#" id="optout-btn" class="btn">Opt out of anonymous stats</a>
+    <div id="status" class="status note"></div>
+
+    <p class="note" style="margin-top:1.5rem;">
+      • To see the stats UI (if enabled on this instance), visit
+      <code><a href="/api/stats?view=human">/api/stats?view=human</a></code>.<br>
+      • For raw JSON, use <code><a href="/api/stats?view=json">/api/stats?view=json</a></code>.
+    </p>
+  </div>
+
+  <script>
+    (function () {
+      var KEY = "poke_stats_optout";
+      var btn = document.getElementById("optout-btn");
+      var status = document.getElementById("status");
+
+      function updateStatus() {
+        try {
+          var v = localStorage.getItem(KEY);
+          if (v === "1") {
+            status.textContent = "Anonymous stats are currently DISABLED in this browser.";
+          } else {
+            status.textContent = "Anonymous stats are currently ENABLED in this browser.";
+          }
+        } catch (e) {
+          status.textContent = "Your browser blocked localStorage, so we cannot store your opt-out choice.";
+        }
+      }
+
+      btn.addEventListener("click", function (ev) {
+        ev.preventDefault();
+        try {
+          localStorage.setItem(KEY, "1");
+          updateStatus();
+        } catch (e) {
+          status.textContent = "Could not save opt-out preference (localStorage error).";
+        }
+      });
+
+      updateStatus();
+    })();
+  </script>
+</body>
+</html>`)
+})
+
  app.get("/api/stats", (req, res) => {
   const view = (req.query.view || "").toString()
 

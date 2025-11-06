@@ -42,6 +42,72 @@ module.exports = function (app, config, renderTemplate) {
     f.body.pipe(res);
   });
 
+ const telemetryConfig = { telemetry: true }
+
+ const path = require("path")
+
+ const statsFile = path.join(__dirname, "stats.json")
+
+ if (!fs.existsSync(statsFile)) {
+  fs.writeFileSync(
+    statsFile,
+    JSON.stringify({ videos: {}, browsers: {}, os: {} }, null, 2)
+  )
+}
+
+ function parseUA(ua) {
+  let browser = "unknown"
+  let os = "unknown"
+
+  if (/firefox/i.test(ua)) browser = "firefox"
+  else if (/chrome|chromium|crios/i.test(ua)) browser = "chrome"
+  else if (/safari/i.test(ua)) browser = "safari"
+  else if (/edge/i.test(ua)) browser = "edge"
+
+  if (/windows/i.test(ua)) os = "windows"
+  else if (/android/i.test(ua)) os = "android"
+  else if (/mac os|macintosh/i.test(ua)) os = "macos"
+  else if (/linux/i.test(ua)) os = "gnu-linux"
+  else if (/iphone|ipad|ios/i.test(ua)) os = "ios"
+
+  return { browser, os }
+}
+
+ app.post("/api/stats", (req, res) => {
+  if (!telemetryConfig.telemetry) return res.status(200).json({ ok: true })
+
+  const { videoId } = req.body
+  if (!videoId) return res.status(400).json({ error: "missing videoId" })
+
+  const ua = req.headers["user-agent"] || ""
+  const { browser, os } = parseUA(ua)
+
+  const raw = fs.readFileSync(statsFile, "utf8")
+  const data = JSON.parse(raw)
+
+  if (!data.videos[videoId]) data.videos[videoId] = 0
+  data.videos[videoId]++
+
+  if (!data.browsers[browser]) data.browsers[browser] = 0
+  data.browsers[browser]++
+
+  if (!data.os[os]) data.os[os] = 0
+  data.os[os]++
+
+  fs.writeFileSync(statsFile, JSON.stringify(data, null, 2))
+  res.json({ ok: true })
+})
+
+ app.get("/api/stats", (req, res) => {
+  if (!telemetryConfig.telemetry)
+    return res.json({ videos: {}, browsers: {}, os: {} })
+
+  const raw = fs.readFileSync(statsFile, "utf8")
+  const data = JSON.parse(raw)
+  res.json(data)
+})
+
+
   app.get("/avatars/:v", async function (req, res) {
     var url = `https://yt3.ggpht.com/${req.params.v}`;
 

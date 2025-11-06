@@ -41,21 +41,20 @@ module.exports = function (app, config, renderTemplate) {
 
     f.body.pipe(res);
   });
-
  const telemetryConfig = { telemetry: true }
 
  const path = require("path")
 
- const statsFile = path.join(__dirname, "stats.json")
+const statsFile = path.join(__dirname, "stats.json")
 
- if (!fs.existsSync(statsFile)) {
+if (!fs.existsSync(statsFile)) {
   fs.writeFileSync(
     statsFile,
-    JSON.stringify({ videos: {}, browsers: {}, os: {} }, null, 2)
+    JSON.stringify({ videos: {}, browsers: {}, os: {}, users: {} }, null, 2)
   )
 }
 
- function parseUA(ua) {
+function parseUA(ua) {
   let browser = "unknown"
   let os = "unknown"
 
@@ -76,8 +75,9 @@ module.exports = function (app, config, renderTemplate) {
  app.post("/api/stats", (req, res) => {
   if (!telemetryConfig.telemetry) return res.status(200).json({ ok: true })
 
-  const { videoId } = req.body
+  const { videoId, userId } = req.body
   if (!videoId) return res.status(400).json({ error: "missing videoId" })
+  if (!userId) return res.status(400).json({ error: "missing userId" })
 
   const ua = req.headers["user-agent"] || ""
   const { browser, os } = parseUA(ua)
@@ -94,19 +94,32 @@ module.exports = function (app, config, renderTemplate) {
   if (!data.os[os]) data.os[os] = 0
   data.os[os]++
 
+  if (!data.users[userId]) data.users[userId] = true
+
   fs.writeFileSync(statsFile, JSON.stringify(data, null, 2))
   res.json({ ok: true })
 })
 
  app.get("/api/stats", (req, res) => {
   if (!telemetryConfig.telemetry)
-    return res.json({ videos: {}, browsers: {}, os: {} })
+    return res.json({ videos: {}, browsers: {}, os: {}, totalUsers: 0 })
 
   const raw = fs.readFileSync(statsFile, "utf8")
   const data = JSON.parse(raw)
-  res.json(data)
-})
 
+  const sortedVideos = Object.entries(data.videos)
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, 10)
+
+  const topVideos = Object.fromEntries(sortedVideos)
+
+  res.json({
+    videos: topVideos,
+    browsers: data.browsers,
+    os: data.os,
+    totalUsers: Object.keys(data.users).length
+  })
+})
 
   app.get("/avatars/:v", async function (req, res) {
     var url = `https://yt3.ggpht.com/${req.params.v}`;

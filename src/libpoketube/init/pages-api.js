@@ -223,8 +223,7 @@ app.get("/api/stats/optout", (req, res) => {
 </body>
 </html>`)
 })
-
- app.get("/api/stats", (req, res) => {
+app.get("/api/stats", (req, res) => {
   const view = (req.query.view || "").toString()
 
   // JSON view – explicit: /api/stats?view=json
@@ -336,12 +335,14 @@ app.get("/api/stats/optout", (req, res) => {
     <h2>API usage</h2>
     <p class="note">
       • Human view (this page): <code><a href="/api/stats?view=human">/api/stats?view=human</a></code><br>
-      • JSON view (for scripts/tools): <code><a href="/api/stats?view=json">/api/stats?view=json</a></code>
+      • JSON view (for scripts/tools): <code><a href="/api/stats?view=json">/api/stats?view=json</a></code><br>
+      • Opt out for this browser: <code><a href="/api/stats/optout">/api/stats/optout</a></code>
     </p>
   </div>
 
   <script>
     const TELEMETRY_ON = ${telemetryOn ? "true" : "false"};
+    const OPT_KEY = "poke_stats_optout";
 
     const statsNote = document.getElementById("stats-note");
     const statsList = document.getElementById("stats-list");
@@ -353,54 +354,69 @@ app.get("/api/stats/optout", (req, res) => {
       statsList.innerHTML = "";
       topVideos.innerHTML = "<li>No data (telemetry disabled).</li>";
     } else {
-      fetch("/api/stats?view=json")
-        .then(function (res) { return res.json(); })
-        .then(function (data) {
-          var videos = data.videos || {};
-          var browsers = data.browsers || {};
-          var os = data.os || {};
-          var totalUsers = data.totalUsers || 0;
+      // respect per-browser opt-out for the human UI
+      var optedOut = false;
+      try {
+        optedOut = localStorage.getItem(OPT_KEY) === "1";
+      } catch (e) {
+        // ignore localStorage errors; treat as not opted out
+      }
 
-          var videoCount = Object.keys(videos).length;
+      if (optedOut) {
+        statsNote.textContent =
+          "You have opted out of anonymous stats in this browser. Poke will not load stats for you here.";
+        statsList.innerHTML = "";
+        topVideos.innerHTML = "<li>Opt-out active (no stats loaded).</li>";
+      } else {
+        fetch("/api/stats?view=json")
+          .then(function (res) { return res.json(); })
+          .then(function (data) {
+            var videos = data.videos || {};
+            var browsers = data.browsers || {};
+            var os = data.os || {};
+            var totalUsers = data.totalUsers || 0;
 
-          statsNote.textContent = "";
-          statsList.innerHTML = "";
+            var videoCount = Object.keys(videos).length;
 
-          var summaryItems = [
-            "Anonymous users (unique local IDs): " + totalUsers,
-            "Videos with recorded views: " + videoCount,
-            "Browser types seen: " + Object.keys(browsers).length,
-            "OS families seen: " + Object.keys(os).length
-          ];
+            statsNote.textContent = "";
+            statsList.innerHTML = "";
 
-          summaryItems.forEach(function (text) {
-            var li = document.createElement("li");
-            li.textContent = text;
-            statsList.appendChild(li);
-          });
+            var summaryItems = [
+              "Anonymous users (unique local IDs): " + totalUsers,
+              "Videos with recorded views: " + videoCount,
+              "Browser types seen: " + Object.keys(browsers).length,
+              "OS families seen: " + Object.keys(os).length
+            ];
 
-          var videoKeys = Object.keys(videos);
-          if (videoKeys.length === 0) {
-            topVideos.innerHTML = "<li>No stats recorded yet.</li>";
-          } else {
-            topVideos.innerHTML = "";
-            videoKeys.forEach(function (id) {
+            summaryItems.forEach(function (text) {
               var li = document.createElement("li");
-              var a = document.createElement("a");
-              a.href = "/watch?v=" + encodeURIComponent(id);
-              a.textContent = id;
-              li.appendChild(a);
-              li.appendChild(document.createTextNode(" – " + videos[id] + " views"));
-              topVideos.appendChild(li);
+              li.textContent = text;
+              statsList.appendChild(li);
             });
-          }
-        })
-        .catch(function () {
-          statsNote.textContent =
-            "Could not load stats (maybe they are disabled or there was an error).";
-          statsList.innerHTML = "";
-          topVideos.innerHTML = "<li>Error loading data.</li>";
-        });
+
+            var videoKeys = Object.keys(videos);
+            if (videoKeys.length === 0) {
+              topVideos.innerHTML = "<li>No stats recorded yet.</li>";
+            } else {
+              topVideos.innerHTML = "";
+              videoKeys.forEach(function (id) {
+                var li = document.createElement("li");
+                var a = document.createElement("a");
+                a.href = "/watch?v=" + encodeURIComponent(id);
+                a.textContent = id;
+                li.appendChild(a);
+                li.appendChild(document.createTextNode(" – " + videos[id] + " views"));
+                topVideos.appendChild(li);
+              });
+            }
+          })
+          .catch(function () {
+            statsNote.textContent =
+              "Could not load stats (maybe they are disabled or there was an error).";
+            statsList.innerHTML = "";
+            topVideos.innerHTML = "<li>Error loading data.</li>";
+          });
+      }
     }
   </script>
 </body>
@@ -487,12 +503,14 @@ app.get("/api/stats/optout", (req, res) => {
     <h2>API usage</h2>
     <p class="note">
       • Human view (stats UI): <code><a href="/api/stats?view=human">/api/stats?view=human</a></code><br>
-      • JSON view (for scripts/tools): <code><a href="/api/stats?view=json">/api/stats?view=json</a></code>
+      • JSON view (for scripts/tools): <code><a href="/api/stats?view=json">/api/stats?view=json</a></code><br>
+      • Opt out for this browser: <code><a href="/api/stats/optout">/api/stats/optout</a></code>
     </p>
   </div>
 </body>
 </html>`)
 })
+
 
 
   app.get("/avatars/:v", async function (req, res) {

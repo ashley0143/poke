@@ -99,13 +99,18 @@ function parseUA(ua) {
   fs.writeFileSync(statsFile, JSON.stringify(data, null, 2))
   res.json({ ok: true })
 })
-
- app.get("/api/stats", (req, res) => {
+app.get("/api/stats", (req, res) => {
   if (!telemetryConfig.telemetry)
     return res.json({ videos: {}, browsers: {}, os: {}, totalUsers: 0 })
 
   const raw = fs.readFileSync(statsFile, "utf8")
   const data = JSON.parse(raw)
+
+  // ensure structure exists
+  if (!data.videos) data.videos = {}
+  if (!data.browsers) data.browsers = {}
+  if (!data.os) data.os = {}
+  if (!data.users) data.users = {}
 
   const sortedVideos = Object.entries(data.videos)
     .sort((a, b) => b[1] - a[1])
@@ -120,6 +125,7 @@ function parseUA(ua) {
     totalUsers: Object.keys(data.users).length
   })
 })
+
 
   app.get("/avatars/:v", async function (req, res) {
     var url = `https://yt3.ggpht.com/${req.params.v}`;

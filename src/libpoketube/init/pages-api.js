@@ -131,7 +131,7 @@ if (!data.users) data.users = {}
     })
   }
 
-  // Human view – /api/stats?view=human
+  // Human view – /api/stats?view=human (just stats UI)
   if (view === "human") {
     const telemetryOn = telemetryConfig.telemetry
 
@@ -139,7 +139,7 @@ if (!data.users) data.users = {}
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>Improving Poke</title>
+  <title>Improving Poke – Stats</title>
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <link rel="icon" href="/favicon.ico">
   <style>
@@ -193,23 +193,11 @@ if (!data.users) data.users = {}
 </head>
 <body>
   <div class="app">
-    <img src="/css/logo-poke.svg" alt="Poke logo">
-    <h1>Improving Poke</h1>
-    <h2>Private by design</h2>
-
-    <p>
-      At <a href="/">Poke</a>, we do not collect or share any personal information.
-      That's our privacy promise in a nutshell.
-      To improve Poke we use a completely anonymous, local-only way to figure out how the site is being used.
+    <h1>Anonymous stats</h1>
+    <p class="note">
+      These stats are aggregated locally on this Poke instance. For what is collected (and what is not),
+      see <a href="/policies/privacy#stats">/policies/privacy#stats</a>.
     </p>
-
-    <p>
-      Any anonymous stats recorded by this instance come from the <code>/api/stats</code> system.
-      You can read exactly what is measured (and what is <em>not</em>) in our privacy policy:
-      <a href="/policies/privacy#stats">/policies/privacy#stats</a>.
-    </p>
-
-    <hr>
 
     <h2>Current anonymous stats</h2>
     <p id="stats-note" class="note">Loading…</p>
@@ -295,32 +283,87 @@ if (!data.users) data.users = {}
 </html>`)
   }
 
-  // any other view value -> fallback to JSON
-  if (!telemetryConfig.telemetry) {
-    return res.json({ videos: {}, browsers: {}, os: {}, totalUsers: 0 })
-  }
+  // any other view value -> landing page HTML
+  return res.send(`<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Improving Poke</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <link rel="icon" href="/favicon.ico">
+  <style>
+    :root{color-scheme:dark}
+    body{color:#fff}
+    body {
+      background:#1c1b22;
+      margin:0;
+    }
+    img{float:right;margin:.3em 0 1em 2em}
+    :visited{color:#00c0ff}
+    a{color:#0ab7f0}
+    .app{max-width:1000px;margin:0 auto;padding:24px}
+    p{
+      font-family: system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans", sans-serif;
+      line-height:1.6;
+    }
+    ul{
+      font-family:"poketube flex";
+      font-weight:500;
+      font-stretch:extra-expanded;
+      padding-left:1.2rem;
+    }
+    h2 {
+      font-family:"poketube flex", sans-serif;
+      font-weight:700;
+      font-stretch:extra-expanded;
+      margin-top:1.5rem;
+      margin-bottom:.3rem;
+    }
+    h1 {
+      font-family:"poketube flex", sans-serif;
+      font-weight:1000;
+      font-stretch:ultra-expanded;
+      margin-top:0;
+      margin-bottom:.3rem;
+    }
+    .toc{margin:1rem 0 2rem}
+    .toc li{margin:.25rem 0}
+    pre.license{
+      font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace;
+      background:#111;padding:14px 16px;border-radius:12px;overflow-x:auto;line-height:1.45;border:1px solid #222
+    }
+    hr{border:0;border-top:1px solid #222;margin:28px 0}
+    .note{color:#bbb;font-size:.95rem}
 
-  const raw = fs.readFileSync(statsFile, "utf8")
-  const data = JSON.parse(raw)
+    /* extra tiny helpers */
+    .stats-list li{margin:.15rem 0;}
+    .muted{opacity:.8;font-size:.95rem;}
+  </style>
+</head>
+<body>
+  <div class="app">
+    <img src="/css/logo-poke.svg" alt="Poke logo">
+    <h1>Improving Poke</h1>
+    <h2>Private by design</h2>
 
-  if (!data.videos) data.videos = {}
-  if (!data.browsers) data.browsers = {}
-  if (!data.os) data.os = {}
-  if (!data.users) data.users = {}
+    <p>
+      At <a href="/">Poke</a>, we do not collect or share any personal information.
+      That's our privacy promise in a nutshell.
+      To improve Poke we use a completely anonymous, local-only way to figure out how the site is being used.
+    </p>
 
-  const sortedVideos = Object.entries(data.videos)
-    .sort((a, b) => b[1] - a[1])
-    .slice(0, 10)
+    <p>
+      Any anonymous stats recorded by this instance come from the <code>/api/stats</code> system.
+      You can read exactly what is measured (and what is <em>not</em>) in our privacy policy:
+      <a href="/policies/privacy#stats">/policies/privacy#stats</a>.
+    </p>
 
-  const topVideos = Object.fromEntries(sortedVideos)
-
-  res.json({
-    videos: topVideos,
-    browsers: data.browsers,
-    os: data.os,
-    totalUsers: Object.keys(data.users).length
-  })
+    <hr>
+  </div>
+</body>
+</html>`)
 })
+
 
 
   app.get("/avatars/:v", async function (req, res) {

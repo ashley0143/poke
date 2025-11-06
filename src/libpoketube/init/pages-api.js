@@ -100,12 +100,11 @@ if (!data.users) data.users = {}
   fs.writeFileSync(statsFile, JSON.stringify(data, null, 2))
   res.json({ ok: true })
 })
- 
-app.get("/api/stats", (req, res) => {
+ app.get("/api/stats", (req, res) => {
   const view = (req.query.view || "").toString()
 
-  // JSON view (for programmatic access)
-  if (view === "json") {
+  // JSON view (default) – for programmatic access
+  if (!view || view === "json") {
     if (!telemetryConfig.telemetry) {
       return res.json({ videos: {}, browsers: {}, os: {}, totalUsers: 0 })
     }
@@ -132,179 +131,116 @@ app.get("/api/stats", (req, res) => {
     })
   }
 
-   const telemetryOn = telemetryConfig.telemetry
+  // Human view – /api/stats?view=human
+  if (view === "human") {
+    const telemetryOn = telemetryConfig.telemetry
 
-  res.send(`<!DOCTYPE html>
+    return res.send(`<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>Poke – Stats</title>
+  <title>Improving Poke</title>
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <link rel="icon" href="/favicon.ico">
   <style>
+    :root{color-scheme:dark}
+    body{color:#fff}
     body {
-      margin: 0;
-      padding: 16px;
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      background: #05070a;
-      color: #e5e5e5;
+      background:#1c1b22;
+      margin:0;
     }
-    .wrap {
-      max-width: 800px;
-      margin: 0 auto;
+    img{float:right;margin:.3em 0 1em 2em}
+    :visited{color:#00c0ff}
+    a{color:#0ab7f0}
+    .app{max-width:1000px;margin:0 auto;padding:24px}
+    p{
+      font-family: system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans", sans-serif;
+      line-height:1.6;
+    }
+    ul{
+      font-family:"poketube flex";
+      font-weight:500;
+      font-stretch:extra-expanded;
+      padding-left:1.2rem;
+    }
+    h2 {
+      font-family:"poketube flex", sans-serif;
+      font-weight:700;
+      font-stretch:extra-expanded;
+      margin-top:1.5rem;
+      margin-bottom:.3rem;
     }
     h1 {
-      font-size: 1.8rem;
-      margin: 0 0 4px 0;
+      font-family:"poketube flex", sans-serif;
+      font-weight:1000;
+      font-stretch:ultra-expanded;
+      margin-top:0;
+      margin-bottom:.3rem;
     }
-    p {
-      margin: 4px 0;
-      line-height: 1.6;
+    .toc{margin:1rem 0 2rem}
+    .toc li{margin:.25rem 0}
+    pre.license{
+      font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace;
+      background:#111;padding:14px 16px;border-radius:12px;overflow-x:auto;line-height:1.45;border:1px solid #222
     }
-    small {
-      opacity: 0.8;
-      font-size: 0.9rem;
-    }
-    a {
-      color: #7dd3fc;
-      text-decoration: none;
-    }
-    a:hover {
-      text-decoration: underline;
-    }
-    .card {
-      margin-top: 12px;
-      padding: 10px 12px;
-      border-radius: 8px;
-      background: #0b0f19;
-      border: 1px solid #1f2933;
-    }
-    .card h2 {
-      font-size: 1.1rem;
-      margin: 0 0 6px 0;
-    }
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 6px;
-      font-size: 0.9rem;
-    }
-    th, td {
-      padding: 4px 6px;
-      text-align: left;
-      border-bottom: 1px solid #111827;
-      word-break: break-all;
-    }
-    th {
-      font-weight: 600;
-      background: #020617;
-    }
-    .pill {
-      display: inline-block;
-      padding: 2px 6px;
-      border-radius: 999px;
-      font-size: 0.8rem;
-      background: #0b1120;
-      border: 1px solid #1f2937;
-      margin-left: 4px;
-    }
-    .muted {
-      opacity: 0.7;
-      font-size: 0.9rem;
-    }
-    .row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 12px;
-    }
-    .col {
-      flex: 1 1 220px;
-    }
-    @media (max-width: 600px) {
-      body { padding: 12px; }
-    }
+    hr{border:0;border-top:1px solid #222;margin:28px 0}
+    .note{color:#bbb;font-size:.95rem}
+
+    /* extra tiny helpers */
+    .stats-list li{margin:.15rem 0;}
+    .muted{opacity:.8;font-size:.95rem;}
   </style>
 </head>
 <body>
-  <main class="wrap">
-    <h1>Poke stats</h1>
+  <div class="app">
+    <img src="/css/logo-poke.svg" alt="Poke logo">
+    <h1>Improving Poke</h1>
+    <h2>Private by design</h2>
+
     <p>
-      <small>
-        At Poke, we do not collect or share any personal information.
-        To improve Poke we use a completely anonymous, local-only way to figure out how the site is being used.
-      </small>
+      At <a href="/">Poke</a>, we do not collect or share any personal information.
+      That's our privacy promise in a nutshell.
+      To improve Poke we use a completely anonymous, local-only way to figure out how the site is being used.
     </p>
 
-    <div class="card">
-      <h2>Status</h2>
-      <p id="status-text"></p>
-      <p class="muted">
-        For full details on what is collected (and what is <em>not</em>), see:
-        <a href="/policies/privacy#stats">/policies/privacy#stats</a>.
-      </p>
-    </div>
+    <p>
+      Any anonymous stats recorded by this instance come from the <code>/api/stats</code> system.
+      You can read exactly what is measured (and what is <em>not</em>) in our privacy policy:
+      <a href="/policies/privacy#stats">/policies/privacy#stats</a>.
+    </p>
 
-    <div class="card">
-      <h2>Overview</h2>
-      <p id="overview-text" class="muted">Loading stats…</p>
-    </div>
+    <hr>
 
-    <div class="row">
-      <div class="card col">
-        <h2>Top videos</h2>
-        <table id="videos-table">
-          <thead>
-            <tr>
-              <th>Video ID</th>
-              <th>Views</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr><td colspan="2" class="muted">Loading…</td></tr>
-          </tbody>
-        </table>
-      </div>
+    <h2>Current anonymous stats</h2>
+    <p id="stats-note" class="note">Loading…</p>
+    <ul id="stats-list" class="stats-list"></ul>
 
-      <div class="card col">
-        <h2>Platforms</h2>
-        <p class="muted">Browsers</p>
-        <ul id="browsers-list" class="muted" style="padding-left:18px;margin:4px 0 8px 0;">
-          <li>Loading…</li>
-        </ul>
-        <p class="muted">Operating systems</p>
-        <ul id="os-list" class="muted" style="padding-left:18px;margin:4px 0;">
-          <li>Loading…</li>
-        </ul>
-      </div>
-    </div>
+    <h2>Top videos (local-only)</h2>
+    <p class="note">Up to 10 most watched videos on this instance.</p>
+    <ul id="top-videos" class="stats-list"></ul>
 
-    <div class="card">
-      <h2>API usage</h2>
-      <p class="muted">
-        • Human view (this page): <code>/api/stats</code><br>
-        • JSON view (for scripts/tools): <code>/api/stats?view=json</code>
-      </p>
-    </div>
-  </main>
+    <hr>
+
+    <h2>API usage</h2>
+    <p class="note">
+      • Human view (this page): <code>/api/stats?view=human</code><br>
+      • JSON view (for scripts/tools): <code>/api/stats?view=json</code>
+    </p>
+  </div>
 
   <script>
     const TELEMETRY_ON = ${telemetryOn ? "true" : "false"};
 
-    const statusEl = document.getElementById("status-text");
-    const overviewEl = document.getElementById("overview-text");
-    const videosTableBody = document.querySelector("#videos-table tbody");
-    const browsersList = document.getElementById("browsers-list");
-    const osList = document.getElementById("os-list");
+    const statsNote = document.getElementById("stats-note");
+    const statsList = document.getElementById("stats-list");
+    const topVideos = document.getElementById("top-videos");
 
     if (!TELEMETRY_ON) {
-      statusEl.textContent = "Anonymous usage statistics are disabled on this instance. No stats are being collected.";
-      overviewEl.textContent = "There is no stats data to show because telemetry is turned off.";
-      videosTableBody.innerHTML = '<tr><td colspan="2" class="muted">No data (telemetry disabled).</td></tr>';
-      browsersList.innerHTML = '<li>No data (telemetry disabled).</li>';
-      osList.innerHTML = '<li>No data (telemetry disabled).</li>';
+      statsNote.textContent =
+        "Anonymous usage statistics are disabled on this instance. No stats are being collected.";
+      statsList.innerHTML = "";
+      topVideos.innerHTML = "<li>No data (telemetry disabled).</li>";
     } else {
-      statusEl.textContent = "Anonymous usage statistics are enabled. Data is kept local and never shared with third parties.";
-
       fetch("/api/stats?view=json")
         .then(function (res) { return res.json(); })
         .then(function (data) {
@@ -313,72 +249,77 @@ app.get("/api/stats", (req, res) => {
           var os = data.os || {};
           var totalUsers = data.totalUsers || 0;
 
-          overviewEl.textContent =
-            "Poke has seen " + Object.keys(videos).length +
-            " tracked videos, from " + totalUsers +
-            " anonymous users (unique local IDs).";
+          var videoCount = Object.keys(videos).length;
 
-          // videos table
+          statsNote.textContent = "";
+          statsList.innerHTML = "";
+
+          var summaryItems = [
+            "Anonymous users (unique local IDs): " + totalUsers,
+            "Videos with recorded views: " + videoCount,
+            "Browser types seen: " + Object.keys(browsers).length,
+            "OS families seen: " + Object.keys(os).length
+          ];
+
+          summaryItems.forEach(function (text) {
+            var li = document.createElement("li");
+            li.textContent = text;
+            statsList.appendChild(li);
+          });
+
           var videoKeys = Object.keys(videos);
           if (videoKeys.length === 0) {
-            videosTableBody.innerHTML = '<tr><td colspan="2" class="muted">No stats recorded yet.</td></tr>';
+            topVideos.innerHTML = "<li>No stats recorded yet.</li>";
           } else {
-            videosTableBody.innerHTML = "";
+            topVideos.innerHTML = "";
             videoKeys.forEach(function (id) {
-              var views = videos[id];
-              var tr = document.createElement("tr");
-
-              var tdId = document.createElement("td");
-              var link = document.createElement("a");
-              link.href = "/watch?v=" + encodeURIComponent(id);
-              link.textContent = id;
-              tdId.appendChild(link);
-
-              var tdViews = document.createElement("td");
-              tdViews.textContent = views;
-
-              tr.appendChild(tdId);
-              tr.appendChild(tdViews);
-              videosTableBody.appendChild(tr);
-            });
-          }
-
-          // browsers list
-          var browserKeys = Object.keys(browsers);
-          if (browserKeys.length === 0) {
-            browsersList.innerHTML = "<li>No data yet.</li>";
-          } else {
-            browsersList.innerHTML = "";
-            browserKeys.forEach(function (name) {
               var li = document.createElement("li");
-              li.textContent = name + " – " + browsers[name] + " hits";
-              browsersList.appendChild(li);
-            });
-          }
-
-          // os list
-          var osKeys = Object.keys(os);
-          if (osKeys.length === 0) {
-            osList.innerHTML = "<li>No data yet.</li>";
-          } else {
-            osList.innerHTML = "";
-            osKeys.forEach(function (name) {
-              var li = document.createElement("li");
-              li.textContent = name + " – " + os[name] + " hits";
-              osList.appendChild(li);
+              var a = document.createElement("a");
+              a.href = "/watch?v=" + encodeURIComponent(id);
+              a.textContent = id;
+              li.appendChild(a);
+              li.appendChild(document.createTextNode(" – " + videos[id] + " views"));
+              topVideos.appendChild(li);
             });
           }
         })
         .catch(function () {
-          overviewEl.textContent = "Could not load stats (maybe they are disabled or there was an error).";
-          videosTableBody.innerHTML = '<tr><td colspan="2" class="muted">Error loading data.</td></tr>';
-          browsersList.innerHTML = '<li>Error loading data.</li>';
-          osList.innerHTML = '<li>Error loading data.</li>';
+          statsNote.textContent =
+            "Could not load stats (maybe they are disabled or there was an error).";
+          statsList.innerHTML = "";
+          topVideos.innerHTML = "<li>Error loading data.</li>";
         });
     }
   </script>
 </body>
 </html>`)
+  }
+
+  // any other view value -> fallback to JSON
+  if (!telemetryConfig.telemetry) {
+    return res.json({ videos: {}, browsers: {}, os: {}, totalUsers: 0 })
+  }
+
+  const raw = fs.readFileSync(statsFile, "utf8")
+  const data = JSON.parse(raw)
+
+  if (!data.videos) data.videos = {}
+  if (!data.browsers) data.browsers = {}
+  if (!data.os) data.os = {}
+  if (!data.users) data.users = {}
+
+  const sortedVideos = Object.entries(data.videos)
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, 10)
+
+  const topVideos = Object.fromEntries(sortedVideos)
+
+  res.json({
+    videos: topVideos,
+    browsers: data.browsers,
+    os: data.os,
+    totalUsers: Object.keys(data.users).length
+  })
 })
 
 

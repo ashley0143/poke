@@ -199,8 +199,10 @@ app.get("/api/stats/optout", (req, res) => {
           var v = localStorage.getItem(KEY);
           if (v === "1") {
             status.textContent = "Anonymous stats are currently DISABLED in this browser.";
+            btn.textContent = "Re-enable anonymous stats";
           } else {
             status.textContent = "Anonymous stats are currently ENABLED in this browser.";
+            btn.textContent = "Opt out of anonymous stats";
           }
         } catch (e) {
           status.textContent = "Your browser blocked localStorage, so we cannot store your opt-out choice.";
@@ -210,7 +212,14 @@ app.get("/api/stats/optout", (req, res) => {
       btn.addEventListener("click", function (ev) {
         ev.preventDefault();
         try {
-          localStorage.setItem(KEY, "1");
+          var v = localStorage.getItem(KEY);
+          if (v === "1") {
+            // was opted out -> turn stats back on
+            localStorage.removeItem(KEY);
+          } else {
+            // was enabled -> opt out
+            localStorage.setItem(KEY, "1");
+          }
           updateStatus();
         } catch (e) {
           status.textContent = "Could not save opt-out preference (localStorage error).";
@@ -223,6 +232,7 @@ app.get("/api/stats/optout", (req, res) => {
 </body>
 </html>`)
 })
+
 app.get("/api/stats", (req, res) => {
   const view = (req.query.view || "").toString()
 

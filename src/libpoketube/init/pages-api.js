@@ -84,6 +84,7 @@ function parseUA(ua) {
 
   const raw = fs.readFileSync(statsFile, "utf8")
   const data = JSON.parse(raw)
+if (!data.users) data.users = {}
 
   if (!data.videos[videoId]) data.videos[videoId] = 0
   data.videos[videoId]++

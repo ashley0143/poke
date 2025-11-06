@@ -154,7 +154,7 @@
       <h1 class="doc-title" style="text-align: center;font-size: 4em;font-weight: 1000;font-stretch: extra-condensed;">we don’t track <em>you</em>!</h1>
       <p class="doc-lede">
         <strong>We don’t collect personal data.</strong> No trackers, no third-party analytics. Because Poke is <strong>free software</strong>, you can read the code and self-host.  
-        For transparency: this instance keeps <strong>anonymous, local-only usage counts</strong> (see “/api/stats” below) — no IPs, no cookies, no fingerprinting.
+        For transparency: this instance keeps <strong>anonymous, local-only usage counts</strong> (see “How we improve Poke” below) — no IPs, no cookies, no fingerprinting.
       </p>
       <div class="meta-row" aria-label="Document metadata">
         <span class="badge">Instance: <span class="mono">poketube.fun</span></span>
@@ -170,7 +170,7 @@
       </h3>
       <p style="margin-top:6px">Highlights:</p>
       <ul>
-        <li><strong>New section:</strong> Anonymous Usage Statistics (<code>/api/stats</code>) — enabled by default, local-only, no personal data.</li>
+        <li><strong>New section:</strong> How we improve Poke (<code>/api/stats</code>) — enabled by default, local-only, no personal data.</li>
         <li><strong>TL;DR updated:</strong> clarified anonymous counts vs. personal data.</li>
         <li><strong>Cookies &amp; Storage:</strong> disclosed anonymous localStorage ID used for stats.</li>
       </ul>
@@ -188,7 +188,7 @@
         <li><a href="#ownership">Ownership</a></li>
         <li><a href="#initiative-privacy">Initiative Site Privacy</a></li>
         <li><a href="#what-we-collect">What We Do/Don’t Collect</a></li>
-        <li><a href="#stats">Anonymous Usage Statistics (/api/stats)</a></li>
+        <li><a href="#stats">How we improve Poke (<code>/api/stats</code>)</a></li>
         <li><a href="#cookies">Cookies &amp; Storage</a></li>
         <li><a href="#openstreetmap">OpenStreetMap</a></li>
         <li><a href="#weather">Weather Pages &amp; Services</a></li>
@@ -285,23 +285,44 @@
       </details>
     </section>
 
-    <!-- Anonymous Usage Statistics -->
+    <!-- How we improve Poke -->
     <section id="stats" aria-labelledby="stats-heading">
-      <h2 id="stats-heading" class="section">Anonymous Usage Statistics (<code>/api/stats</code>)</h2>
+      <h2 id="stats-heading" class="section">How we improve Poke (<code>/api/stats</code>)</h2>
       <p>
-        This instance of Poke collects <strong>anonymous, local-only usage counts</strong> to understand which videos are popular and which platforms people visit from.
-        This improves performance and feature decisions.
+        How does Poke improve itself while keeping your privacy and browsing history anonymous?  
+        By using <strong>anonymous, local-only usage counts</strong> instead of personal profiles, trackers, or third-party analytics.
+      </p>
+      <p>
+        This instance of Poke keeps a tiny, privacy-respecting statistics file so we can see things like:
+        “Which videos are watched the most?” and “What browsers/OSes should we test for?”
+        None of this is tied to your real identity or browsing history.
       </p>
       <ul>
         <li><strong>Enabled by default.</strong> Instance operators may disable it in server configuration.</li>
-        <li><strong>What is recorded:</strong> video ID (<code>?v=…</code>), an anonymous random viewer ID stored in <strong>localStorage</strong> (not a cookie),
-          browser type (e.g., Firefox, Chromium), and operating system family (e.g., GNU/Linux, Android).</li>
-        <li><strong>What is <em>not</em> collected:</strong> IP address, cookies, account data, full user-agent string, fingerprinting, personal information.</li>
+        <li><strong>What is recorded:</strong>
+          <ul>
+            <li>Video ID you watched (e.g. <code>?v=…</code>)</li>
+            <li>An anonymous random viewer ID stored in <strong>localStorage</strong> (not a cookie)</li>
+            <li>Browser type (e.g., Firefox, Chromium)</li>
+            <li>Operating system family (e.g., GNU/Linux, Android)</li>
+          </ul>
+        </li>
+        <li><strong>What is <em>not</em> collected:</strong>
+          <ul>
+            <li>No IP address</li>
+            <li>No cookies</li>
+            <li>No account data</li>
+            <li>No full user-agent string for fingerprinting</li>
+            <li>No personal information</li>
+            <li>No third-party analytics or ads</li>
+          </ul>
+        </li>
         <li><strong>Where it lives:</strong> the counts are stored on this server only and are never sent to third parties.</li>
-        <li><strong>Public API behavior:</strong> <code>/api/stats</code> exposes only aggregate data (e.g., top 10 videos, browser/OS totals, total unique users). Individual IDs are never shown.</li>
+        <li><strong>Public API behavior:</strong> <code>/api/stats</code> exposes only aggregate data
+          (e.g., top 10 most-watched videos, browser/OS totals, total unique users). Individual anonymous IDs are never shown.</li>
       </ul>
       <p>
-        Poke is free software — you can inspect the source to verify this behavior or turn it off when self-hosting.
+        Poke is free software — you can inspect the source code to verify this behavior, fork it, or turn the stats feature off when self-hosting.
       </p>
     </section>
 

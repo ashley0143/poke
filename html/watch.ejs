@@ -2481,23 +2481,7 @@ if (/[?&]autoplay=/.test(location.search)) {
  
 </script>
      <script>
-(function addStats() {
-  const url = "/static/improving-poke.js"
-
-  if (document.querySelector(`script[src="${url}"]`)) return
-
-  const s = document.createElement("script")
-  s.src = url
-  s.type = "text/javascript"
-  s.async = true
-  s.defer = true
-
-  s.onload = () => console.log("[Poke] improving-poke.js loaded successfully")
-  s.onerror = () => console.warn("[Poke] failed to load improving-poke.js")
-
-  document.head.appendChild(s)
-})()
-     function toggleTheaterMode() {
+      function toggleTheaterMode() {
     var videoPlayerContainer = document.querySelector('.video-player-container');
     if (videoPlayerContainer.classList.contains('theatermodeon')) {
         videoPlayerContainer.classList.remove('theatermodeon');
@@ -2729,8 +2713,7 @@ document.addEventListener("fullscreenchange", () => {
 <!-- BUNDLE VERSION 31.08.2025 -->
 <!-- BUNDLE VERSION 31.08.2025 -->
 <!-- BUNDLE VERSION 31.08.2025 -->
-
-  
+<script src="/static/stats.js?e=341082025_0143ab454493_videojs81563605"></script>
 <style> img.emoji {height: 1em;width: 1em;margin: 0 .05em 0 .1em;vertical-align: -0.1em;}</style>
 <script>
   window.GLOBAL_ENV = {

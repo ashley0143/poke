@@ -182,7 +182,7 @@ app.get("/api/stats/optout", (req, res) => {
     <p class="note">
       Anonymous stats help us understand which videos are popular and which platforms people use —
       without collecting personal data. You can read the full details here:
-      <a href="/policies/privacy#stats">/policies/privacy#stats</a>.
+      <a href="/policies/privacy#stats">Privacy Policy</a>.
     </p>
 
     <a href="#" id="optout-btn" class="btn">Opt out of anonymous stats</a>
@@ -343,7 +343,7 @@ app.get("/api/stats", (req, res) => {
     <h1>Anonymous stats</h1>
     <p class="note">
       These stats are aggregated locally on this Poke instance. For what is collected (and what is not),
-      see <a href="/policies/privacy#stats">/policies/privacy#stats</a>.
+      see <a href="/policies/privacy#stats">privacy policy</a>.
     </p>
 
     <h2>Current anonymous stats</h2>
@@ -526,7 +526,7 @@ app.get("/api/stats", (req, res) => {
     <p>
       Any anonymous stats recorded by this instance come from the <code>/api/stats</code> system.
       You can read exactly what is measured (and what is <em>not</em>) in our privacy policy:
-      <a href="/policies/privacy#stats">/policies/privacy#stats</a>.
+      <a href="/policies/privacy#stats">here</a>.
     </p>
 
     <hr>

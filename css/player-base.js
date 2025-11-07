@@ -35,7 +35,8 @@ var versionclient = "youtube.player.web_20250917_22_RC00"
     videoEl.setAttribute('webkit-playsinline', '');
   } catch {}
 
-   video.ready(() => {
+  // ——————————————————————— TitleBar on fullscreen ——————————————————————
+  video.ready(() => {
     const metaTitle = document.querySelector('meta[name="title"]')?.content || "";
     const metaDesc = document.querySelector('meta[name="twitter:description"]')?.content || "";
     const metaAuthor = document.querySelector('meta[name="twitter:author"]')?.content || "";
@@ -86,22 +87,19 @@ var versionclient = "youtube.player.web_20250917_22_RC00"
   let intendedPlaying = false;
 
   // Only track explicit user intent, not programmatic flips
-  let userMutedVideo = true;   // start muted by default
+  let userMutedVideo = false;
+  let userMutedAudio = false;
 
   let lastPlayKickTs = 0;
   const STARTUP_GRACE_MS = 2200;
 
   let seekingActive = false;
-  let squelchMuteEvents = 0;     // for programmatic mute/unmute
+  let squelchMuteEvents = 0;     // for programmatic volume tweaks
   let suppressMirrorUntil = 0;
   const MUTE_SQUELCH_MS = 500;
 
   let startupPhase = true;
   let firstPlayCommitted = false;
-
-  // Start page muted: video UI shows muted, audio volume at 0
-  try { video.muted(true); } catch {}
-  try { audio.volume = 0; } catch {}
 
   // Remove loop flags from DOM media
   try { videoEl.loop = false; videoEl.removeAttribute?.('loop'); } catch {}
@@ -132,10 +130,11 @@ var versionclient = "youtube.player.web_20250917_22_RC00"
   let syncInterval = null;
   let lastAT = 0, lastATts = 0;
   let aligning = false;
+  let internalPlayRequest = 0; // ignore our own programmatic play() in handlers
 
   // —————————————————————————— Volume / Mute policy ——————————————————————————
-  // We never auto-unmute the video; user controls that.
-  // Audio is controlled purely by volume and mirrors the video volume/mute state.
+  // 1) Never set video.muted.
+  // 2) Only fade the external audio volume.
   let volAnim = null;
 
   function setImmediateVolume(val) {
@@ -189,12 +188,6 @@ var versionclient = "youtube.player.web_20250917_22_RC00"
     }
   }
 
-  async function ensureUnmutedIfNotUserMuted() {
-    if (startupPhase) { updateAudioGainImmediate(); return; }
-    // Only adjust audio volume to follow video; never touch video.muted here
-    await softUnmuteAudio(80);
-  }
-
   // ———————————————————————————— Utilities ————————————————————————————
   function timeInBuffered(media, t) {
     try {
@@ -207,7 +200,6 @@ var versionclient = "youtube.player.web_20250917_22_RC00"
     } catch {}
     return false;
   }
-
   function canPlayAt(media, t) {
     try {
       const rs = Number(media.readyState || 0);
@@ -216,9 +208,7 @@ var versionclient = "youtube.player.web_20250917_22_RC00"
       return timeInBuffered(media, t);
     } catch { return false; }
   }
-
   function bothPlayableAt(t) { return canPlayAt(videoEl, t) && canPlayAt(audio, t); }
-
   function safeSetCT(media, t) { try { if (isFinite(t) && t >= 0) media.currentTime = t; } catch {} }
 
   function clearSyncLoop() {
@@ -230,31 +220,9 @@ var versionclient = "youtube.player.web_20250917_22_RC00"
     }
   }
 
-  // ———————————————————— Play/Pause squelch (avoid loops) ————————————————————
-  let squelchPlayPause = 0;
-
-  function beginSquelchPlayPause() { squelchPlayPause++; }
-  function endSquelchPlayPauseAsync() {
-    queueMicrotask(() => { squelchPlayPause = Math.max(0, squelchPlayPause - 1); });
-  }
-
-  async function safePlayVideo() {
-    beginSquelchPlayPause();
-    try {
-      const p = video.play();
-      if (p && p.then) await p;
-      return true;
-    } catch {
-      return false;
-    } finally {
-      endSquelchPlayPauseAsync();
-    }
-  }
-
-  function safePauseVideo() {
-    beginSquelchPlayPause();
-    try { video.pause(); } catch {}
-    endSquelchPlayPauseAsync();
+  async function ensureUnmutedIfNotUserMuted() {
+    if (startupPhase) { updateAudioGainImmediate(); return; }
+    await softUnmuteAudio(80);
   }
 
   // ———————————————————————— Sync loops —————————————————————————
@@ -264,10 +232,7 @@ var versionclient = "youtube.player.web_20250917_22_RC00"
   function startFrameSyncLoop() {
     if (!useRVFC) return;
     const step = (_now, meta) => {
-      if (!intendedPlaying) {
-        rvfcHandle = videoEl.requestVideoFrameCallback(step);
-        return;
-      }
+      if (!intendedPlaying) { rvfcHandle = videoEl.requestVideoFrameCallback(step); return; }
       const vt = Number(video.currentTime());
       const at = Number(audio.currentTime);
       if (isFinite(vt) && isFinite(at)) {
@@ -293,25 +258,27 @@ var versionclient = "youtube.player.web_20250917_22_RC00"
       const at = Number(audio.currentTime);
       if (!isFinite(vt) || !isFinite(at)) return;
 
-      // Keep both elements' play/pause states aligned with intention
       if (intendedPlaying) {
-        if (video.paused() && !audio.paused) { safePlayVideo(); }
-        if (!video.paused() && audio.paused) {
-          try { audio.play().catch(() => {}); } catch {}
+        if (video.paused() && !audio.paused) {
+          try {
+            internalPlayRequest++;
+            video.play();
+          } catch {}
+          internalPlayRequest = Math.max(0, internalPlayRequest - 1);
         }
+        if (!video.paused() && audio.paused) { try { audio.play().catch(()=>{}); } catch {} }
       } else {
-        if (!video.paused()) { safePauseVideo(); }
+        if (!video.paused()) { try { video.pause(); } catch {} }
         if (!audio.paused) { try { audio.pause(); } catch {} }
       }
 
       const delta = vt - at;
 
-      if (intendedPlaying && Math.abs(delta) > RESYNC_DRIFT_LIMIT) {
+      if (Math.abs(delta) > RESYNC_DRIFT_LIMIT) {
+        // Hard resync only if user still wants playback
+        if (!intendedPlaying) return;
         pauseHard();
-        setTimeout(() => {
-          if (!intendedPlaying) return;
-          playTogether();
-        }, 120);
+        setTimeout(() => { if (intendedPlaying) playTogether({ allowMutedRetry: true }); }, 120);
         return;
       }
 
@@ -325,7 +292,6 @@ var versionclient = "youtube.player.web_20250917_22_RC00"
         }
       } catch {}
 
-      // Kick a stuck audio time
       const now = performance.now();
       if (!audio.paused && intendedPlaying) {
         if (Math.abs(at - lastAT) < 0.001) {
@@ -343,7 +309,7 @@ var versionclient = "youtube.player.web_20250917_22_RC00"
       }
 
       // Watchdog: revive if audio ended up silent unintentionally
-      if (intendedPlaying && !audio.paused && !audio.muted && !userMutedVideo) {
+      if (intendedPlaying && !audio.paused && !audio.muted && !userMutedVideo && !userMutedAudio) {
         if (audio.volume <= 0.001 && (performance.now() - suppressMirrorUntil) > 400) {
           softUnmuteAudio(140);
         }
@@ -372,8 +338,8 @@ var versionclient = "youtube.player.web_20250917_22_RC00"
     } catch { return false; }
   }
 
-  // ———————————————————— playTogether: synced start, cancelable ————————————————————
-  async function playTogether() {
+  // ———————————————————— playTogether: programmatic resume ————————————————————
+  async function playTogether({ allowMutedRetry = true } = {}) {
     if (syncing || restarting || !intendedPlaying) return;
     syncing = true;
     lastPlayKickTs = performance.now();
@@ -391,29 +357,49 @@ var versionclient = "youtube.player.web_20250917_22_RC00"
 
       if (cancelled()) return;
 
-      setImmediateVolume(0); // audio fades in to the target volume
+      setImmediateVolume(0);
 
-      const vOk = await safePlayVideo();
-      if (cancelled() || !vOk) return;
+      let vOk = true, aOk = true;
 
-      const aOk = await tryPlay(audio);
-      if (cancelled() || !aOk) return;
+      try {
+        internalPlayRequest++;
+        const p = video.play();
+        if (p && p.then) await p;
+      } catch {
+        vOk = false;
+      } finally {
+        internalPlayRequest = Math.max(0, internalPlayRequest - 1);
+      }
 
-      if (!syncInterval && intendedPlaying) startSyncLoop();
+      if (cancelled()) return;
 
-      if (!firstPlayCommitted && intendedPlaying) {
+      try {
+        const pa = audio.play();
+        if (pa && pa.then) await pa;
+      } catch {
+        aOk = false;
+      }
+
+      if (cancelled()) return;
+
+      if (!vOk && !aOk) return;
+
+      await softUnmuteAudio(140);
+      if (cancelled()) return;
+
+      if (!syncInterval) startSyncLoop();
+
+      if (!firstPlayCommitted) {
         firstPlayCommitted = true;
         setTimeout(() => { startupPhase = false; }, 800);
       }
-
-      if (intendedPlaying) await softUnmuteAudio(140);
     } finally {
       syncing = false;
     }
   }
 
   function pauseHard() {
-    safePauseVideo();
+    try { video.pause(); } catch {}
     try { audio.pause(); } catch {}
     clearSyncLoop();
   }
@@ -446,12 +432,9 @@ var versionclient = "youtube.player.web_20250917_22_RC00"
     try {
       navigator.mediaSession.setActionHandler('play', () => {
         intendedPlaying = true;
-        playTogether();
+        ensureUnmutedIfNotUserMuted().then(() => playTogether());
       });
-      navigator.mediaSession.setActionHandler('pause', () => {
-        intendedPlaying = false;
-        pauseTogether();
-      });
+      navigator.mediaSession.setActionHandler('pause', () => pauseTogether());
       navigator.mediaSession.setActionHandler('seekforward', (d) => {
         const inc = Number(d?.seekOffset) || 10;
         video.currentTime(Math.min((video.currentTime() || 0) + inc, Number(video.duration()) || 0));
@@ -480,7 +463,6 @@ var versionclient = "youtube.player.web_20250917_22_RC00"
       }
     } catch {}
   }
-
   function saveProgressThrottled() {
     try {
       const t = Math.floor(Number(video.currentTime()) || 0);
@@ -504,12 +486,12 @@ var versionclient = "youtube.player.web_20250917_22_RC00"
     el.addEventListener('error', pauseIfRealStall);
 
     const tryResume = async () => {
-      hideError();
       if (!intendedPlaying) return;
       const t = Number(video.currentTime());
       if (bothPlayableAt(t)) {
+        hideError();
         await ensureUnmutedIfNotUserMuted();
-        playTogether();
+        playTogether({ allowMutedRetry: true });
       }
     };
     el.addEventListener('canplay', tryResume);
@@ -561,21 +543,35 @@ var versionclient = "youtube.player.web_20250917_22_RC00"
       rampVolumeTo(targetVolFromVideo(), 120);
     });
 
+    // Track manual mutes on the hidden audio element (rare, but safe)
+    audio.addEventListener('volumechange', () => {
+      if (squelchMuteEvents) return;
+      userMutedAudio = !!audio.muted;
+    });
+
+    // Hide buffering indicator once playback actually resumes
+    videoEl.addEventListener('playing', hideError);
+    audio.addEventListener('playing', hideError);
+
     video.on('ratechange', () => { try { audio.playbackRate = video.playbackRate(); } catch {} });
 
-    // Only treat real user/OS play as intent
+    // ————— User play: treat video as the source of truth —————
     video.on('play', () => {
-      if (squelchPlayPause) return;
+      if (internalPlayRequest > 0) return; // ignore our own programmatic play()
+      hideError();
       intendedPlaying = true;
-      ensureUnmutedIfNotUserMuted().then(() => playTogether());
+
+      if (hasExternalAudio) {
+        const t = Number(video.currentTime());
+        if (isFinite(t)) safeSetCT(audio, t);
+        try { audio.play().catch(()=>{}); } catch {}
+        if (!syncInterval) startSyncLoop();
+      }
+      ensureUnmutedIfNotUserMuted();
     });
 
     video.on('pause', () => {
-      if (squelchPlayPause) return;
-      if (!restarting) {
-        intendedPlaying = false;
-        pauseTogether();
-      }
+      if (!restarting) pauseTogether();
     });
 
     let wasPlayingBeforeSeek = false;
@@ -613,12 +609,12 @@ var versionclient = "youtube.player.web_20250917_22_RC00"
       if (diff <= small) {
         if (wasPlayingBeforeSeek && bothPlayableAt(newTime)) {
           intendedPlaying = true;
-          playTogether();
+          playTogether({ allowMutedRetry: true });
         }
       } else if (diff <= large) {
         if (wasPlayingBeforeSeek) {
           intendedPlaying = true;
-          if (bothPlayableAt(newTime)) playTogether();
+          if (bothPlayableAt(newTime)) playTogether({ allowMutedRetry: true });
         } else {
           intendedPlaying = false;
           pauseHard();
@@ -633,7 +629,7 @@ var versionclient = "youtube.player.web_20250917_22_RC00"
           if (wasPlayingBeforeSeek) {
             intendedPlaying = true;
             await ensureUnmutedIfNotUserMuted();
-            playTogether();
+            playTogether({ allowMutedRetry: true });
           }
         }, 160);
       }
@@ -677,8 +673,9 @@ var versionclient = "youtube.player.web_20250917_22_RC00"
       if (!intendedPlaying) return;
       const t = Number(video.currentTime());
       if (bothPlayableAt(t)) {
+        hideError();
         await ensureUnmutedIfNotUserMuted();
-        playTogether();
+        playTogether({ allowMutedRetry: true });
       }
     };
     videoEl.addEventListener('canplay', tryAutoResume);

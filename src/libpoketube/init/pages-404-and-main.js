@@ -47,11 +47,8 @@ module.exports = function (app, config, renderTemplate) {
   });
   const t = getJson(await invtrend.text());
 
-  const invpopular = await fetch(
-    `https://invid-api.poketube.fun/bHj665PpYhUdPWuKPfZuQGoX/api/v1/popular`,
-    { headers: { "User-Agent": config.useragent } }
-  );
-  const p = getJson(await invpopular.text());
+ 
+  const p = ""
 
    let j = { results: [], meta: {} };
 

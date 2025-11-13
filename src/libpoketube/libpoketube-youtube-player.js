@@ -205,7 +205,7 @@ class InnerTubePokeVidious {
     const hour = new Date().getHours();
 
     // pattern for each 2-hour block (6 blocks to cover 12 hours; repeats every 12 hours)
-    const pattern = ["normal", "normal", "normal", "normal", "normal", "fallback"];
+    const pattern = ["normal", "normal", "normal", "normal", "normal", "normal"];
 
     // determine which 2-hour slot we're in (0..11 hours cover repeating pattern every 12 hours)
     const twoHourIndex = Math.floor(hour / 2) % pattern.length;

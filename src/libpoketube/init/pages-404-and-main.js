@@ -36,7 +36,9 @@ function getJson(str) {
 module.exports = function (app, config, renderTemplate) {
   app.get("/app", async function (req, res) {
   const { fetch } = await import("undici");
-
+  if (req.useragent && req.useragent.isMobile && req.query.tab !== "search") {
+    return res.redirect("/app?tab=search");
+  }
   let tab = "";
   if (req.query.tab) {
     tab = `/?type=${capitalizeFirstLetter(req.query.tab)}`;

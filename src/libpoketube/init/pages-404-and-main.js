@@ -37,7 +37,10 @@ module.exports = function (app, config, renderTemplate) {
  app.get("/app", async function (req, res) {
   const { fetch } = await import("undici");
 
-   if (req.useragent?.isMobile) {
+   const isMobile = req.useragent?.isMobile;
+  const currentTab = req.query.tab;
+
+  if (isMobile && currentTab !== "search") {
     return res.redirect("/app?tab=search");
   }
 

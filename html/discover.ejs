@@ -979,33 +979,7 @@ margin-left: auto;
                 <a href="/app" class="tab active">Trends</a>
     </div>
                                                       		 	               <% } %>   
-                                <% if (!tab) { %> 
-                                               
-   <% inv.forEach(x =>  { %>
-			<a href="/watch?v=<%- x.videoId %>"  class="video">
-				<div class="thumbnail" style="background-image: url('https://p.poketube.fun/https://i.ytimg.com/vi/<%= x.videoId %>/hqdefault.jpg?sqp=-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLBy_x4UUHLNDZtJtH0PXeQGoRFTgw');border-radius: 16px;"><span class="video-length"><%- turntomins(x.lengthSeconds) %></span></div>
-				<div class="info">
-					<span class="title max-lines-2" title="<%- x.title %>" style="font-family:Inter,sans-serif;"><%- x.title %></span>
-            					<span class="title max-lines-2" title="Video By <%- x.author %>" style="margin-top:1px">By <%- x.author %></span>
-
-             </div>
-
- 			</a>	 		 	               <% }) %>   
-                                                      		 	               <% } %>   
- <% if (tab === "popular") { %> 
-                                               
-   <% p.forEach(x =>  { %>
-			<a href="/watch?v=<%- x.videoId %>"  class="video">
-				<div class="thumbnail" style="background-image: url('https://p.poketube.fun/https://i.ytimg.com/vi/<%= x.videoId %>/hqdefault.jpg?sqp=-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLBy_x4UUHLNDZtJtH0PXeQGoRFTgw');border-radius: 16px;"><span class="video-length"><%- turntomins(x.lengthSeconds) %></span></div>
-				<div class="info">
-					<span class="title max-lines-2" title="<%- x.title %>" style="font-family:Inter,sans-serif;"><%- x.title %></span>
-            					<span class="title max-lines-2" title="Video By <%- x.author %>" style="margin-top:1px">By <%- x.author %></span>
-
-             </div>
-
- 			</a>	 		 	               <% }) %>   
-                                                      		 	               <% } %>   
-
+          
         
                            <div id="more-button-container">
   
@@ -1060,8 +1034,7 @@ Privacy
                                   
                                           
                       		 	                                         <% if (tab == "search") { %> 
- <a href="/app"><-- go to home  </a>                                        
-                            <span style="display:none">
+                             <span style="display:none">
  Search videos on poke!!!
                                                                      </span>
                                <div class=search>

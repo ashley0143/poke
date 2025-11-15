@@ -36,82 +36,81 @@ function getJson(str) {
 module.exports = function (app, config, renderTemplate) {
   app.get("/app", async function (req, res) {
   const { fetch } = await import("undici");
-  if (req.useragent && req.useragent.isMobile && req.query.tab !== "search") {
+
+  // redirect mobiles to /app?tab=search
+  if (req.useragent && req.useragent.isMobile) {
     return res.redirect("/app?tab=search");
   }
+
+  // no more trending fetch
   let tab = "";
   if (req.query.tab) {
     tab = `/?type=${capitalizeFirstLetter(req.query.tab)}`;
   }
 
-  const invtrend = await fetch(`${config.invapi}/trending${tab}`, {
-    headers: { "User-Agent": config.useragent },
-  });
-  const t = getJson(await invtrend.text());
+  // t is now empty string
+  const t = " ";
 
- 
-  const p = ""
+  const p = "";
 
-   let j = { results: [], meta: {} };
+  let j = { results: [], meta: {} };
 
-  // Small helper to coerce various payload shapes into { results: [] }
   const normalizeSearchData = (data) => {
     if (!data) return { results: [] };
     if (Array.isArray(data)) return { results: data };
     if (Array.isArray(data.results)) return { results: data.results, meta: data.meta || {} };
     if (Array.isArray(data.items)) return { results: data.items, meta: data.meta || {} };
-     if (Array.isArray(data.videos)) return { results: data.videos, meta: data.meta || {} };
+    if (Array.isArray(data.videos)) return { results: data.videos, meta: data.meta || {} };
     return { results: [], meta: { note: "unrecognized search payload shape" } };
   };
 
   try {
-    // Accept multiple query aliases; trim to avoid spaces-only values.
     const query =
       (typeof req.query.mobilesearch === "string" && req.query.mobilesearch.trim()) ??
       (typeof req.query.query === "string" && req.query.query.trim()) ??
       (typeof req.query.q === "string" && req.query.q.trim()) ??
       "";
 
-    // Keep "0" valid
     const continuation = (req.query.continuation ?? "1").toString();
 
     if (query) {
-      const searchUrl = `${config.invapi}/search?q=${encodeURIComponent(query)}&type=video&page=${encodeURIComponent(continuation)}`;
+      const searchUrl = `${config.invapi}/search?q=${encodeURIComponent(query)}&type=video&page=${encodeURIComponent(
+        continuation
+      )}`;
 
-      const res = await fetch(searchUrl, {
+      const resSearch = await fetch(searchUrl, {
         headers: { "User-Agent": config.useragent },
       });
 
-      if (!res.ok) {
+      if (!resSearch.ok) {
         j = {
           results: [],
           error: true,
-          meta: { status: res.status, statusText: res.statusText, url: searchUrl },
+          meta: { status: resSearch.status, statusText: resSearch.statusText, url: searchUrl },
         };
         console.error("[mobilesearch] HTTP error", j.meta);
       } else {
-        const ct = res.headers.get("content-type") || "";
+        const ct = resSearch.headers.get("content-type") || "";
         let data;
         if (ct.includes("application/json")) {
-          data = await res.json();
+          data = await resSearch.json();
         } else {
-          const txt = await res.text();
+          const txt = await resSearch.text();
           data = await Promise.resolve(getJson(txt));
         }
         j = normalizeSearchData(data);
       }
     } else {
       j = { results: [], error: true, meta: { reason: "missing query" } };
-      console.warn("[mobilesearch] Missing query parameter (mobilesearch/q/query)");
+      console.warn("[mobilesearch] Missing query param (mobilesearch/q/query)");
     }
 
-    // expose continuation back to the template even if not provided
     j.meta = { ...(j.meta || {}), continuation };
   } catch (err) {
     j = {
       results: [],
       error: true,
-      meta: { reason: "exception", message: String(err && err.message || err) },
+      meta: { reason: "exception", message: String((err && err.message) || err) },
     };
     console.error("[mobilesearch] Exception:", err);
   }
@@ -121,14 +120,16 @@ module.exports = function (app, config, renderTemplate) {
     isMobile: req.useragent.isMobile,
     p,
     mobilesearch: req.query.mobilesearch,
-    q:req.query.q,
+    q: req.query.q,
     inv: t,
     turntomins,
     continuation: req.query.continuation,
-    j,  
+    j,
   });
 });
 
+  
+           
 
   app.get("/:v*?", async function (req, res) {
     const uaos = req.useragent.os;

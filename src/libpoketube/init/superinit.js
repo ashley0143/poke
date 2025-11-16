@@ -55,6 +55,7 @@ function init(app, config, rendertemplate) {
         { name: "redirects/old pages", path: "../init/pages-redir.js" },
         { name: "Download and channel pages", path: "../init/pages-channel-and-download.js",},
         { name: "api pages", path: "../init/pages-api.js" },
+        { name: "telemetry [api/stats]", path: "../init/telemetry.js",},
         { name: "static pages", path: "../init/pages-static.js" },
         { name: "account pages", path: "../init/pages-account.js" },
         { name: "main pages", path: "../init/pages-404-and-main.js" },
